@@ -1,0 +1,128 @@
+body
+{
+	background-color: #fafafa;
+	margin: 0;
+	font-family: 'Myriad Pro', 'PT Sans', Arial, Helvetica, sans-serif;
+	text-align: center;
+}
+
+a
+{
+	text-decoration: none;
+}
+
+
+/* Header */
+
+header
+{
+	background: url('/images/header-background.png') repeat-x top left;
+	height: 60px;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	text-align: center;
+	z-index: 1
+}
+
+header div
+{
+	margin: 0 auto;
+	height: 60px;
+	text-align: left;
+	width: 1300px;
+}
+
+header img 
+{
+	margin-left: 10px;
+	margin-top: 14px;
+	float: left;
+}
+
+header ul 
+{
+	float: left;
+	margin: 0 0 0 40px;
+	padding: 0;
+}
+
+header li
+{
+	line-height: 60px;
+	list-style-type: none;
+}
+
+header li a
+{
+	color: #0fbe4d;
+	font-size: 18px;
+	position: relative;
+	top: 4px;
+}
+
+/* Footer */
+
+footer
+{
+	background: url('/images/footer-background.png') repeat-y center center;
+	height: 50px;
+	text-align: center;
+	margin-bottom: 100px;
+}
+
+#footer-about-socrata
+{
+	color: #fafafa;
+	font-size: 14px;
+	display: inline-block;
+	height: 50px;
+	line-height: 50px;
+	position: relative;
+	left: 30px;
+	top: 2px;
+}
+
+#footer-content 
+{
+	background: url('/images/footer-content-background.png') no-repeat top left;
+	height: 50px;
+	margin: 0 auto;
+	position: relative;
+	text-align: left;
+	width: 1280px;
+}
+
+#footer-powered-by-socrata img
+{
+	display: block;
+	margin-top: -12px;
+	position: absolute;
+	right: 0;
+	top: 50%;
+}
+
+
+/* Media queries */
+
+@media (max-width: 1280px) {
+	#footer-content
+	{
+		width: 100%;
+	}
+}
+
+@media (max-width: 1020px) {
+	#footer-content
+	{
+		width: 100%;
+	}
+}
+
+@media (max-width: 760px) {
+	#footer-content
+	{
+		width: 100%;
+	}
+}
+

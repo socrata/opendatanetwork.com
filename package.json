@@ -1,0 +1,8 @@
+{
+  "description": "Open Data Network Website",
+  "dependencies": {
+    "express": "^3.5.2",
+    "request": "^2.34.0",
+    "ejs": "^1.0.0"
+  }
+}
