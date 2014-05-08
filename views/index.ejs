@@ -1,39 +1,47 @@
 <% include header %>
 
-<div id="hero-section">
+<div id="hero">
     <img id="hero-image" src="/images/hero-background.jpg" alt="Food Trucks in New York City">
     <h1>Data the Way You Want It.</h1>
     <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor <br>auctor.  Praesent commodo cursus magna.</p>
-    <a id="hero-start-exploring" href="/explore">Start Exploring</a>
+    <a id="hero-start-exploring" href="/finder">Start Exploring</a>
     <a id="hero-mini-map" href="/"><img src="/images/hero-mini-map.png" alt="Mini map"></a>
     <label id="hero-image-label">FEATURED: Food Trucks in New York City</label>
 </div>
 
+<div class="content">
+    <div id="slides">
+        <a href="javascript:void(0)" id="slide-left" class="slide-arrow prev"><img src="/images/slides-left-button.png"></a>
+        <a href="javascript:void(0)" id="slide-right" class="slide-arrow next"><img src="/images/slides-right-button.png"></a>
+        <ul>
+          <% slides.forEach(function(slide) { %>
+            <li class="slide" style="background:url('<%= slide.image %>'); background-size:100%;">
+                <h2><a href="<%= slide.href %>"><%= slide.title %></a></h2>
+                <p><%= slide.text %></p>
+            </li>
+          <% }); %>
+        </ul>
+    </div>
+</div>
+  
 <div class="content">
     <div id="tiles">
       <% columns.forEach(function(column, columnIndex) { %>
         <div class="col-<%= columnIndex %>">
           <% column.forEach(function(tile) { %>
             <a class="tile tile-<%= tile.type %>" href="<%= tile.url %>">
-
               <% if (tile.image != null) { %>
                 <div class="tile-background" style="background-image:url('<%= tile.image %>')">
-
                   <% if (tile.category != null) { %>
                     <div class="tile-category"><%= tile.category %></div>
                   <% } %>
-
                 </div>
               <% } %>
-
                 <div class="tile-title"><%= tile.title %></div>
-
               <% if (tile.text != null) { %>
                 <div class="tile-text"><%= tile.text %></div>
               <% } %>
-
                 <img class="tile-stars" src="/images/tiles-stars-icon.png">
-    
            </a>
           <% }); %>
         </div>
@@ -45,8 +53,12 @@
     <div id="orange-footer">
         <div id="orange-footer-find-data">Find Data</div>	
         <div id="orange-footer-tag-line">Nullam id dolor id nibh ultricies vehicula ut id elit.</div>
-        <a id="orange-footer-start-exploring" href="/explore">START EXPLORING</a>
+        <a id="orange-footer-start-exploring" href="/finder">START EXPLORING</a>
     </div>
 </div>
+
+<script src="/jquery/jquery.min.js"></script>
+<script src="/scripts/unslider-min.js"></script>
+<script src="/scripts/index.js"></script>
 
 <% include footer %>

@@ -29,15 +29,15 @@
 	display: block;
 }
 
-#hero-section
+#hero
 {
 	margin-top: 60px;
-	margin-bottom: 60px;  
+	margin-bottom: 45px;  
 	position: relative;
 	text-align: center;
 }
 
-#hero-section h1
+#hero h1
 {
 	font-weight: 700;
 	font-size: 58pt;
@@ -53,7 +53,7 @@
 	white-space: nowrap;
 }
 
-#hero-section p 
+#hero p 
 {
 	color: #fafafa;
 	font-size: 26pt;
@@ -99,6 +99,72 @@
 	margin-left: -10px;
 }
 
+
+/* Slides */
+
+#slides
+{
+	margin: 0 0px 30px;
+	position: relative;
+	overflow: auto; 
+	width: 100%;
+}
+
+#slide-left
+{
+	left: 0;
+	margin-top: -50px;
+	position: absolute;
+	top: 50%;
+	z-index: 1;
+}
+
+#slide-right
+{
+	margin-top: -50px;
+	position: absolute;
+	right: 0;
+	top: 50%;
+	z-index: 1;
+}
+
+#slides ul 
+{
+	margin: 0;
+	padding: 0;
+}
+
+#slides ul li 
+{ 
+	float: left; 
+	height: 400px;
+	list-style: none; 
+	background-size: cover;
+}
+
+#slides h2 a
+{
+	color: #851b1b;
+	display: block;
+	font-size: 34px;
+	font-weight: bold;
+	margin-left: 60%;
+	margin-top: 100px;
+	width: 30%;
+}
+
+#slides p
+{
+	color: #851b1b;
+	display: block;
+	font-size: 20px;
+	font-weight: normal;
+	margin-left: 60%;
+	width: 30%;
+}
+
+
+
 /* Tiles */
 
 #tiles
@@ -117,7 +183,7 @@
 	border: 1px solid #eaeaea;
 	border-radius: 2px;
 	display: block;
-	margin: 0px 10px 20px 10px;
+	margin: 0px 10px 20px;
 	padding: 5px;
 	position: relative;
 }
@@ -304,17 +370,6 @@
 }
 
 @media (max-width: 1020px) {
-	.content, 
-	.content > #tiles
-	{
-		width: 100%;
-	}
-
-	.content > #tiles
-	{	
-		margin-left: auto;
-	}
-
 	#tiles .col-0, #tiles .col-7
 	{
 		width: 66.67%;
@@ -328,17 +383,6 @@
 }
 
 @media (max-width: 760px) {
-	.content, 
-	.content > #tiles
-	{
-		width: 100%;
-	}
-
-	.content > #tiles
-	{	
-		margin-left: auto;
-	}
-
 	#tiles .col-0, #tiles .col-7
 	{
 		width: 100%;
@@ -355,7 +399,5 @@
 		display: none;
 	}
 }
-
-
 
 

@@ -1,0 +1,26 @@
+[
+    {
+        "category" : "Housing",
+        "image" : "/images/slides-placeholder.jpg",
+        "title" : "Bibendum Cursus Dapibus Amet",
+        "text" : "Cras mattis consectetur pursus sit amet fermentum. Cum sociss natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+        "type" : "large",
+        "url" : "http://socrata.com"
+    },
+    {
+        "category" : "Housing",
+        "image" : "/images/slides-placeholder.jpg",
+        "title" : "Bibendum Cursus Dapibus Amet",
+        "text" : "Cras mattis consectetur pursus sit amet fermentum. Cum sociss natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+        "type" : "large",
+        "url" : "http://socrata.com"
+    },
+    {
+        "category" : "Housing",
+        "image" : "/images/slides-placeholder.jpg",
+        "title" : "Bibendum Cursus Dapibus Amet",
+        "text" : "Cras mattis consectetur pursus sit amet fermentum. Cum sociss natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+        "type" : "large",
+        "url" : "http://socrata.com"
+    }
+]

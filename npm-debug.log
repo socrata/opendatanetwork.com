@@ -1,0 +1,103 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   '-save',
+1 verbose cli   'git@github.com:idiot/unslider.git' ]
+2 info using npm@1.4.3
+3 info using node@v0.10.26
+4 warn package.json @ No repository field.
+5 verbose readDependencies using package.json deps
+6 verbose cache add [ 'git@github.com:idiot/unslider.git', null ]
+7 verbose cache add name=undefined spec="git@github.com:idiot/unslider.git" args=["git@github.com:idiot/unslider.git",null]
+8 verbose parsed url { protocol: null,
+8 verbose parsed url   slashes: null,
+8 verbose parsed url   auth: null,
+8 verbose parsed url   host: null,
+8 verbose parsed url   port: null,
+8 verbose parsed url   hostname: null,
+8 verbose parsed url   hash: null,
+8 verbose parsed url   search: null,
+8 verbose parsed url   query: null,
+8 verbose parsed url   pathname: 'git@github.com:idiot/unslider.git',
+8 verbose parsed url   path: 'git@github.com:idiot/unslider.git',
+8 verbose parsed url   href: 'git@github.com:idiot/unslider.git' }
+9 verbose cache add name="git" spec="github.com:idiot/unslider.git" args=["git","github.com:idiot/unslider.git"]
+10 verbose parsed url { protocol: 'github.com:',
+10 verbose parsed url   slashes: null,
+10 verbose parsed url   auth: null,
+10 verbose parsed url   host: 'idiot',
+10 verbose parsed url   port: null,
+10 verbose parsed url   hostname: 'idiot',
+10 verbose parsed url   hash: null,
+10 verbose parsed url   search: null,
+10 verbose parsed url   query: null,
+10 verbose parsed url   pathname: '/unslider.git',
+10 verbose parsed url   path: '/unslider.git',
+10 verbose parsed url   href: 'github.com:idiot/unslider.git' }
+11 verbose addNamed [ 'git', 'github.com:idiot/unslider.git' ]
+12 verbose addNamed [ null, null ]
+13 silly lockFile f25fa80c-it-github-com-idiot-unslider-git git@github.com:idiot/unslider.git
+14 verbose lock git@github.com:idiot/unslider.git /Users/toshm/.npm/f25fa80c-it-github-com-idiot-unslider-git.lock
+15 info addNameTag [ 'git', 'github.com:idiot/unslider.git' ]
+16 verbose url raw git
+17 verbose url resolving [ 'https://registry.npmjs.org/', './git' ]
+18 verbose url resolved https://registry.npmjs.org/git
+19 info trying registry request attempt 1 at 17:43:58
+20 http GET https://registry.npmjs.org/git
+21 http 200 https://registry.npmjs.org/git
+22 silly registry.get cb [ 200,
+22 silly registry.get   { date: 'Thu, 08 May 2014 00:44:11 GMT',
+22 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B)',
+22 silly registry.get     etag: '"CKR75XZQ2WZH3YFGFF3IJVSMY"',
+22 silly registry.get     'content-type': 'application/json',
+22 silly registry.get     via: '1.1 varnish',
+22 silly registry.get     'cache-control': 'max-age=1',
+22 silly registry.get     'content-length': '10458',
+22 silly registry.get     'accept-ranges': 'bytes',
+22 silly registry.get     age: '725',
+22 silly registry.get     'x-served-by': 'cache-v44-ASH, cache-lax1420-LAX',
+22 silly registry.get     'x-cache': 'MISS, MISS',
+22 silly registry.get     'x-cache-hits': '0, 0',
+22 silly registry.get     'x-timer': 'S1399509126.345014811,VS0,VS34,VE125,VE725063',
+22 silly registry.get     vary: 'Accept',
+22 silly registry.get     'keep-alive': 'timeout=10, max=50',
+22 silly registry.get     connection: 'Keep-Alive' } ]
+23 info maybeGithub Attempting github.com:idiot/unslider.git from git://github.com/github.com:idiot/unslider.git
+24 silly lockFile a120aefe-om-github-com-idiot-unslider-git git://github.com/github.com:idiot/unslider.git
+25 verbose lock git://github.com/github.com:idiot/unslider.git /Users/toshm/.npm/a120aefe-om-github-com-idiot-unslider-git.lock
+26 verbose addRemoteGit [ 'git://github.com/github.com:idiot/unslider.git', 'master' ]
+27 verbose git clone git://github.com/github.com:idiot/unslider.git Cloning into bare repository '/Users/toshm/.npm/_git-remotes/git-github-com-github-com-idiot-unslider-git-a120aefe'...
+27 verbose git clone git://github.com/github.com:idiot/unslider.git fatal: remote error:
+27 verbose git clone git://github.com/github.com:idiot/unslider.git   github.com:idiot/unslider is not a valid repository name
+27 verbose git clone git://github.com/github.com:idiot/unslider.git   Email support@github.com for help
+28 silly lockFile a120aefe-om-github-com-idiot-unslider-git git://github.com/github.com:idiot/unslider.git
+29 silly lockFile a120aefe-om-github-com-idiot-unslider-git git://github.com/github.com:idiot/unslider.git
+30 info maybeGithub Attempting github.com:idiot/unslider.git from git+ssh://git@github.com:github.com:idiot/unslider.git
+31 silly lockFile d95560c7-om-github-com-idiot-unslider-git git@github.com:github.com:idiot/unslider.git
+32 verbose lock git@github.com:github.com:idiot/unslider.git /Users/toshm/.npm/d95560c7-om-github-com-idiot-unslider-git.lock
+33 verbose addRemoteGit [ 'git@github.com:github.com:idiot/unslider.git', 'master' ]
+34 verbose git clone git@github.com:github.com:idiot/unslider.git Cloning into bare repository '/Users/toshm/.npm/_git-remotes/git-github-com-github-com-idiot-unslider-git-d95560c7'...
+34 verbose git clone git@github.com:github.com:idiot/unslider.git Saving password to keychain failed
+34 verbose git clone git@github.com:github.com:idiot/unslider.git Identity added: /Users/toshm/.ssh/id_rsa (/Users/toshm/.ssh/id_rsa)
+34 verbose git clone git@github.com:github.com:idiot/unslider.git fatal: remote error:
+34 verbose git clone git@github.com:github.com:idiot/unslider.git    is not a valid repository name
+34 verbose git clone git@github.com:github.com:idiot/unslider.git   Email support@github.com for help
+35 silly lockFile d95560c7-om-github-com-idiot-unslider-git git@github.com:github.com:idiot/unslider.git
+36 silly lockFile d95560c7-om-github-com-idiot-unslider-git git@github.com:github.com:idiot/unslider.git
+37 silly lockFile f25fa80c-it-github-com-idiot-unslider-git git@github.com:idiot/unslider.git
+38 silly lockFile f25fa80c-it-github-com-idiot-unslider-git git@github.com:idiot/unslider.git
+39 error notarget No compatible version found: git@'github.com:idiot/unslider.git'
+39 error notarget Valid install targets:
+39 error notarget ["0.1.0","0.1.1","0.1.2","0.1.3","0.1.4","0.1.5"]
+39 error notarget
+39 error notarget This is most likely not a problem with npm itself.
+39 error notarget In most cases you or one of your dependencies are requesting
+39 error notarget a package version that doesn't exist.
+40 error System Darwin 13.1.0
+41 error command "node" "/usr/local/bin/npm" "install" "-save" "git@github.com:idiot/unslider.git"
+42 error cwd /Users/toshm/Documents/Dev/Socrata/opendatanetwork.com
+43 error node -v v0.10.26
+44 error npm -v 1.4.3
+45 error code ETARGET
+46 verbose exit [ 1, true ]
