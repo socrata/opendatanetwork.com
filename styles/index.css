@@ -135,11 +135,12 @@
 }
 
 #slides ul li 
-{ 
-	float: left; 
+{
 	height: 400px;
+	float: left; 
 	list-style: none; 
 	background-size: cover;
+	background-position: center center;
 }
 
 #slides h2 a
@@ -149,7 +150,7 @@
 	font-size: 34px;
 	font-weight: bold;
 	margin-left: 60%;
-	margin-top: 100px;
+	margin-top: 10%;
 	width: 30%;
 }
 
@@ -209,12 +210,12 @@
 #tiles .tile-large, 
 #tiles .tile-tall
 {
-	height: 472px;
+	height: 452px;
 }
 
 #tiles .tile-small
 {
-	height: 220px;
+	height: 210px;
 }
 
 #tiles .tile-large .tile-background
@@ -224,7 +225,7 @@
 
 #tiles .tile-small .tile-background
 {
-	height: 150px;
+	height: 158px;
 }
 
 #tiles .tile-tall .tile-background
@@ -261,8 +262,8 @@
 #tiles .tile-small .tile-title
 {
 	font-size: 16px;
-	height: 40px;
-	line-height: 40px;
+	height: 45px;
+	line-height: 45px;
 	padding: 0px 20px;
 	position: relative;
 	top: 5px;
@@ -400,4 +401,21 @@
 	}
 }
 
+@media (max-width: 600px) {
+	#tiles .col-0, #tiles .col-7
+	{
+		width: 100%;
+	}
+	
+	#tiles .col-1, #tiles .col-2, #tiles .col-3, 
+	#tiles .col-4, #tiles .col-5, #tiles .col-6
+	{
+		width: 100%;
+	}
+
+	#orange-footer-tag-line
+	{
+		display: none;
+	}
+}
 

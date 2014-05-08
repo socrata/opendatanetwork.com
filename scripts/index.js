@@ -1,4 +1,6 @@
-    var unslider = $('#slides').unslider();
+    var unslider = $('#slides').unslider({
+            fluid: false
+        });
   
     $('.slide-arrow').click(function() {
         var fn = this.className.split(' ')[1];
