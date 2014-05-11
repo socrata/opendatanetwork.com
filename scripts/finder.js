@@ -145,39 +145,42 @@ var _finder = new function() {
         $('#question-3-link').text(s);
         $('#menu').hide(300);
 
-        this.showHideAnswers(true);
-
         // Show results
         //
         var items = [];
 
-        items.push('<li><a href="javascript:_finder.reset()"><img id="answers-start-over-image" src="/images/finder-start-over.png"><div>Start Over</div></a></li>');
+        items.push('<li><a href="javascript:_finder.reset()">' +
+            '<img id="answers-start-over-image" src="/images/finder-start-over.png">' +
+            '<div>Start Over</div></a></li>');
 
         console.log(this.choices[this.firstChoiceIndex].choices[this.secondChoiceIndex].choices[this.thirdChoiceIndex].choices);
 
         $.each(
             this.choices[this.firstChoiceIndex].choices[this.secondChoiceIndex].choices[this.thirdChoiceIndex].choices, 
             function(i, item) {
-                items.push('<li><a href="">' +
-                    '<img class="answers-result-image" src="/images/finder-placeholder.png">' + 
+                items.push('<li><a href="' + item.url + '" target="_blank">' +
+                    '<img class="answers-result-image" src="/images/' + (item.image || 'tiles-placeholder.png') + '">' + 
                     '<div class="answers-result-text">' + 
                     item.title + 
                     '</div></a></li>');
             }); 
 
         $('#answers-list').empty().append(items.join('')).show(300);
+
+        this.showHideAnswers(true);
     };
 
     this.showHideAnswers = function(show) {
 
         if (show)
         {
-            $('#answers').show()
-            $('#supplemental').show();
+            $('#answers').show(300, function() {
+                $('#supplemental').show();
+            });
         }
         else
         {
-            $('#answers').hide();
+            $('#answers').hide(300);
             $('#supplemental').hide();
         }
     };
@@ -220,10 +223,11 @@ var _finder = new function() {
 };
 
 $(document).ready(function() {
-
-    _finder.init(_choices);
-
-    console.log(_choices[0].title);
-    console.log(_choices[1].title);
-    console.log(_choices[2].title);
+    $.ajax({
+        url: "/data/finder-choices.json",
+        dataType: "text",
+        success: function(data) {
+            _finder.init($.parseJSON(data));
+        }
+    });
 });

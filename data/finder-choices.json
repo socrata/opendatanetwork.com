@@ -1,4 +1,4 @@
-_choices = [
+[
 	{
 		"title" : "part of a housing-oriented business.",
 		"choices" : [
@@ -9,10 +9,14 @@ _choices = [
 						"title" : "wide-spread national syndication.",
 						"choices" : [
 							{
-								"title" : "Profile of how Trulia uses HouseFacts."
+								"image" : "tiles-trulia.png",
+								"title" : "Profile of how Trulia uses HouseFacts.",
+								"url" : "http://youtu.be/VDumAcRCfnk"
 							},
 							{
-								"title" : "Profile of how Porch.com uses permit data."
+								"image" : null,
+								"title" : "Profile of how Porch.com uses permit data.",
+								"url" : "http://online.wsj.com/news/articles/SB10001424052702304887104579307000606208592"
 							}
 						]
 					},
@@ -20,10 +24,14 @@ _choices = [
 						"title" : "individual apps in specific cities...",
 						"choices" : [
 							{
-								"title" : "Profile of Appalicious."
+								"image" : "tiles-appallicious.png",
+								"title" : "Profile of Appallicious.",
+								"url" : "http://www.socrata.com/partner/"
 							},
 							{
-								"title" : "Profile of Local Data."
+								"image" : null,
+								"title" : "Profile of Local Data.",
+								"url" : null
 							}
 						]
 					}
@@ -36,20 +44,24 @@ _choices = [
 						"title" : "helping customers buy/sell a house...",
 						"choices" : [
 							{
+								"image" : null,
 								"title" : "A catalog that shows relationships between housing inventory, crime rate and educational performance data from top U.S. cities.",
-								"filter" : "odn-1"
+								"url" : "http://odn.demo.socrata.com/browse?tags=odn-1"
 							},
 							{
+								"image" : null,
 								"title" : "A catalog of building permit data for building construction projects from top U.S. cities.",
-								"filter" : "odn-2"
+								"url" : "http://odn.demo.socrata.com/browse?tags=odn-2"
 							},
 							{
+								"image" : null,
 								"title" : "Standardized and granular data on housing use, health and safety reports from top innovative cities.",
-								"filter" : "odn-3"
+								"url" : "http://odn.demo.socrata.com/browse?tags=odn-3"
 							},
 							{
+								"image" : null,
 								"title" : "A catalog of every geospatial or map open data file from the nation's leading cities.",
-								"filter" : "odn-4"
+								"url" : "http://odn.demo.socrata.com/browse?tags=odn-4"
 							}
 						]
 					},
@@ -57,19 +69,24 @@ _choices = [
 						"title" : "helping customers understand housing issues...",
 						"choices" : [
 							{
+								"image" : null,
 								"title" : "Standardized and granular data on housing use, health and safety reports from two innovative cities.",
-								"filter" : "odn-5"
+								"url" : "http://odn.demo.socrata.com/browse?tags=odn-5"
 							},
 							{
+								"image" : null,
 								"title" : "Catalog of data sets on homelessness from across the country.",
-								"filter" : "odn-6"
+								"url" : "http://odn.demo.socrata.com/browse?tags=odn-6"
 							},
 							{
+								"image" : null,
 								"title" : "Catalog of data sets on housing and apartment inspections, foreclosures and vacancies from the top U.S. cities.",
-								"filter" : "odn-7"
+								"url" : "http://odn.demo.socrata.com/browse?tags=odn-7"
 							},
 							{
-								"title" : "Catalog of data sets on Data sets on housing and apartment inspections, foreclosures and vacancies."
+								"image" : null,
+								"title" : "Catalog of data sets on Data sets on housing and apartment inspections, foreclosures and vacancies.",
+								"url" : null
 							}
 						]
 					},
@@ -77,20 +94,24 @@ _choices = [
 						"title" : "expanding my app to a new market...",
 						"choices" : [
 							{
+								"image" : null,
 								"title" : "Demographic data from U.S. census.",
-								"filter" : "odn-9"
+								"url" : "http://odn.demo.socrata.com/browse?tags=odn-9"
 							},
 							{
+								"image" : null,
 								"title" : "All data sets from top U.S. cities that have the words “housing”, “buildings”, or “apartment” in the metadata.",
-								"filter" : "odn-10"
+								"url" : "http://odn.demo.socrata.com/browse?tags=odn-10"
 							},
 							{
+								"image" : null,
 								"title" : "Data on housing/building costs and finance (e.g. assessments, property tax, etc).  Tier 2 from top U.S. cities.",
-								"filter" : "odn-11"
+								"url" : "http://odn.demo.socrata.com/browse?tags=odn-11"
 							},
 							{
+								"image" : null,
 								"title" : "Data on housing/building use (e.g. zoning as residential/commercial, parcel type, maps of boundaries, etc).",
-								"filter" : "odn-12"
+								"url" : "http://odn.demo.socrata.com/browse?tags=odn-12"
 							}
 						]
 					}
@@ -103,13 +124,19 @@ _choices = [
 						"title" : "creating a data-driven app.",
 						"choices" : [
 							{
-								"title" : "Sign up for a Socrata API app token on dev.socrata.com."
+								"image" : null,
+								"title" : "Sign up for a Socrata API app token on dev.socrata.com.",
+								"url" : null
 							},
 							{
-								"title" : "Check out this list of companies that are using housing data."
+								"image" : null,
+								"title" : "Check out this list of companies that are using housing data.",
+								"url" : null
 							},
 							{
-								"title" : "Check out these standards on popular housing data sets."
+								"image" : null,
+								"title" : "Check out these standards on popular housing data sets.",
+								"url" : null
 							}
 						]
 					},
@@ -117,14 +144,19 @@ _choices = [
 						"title" : "creating visualizations of data.",
 						"choices" : [
 							{
-								"title" : "See examples here of compelling housing data visualizations."
+								"image" : null,
+								"title" : "See examples here of compelling housing data visualizations.",
+								"url" : null
 							},
 							{
-								"title" : "See this instructional guide to creating your own data visualizations."
+								"image" : null,
+								"title" : "See this instructional guide to creating your own data visualizations.",
+								"url" : null
 							},
 							{
+								"image" : null,
 								"title" : "Explore this catalog of data sets relating to buildings that are maps or other types of geospatial data.",
-								"filter" : "odn-1"
+								"url" : "http://odn.demo.socrata.com/browse?tags=odn-1"
 							}
 						]
 					}
@@ -142,13 +174,19 @@ _choices = [
 						"title" : "housing and buildings.",
 						"choices" : [
 							{
-								"title" : "Sign up for a Socrata API app token on dev.socrata.com."
+								"image" : null,
+								"title" : "Sign up for a Socrata API app token on dev.socrata.com.",
+								"url" : null
 							},
 							{
-								"title" : "Check out this list of companies that are using housing data."
+								"image" : null,
+								"title" : "Check out this list of companies that are using housing data.",
+								"url" : null
 							},
 							{
-								"title" : "Check out these standards on popular housing data sets."
+								"image" : null,
+								"title" : "Check out these standards on popular housing data sets.",
+								"url" : null
 							}
 						]
 					}
@@ -161,16 +199,24 @@ _choices = [
 						"title" : "housing and buildings.",
 						"choices" : [
 							{
-								"title" : "Standardized and granular data on housing use, health and safety reports from two innovative cities."
+								"image" : null,
+								"title" : "Standardized and granular data on housing use, health and safety reports from two innovative cities.",
+								"url" : null
 							},
 							{
-								"title" : "Catalog of data sets on homelessness from across the country."
+								"image" : null,
+								"title" : "Catalog of data sets on homelessness from across the country.",
+								"url" : null
 							},
 							{
-								"title" : "Catalog of data sets on housing and apartment inspections, foreclosures and vacancies from the top U.S. cities."
+								"image" : null,
+								"title" : "Catalog of data sets on housing and apartment inspections, foreclosures and vacancies from the top U.S. cities.",
+								"url" : null
 							},
 							{
-								"title" : "Catalog of data sets on Data sets on housing and apartment inspections, foreclosures and vacancies."
+								"image" : null,
+								"title" : "Catalog of data sets on Data sets on housing and apartment inspections, foreclosures and vacancies.",
+								"url" : null
 							}
 						]
 					}
@@ -188,13 +234,19 @@ _choices = [
 						"title" : "housing and buildings.",
 						"choices" : [
 							{
-								"title" : "Profile of Trulia, Porch, etc."
+								"image" : null,
+								"title" : "Profile of Trulia, Porch, etc.",
+								"url" : null
 							},
 							{
-								"title" : "Catalog of app partners like Appilicious, etc."
+								"image" : null,
+								"title" : "Catalog of app partners like Appilicious, etc.",
+								"url" : null
 							},
 							{
-								"title" : "Content about developer community with links to dev community assets/site"
+								"image" : null,
+								"title" : "Content about developer community with links to dev community assets/site",
+								"url" : null
 							}
 						]
 					}
@@ -207,10 +259,14 @@ _choices = [
 						"title" : "housing and buildings.",
 						"choices" : [
 							{
-								"title" : "Map of participating/included governments."
+								"image" : null,
+								"title" : "Map of participating/included governments.",
+								"url" : null
 							},
 							{
-								"title" : "Catalog of relevant data by government"
+								"image" : null,
+								"title" : "Catalog of relevant data by government",
+								"url" : null
 							}
 						]
 					}
@@ -223,7 +279,9 @@ _choices = [
 						"title" : "housing and buildings.",
 						"choices" : [
 							{
-								"title" : "Crisp overview of ODN member value prop."
+								"image" : null,
+								"title" : "Crisp overview of ODN member value prop.",
+								"url" : null
 							}
 						]                
 					}
@@ -231,4 +289,4 @@ _choices = [
 			}
 		]
 	}
-];
+]

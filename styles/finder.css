@@ -152,6 +152,7 @@
 #answers li
 {
     float: left;
+    margin-bottom: 20px;
     margin-right: 20px;
 }
 
@@ -180,6 +181,7 @@
     -moz-box-shadow: 0px 1px 1px 0px rgba(7,8,8,0.15);
     box-shadow: 0px 1px 1px 0px rgba(7,8,8,0.15);
     border: 1px solid #eaeaea;
+    color: #222;
     display: block;
     height: 230px;
     overflow: hidden;
