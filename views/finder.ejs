@@ -1,0 +1,62 @@
+<% include header %>
+
+<script src="/jquery/jquery.min.js"></script>
+<script src="/scripts/finder-choices.js"></script>
+<script src="/scripts/finder.js"></script>
+
+<div class="content">
+
+    <div id="circles">
+        <div id="cirles-container">
+            <a id="circle-1" class="circle circle-active">1</a>
+            <a id="circle-2" class="circle">2</a>
+            <a id="circle-3" class="circle">3</a>
+        </div>
+    </div>
+
+    <div id="questions">
+        <div id="question-1" class="question">
+            <p>I am <a id="question-1-link" href="javascript:_finder.showFirstQuestionMenu();">your answer.</a></p>
+            <div id="question-tip">
+                <div>Let us tailor your data results.<br>Select your best answer.</div>
+            </div>
+        </div>
+        <div id="question-2" class="question">
+            <p>I want to <a id="question-2-link" href="javascript:_finder.showSecondQuestionMenu();">your answer.</a></p>
+        </div>
+        <div id="question-3" class="question">
+            <p>Related to <a id="question-3-link" href="javascript:_finder.showThirdQuestionMenu();">your answer.</a></p>
+        </div>
+    </div>
+
+    <ul id="menu">
+    </ul>
+
+    <div id="answers">
+        <div id="answers-may-we-suggest">May we suggest...</div>
+        <ul id="answers-list">
+        </ul>
+    </div>
+
+    <div id="supplemental">
+        <div id="partners">
+            <div class="supplemental-container">
+                <div class="supplemental-title">Interested in becoming an ODN partner?</div>
+                <div class="supplemental-text">We're looking for partners who are passionate about the Open Data movement.</div>
+                <a class="supplemental-button">Sign Up</a>
+            </div>
+        </div>
+        <div id="feedback">
+            <div class="supplemental-container">
+                <div class="supplemental-title">Not what you were expecting?</div>
+                <div class="supplemental-text">If you don't like these results, let us know.  You may want to look at our entire list.</div>            
+                <a class="supplemental-button">Leave Feedback</a>
+                <a class="supplemental-button">View Entire Data List</a>
+            </div>
+        </div>
+    </div>
+
+    <br style="clear:both">
+</div>
+
+<% include footer %>

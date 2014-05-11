@@ -12,7 +12,7 @@
     [
         {
             "category" : "311",
-            "image" : "/images/tiles-311-background.png",
+            "image" : "/images/tiles-311.png",
             "title" : "Commodo Cras Magna",
             "text" : null,
             "type" : "small",
@@ -20,7 +20,7 @@
         },
         {
             "category" : "Transit",
-            "image" : "/images/tiles-311-background.png",
+            "image" : "/images/tiles-311.png",
             "title" : "Venenatis Risus Consectetur",
             "text" : null,
             "type" : "small",
@@ -30,7 +30,7 @@
     [
         {
             "category" : "Transit",
-            "image" : "/images/tiles-311-background.png",
+            "image" : "/images/tiles-311.png",
             "title" : "Porta Magna Etiam Fermen",
             "text" : null,
             "type" : "small",
@@ -38,7 +38,7 @@
         },
         {
             "category" : "Housing",
-            "image" : "/images/tiles-311-background.png",
+            "image" : "/images/tiles-311.png",
             "title" : "Aenean Nibh Porta",
             "text" : null,
             "type" : "small",
@@ -48,7 +48,7 @@
     [
         {
             "category" : null,
-            "image" : "/images/tiles-money-bag-icon.png",
+            "image" : "/images/tiles-money-background.png",
             "title" : "Fusce Magna Condimentum Fringilla Dolor",
             "text" : "Maecenas faucibus mollis interdum. Lorem ipsum dolor sit amet",
             "type" : "tall",
@@ -58,7 +58,7 @@
     [
         {
             "category" : null,
-            "image" : "/images/tiles-money-bag-icon.png",
+            "image" : "/images/tiles-money-background.png",
             "title" : "Fusce Magna Condimentum Fringilla Dolor",
             "text" : "Maecenas faucibus mollis interdum. Lorem ipsum dolor sit amet",
             "type" : "tall",
@@ -68,7 +68,7 @@
     [
         {
             "category" : "311",
-            "image" : "/images/tiles-311-background.png",
+            "image" : "/images/tiles-311.png",
             "title" : "Commodo Cras Magna",
             "text" : null,
             "type" : "small",
@@ -76,7 +76,7 @@
         },
         {
             "category" : "Transit",
-            "image" : "/images/tiles-311-background.png",
+            "image" : "/images/tiles-311.png",
             "title" : "Venenatis Risus Consectetur",
             "text" : null,
             "type" : "small",
@@ -86,7 +86,7 @@
     [
         {
             "category" : "Transit",
-            "image" : "/images/tiles-311-background.png",
+            "image" : "/images/tiles-311.png",
             "title" : "Porta Magna Etiam Fermen",
             "text" : null,
             "type" : "small",
@@ -94,7 +94,7 @@
         },
         {
             "category" : "Housing",
-            "image" : "/images/tiles-311-background.png",
+            "image" : "/images/tiles-311.png",
             "title" : "Aenean Nibh Porta",
             "text" : null,
             "type" : "small",

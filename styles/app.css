@@ -2,7 +2,7 @@ body
 {
 	background-color: #fafafa;
 	margin: 0;
-	font-family: 'Myriad Pro', 'PT Sans', Arial, Helvetica, sans-serif;
+	font-family: 'Myriad Pro', 'Open Sans', Arial, Helvetica, sans-serif;
 	text-align: center;
 }
 
@@ -55,10 +55,11 @@ header li
 
 header li a
 {
-	color: #0fbe4d;
-	font-size: 18px;
-	position: relative;
-	top: 4px;
+	background-color: #0fbe4d;
+	border-radius: 3px;
+	color: white;
+	font-size: 16px;
+	padding: 8px 20px;
 }
 
 /* Footer */
@@ -106,11 +107,6 @@ footer
 /* Media queries */
 
 @media (max-width: 1280px) {
-	header 
-	{
-		position: static;
-	}
-	
 	#footer-content
 	{
 		width: 100%;
@@ -136,3 +132,9 @@ footer
 	}
 }
 
+@media (max-width: 600px) {
+	header 
+	{
+		position: static;
+	}
+}	
