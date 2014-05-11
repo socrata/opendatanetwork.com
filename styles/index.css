@@ -11,7 +11,7 @@
 	bottom: 0;
 	color: #fafafa;
 	display: block;
-	font-size: 10pt;
+	font-size: 14px;
 	line-height: 40px;
 	text-align: right;
 	position: absolute;
@@ -40,10 +40,10 @@
 
 #hero h1
 {
-	font-weight: 700;
-	font-size: 58pt;
-	line-height: 58pt;
 	color: #fafafa;
+	font-weight: 700;
+	font-size: 80px;
+	line-height: 80px;
 	letter-spacing: -3px;
 	margin: 0;
 	position: absolute;
@@ -57,7 +57,7 @@
 #hero p 
 {
 	color: #fafafa;
-	font-size: 26pt;
+	font-size: 36px;
 	font-weight: 600;
 	margin: 0;
 	position: absolute;
@@ -290,9 +290,6 @@
 }
 
 
-
-
-
 /* Orange footer */
 
 #orange-footer
@@ -317,12 +314,11 @@
 
 #orange-footer-start-exploring
 {
-	background-color: #bf4b28;
 	border: 3px solid white;
 	border-radius: 5px;
 	color: #fafafa;
 	display: block;
-	font-size: 15pt;
+	font-size: 20px;
 	height: 50px;
 	line-height: 50px;
 	margin-top: -25px;
