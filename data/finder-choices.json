@@ -11,12 +11,12 @@
 							{
 								"image" : "tiles-trulia.png",
 								"title" : "Profile of how Trulia uses HouseFacts.",
-								"url" : "http://youtu.be/VDumAcRCfnk"
+								"url" : "/articles/trulia"
 							},
 							{
 								"image" : null,
 								"title" : "Profile of how Porch.com uses permit data.",
-								"url" : "http://online.wsj.com/news/articles/SB10001424052702304887104579307000606208592"
+								"url" : "/articles/porch"
 							}
 						]
 					},
@@ -26,7 +26,7 @@
 							{
 								"image" : "tiles-appallicious.png",
 								"title" : "Profile of Appallicious.",
-								"url" : "http://www.socrata.com/partner/"
+								"url" : "/articles/appallicious.ejs"
 							},
 							{
 								"image" : null,

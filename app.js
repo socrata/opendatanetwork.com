@@ -1,6 +1,5 @@
 var express = require('express');
 var app = express();
-var soc = require('./modules/socrata');
 var fs = require('fs');
 
 // Set up static folders.
@@ -11,16 +10,18 @@ app.use('/images', express.static(__dirname + '/images'));
 app.use('/scripts', express.static(__dirname + '/scripts'));
 app.use('/styles', express.static(__dirname + '/styles'));
 
-app.locals.title = 'OpenData Network';
-
+// Set up app data
+//
 fs.readFile(__dirname + '/data/tiles.json', function(err, data) {
-  app.locals.columns = JSON.parse(data);
+    app.locals.columns = JSON.parse(data);
 });
 
 fs.readFile(__dirname + '/data/slides.json', function(err, data) {
-  app.locals.slides = JSON.parse(data);
+    app.locals.slides = JSON.parse(data);
 });
 
+// Set up routes
+//
 app.get('/', function(req, res) {
     app.locals.css = 'index.css';
     res.render('index.ejs');
@@ -31,5 +32,12 @@ app.get('/finder', function(req, res) {
     res.render('finder.ejs');
 });
 
+app.get('/articles/:article', function(req, res) {
+    app.locals.css = 'article.css';
+    res.render('articles/' + req.params.article + '.ejs');
+});
+
+// Start listening
+//
 app.listen(3000);
 console.log('app is listening at localhost:3000');

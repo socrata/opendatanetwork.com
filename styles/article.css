@@ -1,0 +1,67 @@
+/* Content area */
+
+.content
+{
+    font-size: 16px;
+    margin: 100px auto 60px;    
+    width: 800px;
+}
+
+.content-inner
+{
+    margin: 0 auto;
+    text-align: left;
+    width: 600px;
+}
+
+h1
+{
+    font-size: 40px;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* Sharing */
+
+#article-share
+{
+    float: left;
+    list-style-type: none;    
+    margin: 0;
+    padding: 0;
+}
+
+#article-share li a
+{
+    display: block;
+    height: 32px;
+    width: 32px;
+}
+
+#article-share-facebook
+{
+    background: url('/images/article-share-networks.png') no-repeat 0px 0px;
+}
+
+#article-share-twitter
+{
+    background: url('/images/article-share-networks.png') no-repeat 0px -32px;
+}
+
+#article-share-pinterest
+{
+    background: url('/images/article-share-networks.png') no-repeat 0px -64px;
+}
+
+#article-share-google
+{
+    background: url('/images/article-share-networks.png') no-repeat 0px -96px;
+}
+
+#article-share-add-this
+{
+    background: url('/images/article-share-networks.png') no-repeat 0px -128px;
+}
+
