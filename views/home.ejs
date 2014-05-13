@@ -1,30 +1,31 @@
 <% include header %>
 
+<script src="/jquery/jquery.min.js"></script>
+<script src="/scripts/jquery.slides.js"></script>
+<script src="/scripts/home.js"></script>
+
 <div id="hero">
     <img id="hero-image" src="/images/hero-background.jpg" alt="Food Trucks in New York City">
-    <h1>Data the Way You Want It.</h1>
-    <p>Introducing the Open Data Network,<br>the new hub for the vibrant and growing open data ecosystem.</p>
-    
+    <div id="hero-words">
+      <h1>Data the Way You Want It.</h1>
+      <p>Introducing the Open Data Network,<br>the new hub for the vibrant and growing open data ecosystem.</p>
+    </div>    
     <div id="hero-start-exploring-container">
       <a id="hero-start-exploring" href="/finder">START EXPLORING</a>
     </div>
-
     <a id="hero-mini-map" href="/"><img src="/images/hero-mini-map.png" alt="Mini map"></a>
     <label id="hero-image-label">FEATURED: Food Trucks in New York City</label>
 </div>
 
 <div class="content">
     <div id="slides">
-        <a href="javascript:void(0)" id="slide-left" class="slide-arrow prev"><img src="/images/slides-left-button.png"></a>
-        <a href="javascript:void(0)" id="slide-right" class="slide-arrow next"><img src="/images/slides-right-button.png"></a>
-        <ul>
+        <div id="slides-list">
           <% slides.forEach(function(slide) { %>
-            <li class="slide" style="background:url('<%= slide.image %>'); background-size:100%;">
-                <h2><a href="<%= slide.href %>"><%= slide.title %></a></h2>
-                <p><%= slide.text %></p>
-            </li>
+            <img src="<%= slide.image %>">
           <% }); %>
-        </ul>
+            <a href="#" class="slidesjs-previous slidesjs-navigation"><img src="/images/slides-left-button.png"></a>
+            <a href="#" class="slidesjs-next slidesjs-navigation"><img src="/images/slides-right-button.png"></a>        
+        </div>
     </div>
 </div>
   
@@ -64,9 +65,5 @@
         <a id="orange-footer-start-exploring" href="/finder">Start Exploring</a>
     </div>
 </div>
-
-<script src="/jquery/jquery.min.js"></script>
-<script src="/scripts/unslider-min.js"></script>
-<script src="/scripts/home.js"></script>
 
 <% include footer %>

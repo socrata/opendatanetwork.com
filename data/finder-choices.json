@@ -236,17 +236,17 @@
 							{
 								"image" : null,
 								"title" : "Profile of Trulia, Porch, etc.",
-								"url" : null
+								"url" : "/articles/trulia"
 							},
 							{
 								"image" : null,
-								"title" : "Catalog of app partners like Appilicious, etc.",
+								"title" : "Catalog of app partners like Appallicious, etc.",
 								"url" : null
 							},
 							{
 								"image" : null,
 								"title" : "Content about developer community with links to dev community assets/site",
-								"url" : null
+								"url" : "/articles/socrata-open-data-api-developer"
 							}
 						]
 					}

@@ -24,7 +24,7 @@ fs.readFile(__dirname + '/data/slides.json', function(err, data) {
 //
 app.get('/', function(req, res) {
     app.locals.css = 'home.css';
-    res.render('home.ejs');ƒß
+    res.render('home.ejs');
 });
 
 app.get('/finder', function(req, res) {
