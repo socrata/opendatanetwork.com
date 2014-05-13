@@ -23,8 +23,8 @@ fs.readFile(__dirname + '/data/slides.json', function(err, data) {
 // Set up routes
 //
 app.get('/', function(req, res) {
-    app.locals.css = 'index.css';
-    res.render('index.ejs');
+    app.locals.css = 'home.css';
+    res.render('home.ejs');ƒß
 });
 
 app.get('/finder', function(req, res) {

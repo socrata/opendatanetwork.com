@@ -68,10 +68,16 @@
     border-bottom: 1px dashed #222;
 }
 
+#question-1
+{
+    margin-bottom: 20px;
+}
+
 #question-2,
 #question-3
 {
     display: none;
+    margin-bottom: 20px;
 }
 
 #question-tip
@@ -93,13 +99,16 @@
     color: white;
 }
 
+
 /* Menu */
+
 #menu
 {
     -webkit-box-shadow: 0px 1px 1px 0px rgba(7,8,8,0.15);
     -moz-box-shadow: 0px 1px 1px 0px rgba(7,8,8,0.15);
     box-shadow: 0px 1px 1px 0px rgba(7,8,8,0.15);
     background-color: white;
+    border: 1px solid #eaeaea;
     display: none;
     margin: 0 auto;    
     padding: 0;
@@ -132,7 +141,8 @@
 {
     display: none;
     float: left;
-    margin: 80px 0;
+    margin: 40px 0 80px;
+    width: 100%;
 }
 
 #answers-may-we-suggest
@@ -141,60 +151,65 @@
     margin-bottom: 20px;
 }
 
-#answers ul 
+#answers-list
 {
+    display: block;
     float: left;
     list-style-type: none;
-    margin: 0;
     padding: 0;
+    width: 100%;
 }
 
-#answers li
-{
-    float: left;
-    margin-bottom: 20px;
-    margin-right: 20px;
-}
-
-#answers-start-over-image
-{
-    margin-top: 70px;
-}
-
-.answers-result-image
-{
-    margin: 5px;
-}
-
-.answers-result-text
-{
-    background-color: #fff;
-    bottom: 0;
-    padding: 10px 15px;
-    position: absolute;
-    width: 200px;
-}
-
-#answers-list li a
+#answers-list li
 {
     -webkit-box-shadow: 0px 1px 1px 0px rgba(7,8,8,0.15);
     -moz-box-shadow: 0px 1px 1px 0px rgba(7,8,8,0.15);
     box-shadow: 0px 1px 1px 0px rgba(7,8,8,0.15);
     border: 1px solid #eaeaea;
-    color: #222;
     display: block;
-    height: 230px;
-    overflow: hidden;
+    float: left;
+    margin: 0 20px 20px 0;
     position: relative;
     width: 230px;
 }
 
-#answers li:first-child a
+#answers-list li a
+{
+    color: #222;
+    display: block;
+    float: left;
+    height: 100%;
+    padding: 5px;
+}
+
+#answers-list li:last-child a
 {
     background-color: #9999ff;
     color: white;
     font-size: 24px; 
     text-align: center;
+}
+
+#answers-list li .answers-result-text
+{
+    background-color: #fff;
+    bottom: 0;
+    padding: 5px 10px;
+    position: absolute;
+}
+
+#answers-list li .answers-start-over-text
+{
+    position: absolute;
+    text-align: center;
+    top: 60%;
+    width: 100%;
+}
+
+#answers-list li img
+{
+    display: block;
+    width: 100%;
 }
 
 
@@ -232,6 +247,7 @@
     border-radius: 5px;
     color: white;
     display: inline-block;
+    margin-bottom: 20px;
     margin-right: 10px;
     padding: 10px 25px;
 }
@@ -253,7 +269,7 @@
     color: white;
     float: left;
     margin-left: 2%;
-    width: 48%;
+    width: 48%;     
 }
 
 
@@ -264,7 +280,59 @@
     {
         width: 100%;
     }
+
+    #answers-may-we-suggest
+    {
+        margin-left: 20px;
+    }
+
+    #answers-list li
+    {
+        margin-left: 10px;
+    }
 }
 
+@media (max-width: 768px) {
+    .content 
+    {
+        margin-top: 50px;
+    }
 
+    #menu
+    {
+        width: 100%;
+    }
+
+    #answers-list
+    {
+        margin-top: 20px;
+    }
+
+    #answers-list li
+    {
+        margin-left: 45px;
+    }
+
+    #answers-may-we-suggest
+    {
+        text-align: center;
+        margin-left: 0;
+    }
+
+    #supplemental
+    {
+        margin: 0;
+    }
+
+    #partners, #feedback
+    {
+        margin: 0;
+        width: 100%;
+    }
+
+    footer
+    {
+        margin-top: 50px;
+    }
+}
 

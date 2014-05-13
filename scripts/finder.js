@@ -149,21 +149,21 @@ var _finder = new function() {
         //
         var items = [];
 
-        items.push('<li><a href="javascript:_finder.reset()">' +
-            '<img id="answers-start-over-image" src="/images/finder-start-over.png">' +
-            '<div>Start Over</div></a></li>');
-
         console.log(this.choices[this.firstChoiceIndex].choices[this.secondChoiceIndex].choices[this.thirdChoiceIndex].choices);
 
         $.each(
             this.choices[this.firstChoiceIndex].choices[this.secondChoiceIndex].choices[this.thirdChoiceIndex].choices, 
             function(i, item) {
-                items.push('<li><a href="' + item.url + '" target="_blank">' +
+                items.push('<li><a href="' + item.url + '" target="_blank"><div class="answers-container">' +
                     '<img class="answers-result-image" src="/images/' + (item.image || 'tiles-placeholder.png') + '">' + 
                     '<div class="answers-result-text">' + 
                     item.title + 
-                    '</div></a></li>');
+                    '</div></div></a></li>');
             }); 
+
+        items.push('<li><a href="javascript:_finder.reset()"><div class="answers-container">' +
+            '<img id="answers-start-over-image" src="/images/finder-start-over.png">' +
+            '<div class="answers-start-over-text">Start Over</div></div></a></li>');
 
         $('#answers-list').empty().append(items.join('')).show(300);
 
@@ -211,10 +211,21 @@ var _finder = new function() {
 
     this.showTip =  function() {
 
-        var linkPosition = $('#question-1-link').offset(); 
-        var linkWidth = $('#question-1-link').width();
+        var viewPortWidth = $(window).width();
         var tipWidth = $('#question-tip').width();
-        var posLeft = linkPosition.left + ((linkWidth - tipWidth) / 2);
+        var posLeft;
+
+        if (viewPortWidth > 768)
+        {
+            var linkPosition = $('#question-1-link').offset(); 
+            var linkWidth = $('#question-1-link').width();
+            
+            posLeft = linkPosition.left + ((linkWidth - tipWidth) / 2);
+        }
+        else 
+        {
+            posLeft = (viewPortWidth - tipWidth) / 2;
+        }
 
         $('#question-tip').css({ left: posLeft });
         $('#question-tip').show(300);

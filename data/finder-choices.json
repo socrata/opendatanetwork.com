@@ -30,8 +30,8 @@
 							},
 							{
 								"image" : null,
-								"title" : "Profile of Local Data.",
-								"url" : null
+								"title" : "Zillow Uses Housing Data.",
+								"url" : "/articles/zillow"
 							}
 						]
 					}
@@ -126,17 +126,17 @@
 							{
 								"image" : null,
 								"title" : "Sign up for a Socrata API app token on dev.socrata.com.",
-								"url" : null
+								"url" : "http://dev.socrata.com"
 							},
 							{
 								"image" : null,
 								"title" : "Check out this list of companies that are using housing data.",
-								"url" : null
+								"url" : "/articles/companies-using-housing-data"
 							},
 							{
 								"image" : null,
 								"title" : "Check out these standards on popular housing data sets.",
-								"url" : null
+								"url" : "/articles/house-facts"
 							}
 						]
 					},
@@ -145,8 +145,8 @@
 						"choices" : [
 							{
 								"image" : null,
-								"title" : "See examples here of compelling housing data visualizations.",
-								"url" : null
+								"title" : "See examples here of compeling housing data visualizations.",
+								"url" : "/articles/examples-housing-visualizations"
 							},
 							{
 								"image" : null,
@@ -176,7 +176,7 @@
 							{
 								"image" : null,
 								"title" : "Sign up for a Socrata API app token on dev.socrata.com.",
-								"url" : null
+								"url" : "http://dev.socrata.com"
 							},
 							{
 								"image" : null,
@@ -186,7 +186,7 @@
 							{
 								"image" : null,
 								"title" : "Check out these standards on popular housing data sets.",
-								"url" : null
+								"url" : "/articles/learn-relevant-housing-standards"
 							}
 						]
 					}
@@ -261,7 +261,7 @@
 							{
 								"image" : null,
 								"title" : "Map of participating/included governments.",
-								"url" : null
+								"url" : "/articles/map-city-data"
 							},
 							{
 								"image" : null,
@@ -281,7 +281,7 @@
 							{
 								"image" : null,
 								"title" : "Crisp overview of ODN member value prop.",
-								"url" : null
+								"url" : "/articles/join-open-data-network-2"
 							}
 						]                
 					}

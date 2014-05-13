@@ -118,23 +118,14 @@ footer
 	}
 }
 
-@media (max-width: 1020px) {
-	#footer-content
-	{
-		width: 100%;
-	}
-}
-
-@media (max-width: 760px) {
-	#footer-content
-	{
-		width: 100%;
-	}
-}
-
-@media (max-width: 600px) {
-	header 
-	{
+@media (max-width: 768px) {
+    header
+    {
 		position: static;
-	}
-}	
+    }
+
+    header ul 
+    {
+    	display: none;
+    }
+}
