@@ -155,7 +155,7 @@ var _finder = new function() {
             this.choices[this.firstChoiceIndex].choices[this.secondChoiceIndex].choices[this.thirdChoiceIndex].choices, 
             function(i, item) {
                 items.push('<li><a href="' + item.url + '" target="_blank"><div class="answers-container">' +
-                    '<img class="answers-result-image" src="/images/' + (item.image || 'tiles-placeholder.png') + '">' + 
+                    '<img class="answers-result-image" src="' + (item.image || '/images/articles-placeholder.png') + '">' + 
                     '<div class="answers-result-text">' + 
                     item.title + 
                     '</div></div></a></li>');

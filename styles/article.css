@@ -42,26 +42,25 @@ h1
 
 #article-share-facebook
 {
-    background: url('/images/article-share-networks.png') no-repeat 0px 0px;
+    background: url('/images/articles-share-networks.png') no-repeat 0px 0px;
 }
 
 #article-share-twitter
 {
-    background: url('/images/article-share-networks.png') no-repeat 0px -32px;
+    background: url('/images/articles-share-networks.png') no-repeat 0px -32px;
 }
 
 #article-share-pinterest
 {
-    background: url('/images/article-share-networks.png') no-repeat 0px -64px;
+    background: url('/images/articles-share-networks.png') no-repeat 0px -64px;
 }
 
 #article-share-google
 {
-    background: url('/images/article-share-networks.png') no-repeat 0px -96px;
+    background: url('/images/articles-share-networks.png') no-repeat 0px -96px;
 }
 
 #article-share-add-this
 {
-    background: url('/images/article-share-networks.png') no-repeat 0px -128px;
+    background: url('/images/articles-share-networks.png') no-repeat 0px -128px;
 }
-
