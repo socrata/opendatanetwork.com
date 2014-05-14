@@ -330,6 +330,12 @@
 	{
 		width: 100%;
 	}
+
+	#hero-image-label,
+	#hero-mini-map
+	{
+		display: none;
+	}
 }
 
 @media (max-width: 992px) {
@@ -391,12 +397,6 @@
 	#hero p
 	{
 		font-size: 18px;
-	}
-
-	#hero-image-label,
-	#hero-mini-map
-	{
-		display: none;
 	}
 
 	.col-0, .col-1, .col-2, .col-3,

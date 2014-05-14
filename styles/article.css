@@ -10,8 +10,15 @@
 .content-inner
 {
     margin: 0 auto;
+    min-height: 400px;
     text-align: left;
     width: 600px;
+
+}
+
+.content-inner a
+{
+    color: rgb(237,59,57);
 }
 
 h1
@@ -20,6 +27,13 @@ h1
     font-weight: normal;
     margin: 0;
     padding: 0;
+}
+
+blockquote
+{
+    background-color: rgb(230,230,230);
+    border-left: 2px solid rgb(200,200,200);
+    padding: 15px 30px;
 }
 
 

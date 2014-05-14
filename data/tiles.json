@@ -2,113 +2,113 @@
     [
         {
             "category" : "Housing",
-            "image" : "/images/tiles-housing-background.png",
-            "title" : "Ultricies Fusce Malesuada Dolor Ullamcorper",
+            "image" : "/images/tiles-trulia-large.png",
+            "title" : "How Trulia Uses HouseFacts",
             "text" : null,
             "type" : "large",
-            "url" : "http://socrata.com"
+            "url" : "/articles/trulia"
         }
     ],
     [
         {
-            "category" : "311",
-            "image" : "/images/tiles-311.png",
-            "title" : "Commodo Cras Magna",
+            "category" : "Housing",
+            "image" : "/images/tiles-appallicious.png",
             "text" : null,
+            "title" : "Profile of Appallicious",
             "type" : "small",
-            "url" : "http://socrata.com"
-        },
-        {
-            "category" : "Transit",
-            "image" : "/images/tiles-311.png",
-            "title" : "Venenatis Risus Consectetur",
-            "text" : null,
-            "type" : "small",
-            "url" : "http://socrata.com"
-        }
-    ],
-    [
-        {
-            "category" : "Transit",
-            "image" : "/images/tiles-311.png",
-            "title" : "Porta Magna Etiam Fermen",
-            "text" : null,
-            "type" : "small",
-            "url" : "http://socrata.com"
+            "url" : "/articles/appallicious"
         },
         {
             "category" : "Housing",
-            "image" : "/images/tiles-311.png",
-            "title" : "Aenean Nibh Porta",
+            "image" : "/images/tiles-catalog.png",
+            "title" : "Building Permit Data",
             "text" : null,
             "type" : "small",
-            "url" : "http://socrata.com"
+            "url" : "http://odn.demo.socrata.com/browse?tags=odn-2"
+        }
+    ],
+    [
+        {
+            "category" : "Housing",
+            "image" : "/images/tiles-catalog.png",
+            "title" : "Housing Use, Health and Safety Reports from Top Innovative Cities",
+            "text" : null,
+            "type" : "small",
+            "url" : "http://odn.demo.socrata.com/browse?tags=odn-3"
+        },
+        {
+            "category" : "Housing",
+            "image" : "/images/tiles-socrata-dev.png",
+            "title" : "Socrata Developer API",
+            "text" : null,
+            "type" : "small",
+            "url" : "http://dev.socrata.com"
         }
     ],
     [
         {
             "category" : null,
             "image" : "/images/tiles-money-background.png",
-            "title" : "Fusce Magna Condimentum Fringilla Dolor",
-            "text" : "Maecenas faucibus mollis interdum. Lorem ipsum dolor sit amet",
+            "title" : "Relevant Housing Data Standards",
+            "text" : "Data standards, or the uniform formats for exchange information, helps publishers of information get data in to the right hands at the right time.",
             "type" : "tall",
-            "url" : "http://socrata.com"
+            "url" : "/articles/learn-relevant-housing-standards"
         }
     ],
     [
         {
             "category" : null,
             "image" : "/images/tiles-money-background.png",
-            "title" : "Fusce Magna Condimentum Fringilla Dolor",
-            "text" : "Maecenas faucibus mollis interdum. Lorem ipsum dolor sit amet",
+            "title" : "Housing Data Visualizations",
+            "text" : "Pulling information from San Francisco's DataSF portal, an engineer created a mash-up of the commuter Tech Buses, house price appreciation, and new business formation.",
             "type" : "tall",
-            "url" : "http://socrata.com"
-        }
-    ],
-    [
-        {
-            "category" : "311",
-            "image" : "/images/tiles-311.png",
-            "title" : "Commodo Cras Magna",
-            "text" : null,
-            "type" : "small",
-            "url" : "http://socrata.com"
-        },
-        {
-            "category" : "Transit",
-            "image" : "/images/tiles-311.png",
-            "title" : "Venenatis Risus Consectetur",
-            "text" : null,
-            "type" : "small",
-            "url" : "http://socrata.com"
-        }
-    ],
-    [
-        {
-            "category" : "Transit",
-            "image" : "/images/tiles-311.png",
-            "title" : "Porta Magna Etiam Fermen",
-            "text" : null,
-            "type" : "small",
-            "url" : "http://socrata.com"
-        },
-        {
-            "category" : "Housing",
-            "image" : "/images/tiles-311.png",
-            "title" : "Aenean Nibh Porta",
-            "text" : null,
-            "type" : "small",
-            "url" : "http://socrata.com"
+            "url" : "/articles/housing-visualizations"
         }
     ],
     [
         {
             "category" : "Housing",
-            "image" : "/images/tiles-housing-background.png",
-            "title" : "Ultricies Fusce Malesuada Dolor Ullamcorper",
+            "image" : "/images/tiles-zillow.png",
+            "title" : "Zillow Uses Housing Data",
+            "text" : null,
+            "type" : "small",
+            "url" : "/articles/zillow"
+        },
+        {
+            "category" : "Housing",
+            "image" : "/images/tiles-catalog.png",
+            "text" : null,
+            "title" : "US Census Demographics",
+            "type" : "small",
+            "url" : "http://odn.demo.socrata.com/browse?tags=odn-9"
+        }
+    ],
+    [
+        {
+            "category" : "Housing",
+            "image" : "/images/tiles-catalog.png",
+            "title" : "Housing Inventory, Crime Rate and Educational Performance Data from Top U.S. Cities.",
+            "text" : null,
+            "type" : "small",
+            "url" : "http://odn.demo.socrata.com/browse?tags=odn-1"
+        },
+        {
+            "category" : "Housing",
+            "image" : "/images/tiles-porch.png",
+            "title" : "Porch.com Uses Permit Data",
+            "text" : null,
+            "type" : "small",
+            "url" : "/articles/porch"
+        }
+    ],
+    [
+        {
+            "category" : "Housing",
+            "image" : "/images/tiles-socrata-partners-large.png",
+            "title" : "List of Companies Using Housing Data",
             "text" : null,
             "type" : "large",
-            "url" : "http://socrata.com"
+            "url" : "/articles/companies-using-housing-data"
         }
     ]
 ]
