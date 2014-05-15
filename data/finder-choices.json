@@ -56,7 +56,7 @@
 							{
 								"image" : "/images/articles-catalog.png",
 								"title" : "Standardized and granular data on housing use, health and safety reports from top innovative cities",
-								"url" : "http://odn.demo.socrata.com/browse?tags=odn-3"
+								"url" : "https://odn.demo.socrata.com/browse?q=housefacts&sortBy=relevance&utf8=%E2%9C%93"
 							},
 							{
 								"image" : "/images/articles-catalog.png",
