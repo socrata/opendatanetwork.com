@@ -37,6 +37,10 @@ app.get('/articles/:article', function(req, res) {
     res.render('articles/' + req.params.article + '.ejs');
 });
 
+app.get('/robots.txt', function(req, res) {
+    res.render('robots.ejs');
+});
+
 // Start listening
 //
 var port = Number(process.env.PORT || 3000);
