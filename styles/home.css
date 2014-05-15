@@ -214,6 +214,7 @@
 	-webkit-box-shadow: 0px 1px 1px 0px rgba(7,8,8,0.15);
 	-moz-box-shadow: 0px 1px 1px 0px rgba(7,8,8,0.15);
 	box-shadow: 0px 1px 1px 0px rgba(7,8,8,0.15);
+	background-color: white;
 	border: 1px solid #eaeaea;
 	display: block;
 	overflow: hidden;
@@ -239,7 +240,7 @@
 
 .tile-title-container
 {
-	background-color: rgba(255, 255, 255, 1);
+	background-color: white;
 	bottom: 0;
 	position: absolute;
 	width: 100%;
@@ -306,7 +307,7 @@
 
 #orange-footer-start-exploring
 {
-	border: 3px solid white;
+	border: 3px solid #fafafa;
 	border-radius: 5px;
 	color: #fafafa;
 	display: block;

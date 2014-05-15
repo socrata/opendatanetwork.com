@@ -5,7 +5,7 @@ $(function() {
         play: {
             active: true,
             effect: "slide",
-            interval: 3000,
+            interval: 5000,
             auto: true,
             pauseOnHover: false
         }
