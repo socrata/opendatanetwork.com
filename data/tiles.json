@@ -39,7 +39,7 @@
         {
             "category" : "Housing",
             "image" : "/images/tiles-socrata-dev.png",
-            "title" : "Socrata Developer API",
+            "title" : "Socrata Open Data API",
             "text" : null,
             "type" : "small",
             "url" : "http://dev.socrata.com"
