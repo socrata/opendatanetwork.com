@@ -39,5 +39,7 @@ app.get('/articles/:article', function(req, res) {
 
 // Start listening
 //
-app.listen(3000);
-console.log('app is listening at localhost:3000');
+var port = Number(process.env.PORT || 3000);
+
+app.listen(port);
+console.log('app is listening on ' + port);
