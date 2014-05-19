@@ -48,7 +48,7 @@
     [
         {
             "category" : null,
-            "image" : "/images/tiles-money-background.png",
+            "image" : null,
             "title" : "Relevant Housing Data Standards",
             "text" : "Data standards, or the uniform formats for exchange information, helps publishers of information get data in to the right hands at the right time.",
             "type" : "tall",
@@ -58,7 +58,7 @@
     [
         {
             "category" : null,
-            "image" : "/images/tiles-money-background.png",
+            "image" : null,
             "title" : "Housing Data Visualizations",
             "text" : "Pulling information from San Francisco's DataSF portal, an engineer created a mash-up of the commuter Tech Buses, house price appreciation, and new business formation.",
             "type" : "tall",
