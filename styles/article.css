@@ -42,39 +42,6 @@ blockquote
 #article-share
 {
     float: left;
-    list-style-type: none;    
     margin: 0;
     padding: 0;
-}
-
-#article-share li a
-{
-    display: block;
-    height: 32px;
-    width: 32px;
-}
-
-#article-share-facebook
-{
-    background: url('/images/articles-share-networks.png') no-repeat 0px 0px;
-}
-
-#article-share-twitter
-{
-    background: url('/images/articles-share-networks.png') no-repeat 0px -32px;
-}
-
-#article-share-pinterest
-{
-    background: url('/images/articles-share-networks.png') no-repeat 0px -64px;
-}
-
-#article-share-google
-{
-    background: url('/images/articles-share-networks.png') no-repeat 0px -96px;
-}
-
-#article-share-add-this
-{
-    background: url('/images/articles-share-networks.png') no-repeat 0px -128px;
 }
