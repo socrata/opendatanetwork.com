@@ -276,9 +276,8 @@
 	height: 100%;
 }
 
-.tile-tall:before
+.tile-tall::before
 {
-	content: '';
 	display: block;
 	margin-top: 165%;
 }

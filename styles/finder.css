@@ -1,3 +1,8 @@
+body
+{
+    overflow-y: scroll;
+}
+
 /* Content area */
 
 .content

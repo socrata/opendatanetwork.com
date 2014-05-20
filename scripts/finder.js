@@ -5,46 +5,92 @@ var _finder = new function() {
     this.firstChoiceIndex = 0;
     this.secondChoiceIndex = 0;
     this.thirdChoiceIndex = 0;
+    this.lastHash = null;
 
     this.init = function(choices) {
 
-        this.choices = choices
-        this.showTip();
+        this.choices = choices;
+        this.lastHash = location.hash;
+        this.reloadFromHash();
+    }
+
+    this.reloadFromHash = function() {
+
+        var rg = (location.hash == '') ? [] : location.hash.substring(1).split(',');
+
+        if (rg.length == 0)
+        {
+            $('#menu').hide(300);
+            $('#answers').hide(300);
+            $('#supplemental').hide(300);
+
+            this.showTip();
+        }
+        else 
+        {
+            $('#question-tip').hide(300);
+
+            if (rg.length > 0)
+                this.didMakeFirstChoice(parseInt(rg[0]));
+
+            if (rg.length > 1)
+                this.didMakeSecondChoice(parseInt(rg[1]));
+
+            if (rg.length > 2)
+                this.didMakeThirdChoice(parseInt(rg[2]));
+        }
     };
 
     this.reset = function() {
 
-        this.firstChoiceIndex = 0;
-        this.secondChoiceIndex = 0;
+        this.navigate([]);
+    }
 
+    this.showTip =  function() {
+
+        var viewPortWidth = $(window).width();
+        var tipWidth = $('#question-tip').width();
+        var posLeft;
+
+        if (viewPortWidth > 768)
+        {
+            var linkPosition = $('#question-1-link').offset(); 
+            var linkWidth = $('#question-1-link').width();
+            
+            posLeft = linkPosition.left + ((linkWidth - tipWidth) / 2);
+        }
+        else 
+        {
+            posLeft = (viewPortWidth - tipWidth) / 2;
+        }
+
+        this.setActiveCircle(1);
+        
         $('#question-1-link').text(this.yourAnswer) 
         $('#question-2').hide(300);
         $('#question-2-link').text(this.yourAnswer) 
         $('#question-3').hide(300);
         $('#question-3-link').text(this.yourAnswer) 
+        $('#question-tip').css({ left: posLeft });
+        $('#question-tip').show(300);
+    };
 
-        this.setActiveCircle(1);
-        this.showHideAnswers(false);
-    }
-
-    this.showFirstQuestionMenu =  function() {
-
-        // Hide tip
-        //
-        $('#question-tip').hide(300);
+    this.showFirstQuestionMenu = function() {
 
         // Init menu 
         //
         var items = [];
 
         $.each(this.choices, function(i, item) {
-            items.push('<li><a href="javascript:_finder.didMakeFirstChoice(' + i + ');">' + item.title + '</a></li>');
+            items.push('<li><a href="javascript:_finder.navigate([' + i + ']);">' + item.title + '</a></li>');
         }); 
 
         $('#menu').empty().append(items.join('')).show(300);
 
-        // Hide the second and third questions if already open.
+        // Hide / show elements
         //
+        $('#question-tip').hide(300);
+
         $('#question-2').hide(300);
         $('#question-2-link').text(this.yourAnswer) 
 
@@ -55,24 +101,23 @@ var _finder = new function() {
         this.showHideAnswers(false);
     };
 
-    this.showSecondQuestionMenu =  function() {
-
-        // Hide tip
-        //
-        $('#question-tip').hide(300);
+    this.showSecondQuestionMenu = function() {
 
         // Init menu 
         //
         var items = [];
+        var i = this.firstChoiceIndex;
 
-        $.each(this.choices[this.firstChoiceIndex].choices, function(i, item) {
-            items.push('<li><a href="javascript:_finder.didMakeSecondChoice(' + i + ');">' + item.title + '</a></li>');
+        $.each(this.choices[this.firstChoiceIndex].choices, function(index, value) {
+            items.push('<li><a href="javascript:_finder.navigate([' + i + ',' + index + ']);">' + value.title + '</a></li>');
         }); 
 
         $('#menu').empty().append(items.join('')).show(300);
 
-        // Hide the third questions if already open.
+        // Hide / show elements
         //
+        $('#question-tip').hide(300);
+
         $('#question-3').hide(300);
         $('#question-3-link').text(this.yourAnswer) 
 
@@ -80,21 +125,23 @@ var _finder = new function() {
         this.showHideAnswers(false);
     };
 
-    this.showThirdQuestionMenu =  function() {
-
-        // Hide tip
-        //
-        $('#question-tip').hide(300);
+    this.showThirdQuestionMenu = function() {
 
         // Init menu 
         //
         var items = [];
+        var i = this.firstChoiceIndex;
+        var j = this.secondChoiceIndex;
 
-        $.each(this.choices[this.firstChoiceIndex].choices[this.secondChoiceIndex].choices, function(i, item) {
-            items.push('<li><a href="javascript:_finder.didMakeThirdChoice(' + i + ');">' + item.title + '</a></li>');
+        $.each(this.choices[this.firstChoiceIndex].choices[this.secondChoiceIndex].choices, function(index, value) {
+            items.push('<li><a href="javascript:_finder.navigate([' + i + ',' + j + ',' + index + ']);">' + value.title + '</a></li>');
         }); 
 
         $('#menu').empty().append(items.join('')).show(300);
+
+        // Hide / show elements
+        //
+        $('#question-tip').hide(300);
 
         this.setActiveCircle(3);
         this.showHideAnswers(false);
@@ -107,12 +154,14 @@ var _finder = new function() {
         this.thirdChoiceIndex = 0;
 
         var s = this.choices[index].title;
-        console.log(s);
+        console.log('didMakeFirstChoice : ' + s);
 
-        $('#question-1-link').text(s);
- 
-        $('#question-2').show(300);
         $('#menu').hide(300);
+        $('#question-1-link').text(s);
+        $('#question-2-link').text(this.yourAnswer);
+        $('#question-3-link').text(this.yourAnswer);
+        $('#question-2').show(300);
+        $('#question-3').hide(300);
 
         this.setActiveCircle(2);
         this.showHideAnswers(false);
@@ -124,12 +173,13 @@ var _finder = new function() {
         this.thirdChoiceIndex = 0;
 
         var s = this.choices[this.firstChoiceIndex].choices[this.secondChoiceIndex].title;
-        console.log(s);
+        console.log('didMakeSecondChoice : ' + s);
 
-        $('#question-2-link').text(s);
- 
-        $('#question-3').show(300);
         $('#menu').hide(300);
+        $('#question-2-link').text(s);
+        $('#question-3-link').text(this.yourAnswer);
+        $('#question-2').show(300);
+        $('#question-3').show(300);
 
         this.setActiveCircle(3);
         this.showHideAnswers(false);
@@ -139,13 +189,7 @@ var _finder = new function() {
 
         this.thirdChoiceIndex = index;
 
-        var s = this.choices[this.firstChoiceIndex].choices[this.secondChoiceIndex].choices[this.thirdChoiceIndex].title;
-        console.log(s);
-
-        $('#question-3-link').text(s);
-        $('#menu').hide(300);
-
-        // Show results
+        // Build results
         //
         var items = [];
 
@@ -166,6 +210,14 @@ var _finder = new function() {
             '<div class="answers-start-over-text">Start Over</div></div></a></li>');
 
         $('#answers-list').empty().append(items.join('')).show(300);
+
+        var s = this.choices[this.firstChoiceIndex].choices[this.secondChoiceIndex].choices[this.thirdChoiceIndex].title;
+        console.log('didMakeThirdChoice : ' + s);
+
+        $('#menu').hide(300);
+        $('#question-3-link').text(s);
+        $('#question-2').show(300);
+        $('#question-3').show(300);
 
         this.showHideAnswers(true);
     };
@@ -209,31 +261,19 @@ var _finder = new function() {
         }
     }
 
-    this.showTip =  function() {
+    this.navigate = function(rg) {
 
-        var viewPortWidth = $(window).width();
-        var tipWidth = $('#question-tip').width();
-        var posLeft;
+        location.hash = rg.join(',');
 
-        if (viewPortWidth > 768)
-        {
-            var linkPosition = $('#question-1-link').offset(); 
-            var linkWidth = $('#question-1-link').width();
-            
-            posLeft = linkPosition.left + ((linkWidth - tipWidth) / 2);
-        }
-        else 
-        {
-            posLeft = (viewPortWidth - tipWidth) / 2;
-        }
+        if (location.hash == this.lastHash)
+            this.reloadFromHash();
 
-        $('#question-tip').css({ left: posLeft });
-        $('#question-tip').show(300);
-    };
-
+        this.lastHash = location.hash;
+    }
 };
 
 $(document).ready(function() {
+
     $.ajax({
         url: "/data/finder-choices.json",
         dataType: "text",
@@ -241,4 +281,9 @@ $(document).ready(function() {
             _finder.init($.parseJSON(data));
         }
     });
+});
+
+$(window).on('hashchange', function() {
+
+    _finder.reloadFromHash();
 });
