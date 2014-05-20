@@ -1,10 +1,10 @@
-$(function() {
-    $("#slides-list").slidesjs({
+$(document).ready(function() {
+    $('#slides-list').slidesjs({
         width: 1280,
         height: 528,
         play: {
             active: true,
-            effect: "slide",
+            effect: 'slide',
             interval: 5000,
             auto: true,
             pauseOnHover: false

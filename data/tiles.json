@@ -21,7 +21,7 @@
         {
             "category" : "Housing",
             "image" : "/images/tiles-catalog.png",
-            "title" : "Building Permit Data",
+            "title" : "Building Permit Data for Building Construction Projects from Top U.S. Cities",
             "text" : null,
             "type" : "small",
             "url" : "http://odn.demo.socrata.com/browse?tags=odn-2"
@@ -31,7 +31,7 @@
         {
             "category" : "Housing",
             "image" : "/images/tiles-catalog.png",
-            "title" : "Housing Use, Health and Safety Reports from Top Innovative Cities",
+            "title" : "Standardized and Granular Data on Housing Use, Health and Safety Reports from Top Innovative Cities",
             "text" : null,
             "type" : "small",
             "url" : "http://odn.demo.socrata.com/browse?tags=odn-3"
@@ -39,7 +39,7 @@
         {
             "category" : "Housing",
             "image" : "/images/tiles-socrata-dev.png",
-            "title" : "Socrata Open Data API",
+            "title" : "Sign up for a Socrata API App Token on dev.socrata.com",
             "text" : null,
             "type" : "small",
             "url" : "http://dev.socrata.com"
@@ -69,7 +69,7 @@
         {
             "category" : "Housing",
             "image" : "/images/tiles-zillow.png",
-            "title" : "Zillow Uses Housing Data",
+            "title" : "Profile of How Zillow Uses Housing Data",
             "text" : null,
             "type" : "small",
             "url" : "/articles/zillow"
@@ -78,7 +78,7 @@
             "category" : "Housing",
             "image" : "/images/tiles-catalog.png",
             "text" : null,
-            "title" : "US Census Demographics",
+            "title" : "Demographic Data from U.S. Census",
             "type" : "small",
             "url" : "http://odn.demo.socrata.com/browse?tags=odn-9"
         }
@@ -87,7 +87,7 @@
         {
             "category" : "Housing",
             "image" : "/images/tiles-catalog.png",
-            "title" : "Housing Inventory, Crime Rate and Educational Performance Data from Top U.S. Cities.",
+            "title" : "Relationships between Housing Inventory, Crime Rate and Educational Performance Data from Top U.S. Cities",
             "text" : null,
             "type" : "small",
             "url" : "http://odn.demo.socrata.com/browse?tags=odn-1"
@@ -95,7 +95,7 @@
         {
             "category" : "Housing",
             "image" : "/images/tiles-porch.png",
-            "title" : "Porch.com Uses Permit Data",
+            "title" : "Profile of How Porch.com Uses Permit Data",
             "text" : null,
             "type" : "small",
             "url" : "/articles/porch"
