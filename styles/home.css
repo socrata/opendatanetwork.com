@@ -278,6 +278,7 @@
 
 .tile-tall::before
 {
+	content: '';
 	display: block;
 	margin-top: 165%;
 }
