@@ -1,4 +1,11 @@
-<% include ../article-header %>
+<% if (modal) { %>
+    <% include ../modal-header %>
+<% } else  { %>
+    <% include ../article-header %>
+<% } %>
+
+
+
 
 <h1>Companies Using Housing Data</h1>
 
@@ -27,4 +34,12 @@
     <li>Zoner</li>
 </ul>
 
-<% include ../article-footer %>
+
+
+
+
+<% if (modal) { %>
+    <% include ../modal-footer %>
+<% } else  { %>
+    <% include ../article-footer %>
+<% } %>

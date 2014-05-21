@@ -198,7 +198,7 @@ var _finder = new function() {
         $.each(
             this.choices[this.firstChoiceIndex].choices[this.secondChoiceIndex].choices[this.thirdChoiceIndex].choices, 
             function(i, item) {
-                items.push('<li><a href="' + item.url + '" target="_blank"><div class="answers-container">' +
+                items.push('<li><a href="' + item.url + '"><div class="answers-container">' +
                     '<img class="answers-result-image" src="' + (item.image || '/images/articles-placeholder.png') + '">' + 
                     '<div class="answers-result-text">' + 
                     item.title + 
@@ -206,7 +206,7 @@ var _finder = new function() {
             }); 
 
         items.push('<li><a href="javascript:_finder.reset()"><div class="answers-container">' +
-            '<img id="answers-start-over-image" src="/images/finder-start-over.png">' +
+            '<img id="answers-start-over-image" src="/images/explore-start-over.png">' +
             '<div class="answers-start-over-text">Start Over</div></div></a></li>');
 
         $('#answers-list').empty().append(items.join('')).show(300);
@@ -275,7 +275,7 @@ var _finder = new function() {
 $(document).ready(function() {
 
     $.ajax({
-        url: "/data/finder-choices.json",
+        url: "/data/explore.json",
         dataType: "text",
         success: function(data) {
             _finder.init($.parseJSON(data));

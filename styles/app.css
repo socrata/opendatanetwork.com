@@ -1,12 +1,41 @@
+/* CSS reset to override bootstrap */
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video 
+{
+    font-size: 100%;
+}
+
+
+
+/* Common styles */
+
 body
 {
 	background-color: #fafafa;
 	margin: 0;
 	font-family: 'Myriad Pro', 'Open Sans', Arial, Helvetica, sans-serif;
+	font-size: 100%;
 	text-align: center;
 }
 
 a
+{
+	text-decoration: none;
+}
+
+a:hover
 {
 	text-decoration: none;
 }
@@ -60,6 +89,11 @@ header li a
 	color: white;
 	font-size: 16px;
 	padding: 8px 20px;
+}
+
+header li a:hover
+{
+	color: white;
 }
 
 /* Footer */

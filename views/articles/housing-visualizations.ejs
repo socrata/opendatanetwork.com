@@ -1,4 +1,12 @@
-<% include ../article-header %>
+<% if (modal) { %>
+    <% include ../modal-header %>
+<% } else  { %>
+    <% include ../article-header %>
+<% } %>
+
+
+
+
 
 <h1>Examples of Housing Visualizations</h1>
 
@@ -6,4 +14,12 @@
 
 <p><a href="http://chriswhong.com/open-data/gothamists-best-maps-of-2013-brought-to-you-by-open-data/">Example #2</a>: Chris Whong, an active civic hacker in New York City, dug deeper in to a ""Best Of..."" list of maps and discovered that most were actually powered by open data, including this one on when lower manhattan's buildings were built.</p>
 
-<% include ../article-footer %>
+
+
+
+
+<% if (modal) { %>
+    <% include ../modal-footer %>
+<% } else  { %>
+    <% include ../article-footer %>
+<% } %>

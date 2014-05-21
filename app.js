@@ -27,13 +27,20 @@ app.get('/', function(req, res) {
     res.render('home.ejs');
 });
 
-app.get('/finder', function(req, res) {
-    app.locals.css = 'finder.css';
-    res.render('finder.ejs');
+app.get('/explore', function(req, res) {
+    app.locals.css = 'explore.css';
+    res.render('explore.ejs');
 });
 
 app.get('/articles/:article', function(req, res) {
     app.locals.css = 'article.css';
+    app.locals.modal = false;
+    res.render('articles/' + req.params.article + '.ejs');
+});
+
+app.get('/modal/:article', function(req, res) {
+    app.locals.css = 'modal.css';
+    app.locals.modal = true;
     res.render('articles/' + req.params.article + '.ejs');
 });
 

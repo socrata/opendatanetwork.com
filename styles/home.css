@@ -84,7 +84,7 @@
 	top: 70%;
 	left: 0;
 	right: 0;
-	width: 240px;
+	width: 260px;
 }
 
 #hero-start-exploring
@@ -136,7 +136,7 @@
 	position: absolute;
 	top: 50%;
 	width: 48px;
-	z-index: 11;
+	z-index: 10;
 }
 
 .slidesjs-next
@@ -146,7 +146,7 @@
 	right: 0px;
 	top: 50%;
 	width: 48px;
-	z-index: 11;
+	z-index: 10;
 }
 
 #slides-list

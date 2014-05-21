@@ -3,6 +3,7 @@
         {
             "category" : "Housing",
             "image" : "/images/tiles-trulia-large.png",
+            "modalUrl" : "/modal/trulia",
             "title" : "How Trulia Uses HouseFacts",
             "text" : null,
             "type" : "large",
@@ -13,6 +14,7 @@
         {
             "category" : "Housing",
             "image" : "/images/tiles-appallicious.png",
+            "modalUrl" : "/modal/appallicious",
             "text" : null,
             "title" : "Profile of Appallicious",
             "type" : "small",
@@ -21,6 +23,7 @@
         {
             "category" : "Housing",
             "image" : "/images/tiles-catalog.png",
+            "modalUrl" : null,
             "title" : "Building Permit Data for Building Construction Projects from Top U.S. Cities",
             "text" : null,
             "type" : "small",
@@ -31,6 +34,7 @@
         {
             "category" : "Housing",
             "image" : "/images/tiles-catalog.png",
+            "modalUrl" : null,
             "title" : "Standardized and Granular Data on Housing Use, Health and Safety Reports from Top Innovative Cities",
             "text" : null,
             "type" : "small",
@@ -39,6 +43,7 @@
         {
             "category" : "Housing",
             "image" : "/images/tiles-socrata-dev.png",
+            "modalUrl" : null,
             "title" : "Sign up for a Socrata API App Token on dev.socrata.com",
             "text" : null,
             "type" : "small",
@@ -49,6 +54,7 @@
         {
             "category" : null,
             "image" : null,
+            "modalUrl" : "/modal/learn-relevant-housing-standards",
             "title" : "Relevant Housing Data Standards",
             "text" : "Data standards, or the uniform formats for exchange information, helps publishers of information get data in to the right hands at the right time.",
             "type" : "tall",
@@ -59,6 +65,7 @@
         {
             "category" : null,
             "image" : null,
+            "modalUrl" : "/modal/housing-visualizations",
             "title" : "Housing Data Visualizations",
             "text" : "Pulling information from San Francisco's DataSF portal, an engineer created a mash-up of the commuter Tech Buses, house price appreciation, and new business formation.",
             "type" : "tall",
@@ -69,6 +76,7 @@
         {
             "category" : "Housing",
             "image" : "/images/tiles-zillow.png",
+            "modalUrl" : "/modal/zillow",
             "title" : "Profile of How Zillow Uses Housing Data",
             "text" : null,
             "type" : "small",
@@ -77,6 +85,7 @@
         {
             "category" : "Housing",
             "image" : "/images/tiles-catalog.png",
+            "modalUrl" : null,
             "text" : null,
             "title" : "Demographic Data from U.S. Census",
             "type" : "small",
@@ -87,6 +96,7 @@
         {
             "category" : "Housing",
             "image" : "/images/tiles-catalog.png",
+            "modalUrl" : null,
             "title" : "Relationships between Housing Inventory, Crime Rate and Educational Performance Data from Top U.S. Cities",
             "text" : null,
             "type" : "small",
@@ -95,6 +105,7 @@
         {
             "category" : "Housing",
             "image" : "/images/tiles-porch.png",
+            "modalUrl" : "/modal/porch",
             "title" : "Profile of How Porch.com Uses Permit Data",
             "text" : null,
             "type" : "small",
@@ -105,6 +116,7 @@
         {
             "category" : "Housing",
             "image" : "/images/tiles-socrata-partners-large.png",
+            "modalUrl" : "/modal/companies-using-housing-data",
             "title" : "List of Companies Using Housing Data",
             "text" : null,
             "type" : "large",

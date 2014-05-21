@@ -1,6 +1,5 @@
 <% include header %>
 
-<script src="/jquery/jquery.min.js"></script>
 <script src="/scripts/jquery.slides.js"></script>
 <script src="/scripts/home.js"></script>
 
@@ -11,7 +10,7 @@
       <p>Introducing the Open Data Network,<br>the new hub for the vibrant and growing open data ecosystem.</p>
     </div>    
     <div id="hero-start-exploring-container">
-      <a id="hero-start-exploring" href="/finder">START EXPLORING</a>
+      <a id="hero-start-exploring" href="/explore">START EXPLORING</a>
     </div>
     <a id="hero-mini-map" href="https://odn.demo.socrata.com/browse?sortBy=relevance&utf8=%E2%9C%93&q=map"><img src="/images/hero-mini-map.png" alt="Mini map"></a>
     <label id="hero-image-label">Data Delivering the American Dream</label>
@@ -35,7 +34,14 @@
         <div class="col-<%= columnIndex %>">
 
             <% column.forEach(function(tile) { %>
-              <a class="tile tile-<%= tile.type %>" href="<%= tile.url %>">
+              <a class="tile tile-<%= tile.type %>" 
+
+<% if (tile.modalUrl != null) { %>
+                data-toggle="modal"
+                data-target="#article-modal"
+                data-remote="<%= tile.modalUrl %>"
+<% } %>
+                href="<%= tile.url %>">
                 
                 <% if (tile.image != null) { %>
                   <img class="tile-image" src="<%= tile.image %>">
@@ -62,7 +68,15 @@
 <div class="content">
     <div id="orange-footer">
         <div id="orange-footer-tag-line">Your data is more valuable when it's here.</div>
-        <a id="orange-footer-start-exploring" href="/finder">Start Exploring</a>
+        <a id="orange-footer-start-exploring" href="/explore">Start Exploring</a>
+    </div>
+</div>
+
+<div id="article-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <div class="modal-content">
+        </div>
     </div>
 </div>
 

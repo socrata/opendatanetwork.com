@@ -1,7 +1,23 @@
-<% include ../article-header %>
+<% if (modal) { %>
+    <% include ../modal-header %>
+<% } else  { %>
+    <% include ../article-header %>
+<% } %>
+
+
+
+
 
 <h1>Instructions for How to Make Your Own Visualizations</h1>
 
 <p>Don't just sit there.  Data by itself is useless.  Help to unlock some of the value of the information on this site by making your own visualization.  Here's a <a href="https://opendata.socrata.com/videos/#bar-chart">video</a> to help you get started.</p>
 
-<% include ../article-footer %>
+
+
+
+
+<% if (modal) { %>
+    <% include ../modal-footer %>
+<% } else  { %>
+    <% include ../article-footer %>
+<% } %>

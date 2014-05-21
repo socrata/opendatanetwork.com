@@ -1,4 +1,12 @@
-<% include ../article-header %>
+<% if (modal) { %>
+    <% include ../modal-header %>
+<% } else  { %>
+    <% include ../article-header %>
+<% } %>
+
+
+
+
 
 <h1>Zillow Uses Housing Data</h1>
 
@@ -6,4 +14,12 @@
 
 <blockquote>"For most Americans, buying a home is the largest purchase of their lives.&nbsp; That’s where a company like Zillow comes in -- helping families make informed decisions about buying a home and where to raise a family.&nbsp; Zillow is powered, in part, by open government data – including freely available data from the Bureau of Labor Statistics, Federal Housing Finance Agency, and the Census Bureau.&nbsp; Zillow uses these data sets to do things like help home buyers in a given region understand the point in years at which buying a home is more financially advantageous than renting the same home."</blockquote>
 
-<% include ../article-footer %>
+
+
+
+
+<% if (modal) { %>
+    <% include ../modal-footer %>
+<% } else  { %>
+    <% include ../article-footer %>
+<% } %>

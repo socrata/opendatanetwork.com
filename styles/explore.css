@@ -30,7 +30,7 @@ body
 
 .circle 
 {
-    background: url('/images/finder-circle-gray.png');
+    background: url('/images/explore-circle-gray.png');
     color: #d1d1d1;
     display: inline-block;
     font-size: 24px;
@@ -43,7 +43,7 @@ body
 
 #circles .circle-active
 {
-    background: url('/images/finder-circle-purple.png');
+    background: url('/images/explore-circle-purple.png');
     color: #9999ff;
 }
 
@@ -87,7 +87,7 @@ body
 
 #question-tip
 {
-    background: url('/images/finder-question-tip-arrow.png') no-repeat top center;
+    background: url('/images/explore-question-tip-arrow.png') no-repeat top center;
     display: none;
     margin: 0 auto;
     padding-top: 10px;
@@ -201,7 +201,7 @@ body
     bottom: 0;
     padding: 5px 10px;
     position: absolute;
-    width: 200px;
+    width: 220px;
 }
 
 #answers-list li .answers-start-over-text
@@ -256,6 +256,11 @@ body
     margin-bottom: 20px;
     margin-right: 10px;
     padding: 10px 25px;
+}
+
+.supplemental-button:hover
+{
+    color: white;    
 }
 
 #partners

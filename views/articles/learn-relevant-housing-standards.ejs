@@ -1,4 +1,12 @@
-<% include ../article-header %>
+<% if (modal) { %>
+    <% include ../modal-header %>
+<% } else  { %>
+    <% include ../article-header %>
+<% } %>
+
+
+
+
 
 <h1>Learn about Relevant Housing Standards</h1>
 
@@ -15,4 +23,12 @@
     <li>A newly developed civic standard that is receiving great accolades is <a href="www.housefacts.me">HouseFacts</a>.  With participation from a handful of U.S. cities, this data set contains information on the building use, safety and health and is being utilized within platforms like Trulia."</li>
 </ul>
 
-<% include ../article-footer %>
+
+
+
+
+<% if (modal) { %>
+    <% include ../modal-footer %>
+<% } else  { %>
+    <% include ../article-footer %>
+<% } %>
