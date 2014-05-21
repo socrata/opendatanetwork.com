@@ -48,6 +48,11 @@ app.get('/robots.txt', function(req, res) {
     res.render('robots.ejs');
 });
 
+app.get('/google0679b96456cb5b3a.html', function(req, res) {
+    res.render('google0679b96456cb5b3a.ejs');
+});
+
+
 // Start listening
 //
 var port = Number(process.env.PORT || 3000);
