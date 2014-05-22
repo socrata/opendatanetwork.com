@@ -1,5 +1,16 @@
 /* Hero section */
 
+#hero
+{
+	background: url('/images/hero-background.jpg') no-repeat center center;
+	background-size: cover;
+	height: 100%;
+	min-height: 480px;
+	margin-bottom: 35px;  
+	position: relative;
+	text-align: center;
+}
+
 #hero-image
 {
 	display: block;
@@ -28,14 +39,6 @@
 #hero-mini-map img 
 {
 	display: block;
-}
-
-#hero
-{
-	margin-bottom: 35px;  
-	margin-top: 60px;
-	position: relative;
-	text-align: center;
 }
 
 #hero-words
