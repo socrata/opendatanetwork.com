@@ -10,6 +10,8 @@ app.use('/images', express.static(__dirname + '/images'));
 app.use('/scripts', express.static(__dirname + '/scripts'));
 app.use('/styles', express.static(__dirname + '/styles'));
 
+app.use(express.favicon(__dirname + '/images/favicon.ico'));
+
 // Set up app data
 //
 fs.readFile(__dirname + '/data/tiles.json', function(err, data) {
@@ -45,11 +47,11 @@ app.get('/modal/:article', function(req, res) {
 });
 
 app.get('/robots.txt', function(req, res) {
-    res.render('robots.ejs');
+    res.render('static/robots.ejs');
 });
 
 app.get('/google0679b96456cb5b3a.html', function(req, res) {
-    res.render('google0679b96456cb5b3a.ejs');
+    res.render('static/google0679b96456cb5b3a.ejs');
 });
 
 
