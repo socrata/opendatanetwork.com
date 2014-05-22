@@ -12,11 +12,6 @@
 								"image" : "/images/articles-trulia.png",
 								"title" : "Profile of How Trulia Uses HouseFacts",
 								"url" : "/articles/trulia"
-							},
-							{
-								"image" : "/images/articles-porch.png",
-								"title" : "Profile of How Porch.com Uses Permit Data",
-								"url" : "/articles/porch"
 							}
 						]
 					},

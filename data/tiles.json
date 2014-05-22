@@ -104,12 +104,12 @@
         },
         {
             "category" : "Housing",
-            "image" : "/images/tiles-porch.png",
-            "modalUrl" : "/modal/porch",
-            "title" : "Profile of How Porch.com Uses Permit Data",
+            "image" : "/images/tiles-catalog.png",
+            "modalUrl" : null,
+            "title" : "Catalog of Every Geospatial or Map Open Data File from the Nation's Leading Cities",
             "text" : null,
             "type" : "small",
-            "url" : "/articles/porch"
+            "url" : "http://odn.demo.socrata.com/browse?tags=odn-4"
         }
     ],
     [
