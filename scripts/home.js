@@ -8,7 +8,7 @@ $(document).ready(function() {
         play: {
             active: true,
             effect: 'slide',
-            interval: 5000,
+            interval: 10000,
             auto: true,
             pauseOnHover: false
         }
