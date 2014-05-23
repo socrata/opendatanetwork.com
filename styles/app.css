@@ -162,11 +162,6 @@ footer
 
 @media (max-width: 768px) {
 
-    header
-    {
-		position: static;
-    }
-
     header .explore
     {
     	display: none;

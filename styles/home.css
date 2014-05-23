@@ -6,7 +6,7 @@
 	background-size: cover;
 	height: 100%;
 	min-height: 480px;
-	margin-bottom: 35px;  
+	margin-bottom: 30px;  
 	position: relative;
 	text-align: center;
 }
@@ -52,25 +52,26 @@
 #hero h1
 {
 	color: #fafafa;
-	font-weight: 700;
+	display: block;
+	font-weight: 700;	
 	font-size: 80px;
 	letter-spacing: -3px;
-	margin: 0 auto 3%;
-	padding: 0;
+	margin: 0 auto 4%;
+	padding: 0 2%;
 	text-shadow: 0px 1px 2px rgba(7, 8, 8, 0.75);
 	text-transform: uppercase;
-	width: 100%;
 	white-space: nowrap;
 }
 
 #hero p
 {
 	color: #fafafa;
+	display: block;
 	font-size: 36px;
 	font-weight: 600;
 	margin: 0 auto;
+	padding: 0 2%;
 	text-shadow: 0px 1px 2px rgba(7, 8, 8, 0.75);
-	width: 100%;
 }
 
 #hero-start-exploring-container
@@ -84,7 +85,7 @@
 	padding-bottom: 20px;
 	position: absolute;
 	text-align: center;
-	top: 70%;
+	bottom: 30%;
 	left: 0;
 	right: 0;
 	width: 260px;
@@ -360,7 +361,6 @@
 	display: block;
 	float: right;
 	font-size: 20px;
-	height: 50px;
 	line-height: 50px;
 	margin-right: 25px;
 	padding-left: 36px;
@@ -374,15 +374,16 @@
 /* Media queries */
 
 @media (max-width: 1280px) {
+
+	#hero h1
+	{
+		font-size: 66px;
+		letter-spacing: normal;
+	}
+
 	.content
 	{
 		width: 100%;
-	}
-
-	#hero-image-label,
-	#hero-mini-map
-	{
-		display: none;
 	}
 }
 
@@ -390,13 +391,12 @@
 
 	#hero h1
 	{
-		font-size: 48px;
-		letter-spacing: normal;
+		font-size: 54px;
 	}
 
 	#hero p
 	{
-		font-size: 24px;
+		font-size: 28px;
 	}
 
 	.col-0, .col-1, .col-2, .col-3,
@@ -432,19 +432,20 @@
 
 @media (max-width: 768px) {
 
-	#hero
-	{
-		margin-top: 0;
-	}
-
 	#hero h1
 	{
-		font-size: 36px;
+		font-size: 40px;
 	}
 
 	#hero p
 	{
-		font-size: 18px;
+		font-size: 24px;
+	}
+
+	#hero-image-label,
+	#hero-mini-map
+	{
+		display: none;
 	}
 
 	.col-0, .col-1, .col-2, .col-3,
@@ -499,33 +500,27 @@
 
 	#hero
 	{
-		margin-bottom: 0;
 	}
 
 	#hero h1
 	{
-		font-size: 20px;
+		white-space: normal;
 	}
 
 	#hero p
 	{
-		font-size: 14px;
+	}
+
+	#hero-start-exploring-container
+	{
+		bottom: 6%;
 	}
 
 	#hero-words
 	{
-		top: 15%;
+		top: 18%;
 	}
 	
-	#hero-start-exploring-container
-	{
-		border-radius: 0;
-		position: static;
-		margin-bottom: 0;
-		margin-top: 0;
-		width: 100%;
-	}
-
 	.col-0, .col-1, .col-2, .col-3,
 	.col-4, .col-5, .col-6, .col-7
 	{
