@@ -16,7 +16,7 @@ module.exports = function(grunt) {
             }
         },
         sass: {
-            compressed: {
+            build: {
                 options: {
                     style: 'compressed'
                 },
@@ -25,13 +25,27 @@ module.exports = function(grunt) {
                     cwd: '<%= project.styles %>',
                     src: ['*.scss'],
                     dest: '<%= project.styles %>/compressed',
-                    ext: '.css'
+                    ext: '.min.css'
                 }]
             }
         },
+        uglify: {
+            build: {
+                options: {
+                    mangle: false
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%= project.scripts %>',
+                    src: ['*.js'],
+                    dest: '<%= project.scripts %>/compressed',
+                    ext: '.min.js'
+                }]
+            }
+        }
     });
 
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
-    grunt.registerTask('default', ['sass']);
+    grunt.registerTask('default', ['sass','uglify']);
 };
