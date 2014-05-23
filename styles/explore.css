@@ -287,6 +287,7 @@ body
 /* Media queries */
 
 @media (max-width: 1280px) {
+
     .content
     {
         width: 100%;
@@ -304,10 +305,6 @@ body
 }
 
 @media (max-width: 768px) {
-    .content 
-    {
-        margin-top: 50px;
-    }
 
     #menu
     {
