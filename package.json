@@ -1,14 +1,19 @@
 {
-    "name" : "OpenDataNetwork.com",
-    "description" : "Open Data Network Website",
-    "private": true,
-    "dependencies" : {
-        "express" : "^3.5.2",
-        "request" : "^2.34.0",
-        "ejs" : "^1.0.0",
-        "jquery" : "^2.1.1"
-        },
-    "engines" : {
-        "node" : "0.10.x"
-    }
+  "name": "OpenDataNetwork.com",
+  "description": "Open Data Network Website",
+  "private": true,
+  "dependencies": {
+    "express": "^3.5.2",
+    "ejs": "^1.0.0",
+    "jquery": "^2.1.1"
+  },
+  "engines": {
+    "node": "0.10.x"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-nodemon": "^0.2.1",
+    "grunt-contrib-sass": "^0.7.3",
+    "matchdep": "^0.3.0"
+  }
 }

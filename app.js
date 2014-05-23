@@ -8,7 +8,7 @@ app.use('/data', express.static(__dirname + '/data'));
 app.use('/images', express.static(__dirname + '/images'));
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist'));
 app.use('/scripts', express.static(__dirname + '/scripts'));
-app.use('/styles', express.static(__dirname + '/styles'));
+app.use('/styles', express.static(__dirname + '/styles/compressed'));
 
 app.use(express.favicon(__dirname + '/images/favicon.ico'));
 
