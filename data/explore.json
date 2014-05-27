@@ -10,6 +10,7 @@
 						"choices" : [
 							{
 								"image" : "/images/articles-trulia.png",
+					            "modalUrl" : "/modal/trulia",
 								"title" : "Profile of How Trulia Uses HouseFacts",
 								"url" : "/articles/trulia"
 							}
@@ -20,11 +21,13 @@
 						"choices" : [
 							{
 								"image" : "/images/articles-appallicious.png",
+								"modalUrl" : "/modal/appallicious",
 								"title" : "Profile of Appallicious",
 								"url" : "/articles/appallicious"
 							},
 							{
 								"image" : "/images/articles-zillow.png",
+								"modalUrl" : "/modal/zillow",
 								"title" : "Profile of How Zillow Uses Housing Data",
 								"url" : "/articles/zillow"
 							}
@@ -40,26 +43,31 @@
 						"choices" : [
 							{
 								"image" : "/images/articles-catalog.png",
+								"modalUrl" : null,
 								"title" : "Catalog that Shows Relationships between Housing Inventory, Crime Rate and Educational Performance Data from Top U.S. Cities",
 								"url" : "http://odn.demo.socrata.com/browse?tags=odn-1"
 							},
 							{
 								"image" : "/images/articles-catalog.png",
+								"modalUrl" : null,
 								"title" : "Catalog of Building Permit Data for Building Construction Projects from Top U.S. Cities",
 								"url" : "http://odn.demo.socrata.com/browse?tags=odn-2"
 							},
 							{
 								"image" : "/images/articles-catalog.png",
+								"modalUrl" : null,
 								"title" : "Standardized and Granular Data on Housing Use, Health and Safety Reports from Top Innovative Cities",
 								"url" : "http://odn.demo.socrata.com/browse?tags=odn-2"
 							},
 							{
 								"image" : "/images/articles-catalog.png",
+								"modalUrl" : null,
 								"title" : "Catalog of Every Geospatial or Map Open Data File from the Nation's Leading Cities",
 								"url" : "http://odn.demo.socrata.com/browse?tags=odn-4"
 							},
 							{
 								"image" : "/images/articles-catalog.png",
+								"modalUrl" : null,
 								"title" : "Catalog of Data Sets Relating to Buildings that are Maps or Other Types of Geospatial Data",
 								"url" : "https://odn.demo.socrata.com/browse?tags=odn-13"
 							}
@@ -70,16 +78,19 @@
 						"choices" : [
 							{
 								"image" : "/images/articles-catalog.png",
+								"modalUrl" : null,
 								"title" : "Standardized and Granular Data on Housing Use, Health and Safety Reports from Two Innovative Cities",
 								"url" : "http://odn.demo.socrata.com/browse?tags=odn-5"
 							},
 							{
 								"image" : "/images/articles-catalog.png",
+								"modalUrl" : null,
 								"title" : "Catalog of Data Sets on Homelessness from across the Country",
 								"url" : "http://odn.demo.socrata.com/browse?tags=odn-6"
 							},
 							{
 								"image" : "/images/articles-catalog.png",
+								"modalUrl" : null,
 								"title" : "Catalog of Data Sets on Housing and Apartment Inspections, Foreclosures and Vacancies from Top U.S. Cities",
 								"url" : "http://odn.demo.socrata.com/browse?tags=odn-7"
 							}
@@ -90,26 +101,31 @@
 						"choices" : [
 							{
 								"image" : "/images/articles-catalog.png",
+								"modalUrl" : null,
 								"title" : "Demographic Data from U.S. Census",
 								"url" : "http://odn.demo.socrata.com/browse?tags=odn-9"
 							},
 							{
 								"image" : "/images/articles-catalog.png",
+								"modalUrl" : null,
 								"title" : "All Data Sets from Top U.S. cities that Have the Words “housing”, “buildings”, or “apartment” in the Metadata",
 								"url" : "http://odn.demo.socrata.com/browse?tags=odn-10"
 							},
 							{
 								"image" : "/images/articles-catalog.png",
+								"modalUrl" : null,
 								"title" : "Data on Housing / Building Costs and Finance (e.g. Assessments, Property Tax, etc) from Top U.S. cities",
 								"url" : "http://odn.demo.socrata.com/browse?tags=odn-11"
 							},
 							{
 								"image" : "/images/articles-catalog.png",
+								"modalUrl" : null,
 								"title" : "Data on Housing / Building Use (e.g. Zoning as Residential / Commercial, Parcel Type, Maps of Boundaries, etc)",
 								"url" : "http://odn.demo.socrata.com/browse?tags=odn-12"
 							},
 							{
 								"image" : "/images/articles-catalog.png",
+								"modalUrl" : null,
 								"title" : "Sustainability / Energy Use",
 								"url" : "http://odn.demo.socrata.com/browse?tags=odn-14"
 							}
@@ -125,16 +141,19 @@
 						"choices" : [
 							{
 								"image" : "/images/articles-socrata-dev.png",
+								"modalUrl" : null,
 								"title" : "Sign up for a Socrata API App Token on dev.socrata.com",
 								"url" : "http://dev.socrata.com"
 							},
 							{
 								"image" : "/images/articles-socrata-partners.png",
+								"modalUrl" : "/modal/companies-using-housing-data",
 								"title" : "Check Out this List of Companies that are Using Housing Data",
 								"url" : "/articles/companies-using-housing-data"
 							},
 							{
 								"image" : "/images/articles-house-facts.png",
+								"modalUrl" : "/modal/house-facts",
 								"title" : "Check Out these Standards on Popular Housing Data Sets",
 								"url" : "/articles/house-facts"
 							}
@@ -145,16 +164,19 @@
 						"choices" : [
 							{
 								"image" : "/images/articles-housing-visualizations.png",
+								"modalUrl" : "/modal/housing-visualizations",
 								"title" : "See Examples Here of Compelling Housing Data Visualizations",
 								"url" : "/articles/housing-visualizations"
 							},
 							{
 								"image" : "/images/socrata-data-visualizations-how-to.png",
+								"modalUrl" : null,
 								"title" : "See this Instructional Guide to Creating your Own Data Visualizations",
 								"url" : "https://opendata.socrata.com/videos/#bar-chart"
 							},
 							{
 								"image" : "/images/articles-catalog.png",
+								"modalUrl" : null,
 								"title" : "Catalog of Data Sets Relating to Buildings that are Maps or Other Types of Geospatial Data",
 								"url" : "http://odn.demo.socrata.com/browse?tags=odn-13"
 							}
@@ -175,16 +197,19 @@
 						"choices" : [
 							{
 								"image" : "/images/articles-socrata-dev.png",
+								"modalUrl" : null,
 								"title" : "Sign Up for a Socrata API App Token on dev.socrata.com",
 								"url" : "http://dev.socrata.com"
 							},
 							{
 								"image" : "/images/articles-socrata-partners.png",
+								"modalUrl" : "/modal/companies-using-housing-data",
 								"title" : "Check Out this List of Companies that are Using Housing Data",
 								"url" : "/articles/companies-using-housing-data"
 							},
 							{
 								"image" : "/images/articles-house-facts.png",
+								"modalUrl" : "/modal/learn-relevant-housing-standards",
 								"title" : "Check Out these Standards on Popular Housing Data Sets",
 								"url" : "/articles/learn-relevant-housing-standards"
 							}
@@ -200,6 +225,7 @@
 						"choices" : [
 							{
 								"image" : "/images/articles-catalog.png",
+								"modalUrl" : null,
 								"title" : "Standardized and Granular Data on Housing Use, Health and Safety Reports from Two Innovative Cities",
 								"url" : "https://odn.demo.socrata.com/browse?q=housefacts&sortBy=relevance&utf8=%E2%9C%93"
 							}
@@ -210,6 +236,7 @@
 						"choices" : [
 							{
 								"image" : "/images/articles-socrata-open-source.png",
+								"modalUrl" : null,
 								"title" : "Socrata is Committed to Open Source, Open Standards, Data Portability, and Interoperability.",
 								"url" : "http://www.socrata.com/products/open-source-development-community/"
 							}
@@ -230,11 +257,13 @@
 						"choices" : [
 							{
 								"image" : "/images/articles-socrata-partners.png",
+								"modalUrl" : "/modal/companies-using-housing-data",
 								"title" : "Check Out this List of Companies that are Using Housing Data",
 								"url" : "/articles/companies-using-housing-data"
 							},
 							{
 								"image" : "/images/articles-socrata-dev.png",
+								"modalUrl" : null,
 								"title" : "Content about Developer Community with Links to Dev Community Assets / Site",
 								"url" : "/articles/socrata-open-data-api-developer"
 							}
@@ -250,11 +279,13 @@
 						"choices" : [
 							{
 								"image" : "/images/articles-catalog.png",
+								"modalUrl" : "/modal/map-city-data",
 								"title" : "Map of Participating / Included Governments",
 								"url" : "/articles/map-city-data"
 							},
 							{
 								"image" : "/images/articles-catalog.png",
+								"modalUrl" : null,
 								"title" : "Catalog of Relevant Data by Government",
 								"url" : "https://odn.demo.socrata.com"
 							}
@@ -270,7 +301,8 @@
 						"choices" : [
 							{
 								"image" : "/images/articles-socrata-partners.png",
-								"title" : "Crisp Overview of ODN Member Value prop",
+								"modalUrl" : "/modal/join-open-data-network",
+								"title" : "Join the Open Data Network",
 								"url" : "/articles/join-open-data-network"
 							}
 						]                

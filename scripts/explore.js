@@ -198,11 +198,24 @@ var _finder = new function() {
         $.each(
             this.choices[this.firstChoiceIndex].choices[this.secondChoiceIndex].choices[this.thirdChoiceIndex].choices, 
             function(i, item) {
-                items.push('<li><a href="' + item.url + '"><div class="answers-container">' +
+                var s;
+
+                s = '<li><a href="' + item.url + '"';
+
+                if (item.modalUrl != null)
+                {
+                    s += ' data-toggle="modal"' +
+                        ' data-target="#article-modal"' +
+                        ' data-remote="' + item.modalUrl + '"';
+                }
+
+                s += '><div class="answers-container">' +
                     '<img class="answers-result-image" src="' + (item.image || '/images/articles-placeholder.png') + '">' + 
                     '<div class="answers-result-text">' + 
                     item.title + 
-                    '</div></div></a></li>');
+                    '</div></div></a></li>';
+
+                items.push(s);
             }); 
 
         items.push('<li><a href="javascript:_finder.reset()"><div class="answers-container">' +
@@ -274,6 +287,8 @@ var _finder = new function() {
 
 $(document).ready(function() {
 
+    // Get the explore.json
+    //
     $.ajax({
         url: "/data/explore.json",
         dataType: "text",
@@ -281,6 +296,38 @@ $(document).ready(function() {
             _finder.init($.parseJSON(data));
         }
     });
+
+    // Init modal
+    //
+    var originalUrl = document.URL;
+
+    $('#article-modal').on('shown.bs.modal', function(e) {
+        
+        console.log('shown.bs.modal');
+
+        var script = 'http://s7.addthis.com/js/250/addthis_widget.js#domready=1';
+
+        if (window.addthis) {
+            window.addthis = null;
+            window._adr = null;
+            window._atc = null;
+            window._atd = null;
+            window._ate = null;
+            window._atr = null;
+            window._atw = null;
+        }
+
+        $.getScript(script, function() {
+            addthis.init();
+        });
+    })
+
+    $('#article-modal').on('hide.bs.modal', function() {
+        
+        console.log('hide.bs.modal');
+
+        $(this).removeData();
+    })
 });
 
 $(window).on('hashchange', function() {
