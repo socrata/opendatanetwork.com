@@ -1,3 +1,5 @@
+var _shouldNavigate = true;
+
 var _finder = new function() {
 
     this.yourAnswer = "your answer.";
@@ -6,11 +8,13 @@ var _finder = new function() {
     this.secondChoiceIndex = 0;
     this.thirdChoiceIndex = 0;
     this.lastHash = null;
+    this.lastUrl = null;
 
     this.init = function(choices) {
 
         this.choices = choices;
         this.lastHash = location.hash;
+        this.lastUrl = document.URL;
         this.reloadFromHash();
     }
 
@@ -193,8 +197,6 @@ var _finder = new function() {
         //
         var items = [];
 
-        console.log(this.choices[this.firstChoiceIndex].choices[this.secondChoiceIndex].choices[this.thirdChoiceIndex].choices);
-
         $.each(
             this.choices[this.firstChoiceIndex].choices[this.secondChoiceIndex].choices[this.thirdChoiceIndex].choices, 
             function(i, item) {
@@ -282,6 +284,7 @@ var _finder = new function() {
             this.reloadFromHash();
 
         this.lastHash = location.hash;
+        this.lastUrl = document.URL;
     }
 };
 
@@ -299,11 +302,12 @@ $(document).ready(function() {
 
     // Init modal
     //
-    var originalUrl = document.URL;
-
     $('#article-modal').on('shown.bs.modal', function(e) {
         
         console.log('shown.bs.modal');
+
+        var url = $(e.relatedTarget).attr('href');
+        window.history.pushState({}, null, url);
 
         var script = 'http://s7.addthis.com/js/250/addthis_widget.js#domready=1';
 
@@ -328,9 +332,22 @@ $(document).ready(function() {
 
         $(this).removeData();
     })
+
+    $(window).on('hashchange', function() {
+
+        if (_shouldNavigate)
+            _finder.reloadFromHash();
+
+        _shouldNavigate = true;
+    });
+
+    $('#article-modal').on('hide.bs.modal', function() {
+        
+        console.log('hide.bs.modal');
+
+        _shouldNavigate = false;
+        window.history.replaceState({}, null, _finder.lastUrl);
+        $(this).removeData();
+    })
 });
 
-$(window).on('hashchange', function() {
-
-    _finder.reloadFromHash();
-});
