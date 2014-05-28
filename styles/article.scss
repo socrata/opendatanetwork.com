@@ -9,11 +9,10 @@
 
 .content-inner
 {
-    margin: 0 auto;
+    margin: 0 10%;
     min-height: 400px;
     text-align: left;
-    width: 600px;
-
+    width: 80%;
 }
 
 .content-inner a
@@ -44,4 +43,23 @@ blockquote
     float: left;
     margin: 0;
     padding: 0;
+}
+
+
+/* Media queries */
+
+@media (max-width: 992px) {
+
+    .content
+    {
+        width: 100%;
+    }
+}
+
+@media (max-width: 400px) {
+
+    #article-share
+    {
+        display: none;
+    }
 }
