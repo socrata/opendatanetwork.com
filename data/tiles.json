@@ -13,7 +13,7 @@
     [
         {
             "category" : "Housing",
-            "image" : "/images/tiles-appallicious.png",
+            "image" : "/images/tiles-appallicious.jpg",
             "modalUrl" : "/modal/appallicious",
             "text" : null,
             "title" : "Profile of Appallicious",
@@ -42,7 +42,7 @@
         },
         {
             "category" : "Housing",
-            "image" : "/images/tiles-socrata-dev.png",
+            "image" : "/images/tiles-socrata-dev.jpg",
             "modalUrl" : null,
             "title" : "Sign up for a Socrata API App Token on dev.socrata.com",
             "text" : null,
@@ -115,7 +115,7 @@
     [
         {
             "category" : "Housing",
-            "image" : "/images/tiles-socrata-partners-large.png",
+            "image" : "/images/tiles-socrata-partners-large.jpg",
             "modalUrl" : "/modal/companies-using-housing-data",
             "title" : "List of Companies Using Housing Data",
             "text" : null,

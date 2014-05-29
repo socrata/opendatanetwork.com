@@ -20,7 +20,7 @@
 						"title" : "individual apps in specific cities.",
 						"choices" : [
 							{
-								"image" : "/images/articles-appallicious.png",
+								"image" : "/images/articles-appallicious.jpg",
 								"modalUrl" : "/modal/appallicious",
 								"title" : "Profile of Appallicious",
 								"url" : "/articles/appallicious"
@@ -140,7 +140,7 @@
 						"title" : "creating a data-driven app.",
 						"choices" : [
 							{
-								"image" : "/images/articles-socrata-dev.png",
+								"image" : "/images/articles-socrata-dev.jpg",
 								"modalUrl" : null,
 								"title" : "Sign up for a Socrata API App Token on dev.socrata.com",
 								"url" : "http://dev.socrata.com"
