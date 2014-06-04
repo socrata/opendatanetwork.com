@@ -1,6 +1,9 @@
 /* Variables */
 
-$gray-color: #eee;
+$row-color: #eee;
+$black-color: #222;
+$gray-color: #888;
+$green-color: #0FBE4D;
 
 /* Content area */
 
@@ -19,7 +22,12 @@ $gray-color: #eee;
 
 .content a 
 {
-    color: #9999ff;
+    color: $green-color;
+}
+
+.content td:first-child a
+{
+    color: $black-color;
 }
 
 .content table
@@ -30,13 +38,18 @@ $gray-color: #eee;
 
 .content tr:nth-child(even) 
 {
-    background-color: $gray-color;
+    background-color: $row-color;
 }
 
 .content td:first-child,
 .content th:first-child
 {
     text-align: left;
+}
+
+.content td 
+{
+    color: $gray-color;
 }
 
 .content td,
@@ -48,7 +61,7 @@ $gray-color: #eee;
 
 .content th
 {
-    color: #222;
+    color: $black-color;
 }
 
 .content .c 

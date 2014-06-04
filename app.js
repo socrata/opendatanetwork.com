@@ -1,8 +1,7 @@
 var express = require('express');
 var app = express();
 var fs = require('fs');
-var pg = require('pg').native;
-
+var pg = require('pg');
 
 
 // Set up static folders.
@@ -16,18 +15,13 @@ app.use('/styles', express.static(__dirname + '/styles/compressed'));
 app.use(express.favicon(__dirname + '/images/favicon.ico'));
 
 
-// Set up app data
+// St up app data
 //
 fs.readFile(__dirname + '/data/tiles.json', function(err, data) {
     app.locals.columns = JSON.parse(data);
 });
-
 fs.readFile(__dirname + '/data/slides.json', function(err, data) {
     app.locals.slides = JSON.parse(data);
-});
-
-fs.readFile(__dirname + '/data/census.json', function(err, data) {
-    app.locals.census = JSON.parse(data);
 });
 
 
@@ -52,7 +46,7 @@ app.get('/census', function(req, res) {
     
     client.connect();
 
-    var query = client.query("SELECT * FROM documents;");
+    var query = client.query("SELECT * FROM documents ORDER BY portal_title;");
     
     query.on('row', function(row) {
         results.push(

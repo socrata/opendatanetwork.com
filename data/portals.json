@@ -1,0 +1,260 @@
+{
+    "portals" : [
+        {
+            "title" : "Australian Capital Territory",
+            "url" : "https://www.data.act.gov.au"
+        },
+        {
+            "title" : "Health System Measurement Project",
+            "url" : "https://healthmeasures.aspe.hhs.gov"
+        },
+        {
+            "title" : "California Common Sense",
+            "url" : "https://data.cacs.org"
+        },
+        {
+            "title" : "Centers for Disease Control and Prevention",
+            "url" : "https://data.cdc.gov"
+        },
+        {
+            "title" : "Consumer Complaint Database",
+            "url" : "http://www.consumerfinance.gov/complaintdatabase"
+        },
+        {
+            "title" : "Honolulu",
+            "url" : "https://data.honolulu.gov"
+        },
+        {
+            "title" : "San Francisco",
+            "url" : "https://data.sfgov.org"
+        },
+        {
+            "title" : "Albany, New York",
+            "url" : "https://data.albanyny.gov"
+        },
+        {
+            "title" : "Austin",
+            "url" : "https://data.austintexas.gov"
+        },
+        {
+            "title" : "Baltimore",
+            "url" : "http://data.baltimorecity.gov"
+        },
+        {
+            "title" : "Boston",
+            "url" : "https://data.cityofboston.gov"
+        },
+        {
+            "title" : "Chicago",
+            "url" : "http://data.cityofchicago.org"
+        },
+        {
+            "title" : "Edmonton",
+            "url" : "https://data.edmonton.ca"
+        },
+        {
+            "title" : "Eindhoven, NL",
+            "url" : "https://data.eindhoven.nl"
+        },
+        {
+            "title" : "Kansas City",
+            "url" : "https://data.kcmo.org"
+        },
+        {
+            "title" : "Las Vegas",
+            "url" : "https://opendata.lasvegasnevada.gov"
+        },
+        {
+            "title" : "Los Angeles",
+            "url" : "https://controllerdata.lacity.org"
+        },
+        {
+            "title" : "Madison, WI",
+            "url" : "https://data.cityofmadison.com"
+        },
+        {
+            "title" : "New Orleans",
+            "url" : "http://data.nola.gov"
+        },
+        {
+            "title" : "New York City",
+            "url" : "https://www.opendatanyc.com"
+        },
+        {
+            "title" : "Oakland, CA",
+            "url" : "https://data.oaklandnet.com"
+        },
+        {
+            "title" : "Raleigh, NC",
+            "url" : "https://data.raleighnc.gov"
+        },
+        {
+            "title" : "Redmond, WA",
+            "url" : "https://data.redmond.gov"
+        },
+        {
+            "title" : "Salt Lake City",
+            "url" : "http://data.slcgov.com"
+        },
+        {
+            "title" : "Somerville, MA",
+            "url" : "https://data.somervillema.gov"
+        },
+        {
+            "title" : "South Bend, IN",
+            "url" : "http://data.southbendin.gov"
+        },
+        {
+            "title" : "Weatherford, TX",
+            "url" : "https://data.weatherfordtx.gov"
+        },
+        {
+            "title" : "Wellington, FL",
+            "url" : "http://data.wellingtonfl.gov"
+        },
+        {
+            "title" : "Medicare",
+            "url" : "http://data.medicare.gov"
+        },
+        {
+            "title" : "Alameda County, CA",
+            "url" : "https://data.acgov.org"
+        },
+        {
+            "title" : "Cook County, IL",
+            "url" : "http://datacatalog.cookcountyil.gov"
+        },
+        {
+            "title" : "King County, WA",
+            "url" : "http://www.datakc.org"
+        },
+        {
+            "title" : "Mongomery County, MD",
+            "url" : "https://data.montgomerycountymd.gov"
+        },
+        {
+            "title" : "San Mateo County, CA",
+            "url" : "https://data.smcgov.org"
+        },
+        {
+            "title" : "Snohomish County, WA",
+            "url" : "https://data.snostat.org"
+        },
+        {
+            "title" : "Snohomish County, WA",
+            "url" : "https://data.snostat.org"
+        },
+        {
+            "title" : "Data.gov",
+            "url" : "http://explore.data.gov"
+        },
+        {
+            "title" : "Development Credit Authority",
+            "url" : "https://www.dcadashboard.com"
+        },
+        {
+            "title" : "Boosting College Completion",
+            "url" : "https://boostingcollegecompletion.socrata.com"
+        },
+        {
+            "title" : "Energy Star",
+            "url" : "https://data.energystar.gov"
+        },
+        {
+            "title" : "US Environmental Protection Agency",
+            "url" : "https://epa-data.socrata.com"
+        },
+        {
+            "title" : "Kenya Open Data",
+            "url" : "https://opendata.go.ke"
+        },
+        {
+            "title" : "Halifax Open Data",
+            "url" : "https://www.halifaxopendata.ca"
+        },
+        {
+            "title" : "Human Rights in Iran",
+            "url" : "https://iranhumanrights.socrata.com"
+        },
+        {
+            "title" : "Lehman College, NY",
+            "url" : "https://bronx.lehman.cuny.edu"
+        },
+        {
+            "title" : "Lombardi Region, Italy",
+            "url" : "https://dati.lombardia.it"
+        },
+        {
+            "title" : "National Fire Protection Association",
+            "url" : "https://data.nfpa.org"
+        },
+        {
+            "title" : "Oklahoma",
+            "url" : "http://data.ok.gov"
+        },
+        {
+            "title" : "Oregon",
+            "url" : "https://data.oregon.gov"
+        },
+        {
+            "title" : "Alberta",
+            "url" : "https://data.eae.alberta.ca"
+        },
+        {
+            "title" : "Colorado",
+            "url" : "https://data.colorado.gov"
+        },
+        {
+            "title" : "Hawaii",
+            "url" : "https://data.hawaii.gov"
+        },
+        {
+            "title" : "Illinois",
+            "url" : "http://data.illinois.gov"
+        },
+        {
+            "title" : "Maryland",
+            "url" : "https://data.maryland.gov"
+        },
+        {
+            "title" : "Missouri",
+            "url" : "https://data.mo.gov"
+        },
+        {
+            "title" : "New York Health Data",
+            "url" : "http://health.data.ny.gov"
+        },
+        {
+            "title" : "New York Open Data",
+            "url" : "https://data.ny.gov"
+        },
+        {
+            "title" : "Vermont",
+            "url" : "https://data.vermont.gov"
+        },
+        {
+            "title" : "Washington",
+            "url" : "https://data.wa.gov"
+        },
+        {
+            "title" : "Tax Payers for Common Sense",
+            "url" : "https://data.taxpayer.net"
+        },
+        {
+            "title" : "Timemap for Justice",
+            "url" : "https://data.timapforjustice.org"
+        },
+        {
+            "title" : "United Nations Development Program",
+            "url" : "https://data.undp.org"
+        },
+        {
+            "title" : "World Bank",
+            "url" : "https://finances.worldbank.org"
+        },
+        {
+            "title" : "World Economic Forum",
+            "url" : "https://weforum.socrata.com"
+        }
+    ]
+}
