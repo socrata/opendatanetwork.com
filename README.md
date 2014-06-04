@@ -104,6 +104,10 @@ Once you have compressed your CSS and JS, committed and pushed to Github, and yo
 
 The sources will be pushed into your dyno and the site will be running the lastest bits.  The Heroku toolbelt and dashboard support rollbacks in case of a buggy build.
 
+More details about deploying with git to Heroku, including setting up the remote, can be found here:
+
+[https://devcenter.heroku.com/articles/git]()
+
 
 ##Scheduled Tasks##
 
