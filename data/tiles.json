@@ -106,10 +106,10 @@
             "category" : "Housing",
             "image" : "/images/tiles-catalog.png",
             "modalUrl" : null,
-            "title" : "Catalog of Every Geospatial or Map Open Data File from the Nation's Leading Cities",
+            "title" : "Census of Open Data Portals",
             "text" : null,
             "type" : "small",
-            "url" : "http://odn.demo.socrata.com/browse?tags=odn-4"
+            "url" : "/census"
         }
     ],
     [
