@@ -121,7 +121,7 @@ To run the fetch.js script locally from the source directory, type:
 	
 You can also run in immediately on the Heroku instance by typing:
 
-	$ heroku run tasks/fetch.js
+	$ heroku run node tasks/fetch.js
 	
 More details about Heroku scheduled tasks can be found here:
 
