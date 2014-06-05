@@ -57,7 +57,8 @@ app.get('/census', function(req, res) {
                 restaurant_inspections: row.restaurant_inspections,
                 transit: row.transit,
                 health: row.health,
-                crime: row.crime
+                crime: row.crime,
+                permits: row.permits
             });
     });
 

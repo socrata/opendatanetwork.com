@@ -9,6 +9,7 @@
             <th>Transit</th>
             <th>Health</th>
             <th>Crime</th>
+            <th>Permits</th>
         </tr>
       <% results.forEach(function(result) { %>
         <tr>
@@ -44,6 +45,13 @@
             <td>
               <% if (result.crime > 0) { %>
                 <a href="<%= result.portal_url %>?q=crime&sortBy=relevance&utf8=%E2%9C%93"><%= result.crime %></a>
+              <% } else { %>
+                0
+              <% } %>
+            </td>
+            <td>
+              <% if (result.permits > 0) { %>
+                <a href="<%= result.portal_url %>?q=permits&sortBy=relevance&utf8=%E2%9C%93"><%= result.permits %></a>
               <% } else { %>
                 0
               <% } %>

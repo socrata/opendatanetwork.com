@@ -4,7 +4,7 @@ var _request = require('superagent');
 
 var _connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/census';
 var _portals;
-var _queries = ['housing', 'restaurant inspections', 'transit', 'health', 'crime'];
+var _queries = ['housing', 'restaurant inspections', 'transit', 'health', 'crime', 'permits'];
 var _portalIndex = 22;
 var _queryIndex = 0;
 
@@ -77,7 +77,7 @@ function upsert(portalIndex)
     var portal = _portals[portalIndex];
     var client = new _pg.Client(_connectionString);
     
-    console.log('upsert ' + portal.url + ' ' + portal.data[0] + ' ' + portal.data[1] + ' ' + portal.data[2] + ' ' + portal.data[3]+ ' ' + portal.data[4]);
+    console.log('upsert ' + portal.url + ' ' + portal.data[0] + ' ' + portal.data[1] + ' ' + portal.data[2] + ' ' + portal.data[3]+ ' ' + portal.data[4] + ' ' + portal.data[5]);
 
     client.connect(function(err) {
     
@@ -86,15 +86,13 @@ function upsert(portalIndex)
 
         client.query(
         {
-            text: 'UPDATE documents SET portal_title = $2, housing = $3, restaurant_inspections = $4, transit = $5, health = $6, crime = $7 WHERE portal_url = $1', 
-            values: [portal.url, portal.title, portal.data[0], portal.data[1], portal.data[2], portal.data[3], portal.data[4]]
+            text: 'UPDATE documents SET portal_title = $2, housing = $3, restaurant_inspections = $4, transit = $5, health = $6, crime = $7, permits = $8 WHERE portal_url = $1', 
+            values: [portal.url, portal.title, portal.data[0], portal.data[1], portal.data[2], portal.data[3], portal.data[4], portal.data[5]]
         },
         function(err, result) {
 
             if (err) 
                 return console.error('error running update', err);
-
-//            console.log(result);
 
             // If nothing was updated, then insert it
             //
@@ -102,15 +100,13 @@ function upsert(portalIndex)
             {
                 client.query(
                 {
-                    text: 'INSERT INTO documents (portal_url, portal_title, housing, restaurant_inspections, transit, health, crime) VALUES ($1 , $2, $3, $4, $5, $6, $7)', 
-                    values: [portal.url, portal.title, portal.data[0], portal.data[1], portal.data[2], portal.data[3], portal.data[4]]
+                    text: 'INSERT INTO documents (portal_url, portal_title, housing, restaurant_inspections, transit, health, crime, permits) VALUES ($1 , $2, $3, $4, $5, $6, $7, $8)', 
+                    values: [portal.url, portal.title, portal.data[0], portal.data[1], portal.data[2], portal.data[3], portal.data[4], portal.data[5]]
                 },
                 function(err, result) {
 
                     if (err) 
                         return console.error('error running insert', err);
-
-//                    console.log(result);
 
                     client.end();
                 });
@@ -138,7 +134,7 @@ _fs.readFile(
         //
         for (var i in _portals)
         {
-            _portals[i].data = [0, 0, 0, 0, 0];
+            _portals[i].data = [0, 0, 0, 0, 0, 0];
         }
 
         //_portals.length = 1;
