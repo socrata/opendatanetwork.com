@@ -2,14 +2,14 @@
 
 ---
 
-The goal of OpenDataNetwork.com is to be a developer portal for the purpose of accessing data aggregated from various government portals hosted by Socrata.  The inital effort concentrated on aggregating data in the "housing" category and providing a website for developers to find the data and government officials to discover how to make their data open.  
+A goal of OpenDataNetwork.com is to be a developer portal for the purpose of accessing data aggregated from various government portals hosted by Socrata.  The inital effort concentrated on aggregating data in the "housing" category and providing a website for developers to find the data and government officials to discover how to make their data open.  
 
 The following are a list of ideas for future versions of the Open Data Network.
 
 
 ##Aggregation of More Data Categories##
 
-Having aggregated housing data was a great first step.  We should extend this to other data categories like parks crime, restaurant inspections, health, permits, etc.  The data becomes more interesting as more and more cities' data is included in the system.  
+Having aggregated housing data was a great first step.  We should extend this to other data categories like parks, crime, restaurant inspections, health, permits, etc.  The data becomes more interesting as more and more cities' data is included in the system.  
 
 Freshness of data is also interesting to developers for certain categories like restaurant inspections and crime.  Having an automated injestion system to aggregate data from portals would be valuable.
 
@@ -18,7 +18,7 @@ Pre-aggregation is valuable and worth paying for.  No developer wants to write c
 
 ##How to Get Started Page##
 
-While all the data catalogs exist and there are pages on dev.socrata.com that talk about the REST APIs and the API token, there's no page on OpenDataNetwork.com that describes what a new developer needs to do to get started.  We should create a page that describes what to do in clear simple steps.
+While all the data catalogs exist and there are pages on dev.socrata.com that talk about the REST APIs and the API token, there is no page on OpenDataNetwork.com that describes what a new developer needs to do to get started.  We should create a page that describes what to do in clear simple steps.
 
 
 ##SDKs##
