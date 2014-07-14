@@ -6,17 +6,6 @@
 				"title" : "find examples of how data can make me more money...",
 				"choices" : [
 					{
-						"title" : "wide-spread national syndication.",
-						"choices" : [
-							{
-								"image" : "/images/articles-trulia.png",
-					            "modalUrl" : "/modal/trulia",
-								"title" : "Profile of How Trulia Uses HouseFacts",
-								"url" : "/articles/trulia"
-							}
-						]
-					},
-					{
 						"title" : "individual apps in specific cities.",
 						"choices" : [
 							{

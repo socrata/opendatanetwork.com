@@ -3,10 +3,5 @@
         "image" : "/images/slides-1.jpg",
         "title" : "Join the Open Data Network",
         "url" : "http://socrata.com"
-    },
-    {
-        "image" : "/images/slides-2.jpg",
-        "title" : "Profile of How Trulia Uses HouseFacts",
-        "url" : "/articles/trulia"
     }
 ]

@@ -2,12 +2,12 @@
     [
         {
             "category" : "Housing",
-            "image" : "/images/tiles-trulia-large.png",
-            "modalUrl" : "/modal/trulia",
-            "title" : "How Trulia Uses HouseFacts",
+            "image" : "/images/tiles-zillow-large.jpg",
+            "modalUrl" : "/modal/zillow",
+            "title" : "Profile of How Zillow Uses Housing Data",
             "text" : null,
             "type" : "large",
-            "url" : "/articles/trulia"
+            "url" : "/articles/zillow"
         }
     ],
     [
@@ -75,12 +75,12 @@
     [
         {
             "category" : "Housing",
-            "image" : "/images/tiles-zillow.png",
-            "modalUrl" : "/modal/zillow",
-            "title" : "Profile of How Zillow Uses Housing Data",
+            "image" : "/images/tiles-catalog.png",
+            "modalUrl" : null,
             "text" : null,
+            "title" : "Sustainability / Energy Use",
             "type" : "small",
-            "url" : "/articles/zillow"
+            "url" : "http://odn.demo.socrata.com/browse?tags=odn-14"
         },
         {
             "category" : "Housing",
