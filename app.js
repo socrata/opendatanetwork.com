@@ -2,11 +2,12 @@ var express = require('express');
 var app = express();
 var fs = require('fs');
 var pg = require('pg');
-var xFrameOptions = require('x-frame-options')
+var favicon = require('serve-favicon');
+var helmet = require('helmet');
 
 // Set X-Frame-Options header
 //
-app.use(xFrameOptions())
+app.use(helmet.xframe('deny'));
 
 
 // Set up static folders
@@ -17,7 +18,7 @@ app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist'));
 app.use('/scripts', express.static(__dirname + '/scripts/compressed'));
 app.use('/styles', express.static(__dirname + '/styles/compressed'));
 
-app.use(express.favicon(__dirname + '/images/favicon.ico'));
+app.use(favicon(__dirname + '/images/favicon.ico'));
 
 
 // Set up app data
