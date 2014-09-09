@@ -4,7 +4,7 @@ var fs = require('fs');
 var pg = require('pg');
 
 
-// Set up static folders.
+// Set up static folders
 //
 app.use('/data', express.static(__dirname + '/data'));
 app.use('/images', express.static(__dirname + '/images'));
@@ -15,7 +15,7 @@ app.use('/styles', express.static(__dirname + '/styles/compressed'));
 app.use(express.favicon(__dirname + '/images/favicon.ico'));
 
 
-// St up app data
+// Set up app data
 //
 fs.readFile(__dirname + '/data/tiles.json', function(err, data) {
     app.locals.columns = JSON.parse(data);
@@ -78,10 +78,6 @@ app.get('/modal/:article', function(req, res) {
     app.locals.css = 'modal.min.css';
     app.locals.modal = true;
     res.render('articles/' + req.params.article + '.ejs');
-});
-
-app.get('/robots.txt', function(req, res) {
-    res.render('static/robots.ejs');
 });
 
 app.get('/google0679b96456cb5b3a.html', function(req, res) {
