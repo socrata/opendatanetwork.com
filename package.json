@@ -3,10 +3,11 @@
   "description": "Open Data Network Website",
   "private": true,
   "dependencies": {
-    "express": "^3.5.2",
     "ejs": "^1.0.0",
+    "express": "^3.5.2",
+    "pg": "^3.2.0",
     "superagent": "^0.18.0",
-    "pg": "^3.2.0"
+    "x-frame-options": "0.0.0"
   },
   "engines": {
     "node": "0.10.x"

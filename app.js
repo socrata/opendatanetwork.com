@@ -2,6 +2,11 @@ var express = require('express');
 var app = express();
 var fs = require('fs');
 var pg = require('pg');
+var xFrameOptions = require('x-frame-options')
+
+// Set X-Frame-Options header
+//
+app.use(xFrameOptions())
 
 
 // Set up static folders
