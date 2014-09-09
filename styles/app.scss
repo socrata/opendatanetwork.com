@@ -29,10 +29,11 @@ html
 body
 {
 	background-color: #fafafa;
-	margin: 0;
 	font-family: 'Myriad Pro', 'Open Sans', Arial, Helvetica, sans-serif;
 	font-size: 100%;
 	height: 100%;
+	margin: 0;
+	padding: 0;
 	text-align: center;
 }
 
@@ -104,8 +105,8 @@ footer
 {
 	background: url('/images/footer-background.png') repeat-y center center;
 	height: 50px;
+	overflow: hidden;
 	text-align: center;
-	margin-bottom: 100px;
 }
 
 #footer-about-socrata
