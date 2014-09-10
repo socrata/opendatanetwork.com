@@ -2,7 +2,7 @@ var _shouldNavigate = true;
 
 var _finder = new function() {
 
-    this.yourAnswer = "your answer.";
+    this.yourAnswer = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
     this.choices = null;
     this.firstChoiceIndex = 0;
     this.secondChoiceIndex = 0;
@@ -70,11 +70,11 @@ var _finder = new function() {
 
         this.setActiveCircle(1);
         
-        $('#question-1-link').text(this.yourAnswer) 
+        $('#question-1-link').html(this.yourAnswer) 
         $('#question-2').hide(300);
-        $('#question-2-link').text(this.yourAnswer) 
+        $('#question-2-link').html(this.yourAnswer) 
         $('#question-3').hide(300);
-        $('#question-3-link').text(this.yourAnswer) 
+        $('#question-3-link').html(this.yourAnswer) 
         $('#question-tip').css({ left: posLeft });
         $('#question-tip').show(300);
     };
@@ -96,10 +96,10 @@ var _finder = new function() {
         $('#question-tip').hide(300);
 
         $('#question-2').hide(300);
-        $('#question-2-link').text(this.yourAnswer) 
+        $('#question-2-link').html(this.yourAnswer) 
 
         $('#question-3').hide(300);
-        $('#question-3-link').text(this.yourAnswer) 
+        $('#question-3-link').html(this.yourAnswer) 
 
         this.setActiveCircle(1);
         this.showHideAnswers(false);
@@ -123,7 +123,7 @@ var _finder = new function() {
         $('#question-tip').hide(300);
 
         $('#question-3').hide(300);
-        $('#question-3-link').text(this.yourAnswer) 
+        $('#question-3-link').html(this.yourAnswer) 
 
         this.setActiveCircle(2);
         this.showHideAnswers(false);
@@ -162,8 +162,8 @@ var _finder = new function() {
 
         $('#menu').hide(300);
         $('#question-1-link').text(s);
-        $('#question-2-link').text(this.yourAnswer);
-        $('#question-3-link').text(this.yourAnswer);
+        $('#question-2-link').html(this.yourAnswer);
+        $('#question-3-link').html(this.yourAnswer);
         $('#question-2').show(300);
         $('#question-3').hide(300);
 
@@ -181,7 +181,7 @@ var _finder = new function() {
 
         $('#menu').hide(300);
         $('#question-2-link').text(s);
-        $('#question-3-link').text(this.yourAnswer);
+        $('#question-3-link').html(this.yourAnswer);
         $('#question-2').show(300);
         $('#question-3').show(300);
 
