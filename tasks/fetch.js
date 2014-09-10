@@ -4,7 +4,7 @@ var _request = require('request');
 var _connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/census';
 var _portals;
 var _queries = ['housing', 'restaurant inspections', 'transit', 'health', 'crime', 'permits'];
-var _portalIndex = 22;
+var _portalIndex = 0;
 var _queryIndex = 0;
 
 function next()
@@ -85,7 +85,7 @@ function upsert(portalIndex)
 
         client.query(
         {
-            text: 'UPDATE documents SET portal_title = $2, housing = $3, restaurant_inspections = $4, transit = $5, health = $6, crime = $7, permits = $8 WHERE portal_url = $1', 
+            text: 'UPDATE portals SET portal_title = $2, housing = $3, restaurant_inspections = $4, transit = $5, health = $6, crime = $7, permits = $8 WHERE portal_url = $1', 
             values: [portal.url, portal.title, portal.data[0], portal.data[1], portal.data[2], portal.data[3], portal.data[4], portal.data[5]]
         },
         function(err, result) {
@@ -99,7 +99,7 @@ function upsert(portalIndex)
             {
                 client.query(
                 {
-                    text: 'INSERT INTO documents (portal_url, portal_title, housing, restaurant_inspections, transit, health, crime, permits) VALUES ($1 , $2, $3, $4, $5, $6, $7, $8)', 
+                    text: 'INSERT INTO portals (portal_url, portal_title, housing, restaurant_inspections, transit, health, crime, permits) VALUES ($1 , $2, $3, $4, $5, $6, $7, $8)', 
                     values: [portal.url, portal.title, portal.data[0], portal.data[1], portal.data[2], portal.data[3], portal.data[4], portal.data[5]]
                 },
                 function(err, result) {
