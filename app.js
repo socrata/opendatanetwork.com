@@ -52,7 +52,7 @@ app.get('/census', function(req, res) {
     
     client.connect();
 
-    var query = client.query("SELECT * FROM documents ORDER BY portal_title;");
+    var query = client.query("SELECT * FROM portals ORDER BY portal_title;");
     
     query.on('row', function(row) {
         results.push(
