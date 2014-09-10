@@ -4,18 +4,13 @@ body
     height: 100%;
 }
 
+
+/* Main container */
+
 #container 
 { 
     height: auto; 
     min-height: 100%; 
-}
-
-
-/* Header */
-
-header 
-{
-    margin-bottom: 150px;
 }
 
 
@@ -30,11 +25,13 @@ footer
     z-index: 10;
 }
 
+
 /* Content area */
 
 .content
 {
     margin: 0 auto;
+    padding-top: 150px;
     text-align: left;
     width: 1280px;
 }
@@ -54,7 +51,7 @@ footer
     width: 190px;    
 }
 
-.circle 
+.circle
 {
     background: url('/images/explore-circle-gray.png');
     color: #d1d1d1;
@@ -65,6 +62,11 @@ footer
     margin: 0 10px;
     text-align: center;
     width: 50px;
+}
+
+.circle:hover
+{
+    color: #d1d1d1;
 }
 
 #circles .circle-active
