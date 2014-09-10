@@ -1,7 +1,6 @@
 var _pg = require('pg');
 var _fs = require('fs');
-var _request = require('superagent');
-
+var _request = require('request');
 var _connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/census';
 var _portals;
 var _queries = ['housing', 'restaurant inspections', 'transit', 'health', 'crime', 'permits'];
@@ -36,38 +35,38 @@ function makeRequest(portalIndex, queryIndex)
 {
     var portal = _portals[portalIndex];
 
-    console.log('makeRequest ' + portal.url + ' ' + portalIndex + ' ' + queryIndex + ' ');
 
     try 
     {
-        _request.get(portal.url + '/api/search/views.json')
-            .query({ q: _queries[queryIndex] })
-            .query({ limit: '1' })
-            .end(function(err, res) {
+        var url = portal.url + '/api/search/views.json?limit=1&q=' + encodeURIComponent(_queries[queryIndex])
+        console.log('makeRequest - ' + url);
 
-                if (err)
-                {
-                    console.error('Could not make request to ' + portal.url, err);
+        _request(
+            {
+                'rejectUnauthorized' : false,  // This is set to false because of the cert problem with taxpayer.net
+                'url' : url
+            }, 
+            function (error, response, body) {
+        
+                if (error) {
+
+                    console.log(error);
                     next();
                     return;
                 }
 
-                if (res.ok) 
-                {
-                    console.log(' count : ' + res.body.count);
-                    portal.data[queryIndex] = res.body.count;
-                } 
-                else 
-                {
-                    console.log(res.status);
+                if (response.statusCode == 200) {
+
+                    var o = JSON.parse(body);
+                    portal.data[queryIndex] = o.count;
                 }
 
                 next();
-            });
+        })
     } 
     catch (ex)
     {
-        console.log ('*****  Exception Throw for portal.url ' + portal.url);
+        console.log(ex);
         next();
     }
 }
@@ -77,7 +76,7 @@ function upsert(portalIndex)
     var portal = _portals[portalIndex];
     var client = new _pg.Client(_connectionString);
     
-    console.log('upsert ' + portal.url + ' ' + portal.data[0] + ' ' + portal.data[1] + ' ' + portal.data[2] + ' ' + portal.data[3]+ ' ' + portal.data[4] + ' ' + portal.data[5]);
+    console.log('upsert - ' + portal.url + ' ' + portal.data[0] + ' ' + portal.data[1] + ' ' + portal.data[2] + ' ' + portal.data[3]+ ' ' + portal.data[4] + ' ' + portal.data[5]);
 
     client.connect(function(err) {
     
