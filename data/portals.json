@@ -125,7 +125,7 @@
             "url" : "http://www.datakc.org"
         },
         {
-            "title" : "Mongomery County, MD",
+            "title" : "Montgomery County, MD",
             "url" : "https://data.montgomerycountymd.gov"
         },
         {
@@ -231,6 +231,154 @@
         {
             "title" : "World Economic Forum",
             "url" : "https://weforum.socrata.com"
+        },
+        {
+            "title" : "Bureau of Alcohol, Tobacco, Firearms and Explosives",
+            "url" : "https://data.atf.gov"
+        },
+        {
+            "title" : "NYC Open Data",
+            "url" : "https://data.cityofnewyork.us"
+        },
+        {
+            "title" : "Code for South Africa",
+            "url" : "https://data.code4sa.org"
+        },
+        {
+            "title" : "Connecticut",
+            "url" : "https://data.ct.gov"
+        },
+        {
+            "title" : "Fort Worth",
+            "url" : "https://data.fortworthtexas.gov"
+        },
+        {
+            "title" : "Hartford, Connecticut",
+            "url" : "https://data.hartford.gov"
+        },
+        {
+            "title" : "Los Angeles",
+            "url" : "https://data.lacity.org"
+        },
+        {
+            "title" : "New Jersey",
+            "url" : "https://data.nj.gov"
+        },
+        {
+            "title" : "Seattle",
+            "url" : "https://data.seattle.gov"
+        },
+        {
+            "title" : "Winnipeg",
+            "url" : "https://data.winnipeg.ca"
+        },
+        {
+            "title" : "Romania",
+            "url" : "https://exploredata.gov.ro"
+        },
+        {
+            "title" : "Gavà, Spain",
+            "url" : "https://gavaobert.gavaciutat.cat"
+        },
+        {
+            "title" : "California State Controller's Office",
+            "url" : "https://bythenumbers.sco.ca.gov"
+        },
+        {
+            "title" : "Los Angeles City Controller",
+            "url" : "https://controllerdata.lacity.org"
+        },
+        {
+            "title" : "California Department of Public Health",
+            "url" : "https://cdph.demo.socrata.com"
+        },
+        {
+            "title" : "Boosting College Completion",
+            "url" : "https://boostingcollegecompletion.socrata.com"
+        },
+        {
+            "title" : "Bristol, UK",
+            "url" : "https://bristol.azure-westeurope-prod.socrata.com"
+        },
+        {
+            "title" : "Cambridge, MA",
+            "url" : "https://data.cambridgema.gov"
+        },
+        {
+            "title" : "Gainesville, FL",
+            "url" : "https://data.cityofgainesville.org"
+        },
+        {
+            "title" : "Tacoma, WA",
+            "url" : "https://data.cityoftacoma.org"
+        },
+        {
+            "title" : "West Sacramento",
+            "url" : "https://data.cityofwestsacramento.org"
+        },
+        {
+            "title" : "Culver City, CA",
+            "url" : "https://data.culvercity.org"
+        },
+        {
+            "title" : "US Export-Import Bank",
+            "url" : "https://data.exim.gov"
+        },
+        {
+            "title" : "Nashville",
+            "url" : "https://data.nashville.gov"
+        },
+        {
+            "title" : "Results Washington",
+            "url" : "https://data.results.wa.gov"
+        },
+        {
+            "title" : "Texas",
+            "url" : "https://data.texas.gov"
+        },
+        {
+            "title" : "West Hollywood",
+            "url" : "https://data.weho.org"
+        },
+        {
+            "title" : "American University",
+            "url" : "https://datapilot.american.edu"
+        },
+        {
+            "title" : "Hampton, VA",
+            "url" : "https://hampton.demo.socrata.com"
+        },
+        {
+            "title" : "European Commission Regional Policy",
+            "url" : "https://inforegio.azure-westeurope-prod.socrata.com"
+        },
+        {
+            "title" : "Open White House",
+            "url" : "https://open.whitehouse.gov"
+        },
+        {
+            "title" : "Santa Monica Youth Wellbeing",
+            "url" : "https://reportcard.santamonicayouth.net"
+        },
+        {
+            "title" : "African Economic Research Consortium",
+            "url" : "https://wfp.demo.socrata.com"
+        },
+        {
+            "title" : "Dallas",
+            "url" : "https://www.dallasopendata.com"
+        },
+        {
+            "title" : "Friuli-Venezia Giulia",
+            "url" : "https://www.dati.friuliveneziagiulia.it"
+        },
+        {
+            "title" : "West Sussex",
+            "url" : "https://performance.westsussex.gov.uk"
         }
     ]
 }
+
+
+
+
