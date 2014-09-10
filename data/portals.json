@@ -93,10 +93,6 @@
             "url" : "https://data.redmond.gov"
         },
         {
-            "title" : "Salt Lake City",
-            "url" : "http://data.slcgov.com"
-        },
-        {
             "title" : "Somerville, MA",
             "url" : "https://data.somervillema.gov"
         },
@@ -137,16 +133,8 @@
             "url" : "https://data.smcgov.org"
         },
         {
-            "title" : "Snohomish County, WA",
-            "url" : "https://data.snostat.org"
-        },
-        {
-            "title" : "Snohomish County, WA",
-            "url" : "https://data.snostat.org"
-        },
-        {
             "title" : "Data.gov",
-            "url" : "http://explore.data.gov"
+            "url" : "http://catalog.data.gov"
         },
         {
             "title" : "Development Credit Authority",
@@ -182,7 +170,7 @@
         },
         {
             "title" : "Lombardi Region, Italy",
-            "url" : "https://dati.lombardia.it"
+            "url" : "https://www.dati.lombardia.it"
         },
         {
             "title" : "National Fire Protection Association",
@@ -195,10 +183,6 @@
         {
             "title" : "Oregon",
             "url" : "https://data.oregon.gov"
-        },
-        {
-            "title" : "Alberta",
-            "url" : "https://data.eae.alberta.ca"
         },
         {
             "title" : "Colorado",
@@ -239,10 +223,6 @@
         {
             "title" : "Tax Payers for Common Sense",
             "url" : "https://data.taxpayer.net"
-        },
-        {
-            "title" : "Timemap for Justice",
-            "url" : "https://data.timapforjustice.org"
         },
         {
             "title" : "United Nations Development Program",
