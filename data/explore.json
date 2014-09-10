@@ -185,7 +185,7 @@
 						"title" : "housing and buildings.",
 						"choices" : [
 							{
-								"image" : "/images/articles-socrata-dev.png",
+								"image" : "/images/articles-socrata-dev.jpg",
 								"modalUrl" : null,
 								"title" : "Sign Up for a Socrata API App Token on dev.socrata.com",
 								"url" : "http://dev.socrata.com"

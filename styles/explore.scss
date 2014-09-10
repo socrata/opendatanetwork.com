@@ -1,14 +1,40 @@
 body
 {
     overflow-y: scroll;
+    height: 100%;
+}
+
+#container 
+{ 
+    height: auto; 
+    min-height: 100%; 
+}
+
+
+/* Header */
+
+header 
+{
+    margin-bottom: 150px;
+}
+
+
+/* Footer */
+
+footer 
+{
+    clear: both;
+    height: 3em;
+    margin-top: -3em;
+    position: relative;
+    z-index: 10;
 }
 
 /* Content area */
 
 .content
 {
-    margin: 150px auto 0;
-    min-height: 500px;
+    margin: 0 auto;
     text-align: left;
     width: 1280px;
 }
@@ -338,9 +364,8 @@ body
         width: 100%;
     }
 
-    footer
+    #feedback
     {
-        margin-top: 50px;
+        margin-bottom: 70px;
     }
 }
-
