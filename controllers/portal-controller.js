@@ -1,5 +1,4 @@
-var _pg = require('pg');
-var _completionHandler;
+var pg = require('pg');
 
 module.exports = PortalController;
 
@@ -10,10 +9,8 @@ function PortalController() {
 //
 PortalController.prototype.getPortals = function(completionHandler) {
 
-    _completionHandler = completionHandler;
-
     var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/census';
-    var client = new _pg.Client(connectionString);
+    var client = new pg.Client(connectionString);
     var results = [];
     
     client.connect();
@@ -39,7 +36,7 @@ PortalController.prototype.getPortals = function(completionHandler) {
 
         client.end(); 
 
-        if (_completionHandler)
-            _completionHandler(results);
+        if (completionHandler)
+            completionHandler(results);
     });
 }

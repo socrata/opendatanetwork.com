@@ -1,10 +1,11 @@
 var PortalController = require('./controllers/portal-controller');
-var portalController = new PortalController();
 var express = require('express');
-var app = express();
 var fs = require('fs');
 var favicon = require('serve-favicon');
 var helmet = require('helmet');
+
+var portalController = new PortalController();
+var app = express();
 
 
 // Set X-Frame-Options header
