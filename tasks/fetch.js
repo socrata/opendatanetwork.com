@@ -35,7 +35,6 @@ function makeRequest(portalIndex, queryIndex)
 {
     var portal = _portals[portalIndex];
 
-
     try 
     {
         var url = portal.url + '/api/search/views.json?limit=1&q=' + encodeURIComponent(_queries[queryIndex])
@@ -85,7 +84,7 @@ function upsert(portalIndex)
 
         client.query(
         {
-            text: 'UPDATE portals SET portal_title = $2, housing = $3, restaurant_inspections = $4, transit = $5, health = $6, crime = $7, permits = $8 WHERE portal_url = $1', 
+            text: 'UPDATE portals SET title = $2, housing = $3, restaurant_inspections = $4, transit = $5, health = $6, crime = $7, permits = $8 WHERE url = $1', 
             values: [portal.url, portal.title, portal.data[0], portal.data[1], portal.data[2], portal.data[3], portal.data[4], portal.data[5]]
         },
         function(err, result) {
@@ -99,7 +98,7 @@ function upsert(portalIndex)
             {
                 client.query(
                 {
-                    text: 'INSERT INTO portals (portal_url, portal_title, housing, restaurant_inspections, transit, health, crime, permits) VALUES ($1 , $2, $3, $4, $5, $6, $7, $8)', 
+                    text: 'INSERT INTO portals (url, title, housing, restaurant_inspections, transit, health, crime, permits) VALUES ($1 , $2, $3, $4, $5, $6, $7, $8)', 
                     values: [portal.url, portal.title, portal.data[0], portal.data[1], portal.data[2], portal.data[3], portal.data[4], portal.data[5]]
                 },
                 function(err, result) {
@@ -135,8 +134,6 @@ _fs.readFile(
         {
             _portals[i].data = [0, 0, 0, 0, 0, 0];
         }
-
-        //_portals.length = 1;
 
         makeRequest(_portalIndex, _queryIndex);
     });
