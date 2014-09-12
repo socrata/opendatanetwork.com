@@ -2,7 +2,8 @@
     "portals" : [
         {
             "title" : "Australian Capital Territory",
-            "url" : "https://www.data.act.gov.au"
+            "url" : "https://www.data.act.gov.au",
+            "population" : 357222
         },
         {
             "title" : "Health System Measurement Project",
@@ -21,88 +22,109 @@
             "url" : "https://data.consumerfinance.gov"
         },
         {
-            "title" : "Honolulu",
-            "url" : "https://data.honolulu.gov"
+            "title" : "Honolulu, HI",
+            "url" : "https://data.honolulu.gov",
+            "population" : 337256
         },
         {
-            "title" : "San Francisco",
-            "url" : "https://data.sfgov.org"
+            "title" : "San Francisco, CA",
+            "url" : "https://data.sfgov.org",
+            "population" : 805235
         },
         {
-            "title" : "Albany, New York",
-            "url" : "https://data.albanyny.gov"
+            "title" : "Albany, NY",
+            "url" : "https://data.albanyny.gov",
+            "population" : 97856
         },
         {
-            "title" : "Austin",
-            "url" : "https://data.austintexas.gov"
+            "title" : "Austin, TX",
+            "url" : "https://data.austintexas.gov",
+            "population" : 790390
         },
         {
-            "title" : "Baltimore",
-            "url" : "http://data.baltimorecity.gov"
+            "title" : "Baltimore, MD",
+            "url" : "http://data.baltimorecity.gov",
+            "population" : 620961
         },
         {
-            "title" : "Boston",
-            "url" : "https://data.cityofboston.gov"
+            "title" : "Boston, MA",
+            "url" : "https://data.cityofboston.gov",
+            "population" : 617594
         },
         {
-            "title" : "Chicago",
-            "url" : "http://data.cityofchicago.org"
+            "title" : "Chicago, IL",
+            "url" : "http://data.cityofchicago.org",
+            "population" : 2695598
         },
         {
-            "title" : "Edmonton",
-            "url" : "https://data.edmonton.ca"
+            "title" : "Edmonton, AB",
+            "url" : "https://data.edmonton.ca",
+            "population" : 730375
         },
         {
-            "title" : "Kansas City",
-            "url" : "https://data.kcmo.org"
+            "title" : "Kansas City, MO",
+            "url" : "https://data.kcmo.org",
+            "population" : 459787
         },
         {
-            "title" : "Las Vegas",
-            "url" : "https://opendata.lasvegasnevada.gov"
+            "title" : "Las Vegas, NV",
+            "url" : "https://opendata.lasvegasnevada.gov",
+            "population" : 583756
         },
         {
-            "title" : "Los Angeles",
-            "url" : "https://controllerdata.lacity.org"
+            "title" : "Los Angeles, CA",
+            "url" : "https://controllerdata.lacity.org",
+            "population" : 3792621
         },
         {
             "title" : "Madison, WI",
-            "url" : "https://data.cityofmadison.com"
+            "url" : "https://data.cityofmadison.com",
+            "population" : 233209
         },
         {
-            "title" : "New Orleans",
-            "url" : "http://data.nola.gov"
+            "title" : "New Orleans, LA",
+            "url" : "http://data.nola.gov",
+            "population" : 343829
         },
         {
-            "title" : "New York City",
-            "url" : "https://www.opendatanyc.com"
+            "title" : "New York City, NY",
+            "url" : "https://www.opendatanyc.com",
+            "population" : 8175133
         },
         {
             "title" : "Oakland, CA",
-            "url" : "https://data.oaklandnet.com"
+            "url" : "https://data.oaklandnet.com",
+            "population" : 390724
         },
         {
             "title" : "Raleigh, NC",
-            "url" : "https://data.raleighnc.gov"
+            "url" : "https://data.raleighnc.gov",
+            "population" : 403892
         },
         {
             "title" : "Redmond, WA",
-            "url" : "https://data.redmond.gov"
+            "url" : "https://data.redmond.gov",
+            "population" : 54144
         },
         {
             "title" : "Somerville, MA",
-            "url" : "https://data.somervillema.gov"
+            "url" : "https://data.somervillema.gov",
+            "population" : 75754
         },
         {
             "title" : "South Bend, IN",
-            "url" : "http://data.southbendin.gov"
+            "url" : "http://data.southbendin.gov",
+            "population" : 101168
         },
         {
             "title" : "Weatherford, TX",
-            "url" : "https://data.weatherfordtx.gov"
+            "url" : "https://data.weatherfordtx.gov",
+            "population" : 25461
         },
         {
             "title" : "Wellington, FL",
-            "url" : "http://data.wellingtonfl.gov"
+            "url" : "http://data.wellingtonfl.gov",
+            "population" : 56508
         },
         {
             "title" : "Medicare",
@@ -110,23 +132,28 @@
         },
         {
             "title" : "Alameda County, CA",
-            "url" : "https://data.acgov.org"
+            "url" : "https://data.acgov.org",
+            "population" : 1510271
         },
         {
             "title" : "Cook County, IL",
-            "url" : "http://datacatalog.cookcountyil.gov"
+            "url" : "http://datacatalog.cookcountyil.gov",
+            "population" : 5194675
         },
         {
             "title" : "King County, WA",
-            "url" : "http://www.datakc.org"
+            "url" : "http://www.datakc.org",
+            "population" : 1931249
         },
         {
             "title" : "Montgomery County, MD",
-            "url" : "https://data.montgomerycountymd.gov"
+            "url" : "https://data.montgomerycountymd.gov",
+            "population" : 971777
         },
         {
             "title" : "San Mateo County, CA",
-            "url" : "https://data.smcgov.org"
+            "url" : "https://data.smcgov.org",
+            "population" : 718451
         },
         {
             "title" : "Development Credit Authority",
@@ -145,24 +172,27 @@
             "url" : "https://epa-data.socrata.com"
         },
         {
-            "title" : "Kenya Open Data",
-            "url" : "https://opendata.go.ke"
+            "title" : "Kenya",
+            "url" : "https://opendata.go.ke",
+            "population" : 43180000
         },
         {
-            "title" : "Halifax Open Data",
-            "url" : "https://www.halifaxopendata.ca"
+            "title" : "Halifax, NS",
+            "url" : "https://www.halifaxopendata.ca",
+            "population" : 372680
         },
         {
             "title" : "Human Rights in Iran",
             "url" : "https://iranhumanrights.socrata.com"
         },
         {
-            "title" : "Lehman College, NY",
+            "title" : "Lehman College",
             "url" : "https://bronx.lehman.cuny.edu"
         },
         {
             "title" : "Lombardi Region, Italy",
-            "url" : "https://www.dati.lombardia.it"
+            "url" : "https://www.dati.lombardia.it",
+            "population" : 9922000
         },
         {
             "title" : "National Fire Protection Association",
@@ -170,47 +200,58 @@
         },
         {
             "title" : "Oklahoma",
-            "url" : "http://data.ok.gov"
+            "url" : "http://data.ok.gov",
+            "population" : 3751351
         },
         {
             "title" : "Oregon",
-            "url" : "https://data.oregon.gov"
+            "url" : "https://data.oregon.gov",
+            "population" : 3831074
         },
         {
             "title" : "Colorado",
-            "url" : "https://data.colorado.gov"
+            "url" : "https://data.colorado.gov",
+            "population" : 5029196
         },
         {
             "title" : "Hawaii",
-            "url" : "https://data.hawaii.gov"
+            "url" : "https://data.hawaii.gov",
+            "population" : 1360301
         },
         {
             "title" : "Illinois",
-            "url" : "http://data.illinois.gov"
+            "url" : "http://data.illinois.gov",
+            "population" : 12830632
         },
         {
             "title" : "Maryland",
-            "url" : "https://data.maryland.gov"
+            "url" : "https://data.maryland.gov",
+            "population" : 5773552
         },
         {
             "title" : "Missouri",
-            "url" : "https://data.mo.gov"
+            "url" : "https://data.mo.gov",
+            "population" : 5988927
         },
         {
             "title" : "New York Health Data",
-            "url" : "http://health.data.ny.gov"
+            "url" : "http://health.data.ny.gov",
+            "population" : 19378102
         },
         {
             "title" : "New York Open Data",
-            "url" : "https://data.ny.gov"
+            "url" : "https://data.ny.gov",
+            "population" : 19378102
         },
         {
             "title" : "Vermont",
-            "url" : "https://data.vermont.gov"
+            "url" : "https://data.vermont.gov",
+            "population" : 625741
         },
         {
             "title" : "Washington",
-            "url" : "https://data.wa.gov"
+            "url" : "https://data.wa.gov",
+            "population" : 6724540
         },
         {
             "title" : "United Nations Development Program",
@@ -230,7 +271,8 @@
         },
         {
             "title" : "NYC Open Data",
-            "url" : "https://data.cityofnewyork.us"
+            "url" : "https://data.cityofnewyork.us",
+            "population" : 8175133
         },
         {
             "title" : "Code for South Africa",
@@ -238,51 +280,63 @@
         },
         {
             "title" : "Connecticut",
-            "url" : "https://data.ct.gov"
+            "url" : "https://data.ct.gov",
+            "population" : 3574097
         },
         {
             "title" : "Fort Worth",
-            "url" : "https://data.fortworthtexas.gov"
+            "url" : "https://data.fortworthtexas.gov",
+            "population" : 741206      
         },
         {
-            "title" : "Hartford, Connecticut",
-            "url" : "https://data.hartford.gov"
+            "title" : "Hartford, CT",
+            "url" : "https://data.hartford.gov",
+            "population" : 124775
         },
         {
-            "title" : "Los Angeles",
-            "url" : "https://data.lacity.org"
+            "title" : "Los Angeles, CA",
+            "url" : "https://data.lacity.org",
+            "population" : 3792621
         },
         {
             "title" : "New Jersey",
-            "url" : "https://data.nj.gov"
+            "url" : "https://data.nj.gov",
+            "population" : 8791894
         },
         {
-            "title" : "Seattle",
-            "url" : "https://data.seattle.gov"
+            "title" : "Seattle, WA",
+            "url" : "https://data.seattle.gov",
+            "population" : 608660
         },
         {
-            "title" : "Winnipeg",
-            "url" : "https://data.winnipeg.ca"
+            "title" : "Winnipeg, MB",
+            "url" : "https://data.winnipeg.ca",
+            "population" : 633450
         },
         {
             "title" : "Romania",
-            "url" : "https://exploredata.gov.ro"
+            "url" : "https://exploredata.gov.ro",
+            "population" : 19960000
         },
         {
             "title" : "Gavà, Spain",
-            "url" : "https://gavaobert.gavaciutat.cat"
+            "url" : "https://gavaobert.gavaciutat.cat",
+            "population" : 46488
         },
         {
             "title" : "California State Controller's Office",
-            "url" : "https://bythenumbers.sco.ca.gov"
+            "url" : "https://bythenumbers.sco.ca.gov",
+            "population" : 37253956
         },
         {
             "title" : "Los Angeles City Controller",
-            "url" : "https://controllerdata.lacity.org"
+            "url" : "https://controllerdata.lacity.org",
+            "population" : 3792621
         },
         {
             "title" : "California Department of Public Health",
-            "url" : "https://cdph.demo.socrata.com"
+            "url" : "https://cdph.demo.socrata.com",
+            "population" : 37253956
         },
         {
             "title" : "Boosting College Completion",
@@ -290,35 +344,42 @@
         },
         {
             "title" : "Bristol, UK",
-            "url" : "https://bristol.azure-westeurope-prod.socrata.com"
+            "url" : "https://bristol.azure-westeurope-prod.socrata.com",
+            "population" : 428100
         },
         {
             "title" : "Cambridge, MA",
-            "url" : "https://data.cambridgema.gov"
+            "url" : "https://data.cambridgema.gov",
+            "population" : 105162
         },
         {
             "title" : "Gainesville, FL",
-            "url" : "https://data.cityofgainesville.org"
+            "url" : "https://data.cityofgainesville.org",
+            "population" : 124354
         },
         {
             "title" : "Tacoma, WA",
-            "url" : "https://data.cityoftacoma.org"
+            "url" : "https://data.cityoftacoma.org",
+            "population" : 198397
         },
         {
-            "title" : "West Sacramento",
-            "url" : "https://data.cityofwestsacramento.org"
+            "title" : "West Sacramento, CA",
+            "url" : "https://data.cityofwestsacramento.org",
+            "population" : 48846
         },
         {
             "title" : "Culver City, CA",
-            "url" : "https://data.culvercity.org"
+            "url" : "https://data.culvercity.org",
+            "population" : 38899
         },
         {
             "title" : "US Export-Import Bank",
             "url" : "https://data.exim.gov"
         },
         {
-            "title" : "Nashville",
-            "url" : "https://data.nashville.gov"
+            "title" : "Nashville, TN",
+            "url" : "https://data.nashville.gov",
+            "population" : 601222
         },
         {
             "title" : "Results Washington",
@@ -326,11 +387,13 @@
         },
         {
             "title" : "Texas",
-            "url" : "https://data.texas.gov"
+            "url" : "https://data.texas.gov",
+            "population" : 25145561
         },
         {
-            "title" : "West Hollywood",
-            "url" : "https://data.weho.org"
+            "title" : "West Hollywood, CA",
+            "url" : "https://data.weho.org",
+            "population" : 34781
         },
         {
             "title" : "American University",
@@ -338,7 +401,8 @@
         },
         {
             "title" : "Hampton, VA",
-            "url" : "https://hampton.demo.socrata.com"
+            "url" : "https://hampton.demo.socrata.com",
+            "population" : 137436
         },
         {
             "title" : "European Commission Regional Policy",
@@ -357,16 +421,19 @@
             "url" : "https://wfp.demo.socrata.com"
         },
         {
-            "title" : "Dallas",
-            "url" : "https://www.dallasopendata.com"
+            "title" : "Dallas, TX",
+            "url" : "https://www.dallasopendata.com",
+            "population" : 1197816
         },
         {
             "title" : "Friuli-Venezia Giulia, Italy",
-            "url" : "https://www.dati.friuliveneziagiulia.it"
+            "url" : "https://www.dati.friuliveneziagiulia.it",
+            "population" : 1233000
         },
         {
             "title" : "West Sussex, UK",
-            "url" : "https://performance.westsussex.gov.uk"
+            "url" : "https://performance.westsussex.gov.uk",
+            "population" : 808900
         }
     ]
 }

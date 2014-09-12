@@ -6,6 +6,7 @@
     "ejs": "^1.0.0",
     "express": "^4.9.0",
     "helmet": "^0.4.1",
+    "numeral": "^1.5.3",
     "pg": "^3.4.2",
     "request": "^2.42.0",
     "serve-favicon": "^2.1.3"

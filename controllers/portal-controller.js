@@ -1,4 +1,5 @@
 var pg = require('pg');
+var numeral = require('numeral');
 
 module.exports = PortalController;
 
@@ -28,7 +29,8 @@ PortalController.prototype.getPortals = function(completionHandler) {
                 transit : row.transit,
                 health : row.health,
                 crime : row.crime,
-                permits : row.permits
+                permits : row.permits,
+                population : row.population ? '(pop: ' + numeral(row.population).format('0,0') + ')' : ''
             });
     });
 
