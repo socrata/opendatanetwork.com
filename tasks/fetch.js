@@ -42,7 +42,6 @@ function makeRequest(portalIndex, queryIndex)
 
         _request(
             {
-                'rejectUnauthorized' : false,  // This is set to false because of the cert problem with taxpayer.net
                 'url' : url
             }, 
             function (error, response, body) {
