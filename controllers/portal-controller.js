@@ -15,7 +15,7 @@ PortalController.prototype.getPortals = function(completionHandler) {
     
     client.connect();
 
-    var query = client.query("SELECT * FROM portals ORDER BY title;");
+    var query = client.query('SELECT * FROM portals ORDER BY title;');
     
     query.on('row', function(row) {
 

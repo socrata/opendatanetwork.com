@@ -101,6 +101,13 @@ footer
     border-bottom: 1px dashed #222;
 }
 
+.question a:empty
+{
+    display: inline-block;
+    height: 1em;
+    width: 200px;
+}
+
 #question-1
 {
     margin-bottom: 20px;
@@ -146,6 +153,7 @@ footer
     margin: 0 auto;    
     padding: 0;
     width: 400px;
+    z-index: 100;
 }
 
 #menu li

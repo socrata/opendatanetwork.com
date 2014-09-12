@@ -1,13 +1,13 @@
-[
-	{
+{
+	"housing" : {
 		"title" : "part of a housing-oriented business.",
-		"choices" : [
-			{
+		"choices" : {
+			"examples" : {
 				"title" : "find examples of how data can make me more money...",
-				"choices" : [
-					{
+				"choices" : {
+					"apps" : {
 						"title" : "individual apps in specific cities.",
-						"choices" : [
+						"results" : [
 							{
 								"image" : "/images/articles-appallicious.jpg",
 								"modalUrl" : "/modal/appallicious",
@@ -22,14 +22,14 @@
 							}
 						]
 					}
-				]
+				}
 			},
-			{
+			"data" : {
 				"title" : "find data that I can use right now...",
-				"choices" : [
-					{
+				"choices" : {
+					"buying-selling" : {
 						"title" : "helping customers buy/sell a house.",
-						"choices" : [
+						"results" : [
 							{
 								"image" : "/images/articles-catalog.png",
 								"modalUrl" : null,
@@ -62,9 +62,9 @@
 							}
 						]
 					},
-					{
+					"housing-issues" : {
 						"title" : "helping customers understand housing issues.",
-						"choices" : [
+						"results" : [
 							{
 								"image" : "/images/articles-catalog.png",
 								"modalUrl" : null,
@@ -85,9 +85,9 @@
 							}
 						]
 					},
-					{
+					"new-markets" : {
 						"title" : "expanding my app to a new market.",
-						"choices" : [
+						"results" : [
 							{
 								"image" : "/images/articles-catalog.png",
 								"modalUrl" : null,
@@ -120,14 +120,14 @@
 							}
 						]
 					}
-				]
+				}
 			},
-			{
+			"tools" : {
 				"title" : "find tools to contextualize my data...",
-				"choices" : [
-					{
+				"choices" : {
+					"data-driven" : {
 						"title" : "creating a data-driven app.",
-						"choices" : [
+						"results" : [
 							{
 								"image" : "/images/articles-socrata-dev.jpg",
 								"modalUrl" : null,
@@ -148,9 +148,9 @@
 							}
 						]
 					},
-					{
+					"visualizations" : {
 						"title" : "creating visualizations of data.",
-						"choices" : [
+						"results" : [
 							{
 								"image" : "/images/articles-housing-visualizations.png",
 								"modalUrl" : "/modal/housing-visualizations",
@@ -171,19 +171,19 @@
 							}
 						]
 					}
-				]
+				}
 			}
-		]
+		}
 	},
-	{
+	"developer" : {
 		"title" : "a developer.",
-		"choices" : [
-			{
+		"choices" : {
+			"build" : {
 				"title" : "build an app with open data.",
-				"choices" : [
-					{
+				"choices" : {
+					"housing-buildings" : {
 						"title" : "housing and buildings.",
-						"choices" : [
+						"results" : [
 							{
 								"image" : "/images/articles-socrata-dev.jpg",
 								"modalUrl" : null,
@@ -204,14 +204,14 @@
 							}
 						]
 					}
-				]
+				}
 			},
-			{
+			"explore" : {
 				"title" : "explore open data.",
-				"choices" : [
-					{
+				"choices" : {
+					"housing-buildings" : {
 						"title" : "housing and buildings.",
-						"choices" : [
+						"results" : [
 							{
 								"image" : "/images/articles-catalog.png",
 								"modalUrl" : null,
@@ -220,9 +220,9 @@
 							}
 						]
 					},
-					{
+					"open-source" : {
 						"title" : "open source and open standards.",
-						"choices" : [
+						"results" : [
 							{
 								"image" : "/images/articles-socrata-open-source.png",
 								"modalUrl" : null,
@@ -231,19 +231,19 @@
 							}
 						]
 					}
-				]
+				}
 			}
-		]
+		}
 	},
-	{
+	"publisher" : {
 		"title" : "a government open data publisher.",
-		"choices" : [
-			{
+		"choices" : {
+			"businesses" : {
 				"title" : "find examples of how businesses are using open data.",
-				"choices" : [
-					{
+				"choices" : {
+					"housing-buildings" : {
 						"title" : "housing and buildings.",
-						"choices" : [
+						"results" : [
 							{
 								"image" : "/images/articles-socrata-partners.png",
 								"modalUrl" : "/modal/companies-using-housing-data",
@@ -258,14 +258,14 @@
 							}
 						]
 					}
-				]
+				}
 			},
-			{
+			"governments" : {
 				"title" : "see which governments are making data available.",
-				"choices" : [
-					{
+				"choices" : {
+					"housing-buildings" : {
 						"title" : "housing and buildings.",
-						"choices" : [
+						"results" : [
 							{
 								"image" : "/images/articles-catalog.png",
 								"modalUrl" : "/modal/map-city-data",
@@ -280,14 +280,14 @@
 							}
 						]
 					}
-				]
+				}
 			},
-			{
+			"publish" : {
 				"title" : "publish my data for inclusion in the network.",
-				"choices" : [
-					{
+				"choices" : {
+					"housing-buildings" : {
 						"title" : "housing and buildings.",
-						"choices" : [
+						"results" : [
 							{
 								"image" : "/images/articles-socrata-partners.png",
 								"modalUrl" : "/modal/join-open-data-network",
@@ -296,8 +296,8 @@
 							}
 						]                
 					}
-				]
+				}
 			}
-		]
+		}
 	}
-]
+}

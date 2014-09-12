@@ -2,11 +2,11 @@ var _shouldNavigate = true;
 
 var _finder = new function() {
 
-    this.yourAnswer = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+    this.yourAnswer = '';
     this.choices = null;
-    this.firstChoiceIndex = 0;
-    this.secondChoiceIndex = 0;
-    this.thirdChoiceIndex = 0;
+    this.firstChoiceKey = null;
+    this.secondChoiceKey = null;
+    this.thirdChoiceKey = null;
     this.lastHash = null;
     this.lastUrl = null;
 
@@ -22,33 +22,50 @@ var _finder = new function() {
 
         var rg = (location.hash == '') ? [] : location.hash.substring(1).split(',');
 
-        if (rg.length == 0)
-        {
+        if (rg.length == 0) {
+
             $('#menu').hide(300);
             $('#answers').hide(300);
             $('#supplemental').hide(300);
 
             this.showTip();
         }
-        else 
-        {
+        else {
+
             $('#question-tip').hide(300);
 
-            if (rg.length > 0)
-                this.didMakeFirstChoice(parseInt(rg[0]));
+            if (rg.length > 0) {
 
-            if (rg.length > 1)
-                this.didMakeSecondChoice(parseInt(rg[1]));
+console.log(this.choices[rg[0]] == null)
 
-            if (rg.length > 2)
-                this.didMakeThirdChoice(parseInt(rg[2]));
+                if (this.choices[rg[0]] == null)
+                    return;
+
+                this.didMakeFirstChoice(rg[0]);
+            }
+
+            if (rg.length > 1) {
+
+                if (this.choices[rg[0]].choices[rg[1]] == null)
+                    return;
+
+                this.didMakeSecondChoice(rg[1]);
+            }
+
+            if (rg.length > 2) {
+
+                if (this.choices[rg[0]].choices[rg[1]].choices[rg[2]] == null)
+                    return;
+
+                this.didMakeThirdChoice(rg[2]);
+            }
         }
     };
 
     this.reset = function() {
 
         this.navigate([]);
-    }
+    };
 
     this.showTip =  function() {
 
@@ -56,15 +73,15 @@ var _finder = new function() {
         var tipWidth = $('#question-tip').width();
         var posLeft;
 
-        if (viewPortWidth > 768)
-        {
+        if (viewPortWidth > 768) {
+
             var linkPosition = $('#question-1-link').offset(); 
             var linkWidth = $('#question-1-link').width();
             
             posLeft = linkPosition.left + ((linkWidth - tipWidth) / 2);
         }
-        else 
-        {
+        else {
+
             posLeft = (viewPortWidth - tipWidth) / 2;
         }
 
@@ -85,8 +102,9 @@ var _finder = new function() {
         //
         var items = [];
 
-        $.each(this.choices, function(i, item) {
-            items.push('<li><a href="javascript:_finder.navigate([' + i + ']);">' + item.title + '</a></li>');
+        $.each(this.choices, function(key, item) {
+
+            items.push('<li><a href="javascript:_finder.navigate([\'' + key + '\']);">' + item.title + '</a></li>');
         }); 
 
         $('#menu').empty().append(items.join('')).show(300);
@@ -110,10 +128,11 @@ var _finder = new function() {
         // Init menu 
         //
         var items = [];
-        var i = this.firstChoiceIndex;
+        var i = this.firstChoiceKey;
 
-        $.each(this.choices[this.firstChoiceIndex].choices, function(index, value) {
-            items.push('<li><a href="javascript:_finder.navigate([' + i + ',' + index + ']);">' + value.title + '</a></li>');
+        $.each(this.choices[this.firstChoiceKey].choices, function(key, value) {
+
+            items.push('<li><a href="javascript:_finder.navigate([\'' + i + '\',\'' + key + '\']);">' + value.title + '</a></li>');
         }); 
 
         $('#menu').empty().append(items.join('')).show(300);
@@ -134,11 +153,12 @@ var _finder = new function() {
         // Init menu 
         //
         var items = [];
-        var i = this.firstChoiceIndex;
-        var j = this.secondChoiceIndex;
+        var i = this.firstChoiceKey;
+        var j = this.secondChoiceKey;
 
-        $.each(this.choices[this.firstChoiceIndex].choices[this.secondChoiceIndex].choices, function(index, value) {
-            items.push('<li><a href="javascript:_finder.navigate([' + i + ',' + j + ',' + index + ']);">' + value.title + '</a></li>');
+        $.each(this.choices[this.firstChoiceKey].choices[this.secondChoiceKey].choices, function(key, value) {
+
+            items.push('<li><a href="javascript:_finder.navigate([\'' + i + '\',\'' + j + '\',\'' + key + '\']);">' + value.title + '</a></li>');
         }); 
 
         $('#menu').empty().append(items.join('')).show(300);
@@ -151,13 +171,13 @@ var _finder = new function() {
         this.showHideAnswers(false);
     };
 
-    this.didMakeFirstChoice = function(index) {
+    this.didMakeFirstChoice = function(key) {
 
-        this.firstChoiceIndex = index;
-        this.secondChoiceIndex = 0;
-        this.thirdChoiceIndex = 0;
+        this.firstChoiceKey = key;
+        this.secondChoiceKey = null;
+        this.thirdChoiceKey = null;
 
-        var s = this.choices[index].title;
+        var s = this.choices[key].title;
         console.log('didMakeFirstChoice : ' + s);
 
         $('#menu').hide(300);
@@ -171,12 +191,12 @@ var _finder = new function() {
         this.showHideAnswers(false);
     };
 
-    this.didMakeSecondChoice = function(index) {
+    this.didMakeSecondChoice = function(key) {
 
-        this.secondChoiceIndex = index;
-        this.thirdChoiceIndex = 0;
+        this.secondChoiceKey = key;
+        this.thirdChoiceKey = null;
 
-        var s = this.choices[this.firstChoiceIndex].choices[this.secondChoiceIndex].title;
+        var s = this.choices[this.firstChoiceKey].choices[this.secondChoiceKey].title;
         console.log('didMakeSecondChoice : ' + s);
 
         $('#menu').hide(300);
@@ -189,23 +209,23 @@ var _finder = new function() {
         this.showHideAnswers(false);
     };
 
-    this.didMakeThirdChoice = function(index) {
+    this.didMakeThirdChoice = function(key) {
 
-        this.thirdChoiceIndex = index;
+        this.thirdChoiceKey = key;
 
         // Build results
         //
         var items = [];
 
         $.each(
-            this.choices[this.firstChoiceIndex].choices[this.secondChoiceIndex].choices[this.thirdChoiceIndex].choices, 
+            this.choices[this.firstChoiceKey].choices[this.secondChoiceKey].choices[this.thirdChoiceKey].results, 
             function(i, item) {
                 var s;
 
                 s = '<li><a href="' + item.url + '"';
 
-                if (item.modalUrl != null)
-                {
+                if (item.modalUrl != null) {
+
                     s += ' data-toggle="modal"' +
                         ' data-target="#article-modal"' +
                         ' data-remote="' + item.modalUrl + '"';
@@ -226,7 +246,7 @@ var _finder = new function() {
 
         $('#answers-list').empty().append(items.join('')).show(300);
 
-        var s = this.choices[this.firstChoiceIndex].choices[this.secondChoiceIndex].choices[this.thirdChoiceIndex].title;
+        var s = this.choices[this.firstChoiceKey].choices[this.secondChoiceKey].choices[this.thirdChoiceKey].title;
         console.log('didMakeThirdChoice : ' + s);
 
         $('#menu').hide(300);
@@ -239,14 +259,15 @@ var _finder = new function() {
 
     this.showHideAnswers = function(show) {
 
-        if (show)
-        {
+        if (show) {
+
             $('#answers').show(300, function() {
+
                 $('#supplemental').show();
             });
         }
-        else
-        {
+        else {
+
             $('#answers').hide(300);
             $('#supplemental').hide();
         }
@@ -254,8 +275,8 @@ var _finder = new function() {
 
     this.setActiveCircle = function(index) {
 
-        switch (index)
-        {
+        switch (index) {
+
             case 1: 
                 $('#circle-1').addClass('circle-active');
                 $('#circle-2').removeClass('circle-active');
@@ -285,7 +306,7 @@ var _finder = new function() {
 
         this.lastHash = location.hash;
         this.lastUrl = document.URL;
-    }
+    };
 };
 
 $(document).ready(function() {
@@ -296,6 +317,7 @@ $(document).ready(function() {
         url: "/data/explore.json",
         dataType: "text",
         success: function(data) {
+
             _finder.init($.parseJSON(data));
         }
     });
@@ -312,6 +334,7 @@ $(document).ready(function() {
         var script = 'http://s7.addthis.com/js/250/addthis_widget.js#domready=1';
 
         if (window.addthis) {
+
             window.addthis = null;
             window._adr = null;
             window._atc = null;
@@ -322,14 +345,13 @@ $(document).ready(function() {
         }
 
         $.getScript(script, function() {
+
             addthis.init();
         });
     })
 
     $('#article-modal').on('hide.bs.modal', function() {
         
-        console.log('hide.bs.modal');
-
         $(this).removeData();
     })
 
@@ -343,8 +365,6 @@ $(document).ready(function() {
 
     $('#article-modal').on('hide.bs.modal', function() {
         
-        console.log('hide.bs.modal');
-
         _shouldNavigate = false;
         window.history.replaceState({}, null, _finder.lastUrl);
         $(this).removeData();

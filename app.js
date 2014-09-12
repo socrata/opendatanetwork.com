@@ -7,11 +7,9 @@ var helmet = require('helmet');
 var portalController = new PortalController();
 var app = express();
 
-
 // Set X-Frame-Options header
 //
 app.use(helmet.xframe('deny'));
-
 
 // Set up static folders
 //
@@ -20,16 +18,18 @@ app.use('/images', express.static(__dirname + '/images'));
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist'));
 app.use('/scripts', express.static(__dirname + '/scripts/compressed'));
 app.use('/styles', express.static(__dirname + '/styles/compressed'));
-
 app.use(favicon(__dirname + '/images/favicon.ico'));
 
 
 // Set up app data
 //
 fs.readFile(__dirname + '/data/tiles.json', function(err, data) {
+
     app.locals.columns = JSON.parse(data);
 });
+
 fs.readFile(__dirname + '/data/slides.json', function(err, data) {
+
     app.locals.slides = JSON.parse(data);
 });
 
