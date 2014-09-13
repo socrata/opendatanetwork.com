@@ -57,6 +57,12 @@ app.get('/census', function(req, res) {
     });
 });
 
+app.get('/join', function(req, res) {
+
+    app.locals.css = 'join.min.css';
+    res.render('join.ejs');
+});
+
 app.get('/articles/:article', function(req, res) {
 
     app.locals.css = 'article.min.css';
