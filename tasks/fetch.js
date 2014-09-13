@@ -83,8 +83,8 @@ function upsert(portalIndex)
 
         client.query(
         {
-            text: 'UPDATE portals SET title = $2, housing = $3, restaurant_inspections = $4, transit = $5, health = $6, crime = $7, permits = $8, population = $9 WHERE url = $1', 
-            values: [portal.url, portal.title, portal.data[0], portal.data[1], portal.data[2], portal.data[3], portal.data[4], portal.data[5], portal.population]
+            text: 'UPDATE portals SET title = $2, housing = $3, restaurant_inspections = $4, transit = $5, health = $6, crime = $7, permits = $8, population = $9, description = $10 WHERE url = $1', 
+            values: [portal.url, portal.title, portal.data[0], portal.data[1], portal.data[2], portal.data[3], portal.data[4], portal.data[5], portal.population, portal.description]
         },
         function(err, result) {
 
@@ -97,8 +97,8 @@ function upsert(portalIndex)
             {
                 client.query(
                 {
-                    text: 'INSERT INTO portals (url, title, housing, restaurant_inspections, transit, health, crime, permits, population) VALUES ($1 , $2, $3, $4, $5, $6, $7, $8, $9)', 
-                    values: [portal.url, portal.title, portal.data[0], portal.data[1], portal.data[2], portal.data[3], portal.data[4], portal.data[5], portal.population]
+                    text: 'INSERT INTO portals (url, title, housing, restaurant_inspections, transit, health, crime, permits, population, description) VALUES ($1 , $2, $3, $4, $5, $6, $7, $8, $9, $10)', 
+                    values: [portal.url, portal.title, portal.data[0], portal.data[1], portal.data[2], portal.data[3], portal.data[4], portal.data[5], portal.population, portal.description]
                 },
                 function(err, result) {
 

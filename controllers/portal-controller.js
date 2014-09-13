@@ -30,7 +30,8 @@ PortalController.prototype.getPortals = function(completionHandler) {
                 health : row.health,
                 crime : row.crime,
                 permits : row.permits,
-                population : row.population ? '(pop: ' + numeral(row.population).format('0,0') + ')' : ''
+                population : row.population ? '(pop: ' + numeral(row.population).format('0,0') + ')' : '',
+                description : row.description
             });
     });
 
