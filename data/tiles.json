@@ -74,13 +74,13 @@
     ],
     [
         {
-            "category" : "Housing",
-            "image" : "/images/tiles-catalog.png",
+            "category" : null,
+            "image" : "/images/tiles-categories.png",
             "modalUrl" : null,
             "text" : null,
-            "title" : "Sustainability / Energy Use",
+            "title" : "ODN Categories",
             "type" : "small",
-            "url" : "http://odn.demo.socrata.com/browse?tags=odn-14"
+            "url" : "http://ec2-54-191-8-118.us-west-2.compute.amazonaws.com/#/tags"
         },
         {
             "category" : "Housing",
@@ -103,10 +103,10 @@
             "url" : "http://odn.demo.socrata.com/browse?tags=odn-1"
         },
         {
-            "category" : "Housing",
-            "image" : "/images/tiles-catalog.png",
+            "category" : null,
+            "image" : "/images/tiles-census.png",
             "modalUrl" : null,
-            "title" : "Census of Open Data Portals",
+            "title" : "ODN Census",
             "text" : null,
             "type" : "small",
             "url" : "/census"
