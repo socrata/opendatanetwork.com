@@ -13,55 +13,32 @@
             <th>Permits</th>
         </tr>
       <% results.forEach(function(result) { %>
-        <tr>
-            <td><a href="<%= result.url %>"><%= result.title %>
+        <tr class="content-row">
+            <td><a class="content-title" href="<%= result.url %>"><%= result.title %></a>
 <% if (result.description) { %>
               <p class="description"><%= result.description %></p>
 <% } %>
 <% if (result.population) { %>
-              <p class="population"><%= result.population %></p></a></td>
+              <p class="population"><%= result.population %></p></td>
 <% } %>
-            <td class="data">
-              <% if (result.housing > 0) { %>
-                <a href="<%= result.url %>/browse?q=housing&sortBy=relevance&utf8=%E2%9C%93"><%= result.housing %></a>
-              <% } else { %>
-                0
-              <% } %>
             </td>
-            <td class="data">
-              <% if (result.restaurant_inspections > 0) { %>
+            <td class="content-data">
+              <a href="<%= result.url %>/browse?q=housing&sortBy=relevance&utf8=%E2%9C%93"><%= result.housing %></a>
+            </td>
+            <td class="content-data">
                 <a href="<%= result.url %>/browse?q=restaurant%20inspections&sortBy=relevance&utf8=%E2%9C%93"><%= result.restaurant_inspections %></a>
-              <% } else { %>
-                0
-              <% } %>
             </td>
-            <td class="data">
-              <% if (result.transit > 0) { %>
+            <td class="content-data">
                 <a href="<%= result.url %>/browse?q=transit&sortBy=relevance&utf8=%E2%9C%93"><%= result.transit %></a>
-              <% } else { %>
-                0
-              <% } %>
             </td>
-            <td class="data">
-              <% if (result.health > 0) { %>
+            <td class="content-data">
                 <a href="<%= result.url %>/browse?q=health&sortBy=relevance&utf8=%E2%9C%93"><%= result.health %></a>
-              <% } else { %>
-                0
-              <% } %>
             </td>
-            <td class="data">
-              <% if (result.crime > 0) { %>
+            <td class="content-data">
                 <a href="<%= result.url %>/browse?q=crime&sortBy=relevance&utf8=%E2%9C%93"><%= result.crime %></a>
-              <% } else { %>
-                0
-              <% } %>
             </td>
-            <td class="data">
-              <% if (result.permits > 0) { %>
+            <td class="content-data">
                 <a href="<%= result.url %>/browse?q=permits&sortBy=relevance&utf8=%E2%9C%93"><%= result.permits %></a>
-              <% } else { %>
-                0
-              <% } %>
             </td>
         </tr>
       <% }); %>
