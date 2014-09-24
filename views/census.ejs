@@ -14,16 +14,17 @@
         </tr>
       <% results.forEach(function(result) { %>
         <tr class="content-row">
-            <td><a class="content-title" href="<%= result.url %>"><%= result.title %></a>
+            <td>
+                <a class="content-title" href="<%= result.url %>"><%= result.title %></a>
 <% if (result.description) { %>
-              <p class="description"><%= result.description %></p>
+                <p class="description"><%= result.description %></p>
 <% } %>
 <% if (result.population) { %>
-              <p class="population"><%= result.population %></p></td>
+                <p class="population"><%= result.population %></p></td>
 <% } %>
             </td>
             <td class="content-data">
-              <a href="<%= result.url %>/browse?q=housing&sortBy=relevance&utf8=%E2%9C%93"><%= result.housing %></a>
+                <a href="<%= result.url %>/browse?q=housing&sortBy=relevance&utf8=%E2%9C%93"><%= result.housing %></a>
             </td>
             <td class="content-data">
                 <a href="<%= result.url %>/browse?q=restaurant%20inspections&sortBy=relevance&utf8=%E2%9C%93"><%= result.restaurant_inspections %></a>

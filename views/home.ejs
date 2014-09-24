@@ -6,11 +6,11 @@
 
 <div id="hero">
     <div id="hero-words">
-      <h1>Data the Way You Want It.</h1>
-      <p>Introducing the Open Data Network,<br>the new hub for the vibrant and growing open data ecosystem.</p>
+        <h1>Data the Way You Want It.</h1>
+        <p>Introducing the Open Data Network,<br>the new hub for the vibrant and growing open data ecosystem.</p>
     </div>    
     <div id="hero-start-exploring-container">
-      <a id="hero-start-exploring" href="/explore">START EXPLORING</a>
+        <a id="hero-start-exploring" href="/explore">START EXPLORING</a>
     </div>
     <a id="hero-mini-map" href="https://odn.demo.socrata.com/browse?sortBy=relevance&utf8=%E2%9C%93&q=map"><img src="/images/hero-mini-map.png" alt="Mini map"></a>
     <label id="hero-image-label">Data Delivering the American Dream</label>
@@ -19,9 +19,9 @@
 <div class="content">
     <div id="slides">
         <div id="slides-list">
-          <% slides.forEach(function(slide) { %>
+            <% slides.forEach(function(slide) { %>
             <a href="<%= slide.url %>"><img src="<%= slide.image %>" alt="<%= slide.title %>"></a>
-          <% }); %>
+            <% }); %>
             <a href="#" class="slidesjs-previous slidesjs-navigation"><img src="/images/slides-left-button.png"></a>
             <a href="#" class="slidesjs-next slidesjs-navigation"><img src="/images/slides-right-button.png"></a>        
         </div>
@@ -30,11 +30,11 @@
   
 <div class="content">
 
-      <% columns.forEach(function(column, columnIndex) { %>
+        <% columns.forEach(function(column, columnIndex) { %>
         <div class="col-<%= columnIndex %>">
 
             <% column.forEach(function(tile) { %>
-              <a class="tile tile-<%= tile.type %>" 
+            <a class="tile tile-<%= tile.type %>" 
 
 <% if (tile.modalUrl != null) { %>
                 data-toggle="modal"
@@ -44,20 +44,20 @@
                 href="<%= tile.url %>">
                 
                 <% if (tile.image != null) { %>
-                  <img class="tile-image" src="<%= tile.image %>">
+                <img class="tile-image" src="<%= tile.image %>">
                 <% } %>
 
                 <% if (tile.category != null) { %>
-                  <div class="tile-category"><%= tile.category %></div>
+                <div class="tile-category"><%= tile.category %></div>
                 <% } %>
 
-                  <div class="tile-title-container">              
-                      <div class="tile-title"><%= tile.title %></div>                  
+                <div class="tile-title-container">              
+                    <div class="tile-title"><%= tile.title %></div>                  
                     <% if (tile.text != null) { %>
-                      <div class="tile-text"><%= tile.text %></div>
+                    <div class="tile-text"><%= tile.text %></div>
                     <% } %>
-                  </div>
-              </a>
+                </div>
+            </a>
             <% }); %>
 
         </div>

@@ -1,9 +1,6 @@
 /* Variables */
 
-$row-color: #eee;
 $black-color: #222;
-$gray-color: #888;
-$green-color: #0FBE4D;
 
 /* Content area */
 
@@ -15,7 +12,8 @@ $green-color: #0FBE4D;
     text-align: center;
     width: 1280px;
 
-    @media (max-width: 1280px) {
+    @media (max-width: 1280px) 
+    {
         width: 100%;
     }
 }
@@ -28,17 +26,82 @@ $green-color: #0FBE4D;
 .content td:first-child a
 {
     font-size: 24px;
+
+    @media (max-width: 1280px) 
+    {
+        font-size: 18px;
+    }
+
+    @media (max-width: 768px) 
+    {
+        font-size: 12px;
+    }
+}
+
+.content td,
+.content th
+{    
+    padding: 20px;
+    text-align: center;
+
+    @media (max-width: 768px) 
+    {
+        padding: 20px 2%;
+    }
+
+    @media (max-width: 550px) 
+    {
+        padding: 20px 1%;
+    }
+}
+
+.content th
+{
+    font-size: 16px;
+
+    @media (max-width: 768px) 
+    {
+        font-size: 10px;
+    }
+
+    @media (max-width: 550px) 
+    {
+        font-size: 6px;
+    }
+}
+
+.content td:first-child
+{
+    width: 40%;
+
+    @media (max-width: 768px) 
+    {
+        width: auto;
+    }
+}
+
+.content-data
+{    
+    font-size: 24px;
+    width: 10%;
+
+    @media (max-width: 1280px) 
+    {
+        font-size: 18px;
+        width: auto;
+    }
+
+    @media (max-width: 768px) 
+    {
+        font-size: 14px;
+        width: auto;
+    }
 }
 
 .content table
 {
     margin: 0 auto;
     text-align: left;
-}
-
-.content td:first-child
-{
-    width: 40%;
 }
 
 .content td:first-child,
@@ -50,6 +113,11 @@ $green-color: #0FBE4D;
 .content-row
 {
     border-bottom: 20px solid #fafafa;
+
+    @media (max-width: 768px) 
+    {
+        border-bottom-width: 10px;
+    }
 }
 
 .content-row:nth-child(11n+2)
@@ -107,13 +175,6 @@ $green-color: #0FBE4D;
     background-color: #d35400;
 }
 
-.content td,
-.content th
-{    
-    padding: 20px;
-    text-align: center;
-}
-
 .content th
 {
     color: $black-color;
@@ -144,8 +205,3 @@ $green-color: #0FBE4D;
     text-align: center;
 }
 
-.content-data
-{    
-    font-size: 24px;
-    width: 10%;
-}
