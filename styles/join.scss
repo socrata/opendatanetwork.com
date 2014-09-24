@@ -1,16 +1,20 @@
-/* Main container */
-
 h1
 {
-    font-size: 32px;
     color: #222;
+    font-size: 32px;
+    margin-bottom: 40px;
 }
 
 h2
 {
-    font-size: 24px;
     color: #222;
+    font-size: 24px;
     margin-bottom: 20px;
+}
+
+p
+{
+    margin-bottom: 40px;
 }
 
 ul
@@ -20,7 +24,8 @@ ul
     text-align: center;
     width: 1000px;
 
-     @media (max-width: 1280px) {
+    @media (max-width: 1280px) 
+    {
         width: 90%;
     }
 }
@@ -43,7 +48,8 @@ li
     text-align: left;
     width: 1280px;
 
-    @media (max-width: 1280px) {
+    @media (max-width: 1280px) 
+    {
         width: 90%;
     }
 }
@@ -51,11 +57,20 @@ li
 #odn-logo
 {
     display: block;
-    margin: 0 auto 30px;    
-    text-align: center;
+    float: right;
+    margin-bottom: 40px;
+    margin-left: 40px;
 
-    @media (max-width: 600px) {
-        width: 90%;
+    @media (max-width: 1280px) 
+    {
+        width: 33%;
+        margin-bottom: 5%;
+        margin-left: 5%;
+    }
+
+    @media (max-width: 768px) 
+    {
+        width: 50%;
     }
 }
 
