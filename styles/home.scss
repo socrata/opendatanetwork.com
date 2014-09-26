@@ -106,6 +106,110 @@ body
 	padding: 10px 25px;
 }
 
+/* Logos area */
+
+#logo-container
+{
+	-webkit-box-shadow: 0px 1px 1px 0px rgba(7,8,8,0.15);
+	-moz-box-shadow: 0px 1px 1px 0px rgba(7,8,8,0.15);
+	box-shadow: 0px 1px 1px 0px rgba(7,8,8,0.15);
+	background-color: white;
+	border: 1px solid #eaeaea;
+	clear: both;
+	height: 206px;
+	margin-bottom: 30px;
+	position: relative;
+
+	@media (max-width: 1280px) 
+	{
+		display: none;
+	}
+}
+
+#logo-container label
+{
+	left: 15px;
+	position: absolute;
+	top: 15px;
+}
+
+#logo-accela
+{
+	left: 1131px;
+	position: absolute;
+	top: 78px;			
+}
+
+#logo-appallicious
+{
+	left: 654px;
+	position: absolute;
+	top: 99px;		
+}
+
+#logo-basic-gov
+{
+	left: 929px;
+	position: absolute;
+	top: 32px;			
+}
+
+#logo-build-fax
+{
+	left: 289px;
+	position: absolute;
+	top: 17px;	
+}
+
+#logo-building-eye
+{
+	left: 482px;
+	position: absolute;
+	top: 47px;		
+}
+
+#logo-civic-insight
+{
+	left: 646px;
+	position: absolute;
+	top: 33px;	
+}
+
+#logo-drive
+{
+	left: 945px;
+	position: absolute;
+	top: 134px;
+}
+
+#logo-ontodia
+{
+	left: 470px;
+	position: absolute;
+	top: 153px;
+}
+
+#logo-realty-trac
+{
+	left: 39px;
+	position: absolute;
+	top: 154px;
+}
+
+#logo-site-compli
+{
+	left: 288px;
+	position: absolute;
+	top: 103px;
+}
+
+#logo-zillow
+{
+	left: 32px;
+	position: absolute;
+	top: 64px;	
+}
+
 
 /* Content area */
 
@@ -378,8 +482,8 @@ body
 
 /* Media queries */
 
-@media (max-width: 1280px) {
-
+@media (max-width: 1280px) 
+{
 	#hero h1
 	{
 		font-size: 66px;
@@ -392,8 +496,8 @@ body
 	}
 }
 
-@media (max-width: 992px) {
-
+@media (max-width: 992px) 
+{
 	#hero h1
 	{
 		font-size: 54px;
@@ -435,8 +539,8 @@ body
 	}
 }
 
-@media (max-width: 768px) {
-
+@media (max-width: 768px) 
+{
 	#hero h1
 	{
 		font-size: 40px;
@@ -501,12 +605,8 @@ body
     }
 }
 
-@media (max-width: 550px) {
-
-	#hero
-	{
-	}
-
+@media (max-width: 550px) 
+{
 	#hero h1
 	{
 		white-space: normal;
@@ -570,7 +670,8 @@ body
 
 }
 
-@media (max-width: 400px) {
+@media (max-width: 400px) 
+{
 	.col-0, .col-1, .col-2, .col-3,
 	.col-4, .col-5, .col-6, .col-7
 	{
