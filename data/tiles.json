@@ -27,7 +27,7 @@
             "title" : "Building Permit Data for Building Construction Projects from Top U.S. Cities",
             "text" : null,
             "type" : "small",
-            "url" : "http://odn.demo.socrata.com/browse?tags=odn-2"
+            "url" : "http://data.opendatanetwork.com/browse?tags=odn-2"
         }
     ],
     [
@@ -38,7 +38,7 @@
             "title" : "Standardized and Granular Data on Housing Use, Health and Safety Reports from Top Innovative Cities",
             "text" : null,
             "type" : "small",
-            "url" : "http://odn.demo.socrata.com/browse?tags=odn-3"
+            "url" : "http://data.opendatanetwork.com/browse?tags=odn-3"
         },
         {
             "category" : "Housing",
@@ -89,7 +89,7 @@
             "text" : null,
             "title" : "Demographic Data from U.S. Census",
             "type" : "small",
-            "url" : "http://odn.demo.socrata.com/browse?tags=odn-9"
+            "url" : "http://data.opendatanetwork.com/browse?tags=odn-9"
         }
     ],
     [
@@ -100,7 +100,7 @@
             "title" : "Relationships between Housing Inventory, Crime Rate and Educational Performance Data from Top U.S. Cities",
             "text" : null,
             "type" : "small",
-            "url" : "http://odn.demo.socrata.com/browse?tags=odn-1"
+            "url" : "http://data.opendatanetwork.com/browse?tags=odn-1"
         },
         {
             "category" : null,

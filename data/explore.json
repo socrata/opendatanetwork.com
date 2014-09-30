@@ -34,31 +34,31 @@
 								"image" : "/images/articles-catalog.png",
 								"modalUrl" : null,
 								"title" : "Catalog that Shows Relationships between Housing Inventory, Crime Rate and Educational Performance Data from Top U.S. Cities",
-								"url" : "http://odn.demo.socrata.com/browse?tags=odn-1"
+								"url" : "http://data.opendatanetwork.com/browse?tags=odn-1"
 							},
 							{
 								"image" : "/images/articles-catalog.png",
 								"modalUrl" : null,
 								"title" : "Catalog of Building Permit Data for Building Construction Projects from Top U.S. Cities",
-								"url" : "http://odn.demo.socrata.com/browse?tags=odn-2"
+								"url" : "http://data.opendatanetwork.com/browse?tags=odn-2"
 							},
 							{
 								"image" : "/images/articles-catalog.png",
 								"modalUrl" : null,
 								"title" : "Standardized and Granular Data on Housing Use, Health and Safety Reports from Top Innovative Cities",
-								"url" : "http://odn.demo.socrata.com/browse?tags=odn-2"
+								"url" : "http://data.opendatanetwork.com/browse?tags=odn-2"
 							},
 							{
 								"image" : "/images/articles-catalog.png",
 								"modalUrl" : null,
 								"title" : "Catalog of Every Geospatial or Map Open Data File from the Nation's Leading Cities",
-								"url" : "http://odn.demo.socrata.com/browse?tags=odn-4"
+								"url" : "http://data.opendatanetwork.com/browse?tags=odn-4"
 							},
 							{
 								"image" : "/images/articles-catalog.png",
 								"modalUrl" : null,
 								"title" : "Catalog of Data Sets Relating to Buildings that are Maps or Other Types of Geospatial Data",
-								"url" : "https://odn.demo.socrata.com/browse?tags=odn-13"
+								"url" : "https://data.opendatanetwork.com/browse?tags=odn-13"
 							}
 						]
 					},
@@ -69,19 +69,19 @@
 								"image" : "/images/articles-catalog.png",
 								"modalUrl" : null,
 								"title" : "Standardized and Granular Data on Housing Use, Health and Safety Reports from Two Innovative Cities",
-								"url" : "http://odn.demo.socrata.com/browse?tags=odn-5"
+								"url" : "http://data.opendatanetwork.com/browse?tags=odn-5"
 							},
 							{
 								"image" : "/images/articles-catalog.png",
 								"modalUrl" : null,
 								"title" : "Catalog of Data Sets on Homelessness from across the Country",
-								"url" : "http://odn.demo.socrata.com/browse?tags=odn-6"
+								"url" : "http://data.opendatanetwork.com/browse?tags=odn-6"
 							},
 							{
 								"image" : "/images/articles-catalog.png",
 								"modalUrl" : null,
 								"title" : "Catalog of Data Sets on Housing and Apartment Inspections, Foreclosures and Vacancies from Top U.S. Cities",
-								"url" : "http://odn.demo.socrata.com/browse?tags=odn-7"
+								"url" : "http://data.opendatanetwork.com/browse?tags=odn-7"
 							}
 						]
 					},
@@ -92,31 +92,31 @@
 								"image" : "/images/articles-catalog.png",
 								"modalUrl" : null,
 								"title" : "Demographic Data from U.S. Census",
-								"url" : "http://odn.demo.socrata.com/browse?tags=odn-9"
+								"url" : "http://data.opendatanetwork.com/browse?tags=odn-9"
 							},
 							{
 								"image" : "/images/articles-catalog.png",
 								"modalUrl" : null,
 								"title" : "All Data Sets from Top U.S. cities that Have the Words “housing”, “buildings”, or “apartment” in the Metadata",
-								"url" : "http://odn.demo.socrata.com/browse?tags=odn-10"
+								"url" : "http://data.opendatanetwork.com/browse?tags=odn-10"
 							},
 							{
 								"image" : "/images/articles-catalog.png",
 								"modalUrl" : null,
 								"title" : "Data on Housing / Building Costs and Finance (e.g. Assessments, Property Tax, etc) from Top U.S. cities",
-								"url" : "http://odn.demo.socrata.com/browse?tags=odn-11"
+								"url" : "http://data.opendatanetwork.com/browse?tags=odn-11"
 							},
 							{
 								"image" : "/images/articles-catalog.png",
 								"modalUrl" : null,
 								"title" : "Data on Housing / Building Use (e.g. Zoning as Residential / Commercial, Parcel Type, Maps of Boundaries, etc)",
-								"url" : "http://odn.demo.socrata.com/browse?tags=odn-12"
+								"url" : "http://data.opendatanetwork.com/browse?tags=odn-12"
 							},
 							{
 								"image" : "/images/articles-catalog.png",
 								"modalUrl" : null,
 								"title" : "Sustainability / Energy Use",
-								"url" : "http://odn.demo.socrata.com/browse?tags=odn-14"
+								"url" : "http://data.opendatanetwork.com/browse?tags=odn-14"
 							}
 						]
 					}
@@ -167,7 +167,7 @@
 								"image" : "/images/articles-catalog.png",
 								"modalUrl" : null,
 								"title" : "Catalog of Data Sets Relating to Buildings that are Maps or Other Types of Geospatial Data",
-								"url" : "http://odn.demo.socrata.com/browse?tags=odn-13"
+								"url" : "http://data.opendatanetwork.com/browse?tags=odn-13"
 							}
 						]
 					}
@@ -216,7 +216,7 @@
 								"image" : "/images/articles-catalog.png",
 								"modalUrl" : null,
 								"title" : "Standardized and Granular Data on Housing Use, Health and Safety Reports from Two Innovative Cities",
-								"url" : "https://odn.demo.socrata.com/browse?q=housefacts&sortBy=relevance&utf8=%E2%9C%93"
+								"url" : "https://data.opendatanetwork.com/browse?q=housefacts&sortBy=relevance&utf8=%E2%9C%93"
 							}
 						]
 					},
@@ -276,7 +276,7 @@
 								"image" : "/images/articles-catalog.png",
 								"modalUrl" : null,
 								"title" : "Catalog of Relevant Data by Government",
-								"url" : "https://odn.demo.socrata.com"
+								"url" : "https://data.opendatanetwork.com"
 							}
 						]
 					}
