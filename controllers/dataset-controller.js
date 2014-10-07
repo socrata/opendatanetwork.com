@@ -16,7 +16,7 @@ DatasetController.prototype.getPopularDatasets = function(completionHandler) {
     
     client.connect();
 
-    var query = client.query('SELECT * FROM datasets ORDER BY view_count DESC;');
+    var query = client.query('SELECT * FROM datasets ORDER BY view_count DESC limit 100;');
     
     query.on('row', function(row) {
 
