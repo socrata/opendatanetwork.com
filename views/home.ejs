@@ -19,9 +19,14 @@
 <div class="content">
     <div id="slides">
         <div id="slides-list">
-            <% slides.forEach(function(slide) { %>
-            <a href="<%= slide.url %>"><img src="<%= slide.image %>" alt="<%= slide.title %>"></a>
-            <% }); %>
+        <% slides.forEach(function(slide) { %>
+          <% if (slide.modalUrl != null) { %>
+            <a href="<%= slide.url %>" data-toggle="modal" data-target="#article-modal" data-remote="<%= slide.modalUrl %>">
+          <% } else { %>
+            <a href="<%= slide.url %>">
+          <% } %>
+            <img src="<%= slide.image %>" alt="<%= slide.title %>"></a>
+        <% }); %>
             <a href="#" class="slidesjs-previous slidesjs-navigation"><img src="/images/slides-left-button.png"></a>
             <a href="#" class="slidesjs-next slidesjs-navigation"><img src="/images/slides-right-button.png"></a>        
         </div>
