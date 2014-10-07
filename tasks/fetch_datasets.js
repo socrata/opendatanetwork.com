@@ -38,7 +38,7 @@ function makeRequest(portalIndex)
 
     try 
     {
-        var url = portal.url + '/api/search/views.json?sortBy=MOST_ACCESSED&limit=10';
+        var url = portal.url + '/api/search/views.json?sortBy=MOST_ACCESSED&limit=100';
         console.log('makeRequest - ' + url);
 
         _request(
@@ -105,8 +105,8 @@ function upsert(datasetIndex)
 
         client.query(
         {
-            text: 'UPDATE datasets SET dataset_url = $2, description = $3, name = $4, portal_title = $5, portal_url = $6, view_count = $7 WHERE identifier = $1', 
-            values: [dataset.identifier, dataset.datasetUrl, dataset.description, dataset.name, dataset.portalTitle, dataset.portalUrl, dataset.viewCount]
+            text: 'UPDATE datasets SET description = $2, name = $3, view_count = $4 WHERE identifier = $1', 
+            values: [dataset.identifier, dataset.description, dataset.name, dataset.viewCount]
         },
         function(err, result) {
 

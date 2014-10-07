@@ -31,9 +31,9 @@ $black-color: #222;
 
 .content h1
 {
-    color: #222;
+    color: $black-color;
     font-size: 24px;
-    margin-bottom: 35px;
+    margin-bottom: 15px;
     text-align: left;
 }
 
@@ -106,6 +106,35 @@ $black-color: #222;
     text-align: left;
 }
 
+.content p
+{
+    @media (max-width: 1280px) 
+    {
+        display: none;
+    }
+}
+
+.content p.description
+{
+    color: white;
+    font-size: 12px;
+}
+
+.content p.subheader
+{
+    color: $black-color;
+    font-size: 12px;
+    margin-bottom: 20px;
+    text-align: left
+}
+
+.content label.views
+{
+    color: white;
+    display: block;
+    font-size: 12px;
+}
+
 .content-row
 {
     border-bottom: 20px solid #fafafa;
@@ -165,36 +194,3 @@ $black-color: #222;
 {
     background-color: #d35400;
 }
-
-.content p
-{
-    color: white;
-
-    @media (max-width: 1280px) 
-    {
-        display: none;
-    }
-}
-
-.content p.description
-{
-    font-size: 12px;
-}
-
-.content p.population
-{
-    font-size: 12px;
-}
-
-.content label.views
-{
-    color: white;
-    display: block;
-    font-size: 12px;
-}
-
-.content .c 
-{
-    text-align: center;
-}
-
