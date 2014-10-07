@@ -1,3 +1,4 @@
+var DatasetController = require('./controllers/dataset-controller');
 var PortalController = require('./controllers/portal-controller');
 var express = require('express');
 var fs = require('fs');
@@ -5,6 +6,7 @@ var favicon = require('serve-favicon');
 var helmet = require('helmet');
 
 var portalController = new PortalController();
+var datasetController = new DatasetController();
 var app = express();
 
 // Set X-Frame-Options header
@@ -54,6 +56,15 @@ app.get('/census', function(req, res) {
 
         app.locals.css = 'census.min.css';
         res.render('census.ejs', { results: results });
+    });
+});
+
+app.get('/popular', function(req, res) {
+
+    datasetController.getPopularDatasets(function(results) {
+
+        app.locals.css = 'popular.min.css';
+        res.render('popular.ejs', { results: results });
     });
 });
 

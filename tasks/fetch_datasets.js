@@ -6,6 +6,7 @@ var _portalIndex = 0;
 var _portals;
 var _datasetIndex = 0;
 var _datasets;
+var _descriptionSize = 500;
 
 function next()
 {
@@ -61,12 +62,21 @@ function makeRequest(portalIndex)
                     for (var i = 0; i < results.length; i++) {
 
                         var view = results[i].view;
-    
-                        _datasets.push({
+                        var description = view.description || '';
 
+                        description = description.trim();
+
+                        if (description.length > _descriptionSize)
+                            description = description.substring(0, _descriptionSize - 3) + '...';
+    
+                        _datasets.push(
+                        {
+                            'datasetUrl' : portal.url + '/w/' + view.id,
+                            'description' : description,
+                            'identifier' : view.id,
                             'name' :  view.name,
+                            'portalTitle' : portal.title,
                             'portalUrl' : portal.url,
-                            'url' : portal.url + '/w/' + view.id,
                             'viewCount' : view.viewCount
                         });
                     }
@@ -86,7 +96,7 @@ function upsert(datasetIndex)
     var dataset = _datasets[datasetIndex];
     var client = new _pg.Client(_connectionString);
     
-    console.log('upsert - ' + dataset.url + ' ' + dataset.viewCount);
+    console.log('upsert - ' + dataset.datasetUrl + ' ' + dataset.viewCount);
 
     client.connect(function(err) {
     
@@ -95,8 +105,8 @@ function upsert(datasetIndex)
 
         client.query(
         {
-            text: 'UPDATE datasets SET name = $2, portal_url = $3, view_count = $4 WHERE url = $1', 
-            values: [dataset.url, dataset.name, dataset.portalUrl, dataset.viewCount]
+            text: 'UPDATE datasets SET dataset_url = $2, description = $3, name = $4, portal_title = $5, portal_url = $6, view_count = $7 WHERE identifier = $1', 
+            values: [dataset.identifier, dataset.datasetUrl, dataset.description, dataset.name, dataset.portalTitle, dataset.portalUrl, dataset.viewCount]
         },
         function(err, result) {
 
@@ -122,8 +132,8 @@ function upsert(datasetIndex)
 
             client.query(
             {
-                text: 'INSERT INTO datasets (name, portal_url, url, view_count) VALUES ($1, $2, $3, $4)', 
-                values: [dataset.name, dataset.portalUrl, dataset.url, dataset.viewCount]
+                text: 'INSERT INTO datasets (dataset_url, description, identifier, name, portal_title, portal_url, view_count) VALUES ($1, $2, $3, $4, $5, $6, $7)', 
+                values: [dataset.datasetUrl, dataset.description, dataset.identifier, dataset.name, dataset.portalTitle, dataset.portalUrl, dataset.viewCount]
             },
             function(err, result) {
 

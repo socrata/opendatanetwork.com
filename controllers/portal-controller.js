@@ -10,7 +10,7 @@ function PortalController() {
 //
 PortalController.prototype.getPortals = function(completionHandler) {
 
-    var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/census';
+    var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/odn';
     var client = new pg.Client(connectionString);
     var results = [];
     
