@@ -12,6 +12,17 @@ h2
     margin-bottom: 20px;
 }
 
+input[type="checkbox"]
+{
+    margin-right: 10px;
+}
+
+li
+{
+    margin-bottom: 10px;
+    text-align: left;
+}
+
 p
 {
     margin-bottom: 40px;
@@ -19,7 +30,7 @@ p
 
 ul
 {
-    margin: 0 auto 100px;    
+    margin: 0 auto 50px;    
     padding-left: 0;
     text-align: center;
     width: 1000px;
@@ -28,12 +39,6 @@ ul
     {
         width: 90%;
     }
-}
-
-li
-{
-    margin-bottom: 10px;
-    text-align: left;
 }
 
 #container 
@@ -52,6 +57,35 @@ li
     {
         width: 90%;
     }
+}
+
+.content-form-container
+{
+    text-align: center;
+}
+
+.content-form
+{
+    margin: 0 auto 50px;
+    width: 550px;
+    text-align: left;
+
+    @media (max-width: 768px) 
+    {
+        width: 90%;
+    }
+}
+
+.mktoAsterix
+{
+    float: right;
+    color: red;
+    display: none;
+}
+
+.mktoErrorMsg
+{
+    color: red;
 }
 
 #odn-logo
