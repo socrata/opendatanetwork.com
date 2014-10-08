@@ -33,7 +33,7 @@ ul
     margin: 0 auto 50px;    
     padding-left: 0;
     text-align: center;
-    width: 1000px;
+    width: 510px;
 
     @media (max-width: 1280px) 
     {
@@ -51,9 +51,9 @@ ul
 {
     margin: 0 auto;
     text-align: left;
-    width: 1280px;
+    width: 768px;
 
-    @media (max-width: 1280px) 
+    @media (max-width: 768px) 
     {
         width: 90%;
     }
@@ -95,14 +95,14 @@ ul
     margin-bottom: 40px;
     margin-left: 40px;
 
-    @media (max-width: 1280px) 
+    @media (max-width: 768px) 
     {
         width: 33%;
         margin-bottom: 5%;
         margin-left: 5%;
     }
 
-    @media (max-width: 768px) 
+    @media (max-width: 550px) 
     {
         width: 50%;
     }
