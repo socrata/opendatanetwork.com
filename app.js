@@ -68,6 +68,12 @@ app.get('/popular', function(req, res) {
     });
 });
 
+app.get('/join/complete', function(req, res) {
+
+    app.locals.css = 'join-complete.min.css';
+    res.render('join-complete.ejs');
+});
+
 app.get('/join', function(req, res) {
 
     app.locals.css = 'join.min.css';
