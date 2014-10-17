@@ -75,12 +75,12 @@
     [
         {
             "category" : null,
-            "image" : "/images/tiles-categories.png",
+            "image" : "/images/tiles-popular.png",
             "modalUrl" : null,
             "text" : null,
-            "title" : "ODN Categories",
+            "title" : "Popular Datasets",
             "type" : "small",
-            "url" : "http://ec2-54-191-8-118.us-west-2.compute.amazonaws.com/#/tags"
+            "url" : "/popular"
         },
         {
             "category" : "Housing",

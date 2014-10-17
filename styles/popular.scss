@@ -14,7 +14,7 @@ $black-color: #222;
 
     @media (max-width: 1280px) 
     {
-        width: 100%;
+        width: 90%;
     }
 }
 
@@ -35,6 +35,12 @@ $black-color: #222;
     font-size: 24px;
     margin-bottom: 15px;
     text-align: left;
+
+    @media (max-width: 768px) 
+    {
+        font-size: 18px;
+        width: auto;
+    }
 }
 
 .content td:first-child a.content-title
@@ -47,6 +53,11 @@ $black-color: #222;
     }
 
     @media (max-width: 768px) 
+    {
+        font-size: 14px;
+    }
+
+    @media (max-width: 550px) 
     {
         font-size: 12px;
     }
@@ -70,12 +81,6 @@ $black-color: #222;
 
 .content td:first-child
 {
-    width: 70%;
-
-    @media (max-width: 768px) 
-    {
-        width: auto;
-    }
 }
 
 .content-data
@@ -99,6 +104,7 @@ $black-color: #222;
 {
     margin: 0 auto;
     text-align: left;
+    width: 100%;
 }
 
 .content td:first-child
