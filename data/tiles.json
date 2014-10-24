@@ -80,7 +80,7 @@
             "text" : null,
             "title" : "Popular Datasets",
             "type" : "small",
-            "url" : "/popular"
+            "url" : "/popular-open-datasets"
         },
         {
             "category" : "Housing",
@@ -109,7 +109,7 @@
             "title" : "ODN Census",
             "text" : null,
             "type" : "small",
-            "url" : "/census"
+            "url" : "/open-data-census"
         }
     ],
     [

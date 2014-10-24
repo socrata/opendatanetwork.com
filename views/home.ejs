@@ -10,7 +10,7 @@
         <p>Introducing the Open Data Network,<br>the new hub for the vibrant and growing open data ecosystem.</p>
     </div>    
     <div id="hero-start-exploring-container">
-        <a id="hero-start-exploring" href="/explore">START EXPLORING</a>
+        <a id="hero-start-exploring" href="/explore-open-data" title="Start Exploring Open Data">START EXPLORING</a>
     </div>
     <a id="hero-mini-map" href="https://data.opendatanetwork.com/browse?sortBy=relevance&utf8=%E2%9C%93&q=map"><img src="/images/hero-mini-map.png" alt="Mini map"></a>
     <label id="hero-image-label">Data Delivering the American Dream</label>
@@ -21,9 +21,9 @@
         <div id="slides-list">
         <% slides.forEach(function(slide) { %>
           <% if (slide.modalUrl != null) { %>
-            <a href="<%= slide.url %>" data-toggle="modal" data-target="#article-modal" data-remote="<%= slide.modalUrl %>">
+            <a href="<%= slide.url %>" data-toggle="modal" data-target="#article-modal" data-remote="<%= slide.modalUrl %>" title="<%= slide.title %>">
           <% } else { %>
-            <a href="<%= slide.url %>">
+            <a href="<%= slide.url %>" title="<%= slide.title %>">
           <% } %>
             <img src="<%= slide.image %>" alt="<%= slide.title %>"></a>
         <% }); %>
@@ -92,7 +92,7 @@
 <div class="content">
     <div id="orange-footer">
         <div id="orange-footer-tag-line">Your data is more valuable when it's here.</div>
-        <a id="orange-footer-start-exploring" href="/explore">Start Exploring</a>
+        <a id="orange-footer-start-exploring" href="/explore-open-data">Start Exploring</a>
     </div>
 </div>
 
