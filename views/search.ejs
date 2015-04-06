@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="/styles/search.min.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <form action="/beta" method="get">
+        <input type="text" placeholder="Search Open Data Network" name="q" value="<%= q || '' %>"/>
+    </form>
+<% if (data && data.results) { %>    
+    <ul class="results">
+        <% data.results.forEach(function(result) { %>
+            <li>
+                <a class="main" href="<%= result.link %>"><%= result.resource.name %></a>
+                <div class="domain"><%= result.resource.domain %></div>
+                <p class="description"><%= result.resource.description %></p>
+            </li>
+        <% }); %>
+    </ul>
+<% } %>
+</body>
+</html

@@ -1,5 +1,7 @@
 var DatasetController = require('./controllers/dataset-controller');
 var PortalController = require('./controllers/portal-controller');
+var SearchController = require('./controllers/search-controller');
+
 var express = require('express');
 var fs = require('fs');
 var favicon = require('serve-favicon');
@@ -7,6 +9,7 @@ var helmet = require('helmet');
 
 var portalController = new PortalController();
 var datasetController = new DatasetController();
+var searchController = new SearchController();
 var app = express();
 
 // Set X-Frame-Options header
@@ -130,6 +133,23 @@ app.get('/modal/:article', function(req, res) {
 app.get('/google0679b96456cb5b3a.html', function(req, res) {
 
     res.render('static/google0679b96456cb5b3a.ejs');
+});
+
+// Beta homepage
+//
+app.get('/beta', function(req, res) {
+
+    if (req.query.q) {
+
+        searchController.search(req.query.q, function(data) {
+
+            res.render('search.ejs', { q : req.query.q, data : data });
+        });
+    }
+    else {
+
+        res.render('search.ejs', { q : null, data : null });
+    }
 });
 
 
