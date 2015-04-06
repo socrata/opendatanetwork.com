@@ -7,10 +7,19 @@ body
 
 input[type="text"]
 {
-    margin: 0 auto 100px;
-    font-size: 12px;
+    margin: 0 auto 40px;
+    font-size: 16px;
     padding: 8px 16px;
     width: 400px;
+}
+
+div.resultStats
+{
+    color: #808080;
+    font-size: 13px;
+    margin: 0 auto 40px;
+    text-align: left;
+    width: 992px;
 }
 
 ul.results

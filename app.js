@@ -6,6 +6,7 @@ var express = require('express');
 var fs = require('fs');
 var favicon = require('serve-favicon');
 var helmet = require('helmet');
+var numeral = require('numeral');
 
 var portalController = new PortalController();
 var datasetController = new DatasetController();
@@ -135,15 +136,15 @@ app.get('/google0679b96456cb5b3a.html', function(req, res) {
     res.render('static/google0679b96456cb5b3a.ejs');
 });
 
-// Beta homepage
+// Alpha homepage
 //
-app.get('/beta', function(req, res) {
+app.get('/search', function(req, res) {
 
     if (req.query.q) {
 
         searchController.search(req.query.q, function(data) {
 
-            res.render('search.ejs', { q : req.query.q, data : data });
+            res.render('search.ejs', { q : req.query.q, resultSetSizeString : numeral(data.resultSetSize).format('0,0'), data : data });
         });
     }
     else {

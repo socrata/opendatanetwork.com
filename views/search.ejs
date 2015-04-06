@@ -6,10 +6,11 @@
     <link href="/styles/search.min.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-    <form action="/beta" method="get">
+    <form action="/search" method="GET">
         <input type="text" placeholder="Search Open Data Network" name="q" value="<%= q || '' %>"/>
     </form>
-<% if (data && data.results) { %>    
+<% if (data) { %>    
+    <div class="resultStats">About <%= resultSetSizeString %> results (<%= data.timings.serviceMillis %> ms)</div>
     <ul class="results">
         <% data.results.forEach(function(result) { %>
             <li>
