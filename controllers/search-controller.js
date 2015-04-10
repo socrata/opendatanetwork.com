@@ -1,5 +1,5 @@
 var _request = require('request');
-var _searchUrl = 'http://api.us.socrata.com/api/catalog/v1?q=';
+var _searchUrl = 'http://api.us.socrata.com/api/catalog/v1?only=datasets&q=';
 
 module.exports = SearchController;
 
@@ -10,10 +10,15 @@ function SearchController() {
 //
 SearchController.prototype.search = function(q, completionHandler) {
 
-    var url = _searchUrl + encodeURIComponent(q);
+    var options = {
+        url: _searchUrl + encodeURIComponent(q),
+        headers: {
+            'User-Agent' : 'www.opendatanetwork.com'
+        }
+    };
 
     _request(
-        url, 
+        options, 
         function(err, resp, html) {
 
             if (err) {
