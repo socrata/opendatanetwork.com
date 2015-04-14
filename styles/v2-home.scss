@@ -1,0 +1,263 @@
+/* Variables */
+
+$black-text-color: #222222;
+$blue-icon-color: #3498db;
+$gray-background-color: #ecf0f1;
+$gray-text-color: #7f8c8d;
+$green-color: #27ae60;
+$orange-color: #e74c3c;
+$container-width: 990px;
+$category-item-width: 330px;
+
+/* Hero section */
+
+section.hero
+{
+    background: url('/images/v2-hero-background.jpg') no-repeat center center;
+    background-size: cover;
+    height: 100%;
+}
+
+section.hero .container
+{
+    margin: 0 auto;
+    height: 100%;
+    width: $container-width;
+}
+
+section.hero h1
+{
+    color: white;
+    display: block;
+    font-size: 24px;
+    font-weight: 300;
+    margin: 25% 0 50px;
+}
+
+section.hero .browse-link
+{
+    border: 2px solid white;
+    border-radius: 3px;
+    color: white;
+    display: inline-block;
+    font-size: 20px;
+    line-height: 50px;
+    margin: 0 auto;
+    padding-left: 30px;
+    padding-right: 30px;
+    vertical-align: middle;
+}
+
+section.hero .search-text
+{
+    display: inline-block;
+    margin-bottom: 200px;
+    overflow: hidden;
+    padding: 0;
+}
+
+section.hero .search-text-white
+{
+    background-color: white;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+    display: inline-block;
+    font-size: 20px;
+    height: 60px;
+    line-height: 60px;
+    vertical-align: middle;
+    text-align: left;
+    width: 640px;
+}
+
+section.hero input[type="text"]
+{
+    border: 0;
+    font-size: 20px;
+    height: 60px;
+    line-height: 60px;
+    margin-left: 20px;
+    outline: none;
+    width: 580px;
+}
+
+section.hero .search-text-white .fa-caret-down
+{
+    font-size: 24px;
+}
+
+section.hero .search-link
+{
+    background-color: $orange-color;
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+    color: white;
+    display: inline-block;
+    font-size: 24px;
+    height: 60px;
+    line-height: 60px;
+    padding-left: 50px;
+    padding-right: 50px;
+    vertical-align: middle;
+    width: 160px;
+}
+
+/* Orange section */
+
+section.orange
+{
+    background-color: $orange-color;
+    color: white;
+}
+
+section.orange .container
+{
+    margin: 0 auto;
+    padding: 100px 0;
+    width: $container-width;
+}
+
+section.orange h2
+{
+    font-size: 86px;
+    font-weight: 800;
+    margin: 0 0 40px;
+    white-space: nowrap;
+    text-transform: uppercase;
+}
+
+section.orange p
+{
+    font-size: 24px;
+    font-weight: 300;
+    margin: 0 auto 40px;
+}
+
+section.orange a
+{
+    background-color: white;
+    border-radius: 3px;
+    color: $orange-color;
+    display: inline-block;
+    font-size: 20px;
+    line-height: 50px;
+    padding-left: 30px;
+    padding-right: 30px;
+    vertical-align: middle;
+}
+
+
+/* Gray section */
+
+section.gray
+{
+    background-color: $gray-background-color;
+    color: $gray-text-color
+}
+
+section.gray .container
+{
+    margin: 0 auto;
+    width: $container-width;
+}
+
+section.gray ul
+{
+    float: left;
+    padding: 0;    
+}
+
+section.gray li
+{
+    float: left;
+    list-style-type: none;
+    margin: 0;
+    min-height: 320px;
+    padding: 0;
+    width: $category-item-width;
+}
+
+section.gray h3
+{
+    color: $blue-icon-color;
+    font-size: 24px;
+    font-weight: 300;
+    margin: 0 0 15px;
+}
+
+section.gray p
+{
+    margin: 0;
+}
+
+section.gray .fa
+{
+    display: block;
+    color: $blue-icon-color;
+    font-size: 40px;
+    height: 100%;
+    line-height: 130px;
+    width: 100%;
+}
+
+section.gray .icon
+{
+    background-image: url('/images/v2-category-background.png');
+    display: inline-block;
+    height: 130px;
+    margin-bottom: 25px;
+    width: 130px;
+}
+
+/* Partners */
+
+section.partners
+{
+    background-color: white;
+}
+
+section.partners .container
+{
+    margin: 0 auto;
+    padding: 90px 0;
+    width: $container-width;
+}
+
+section.partners h4
+{
+    color: $black-text-color;
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0 0 60px;
+    text-transform: uppercase;
+}
+
+section.partners .slider 
+{
+
+    margin: 0 0 70px;
+}
+
+section.partners a
+{
+    background-color: $green-color;
+    border-radius: 3px;
+    color: white;
+    display: inline-block;
+    font-size: 20px;
+    line-height: 50px;
+    margin: 0 auto;
+    padding-left: 30px;
+    padding-right: 30px;
+    vertical-align: middle;
+}
+
+
+
+
+
+
+
+
+
+

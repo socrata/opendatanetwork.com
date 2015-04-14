@@ -138,6 +138,12 @@ app.get('/google0679b96456cb5b3a.html', function(req, res) {
 
 // Alpha homepage
 //
+app.get('/v2', function (req, res) {
+
+    app.locals.css = 'v2-home.min.css';
+    res.render('v2-home.ejs');
+})
+
 app.get('/search', function(req, res) {
 
     if (req.query.q) {
