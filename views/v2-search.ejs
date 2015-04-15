@@ -10,23 +10,50 @@
 <% if (data) { %>    
 
 <section class="search-results">
-    <ul>
-        <% data.results.forEach(function(result) { %>
-            <li>
-                <i class="fa <%= result.classification.categoryGlyphString %>"></i>
-                <h2 href="<%= result.link %>"><%= result.resource.name %></h2>
-                <a><%= result.resource.domain %></a> <span>| Last Updated: <%= result.resource.updatedAtString.toUpperCase() %></span>
-                <p><%= result.resource.description %></p>
-                <% if (result.classification.tags.length > 0) { %>
-                    <span>Tags:</span>
-                    <% result.classification.tags.forEach(function(tag, i) {
 
-                        if (i > 0) { %>, <% } %><a href=""><%= tag %></a><% 
-                    }); %>
-                <% } %>
-            </li>
-        <% }); %>
-    </ul>
+    <div class="search-categories-pane">
+        
+        <div class="search-filter-by">
+            <span>Filter by Publisher</span>
+            <a class="fa fa-caret-down"></a>
+        </div>
+
+        <ul class="search-categories-list">
+            <li class="selected"><i class="fa fa-list"></i> All Results</li>
+            <li><i class="fa fa-heart"></i> Health</li>
+            <li><i class="fa fa-car"></i> Transportation</li>
+            <li><i class="fa fa-money"></i> Finance</li>
+            <li><i class="fa fa-child"></i> Social Services</li>
+            <li><i class="fa fa-leaf"></i> Environment</li>
+            <li><i class="fa fa-shield"></i> Public Safety</li>
+            <li><i class="fa fa-building"></i> Housing &amp; Development</li>
+            <li><i class="fa fa-road"></i> Infrastructure</li>
+            <li><i class="fa fa-graduation-cap"></i> Education</li>
+            <li><i class="fa fa-ticket"></i> Recreation</li>
+        </ul>
+    </div>
+
+    <div class="search-results-pane">
+        <div class="search-results-header"><strong><%= data.resultSetSizeString %></strong> Results</div>
+        <ul>
+            <% data.results.forEach(function(result) { %>
+                <li>
+                    <i class="fa <%= result.classification.categoryGlyphString %>"></i>
+                    <h2><a href="<%= result.link %>"><%= result.resource.name %></a></h2>
+                    <a href="http://<%= result.resource.domain %>"><%= result.resource.domain %></a> 
+                    <span>| Last Updated: <%= result.resource.updatedAtString.toUpperCase() %></span>
+                    <p><%= result.resource.description %></p>
+                    <% if (result.classification.tags.length > 0) { %>
+                        <span>Tags:</span>
+                        <% result.classification.tags.forEach(function(tag, i) {
+
+                            if (i > 0) { %>, <% } %><a href=""><%= tag %></a><% 
+                        }); %>
+                    <% } %>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
 </section>
 
 <% } %>

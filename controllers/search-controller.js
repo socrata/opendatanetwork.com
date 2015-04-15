@@ -33,6 +33,16 @@ SearchController.prototype.search = function(q, offset, limit, completionHandler
                 return;
             }
 
+            if (resp.statusCode != 200) {
+
+                console.log(resp.body);
+
+                if (completionHandler)
+                    completionHandler(null);
+
+                return;
+            }
+
             var json = JSON.parse(resp.body);
 
             annotateResults(json);
@@ -48,12 +58,12 @@ function annotateResults(o) {
     //
     o.resultSetSizeString = _numeral(o.resultSetSize).format('0,0'), 
 
-    // updatedAtString, categoryGlyphString
+    // categoryGlyphString, updatedAtString
     //
     o.results.forEach(function(result) {
 
-        result.resource.updatedAtString = _moment(result.updatedAt).format('D MMM YYYY');
         result.classification.categoryGlyphString = getCategoryGlyphString(result);
+        result.resource.updatedAtString = _moment(result.updatedAt).format('D MMM YYYY');
     });
 }
 

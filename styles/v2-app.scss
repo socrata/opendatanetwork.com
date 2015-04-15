@@ -1,5 +1,6 @@
 /* Variables */
 
+$black-text-color: #222222;
 $orange-color: #e74c3c;
 
 /* Common */
@@ -158,6 +159,7 @@ footer .powered-by img
 .search-text input[type="text"]
 {
     border: 0;
+    color: $black-text-color;
     font-size: 20px;
     height: 58px;
     line-height: 58px;
@@ -169,6 +171,11 @@ footer .powered-by img
 .search-text .search-text-white .fa-caret-down
 {
     font-size: 24px;
+}
+
+.search-text .search-text-white .fa-caret-down:visited
+{
+    color: $black-text-color;
 }
 
 .search-text .search-link
