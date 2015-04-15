@@ -50,57 +50,9 @@ section.hero .browse-link
 
 section.hero .search-text
 {
-    display: inline-block;
     margin-bottom: 200px;
-    overflow: hidden;
-    padding: 0;
 }
 
-section.hero .search-text-white
-{
-    background-color: white;
-    border-bottom-left-radius: 3px;
-    border-top-left-radius: 3px;
-    display: inline-block;
-    font-size: 20px;
-    height: 60px;
-    line-height: 60px;
-    vertical-align: middle;
-    text-align: left;
-    width: 640px;
-}
-
-section.hero input[type="text"]
-{
-    border: 0;
-    font-size: 20px;
-    height: 60px;
-    line-height: 60px;
-    margin-left: 20px;
-    outline: none;
-    width: 580px;
-}
-
-section.hero .search-text-white .fa-caret-down
-{
-    font-size: 24px;
-}
-
-section.hero .search-link
-{
-    background-color: $orange-color;
-    border-bottom-right-radius: 3px;
-    border-top-right-radius: 3px;
-    color: white;
-    display: inline-block;
-    font-size: 24px;
-    height: 60px;
-    line-height: 60px;
-    padding-left: 50px;
-    padding-right: 50px;
-    vertical-align: middle;
-    width: 160px;
-}
 
 /* Orange section */
 
@@ -146,7 +98,6 @@ section.orange a
     vertical-align: middle;
 }
 
-
 /* Gray section */
 
 section.gray
@@ -165,6 +116,7 @@ section.gray ul
 {
     float: left;
     padding: 0;    
+    margin: 90px 0 0;
 }
 
 section.gray li
