@@ -73,7 +73,7 @@ function getCategoryGlyphString(result) {
         (result.classification.categories == null) ||
         (result.classification.categories.length == 0)) {
 
-        return 'fa-heart';
+        return 'fa-database';
     }
 
     switch (result.classification.categories[0].toLowerCase()) {
@@ -88,7 +88,7 @@ function getCategoryGlyphString(result) {
         case 'infrastructure': return 'fa-road';
         case 'education': return 'fa-graduation-cap';
         case 'recreation': return 'fa-ticket';
-        default: return '';
+        default: return 'fa-database';
     }
 }
 

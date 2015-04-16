@@ -21,7 +21,7 @@ section.hero
 section.hero .container
 {
     margin: 0 auto;
-    height: 100%;
+    padding-top: 200px;
     width: $container-width;
 }
 
@@ -31,7 +31,7 @@ section.hero h1
     display: block;
     font-size: 24px;
     font-weight: 300;
-    margin: 25% 0 50px;
+    margin: 0 0 100px;
 }
 
 section.hero .browse-link
@@ -50,7 +50,7 @@ section.hero .browse-link
 
 section.hero .search-text
 {
-    margin-bottom: 200px;
+    margin-bottom: 100px;
 }
 
 
@@ -82,20 +82,7 @@ section.orange p
 {
     font-size: 24px;
     font-weight: 300;
-    margin: 0 auto 40px;
-}
-
-section.orange a
-{
-    background-color: white;
-    border-radius: 3px;
-    color: $orange-color;
-    display: inline-block;
-    font-size: 20px;
-    line-height: 50px;
-    padding-left: 30px;
-    padding-right: 30px;
-    vertical-align: middle;
+    margin: 0 auto;
 }
 
 /* Gray section */
@@ -124,7 +111,7 @@ section.gray li
     float: left;
     list-style-type: none;
     margin: 0;
-    min-height: 320px;
+    min-height: 250px;
     padding: 0;
     width: $category-item-width;
 }
@@ -135,11 +122,6 @@ section.gray h3
     font-size: 24px;
     font-weight: 300;
     margin: 0 0 15px;
-}
-
-section.gray p
-{
-    margin: 0;
 }
 
 section.gray .fa

@@ -44,8 +44,11 @@ header
     background-color: #222;
     height: 60px;
     line-height: 60px;
-    position: relative;
+    position: fixed;
     text-align: left;
+    top: 0;
+    width: 100%;
+    z-index: 100;
 }
 
 header .logo
