@@ -146,24 +146,24 @@ app.get('/robots.txt', function(req, res) {
 //
 app.get('/v2', function (req, res) {
 
-    app.locals.css = 'v2-home.min.css';
-    res.render('v2-home.ejs', { q : null });
+    var params = searchController.getSearchParameters(req.query);
+    res.render('v2-home.ejs', { css : 'v2-home.min.css', params : params });
 })
 
 app.get('/v2-search', function(req, res) {
 
-    app.locals.css = 'v2-search.min.css';
+    var params = searchController.getSearchParameters(req.query);
 
     if (req.query.q) {
 
-        searchController.search(req.query.q, (req.query.offset || 0), (req.query.limit || 10), function(data) {
+        searchController.search(params, function(data) {
 
-            res.render('v2-search.ejs', { q : req.query.q, data : data });
+            res.render('v2-search.ejs', { css : 'v2-search.min.css', params : params, data : data });
         });
     }
     else {
 
-        res.render('v2-search.ejs', { q : null, data : null });
+        res.render('v2-search.ejs', { css : 'v2-search.min.css', params : params, data : null });
     }
 });
 

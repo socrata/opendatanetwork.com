@@ -1,7 +1,8 @@
 var _moment = require('moment');
 var _numeral = require('numeral');
+var _queryString = require('querystring');
 var _request = require('request');
-var _searchUrl = 'http://api.us.socrata.com/api/catalog/v1?only=datasets&q=';
+var _searchUrl = 'http://api.us.socrata.com/api/catalog/v1?';
 
 module.exports = SearchController;
 
@@ -10,13 +11,26 @@ function SearchController() {
 
 // Public methods
 //
-SearchController.prototype.search = function(q, offset, limit, completionHandler) {
+SearchController.prototype.getSearchParameters = function(query) {
+
+    var categories = getNormalizedArrayFromDelimitedString(query.categories);
+    var domains = getNormalizedArrayFromDelimitedString(query.domains);
+
+    return {
+        only : 'datasets',
+        q : query.q || '',
+        offset : query.offset || 0,
+        limit : query.limit || 10,        
+        categories : categories,
+        domains : domains,
+    };
+};
+
+SearchController.prototype.search = function(params, completionHandler) {
 
     var options = {
-        url: _searchUrl + encodeURIComponent(q) + "&offset=" + offset + "&limit=" + limit,
-        headers: {
-            'User-Agent' : 'www.opendatanetwork.com'
-        }
+        url: getUrlFromSearchParameters(params),
+        headers: { 'User-Agent' : 'www.opendatanetwork.com' }
     };
 
     _request(
@@ -52,6 +66,8 @@ SearchController.prototype.search = function(q, offset, limit, completionHandler
         });
 }
 
+// Private functions
+//
 function annotateResults(o) {
 
     // resultSetSizeString
@@ -92,4 +108,24 @@ function getCategoryGlyphString(result) {
     }
 }
 
+function getNormalizedArrayFromDelimitedString(s) {
 
+    if (s == null) 
+        return [];
+
+    var parts = s.split(',');
+
+    for (var i in parts) {
+        parts[i] = parts[i]; // TODO: lowercase this tomorrow afternoon
+    }
+
+    return parts;
+}
+
+function getUrlFromSearchParameters(params) {
+
+    var url = _searchUrl + _queryString.stringify(params);
+    console.log(url);
+
+    return url;
+}

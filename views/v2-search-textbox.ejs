@@ -1,9 +1,12 @@
-
 <div class="search-text">
     <div class="search-text-white">
         <form method="GET" action="/v2-search" id="form" autocomplete="off">
-            <input type="text" placeholder="Search the Open Data Network" name="q" id="q" value="<%= q || '' %>">
+            <input type="text" placeholder="Search the Open Data Network" name="q" id="q" value="<%= params.q %>">
             <a class="fa fa-caret-down" href=""></a>
+            <input type="hidden" name="offset" value="<%= params.offset %>">
+            <input type="hidden" name="limit" value="<%= params.limit %>">
+            <% if (params.categories.length > 0) { %><input type="hidden" name="categories" value="<%= params.categories.join(',') %>"><% } -%>
+            <% if (params.domains.length > 0) { %><input type="hidden" name="domains" value="<%= params.domains.join(',') %>"><% } %>
         </form>
     </div><a class="search-link">Search</a>
 </div>
