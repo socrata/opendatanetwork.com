@@ -2,7 +2,9 @@ var _moment = require('moment');
 var _numeral = require('numeral');
 var _queryString = require('querystring');
 var _request = require('request');
+
 var _searchUrl = 'http://api.us.socrata.com/api/catalog/v1?';
+var _limit = 10;
 
 module.exports = SearchController;
 
@@ -15,12 +17,14 @@ SearchController.prototype.getSearchParameters = function(query) {
 
     var categories = getNormalizedArrayFromDelimitedString(query.categories);
     var domains = getNormalizedArrayFromDelimitedString(query.domains);
+    var page = isNaN(query.page) ? 1 : parseInt(query.page);
 
     return {
         only : 'datasets',
         q : query.q || '',
-        offset : query.offset || 0,
-        limit : query.limit || 10,        
+        page : page,
+        offset : (page - 1) * _limit,
+        limit : _limit,        
         categories : categories,
         domains : domains,
     };
@@ -57,30 +61,36 @@ SearchController.prototype.search = function(params, completionHandler) {
                 return;
             }
 
-            var json = JSON.parse(resp.body);
+            var data = JSON.parse(resp.body);
 
-            annotateResults(json);
+            annotateData(data);
+            annotateParams(data, params);
             
             if (completionHandler) 
-                completionHandler(json);
+                completionHandler(data);
         });
 }
 
 // Private functions
 //
-function annotateResults(o) {
+function annotateData(data) {
 
     // resultSetSizeString
     //
-    o.resultSetSizeString = _numeral(o.resultSetSize).format('0,0'), 
+    data.resultSetSizeString = _numeral(data.resultSetSize).format('0,0'), 
 
     // categoryGlyphString, updatedAtString
     //
-    o.results.forEach(function(result) {
+    data.results.forEach(function(result) {
 
         result.classification.categoryGlyphString = getCategoryGlyphString(result);
         result.resource.updatedAtString = _moment(result.updatedAt).format('D MMM YYYY');
     });
+}
+
+function annotateParams(data, params) {
+
+    params.totalPages = Math.ceil(data.resultSetSize / _limit);
 }
 
 function getCategoryGlyphString(result) {
@@ -129,3 +139,4 @@ function getUrlFromSearchParameters(params) {
 
     return url;
 }
+

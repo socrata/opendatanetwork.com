@@ -2,6 +2,7 @@
 
 $black-text-color: #222222;
 $blue-color: #3498db;
+$category-blue-color: #2980b9;
 $gray-background-color: #ecf0f1;
 $gray-border-color: #bdc3c7;
 $gray-text-color: #7f8c8d;
@@ -17,6 +18,56 @@ section.search-bar
     padding: 50px 0;
 }
 
+/* Pager */
+
+span.pager 
+{
+    float: right;
+    font-size: 14px;
+}
+
+span.pager a
+{
+    border: 1px solid $gray-border-color;
+    color: #7f8c8d;
+    display: inline-block;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    width: 32px;
+}
+
+span.pager a.disabled
+{
+    background-color: #ecf0f1;
+    color: #cbd2d3;
+}
+
+span.pager span
+{
+    border-bottom: 1px solid $gray-border-color;
+    border-right: 1px solid $gray-border-color;
+    border-top: 1px solid $gray-border-color;
+    color: $black-text-color;
+    display: inline-block;
+    height: 32px;
+    line-height: 32px;
+    margin-right: 10px;
+    text-align: center;
+    width: 32px;
+}
+
+span.pager .fa-chevron-right
+{
+    margin-left: 10px;
+}
+
+span.pager .currentPage
+{
+    border: 1px solid $gray-border-color;
+    color: $black-text-color;
+}
+
 /* Search results */
 
 section.search-results
@@ -28,7 +79,7 @@ section.search-results
 .search-results-pane
 {
     display: table-cell;
-    padding: 30px 30px 80px;
+    padding: 30px 30px 20px;
 }
 
 .search-results-pane ul
@@ -70,7 +121,7 @@ section.search-results
     color: $black-text-color;
 }
 
-.search-results-pane .fa
+.search-results-pane li .fa
 {
     color: $blue-color;
     float: left;
@@ -82,6 +133,12 @@ section.search-results
 .search-results-pane .search-results-header
 {    
     font-size: 16px;
+    line-height: 32px;
+}
+
+.search-results-pane .search-results-footer
+{
+    margin-top: 25px;
 }
 
 .search-categories-pane
@@ -101,7 +158,7 @@ section.search-results
 .search-categories-pane li
 {
     list-style-type: none;
-    margin: 0;
+    margin: 0 0 0 30px;
     padding: 0;
 }
 
@@ -115,13 +172,16 @@ section.search-results
 
 .search-categories-pane a.selected
 {
-    color: $blue-color;
+    color: $category-blue-color;
 }
 
 .search-categories-list .fa
 {
+    float: left;
     font-size: 16px;
-    margin-right: 15px;
+    height: 35px;
+    line-height: 35px;
+    margin-left: -30px;
 }
 
 .search-filter-by

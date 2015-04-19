@@ -8,7 +8,6 @@
     <% include v2-search-textbox %>
 </section>
 
-<% if (data) { -%>    
 <section class="search-results">
 
     <div class="search-categories-pane">
@@ -34,7 +33,15 @@
     </div>
 
     <div class="search-results-pane">
-        <div class="search-results-header"><strong><%= data.resultSetSizeString %></strong> Results</div>
+
+        <div class="search-results-header">
+            <strong><%= data.resultSetSizeString %></strong> Results
+
+        <% if (data.resultSetSize > 0) { %>
+            <% include v2-pager %>
+        <% } %>
+
+        </div>
         <ul>
             <% data.results.forEach(function(result) { %>
                 <li>
@@ -53,9 +60,16 @@
                 </li>
             <% }); %>
         </ul>
+
+    <% if (data.resultSetSize > 0) { %>
+        <div class="search-results-footer">
+            <% include v2-pager %>
+        </div>
+    <% } %>
+    
     </div>
+
 </section>
-<% } -%>
 
 <% include v2-footer %>
 

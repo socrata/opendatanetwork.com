@@ -1,0 +1,4 @@
+<span class="pager">
+    <a href="javascript:prev();" class="fa fa-chevron-left<%= (params.page == 1) ? ' disabled' : '' %>"></a><span><%= params.page %></span>of <%= params.totalPages %>
+    <a href="javascript:next();" class="fa fa-chevron-right<%= (params.page == params.totalPages) ? ' disabled' : '' %>"></a>
+</span>

@@ -25,6 +25,18 @@ function toggle(category) {
     _controller.navigate();
 }
 
+function prev() {
+
+    if (_controller.tryChangePage(-1))
+        _controller.navigate();
+}
+
+function next() {
+
+    if (_controller.tryChangePage(1))
+        _controller.navigate();
+}
+
 // SearchPageController
 //
 function SearchPageController(params) {
@@ -42,9 +54,11 @@ SearchPageController.prototype.clearCategories = function() {
 SearchPageController.prototype.getSearchUrl = function() {
 
     var searchUrl = window.location.href.split('?')[0];
-    var url = searchUrl + '?q=' + encodeURIComponent($('#q').val()) + 
-        '&offset=' + this.params.offset + 
-        '&limit=' + this.params.limit;
+    var url = searchUrl + 
+        '?q=' + encodeURIComponent($('#q').val());
+
+    if (this.params.page > 1)
+        url += '&page=' + this.params.page;
 
     if (this.params.categories.length > 0)
         url += '&categories=' + encodeURIComponent(this.params.categories.join(','));
@@ -70,4 +84,18 @@ SearchPageController.prototype.toggleCategory = function(category) {
         this.params.categories.splice(i, 1); // remove at index i
     else 
         this.params.categories.push(category);
+
+    this.params.page = 1;
+};
+
+SearchPageController.prototype.tryChangePage = function(diff) {
+
+    if ((this.params.page + diff) < 1)
+        return false;
+
+    if ((this.params.page + diff) > this.params.totalPages)
+        return false;
+    
+    this.params.page = this.params.page + diff;
+    return true;
 };

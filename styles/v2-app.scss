@@ -1,6 +1,7 @@
 /* Variables */
 
 $black-text-color: #222222;
+$footer-background-color: #fafafa;
 $orange-color: #e74c3c;
 
 /* Common */
@@ -92,9 +93,11 @@ header .menus .fa-caret-down
 
 footer
 {
+    background-color: $footer-background-color;
     height: 50px;
     line-height: 50px;
     margin: 0;
+    overflow: hidden;
     position: relative;
 }
 
