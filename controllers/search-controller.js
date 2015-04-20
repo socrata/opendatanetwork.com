@@ -136,7 +136,7 @@ function getNormalizedArrayFromDelimitedString(s) {
 function getUrlFromSearchParameters(params) {
 
     var url = _searchUrl + 
-        '?q=' + encodeURIComponent(params.q);
+        '?q=' + encodeURIComponent(params.q) +
         '&offset=' + params.offset + 
         '&limit=' + params.limit;
 
