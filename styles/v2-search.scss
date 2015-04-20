@@ -6,6 +6,7 @@ $category-blue-color: #2980b9;
 $gray-background-color: #ecf0f1;
 $gray-border-color: #bdc3c7;
 $gray-text-color: #7f8c8d;
+$green-background-color: #27ae60;
 $light-gray-border-color: #dbd6cf;
 
 /* Search bar */
@@ -128,6 +129,20 @@ section.search-results
     margin-left: -55px;
     margin-top: 3px;
     font-size: 30px;
+}
+
+.search-results-pane li .api-link
+{
+    background-color: $green-background-color;
+    border-radius: 3px;
+    color: white;
+    float: right;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 34px;
+    height: 34px;
+    padding-left: 18px;
+    padding-right: 18px;
 }
 
 .search-results-pane .search-results-header

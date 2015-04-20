@@ -47,6 +47,7 @@
             <ul>
                 <% data.results.forEach(function(result) { %>
                     <li>
+                        <a class="api-link" href="http://dev.socrata.com/foundry/#/<%= result.resource.domain %>/<%= result.resource.id %>">API</a>
                         <i class="fa <%= result.classification.categoryGlyphString %>"></i>
                         <h2><a href="<%= result.link %>"><%= result.resource.name %></a></h2>
                         <a href="http://<%= result.resource.domain %>"><%= result.resource.domain %></a> 
