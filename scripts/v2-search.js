@@ -19,10 +19,16 @@ function clear() {
     _controller.navigate();
 }
 
-function toggle(category) {
+function category(category) {
 
     _controller.toggleCategory(category);
     _controller.navigate();
+}
+
+function next() {
+
+    if (_controller.tryChangePage(1))
+        _controller.navigate();
 }
 
 function prev() {
@@ -31,10 +37,10 @@ function prev() {
         _controller.navigate();
 }
 
-function next() {
+function tag(tag) {
 
-    if (_controller.tryChangePage(1))
-        _controller.navigate();
+    _controller.applyTag(tag);
+    _controller.navigate();
 }
 
 // SearchPageController
@@ -46,6 +52,12 @@ function SearchPageController(params) {
 
 // Public methods
 //
+SearchPageController.prototype.applyTag = function(tag) {
+
+    this.params.tags = [ tag ]; // just apply it, do not toggle
+    this.params.page = 1;
+}
+
 SearchPageController.prototype.clearCategories = function() {
 
     this.params.categories = [];
@@ -65,6 +77,9 @@ SearchPageController.prototype.getSearchUrl = function() {
 
     if (this.params.domains.length > 0)
         url += '&domains=' + encodeURIComponent(this.params.domains.join(','));
+
+    if (this.params.tags.length > 0)
+        url += '&tags=' + encodeURIComponent(this.params.tags.join(','));
 
     console.log(url);
 

@@ -1,9 +1,8 @@
 var _moment = require('moment');
 var _numeral = require('numeral');
-var _queryString = require('querystring');
 var _request = require('request');
 
-var _searchUrl = 'http://api.us.socrata.com/api/catalog/v1?';
+var _searchUrl = 'http://api.us.socrata.com/api/catalog/v1';
 var _limit = 10;
 
 module.exports = SearchController;
@@ -17,6 +16,7 @@ SearchController.prototype.getSearchParameters = function(query) {
 
     var categories = getNormalizedArrayFromDelimitedString(query.categories);
     var domains = getNormalizedArrayFromDelimitedString(query.domains);
+    var tags = getNormalizedArrayFromDelimitedString(query.tags);
     var page = isNaN(query.page) ? 1 : parseInt(query.page);
 
     return {
@@ -27,6 +27,7 @@ SearchController.prototype.getSearchParameters = function(query) {
         limit : _limit,        
         categories : categories,
         domains : domains,
+        tags : tags,
     };
 };
 
@@ -134,7 +135,20 @@ function getNormalizedArrayFromDelimitedString(s) {
 
 function getUrlFromSearchParameters(params) {
 
-    var url = _searchUrl + _queryString.stringify(params);
+    var url = _searchUrl + 
+        '?q=' + encodeURIComponent(params.q);
+        '&offset=' + params.offset + 
+        '&limit=' + params.limit;
+
+    if (params.categories.length > 0)
+        url += '&categories=' + encodeURIComponent(params.categories.join(','));
+
+    if (params.domains.length > 0)
+        url += '&domains=' + encodeURIComponent(params.domains.join(','));
+
+    if (params.tags.length > 0)
+        url += '&tags=' + encodeURIComponent(params.tags.join(','));
+
     console.log(url);
 
     return url;

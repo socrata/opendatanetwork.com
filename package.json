@@ -9,7 +9,6 @@
     "moment": "^2.10.2",
     "numeral": "^1.5.3",
     "pg": "^3.4.2",
-    "querystring": "^0.2.0",
     "request": "^2.42.0",
     "serve-favicon": "^2.1.3"
   },

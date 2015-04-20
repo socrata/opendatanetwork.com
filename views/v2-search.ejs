@@ -4,72 +4,76 @@
 <script src="/scripts/v2-search.min.js" type="text/javascript"></script>
 <script>var _controller = new SearchPageController(<%- JSON.stringify(params) %>);</script>
 
-<section class="search-bar">
-    <% include v2-search-textbox %>
-</section>
+<div id="container">
 
-<section class="search-results">
+    <section class="search-bar">
+        <% include v2-search-textbox %>
+    </section>
 
-    <div class="search-categories-pane">
-        
-        <div class="search-filter-by">
-            <span>Filter by Publisher</span>
-            <a class="fa fa-caret-down"></a>
+    <section class="search-results">
+
+        <div class="search-categories-pane">
+            
+            <div class="search-filter-by">
+                <span>Filter by Publisher</span>
+                <a class="fa fa-caret-down"></a>
+            </div>
+
+            <ul class="search-categories-list">
+                <li><a href="javascript:clear();"<%- getSelectedIfNoCategories() %>><i class="fa fa-list"></i>All Results</a></li>
+                <li><a href="javascript:category('Health');"<%- getSelectedIfCategory('Health') %>><i class="fa fa-heart"></i>Health</a></li>
+                <li><a href="javascript:category('Transportation');"<%- getSelectedIfCategory('Transportation') %>><i class="fa fa-car"></i>Transportation</a></li>
+                <li><a href="javascript:category('Finance');"<%- getSelectedIfCategory('Finance') %>><i class="fa fa-money"></i>Finance</a></li>
+                <li><a href="javascript:category('Social Services');"<%- getSelectedIfCategory('Social Services') %>><i class="fa fa-child"></i>Social Services</a></li>
+                <li><a href="javascript:category('Environment');"<%- getSelectedIfCategory('Environment') %>><i class="fa fa-leaf"></i>Environment</a></li>
+                <li><a href="javascript:category('Public Safety');"<%- getSelectedIfCategory('Public Safety') %>><i class="fa fa-shield"></i>Public Safety</a></li>
+                <li><a href="javascript:category('Housing & Development');"<%- getSelectedIfCategory('Housing & Development') %>><i class="fa fa-building"></i>Housing &amp; Development</a></li>
+                <li><a href="javascript:category('Infrastructure');"<%- getSelectedIfCategory('Infrastructure') %>><i class="fa fa-road"></i>Infrastructure</a></li>
+                <li><a href="javascript:category('Education');"<%- getSelectedIfCategory('Education') %>><i class="fa fa-graduation-cap"></i>Education</a></li>
+                <li><a href="javascript:category('Recreation');"<%- getSelectedIfCategory('Recreation') %>><i class="fa fa-ticket"></i>Recreation</a></li>
+            </ul>
         </div>
 
-        <ul class="search-categories-list">
-            <li><a href="javascript:clear();"<%- getSelectedIfNoCategories() %>><i class="fa fa-list"></i>All Results</a></li>
-            <li><a href="javascript:toggle('Health');"<%- getSelectedIfCategory('Health') %>><i class="fa fa-heart"></i>Health</a></li>
-            <li><a href="javascript:toggle('Transportation');"<%- getSelectedIfCategory('Transportation') %>><i class="fa fa-car"></i>Transportation</a></li>
-            <li><a href="javascript:toggle('Finance');"<%- getSelectedIfCategory('Finance') %>><i class="fa fa-money"></i>Finance</a></li>
-            <li><a href="javascript:toggle('Social Services');"<%- getSelectedIfCategory('Social Services') %>><i class="fa fa-child"></i>Social Services</a></li>
-            <li><a href="javascript:toggle('Environment');"<%- getSelectedIfCategory('Environment') %>><i class="fa fa-leaf"></i>Environment</a></li>
-            <li><a href="javascript:toggle('Public Safety');"<%- getSelectedIfCategory('Public Safety') %>><i class="fa fa-shield"></i>Public Safety</a></li>
-            <li><a href="javascript:toggle('Housing & Development');"<%- getSelectedIfCategory('Housing & Development') %>><i class="fa fa-building"></i>Housing &amp; Development</a></li>
-            <li><a href="javascript:toggle('Infrastructure');"<%- getSelectedIfCategory('Infrastructure') %>><i class="fa fa-road"></i>Infrastructure</a></li>
-            <li><a href="javascript:toggle('Education');"<%- getSelectedIfCategory('Education') %>><i class="fa fa-graduation-cap"></i>Education</a></li>
-            <li><a href="javascript:toggle('Recreation');"<%- getSelectedIfCategory('Recreation') %>><i class="fa fa-ticket"></i>Recreation</a></li>
-        </ul>
-    </div>
+        <div class="search-results-pane">
 
-    <div class="search-results-pane">
+            <div class="search-results-header">
+                <strong><%= data.resultSetSizeString %></strong> Results
 
-        <div class="search-results-header">
-            <strong><%= data.resultSetSizeString %></strong> Results
+            <% if (data.resultSetSize > 0) { %>
+                <% include v2-pager %>
+            <% } %>
+
+            </div>
+            <ul>
+                <% data.results.forEach(function(result) { %>
+                    <li>
+                        <i class="fa <%= result.classification.categoryGlyphString %>"></i>
+                        <h2><a href="<%= result.link %>"><%= result.resource.name %></a></h2>
+                        <a href="http://<%= result.resource.domain %>"><%= result.resource.domain %></a> 
+                        <span>| Last Updated: <%= result.resource.updatedAtString.toUpperCase() %></span>
+                        <p><%= result.resource.description %></p>
+                        <% if (result.classification.tags.length > 0) { %>
+                            <span>Tags:</span>
+                            <% result.classification.tags.forEach(function(tag, i) {
+
+                                if (i > 0) { %>, <% } %><a href="javascript:tag('<%=tag %>');"><%= tag %></a><% 
+                            }); %>
+                        <% } %>
+                    </li>
+                <% }); %>
+            </ul>
 
         <% if (data.resultSetSize > 0) { %>
-            <% include v2-pager %>
+            <div class="search-results-footer">
+                <% include v2-pager %>
+            </div>
         <% } %>
-
+        
         </div>
-        <ul>
-            <% data.results.forEach(function(result) { %>
-                <li>
-                    <i class="fa <%= result.classification.categoryGlyphString %>"></i>
-                    <h2><a href="<%= result.link %>"><%= result.resource.name %></a></h2>
-                    <a href="http://<%= result.resource.domain %>"><%= result.resource.domain %></a> 
-                    <span>| Last Updated: <%= result.resource.updatedAtString.toUpperCase() %></span>
-                    <p><%= result.resource.description %></p>
-                    <% if (result.classification.tags.length > 0) { %>
-                        <span>Tags:</span>
-                        <% result.classification.tags.forEach(function(tag, i) {
 
-                            if (i > 0) { %>, <% } %><a href=""><%= tag %></a><% 
-                        }); %>
-                    <% } %>
-                </li>
-            <% }); %>
-        </ul>
+    </section>
 
-    <% if (data.resultSetSize > 0) { %>
-        <div class="search-results-footer">
-            <% include v2-pager %>
-        </div>
-    <% } %>
-    
-    </div>
-
-</section>
+</div>
 
 <% include v2-footer %>
 
