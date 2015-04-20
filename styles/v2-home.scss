@@ -34,11 +34,13 @@ section.hero h1
     margin: 0 0 100px;
 }
 
-section.hero .browse-link
+section.hero .browse-button
 {
+    background-color: transparent;
     border: 2px solid white;
     border-radius: 3px;
     color: white;
+    cursor: pointer;
     display: inline-block;
     font-size: 20px;
     line-height: 50px;

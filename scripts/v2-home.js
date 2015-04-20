@@ -2,19 +2,28 @@ $(document).ready(function() {
 
     // Search box
     //
-    $(".search-link").click(function() {
+    $('.search-link').click(function() {
 
-        var text = $("#q").val().trim();
+        var text = $('#q').val().trim();
 
         if (text.length == 0)
-            $("#q").focus();
+            $('#q').focus();
         else
-            $("#form").submit();
+            $('#form').submit();
+    });
+
+    // Browse categories
+    //
+    $('.browse-button').click(function() {
+        $('html, body').animate({
+            scrollTop: $('.gray').offset().top - 60
+        }, 
+        400);
     });
 
     // Slider 
     //
-    $(".slider").slick({
+    $('.slider').slick({
         arrows: false,
         autoplay: true,
         autoplaySpeed: 2000,
