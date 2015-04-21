@@ -1,7 +1,10 @@
 /* Variables */
 
 $black-text-color: #222222;
+$dark-gray-text-color: #818588;
+$gray-text-color: #bdc3c7;
 $footer-background-color: #fafafa;
+$menu-border-color: #eaeaea;
 $orange-color: #e74c3c;
 
 /* Common */
@@ -72,22 +75,80 @@ header .menus
     height: 60px;
 }
 
-header .menus a
+header .menus .menu-item-link
 {
     color: white;
     display: inline-block;
     margin-right: 40px;
+    padding-left: 16px;
+    padding-right: 16px;
 }
 
-header .menus .fa
+header .menus .selected .menu-item-link
+{
+    background-color: white;
+    color: $black-text-color;
+}
+
+header .menus .selected .fa
+{
+    color: $gray-text-color;
+}
+
+header .menus .fa-search
 {
     color: white;
+    cursor: pointer;
 }
 
 header .menus .fa-caret-down
 {
     margin-left: 10px;
 }
+
+/* Menus */
+
+.menu
+{
+    background-color: white;
+    border-bottom: 1px solid $menu-border-color;
+    border-left: 1px solid $menu-border-color;
+    border-right: 1px solid $menu-border-color;
+    display: none;
+    margin: 0;
+    min-width: 150px;
+    padding: 8px 16px;
+    position: absolute;
+    text-align: left;
+    z-index: 10;
+}
+
+.menu li
+{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu li a
+{
+    color: $black-text-color;
+    display: block;
+    font-size: 14px;
+    height: 32px;
+    line-height: 32px;
+}
+
+.menu li a span
+{
+    color: $dark-gray-text-color;
+}
+
+#menu-item-communities
+{
+    display: inline-block;
+}
+
 
 /* Footer */
 
