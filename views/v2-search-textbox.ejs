@@ -2,9 +2,74 @@
     <div class="search-text-white">
         <form method="GET" action="/v2-search" id="form" autocomplete="off">
             <input type="text" placeholder="Search the Open Data Network" name="q" id="q" value="<%= params.q %>">
-            <a class="fa fa-caret-down" href=""></a>
-            <% if (params.categories.length > 0) { %><input type="hidden" name="categories" value="<%= params.categories.join(',') %>"><% } -%>
+            <input type="hidden" name="categories" id="categories" value="<%= params.categories.join(',') %>">
+            <i id="search-categories-menu-open" class="fa fa-caret-down"></i>
             <% if (params.domains.length > 0) { %><input type="hidden" name="domains" value="<%= params.domains.join(',') %>"><% } %>
         </form>
+        <div id="search-categories-menu" style="display:none;">
+            <div id="search-categories-header"><i id="search-categories-menu-close" class="fa fa-times"></i>Filter results by...</div>
+            <ul id="search-categories-menu-list">
+                <li>
+                    <label for="searchCategoryHealth">
+                        <input type="checkbox" id="searchCategoryHealth">
+                        <i class="fa fa-heart"></i>Health
+                    </label>
+                </li>
+                <li>
+                    <label for="searchCategoryTransportation">
+                        <input type="checkbox" id="searchCategoryTransportation">
+                        <i class="fa fa-car"></i>Transportation
+                    </label>
+                </li>
+                <li>
+                    <label for="searchCategoryFinance">
+                        <input type="checkbox" id="searchCategoryFinance">
+                        <i class="fa fa-money"></i>Finance
+                    </label>
+                </li>
+                <li>
+                    <label for="searchCategorySocialServices">
+                        <input type="checkbox" id="searchCategorySocialServices">
+                        <i class="fa fa-child"></i>Social Services
+                    </label>
+                </li>
+                <li>
+                    <label for="searchCategoryEnvironment">
+                        <input type="checkbox" id="searchCategoryEnvironment">
+                        <i class="fa fa-leaf"></i>Environment
+                    </label>
+                </li>
+                <li>
+                    <label for="searchCategoryPublicSafety">
+                        <input type="checkbox" id="searchCategoryPublicSafety">
+                        <i class="fa fa-shield"></i>Public Safety
+                    </label>
+                </li>
+                <li>
+                    <label for="searchCategoryHousingAndDevelopment">
+                        <input type="checkbox" id="searchCategoryHousingAndDevelopment">
+                        <i class="fa fa-building"></i>Housing &amp; Development
+                    </label>
+                </li>
+                <li>
+                    <label for="searchCategoryInfrastructure">
+                        <input type="checkbox" id="searchCategoryInfrastructure">
+                        <i class="fa fa-road"></i>Infrastructure
+                    </label>
+                </li>
+                <li>
+                    <label for="searchCategoryEducation">
+                        <input type="checkbox" id="searchCategoryEducation">
+                        <i class="fa fa-graduation-cap"></i>Education
+                    </label>
+                </li>
+                <li>
+                    <label for="searchCategoryRecreation">
+                        <input type="checkbox" id="searchCategoryRecreation">
+                        <i class="fa fa-ticket"></i>Recreation
+                    </label>
+                </li>
+            </ul>
+        </div>
     </div><a class="search-link">Search</a>
 </div>

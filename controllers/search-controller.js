@@ -126,6 +126,9 @@ function getNormalizedArrayFromDelimitedString(s) {
 
     var parts = s.split(',');
 
+    if ((parts.length == 1) && (parts[0] == ''))
+        parts = [];
+
     for (var i in parts) {
         parts[i] = parts[i]; // TODO: lowercase this tomorrow afternoon
     }
@@ -153,4 +156,5 @@ function getUrlFromSearchParameters(params) {
 
     return url;
 }
+
 

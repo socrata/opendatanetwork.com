@@ -2,9 +2,9 @@
 
 $black-text-color: #222222;
 $dark-gray-text-color: #818588;
+$gray-border-color: #d1d1d1;
 $gray-text-color: #bdc3c7;
 $footer-background-color: #fafafa;
-$menu-border-color: #eaeaea;
 $orange-color: #e74c3c;
 
 /* Common */
@@ -111,9 +111,9 @@ header .menus .fa-caret-down
 .menu
 {
     background-color: white;
-    border-bottom: 1px solid $menu-border-color;
-    border-left: 1px solid $menu-border-color;
-    border-right: 1px solid $menu-border-color;
+    border-bottom: 1px solid $gray-border-color;
+    border-left: 1px solid $gray-border-color;
+    border-right: 1px solid $gray-border-color;
     display: none;
     margin: 0;
     min-width: 150px;
@@ -238,6 +238,7 @@ footer .powered-by img
 .search-text .search-text-white .fa-caret-down
 {
     font-size: 24px;
+    cursor: pointer;
 }
 
 .search-text .search-text-white .fa-caret-down:visited
@@ -263,6 +264,69 @@ footer .powered-by img
     width: 160px;
 }
 
+/* Search categories menu */
 
+#search-categories-menu
+{
+    background-color: white;
+    border: 1px solid $gray-border-color;
+    border-radius: 3px;
+    position: relative;
+    top: 2px;
+    z-index: 10;
+}
 
+#search-categories-header
+{
+    font-size: 18px;
+    height: 35px;
+    line-height: 35px;
+    margin: 14px 18px 14px 20px;
+}
 
+#search-categories-header .fa-times
+{
+    cursor: pointer;
+    float: right;
+    height: 35px;
+    line-height: 35px;
+}
+
+#search-categories-menu-list
+{
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;    
+    -webkit-column-gap: 0;
+    -moz-column-gap: 0;
+    column-gap: 0;
+    font-size: 13px;
+    margin: 10px 16px 16px;
+    padding: 0;
+}
+
+#search-categories-menu-list li
+{
+    height: 35px;
+    line-height: 35px;
+    margin: 0;
+    padding: 0 0 0 48px;
+    white-space: nowrap;
+}
+
+#search-categories-menu-list li input
+{
+    float: left;
+    height: 30px;
+    line-height: 35px;
+    margin-left: -44px;
+}
+
+#search-categories-menu-list li .fa
+{
+    color: #95a5a6;
+    float: left;
+    height: 35px;
+    line-height: 35px;
+    margin-left: -22px;
+}
