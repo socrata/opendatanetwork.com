@@ -8,7 +8,7 @@ $(document).ready(function() {
         $('#menu-item-communities').addClass('selected');
     });
 
-    $('#menu-item-communities, #menu-communities').mouseleave(function() {
+    $('#menu-item-communities').mouseleave(function() {
 
         $('#menu-communities').hide(); 
         $('#menu-item-communities').removeClass('selected');

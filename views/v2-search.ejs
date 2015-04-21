@@ -1,7 +1,6 @@
 <% include v2-header %>
-<% include v2-header-bar %>
+<% include v2-header-bar -%>
 
-<script src="/scripts/v2-search.min.js" type="text/javascript"></script>
 <script>var _controller = new SearchPageController(<%- JSON.stringify(params) %>);</script>
 
 <div id="container">
@@ -35,7 +34,6 @@
         </div>
 
         <div class="search-results-pane">
-
             <div class="search-results-header">
                 <strong><%= data.resultSetSizeString %></strong> Results
 
@@ -45,31 +43,30 @@
 
             </div>
             <ul>
-                <% data.results.forEach(function(result) { %>
-                    <li>
-                        <a class="api-link" href="http://dev.socrata.com/foundry/#/<%= result.resource.domain %>/<%= result.resource.id %>">API</a>
-                        <i class="fa <%= result.classification.categoryGlyphString %>"></i>
-                        <h2><a href="<%= result.link %>"><%= result.resource.name %></a></h2>
-                        <a href="http://<%= result.resource.domain %>"><%= result.resource.domain %></a> 
-                        <span>| Last Updated: <%= result.resource.updatedAtString.toUpperCase() %></span>
-                        <p><%= result.resource.description %></p>
-                        <% if (result.classification.tags.length > 0) { %>
-                            <span>Tags:</span>
-                            <% result.classification.tags.forEach(function(tag, i) {
+            <% data.results.forEach(function(result) { %>
+                <li>
+                    <a class="api-link" href="http://dev.socrata.com/foundry/#/<%= result.resource.domain %>/<%= result.resource.id %>">API</a>
+                    <i class="fa <%= result.classification.categoryGlyphString %>"></i>
+                    <h2><a href="<%= result.link %>"><%= result.resource.name %></a></h2>
+                    <a href="http://<%= result.resource.domain %>"><%= result.resource.domain %></a> 
+                    <span>| Last Updated: <%= result.resource.updatedAtString.toUpperCase() %></span>
+                    <p><%= result.resource.description %></p>
+                <% if (result.classification.tags.length > 0) { %>
+                    <span>Tags:</span>
+                    <% result.classification.tags.forEach(function(tag, i) {
 
-                                if (i > 0) { %>, <% } %><a href="javascript:tag('<%=tag %>');"><%= tag %></a><% 
-                            }); %>
-                        <% } %>
-                    </li>
-                <% }); %>
+                        if (i > 0) { %>, <% } %><a href="javascript:tag('<%=tag %>');"><%= tag %></a><% 
+                    }); -%>
+                <% } %>
+                </li>
+            <% }); %>
             </ul>
 
         <% if (data.resultSetSize > 0) { %>
             <div class="search-results-footer">
                 <% include v2-pager %>
             </div>
-        <% } %>
-        
+        <% } %>        
         </div>
 
     </section>

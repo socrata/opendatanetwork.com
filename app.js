@@ -147,7 +147,13 @@ app.get('/robots.txt', function(req, res) {
 app.get('/v2', function (req, res) {
 
     var params = searchController.getSearchParameters(req.query);
-    res.render('v2-home.ejs', { css : 'v2-home.min.css', params : params });
+    res.render(
+        'v2-home.ejs', 
+        { 
+            css : ['/styles/v2-home.min.css', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css'], 
+            scripts : ['/scripts/v2-home.min.js', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js'], 
+            params : params 
+        });
 })
 
 app.get('/v2-search', function(req, res) {
@@ -158,12 +164,27 @@ app.get('/v2-search', function(req, res) {
 
         searchController.search(params, function(data) {
 
-            res.render('v2-search.ejs', { css : 'v2-search.min.css', params : params, data : data });
+            res.render(
+                'v2-search.ejs', 
+                { 
+                    css : ['/styles/v2-search.min.css'], 
+                    scripts : ['/scripts/v2-search.min.js'], 
+                    params : 
+                    params, 
+                    data : data 
+                });
         });
     }
     else {
 
-        res.render('v2-search.ejs', { css : 'v2-search.min.css', params : params, data : null });
+        res.render(
+            'v2-search.ejs', 
+            { 
+                css : ['/styles/v2-search.min.css'], 
+                scripts : ['/scripts/v2-search.min.js'], 
+                params : params, 
+                data : null 
+            });
     }
 });
 
