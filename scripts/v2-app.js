@@ -4,13 +4,13 @@ $(document).ready(function() {
     //
     $('#menu-item-communities').mouseenter(function() {
 
-        $('#menu-communities').show(); 
+        $('#menu-communities').show(100); 
         $('#menu-item-communities').addClass('selected');
     });
 
     $('#menu-item-communities').mouseleave(function() {
 
-        $('#menu-communities').hide(); 
+        $('#menu-communities').hide(100);
         $('#menu-item-communities').removeClass('selected');
     });
 
