@@ -1,7 +1,7 @@
 <% include v2-header %>
 <% include v2-header-bar -%>
 
-<script>var _controller = new SearchPageController(<%- JSON.stringify(params) %>);</script>
+<script>var _params = <%- JSON.stringify(params) %>;</script>
 
 <div id="container">
 
@@ -19,17 +19,17 @@
             </div>
 
             <ul class="search-categories-list">
-                <li><a href="javascript:clear();"<%- getSelectedIfNoCategories() %>><i class="fa fa-list"></i>All Results</a></li>
-                <li><a href="javascript:category('Health');"<%- getSelectedIfCategory('Health') %>><i class="fa fa-heart"></i>Health</a></li>
-                <li><a href="javascript:category('Transportation');"<%- getSelectedIfCategory('Transportation') %>><i class="fa fa-car"></i>Transportation</a></li>
-                <li><a href="javascript:category('Finance');"<%- getSelectedIfCategory('Finance') %>><i class="fa fa-money"></i>Finance</a></li>
-                <li><a href="javascript:category('Social Services');"<%- getSelectedIfCategory('Social Services') %>><i class="fa fa-child"></i>Social Services</a></li>
-                <li><a href="javascript:category('Environment');"<%- getSelectedIfCategory('Environment') %>><i class="fa fa-leaf"></i>Environment</a></li>
-                <li><a href="javascript:category('Public Safety');"<%- getSelectedIfCategory('Public Safety') %>><i class="fa fa-shield"></i>Public Safety</a></li>
-                <li><a href="javascript:category('Housing & Development');"<%- getSelectedIfCategory('Housing & Development') %>><i class="fa fa-building"></i>Housing &amp; Development</a></li>
-                <li><a href="javascript:category('Infrastructure');"<%- getSelectedIfCategory('Infrastructure') %>><i class="fa fa-road"></i>Infrastructure</a></li>
-                <li><a href="javascript:category('Education');"<%- getSelectedIfCategory('Education') %>><i class="fa fa-graduation-cap"></i>Education</a></li>
-                <li><a href="javascript:category('Recreation');"<%- getSelectedIfCategory('Recreation') %>><i class="fa fa-ticket"></i>Recreation</a></li>
+                <li><a id="category-all"<%- getSelectedIfNoCategories() %>><i class="fa fa-list"></i>All Results</a></li>
+                <li><a id="category-health"<%- getSelectedIfCategory('Health') %>><i class="fa fa-heart"></i>Health</a></li>
+                <li><a id="category-transportation"<%- getSelectedIfCategory('Transportation') %>><i class="fa fa-car"></i>Transportation</a></li>
+                <li><a id="category-finance"<%- getSelectedIfCategory('Finance') %>><i class="fa fa-money"></i>Finance</a></li>
+                <li><a id="category-social-services"<%- getSelectedIfCategory('Social Services') %>><i class="fa fa-child"></i>Social Services</a></li>
+                <li><a id="category-environment"<%- getSelectedIfCategory('Environment') %>><i class="fa fa-leaf"></i>Environment</a></li>
+                <li><a id="category-public-safety"<%- getSelectedIfCategory('Public Safety') %>><i class="fa fa-shield"></i>Public Safety</a></li>
+                <li><a id="category-housing-and-development"<%- getSelectedIfCategory('Housing & Development') %>><i class="fa fa-building"></i>Housing &amp; Development</a></li>
+                <li><a id="category-infrastructure"<%- getSelectedIfCategory('Infrastructure') %>><i class="fa fa-road"></i>Infrastructure</a></li>
+                <li><a id="category-education"<%- getSelectedIfCategory('Education') %>><i class="fa fa-graduation-cap"></i>Education</a></li>
+                <li><a id="category-recreation"<%- getSelectedIfCategory('Recreation') %>><i class="fa fa-ticket"></i>Recreation</a></li>
             </ul>
         </div>
 
@@ -55,7 +55,7 @@
                     <span>Tags:</span>
                     <% result.classification.tags.forEach(function(tag, i) {
 
-                        if (i > 0) { %>, <% } %><a href="javascript:tag('<%=tag %>');"><%= tag %></a><% 
+                        if (i > 0) { %>, <% } %><a class="tag"><%= tag %></a><% 
                     }); -%>
                 <% } %>
                 </li>

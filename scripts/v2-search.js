@@ -11,43 +11,103 @@ $(document).ready(function() {
         else
             $('#form').submit();
     });
+
+    // SearchPageController
+    //
+    new SearchPageController(_params);
 });
-
-function clear() {
-
-    _controller.clearCategories();
-    _controller.navigate();
-}
-
-function category(category) {
-
-    _controller.toggleCategory(category);
-    _controller.navigate();
-}
-
-function next() {
-
-    if (_controller.tryChangePage(1))
-        _controller.navigate();
-}
-
-function prev() {
-
-    if (_controller.tryChangePage(-1))
-        _controller.navigate();
-}
-
-function tag(tag) {
-
-    _controller.applyTag(tag);
-    _controller.navigate();
-}
 
 // SearchPageController
 //
 function SearchPageController(params) {
 
+    var self = this;
     this.params = params;
+
+    $('#category-all').click(function() { 
+
+        self.clearCategories();
+        self.clearTags();
+        self.navigate();
+    });
+    
+    $('#category-health').click(function() { 
+
+        self.toggleCategory('Health'); 
+        self.navigate();
+    });
+
+    $('#category-transportation').click(function() { 
+
+        self.toggleCategory('Transportation'); 
+        self.navigate();
+    });
+
+    $('#category-finance').click(function() { 
+    
+        self.toggleCategory('Finance'); 
+        self.navigate();
+    });
+
+    $('#category-social-services').click(function() { 
+
+        self.toggleCategory('Social Services'); 
+        self.navigate();
+    });
+    
+    $('#category-environment').click(function() { 
+
+        self.toggleCategory('Environment'); 
+        self.navigate();
+    });
+
+    $('#category-public-safety').click(function() { 
+
+        self.toggleCategory('Public Safety'); 
+        self.navigate();
+    });
+    
+    $('#category-housing-and-development').click(function() { 
+
+        self.toggleCategory('Housing & Development'); 
+        self.navigate();
+    });
+
+    $('#category-infrastructure').click(function() { 
+
+        self.toggleCategory('Infrastructure'); 
+        self.navigate();
+    });
+
+    $('#category-education').click(function() { 
+
+        self.toggleCategory('Education'); 
+        self.navigate();
+    });
+
+    $('#category-recreation').click(function() { 
+
+        self.toggleCategory('Recreation'); 
+        self.navigate();
+    });
+
+    $('.pager-prev').click(function() {
+
+        if (self.tryChangePage(-1))
+            self.navigate();
+    });
+
+    $('.pager-next').click(function() {
+
+        if (self.tryChangePage(1))
+            self.navigate();
+    });
+
+    $('.tag').click(function() {
+
+        self.applyTag($(this).text());
+        self.navigate();
+    });
 };
 
 // Public methods
@@ -61,6 +121,13 @@ SearchPageController.prototype.applyTag = function(tag) {
 SearchPageController.prototype.clearCategories = function() {
 
     this.params.categories = [];
+    this.params.page = 1;
+}
+
+SearchPageController.prototype.clearTags = function() {
+
+    this.params.tags = [];
+    this.params.page = 1;
 }
 
 SearchPageController.prototype.getSearchUrl = function() {

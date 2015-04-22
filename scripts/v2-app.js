@@ -35,7 +35,6 @@ function SearchMenuController() {
     var self = this;
 
     this.categories = this.getParameterByName('categories').split2(',');
-    console.dir(this.categories);
 
     $('#searchCategoryHealth')
         .change(function() { self.toggleCategory('Health'); })
@@ -77,8 +76,8 @@ function SearchMenuController() {
         .change(function() { self.toggleCategory('Recreation'); })
         .prop('checked', this.categories.includes('Recreation'));
 
-    $('#search-categories-menu-open').click(function() { $('#search-categories-menu').show(); });
-    $('#search-categories-menu-close').click(function() { $('#search-categories-menu').hide(); });
+    $('#search-categories-menu-open').click(function() { $('#search-categories-menu').toggle(100); });
+    $('#search-categories-menu-close').click(function() { $('#search-categories-menu').hide(100); });
 };
 
 // Public methods
@@ -86,10 +85,11 @@ function SearchMenuController() {
 SearchMenuController.prototype.getParameterByName = function(name) {
 
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
     var results = regex.exec(location.search);
 
-    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 }
 
 SearchMenuController.prototype.toggleCategory = function(category) {

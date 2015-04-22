@@ -31,6 +31,7 @@ span.pager a
 {
     border: 1px solid $gray-border-color;
     color: #7f8c8d;
+    cursor: pointer;
     display: inline-block;
     height: 32px;
     line-height: 32px;
@@ -115,6 +116,7 @@ section.search-results
 .search-results-pane a
 {
     color: $blue-color;
+    cursor: pointer;
 }
 
 .search-results-pane p
@@ -180,6 +182,7 @@ section.search-results
 .search-categories-pane a
 {
     color: $gray-text-color;
+    cursor: pointer;
     font-size: 14px;
     height: 35px;
     line-height: 35px;
@@ -218,7 +221,6 @@ section.search-results
     height: 35px;
     line-height: 35px;
 }
-
 
 
 
