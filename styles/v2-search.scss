@@ -74,8 +74,9 @@ span.pager .currentPage
 
 section.search-results
 {
-    display: table-row;
+    display: table;
     text-align: left;
+    width: 100%;
 }
 
 .search-results-pane
