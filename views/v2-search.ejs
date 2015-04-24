@@ -32,15 +32,14 @@
                 <li><a id="category-recreation"<%- getSelectedIfCategory('Recreation') %>><i class="fa fa-ticket"></i>Recreation</a></li>
             </ul>
         </div>
-
         <div class="search-results-pane">
+            
+        <% if (data) { %>
             <div class="search-results-header">
                 <strong><%= data.resultSetSizeString %></strong> Results
-
             <% if (data.resultSetSize > 0) { %>
                 <% include v2-pager %>
             <% } %>
-
             </div>
             <ul>
             <% data.results.forEach(function(result) { %>
@@ -62,11 +61,12 @@
             <% }); %>
             </ul>
 
-        <% if (data.resultSetSize > 0) { %>
+            <% if (data.resultSetSize > 0) { %>
             <div class="search-results-footer">
                 <% include v2-pager %>
             </div>
-        <% } %>        
+            <% } %>        
+        <% } %>
         </div>
 
     </section>
