@@ -16,6 +16,7 @@ var app = express();
 //
 app.use(helmet.xframe('deny'));
 
+
 // Set up static folders
 //
 app.use('/data', express.static(__dirname + '/data'));
@@ -68,13 +69,6 @@ app.get('/popular', function(req, res) {
 
 // Set up routes
 //
-app.get('/', function(req, res) {
-
-    app.locals.css = 'home.min.css';
-    app.locals.title = 'Introducing the Open Data Network the new hub for the vibrant and growing open data ecosystem.';
-    res.render('home.ejs');
-});
-
 app.get('/explore-open-data', function(req, res) {
 
     app.locals.css = 'explore.min.css';
@@ -135,16 +129,10 @@ app.get('/google0679b96456cb5b3a.html', function(req, res) {
     res.render('static/google0679b96456cb5b3a.ejs');
 });
 
-app.get('/robots.txt', function(req, res) {
-
-    res.set('Content-Type', 'text/plain');
-    res.render('static/robots.ejs');
-});
-
 
 // V2 homepage
 //
-app.get('/v2', function (req, res) {
+app.get('/', function (req, res) {
 
     var params = searchController.getSearchParameters(req.query);
     res.render(
