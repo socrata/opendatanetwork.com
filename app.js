@@ -148,32 +148,18 @@ app.get('/v2-search', function(req, res) {
 
     var params = searchController.getSearchParameters(req.query);
 
-    if (req.query.q) {
-
-        searchController.search(params, function(data) {
-
-            res.render(
-                'v2-search.ejs', 
-                { 
-                    css : ['/styles/v2-search.min.css'], 
-                    scripts : ['/scripts/v2-search.min.js'], 
-                    params : 
-                    params, 
-                    data : data 
-                });
-        });
-    }
-    else {
+    searchController.search(params, function(data) {
 
         res.render(
             'v2-search.ejs', 
             { 
                 css : ['/styles/v2-search.min.css'], 
                 scripts : ['/scripts/v2-search.min.js'], 
-                params : params, 
-                data : null 
+                params : 
+                params, 
+                data : data 
             });
-    }
+    });
 });
 
 

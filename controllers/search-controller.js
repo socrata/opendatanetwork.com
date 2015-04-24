@@ -139,9 +139,11 @@ function getNormalizedArrayFromDelimitedString(s) {
 function getUrlFromSearchParameters(params) {
 
     var url = _searchUrl + 
-        '?q=' + encodeURIComponent(params.q) +
-        '&offset=' + params.offset + 
+        '?offset=' + params.offset + 
         '&limit=' + params.limit;
+
+    if ((params.q != null) && (params.q.length > 0))
+        url += '&q=' + encodeURIComponent(params.q);
 
     if (params.categories.length > 0)
         url += '&categories=' + encodeURIComponent(params.categories.join(','));
