@@ -11,13 +11,7 @@
 
     <section class="search-results">
 
-        <div class="search-categories-pane">
-            
-            <div class="search-filter-by">
-                <span>Filter by Publisher</span>
-                <a class="fa fa-caret-down"></a>
-            </div>
-
+        <div class="search-categories-pane">            
             <ul class="search-categories-list">
                 <li><a id="category-all"<%- getSelectedIfNoCategories() %>><i class="fa fa-list"></i>All Results</a></li>
                 <li><a id="category-health"<%- getSelectedIfCategory('Health') %>><i class="fa fa-heart"></i>Health</a></li>
@@ -33,7 +27,7 @@
             </ul>
         </div>
         <div class="search-results-pane">
-            
+
         <% if (data) { %>
             <div class="search-results-header">
                 <strong><%= data.resultSetSizeString %></strong> Results
