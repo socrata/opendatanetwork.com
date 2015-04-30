@@ -4,6 +4,8 @@ var _request = require('request');
 
 var _searchUrl = 'http://api.us.socrata.com/api/catalog/v1';
 var _limit = 10;
+var _boostTitle = 2.0;
+var _boostDesc = 1.0;
 
 module.exports = SearchController;
 
@@ -28,6 +30,8 @@ SearchController.prototype.getSearchParameters = function(query) {
         categories : categories,
         domains : domains,
         tags : tags,
+        boostTitle : _boostTitle,
+        boostDesc : _boostDesc,
     };
 };
 
