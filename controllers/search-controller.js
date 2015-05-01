@@ -158,6 +158,12 @@ function getUrlFromSearchParameters(params) {
     if (params.tags.length > 0)
         url += '&tags=' + encodeURIComponent(params.tags.join(','));
 
+    if (params.boostDesc != null)
+        url += '&boostDesc=' + encodeURIComponent(params.boostDesc);
+
+    if (params.boostTitle != null)
+        url += '&boostTitle=' + encodeURIComponent(params.boostTitle);
+
     console.log(url);
 
     return url;
