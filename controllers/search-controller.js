@@ -85,7 +85,7 @@ function annotateData(data) {
     data.results.forEach(function(result) {
 
         result.classification.categoryGlyphString = getCategoryGlyphString(result);
-        result.resource.updatedAtString = _moment(result.updatedAt).format('D MMM YYYY');
+        result.resource.updatedAtString = _moment(result.resource.updatedAt).format('D MMM YYYY');
     });
 }
 
