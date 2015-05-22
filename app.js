@@ -71,8 +71,8 @@ app.get('/popular', function(req, res) {
 //
 app.get('/explore-open-data', function(req, res) {
 
-    app.locals.css = 'explore.min.css';
-    app.locals.title = 'Explore the Open Data Network.';
+    res.locals.css = 'explore.min.css';
+    res.locals.title = 'Explore the Open Data Network.';
     res.render('explore.ejs');
 });
 
@@ -80,8 +80,8 @@ app.get('/open-data-census', function(req, res) {
 
     portalController.getPortals(function(results) {
 
-        app.locals.css = 'census.min.css';
-        app.locals.title = 'Visit Open Data Network portals and datasets in common data categories.';
+        res.locals.css = 'census.min.css';
+        res.locals.title = 'Visit Open Data Network portals and datasets in common data categories.';
         res.render('census.ejs', { results: results });
     });
 });
@@ -90,37 +90,37 @@ app.get('/popular-open-datasets', function(req, res) {
 
     datasetController.getPopularDatasets(function(results) {
 
-        app.locals.css = 'popular.min.css';
-        app.locals.title = 'Visit the all-time, most-viewed open datasets from the Open Data Network.';
+        res.locals.css = 'popular.min.css';
+        res.locals.title = 'Visit the all-time, most-viewed open datasets from the Open Data Network.';
         res.render('popular.ejs', { results: results });
     });
 });
 
 app.get('/join-open-data-network/complete', function(req, res) {
 
-    app.locals.css = 'join-complete.min.css';
-    app.locals.title = 'Thanks for joining the Open Data Network.';
+    res.locals.css = 'join-complete.min.css';
+    res.locals.title = 'Thanks for joining the Open Data Network.';
     res.render('join-complete.ejs');
 });
 
 app.get('/join-open-data-network', function(req, res) {
 
-    app.locals.css = 'join.min.css';
-    app.locals.title = 'Join the Open Data Network.';
+    res.locals.css = 'join.min.css';
+    res.locals.title = 'Join the Open Data Network.';
     res.render('join.ejs');
 });
 
 app.get('/articles/:article', function(req, res) {
 
-    app.locals.css = 'article.min.css';
-    app.locals.modal = false;
+    res.locals.css = 'article.min.css';
+    res.locals.modal = false;
     res.render('articles/' + req.params.article + '.ejs');
 });
 
 app.get('/modal/:article', function(req, res) {
 
-    app.locals.css = 'modal.min.css';
-    app.locals.modal = true;
+    res.locals.css = 'modal.min.css';
+    res.locals.modal = true;
     res.render('articles/' + req.params.article + '.ejs');
 });
 
