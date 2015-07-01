@@ -140,6 +140,7 @@ function getUrlFromSearchParameters(params) {
 
     var url = _searchUrl + 
         '?offset=' + params.offset + 
+        '&only=' + params.only +
         '&limit=' + params.limit;
 
     if ((params.q != null) && (params.q.length > 0))
