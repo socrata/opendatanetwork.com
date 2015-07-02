@@ -155,8 +155,38 @@ app.get('/v2-search', function(req, res) {
             { 
                 css : ['/styles/v2-search.min.css'], 
                 scripts : ['/scripts/v2-search.min.js'], 
-                params : 
-                params, 
+                params : params, 
+                data : data 
+            });
+    });
+});
+
+// V3 homepage
+//
+app.get('/v3', function (req, res) {
+
+    var params = searchController.getSearchParameters(req.query);
+    res.render(
+        'v3-home.ejs', 
+        { 
+            css : ['/styles/v3-home.min.css', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css'], 
+            scripts : ['/scripts/v3-home.min.js', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js'], 
+            params : params 
+        });
+})
+
+app.get('/v3-search', function(req, res) {
+
+    var params = searchController.getSearchParameters(req.query);
+
+    searchController.search(params, function(data) {
+
+        res.render(
+            'v3-search.ejs', 
+            { 
+                css : ['/styles/v3-search.min.css'], 
+                scripts : ['/scripts/v3-search.min.js'], 
+                params : params, 
                 data : data 
             });
     });
