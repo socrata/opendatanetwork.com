@@ -20,7 +20,7 @@
 </head>
 <body>
 <header>
-    <a class="logo" href="/" title="Open Data Network"></a>
+    <a class="logo" href="/v3" title="Open Data Network"></a>
     <div class="menus">
         <div id="menu-item-communities">
             <a class="menu-item-link">Data by Category<i class="fa fa-caret-down"></i></a>
@@ -43,7 +43,7 @@
 </header>
 
 <section class="search-bar">
-	<form method="GET" action="v2-search" id="form" autocomplete="off">
+	<form method="GET" action="v3-search" id="form" autocomplete="off">
         <a class="fa fa-search search-link"></a><a class="fa fa-caret-down search-options-link"></a>	
 		<span><input type="text" placeholder="Search the Open Data Network" name="q" id="q" value="<%= params.q %>"></span>
     	<input type="hidden" name="categories" id="categories" value="<%= params.categories.join(',') %>">

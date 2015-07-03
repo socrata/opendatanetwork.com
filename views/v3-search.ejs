@@ -1,0 +1,43 @@
+<% include v3-header %>
+
+<script>var _params = <%- JSON.stringify(params) %>;</script>
+
+<section class="results-bar">
+	<label><strong><%= data.resultSetSizeString %></strong> results for <%= params.q %></label>
+</section>
+
+<section class="main">
+
+	<div class="filters-pane">
+		filters	
+	</div>
+		
+	<div class="search-results-pane">
+		<ul>
+        <% data.results.forEach(function(result) { %>
+            <li>
+                <a class="api-link" href="http://dev.socrata.com/foundry/#/<%= result.resource.domain %>/<%= result.resource.id %>">API</a>
+                <i class="fa <%= result.classification.categoryGlyphString %>"></i>
+                <h2><a href="<%= result.link %>"><%= result.resource.name %></a></h2>
+                <a href="http://<%= result.resource.domain %>"><%= result.resource.domain %></a> 
+                <span>| Last Updated <%= result.resource.updatedAtString.toUpperCase() %></span>
+                <p><%= result.resource.description %></p>
+            <% if (result.classification.tags.length > 0) { %>
+                <span>Tags:</span>
+                <% result.classification.tags.forEach(function(tag, i) {
+
+                    if (i > 0) { %>, <% } %><a class="tag"><%= tag %></a><% 
+                }); -%>
+            <% } %>
+            </li>
+        <% }); %>
+        </ul>
+	</div>
+	
+	<div class="showcase-pane">
+		showcase
+	</div>
+
+</section>
+
+<% include v3-footer %>
