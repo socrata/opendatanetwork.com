@@ -12,28 +12,28 @@ $font-weight-bold: 700;
 
 section.results-bar
 {
-	background-color: $gray-background-color;
-	padding: 120px 30px 20px;
-	text-align: left;	
+    background-color: $gray-background-color;
+    padding: 120px 30px 20px;
+    text-align: left;	
 }
 
 section.results-bar label
 {
-	color: $black-color;
-	font-size: 16px;	
+    color: $black-color;
+    font-size: 16px;	
 }
 
 section.results-bar label strong
 {
-	font-weight: $font-weight-bold; 
+    font-weight: $font-weight-bold; 
 }
 
 /* Main section */
 
 section.main 
 {
-	display: table;
-	text-align: left;
+    display: table;
+    text-align: left;
     width: 100%;
 }
 
@@ -41,7 +41,7 @@ section.main
 
 .filters-pane
 {
-	background-color: $gray-background-color;
+    background-color: $gray-background-color;
     display: table-cell;
     width: 300px;
 }
@@ -50,7 +50,7 @@ section.main
 
 .search-results-pane
 {
-	background-color: white;
+    background-color: white;
     display: table-cell;
 }
 
@@ -121,10 +121,7 @@ section.main
 
 .showcase-pane
 {
-	background-color: $black-color;
-	display: table-cell;
-	width: 270px;
+    background-color: $black-color;
+    display: table-cell;
+    width: 270px;
 }
-
-
-

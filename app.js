@@ -16,7 +16,6 @@ var app = express();
 //
 app.use(helmet.xframe('deny'));
 
-
 // Set up static folders
 //
 app.use('/data', express.static(__dirname + '/data'));
@@ -25,7 +24,6 @@ app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist'));
 app.use('/scripts', express.static(__dirname + '/scripts/compressed'));
 app.use('/styles', express.static(__dirname + '/styles/compressed'));
 app.use(favicon(__dirname + '/images/favicon.ico'));
-
 
 // Set up app data
 //
@@ -38,7 +36,6 @@ fs.readFile(__dirname + '/data/slides.json', function(err, data) {
 
     app.locals.slides = JSON.parse(data);
 });
-
 
 // Set up 301 redirects for old routes
 //
@@ -129,7 +126,6 @@ app.get('/google0679b96456cb5b3a.html', function(req, res) {
     res.render('static/google0679b96456cb5b3a.ejs');
 });
 
-
 // V2 homepage
 //
 app.get('/', function (req, res) {
@@ -137,7 +133,7 @@ app.get('/', function (req, res) {
     var params = searchController.getSearchParameters(req.query);
     res.render(
         'v2-home.ejs', 
-        { 
+        {
             css : ['/styles/v2-home.min.css', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css'], 
             scripts : ['/scripts/v2-home.min.js', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js'], 
             params : params 
@@ -152,7 +148,7 @@ app.get('/v2-search', function(req, res) {
 
         res.render(
             'v2-search.ejs', 
-            { 
+            {
                 css : ['/styles/v2-search.min.css'], 
                 scripts : ['/scripts/v2-search.min.js'], 
                 params : params, 
@@ -169,29 +165,36 @@ app.get('/v3', function (req, res) {
     res.render(
         'v3-home.ejs', 
         { 
-            css : ['/styles/v3-home.min.css', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css'], 
-            scripts : ['/scripts/v3-home.min.js', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js'], 
+            css : ['/styles/v3-home.min.css', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css'],
+            scripts : ['/scripts/v3-home.min.js', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js'],
             params : params 
         });
 })
 
 app.get('/v3-search', function(req, res) {
 
-    var params = searchController.getSearchParameters(req.query);
-
-    searchController.search(params, function(data) {
-
-        res.render(
-            'v3-search.ejs', 
-            { 
-                css : ['/styles/v3-search.min.css'], 
-                scripts : ['/scripts/v3-search.min.js'], 
-                params : params, 
-                data : data 
+    searchController.getTags(function(tagResults) {
+        
+        searchController.getDomains(function(domainResults) {
+        
+            var params = searchController.getSearchParameters(req.query);
+            
+            searchController.search(params, function(searchResults) {
+        
+                res.render(
+                    'v3-search.ejs', 
+                    { 
+                        css : ['/styles/v3-search.min.css'],
+                        scripts : ['/scripts/v3-search.min.js'],
+                        params : params,
+                        searchResults : searchResults,
+                        domainResults : domainResults,
+                        tagResults : tagResults,
+                    });
             });
+        });
     });
 });
-
 
 // Start listening
 //

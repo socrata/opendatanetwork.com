@@ -1,17 +1,48 @@
+var NodeCache = require('node-cache');
 var _moment = require('moment');
 var _numeral = require('numeral');
 var _request = require('request');
 
-var _searchUrl = 'http://api.us.socrata.com/api/catalog/v1';
+var _baseUrl = 'http://api.us.socrata.com/api/catalog/v1';
+var _domainsUrl = _baseUrl + '/domains';
 var _limit = 10;
+var _nodeCache = new NodeCache();
+var _searchUrl = _baseUrl;
+var _tagsUrl = _baseUrl + '/tags';
+var _ttl = 60 * 60; // seconds
+var _userAgent = 'www.opendatanetwork.com';
 
 module.exports = SearchController;
 
 function SearchController() {
-};
+}
 
 // Public methods
 //
+SearchController.prototype.getDomains = function(completionHandler) {
+
+    getFromCacheOrApi(_domainsUrl, completionHandler);
+};
+
+SearchController.prototype.getTags = function(completionHandler) {
+
+    getFromCacheOrApi(_tagsUrl, completionHandler);
+};
+
+SearchController.prototype.search = function(params, completionHandler) {
+
+    getFromApi(
+        getUrlFromSearchParameters(params), 
+        function(results) {
+
+            annotateData(results);
+            annotateParams(results, params);
+
+            if (completionHandler)
+                completionHandler(results);
+        });
+};
+
 SearchController.prototype.getSearchParameters = function(query) {
 
     var categories = getNormalizedArrayFromDelimitedString(query.categories);
@@ -31,54 +62,13 @@ SearchController.prototype.getSearchParameters = function(query) {
     };
 };
 
-SearchController.prototype.search = function(params, completionHandler) {
-
-    var options = {
-        url: getUrlFromSearchParameters(params),
-        headers: { 'User-Agent' : 'www.opendatanetwork.com' }
-    };
-
-    _request(
-        options, 
-        function(err, resp, html) {
-
-            if (err) {
-             
-                console.log('Could not connect to Socrata');
-
-                if (completionHandler)
-                    completionHandler(null);
-
-                return;
-            }
-
-            if (resp.statusCode != 200) {
-
-                console.log(resp.body);
-
-                if (completionHandler)
-                    completionHandler(null);
-
-                return;
-            }
-
-            var data = JSON.parse(resp.body);
-
-            annotateData(data);
-            annotateParams(data, params);
-            
-            if (completionHandler) 
-                completionHandler(data);
-        });
-}
-
 // Private functions
 //
 function annotateData(data) {
 
     // resultSetSizeString
     //
-    data.resultSetSizeString = _numeral(data.resultSetSize).format('0,0'), 
+    data.resultSetSizeString = _numeral(data.resultSetSize).format('0,0');
 
     // categoryGlyphString, updatedAtString
     //
@@ -138,8 +128,8 @@ function getNormalizedArrayFromDelimitedString(s) {
 
 function getUrlFromSearchParameters(params) {
 
-    var url = _searchUrl + 
-        '?offset=' + params.offset + 
+    var url = _searchUrl +
+        '?offset=' + params.offset +
         '&only=' + params.only +
         '&limit=' + params.limit;
 
@@ -155,9 +145,74 @@ function getUrlFromSearchParameters(params) {
     if (params.tags.length > 0)
         url += '&tags=' + encodeURIComponent(params.tags.join(','));
 
-    console.log(url);
-
     return url;
 }
 
+function getFromApi(url, completionHandler) {
 
+    _request(
+        {
+            url: url, 
+            headers: { 'User-Agent' : _userAgent }
+        }, 
+        function(err, resp) {
+
+            if (err) {
+
+                console.log('Could not connect to Socrata');
+
+                if (completionHandler) completionHandler();
+                return;
+            }
+
+            if (resp.statusCode != 200) {
+
+                console.log(resp.body);
+
+                if (completionHandler) completionHandler();
+                return;
+            }
+
+            console.log('Get from api: ' + url);
+
+            if (completionHandler) {
+
+                var results = JSON.parse(resp.body);
+                completionHandler(results);
+            }
+        });
+};
+
+function getFromCacheOrApi(url, completionHandler) {
+
+    _nodeCache.get(url, function(err, results) {
+
+        if (err) {
+
+            if (completionHandler) completionHandler();
+            return;
+        }
+
+        if (results != undefined) {
+
+            console.log('Get from cache: ' + url);
+
+            if (completionHandler) completionHandler(results);
+            return;
+        }
+
+        getFromApi(url, function(results) {
+
+            _nodeCache.set(url, results, _ttl, function(err, success) {
+
+                if (err || !success) {
+
+                    if (completionHandler) completionHandler();
+                    return;
+                }
+
+                if (completionHandler) completionHandler(results);
+            });
+        });
+    });
+};
