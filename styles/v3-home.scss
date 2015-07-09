@@ -15,9 +15,17 @@ section.blue
 {
     background-color: $blue-background-color;
     color: white;
+    display: table;
     font-size: 60px;
     font-weight: 300;
-    padding: 240px 0 140px; 
+    height: 100%;
+    width: 100%;
+}
+
+section.blue .container
+{
+    display: table-cell;
+    vertical-align: middle;
 }
 
 section.blue .fa 

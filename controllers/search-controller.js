@@ -4,6 +4,7 @@ var _numeral = require('numeral');
 var _request = require('request');
 
 var _baseUrl = 'http://api.us.socrata.com/api/catalog/v1';
+var _categoriesUrl = _baseUrl + '/categories';
 var _domainsUrl = _baseUrl + '/domains';
 var _limit = 10;
 var _nodeCache = new NodeCache();
@@ -19,14 +20,28 @@ function SearchController() {
 
 // Public methods
 //
-SearchController.prototype.getDomains = function(completionHandler) {
+SearchController.prototype.getCategories = function(count, completionHandler) {
 
-    getFromCacheOrApi(_domainsUrl, completionHandler);
+    getFromCacheOrApi(_categoriesUrl, function(results) {
+
+        truncateResults(count, results, completionHandler);
+    });
 };
 
-SearchController.prototype.getTags = function(completionHandler) {
+SearchController.prototype.getDomains = function(count, completionHandler) {
 
-    getFromCacheOrApi(_tagsUrl, completionHandler);
+    getFromCacheOrApi(_domainsUrl, function(results) {
+
+        truncateResults(count, results, completionHandler);
+    });
+};
+
+SearchController.prototype.getTags = function(count, completionHandler) {
+
+    getFromCacheOrApi(_tagsUrl, function(results) {
+
+        truncateResults(count, results, completionHandler);
+    });
 };
 
 SearchController.prototype.search = function(params, completionHandler) {
@@ -215,4 +230,13 @@ function getFromCacheOrApi(url, completionHandler) {
             });
         });
     });
-};
+}
+
+function truncateResults(count, results, completionHandler) {
+
+        if (results.results.length > count)
+            results.results.length = count;
+
+        if (completionHandler)
+            completionHandler(results)
+}
