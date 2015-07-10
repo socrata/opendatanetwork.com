@@ -134,7 +134,7 @@ function getNormalizedArrayFromDelimitedString(s) {
         parts = [];
 
     for (var i in parts) {
-        parts[i] = parts[i]; // TODO: lowercase this tomorrow afternoon
+        parts[i] = parts[i].toLowerCase();
     }
 
     return parts;

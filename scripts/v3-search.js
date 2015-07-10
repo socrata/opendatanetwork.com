@@ -63,6 +63,7 @@ SearchPageController.prototype.navigate = function() {
 
 SearchPageController.prototype.toggleCategory = function(category) {
 
+    category = category.toLowerCase();
     var i = this.params.categories.indexOf(category);
 
     if (i > -1)
@@ -96,4 +97,3 @@ SearchPageController.prototype.toggleTag = function(tag) {
 
     this.params.page = 1;
 };
-

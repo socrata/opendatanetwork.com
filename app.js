@@ -1,4 +1,4 @@
-var CategoriesController = require('./controllers/category-controller');
+var CategoryController = require('./controllers/category-controller');
 var DatasetController = require('./controllers/dataset-controller');
 var PortalController = require('./controllers/portal-controller');
 var SearchController = require('./controllers/search-controller');
@@ -8,7 +8,7 @@ var fs = require('fs');
 var favicon = require('serve-favicon');
 var helmet = require('helmet');
 
-var categoriesController = new CategoriesController();
+var categoryController = new CategoryController();
 var portalController = new PortalController();
 var datasetController = new DatasetController();
 var searchController = new SearchController();
@@ -165,7 +165,7 @@ app.get('/v3', function (req, res) {
 
     var params = searchController.getSearchParameters(req.query);
 
-    categoriesController.getCategories(function(categories) {
+    categoryController.getCategories(function(categories) {
 
         res.render(
             'v3-home.ejs', 
@@ -182,28 +182,32 @@ app.get('/v3-search', function(req, res) {
 
     var params = searchController.getSearchParameters(req.query);
 
-    categoriesController.getCategories(function(categories) {
+    categoryController.getCategories(function(categories) {
 
-        searchController.getCategories(10, function(categoryResults) {
+        categoryController.getSelectedCategory(params, function(selectedCategory) {
 
-            searchController.getDomains(10, function(domainResults) {
+            searchController.getCategories(null, function(categoryResults) {
+    
+                searchController.getDomains(10, function(domainResults) {
 
-                searchController.getTags(10, function(tagResults) {
+                    searchController.getTags(10, function(tagResults) {
 
-                    searchController.search(params, function(searchResults) {
+                        searchController.search(params, function(searchResults) {
 
-                        res.render(
-                            'v3-search.ejs', 
-                            { 
-                                css : ['/styles/v3-search.min.css'],
-                                scripts : ['/scripts/v3-search.min.js'],
-                                params : params,
-                                searchResults : searchResults,
-                                categoryResults : categoryResults,
-                                domainResults : domainResults,
-                                tagResults : tagResults,
-                                categories : categories,
-                            });
+                            res.render(
+                                'v3-search.ejs', 
+                                { 
+                                    css : ['/styles/v3-search.min.css'],
+                                    scripts : ['/scripts/v3-search.min.js'],
+                                    params : params,
+                                    searchResults : searchResults,
+                                    categoryResults : categoryResults,
+                                    domainResults : domainResults,
+                                    tagResults : tagResults,
+                                    categories : categories,
+                                    selectedCategory : selectedCategory,
+                                });
+                        });
                     });
                 });
             });

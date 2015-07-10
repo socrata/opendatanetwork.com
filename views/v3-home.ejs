@@ -18,8 +18,8 @@
         <ul>
           <% categories.forEach(function(category) { %> 
             <li>
-                <a class="icon" href="/v3-search?categories=<%= encodeURIComponent(category.title) %>"><i class="fa <%= category.icon %>"></i></a>
-                <a href="/v3-search?categories=<%= encodeURIComponent(category.title) %>"><h3><%= category.title %></h3></a>
+                <a class="icon" href="/v3-search?categories=<%= encodeURIComponent(category.title.toLowerCase()) %>"><i class="fa <%= category.icon %>"></i></a>
+                <a href="/v3-search?categories=<%= encodeURIComponent(category.title.toLowerCase()) %>"><h3><%= category.title %></h3></a>
             </li>
           <% }); %>
         </ul>

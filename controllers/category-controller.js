@@ -13,9 +13,20 @@ function CategoryController() {
 //
 CategoryController.prototype.getCategory = function(title, completionHandler) {
 
-    _cacheController.getCategories(function(results) {
+    this.getCategories(function(results) {
 
-        if (completionHandler) completionHandler(results[title]);
+        for (var i in results) {
+
+            var result = results[i];
+
+            if (result.title.toLowerCase() == title) {
+
+                if (completionHandler) completionHandler(result);
+                return;
+            }
+        }
+
+        if (completionHandler) completionHandler();
     });
 };
 
@@ -32,29 +43,28 @@ CategoryController.prototype.getCategories = function(completionHandler) {
                     if (completionHandler) completionHandler();
                 }
 
-                var oo = JSON.parse(data);
-                _cacheController.set(_key, oo, function(oo) {
+                var categories = JSON.parse(data);
 
-                    var results = convertCategoriesToArray(oo);
-                    if (completionHandler) completionHandler(results);
+                _cacheController.set(_key, categories, function(categories) {
+
+                    if (completionHandler) completionHandler(categories);
                 });
             });
 
             return;
         }
 
-        var results = convertCategoriesToArray(o);
-        if (completionHandler) completionHandler(results);
+        if (completionHandler) completionHandler(o);
     });
 };
 
-function convertCategoriesToArray(o) {
+CategoryController.prototype.getSelectedCategory = function(params, completionHandler) {
 
-    var results = [];
+    if ((params.q != "") || (params.categories.length != 1)) {
 
-    for (var key in o) {
-        results.push(o[key]);
+        if (completionHandler) completionHandler();
+        return;
     }
-    
-    return results;    
-}
+
+    this.getCategory(params.categories[0], completionHandler);
+};
