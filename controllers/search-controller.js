@@ -1,4 +1,5 @@
 var CacheController = require('./cache-controller');
+
 var _moment = require('moment');
 var _numeral = require('numeral');
 var _request = require('request');
