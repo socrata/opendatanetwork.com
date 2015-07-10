@@ -1,16 +1,15 @@
-var NodeCache = require('node-cache');
+var CacheController = require('./cache-controller');
 var _moment = require('moment');
 var _numeral = require('numeral');
 var _request = require('request');
 
 var _baseUrl = 'http://api.us.socrata.com/api/catalog/v1';
+var _cacheController = new CacheController();
 var _categoriesUrl = _baseUrl + '/categories';
 var _domainsUrl = _baseUrl + '/domains';
 var _limit = 10;
-var _nodeCache = new NodeCache();
 var _searchUrl = _baseUrl;
 var _tagsUrl = _baseUrl + '/tags';
-var _ttl = 60 * 60; // seconds
 var _userAgent = 'www.opendatanetwork.com';
 
 module.exports = SearchController;
@@ -200,17 +199,9 @@ function getFromApi(url, completionHandler) {
 
 function getFromCacheOrApi(url, completionHandler) {
 
-    _nodeCache.get(url, function(err, results) {
-
-        if (err) {
-
-            if (completionHandler) completionHandler();
-            return;
-        }
+    _cacheController.get(url, function(results) {
 
         if (results != undefined) {
-
-            console.log('Get from cache: ' + url);
 
             if (completionHandler) completionHandler(results);
             return;
@@ -218,25 +209,19 @@ function getFromCacheOrApi(url, completionHandler) {
 
         getFromApi(url, function(results) {
 
-            _nodeCache.set(url, results, _ttl, function(err, success) {
-
-                if (err || !success) {
-
-                    if (completionHandler) completionHandler();
-                    return;
-                }
-
-                if (completionHandler) completionHandler(results);
-            });
+            _cacheController.set(url, results, completionHandler);
         });
     });
 }
 
 function truncateResults(count, results, completionHandler) {
 
+    if ((count != null) && (count >= 0))
+    {
         if (results.results.length > count)
             results.results.length = count;
+    }
 
-        if (completionHandler)
-            completionHandler(results)
+    if (completionHandler)
+        completionHandler(results)
 }

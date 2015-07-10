@@ -25,16 +25,9 @@
         <div id="menu-item-communities">
             <a class="menu-item-link">Data by Category<i class="fa fa-caret-down"></i></a>
             <ul id="menu-communities" class="menu">
-                <li><a href="">Health</a></li>
-                <li><a href="">Transportation</a></li>
-                <li><a href="">Finance</a></li>
-                <li><a href="">Social Services</a></li>
-                <li><a href="">Environment</a></li>
-                <li><a href="">Public Safety</a></li>
-                <li><a href="">Housing &amp; Development</a></li>
-                <li><a href="">Infrastructure</a></li>
-                <li><a href="">Education</a></li>
-                <li><a href="">Recreation</a></li>
+              <% categories.forEach(function(category) { %>
+                <li><a href="/v3-search?categories=<%= encodeURIComponent(category.title) %>"><%= category.title %></a></li>
+              <% }) %>
             </ul>
         </div>
         <a class="menu-item-link">Publishers</a>

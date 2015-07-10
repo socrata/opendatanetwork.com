@@ -1,3 +1,4 @@
+var CategoriesController = require('./controllers/category-controller');
 var DatasetController = require('./controllers/dataset-controller');
 var PortalController = require('./controllers/portal-controller');
 var SearchController = require('./controllers/search-controller');
@@ -7,6 +8,7 @@ var fs = require('fs');
 var favicon = require('serve-favicon');
 var helmet = require('helmet');
 
+var categoriesController = new CategoriesController();
 var portalController = new PortalController();
 var datasetController = new DatasetController();
 var searchController = new SearchController();
@@ -162,38 +164,47 @@ app.get('/v2-search', function(req, res) {
 app.get('/v3', function (req, res) {
 
     var params = searchController.getSearchParameters(req.query);
-    res.render(
-        'v3-home.ejs', 
-        { 
-            css : ['/styles/v3-home.min.css', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css'],
-            scripts : ['/scripts/v3-home.min.js', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js'],
-            params : params 
-        });
-})
+
+    categoriesController.getCategories(function(categories) {
+
+        res.render(
+            'v3-home.ejs', 
+            { 
+                css : ['/styles/v3-home.min.css', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css'],
+                scripts : ['/scripts/v3-home.min.js', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js'],
+                params : params,
+                categories : categories,
+            });
+    });
+});
 
 app.get('/v3-search', function(req, res) {
 
     var params = searchController.getSearchParameters(req.query);
 
-    searchController.getCategories(10, function(categoryResults) {
+    categoriesController.getCategories(function(categories) {
 
-        searchController.getDomains(10, function(domainResults) {
+        searchController.getCategories(10, function(categoryResults) {
 
-            searchController.getTags(10, function(tagResults) {
+            searchController.getDomains(10, function(domainResults) {
 
-                searchController.search(params, function(searchResults) {
-            
-                    res.render(
-                        'v3-search.ejs', 
-                        { 
-                            css : ['/styles/v3-search.min.css'],
-                            scripts : ['/scripts/v3-search.min.js'],
-                            params : params,
-                            searchResults : searchResults,
-                            categoryResults : categoryResults,
-                            domainResults : domainResults,
-                            tagResults : tagResults,
-                        });
+                searchController.getTags(10, function(tagResults) {
+
+                    searchController.search(params, function(searchResults) {
+
+                        res.render(
+                            'v3-search.ejs', 
+                            { 
+                                css : ['/styles/v3-search.min.css'],
+                                scripts : ['/scripts/v3-search.min.js'],
+                                params : params,
+                                searchResults : searchResults,
+                                categoryResults : categoryResults,
+                                domainResults : domainResults,
+                                tagResults : tagResults,
+                                categories : categories,
+                            });
+                    });
                 });
             });
         });

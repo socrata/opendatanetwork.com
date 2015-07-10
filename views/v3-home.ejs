@@ -16,46 +16,12 @@
     <div class="container">
         <h4>Data Categories</h4>
         <ul>
+          <% categories.forEach(function(category) { %> 
             <li>
-                <a class="icon" href="/v3-search?categories=Health"><i class="fa fa-heart"></i></a>
-                <a href="/v3-search?categories=Health"><h3>Health</h3></a>
+                <a class="icon" href="/v3-search?categories=<%= encodeURIComponent(category.title) %>"><i class="fa <%= category.icon %>"></i></a>
+                <a href="/v3-search?categories=<%= encodeURIComponent(category.title) %>"><h3><%= category.title %></h3></a>
             </li>
-            <li>
-                <a class="icon" href="/v3-search?categories=Transportation"><i class="fa fa-car"></i></a>
-                <a href="/v3-search?categories=Transportation"><h3>Transportation</h3></a>
-            </li>
-            <li>
-                <a class="icon" href="/v3-search?categories=Finance"><i class="fa fa-money"></i></a>
-                <a href="/v3-search?categories=Finance"><h3>Finance</h3></a>
-            </li>
-            <li>
-                <a class="icon" href="/v3-search?categories=Social%20Services"><i class="fa fa-child"></i></a>
-                <a href="/v3-search?categories=Social%20Services"><h3>Social Services</h3></a>
-            </li>
-            <li>
-                <a class="icon" href="/v3-search?categories=Environment"><i class="fa fa-leaf"></i></a>
-                <a href="/v3-search?categories=Environment"><h3>Environment</h3></a>
-            </li>
-            <li>
-                <a class="icon" href="/v3-search?categories=Public+Safety"><i class="fa fa-shield"></i></a>
-                <a href="/v3-search?categories=Public+Safety"><h3>Public Safety</h3></a>
-            </li>
-            <li>
-                <a class="icon" href="/v3-search?categories=Housing%20%26%20Development"><i class="fa fa-building"></i></a>
-                <a href="/v3-search?categories=Housing%20%26%20Development"><h3>Housing &amp; Development</h3></a>
-            </li>
-            <li>
-                <a class="icon" href="/v3-search?categories=Infrastructure"><i class="fa fa-road"></i></a>
-                <a href="/v3-search?categories=Infrastructure"><h3>Infrastructure</h3></a>
-            </li>
-            <li>
-                <a class="icon" href="/v3-search?categories=Education"><i class="fa fa-graduation-cap"></i></a>
-                <a href="/v3-search?categories=Education"><h3>Education</h3></a>
-            </li>
-            <li>
-                <a class="icon" href="/v3-search?categories=Recreation"><i class="fa fa-ticket"></i></a>
-                <a href="/v3-search?categories=Recreation"><h3>Recreation</h3></a>
-            </li>
+          <% }); %>
         </ul>
         <div class="cb"></div>
     </div>
