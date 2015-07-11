@@ -188,6 +188,16 @@ section.main
     position: relative;
 }
 
+.search-results-pane .tag
+{
+    color: $gray-text-color;
+}
+
+.search-results-pane .tagLabel
+{
+    font-weight: 600;
+}
+
 .search-results-pane h2
 {
     margin: 0;
