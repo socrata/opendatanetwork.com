@@ -29,6 +29,24 @@ function SearchPageController(params) {
         self.toggleTag($(this).text());
         self.navigate();
     });
+    
+    $('.view-more-categories').click(function() {
+       
+       self.toggleCategoryFilters();
+       self.navigate();
+    });
+
+    $('.view-more-domains').click(function() {
+       
+       self.toggleDomainFilters();
+       self.navigate();
+    });
+    
+    $('.view-more-tags').click(function() {
+       
+       self.toggleTagFilters();
+       self.navigate();
+    });
 }
 
 // Public methods
@@ -50,6 +68,15 @@ SearchPageController.prototype.getSearchUrl = function() {
 
     if (this.params.tags.length > 0)
         url += '&tags=' + encodeURIComponent(this.params.tags.join(','));
+
+    if (this.params.ec)
+        url += '&ec=1';
+
+    if (this.params.ed)
+        url += '&ed=1';
+
+    if (this.params.et)
+        url += '&et=1';
 
     console.log(url);
 
@@ -96,4 +123,19 @@ SearchPageController.prototype.toggleTag = function(tag) {
         this.params.tags.push(tag);
 
     this.params.page = 1;
+};
+
+SearchPageController.prototype.toggleCategoryFilters = function() {
+
+    this.params.ec = !this.params.ec;
+};
+
+SearchPageController.prototype.toggleDomainFilters = function() {
+
+    this.params.ed = !this.params.ed;
+};
+
+SearchPageController.prototype.toggleTagFilters = function() {
+
+    this.params.et = !this.params.et;
 };

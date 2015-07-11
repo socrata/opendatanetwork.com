@@ -101,12 +101,14 @@ section.main
 .filters-section .view-more
 {
     color: $blue-color;
+    cursor: pointer;
+    display: inline-block;
     font-size: 14px;
     line-height: 40px;
     margin: 0 0 10px;
 }
 
-.filters-section .view-more .fa-plus
+.filters-section .view-more .fa
 {
     display: inline-block;
     font-size: 14px;

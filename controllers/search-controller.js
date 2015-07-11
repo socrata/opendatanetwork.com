@@ -7,8 +7,9 @@ var _request = require('request');
 var _baseUrl = 'http://api.us.socrata.com/api/catalog/v1';
 var _cacheController = new CacheController();
 var _categoriesUrl = _baseUrl + '/categories';
+var _defaultFilterCount = 10;
+var _defaultSearchResultCount = 10;
 var _domainsUrl = _baseUrl + '/domains';
-var _limit = 10;
 var _searchUrl = _baseUrl;
 var _tagsUrl = _baseUrl + '/tags';
 var _userAgent = 'www.opendatanetwork.com';
@@ -64,16 +65,22 @@ SearchController.prototype.getSearchParameters = function(query) {
     var domains = getNormalizedArrayFromDelimitedString(query.domains);
     var tags = getNormalizedArrayFromDelimitedString(query.tags);
     var page = isNaN(query.page) ? 1 : parseInt(query.page);
+    var ec = getExpandedFiltersSetting(query.ec);
+    var ed = getExpandedFiltersSetting(query.ed);
+    var et = getExpandedFiltersSetting(query.et);
 
     return {
         only : 'datasets',
         q : query.q || '',
         page : page,
-        offset : (page - 1) * _limit,
-        limit : _limit,        
+        offset : (page - 1) * _defaultSearchResultCount,
+        limit : _defaultSearchResultCount,        
         categories : categories,
         domains : domains,
         tags : tags,
+        ec : ec,
+        ed : ed,
+        et : et,
     };
 };
 
@@ -96,7 +103,7 @@ function annotateData(data) {
 
 function annotateParams(data, params) {
 
-    params.totalPages = Math.ceil(data.resultSetSize / _limit);
+    params.totalPages = Math.ceil(data.resultSetSize / _defaultSearchResultCount);
 }
 
 function getCategoryGlyphString(result) {
@@ -122,6 +129,11 @@ function getCategoryGlyphString(result) {
         case 'recreation': return 'fa-ticket';
         default: return 'fa-database';
     }
+}
+
+function getExpandedFiltersSetting(queryValue) {
+    
+    return isNaN(queryValue) ? false : (parseInt(queryValue) == 1);
 }
 
 function getNormalizedArrayFromDelimitedString(s) {
@@ -159,6 +171,15 @@ function getUrlFromSearchParameters(params) {
 
     if (params.tags.length > 0)
         url += '&tags=' + encodeURIComponent(params.tags.join(','));
+
+    if (params.ec)
+        url += '&ec=1';
+
+    if (params.ed)
+        url += '&ed=1';
+
+    if (params.et)
+        url += '&et=1';
 
     return url;
 }

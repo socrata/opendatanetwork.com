@@ -17,15 +17,26 @@
                 <li><a><span><i class="fa<%- getSelectedIfCategory(result.category) %>"></i></span><%= result.category %></a></li>
             <% }); %>
             </ul>
-            <div class="view-more"><i class="fa fa-plus"></i>View More</div>
-
+            <a class="view-more view-more-categories">
+              <% if (params.ec) { %>
+                <i class="fa fa-minus"></i><span>View Less</span>
+              <% } else { %>
+                <i class="fa fa-plus"></i><span>View More</span>
+              <% } %>
+            </a>
             <strong>PUBLISHERS</strong>
             <ul class="filter-pane-domains">
             <% domainResults.results.forEach(function(result) { %>
                 <li><a><span><i class="fa<%- getSelectedIfDomain(result.domain) %>"></i></span><%= result.domain %></a></li>
             <% }); %>
             </ul>
-            <div class="view-more"><i class="fa fa-plus"></i>View More</div>
+            <a class="view-more view-more-domains">
+              <% if (params.ed) { %>
+                <i class="fa fa-minus"></i><span>View Less</span>
+              <% } else { %>
+                <i class="fa fa-plus"></i><span>View More</span>
+              <% } %>
+            </a>
 
             <strong>TAGS</strong>
             <ul class="filter-pane-tags">
@@ -33,7 +44,13 @@
                 <li><a><span><i class="fa<%- getSelectedIfTag(result.tag) %>"></i></span><%= result.tag %></a></li>
             <% }); %>
             </ul>
-            <div class="view-more"><i class="fa fa-plus"></i>View More</div>
+            <a class="view-more view-more-tags">
+              <% if (params.et) { %>
+                <i class="fa fa-minus"></i><span>View Less</span>
+              <% } else { %>
+                <i class="fa fa-plus"></i><span>View More</span>
+              <% } %>
+            </a>
         </div>
 
         <div class="about-section">

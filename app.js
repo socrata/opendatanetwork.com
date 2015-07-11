@@ -180,17 +180,21 @@ _app.get('/v3', function (req, res) {
 
 _app.get('/v3-search', function(req, res) {
 
+    var defaultFilterCount = 10;
     var params = _searchController.getSearchParameters(req.query);
 
     _categoryController.getCategories(function(categories) {
 
         _categoryController.getSelectedCategory(params, function(selectedCategory) {
 
-            _searchController.getCategories(null, function(categoryResults) {
+            var categoryCount = params.ec ? null : defaultFilterCount;
+            _searchController.getCategories(categoryCount, function(categoryResults) {
 
-                _searchController.getDomains(10, function(domainResults) {
+                var domainCount = params.ed ? null : defaultFilterCount;
+                _searchController.getDomains(domainCount, function(domainResults) {
 
-                    _searchController.getTags(10, function(tagResults) {
+                    var tagCount = params.et ? null : defaultFilterCount;
+                    _searchController.getTags(tagCount, function(tagResults) {
 
                         _searchController.search(params, function(searchResults) {
 
