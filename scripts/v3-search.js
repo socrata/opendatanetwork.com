@@ -9,8 +9,11 @@ $(document).ready(function() {
 //
 function SearchPageController(params) {
 
-    var self = this;
     this.params = params;
+    this.fetching = false;
+    this.fetchedAll = false;
+
+    var self = this;
 
     $('.filter-pane-categories li a').click(function() { 
 
@@ -47,21 +50,86 @@ function SearchPageController(params) {
        self.toggleDomainFilters();
        self.navigate();
     });
-    
+
     $('.view-more-tags').click(function() {
        
        self.toggleTagFilters();
        self.navigate();
     });
+
+    $(window).on('scroll', function() {
+
+        var bottomOffsetToBeginRequest = 1000;
+
+        if ($(window).scrollTop() >= $(document).height() - $(window).height() - bottomOffsetToBeginRequest) {
+            self.fetchNextPage();
+        }
+
+    }).scroll();
 }
 
 // Public methods
 //
+SearchPageController.prototype.fetchNextPage = function() {
+
+    if (this.fetching || this.fetchedAll)
+        return;
+
+    this.fetching = true;
+    this.incrementPage();
+
+    var self = this;
+
+    $.ajax(this.getSearchResultsUrl()).done(function(data, textStatus, jqXHR) {
+
+        console.log(jqXHR.status + ' ' + textStatus);
+
+        if (jqXHR.status == 204) { // no content
+
+            self.decrementPage();
+            self.fetching = false;
+            self.fetchedAll = true;
+            return;
+        }
+
+        $('.search-results-pane ul').append(data);
+        self.fetching = false;
+    });
+};
+
+SearchPageController.prototype.decrementPage = function() {
+
+    this.params.page--;
+};
+
+SearchPageController.prototype.incrementPage = function() {
+
+    this.params.page++;
+};
+
+SearchPageController.prototype.getSearchResultsUrl = function() {
+
+    var searchResultsUrl = './v3-search-results'; 
+    var url = searchResultsUrl + this.getSearchQueryString(); 
+
+    console.log(url);
+
+    return url;
+};
+
 SearchPageController.prototype.getSearchUrl = function() {
 
-    var searchUrl = window.location.href.split('?')[0];
-    var url = searchUrl + 
-        '?q=' + encodeURIComponent($('#q').val());
+    var searchUrl = './v3-search'; //window.location.href.split('?')[0];
+    var url = searchUrl + this.getSearchQueryString();
+
+    console.log(url);
+
+    return url;
+};
+
+SearchPageController.prototype.getSearchQueryString = function() {
+
+    var url = '?q=' + encodeURIComponent($('#q').val());
 
     if (this.params.page > 1)
         url += '&page=' + this.params.page;
@@ -83,8 +151,6 @@ SearchPageController.prototype.getSearchUrl = function() {
 
     if (this.params.et)
         url += '&et=1';
-
-    console.log(url);
 
     return url;
 };

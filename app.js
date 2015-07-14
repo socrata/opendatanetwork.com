@@ -219,6 +219,32 @@ _app.get('/v3-search', function(req, res) {
     });
 });
 
+_app.get('/v3-search-results', function(req, res) {
+
+    var params = _searchController.getSearchParameters(req.query);
+
+    _searchController.search(params, function(searchResults) {
+
+        console.log(searchResults.results.length);
+
+        if (searchResults.results.length == 0) {
+
+            res.status(204);
+            res.end();
+            return;
+        }
+
+        res.render(
+            'v3-search-results.ejs',
+            {
+                css : [],
+                scripts : [],
+                params : params,
+                searchResults : searchResults,
+            });
+    });
+});
+
 // Start listening
 //
 var port = Number(process.env.PORT || 3000);
