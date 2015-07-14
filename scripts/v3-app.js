@@ -14,7 +14,7 @@ $(document).ready(function() {
         $('#menu-item-communities').removeClass('selected');
     });
 
-    // Search box
+    // Search button
     //
     $('.search-link').click(function() {
 
@@ -25,4 +25,23 @@ $(document).ready(function() {
         else
             $('#form').submit();
     });
+
+    // Tooltips
+    //
+    setCookie('tooltips-shown');
 });
+
+// Private functions
+//
+function setCookie(key, value) {
+    
+    var expires = new Date();
+    expires.setTime(expires.getTime() + (365 * 24 * 60 * 60 * 1000)); // one year
+    document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
+}
+
+function getCookie(key) {
+    
+    var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
+    return keyValue ? keyValue[2] : null;
+}

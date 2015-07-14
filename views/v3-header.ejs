@@ -42,4 +42,12 @@
         <input type="hidden" name="categories" id="categories" value="<%= params.categories.join(',') %>">
         <% if (params.domains.length > 0) { %><input type="hidden" name="domains" value="<%= params.domains.join(',') %>"><% } %>
     </form>
+  <% if (tooltips) { %>
+    <div class="search-textbox-tip">
+        <div><strong>Start your search here.</strong> Search for data like Aenean eu leo quam.</div>
+    </div>
+    <div class="search-dropdown-tip">
+        <div>Click here to refine your search.</div>
+    </div>
+  <% } %>
 </section>

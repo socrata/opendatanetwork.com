@@ -3,6 +3,7 @@ var DatasetController = require('./controllers/dataset-controller');
 var PortalController = require('./controllers/portal-controller');
 var SearchController = require('./controllers/search-controller');
 
+var _cookieParser = require('cookie-parser')
 var _express = require('express');
 var _fs = require('fs');
 var _favicon = require('serve-favicon');
@@ -13,6 +14,10 @@ var _portalController = new PortalController();
 var _datasetController = new DatasetController();
 var _searchController = new SearchController();
 var _app = _express();
+
+// Cookie parser
+//
+_app.use(_cookieParser())
 
 // Set X-Frame-Options header
 //
@@ -167,6 +172,12 @@ _app.get('/v3', function (req, res) {
 
     _categoryController.getCategories(function(categories) {
 
+        // Set the tooltips shown cookie
+        //
+        res.cookie('tooltips-shown', '1', { expires: new Date(Date.now() + (1 * 24 * 60 * 60 * 1000)), httpOnly: true }); // one day
+
+        // Render page
+        //
         res.render(
             'v3-home.ejs', 
             { 
@@ -174,7 +185,9 @@ _app.get('/v3', function (req, res) {
                 scripts : ['/scripts/v3-home.min.js', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js'],
                 params : params,
                 categories : categories,
+                tooltips : (req.cookies['tooltips-shown'] != '1'),
             });
+
     });
 });
 
@@ -210,6 +223,7 @@ _app.get('/v3-search', function(req, res) {
                                     tagResults : tagResults,
                                     categories : categories,
                                     selectedCategory : selectedCategory,
+                                    tooltips : false,
                                 });
                         });
                     });

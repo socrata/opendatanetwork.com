@@ -171,6 +171,50 @@ section.search-bar .fa-search
     width: 76px;
 }
 
+section.search-bar .search-textbox-tip
+{
+    background-image: url('/images/v3-search-textbox-tip.png');
+    color: white;
+    font-size: 13px;
+    height: 83px;
+    left: 28px;
+    line-height: normal;
+    position: absolute;
+    text-align: left;
+    top: 50px;
+    width: 387px;
+}
+
+section.search-bar .search-textbox-tip div
+{
+    left: 20px;
+    position: absolute;
+    right: 22px;
+    top: 27px;
+}
+
+section.search-bar .search-dropdown-tip
+{
+    background-image: url('/images/v3-search-dropdown-tip.png');
+    color: white;
+    font-size: 13px;
+    height: 66px;
+    line-height: normal;
+    position: absolute;
+    right: 50px;
+    text-align: left;
+    top: 50px;
+    width: 240px;
+}
+
+section.search-bar .search-dropdown-tip div
+{
+    left: 20px;
+    position: absolute;
+    right: 22px;
+    top: 27px;
+}
+
 /* Menus */
 
 .menu
