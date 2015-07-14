@@ -38,10 +38,17 @@ section.results-bar .fa-times-circle
     color: $blue-color;
 }
 
-section.results-bar .applied-category
+section.results-bar .applied-filter
 {
     cursor: pointer;
-    margin-right: 5px;
+    font-weight: 600;
+    margin-right: 3px;
+}
+
+
+section.results-bar .applied-filter-category,
+section.results-bar .applied-filter-tag
+{
     text-transform: capitalize;
 }
 

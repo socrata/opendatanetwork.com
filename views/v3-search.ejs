@@ -3,22 +3,31 @@
 <script>var _params = <%- JSON.stringify(params) %>;</script>
 
 <section class="results-bar">
-  <% if (selectedCategory) { %>
-    <label><strong><%= searchResults.resultSetSizeString %></strong> results for <%= selectedCategory.title %></label>
-  <% } else if (params.q) { %>
-      <% if (params.categories.length == 0) { %>
-        <label><strong><%= searchResults.resultSetSizeString %></strong> results for "<strong><%= params.q %></strong>"</label>
-      <% } else { %>
-        <label>
-            <strong><%= searchResults.resultSetSizeString %></strong> results for "<strong><%= params.q %></strong>" in
-            <% params.categories.forEach(function(category) { %>
-                <span class="applied-category"><%= category %> <a class="fa fa-times-circle"></a></span> 
-            <% }); %>
-        </label>
-      <% } %>
-  <% } else { %>
-    <label><strong><%= searchResults.resultSetSizeString %></strong> results</label>
-  <% } %>
+
+    <label><strong><%= searchResults.resultSetSizeString %></strong> results
+    <% if (params.q) { %>
+        for "<strong><%= params.q %></strong>"
+    <% } %>
+    <% if (params.categories.length > 0) { %>
+        in
+        <% params.categories.forEach(function(category) { %>
+            <span class="applied-filter applied-filter-category"><%= category %> <a class="fa fa-times-circle"></a></span> 
+        <% }); %>
+    <% } %>
+    <% if (params.domains.length > 0) { %>
+        by
+        <% params.domains.forEach(function(domain) { %>
+            <span class="applied-filter applied-filter-domain"><%= domain %> <a class="fa fa-times-circle"></a></span> 
+        <% }); %>
+    <% } %>
+    <% if (params.tags.length > 0) { %>
+        with tag 
+        <% params.tags.forEach(function(tag) { %>
+            <span class="applied-filter applied-filter-tag"><%= tag %> <a class="fa fa-times-circle"></a></span> 
+        <% }); %>
+    <% } %>
+    </label>
+
 </section>
 
 <section class="main">

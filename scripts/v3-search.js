@@ -20,10 +20,22 @@ function SearchPageController(params) {
         self.toggleCategory($(this).text());
         self.navigate();
     });
-    
-    $('.applied-category').click(function() {
-       
+
+    $('.applied-filter-category').click(function() {
+
         self.toggleCategory($(this).text());
+        self.navigate();
+    });
+
+    $('.applied-filter-domain').click(function() {
+
+        self.toggleDomain($(this).text());
+        self.navigate();
+    });
+
+    $('.applied-filter-tag').click(function() {
+       
+        self.toggleTag($(this).text());
         self.navigate();
     });
 
@@ -175,6 +187,7 @@ SearchPageController.prototype.toggleCategory = function(category) {
 
 SearchPageController.prototype.toggleDomain = function(domain) {
 
+    domain = domain.toLowerCase().trim();
     var i = this.params.domains.indexOf(domain);
 
     if (i > -1)
@@ -187,6 +200,7 @@ SearchPageController.prototype.toggleDomain = function(domain) {
 
 SearchPageController.prototype.toggleTag = function(tag) {
 
+    tag = tag.toLowerCase().trim();
     var i = this.params.tags.indexOf(tag);
 
     if (i > -1)
