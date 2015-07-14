@@ -10,6 +10,7 @@ var _categoriesUrl = _baseUrl + '/categories';
 var _defaultFilterCount = 10;
 var _defaultSearchResultCount = 20;
 var _domainsUrl = _baseUrl + '/domains';
+var _maxDescriptionLength = 300;
 var _searchUrl = _baseUrl;
 var _tagsUrl = _baseUrl + '/tags';
 var _userAgent = 'www.opendatanetwork.com';
@@ -92,13 +93,26 @@ function annotateData(data) {
     //
     data.resultSetSizeString = _numeral(data.resultSetSize).format('0,0');
 
-    // categoryGlyphString, updatedAtString
-    //
     data.results.forEach(function(result) {
 
+        // categoryGlyphString, updatedAtString
+        //
         result.classification.categoryGlyphString = getCategoryGlyphString(result);
         result.resource.updatedAtString = _moment(result.resource.updatedAt).format('D MMM YYYY');
+
+        // Truncate description
+        //
+        if (result.resource.description.length > _maxDescriptionLength) {
+
+            result.resource.description = result.resource.description.substring(0, _maxDescriptionLength);
+
+            var lastIndex = result.resource.description.lastIndexOf(" ");
+            result.resource.description = result.resource.description.substring(0, lastIndex) + " ... ";
+
+            console.log(result.resource.description.length + " "  + result.resource.description + "\n");
+        }
     });
+    
 }
 
 function annotateParams(data, params) {
