@@ -3,7 +3,22 @@
 <script>var _params = <%- JSON.stringify(params) %>;</script>
 
 <section class="results-bar">
-    <label><strong><%= searchResults.resultSetSizeString %></strong> results for <%= params.q %></label>
+  <% if (selectedCategory) { %>
+    <label><strong><%= searchResults.resultSetSizeString %></strong> results for <%= selectedCategory.title %></label>
+  <% } else if (params.q) { %>
+      <% if (params.categories.length == 0) { %>
+        <label><strong><%= searchResults.resultSetSizeString %></strong> results for "<strong><%= params.q %></strong>"</label>
+      <% } else { %>
+        <label>
+            <strong><%= searchResults.resultSetSizeString %></strong> results for "<strong><%= params.q %></strong>" in
+            <% params.categories.forEach(function(category) { %>
+                <span class="applied-category"><%= category %> <a class="fa fa-times-circle"></a></span> 
+            <% }); %>
+        </label>
+      <% } %>
+  <% } else { %>
+    <label><strong><%= searchResults.resultSetSizeString %></strong></label>
+  <% } %>
 </section>
 
 <section class="main">

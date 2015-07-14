@@ -33,6 +33,18 @@ section.results-bar label strong
     font-weight: bold; 
 }
 
+section.results-bar .fa-times-circle
+{
+    color: $blue-color;
+}
+
+section.results-bar .applied-category
+{
+    cursor: pointer;
+    margin-right: 5px;
+    text-transform: capitalize;
+}
+
 /* Main section */
 
 section.main 

@@ -17,6 +17,12 @@ function SearchPageController(params) {
         self.toggleCategory($(this).text());
         self.navigate();
     });
+    
+    $('.applied-category').click(function() {
+       
+        self.toggleCategory($(this).text());
+        self.navigate();
+    });
 
     $('.filter-pane-domains li a').click(function() { 
 
@@ -90,7 +96,7 @@ SearchPageController.prototype.navigate = function() {
 
 SearchPageController.prototype.toggleCategory = function(category) {
 
-    category = category.toLowerCase();
+    category = category.toLowerCase().trim();
     var i = this.params.categories.indexOf(category);
 
     if (i > -1)
