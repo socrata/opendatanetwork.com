@@ -108,8 +108,6 @@ function annotateData(data) {
 
             var lastIndex = result.resource.description.lastIndexOf(" ");
             result.resource.description = result.resource.description.substring(0, lastIndex) + " ... ";
-
-            console.log(result.resource.description.length + " "  + result.resource.description + "\n");
         }
     });
     

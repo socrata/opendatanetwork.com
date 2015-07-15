@@ -268,7 +268,7 @@ section.main
     padding-right: 18px;
 }
 
-.search-results-pane .yellow-box
+.search-results-pane .selected-category
 {
     background-color: $yellow-color;
     border-bottom: 1px solid $yellow-border-color;
@@ -282,7 +282,7 @@ section.main
     position: relative;
 }
 
-.search-results-pane .yellow-box .fa
+.search-results-pane .selected-category .fa
 {
     color: $brown-color;
     font-size: 16px;

@@ -15,12 +15,8 @@ function SearchPageController(params) {
 
     var self = this;
 
-    $('.filter-pane-categories li a').click(function() { 
-
-        self.toggleCategory($(this).text());
-        self.navigate();
-    });
-
+    // Results bar applied filters
+    //
     $('.applied-filter-category').click(function() {
 
         self.toggleCategory($(this).text());
@@ -39,6 +35,14 @@ function SearchPageController(params) {
         self.navigate();
     });
 
+    // Filter bar applied filters
+    //
+    $('.filter-pane-categories li a').click(function() { 
+
+        self.toggleCategory($(this).text());
+        self.navigate();
+    });
+
     $('.filter-pane-domains li a').click(function() { 
 
         self.toggleDomain($(this).text());
@@ -51,6 +55,8 @@ function SearchPageController(params) {
         self.navigate();
     });
     
+    // View more anchors
+    //
     $('.view-more-categories').click(function() {
        
        self.toggleCategoryFilters();
@@ -69,6 +75,16 @@ function SearchPageController(params) {
        self.navigate();
     });
 
+    // Selected category (yellow box)
+    //
+    $('.fa-close').click(function() {
+
+        $('.selected-category').fadeOut();
+        setCookie('selected-category-hidden', '1');
+    });
+
+    // Infinite scroll search results
+    //
     $(window).on('scroll', function() {
 
         var bottomOffsetToBeginRequest = 1000;
@@ -225,3 +241,18 @@ SearchPageController.prototype.toggleTagFilters = function() {
 
     this.params.et = !this.params.et;
 };
+
+// Private functions
+//
+function setCookie(key, value) {
+
+    var expires = new Date();
+    expires.setTime(expires.getTime() + (365 * 24 * 60 * 60 * 1000)); // one year
+    document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
+}
+
+function getCookie(key) {
+
+    var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
+    return keyValue ? keyValue[2] : null;
+}

@@ -198,7 +198,7 @@ _app.get('/v3-search', function(req, res) {
 
     _categoryController.getCategories(function(categories) {
 
-        _categoryController.getSelectedCategory(params, function(selectedCategory) {
+        _categoryController.getSelectedCategory(req, params, function(selectedCategory) {
 
             var categoryCount = params.ec ? null : defaultFilterCount;
             _searchController.getCategories(categoryCount, function(categoryResults) {

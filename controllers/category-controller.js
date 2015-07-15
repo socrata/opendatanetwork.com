@@ -58,9 +58,15 @@ CategoryController.prototype.getCategories = function(completionHandler) {
     });
 };
 
-CategoryController.prototype.getSelectedCategory = function(params, completionHandler) {
+CategoryController.prototype.getSelectedCategory = function(req, params, completionHandler) {
 
     if ((params.q != "") || (params.categories.length != 1)) {
+
+        if (completionHandler) completionHandler();
+        return;
+    }
+
+    if (req.cookies['selected-category-hidden'] == '1') {
 
         if (completionHandler) completionHandler();
         return;
