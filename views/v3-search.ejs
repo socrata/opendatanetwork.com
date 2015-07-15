@@ -38,7 +38,7 @@
             <strong>CATEGORIES</strong>
             <ul class="filter-pane-categories">
             <% categoryResults.results.forEach(function(result) { %>
-                <li><a><span><i class="fa<%- getSelectedIfCategory(result.category) %>"></i></span><%= result.category %></a></li>
+                <li><a><span><i class="fa<%- getChecked(result.category, params.categories) %>"></i></span><%= result.category %></a></li>
             <% }); %>
             </ul>
             <a class="view-more view-more-categories">
@@ -51,7 +51,7 @@
             <strong>PUBLISHERS</strong>
             <ul class="filter-pane-domains">
             <% domainResults.results.forEach(function(result) { %>
-                <li><a><span><i class="fa<%- getSelectedIfDomain(result.domain) %>"></i></span><%= result.domain %></a></li>
+                <li><a><span><i class="fa<%- getChecked(result.domain, params.domains) %>"></i></span><%= result.domain %></a></li>
             <% }); %>
             </ul>
             <a class="view-more view-more-domains">
@@ -64,7 +64,7 @@
             <strong>TAGS</strong>
             <ul class="filter-pane-tags">
             <% tagResults.results.forEach(function(result) { %>
-                <li><a><span><i class="fa<%- getSelectedIfTag(result.tag) %>"></i></span><%= result.tag %></a></li>
+                <li><a><span><i class="fa<%- getChecked(result.tag, params.tags) %>"></i></span><%= result.tag %></a></li>
             <% }); %>
             </ul>
             <a class="view-more view-more-tags">
@@ -104,33 +104,11 @@
 </section>
 
 <%
-function getSelectedIfCategory(category) {
+function getChecked(s, rg) {
 
-    for (var i in params.categories) {
+    for (var i in rg) {
 
-        if (params.categories[i].toLowerCase() == category.toLowerCase())
-            return ' fa-check';
-    }
-
-    return '';
-}
-
-function getSelectedIfDomain(domain) {
-
-    for (var i in params.domains) {
-
-        if (params.domains[i].toLowerCase() == domain.toLowerCase())
-            return ' fa-check';
-    }
-
-    return '';
-}
-
-function getSelectedIfTag(tag) {
-
-    for (var i in params.tags) {
-
-        if (params.tags[i].toLowerCase() == tag.toLowerCase())
+        if (rg[i].toLowerCase() == s.toLowerCase())
             return ' fa-check';
     }
 

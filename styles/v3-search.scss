@@ -19,18 +19,18 @@ section.results-bar
 {
     background-color: $gray-background-color;
     padding: 120px 30px 20px;
-    text-align: left;	
+    text-align: left;
 }
 
 section.results-bar label
 {
     color: $black-color;
-    font-size: 16px;	
+    font-size: 16px;
 }
 
 section.results-bar label strong
 {
-    font-weight: bold; 
+    font-weight: bold;
 }
 
 section.results-bar .fa-times-circle
@@ -44,7 +44,6 @@ section.results-bar .applied-filter
     font-weight: 600;
     margin-right: 3px;
 }
-
 
 section.results-bar .applied-filter-category,
 section.results-bar .applied-filter-tag
@@ -132,6 +131,12 @@ section.main
     display: inline-block;
     font-size: 14px;
     margin: 0 10px 0 3px;
+}
+
+.filter-pane-categories li,
+.filter-pane-tags li
+{
+    text-transform: capitalize;
 }
 
 .about-section
