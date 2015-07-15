@@ -1,7 +1,7 @@
 var NodeCache = require('node-cache');
 
-var _nodeCache = new NodeCache();
-var _ttl = 60 * 60; // seconds
+var nodeCache = new NodeCache();
+var ttl = 60 * 60; // seconds
 
 module.exports = CacheController;
 
@@ -12,7 +12,7 @@ function CacheController() {
 //
 CacheController.prototype.get = function(key, completionHandler) {
 
-    _nodeCache.get(key, function(err, o) {
+    nodeCache.get(key, function(err, o) {
 
         if (err || (o == undefined)) {
 
@@ -27,7 +27,7 @@ CacheController.prototype.get = function(key, completionHandler) {
 
 CacheController.prototype.set = function(key, o, completionHandler) {
 
-    _nodeCache.set(key, o, _ttl, function(err, success) {
+    nodeCache.set(key, o, ttl, function(err, success) {
 
         if (err || !success) {
 

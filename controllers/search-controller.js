@@ -1,19 +1,19 @@
 var CacheController = require('./cache-controller');
 
-var _moment = require('moment');
-var _numeral = require('numeral');
-var _request = require('request');
+var moment = require('moment');
+var numeral = require('numeral');
+var request = require('request');
 
-var _baseUrl = 'http://api.us.socrata.com/api/catalog/v1';
-var _cacheController = new CacheController();
-var _categoriesUrl = _baseUrl + '/categories';
-var _defaultFilterCount = 10;
-var _defaultSearchResultCount = 20;
-var _domainsUrl = _baseUrl + '/domains';
-var _maxDescriptionLength = 300;
-var _searchUrl = _baseUrl;
-var _tagsUrl = _baseUrl + '/tags';
-var _userAgent = 'www.opendatanetwork.com';
+var baseUrl = 'http://api.us.socrata.com/api/catalog/v1';
+var cacheController = new CacheController();
+var categoriesUrl = baseUrl + '/categories';
+var defaultFilterCount = 10;
+var defaultSearchResultCount = 20;
+var domainsUrl = baseUrl + '/domains';
+var maxDescriptionLength = 300;
+var searchUrl = baseUrl;
+var tagsUrl = baseUrl + '/tags';
+var userAgent = 'www.opendatanetwork.com';
 
 module.exports = SearchController;
 
@@ -24,7 +24,7 @@ function SearchController() {
 //
 SearchController.prototype.getCategories = function(count, completionHandler) {
 
-    getFromCacheOrApi(_categoriesUrl, function(results) {
+    getFromCacheOrApi(categoriesUrl, function(results) {
 
         truncateResults(count, results, completionHandler);
     });
@@ -32,7 +32,7 @@ SearchController.prototype.getCategories = function(count, completionHandler) {
 
 SearchController.prototype.getDomains = function(count, completionHandler) {
 
-    getFromCacheOrApi(_domainsUrl, function(results) {
+    getFromCacheOrApi(domainsUrl, function(results) {
 
         truncateResults(count, results, completionHandler);
     });
@@ -40,7 +40,7 @@ SearchController.prototype.getDomains = function(count, completionHandler) {
 
 SearchController.prototype.getTags = function(count, completionHandler) {
 
-    getFromCacheOrApi(_tagsUrl, function(results) {
+    getFromCacheOrApi(tagsUrl, function(results) {
 
         truncateResults(count, results, completionHandler);
     });
@@ -74,8 +74,8 @@ SearchController.prototype.getSearchParameters = function(query) {
         only : 'datasets',
         q : query.q || '',
         page : page,
-        offset : (page - 1) * _defaultSearchResultCount,
-        limit : _defaultSearchResultCount,        
+        offset : (page - 1) * defaultSearchResultCount,
+        limit : defaultSearchResultCount,        
         categories : categories,
         domains : domains,
         tags : tags,
@@ -91,20 +91,20 @@ function annotateData(data) {
 
     // resultSetSizeString
     //
-    data.resultSetSizeString = _numeral(data.resultSetSize).format('0,0');
+    data.resultSetSizeString = numeral(data.resultSetSize).format('0,0');
 
     data.results.forEach(function(result) {
 
         // categoryGlyphString, updatedAtString
         //
         result.classification.categoryGlyphString = getCategoryGlyphString(result);
-        result.resource.updatedAtString = _moment(result.resource.updatedAt).format('D MMM YYYY');
+        result.resource.updatedAtString = moment(result.resource.updatedAt).format('D MMM YYYY');
 
         // Truncate description
         //
-        if (result.resource.description.length > _maxDescriptionLength) {
+        if (result.resource.description.length > maxDescriptionLength) {
 
-            result.resource.description = result.resource.description.substring(0, _maxDescriptionLength);
+            result.resource.description = result.resource.description.substring(0, maxDescriptionLength);
 
             var lastIndex = result.resource.description.lastIndexOf(" ");
             result.resource.description = result.resource.description.substring(0, lastIndex) + " ... ";
@@ -115,7 +115,7 @@ function annotateData(data) {
 
 function annotateParams(data, params) {
 
-    params.totalPages = Math.ceil(data.resultSetSize / _defaultSearchResultCount);
+    params.totalPages = Math.ceil(data.resultSetSize / defaultSearchResultCount);
 }
 
 function getCategoryGlyphString(result) {
@@ -167,7 +167,7 @@ function getNormalizedArrayFromDelimitedString(s) {
 
 function getUrlFromSearchParameters(params) {
 
-    var url = _searchUrl +
+    var url = searchUrl +
         '?offset=' + params.offset +
         '&only=' + params.only +
         '&limit=' + params.limit;
@@ -198,10 +198,10 @@ function getUrlFromSearchParameters(params) {
 
 function getFromApi(url, completionHandler) {
 
-    _request(
+    request(
         {
             url: url, 
-            headers: { 'User-Agent' : _userAgent }
+            headers: { 'User-Agent' : userAgent }
         }, 
         function(err, resp) {
 
@@ -233,7 +233,7 @@ function getFromApi(url, completionHandler) {
 
 function getFromCacheOrApi(url, completionHandler) {
 
-    _cacheController.get(url, function(results) {
+    cacheController.get(url, function(results) {
 
         if (results != undefined) {
 
@@ -243,7 +243,7 @@ function getFromCacheOrApi(url, completionHandler) {
 
         getFromApi(url, function(results) {
 
-            _cacheController.set(url, results, completionHandler);
+            cacheController.set(url, results, completionHandler);
         });
     });
 }

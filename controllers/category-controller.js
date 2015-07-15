@@ -1,8 +1,8 @@
 var CacheController = require('./cache-controller');
+var fs = require('fs');
 
-var _cacheController = new CacheController();
-var _fs = require('fs');
-var _key = "categories";
+var categoriesKey = "categories";
+var cacheController = new CacheController();
 
 module.exports = CategoryController;
 
@@ -32,11 +32,11 @@ CategoryController.prototype.getCategory = function(title, completionHandler) {
 
 CategoryController.prototype.getCategories = function(completionHandler) {
 
-    _cacheController.get(_key, function(o) {
+    cacheController.get(categoriesKey, function(o) {
 
         if (o == undefined) {
 
-            _fs.readFile(__dirname + '/../data/categories.json', function(err, data) {
+            fs.readFile(__dirname + '/../data/categories.json', function(err, data) {
 
                 if (err && (data == undefined)) {
 
@@ -45,7 +45,7 @@ CategoryController.prototype.getCategories = function(completionHandler) {
 
                 var categories = JSON.parse(data);
 
-                _cacheController.set(_key, categories, function(categories) {
+                cacheController.set(categoriesKey, categories, function(categories) {
 
                     if (completionHandler) completionHandler(categories);
                 });
