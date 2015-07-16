@@ -41,7 +41,17 @@
         <span><input type="text" placeholder="Search the Open Data Network" name="q" id="q" value="<%= params.q %>"></span>
         <input type="hidden" name="categories" id="categories" value="<%= params.categories.join(',') %>">
         <% if (params.domains.length > 0) { %><input type="hidden" name="domains" value="<%= params.domains.join(',') %>"><% } %>
+        <% if (params.tags.length > 0) { %><input type="hidden" name="tags" value="<%= params.tags.join(',') %>"><% } %>
     </form>
+    <div class="search-options-menu">
+        <div class="search-options-menu-title">Search in</div>
+        <div class="search-options-menu-all"><a><i class="fa fa-check"></i>All Categories</a></div>
+        <ul>
+          <% categories.forEach(function(category) { %>
+            <li><a><i class="fa fa-check"></i><%= category.title %></a></li>
+          <% }) %>
+        </ul>
+    </div>
   <% if (tooltips) { %>
     <div class="search-textbox-tip">
         <div><strong>Start your search here.</strong> Search for data like Aenean eu leo quam.</div>
