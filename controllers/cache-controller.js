@@ -38,4 +38,4 @@ CacheController.prototype.set = function(key, o, completionHandler) {
         console.log('Set in cache: ' + key);
         if (completionHandler) completionHandler(o);
     });
-}
+};

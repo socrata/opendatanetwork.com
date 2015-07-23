@@ -37,7 +37,7 @@
         <div class="filters-section">
             <strong>CATEGORIES</strong>
             <ul class="filter-pane-categories">
-            <% categoryResults.results.forEach(function(result) { %>
+            <% filterCategoryResults.results.forEach(function(result) { %>
                 <li><a><span><i class="fa<%- getChecked(result.category, params.categories) %>"></i></span><%= result.category %></a></li>
             <% }); %>
             </ul>
@@ -50,7 +50,7 @@
             </a>
             <strong>PUBLISHERS</strong>
             <ul class="filter-pane-domains">
-            <% domainResults.results.forEach(function(result) { %>
+            <% filterDomainResults.results.forEach(function(result) { %>
                 <li><a><span><i class="fa<%- getChecked(result.domain, params.domains) %>"></i></span><%= result.domain %></a></li>
             <% }); %>
             </ul>
@@ -63,7 +63,7 @@
             </a>
             <strong>TAGS</strong>
             <ul class="filter-pane-tags">
-            <% tagResults.results.forEach(function(result) { %>
+            <% filterTagResults.results.forEach(function(result) { %>
                 <li><a><span><i class="fa<%- getChecked(result.tag, params.tags) %>"></i></span><%= result.tag %></a></li>
             <% }); %>
             </ul>
@@ -87,10 +87,10 @@
     </div>
 
     <div class="search-results-pane">
-      <% if (selectedCategory) { %>
-        <div class="selected-category">
+      <% if (currentCategory && currentCategory.metadata && currentCategory.metadata.description) { %>
+        <div class="current-category">
             <a class="fa fa-close"></a>
-            <strong><%= selectedCategory.title %></strong> - <%= selectedCategory.description %>
+            <strong><%= currentCategory.category %></strong> - <%= currentCategory.metadata.description %>
         </div>
       <% } %>
         <ul>
@@ -99,6 +99,22 @@
     </div>
 
     <div class="showcase-pane">
+        <a class="fa fa-arrow-circle-o-right"></a>
+        <strong>SHOWCASE</strong>
+        <p>Here is a sampling of what can be created with this data.</p>
+        <ul>
+        <% showcaseResults.forEach(function(result) { %>
+            <li>
+                <a href="<%= result.url %>">
+                    <img class="showcase-image" src="/images/<%= result.image %>">
+                    <div class="showcase-info">
+                        <div class="showcase-info-publisher"><%= result.publisher %></div>
+                        <div class="showcase-info-title"><%= result.title %></div>
+                    </div>
+                </a>
+            </li>
+        <% }); %>
+        </ul>
     </div>
 
 </section>

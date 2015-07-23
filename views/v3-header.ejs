@@ -25,8 +25,8 @@
         <div id="menu-item-communities">
             <a class="menu-item-link">Data by Category<i class="fa fa-caret-down"></i></a>
             <ul id="menu-communities" class="menu">
-              <% categories.forEach(function(category) { %>
-                <li><a href="/v3-search?categories=<%= encodeURIComponent(category.title) %>"><%= category.title %></a></li>
+              <% allCategoryResults.results.forEach(function(result) { %>
+                <li><a href="/v3-search?categories=<%= encodeURIComponent(result.category) %>"><%= result.category %></a></li>
               <% }) %>
             </ul>
         </div>
@@ -47,8 +47,8 @@
         <div class="search-options-menu-title">Search in</div>
         <div class="search-options-menu-all"><a><i class="fa fa-check"></i>All Categories</a></div>
         <ul>
-          <% categories.forEach(function(category) { %>
-            <li><a><i class="fa fa-check"></i><%= category.title %></a></li>
+          <% allCategoryResults.results.forEach(function(result) { %>
+            <li><a><i class="fa fa-check"></i><%= result.category %></a></li>
           <% }) %>
         </ul>
     </div>

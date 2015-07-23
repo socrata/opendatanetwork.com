@@ -15,10 +15,10 @@
     <div class="container">
         <h4>Data Categories</h4>
         <ul>
-          <% categories.forEach(function(category) { %> 
+          <% allCategoryResults.results.forEach(function(result) { %> 
             <li>
-                <a class="icon" href="/v3-search?categories=<%= encodeURIComponent(category.title.toLowerCase()) %>"><i class="fa <%= category.icon %>"></i></a>
-                <a href="/v3-search?categories=<%= encodeURIComponent(category.title.toLowerCase()) %>"><h3><%= category.title %></h3></a>
+                <a class="icon" href="/v3-search?categories=<%= encodeURIComponent(result.category) %>"><i class="fa <%= result.metadata.icon %>"></i></a>
+                <a href="/v3-search?categories=<%= encodeURIComponent(result.category) %>"><h3><%= result.category %></h3></a>
             </li>
           <% }); %>
         </ul>

@@ -168,26 +168,30 @@ app.get('/v2-search', function(req, res) {
 //
 app.get('/v3', function (req, res) {
 
-    var params = searchController.getSearchParameters(req.query);
+    searchController.getCategories(null, function(allCategoryResults) {
 
-    categoryController.getCategories(function(categories) {
+        categoryController.attachCategoryMetadata(allCategoryResults, function(allCategoryResults) {
 
-        // Set the tooltips shown cookie
-        //
-        res.cookie('tooltips-shown', '1', { expires: new Date(Date.now() + (1 * 24 * 60 * 60 * 1000)), httpOnly: true }); // one day
+            // Set the tooltips shown cookie
+            //
+            res.cookie('tooltips-shown', '1', { expires: new Date(Date.now() + (1 * 24 * 60 * 60 * 1000)), httpOnly: true }); // one day
 
-        // Render page
-        //
-        res.render(
-            'v3-home.ejs', 
-            { 
-                css : ['/styles/v3-home.min.css', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css'],
-                scripts : ['/scripts/v3-home.min.js', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js'],
-                params : params,
-                categories : categories,
-                tooltips : (req.cookies['tooltips-shown'] != '1'),
-            });
+            // Get params
+            //
+            var params = searchController.getSearchParameters(req.query);
 
+            // Render page
+            //
+            res.render(
+                'v3-home.ejs', 
+                { 
+                    css : ['/styles/v3-home.min.css', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css'],
+                    scripts : ['/scripts/v3-home.min.js', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js'],
+                    params : params,
+                    allCategoryResults : allCategoryResults,
+                    tooltips : (req.cookies['tooltips-shown'] != '1'),
+                });
+        });
     });
 });
 
@@ -196,35 +200,53 @@ app.get('/v3-search', function(req, res) {
     var defaultFilterCount = 10;
     var params = searchController.getSearchParameters(req.query);
 
-    categoryController.getCategories(function(categories) {
+    // Get all categories for the header menus
+    //
+    searchController.getCategories(null, function(allCategoryResults) {
 
-        categoryController.getSelectedCategory(req, params, function(selectedCategory) {
+        categoryController.attachCategoryMetadata(allCategoryResults, function(categoryResults) {
 
-            var categoryCount = params.ec ? null : defaultFilterCount;
-            searchController.getCategories(categoryCount, function(categoryResults) {
+            // Get the current category
+            //
+            var currentCategory = categoryController.getCurrentCategory(params, allCategoryResults);
 
-                var domainCount = params.ed ? null : defaultFilterCount;
-                searchController.getDomains(domainCount, function(domainResults) {
+            categoryController.getShowcaseForCurrentCategory(params, allCategoryResults, function(showcaseResults) {
 
-                    var tagCount = params.et ? null : defaultFilterCount;
-                    searchController.getTags(tagCount, function(tagResults) {
-
-                        searchController.search(params, function(searchResults) {
-
-                            res.render(
-                                'v3-search.ejs', 
-                                { 
-                                    css : ['/styles/v3-search.min.css'],
-                                    scripts : ['/scripts/v3-search.min.js'],
-                                    params : params,
-                                    searchResults : searchResults,
-                                    categoryResults : categoryResults,
-                                    domainResults : domainResults,
-                                    tagResults : tagResults,
-                                    categories : categories,
-                                    selectedCategory : selectedCategory,
-                                    tooltips : false,
-                                });
+                // Get the categories for the filter menus
+                //
+                var filterCategoryCount = params.ec ? null : defaultFilterCount;
+                searchController.getCategories(filterCategoryCount, function(filterCategoryResults) {
+    
+                    // Get the domains for the filter menus
+                    //
+                    var domainCount = params.ed ? null : defaultFilterCount;
+                    searchController.getDomains(domainCount, function(filterDomainResults) {
+    
+                        // Get the tags for the filter menus
+                        //
+                        var tagCount = params.et ? null : defaultFilterCount;
+                        searchController.getTags(tagCount, function(filterTagResults) {
+    
+                            // Do the search
+                            //
+                            searchController.search(params, function(searchResults) {
+    
+                                res.render(
+                                    'v3-search.ejs', 
+                                    { 
+                                        css : ['/styles/v3-search.min.css'],
+                                        scripts : ['/scripts/v3-search.min.js'],
+                                        params : params,
+                                        currentCategory : currentCategory,
+                                        allCategoryResults : allCategoryResults,
+                                        filterCategoryResults : filterCategoryResults,
+                                        filterDomainResults : filterDomainResults,
+                                        filterTagResults : filterTagResults,
+                                        searchResults : searchResults,
+                                        showcaseResults : showcaseResults,
+                                        tooltips : false,
+                                    });
+                            });
                         });
                     });
                 });

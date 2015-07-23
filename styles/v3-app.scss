@@ -259,6 +259,7 @@ section.search-bar .search-dropdown-tip div
 .search-options-menu a
 {
     cursor: pointer;
+    text-transform: capitalize;
 }
 
 .search-options-menu ul
@@ -305,6 +306,7 @@ section.search-bar .search-dropdown-tip div
     font-size: 14px;
     height: 32px;
     line-height: 32px;
+    text-transform: capitalize;
 }
 
 .menu li a span

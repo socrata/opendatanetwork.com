@@ -79,8 +79,8 @@ function SearchPageController(params) {
     //
     $('.fa-close').click(function() {
 
-        $('.selected-category').fadeOut();
-        setCookie('selected-category-hidden', '1');
+        $('.current-category').fadeOut();
+        setCookie('current-category-hidden', '1');
     });
 
     // Infinite scroll search results

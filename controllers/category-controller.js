@@ -1,8 +1,9 @@
 var CacheController = require('./cache-controller');
 var fs = require('fs');
 
-var categoriesKey = "categories";
 var cacheController = new CacheController();
+var categoryMetadataKey = "category-metadata";
+var emptyMetadata = { "description" : "", "icon" : "fa-database", "showcase" : [] };
 
 module.exports = CategoryController;
 
@@ -11,43 +12,32 @@ function CategoryController() {
 
 // Public methods
 //
-CategoryController.prototype.getCategory = function(title, completionHandler) {
+CategoryController.prototype.attachCategoryMetadata = function(categories, completionHandler) {
 
-    this.getCategories(function(results) {
+    this.getCategoryMetadata(function(metadata) {
 
-        for (var i in results) {
-
-            var result = results[i];
-
-            if (result.title.toLowerCase() == title) {
-
-                if (completionHandler) completionHandler(result);
-                return;
-            }
-        }
-
-        if (completionHandler) completionHandler();
+        attachMetadata(categories, metadata);
+        if (completionHandler) completionHandler(categories);
     });
 };
 
-CategoryController.prototype.getCategories = function(completionHandler) {
+CategoryController.prototype.getCategoryMetadata = function(completionHandler) {
 
-    cacheController.get(categoriesKey, function(o) {
+    cacheController.get(categoryMetadataKey, function(o) {
 
         if (o == undefined) {
 
-            fs.readFile(__dirname + '/../data/categories.json', function(err, data) {
+            fs.readFile(__dirname + '/../data/category-metadata.json', function(err, data) {
 
                 if (err && (data == undefined)) {
-
                     if (completionHandler) completionHandler();
                 }
 
-                var categories = JSON.parse(data);
+                var metadata = JSON.parse(data);
 
-                cacheController.set(categoriesKey, categories, function(categories) {
+                cacheController.set(categoryMetadataKey, metadata, function() {
 
-                    if (completionHandler) completionHandler(categories);
+                    if (completionHandler) completionHandler(metadata);
                 });
             });
 
@@ -55,22 +45,60 @@ CategoryController.prototype.getCategories = function(completionHandler) {
         }
 
         if (completionHandler) completionHandler(o);
+    });  
+};
+
+CategoryController.prototype.getCurrentCategory = function(params, categoryResults) {
+
+    if ((params.q != "") || (params.categories.length != 1))
+        return null;
+
+    for (var i in categoryResults.results) {
+
+        var result = categoryResults.results[i];
+
+        if (result.category == params.categories[0].toLowerCase())
+            return result;
+    }
+
+    return null;
+};
+
+CategoryController.prototype.getShowcaseForCurrentCategory = function(params, categoryResults, completionHandler) {
+
+    var currentCategory = this.getCurrentCategory(params, categoryResults);
+
+    // If there is a current category and it has a non-empty showcase return it
+    //
+    if ((currentCategory != null) && (currentCategory.metadata.showcase.length > 0)) {
+
+        if (completionHandler) completionHandler(currentCategory.metadata.showcase);
+        return;
+    }
+
+    this.getCategoryMetadata(function(metadata) {
+
+       if (metadata == null) {
+
+           // Return an empty showcase
+           //
+           if (completionHandler) completionHandler([]);
+           return;
+       }
+
+       // Return the default showcase
+       //
+       if (completionHandler) completionHandler(metadata.default.showcase);
     });
 };
 
-CategoryController.prototype.getSelectedCategory = function(req, params, completionHandler) {
+// Private functions
+//
+function attachMetadata(categories, metadata) {
 
-    if ((params.q != "") || (params.categories.length != 1)) {
+    categories.results.forEach(function(result) {
 
-        if (completionHandler) completionHandler();
-        return;
-    }
-
-    if (req.cookies['selected-category-hidden'] == '1') {
-
-        if (completionHandler) completionHandler();
-        return;
-    }
-
-    this.getCategory(params.categories[0], completionHandler);
-};
+        var o = metadata[result.category];
+        result.metadata = (o != null)  ? o : emptyMetadata;
+    });
+}
