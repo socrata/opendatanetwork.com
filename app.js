@@ -46,15 +46,13 @@ fs.readFile(__dirname + '/data/slides.json', function(err, data) {
 
 // Set up 301 redirects for old routes
 //
-app.get('/census', function(req, res) {
-
-    res.redirect(301, '/open-data-census');
-});
-
-app.get('/explore', function(req, res) {
-
-    res.redirect(301, '/explore-open-data');
-});
+app.get('/articles/*', function(req, res) { res.redirect(301, '/'); });
+app.get('/census', function(req, res) { res.redirect(301, '/'); });
+app.get('/explore', function(req, res) { res.redirect(301, '/'); });
+app.get('/explore-open-data', function(req, res) { res.redirect(301, '/'); });
+app.get('/modal/*', function(req, res) { res.redirect(301, '/'); });
+app.get('/open-data-census', function(req, res) { res.redirect(301, '/'); });
+app.get('/popular', function(req, res) { res.redirect(301, '/'); });
 
 app.get('/join', function(req, res) {
 
@@ -66,40 +64,8 @@ app.get('/join/complete', function(req, res) {
     res.redirect(301, '/join-open-data-network/complete');
 });
 
-app.get('/popular', function(req, res) {
-
-    res.redirect(301, '/popular-open-datasets');
-});
-
 // Set up routes
 //
-app.get('/explore-open-data', function(req, res) {
-
-    res.locals.css = 'explore.min.css';
-    res.locals.title = 'Explore the Open Data Network.';
-    res.render('explore.ejs');
-});
-
-app.get('/open-data-census', function(req, res) {
-
-    portalController.getPortals(function(results) {
-
-        res.locals.css = 'census.min.css';
-        res.locals.title = 'Visit Open Data Network portals and datasets in common data categories.';
-        res.render('census.ejs', { results: results });
-    });
-});
-
-app.get('/popular-open-datasets', function(req, res) {
-
-    datasetController.getPopularDatasets(function(results) {
-
-        res.locals.css = 'popular.min.css';
-        res.locals.title = 'Visit the all-time, most-viewed open datasets from the Open Data Network.';
-        res.render('popular.ejs', { results: results });
-    });
-});
-
 app.get('/join-open-data-network/complete', function(req, res) {
 
     res.locals.css = 'join-complete.min.css';
@@ -112,20 +78,6 @@ app.get('/join-open-data-network', function(req, res) {
     res.locals.css = 'join.min.css';
     res.locals.title = 'Join the Open Data Network.';
     res.render('join.ejs');
-});
-
-app.get('/articles/:article', function(req, res) {
-
-    res.locals.css = 'article.min.css';
-    res.locals.modal = false;
-    res.render('articles/' + req.params.article + '.ejs');
-});
-
-app.get('/modal/:article', function(req, res) {
-
-    res.locals.css = 'modal.min.css';
-    res.locals.modal = true;
-    res.render('articles/' + req.params.article + '.ejs');
 });
 
 app.get('/google0679b96456cb5b3a.html', function(req, res) {
