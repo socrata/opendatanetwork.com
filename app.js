@@ -1,17 +1,12 @@
 var CategoryController = require('./controllers/category-controller');
-var DatasetController = require('./controllers/dataset-controller');
-var PortalController = require('./controllers/portal-controller');
 var SearchController = require('./controllers/search-controller');
 
 var cookieParser = require('cookie-parser')
 var express = require('express');
-var fs = require('fs');
 var favicon = require('serve-favicon');
 var helmet = require('helmet');
 
 var categoryController = new CategoryController();
-var portalController = new PortalController();
-var datasetController = new DatasetController();
 var searchController = new SearchController();
 var app = express();
 
@@ -25,24 +20,11 @@ app.use(helmet.xframe('deny'));
 
 // Set up static folders
 //
-app.use('/data', express.static(__dirname + '/data'));
 app.use('/images', express.static(__dirname + '/images'));
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist'));
 app.use('/scripts', express.static(__dirname + '/scripts/compressed'));
 app.use('/styles', express.static(__dirname + '/styles/compressed'));
 app.use(favicon(__dirname + '/images/favicon.ico'));
-
-// Set up app data
-//
-fs.readFile(__dirname + '/data/tiles.json', function(err, data) {
-
-    app.locals.columns = JSON.parse(data);
-});
-
-fs.readFile(__dirname + '/data/slides.json', function(err, data) {
-
-    app.locals.slides = JSON.parse(data);
-});
 
 // Set up 301 redirects for old routes
 //
@@ -83,6 +65,11 @@ app.get('/join-open-data-network', function(req, res) {
 app.get('/google0679b96456cb5b3a.html', function(req, res) {
 
     res.render('static/google0679b96456cb5b3a.ejs');
+});
+
+app.get('/robots.txt', function(req, res) {
+
+    res.render('static/robots.ejs');
 });
 
 // V2 homepage
