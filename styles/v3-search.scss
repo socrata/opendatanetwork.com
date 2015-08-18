@@ -163,21 +163,7 @@ section.main
 {
     color: $gray-text-color;
     font-size: 12px;
-}
-
-.about-section .blue-button-link
-{
-    background-color: $blue-color;
-    border-radius: 3px;
-    color: white;
-    display: inline-block;
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 34px;
-    height: 34px;
-    margin-bottom: 25px;
-    padding-left: 18px;
-    padding-right: 18px;
+    margin: 20px 0 30px;
 }
 
 .about-section .blue-link 
@@ -190,7 +176,6 @@ section.main
 .about-section .socrata-link
 {
     display: inline-block;
-    margin-top: 25px;
 }
 
 /* Results pane */
