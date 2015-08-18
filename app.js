@@ -1,7 +1,7 @@
 var CategoryController = require('./controllers/category-controller');
 var SearchController = require('./controllers/search-controller');
 
-var cookieParser = require('cookie-parser')
+var cookieParser = require('cookie-parser');
 var express = require('express');
 var favicon = require('serve-favicon');
 var helmet = require('helmet');
@@ -12,7 +12,7 @@ var app = express();
 
 // Cookie parser
 //
-app.use(cookieParser())
+app.use(cookieParser());
 
 // Set X-Frame-Options header
 //

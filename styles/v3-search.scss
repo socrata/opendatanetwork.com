@@ -159,6 +159,12 @@ section.main
     padding: 0;
 }
 
+.about-section li p
+{
+    color: $gray-text-color;
+    font-size: 12px;
+}
+
 .about-section .blue-button-link
 {
     background-color: $blue-color;

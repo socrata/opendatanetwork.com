@@ -29,7 +29,7 @@
     },
     "health" : {
         "icon" : "fa-heart",
-        "description" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        "description" : "The Health category contains data, from across the Open Data Network&trade; of publishers, related to health, hospital locations, infectious diseases, restaurants, deaths, and vaccination.*",
         "showcase" : [
             {
                 "image" : "v3-showcase-4.png",
@@ -41,57 +41,62 @@
     },
     "transportation" : {
         "icon" : "fa-car",
-        "description" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        "description" : "The Transportation category contains data, from across the Open Data Network&trade; of publishers, related to transportation, taxis, uberlyft, bikes, parking, buses, road congestion, road repair, ferries, bridges, rideshare and tolls.*",
         "showcase" : []
     },
     "economy" : {
         "icon" : "fa-line-chart",
-        "description" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        "description" : "The Economy category contains data, from across the Open Data Network&trade; of publishers, related to the economy, permits, licenses, business locations, and jobs.*",
         "showcase" : []
     },
     "finance" : {
         "icon" : "fa-money",
-        "description" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        "description" : "The Finance category contains data, from across the Open Data Network&trade; of publishers, related to finance, government spending, salaries, budgets, revenues, and taxes.*",
         "showcase" : []
     },
     "geographical & map" : {
         "icon" : "fa-globe",
-        "description" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        "description" : "The Geographical &amp; Map category contains data, from across the Open Data Network&trade; of publishers, related to transporation, politices, finance, business, health, and the environment.*",
         "showcase" : []
     },
     "social services" : {
         "icon" : "fa-child",
-        "description" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        "description" : "The Social Services category contains data, from across the Open Data Network&trade; of publishers, related to social services, homelessness, child protective services, rehab, welfare, and 311 data.*",
         "showcase" : []
     },
     "environment" : {
         "icon" : "fa-leaf",
-        "description" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        "description" : "The Environment category contains data, from across the Open Data Network&trade; of publishers, related to the environment, environmental waste, air, energy, climate, and recycling.*",
+        "showcase" : []
+    },
+    "politics" : {
+        "icon" : "fa-database",
+        "description" : "The Politics category contains data, from across the Open Data Network&trade; of publishers, related to politics.*",
         "showcase" : []
     },
     "public safety" : {
         "icon" : "fa-shield",
-        "description" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        "description" : "The Public Safety category contains data, from across the Open Data Network&trade; of publishers, related to public safety, 911 data, ambulance, emergency, fire, police, prison, evacuation, arrests, and crime.*",
         "showcase" : []
     },
     "housing & development" : {
         "icon" : "fa-building",
-        "description" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        "description" : "The Housing &amp; Development category contains data, from across the Open Data Network&trade; of publishers, related to housing, construction, zoning, building info, and land use.*",
         "showcase" : []
     },
     "infrastructure" : {
         "icon" : "fa-road",
-        "description" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        "description" : "The Infrastructure category contains data, from across the Open Data Network&trade; of publishers, related to infrastructure, streets, 311 data, parking, and construction.*",
         "showcase" : []
     },
     "education" : {
         "icon" : "fa-graduation-cap",
-        "description" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        "description" : "The Education category contains data, from across the Open Data Network&trade; of publishers, related to education, school locations, school exams, school performance, and after-school programs.*",
         "showcase" : []
     },
     "recreation" : {
         "icon" : "fa-ticket",
-        "description" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        "description" : "The Recreation category contains data, from across the Open Data Network&trade; of publishers, related to recreation, parks, art, boating, and libraries.*",
         "showcase" : []
     }
 }
