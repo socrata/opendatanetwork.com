@@ -4,7 +4,7 @@ $(document).ready(function() {
     //
     $('#menu-item-communities').mouseenter(function() {
 
-        $('#menu-communities').show(100); 
+        $('#menu-communities').slideToggle(100); 
         $('#menu-item-communities').addClass('selected');
     });
 
@@ -39,7 +39,7 @@ function SearchMenuController() {
 
     // Attach handler to the search menu button
     //
-    $('.search-options-link').click(function() { $('.search-options-menu').toggle(); });
+    $('.search-options-link').click(function() { $('.search-options-menu').slideToggle(100); });
 
     // Attach handlers to the all categories link
     //

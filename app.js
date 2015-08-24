@@ -125,7 +125,13 @@ app.get('/v3', function (req, res) {
                 'v3-home.ejs', 
                 { 
                     css : ['/styles/v3-home.min.css', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css'],
-                    scripts : ['/scripts/v3-home.min.js', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js'],
+                    scripts : [
+                        '/scripts/v3-home.min.js', 
+                        '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js', 
+                        {
+                            'url' : '//fast.wistia.net/static/popover-v1.js',
+                            'charset' : 'ISO-8859-1'
+                        }],
                     params : params,
                     allCategoryResults : allCategoryResults,
                     tooltips : (req.cookies['tooltips-shown'] != '1'),
