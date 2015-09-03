@@ -6,6 +6,24 @@ module.exports = function(grunt) {
             scripts: 'scripts',
             styles: 'styles'
         },
+        concurrent: {
+            dev: {
+                tasks: ['nodemon', 'watch'],
+                options: {
+                    logConcurrentOutput: true
+                }
+            }
+        },
+        watch: {
+            css: {
+                files: ['<%= project.styles %>/*.scss'],
+                tasks: ['sass']
+            },
+            scripts: {
+                files: ['<%= project.scripts %>/*.js'],
+                tasks: ['uglify']
+            },
+        },
         nodemon: {
             dev: {
                 script: 'app.js',

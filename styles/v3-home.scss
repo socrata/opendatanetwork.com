@@ -13,13 +13,15 @@ $green-color: #27ae60;
 
 section.blue
 {
-    background-color: $blue-background-color;
+    background: url('/images/v3-hero-background.jpg') no-repeat center center fixed;
+    background-size: cover;
     color: white;
     display: table;
     font-size: 60px;
     font-weight: 300;
     height: 100%;
     position: relative;
+    text-shadow: 0px 0.5px #222;
     width: 100%;
 }
 
