@@ -38,8 +38,6 @@ All the JSON files which hold the data to be displayed in the slider, the tiles 
 
 [https://github.com/socrata/opendatanetwork.com/tree/master/data]()
 
-The /tasks folder holds admin scripts and they are not served.  Everything else is pretty self explanatory images, scripts, styles and views hold images, scripts, styles and views.
-
 
 ###Compressing CSS###
 
@@ -65,21 +63,9 @@ To compress everything:
 
 ##JSON Data Files##
 
-###Slides.json###
+###Category-Metadata.json###
 
-On the main home page, the slider section is driven by the **/data/slides.json**.  This contains a simple JSON array of objects representing the slides.
-
-###Tiles.json###
-
-Below the slider on the main home page, there is a list of tiles pointing to various articles.  This list is defined by the **/data/tiles.json**.
-
-###Explore.json###
-
-On the /explore page, the decision tree and all tile results is defined by the **/data/explore.json**.
-
-###Portals.json###
-
-On the /census page, the list of portal names and URLs is defined by the **/data/portals.json**.
+Holds icon, description and showcase items for each category.
 
 
 ##Hosting##
@@ -107,25 +93,6 @@ The sources will be pushed into your dyno and the site will be running the laste
 More details about deploying with git to Heroku, including setting up the remote, can be found here:
 
 [https://devcenter.heroku.com/articles/git]()
-
-
-##Scheduled Tasks##
-
-There is a single script  - /tasks/fetch.js - that Heroku is scheduled to run once a day at 2:00am CST.  
-
-Fetch.js uses the /data/portals.json file to make a web request to each Open Data portal to get a count of documents for search terms such as (housing, crime, restaurant inspections, etc), and then stores those counts in the PostgreSQL database instance.  The /census page displays those counts.
-
-To run the fetch.js script locally from the source directory, type:
-
-	$ node tasks/fetch.js
-	
-You can also run in immediately on the Heroku instance by typing:
-
-	$ heroku run node tasks/fetch.js
-	
-More details about Heroku scheduled tasks can be found here:
-
-	https://devcenter.heroku.com/articles/scheduler
 
 
 ###Robots.txt###

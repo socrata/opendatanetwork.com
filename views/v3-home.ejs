@@ -19,8 +19,8 @@ class="wistia-popover[width=640,height=360,playerColor=#636155] fa fa-play-circl
         <ul>
           <% allCategoryResults.results.forEach(function(result) { %> 
             <li>
-                <a class="icon" href="/v3-search?categories=<%= encodeURIComponent(result.category) %>"><i class="fa <%= result.metadata.icon %>"></i></a>
-                <a href="/v3-search?categories=<%= encodeURIComponent(result.category) %>"><h3><%= result.category %></h3></a>
+                <a class="icon" href="/search?categories=<%= encodeURIComponent(result.category) %>"><i class="fa <%= result.metadata.icon %>"></i></a>
+                <a href="/search?categories=<%= encodeURIComponent(result.category) %>"><h3><%= result.category %></h3></a>
             </li>
           <% }); %>
         </ul>
@@ -32,18 +32,18 @@ class="wistia-popover[width=640,height=360,playerColor=#636155] fa fa-play-circl
     <div class="container">
         <h4>Partners</h4>
         <div class="slider">
-            <div><img src="/images/v2-zillow.png"></div>
-            <div><img src="/images/v2-building-eye.png"></div>
-            <div><img src="/images/v2-civic-insight.png"></div>
-            <div><img src="/images/v2-basic-gov.png"></div>
-            <div><img src="/images/v2-build-fax.png"></div>            
-            <div><img src="/images/v2-realty-trac.png"></div>
-            <div><img src="/images/v2-site-compli.png"></div>
-            <div><img src="/images/v2-ontodia.png"></div>
-            <div><img src="/images/v2-accela.png"></div>
-            <div><img src="/images/v2-citiesense.png"></div>
-            <div><img src="/images/v2-drive.png"></div>
-            <div><img src="/images/v2-see-click-fix.png"></div>
+            <div><img src="/images/v3-zillow.png"></div>
+            <div><img src="/images/v3-building-eye.png"></div>
+            <div><img src="/images/v3-civic-insight.png"></div>
+            <div><img src="/images/v3-basic-gov.png"></div>
+            <div><img src="/images/v3-build-fax.png"></div>            
+            <div><img src="/images/v3-realty-trac.png"></div>
+            <div><img src="/images/v3-site-compli.png"></div>
+            <div><img src="/images/v3-ontodia.png"></div>
+            <div><img src="/images/v3-accela.png"></div>
+            <div><img src="/images/v3-citiesense.png"></div>
+            <div><img src="/images/v3-drive.png"></div>
+            <div><img src="/images/v3-see-click-fix.png"></div>
         </div>
         <a href="/join">Join the Network</a>
     </div>

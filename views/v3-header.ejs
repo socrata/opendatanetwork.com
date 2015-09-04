@@ -28,7 +28,7 @@
             <a class="menu-item-link">Data by Category<i class="fa fa-caret-down"></i></a>
             <ul id="menu-communities" class="menu">
               <% allCategoryResults.results.forEach(function(result) { %>
-                <li><a href="/v3-search?categories=<%= encodeURIComponent(result.category) %>"><%= result.category %></a></li>
+                <li><a href="/search?categories=<%= encodeURIComponent(result.category) %>"><%= result.category %></a></li>
               <% }); %>
             </ul>
         </div>

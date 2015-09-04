@@ -167,7 +167,7 @@ app.get('/search', function(req, res) {
     });
 });
 
-app.get('/v3-search-results', function(req, res) {
+app.get('/search-results', function(req, res) {
 
     var params = searchController.getSearchParameters(req.query);
 

@@ -137,7 +137,7 @@ SearchPageController.prototype.incrementPage = function() {
 
 SearchPageController.prototype.getSearchResultsUrl = function() {
 
-    var searchResultsUrl = './v3-search-results'; 
+    var searchResultsUrl = './search-results'; 
     var url = searchResultsUrl + this.getSearchQueryString(); 
 
     console.log(url);
@@ -147,7 +147,7 @@ SearchPageController.prototype.getSearchResultsUrl = function() {
 
 SearchPageController.prototype.getSearchUrl = function() {
 
-    var searchUrl = './v3-search'; //window.location.href.split('?')[0];
+    var searchUrl = './search';
     var url = searchUrl + this.getSearchQueryString();
 
     console.log(url);
