@@ -72,40 +72,7 @@ app.get('/robots.txt', function(req, res) {
     res.render('static/robots.ejs');
 });
 
-// V2 homepage
-//
 app.get('/', function (req, res) {
-
-    var params = searchController.getSearchParameters(req.query);
-    res.render(
-        'v2-home.ejs', 
-        {
-            css : ['/styles/v2-home.min.css', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css'], 
-            scripts : ['/scripts/v2-home.min.js', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js'], 
-            params : params 
-        });
-})
-
-app.get('/v2-search', function(req, res) {
-
-    var params = searchController.getSearchParameters(req.query);
-
-    searchController.search(params, function(data) {
-
-        res.render(
-            'v2-search.ejs', 
-            {
-                css : ['/styles/v2-search.min.css'], 
-                scripts : ['/scripts/v2-search.min.js'], 
-                params : params, 
-                data : data 
-            });
-    });
-});
-
-// V3 homepage
-//
-app.get('/v3', function (req, res) {
 
     searchController.getCategories(null, function(allCategoryResults) {
 
@@ -123,7 +90,7 @@ app.get('/v3', function (req, res) {
             //
             res.render(
                 'v3-home.ejs', 
-                { 
+                {
                     css : ['/styles/v3-home.min.css', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css'],
                     scripts : [
                         '/scripts/v3-home.min.js', 
@@ -140,7 +107,7 @@ app.get('/v3', function (req, res) {
     });
 });
 
-app.get('/v3-search', function(req, res) {
+app.get('/search', function(req, res) {
 
     var defaultFilterCount = 10;
     var params = searchController.getSearchParameters(req.query);
