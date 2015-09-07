@@ -13,8 +13,6 @@ $green-color: #27ae60;
 
 section.blue
 {
-    background: url('/images/v3-hero-background.jpg') no-repeat center center fixed;
-    background-size: cover;
     color: white;
     display: table;
     font-size: 60px;
@@ -23,6 +21,21 @@ section.blue
     position: relative;
     width: 100%;
 }
+
+section.blue::before
+{
+    background: url('/images/v3-hero-background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    content: ' ';
+    height: 100%;
+    left: 0;
+    position: fixed; // instead of background-attachment
+    top: 0;
+    width: 100%;
+    will-change: transform; // creates a new paint layer
+    z-index: -1;
+}
+
 
 section.blue .container
 {
