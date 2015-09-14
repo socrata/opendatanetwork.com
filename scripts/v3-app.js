@@ -1,11 +1,17 @@
 $(document).ready(function() {
 
+    // Search menu controller
+    //
+    var searchMenu = new SearchMenuController();
+
     // Communities menu
     //
     $('#menu-item-communities').mouseenter(function() {
 
         $('#menu-communities').slideToggle(100); 
         $('#menu-item-communities').addClass('selected');
+
+        searchMenu.hideOptionsMenu();
     });
 
     $('#menu-item-communities').mouseleave(function() {
@@ -13,8 +19,19 @@ $(document).ready(function() {
         $('#menu-communities').hide(100);
         $('#menu-item-communities').removeClass('selected');
     });
+});
 
-    // Search button
+// Search menu controller
+function SearchMenuController() {
+
+    this.categories = this.getParameterByName('categories').split2(',');
+    var self = this;
+
+    // Attach handler to the search text box
+    //
+    $('#q').focusin(function() { $('.search-textbox-tip').fadeOut(); });
+
+    // Attach handler to the search button
     //
     $('.search-link').click(function() {
 
@@ -26,20 +43,13 @@ $(document).ready(function() {
             $('#form').submit();
     });
 
-    // Search menu controller
+    // Attach handler to the search options button
     //
-    new SearchMenuController();
-});
+    $('.search-options-link').click(function() { 
 
-// Search menu controller
-function SearchMenuController() {
-
-    this.categories = this.getParameterByName('categories').split2(',');
-    var self = this;
-
-    // Attach handler to the search menu button
-    //
-    $('.search-options-link').click(function() { $('.search-options-menu').slideToggle(100); });
+        $('.search-options-menu').slideToggle(100);
+        $('.search-dropdown-tip').fadeOut();
+    });
 
     // Attach handlers to the all categories link
     //
@@ -72,6 +82,11 @@ SearchMenuController.prototype.getParameterByName = function(name) {
     var results = regex.exec(location.search);
 
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+};
+
+SearchMenuController.prototype.hideOptionsMenu = function() {
+    
+    $('.search-options-menu').fadeOut();
 };
 
 SearchMenuController.prototype.toggleCategory = function(o) {

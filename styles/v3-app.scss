@@ -229,6 +229,7 @@ section.search-bar .search-dropdown-tip div
     right: 76px;
     top: 42px;
     width: 250px;
+    z-index: 100;
 }
 
 .search-options-menu-title
@@ -242,7 +243,7 @@ section.search-bar .search-dropdown-tip div
 .search-options-menu-all
 {
     border-bottom: 1px solid $gray-text-color;
-    color: $dark-gray-text-color;
+    color: $black-text-color;
     font-size: 14px;
     padding: 5px 15px 15px 40px;
     position: relative;
@@ -270,7 +271,7 @@ section.search-bar .search-dropdown-tip div
 
 .search-options-menu li
 {
-    color: $dark-gray-text-color;
+    color: $black-text-color;
     font-size: 14px;
     list-style-type: none;
     margin: 0;
@@ -322,9 +323,9 @@ section.search-bar .search-dropdown-tip div
 
 #menu-communities
 {
-    border-bottom: 1px solid $gray-background-color;
-    border-left: 1px solid $gray-background-color;
-    border-right: 1px solid $gray-background-color;
+    border-bottom: 1px solid $gray-text-color;
+    border-left: 1px solid $gray-text-color;
+    border-right: 1px solid $gray-text-color;
 }
 
 /* Footer */
