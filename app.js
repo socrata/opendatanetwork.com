@@ -104,7 +104,7 @@ app.get('/', function (req, res) {
                     tooltips : (req.cookies['tooltips-shown'] != '1'),
                 });
         });
-    });
+    }, renderErrorPage(req, res));
 });
 
 app.get('/search', function(req, res) {
@@ -158,13 +158,13 @@ app.get('/search', function(req, res) {
                                         showcaseResults : showcaseResults,
                                         tooltips : false,
                                     });
-                            });
-                        });
-                    });
-                });
+                            }, function() { renderErrorPage(req, res) }); // searchController.search
+                        }, function() { renderErrorPage(req, res) }); // searchController.getTags
+                    }, function() { renderErrorPage(req, res) }); // searchController.getDomains
+                }, function() { renderErrorPage(req, res) }); // searchController.getCategories
             });
         });
-    });
+    }, function() { renderErrorPage(req, res); }); // searchController.getCategories
 });
 
 app.get('/search-results', function(req, res) {
@@ -172,8 +172,6 @@ app.get('/search-results', function(req, res) {
     var params = searchController.getSearchParameters(req.query);
 
     searchController.search(params, function(searchResults) {
-
-        console.log(searchResults.results.length);
 
         if (searchResults.results.length == 0) {
 
@@ -199,3 +197,13 @@ var port = Number(process.env.PORT || 3000);
 
 app.listen(port);
 console.log('app is listening on ' + port);
+
+// Private functions
+//
+function renderErrorPage(req, res) {
+
+    console.log('renderErrorPage');
+
+    res.status = 500;
+    res.end();
+}

@@ -22,42 +22,57 @@ function SearchController() {
 
 // Public methods
 //
-SearchController.prototype.getCategories = function(count, completionHandler) {
+SearchController.prototype.getCategories = function(count, successHandler, errorHandler) {
 
-    getFromCacheOrApi(categoriesUrl, function(results) {
+    console.log('getCategories');
 
-        truncateResults(count, results, completionHandler);
-    });
+    getFromCacheOrApi(
+        categoriesUrl, 
+        function(results) {
+
+            truncateResults(count, results);
+            if (successHandler) successHandler(results); 
+        },
+        errorHandler);
 };
 
-SearchController.prototype.getDomains = function(count, completionHandler) {
+SearchController.prototype.getDomains = function(count, successHandler, errorHandler) {
 
-    getFromCacheOrApi(domainsUrl, function(results) {
+    getFromCacheOrApi(
+        domainsUrl, 
+        function(results) { 
 
-        truncateResults(count, results, completionHandler);
-    });
+            truncateResults(count, results);
+            if (successHandler) successHandler(results); 
+        },
+        errorHandler);
 };
 
-SearchController.prototype.getTags = function(count, completionHandler) {
+SearchController.prototype.getTags = function(count, successHandler, errorHandler) {
 
-    getFromCacheOrApi(tagsUrl, function(results) {
+    getFromCacheOrApi(
+        tagsUrl, 
+        function(results) { 
 
-        truncateResults(count, results, completionHandler);
-    });
+            truncateResults(count, results);
+            if (successHandler) successHandler(results); 
+        },
+        errorHandler);
 };
 
-SearchController.prototype.search = function(params, completionHandler) {
+SearchController.prototype.search = function(params, successHandler, errorHandler) {
 
     getFromApi(
-        getUrlFromSearchParameters(params), 
+        getUrlFromSearchParameters(params),
         function(results) {
 
             annotateData(results);
             annotateParams(results, params);
 
-            if (completionHandler)
-                completionHandler(results);
-        });
+            if (successHandler)
+                successHandler(results);
+        },
+        errorHandler);
 };
 
 SearchController.prototype.getSearchParameters = function(query) {
@@ -110,7 +125,6 @@ function annotateData(data) {
             result.resource.description = result.resource.description.substring(0, lastIndex) + " ... ";
         }
     });
-    
 }
 
 function annotateParams(data, params) {
@@ -196,7 +210,7 @@ function getUrlFromSearchParameters(params) {
     return url;
 }
 
-function getFromApi(url, completionHandler) {
+function getFromApi(url, successHandler, errorHandler) {
 
     request(
         {
@@ -205,57 +219,58 @@ function getFromApi(url, completionHandler) {
         }, 
         function(err, resp) {
 
+            console.log('Get from api: ' + url);
+
             if (err) {
 
                 console.log('Could not connect to Socrata');
 
-                if (completionHandler) completionHandler();
+                if (errorHandler) errorHandler();
                 return;
             }
 
             if (resp.statusCode != 200) {
 
-                console.log(resp.body);
+                console.log('Response: ' + resp.statusCode + ' ' + resp.body);
 
-                if (completionHandler) completionHandler();
+                if (errorHandler) errorHandler();
                 return;
             }
 
-            console.log('Get from api: ' + url);
-
-            if (completionHandler) {
+            if (successHandler) {
 
                 var results = JSON.parse(resp.body);
-                completionHandler(results);
+                successHandler(results);
             }
         });
 };
 
-function getFromCacheOrApi(url, completionHandler) {
+function getFromCacheOrApi(url, successHandler, errorHandler) {
 
     cacheController.get(url, function(results) {
 
         if (results != undefined) {
 
-            if (completionHandler) completionHandler(results);
+            // Found in cache
+            //
+            if (successHandler) successHandler(results);
             return;
         }
 
-        getFromApi(url, function(results) {
-
-            cacheController.set(url, results, completionHandler);
-        });
+        // Not in cache so get from the API
+        //
+        getFromApi(
+            url, 
+            function(results) { cacheController.set(url, results, successHandler); },
+            errorHandler);
     });
 }
 
-function truncateResults(count, results, completionHandler) {
+function truncateResults(count, results) {
 
-    if ((count != null) && (count >= 0))
-    {
+    if ((count != null) && (count >= 0)) {
+
         if (results.results.length > count)
             results.results.length = count;
     }
-
-    if (completionHandler)
-        completionHandler(results)
 }
