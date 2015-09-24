@@ -1,6 +1,6 @@
 var NodeCache = require('node-cache');
 
-var nodeCache = new NodeCache();
+var nodeCache = new NodeCache(); 
 var ttl = 60 * 60; // seconds
 
 module.exports = CacheController;
