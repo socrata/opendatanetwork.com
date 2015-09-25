@@ -104,7 +104,7 @@ app.get('/', function (req, res) {
                     tooltips : (req.cookies['tooltips-shown'] != '1'),
                 });
         });
-    }, renderErrorPage(req, res));
+    }, function() { renderErrorPage(req, res); });
 });
 
 app.get('/search', function(req, res) {
@@ -202,8 +202,12 @@ console.log('app is listening on ' + port);
 //
 function renderErrorPage(req, res) {
 
-    console.log('renderErrorPage');
+//    console.log('renderErrorPage');
 
-    res.status = 500;
-    res.end();
+    res.render(
+        'v3-error.ejs',
+        {
+            css : ['/styles/v3-error.min.css'],
+            scripts : [],
+        });
 }
