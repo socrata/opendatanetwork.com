@@ -204,6 +204,7 @@ function renderErrorPage(req, res) {
 
 //    console.log('renderErrorPage');
 
+    res.status(503);
     res.render(
         'v3-error.ejs',
         {
