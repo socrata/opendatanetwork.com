@@ -4,7 +4,7 @@ var moment = require('moment');
 var numeral = require('numeral');
 var request = require('request');
 
-var baseUrl = 'http://api.us.socrata.com/api/catalog/v1aaa';
+var baseUrl = 'http://api.us.socrata.com/api/catalog/v1';
 var cacheController = new CacheController();
 var categoriesUrl = baseUrl + '/categories';
 var defaultFilterCount = 10;
