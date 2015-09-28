@@ -26,6 +26,12 @@ app.use('/scripts', express.static(__dirname + '/scripts/compressed'));
 app.use('/styles', express.static(__dirname + '/styles/compressed'));
 app.use(favicon(__dirname + '/images/favicon.ico'));
 
+// Set up static files
+//
+app.use('/maintenance.html', express.static(__dirname + '/views/static/maintenance.html'));
+app.use('/google0679b96456cb5b3a.html', express.static(__dirname + '/views/static/google0679b96456cb5b3a.html'));
+app.use('/robots.txt', express.static(__dirname + '/views/static/robots.txt'));
+
 // Set up 301 redirects for old routes
 //
 app.get('/articles/*', function(req, res) { res.redirect(301, '/'); });
@@ -35,6 +41,7 @@ app.get('/explore-open-data', function(req, res) { res.redirect(301, '/'); });
 app.get('/modal/*', function(req, res) { res.redirect(301, '/'); });
 app.get('/open-data-census', function(req, res) { res.redirect(301, '/'); });
 app.get('/popular', function(req, res) { res.redirect(301, '/'); });
+
 
 app.get('/join', function(req, res) {
 
@@ -60,21 +67,6 @@ app.get('/join-open-data-network', function(req, res) {
     res.locals.css = 'join.min.css';
     res.locals.title = 'Join the Open Data Network.';
     res.render('join.ejs');
-});
-
-app.get('/google0679b96456cb5b3a.html', function(req, res) {
-
-    res.render('static/google0679b96456cb5b3a.ejs');
-});
-
-app.get('/robots.txt', function(req, res) {
-
-    res.render('static/robots.ejs');
-});
-
-app.get('/maintenance.html', function(req, res) {
-
-    res.render('static/maintenance.ejs');
 });
 
 app.get('/', function (req, res) {
@@ -206,8 +198,6 @@ console.log('app is listening on ' + port);
 // Private functions
 //
 function renderErrorPage(req, res) {
-
-//    console.log('renderErrorPage');
 
     res.status(503);
     res.render('v3-error.ejs');

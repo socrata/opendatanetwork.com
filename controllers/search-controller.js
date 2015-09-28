@@ -24,8 +24,6 @@ function SearchController() {
 //
 SearchController.prototype.getCategories = function(count, successHandler, errorHandler) {
 
-//    console.log('getCategories');
-
     getFromCacheOrApi(
         categoriesUrl, 
         function(results) {
