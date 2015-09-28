@@ -72,6 +72,11 @@ app.get('/robots.txt', function(req, res) {
     res.render('static/robots.ejs');
 });
 
+app.get('/maintenance.html', function(req, res) {
+
+    res.render('static/maintenance.ejs');
+});
+
 app.get('/', function (req, res) {
 
     searchController.getCategories(null, function(allCategoryResults) {
