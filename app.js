@@ -31,6 +31,7 @@ app.use(favicon(__dirname + '/images/favicon.ico'));
 app.use('/maintenance.html', express.static(__dirname + '/views/static/maintenance.html'));
 app.use('/google0679b96456cb5b3a.html', express.static(__dirname + '/views/static/google0679b96456cb5b3a.html'));
 app.use('/robots.txt', express.static(__dirname + '/views/static/robots.txt'));
+app.use('/error.html', express.static(__dirname + '/views/static/error.html'));
 
 // Set up 301 redirects for old routes
 //
@@ -200,5 +201,5 @@ console.log('app is listening on ' + port);
 function renderErrorPage(req, res) {
 
     res.status(503);
-    res.render('v3-error.ejs');
+    res.sendFile(__dirname + '/views/static/error.html');
 }
