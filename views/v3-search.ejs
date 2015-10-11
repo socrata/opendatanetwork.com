@@ -23,7 +23,7 @@
     <% if (params.tags.length > 0) { %>
         with tag 
         <% params.tags.forEach(function(tag) { %>
-            <span class="applied-filter applied-filter-tag"><%= tag %> <a class="fa fa-times-circle"></a></span> 
+            <span class="applied-filter applied-filter-tag"><%= getTag(tag) %> <a class="fa fa-times-circle"></a></span> 
         <% }); %>
     <% } %>
     </label>
@@ -64,7 +64,7 @@
             <strong>TAGS</strong>
             <ul class="filter-pane-tags">
             <% filterTagResults.results.forEach(function(result) { %>
-                <li><a><span><i class="fa<%- getChecked(result.tag, params.tags) %>"></i></span><%= result.tag %></a></li>
+                <li><a><span><i class="fa<%- getChecked(result.tag, params.tags) %>"></i></span><%= getTag(result.tag) %></a></li>
             <% }); %>
             </ul>
             <a class="view-more view-more-tags">
@@ -91,6 +91,11 @@
         <div class="current-category">
             <a class="fa fa-close"></a>
             <strong><%= currentCategory.category %></strong> - <%- currentCategory.metadata.description %>
+        </div>
+      <% } else if (currentTag && currentTag.metadata && currentTag.metadata.description) { %>
+        <div class="current-category">
+            <a class="fa fa-close"></a>
+            <strong><%= currentTag.tag %></strong> - <%- currentTag.metadata.description %>
         </div>
       <% } %>
         <ul>
@@ -140,5 +145,15 @@ function getChecked(s, rg) {
     }
 
     return '';
+}
+
+function getTag(tag) {
+
+    switch (tag.toLowerCase()) {
+
+        case 'blds': return 'BLDS';
+        case 'lives': return 'LIVES';
+        default: return tag;
+    }
 }
 %>

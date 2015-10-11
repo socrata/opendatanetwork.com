@@ -1,0 +1,12 @@
+{
+    "blds" : {
+        "icon" : "fa-infrastructure",
+        "description" : "The Building & Land Development Specification (BLDS) is a standard for sharing open data on building and construction permits issued by municipal governments.  More information on the BLDS Specification can be found here: <a href=\"http://permitdata.org/\">http://permitdata.org/</a>.",
+        "showcase" : []
+    },
+    "lives" : {
+        "icon" : "fa-heart",
+        "description" : "LIVES is the Local Inspection Value Entry System, an open data standard for restaurant inspection information. LIVES can include restaurant inspection scores (which vary in value and format from government to government) or no scores and violations. Critical violations are more likely to result in foodborne illness, noncritical violations are less likely to result in foodborne illness. For more information on LIVES, see: <a href=\"https://github.com/open-data-standards/lives\">https://github.com/open-data-standards/lives</a>.",
+        "showcase" : []
+    }
+}

@@ -15,14 +15,14 @@ var searchUrl = baseUrl;
 var tagsUrl = baseUrl + '/tags';
 var userAgent = 'www.opendatanetwork.com';
 
-module.exports = SearchController;
+module.exports = ApiController;
 
-function SearchController() {
+function ApiController() {
 }
 
 // Public methods
 //
-SearchController.prototype.getCategories = function(count, successHandler, errorHandler) {
+ApiController.prototype.getCategories = function(count, successHandler, errorHandler) {
 
     getFromCacheOrApi(
         categoriesUrl, 
@@ -34,7 +34,12 @@ SearchController.prototype.getCategories = function(count, successHandler, error
         errorHandler);
 };
 
-SearchController.prototype.getDomains = function(count, successHandler, errorHandler) {
+ApiController.prototype.getCategoriesAll = function(successHandler, errorHandler) {
+
+    this.getCategories(null, successHandler, errorHandler);
+};
+
+ApiController.prototype.getDomains = function(count, successHandler, errorHandler) {
 
     getFromCacheOrApi(
         domainsUrl, 
@@ -46,7 +51,7 @@ SearchController.prototype.getDomains = function(count, successHandler, errorHan
         errorHandler);
 };
 
-SearchController.prototype.getTags = function(count, successHandler, errorHandler) {
+ApiController.prototype.getTags = function(count, successHandler, errorHandler) {
 
     getFromCacheOrApi(
         tagsUrl, 
@@ -58,7 +63,12 @@ SearchController.prototype.getTags = function(count, successHandler, errorHandle
         errorHandler);
 };
 
-SearchController.prototype.search = function(params, successHandler, errorHandler) {
+ApiController.prototype.getTagsAll = function(successHandler, errorHandler) {
+
+    this.getTags(null, successHandler, errorHandler);
+};
+
+ApiController.prototype.search = function(params, successHandler, errorHandler) {
 
     getFromApi(
         getUrlFromSearchParameters(params),
@@ -73,7 +83,7 @@ SearchController.prototype.search = function(params, successHandler, errorHandle
         errorHandler);
 };
 
-SearchController.prototype.getSearchParameters = function(query) {
+ApiController.prototype.getSearchParameters = function(query) {
 
     var categories = getNormalizedArrayFromDelimitedString(query.categories);
     var domains = getNormalizedArrayFromDelimitedString(query.domains);

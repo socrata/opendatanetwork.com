@@ -1,13 +1,15 @@
+var ApiController = require('./controllers/api-controller');
 var CategoryController = require('./controllers/category-controller');
-var SearchController = require('./controllers/search-controller');
+var TagController = require('./controllers/tag-controller');
 
 var cookieParser = require('cookie-parser');
 var express = require('express');
 var favicon = require('serve-favicon');
 var helmet = require('helmet');
 
+var apiController = new ApiController();
 var categoryController = new CategoryController();
-var searchController = new SearchController();
+var tagController = new TagController();
 var app = express();
 
 // Cookie parser
@@ -42,17 +44,8 @@ app.get('/explore-open-data', function(req, res) { res.redirect(301, '/'); });
 app.get('/modal/*', function(req, res) { res.redirect(301, '/'); });
 app.get('/open-data-census', function(req, res) { res.redirect(301, '/'); });
 app.get('/popular', function(req, res) { res.redirect(301, '/'); });
-
-
-app.get('/join', function(req, res) {
-
-    res.redirect(301, '/join-open-data-network');
-});
-
-app.get('/join/complete', function(req, res) {
-
-    res.redirect(301, '/join-open-data-network/complete');
-});
+app.get('/join', function(req, res) { res.redirect(301, '/join-open-data-network'); });
+app.get('/join/complete', function(req, res) { res.redirect(301, '/join-open-data-network/complete'); });
 
 // Set up routes
 //
@@ -72,7 +65,7 @@ app.get('/join-open-data-network', function(req, res) {
 
 app.get('/', function (req, res) {
 
-    searchController.getCategories(null, function(allCategoryResults) {
+    apiController.getCategoriesAll(function(allCategoryResults) {
 
         categoryController.attachCategoryMetadata(allCategoryResults, function(allCategoryResults) {
 
@@ -82,7 +75,7 @@ app.get('/', function (req, res) {
 
             // Get params
             //
-            var params = searchController.getSearchParameters(req.query);
+            var params = apiController.getSearchParameters(req.query);
 
             // Render page
             //
@@ -108,11 +101,11 @@ app.get('/', function (req, res) {
 app.get('/search', function(req, res) {
 
     var defaultFilterCount = 10;
-    var params = searchController.getSearchParameters(req.query);
+    var params = apiController.getSearchParameters(req.query);
 
     // Get all categories for the header menus
     //
-    searchController.getCategories(null, function(allCategoryResults) {
+    apiController.getCategoriesAll(function(allCategoryResults) {
 
         categoryController.attachCategoryMetadata(allCategoryResults, function(categoryResults) {
 
@@ -120,56 +113,66 @@ app.get('/search', function(req, res) {
             //
             var currentCategory = categoryController.getCurrentCategory(params, allCategoryResults);
 
-            categoryController.getShowcaseForCurrentCategory(params, allCategoryResults, function(showcaseResults) {
+            // Get all tags
+            //
+            apiController.getTagsAll(function(allTagResults) {
 
-                // Get the categories for the filter menus
-                //
-                var filterCategoryCount = params.ec ? null : defaultFilterCount;
-                searchController.getCategories(filterCategoryCount, function(filterCategoryResults) {
-    
-                    // Get the domains for the filter menus
+                tagController.attachTagMetadata(allTagResults, function(tagResults) {
+
+                    // Get the current tag
                     //
-                    var domainCount = params.ed ? null : defaultFilterCount;
-                    searchController.getDomains(domainCount, function(filterDomainResults) {
-    
-                        // Get the tags for the filter menus
+                    var currentTag = tagController.getCurrentTag(params, allTagResults);
+
+                    // Get the categories for the filter menus
+                    //
+                    var filterCategoryCount = params.ec ? null : defaultFilterCount;
+                    apiController.getCategories(filterCategoryCount, function(filterCategoryResults) {
+        
+                        // Get the domains for the filter menus
                         //
-                        var tagCount = params.et ? null : defaultFilterCount;
-                        searchController.getTags(tagCount, function(filterTagResults) {
-    
-                            // Do the search
+                        var domainCount = params.ed ? null : defaultFilterCount;
+                        apiController.getDomains(domainCount, function(filterDomainResults) {
+        
+                            // Get the tags for the filter menus
                             //
-                            searchController.search(params, function(searchResults) {
-    
-                                res.render(
-                                    'v3-search.ejs', 
-                                    { 
-                                        css : ['/styles/v3-search.min.css'],
-                                        scripts : ['/scripts/v3-search.min.js'],
-                                        params : params,
-                                        currentCategory : currentCategory,
-                                        allCategoryResults : allCategoryResults,
-                                        filterCategoryResults : filterCategoryResults,
-                                        filterDomainResults : filterDomainResults,
-                                        filterTagResults : filterTagResults,
-                                        searchResults : searchResults,
-                                        showcaseResults : showcaseResults,
-                                        tooltips : false,
-                                    });
-                            }, function() { renderErrorPage(req, res) }); // searchController.search
-                        }, function() { renderErrorPage(req, res) }); // searchController.getTags
-                    }, function() { renderErrorPage(req, res) }); // searchController.getDomains
-                }, function() { renderErrorPage(req, res) }); // searchController.getCategories
-            });
-        });
-    }, function() { renderErrorPage(req, res); }); // searchController.getCategories
+                            var tagCount = params.et ? null : defaultFilterCount;
+                            apiController.getTags(tagCount, function(filterTagResults) {
+        
+                                // Do the search
+                                //
+                                apiController.search(params, function(searchResults) {
+        
+                                    res.render(
+                                        'v3-search.ejs', 
+                                        { 
+                                            css : ['/styles/v3-search.min.css'],
+                                            scripts : ['/scripts/v3-search.min.js'],
+                                            params : params,
+                                            currentCategory : currentCategory,
+                                            currentTag : currentTag,
+                                            allCategoryResults : allCategoryResults,
+                                            filterCategoryResults : filterCategoryResults,
+                                            filterDomainResults : filterDomainResults,
+                                            filterTagResults : filterTagResults,
+                                            searchResults : searchResults,
+                                            showcaseResults : [],
+                                            tooltips : false,
+                                        });
+                                }, function() { renderErrorPage(req, res) }); // apiController.search
+                            }, function() { renderErrorPage(req, res) }); // apiController.getTags
+                        }, function() { renderErrorPage(req, res) }); // apiController.getDomains
+                    }, function() { renderErrorPage(req, res) }); // apiController.getCategories
+                }); // tagController.attachTagMetadata
+            }, function() { renderErrorPage(req, res); }); // apiController.getTagsAll
+        }); // categoryController.attachCategoryMetadata
+    }, function() { renderErrorPage(req, res); }); // apiController.getCategoriesAll
 });
 
 app.get('/search-results', function(req, res) {
 
-    var params = searchController.getSearchParameters(req.query);
+    var params = apiController.getSearchParameters(req.query);
 
-    searchController.search(params, function(searchResults) {
+    apiController.search(params, function(searchResults) {
 
         if (searchResults.results.length == 0) {
 
