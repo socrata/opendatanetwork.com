@@ -2,7 +2,7 @@ $(document).ready(function() {
 
     // Region controller
     //
-    var regionController = new RegionController();
+    new RegionController();
 
     // Search menu controller
     //
@@ -29,20 +29,24 @@ $(document).ready(function() {
 //
 function RegionController() {
 
-    var autoCompleteUrl = 'https://federal.demo.socrata.com/views/7g2b-8brv/columns/autocomplete_name/suggest/{0}?size=10&fuzz=0'
+    var baseUrl = 'https://federal.demo.socrata.com/views/7g2b-8brv';
+    var autoCompleteNameSuggestUrl = baseUrl + '/columns/autocomplete_name/suggest/{0}?size=10&fuzz=0';
 
     $('#q').keyup(function() {
 
         var searchTerm = $('#q').val().trim();
-        var regionList = $('.region-list'); 
         
         if (searchTerm.length == 0) {
 
-            regionList.slideUp(100);
+            $('.region-list').slideUp(100);
             return;
         }
 
-        $.getJSON(autoCompleteUrl.format(encodeURIComponent(searchTerm)), function(data) {
+        var url = autoCompleteNameSuggestUrl.format(encodeURIComponent(searchTerm));
+
+        $.getJSON(url, function(data) {
+
+            var regionList = $('.region-list'); 
 
             if (data.options.length == 0) {
     
@@ -50,13 +54,18 @@ function RegionController() {
                 return;
             }
 
-            var items = [];
-            
-            data.options.map(function(item) {
-                items.push( "<li>" + item.text + "</li>" ); 
+            var items = data.options.map(function(item) {
+                return '<li>' + item.text + '</li>'; 
             });
 
             regionList.html(items.join(''));
+
+            $('.region-list li').click(function(e) {
+
+                $('#region').val($(this).text());
+                regionList.slideUp();
+            });
+
             regionList.slideDown(100);
         });
     });

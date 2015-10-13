@@ -2,6 +2,8 @@ var ApiController = require('./api-controller');
 var CategoryController = require('./category-controller');
 var TagController = require('./tag-controller');
 
+var path = require('path');
+
 var apiController = new ApiController();
 var categoryController = new CategoryController();
 var tagController = new TagController();
@@ -16,7 +18,7 @@ function RenderController() {
 RenderController.prototype.renderErrorPage = function(req, res) {
 
     res.status(503);
-    res.sendFile(__dirname + '/views/static/error.html');
+    res.sendFile(path.resolve(__dirname + '/../views/static/error.html'));
 };
 
 RenderController.prototype.renderHomePage = function (req, res) {
@@ -51,7 +53,7 @@ RenderController.prototype.renderHomePage = function (req, res) {
                     tooltips : (req.cookies['tooltips-shown'] != '1'),
                 });
         });
-    }, function() { renderErrorPage(req, res); });
+    }, function() { RenderController.prototype.renderErrorPage(req, res); });
 };
 
 RenderController.prototype.renderJoinOpenDataNetwork = function(req, res) {
@@ -68,10 +70,42 @@ RenderController.prototype.renderJoinOpenDataNetworkComplete = function(req, res
     res.render('join-complete.ejs');
 };
 
+RenderController.prototype.renderSearchWithRegionPage = function(req, res) {
+
+    console.log(req.params.region);
+    
+    apiController.getAutoCompleteName(
+        req.params.region, 
+        function(results) {
+
+            var params = apiController.getSearchParameters(req.query);
+
+            if (results.length > 0)
+                params.regions.push({ id : results[0].id, name : results[0].name });
+
+            RenderController.prototype.doRenderSearchPage(req, res, params);
+        },
+        function() { RenderController.prototype.renderErrorPage(req, res); });
+};
+
 RenderController.prototype.renderSearchPage = function(req, res) {
 
-    var defaultFilterCount = 10;
+    var region = req.query.region;
+
+    if (region != undefined) {
+        
+        res.redirect(302, '/v4-search/' + region);
+        return;
+    }
+
     var params = apiController.getSearchParameters(req.query);
+
+    RenderController.prototype.doRenderSearchPage(req, res, params);
+};
+
+RenderController.prototype.doRenderSearchPage = function(req, res, params) {
+
+    var defaultFilterCount = 10;
 
     // Get all categories for the header menus
     //
@@ -128,14 +162,14 @@ RenderController.prototype.renderSearchPage = function(req, res) {
                                             showcaseResults : [],
                                             tooltips : false,
                                         });
-                                }, function() { renderErrorPage(req, res) }); // apiController.search
-                            }, function() { renderErrorPage(req, res) }); // apiController.getTags
-                        }, function() { renderErrorPage(req, res) }); // apiController.getDomains
-                    }, function() { renderErrorPage(req, res) }); // apiController.getCategories
+                                }, function() { RenderController.prototype.renderErrorPage(req, res) }); // apiController.search
+                            }, function() { RenderController.prototype.renderErrorPage(req, res) }); // apiController.getTags
+                        }, function() { RenderController.prototype.renderErrorPage(req, res) }); // apiController.getDomains
+                    }, function() { RenderController.prototype.renderErrorPage(req, res) }); // apiController.getCategories
                 }); // tagController.attachTagMetadata
-            }, function() { renderErrorPage(req, res); }); // apiController.getTagsAll
+            }, function() { RenderController.prototype.renderErrorPage(req, res); }); // apiController.getTagsAll
         }); // categoryController.attachCategoryMetadata
-    }, function() { renderErrorPage(req, res); }); // apiController.getCategoriesAll
+    }, function() { RenderController.prototype.renderErrorPage(req, res); }); // apiController.getCategoriesAll
 };
 
 RenderController.prototype.renderSearchResults = function(req, res) {

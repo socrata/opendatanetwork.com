@@ -10,6 +10,7 @@
     "moment": "^2.10.2",
     "node-cache": "^3.0.0",
     "numeral": "^1.5.3",
+    "path": "^0.12.7",
     "request": "^2.42.0",
     "serve-favicon": "^2.1.3"
   },

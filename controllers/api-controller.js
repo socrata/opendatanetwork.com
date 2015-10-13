@@ -4,15 +4,18 @@ var moment = require('moment');
 var numeral = require('numeral');
 var request = require('request');
 
-var baseUrl = 'http://api.us.socrata.com/api/catalog/v1';
+var baseCatalogUrl = 'http://api.us.socrata.com/api/catalog/v1';
+var baseFederalDemoUrl = 'https://federal.demo.socrata.com/resource/7g2b-8brv';
+
+var autoCompleteNameUrl = baseFederalDemoUrl + '/?autocomplete_name=';
 var cacheController = new CacheController();
-var categoriesUrl = baseUrl + '/categories';
+var categoriesUrl = baseCatalogUrl + '/categories';
 var defaultFilterCount = 10;
 var defaultSearchResultCount = 20;
-var domainsUrl = baseUrl + '/domains'; 
+var domainsUrl = baseCatalogUrl + '/domains'; 
 var maxDescriptionLength = 300;
-var searchUrl = baseUrl;
-var tagsUrl = baseUrl + '/tags';
+var searchUrl = baseCatalogUrl;
+var tagsUrl = baseCatalogUrl + '/tags';
 var userAgent = 'www.opendatanetwork.com';
 
 module.exports = ApiController;
@@ -22,6 +25,15 @@ function ApiController() {
 
 // Public methods
 //
+ApiController.prototype.getAutoCompleteName = function(name, successHandler, errorHandler) {
+    
+    var url = autoCompleteNameUrl + encodeURIComponent(name);
+
+    console.log(url);
+
+    getFromApi(url, successHandler, errorHandler);
+}
+
 ApiController.prototype.getCategories = function(count, successHandler, errorHandler) {
 
     getFromCacheOrApi(
@@ -49,6 +61,32 @@ ApiController.prototype.getDomains = function(count, successHandler, errorHandle
             if (successHandler) successHandler(results); 
         },
         errorHandler);
+};
+
+ApiController.prototype.getSearchParameters = function(query) {
+
+    var categories = getNormalizedArrayFromDelimitedString(query.categories);
+    var domains = getNormalizedArrayFromDelimitedString(query.domains);
+    var tags = getNormalizedArrayFromDelimitedString(query.tags);
+    var page = isNaN(query.page) ? 1 : parseInt(query.page);
+    var ec = getExpandedFiltersSetting(query.ec);
+    var ed = getExpandedFiltersSetting(query.ed);
+    var et = getExpandedFiltersSetting(query.et);
+
+    return {
+        only : 'datasets',
+        q : query.q || '',
+        page : page,
+        offset : (page - 1) * defaultSearchResultCount,
+        limit : defaultSearchResultCount,        
+        categories : categories,
+        domains : domains,
+        regions : [],
+        tags : tags,
+        ec : ec,
+        ed : ed,
+        et : et,
+    };
 };
 
 ApiController.prototype.getTags = function(count, successHandler, errorHandler) {
@@ -81,31 +119,6 @@ ApiController.prototype.search = function(params, successHandler, errorHandler) 
                 successHandler(results);
         },
         errorHandler);
-};
-
-ApiController.prototype.getSearchParameters = function(query) {
-
-    var categories = getNormalizedArrayFromDelimitedString(query.categories);
-    var domains = getNormalizedArrayFromDelimitedString(query.domains);
-    var tags = getNormalizedArrayFromDelimitedString(query.tags);
-    var page = isNaN(query.page) ? 1 : parseInt(query.page);
-    var ec = getExpandedFiltersSetting(query.ec);
-    var ed = getExpandedFiltersSetting(query.ed);
-    var et = getExpandedFiltersSetting(query.et);
-
-    return {
-        only : 'datasets',
-        q : query.q || '',
-        page : page,
-        offset : (page - 1) * defaultSearchResultCount,
-        limit : defaultSearchResultCount,        
-        categories : categories,
-        domains : domains,
-        tags : tags,
-        ec : ec,
-        ed : ed,
-        et : et,
-    };
 };
 
 // Private functions

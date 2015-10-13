@@ -50,6 +50,7 @@ app.get('/join-open-data-network/complete', renderController.renderJoinOpenDataN
 app.get('/join-open-data-network', renderController.renderJoinOpenDataNetwork);
 app.get('/search', renderController.renderSearchPage);
 app.get('/search-results', renderController.renderSearchResults);
+app.get('/v4-search/:region', renderController.renderSearchWithRegionPage);
 app.get('/v4-search', renderController.renderSearchPage);
 
 // Start listening
