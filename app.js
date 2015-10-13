@@ -168,6 +168,77 @@ app.get('/search', function(req, res) {
     }, function() { renderErrorPage(req, res); }); // apiController.getCategoriesAll
 });
 
+app.get('/v4-search', function(req, res) {
+
+    var defaultFilterCount = 10;
+    var params = apiController.getSearchParameters(req.query);
+
+    // Get all categories for the header menus
+    //
+    apiController.getCategoriesAll(function(allCategoryResults) {
+
+        categoryController.attachCategoryMetadata(allCategoryResults, function(categoryResults) {
+
+            // Get the current category
+            //
+            var currentCategory = categoryController.getCurrentCategory(params, allCategoryResults);
+
+            // Get all tags
+            //
+            apiController.getTagsAll(function(allTagResults) {
+
+                tagController.attachTagMetadata(allTagResults, function(tagResults) {
+
+                    // Get the current tag
+                    //
+                    var currentTag = tagController.getCurrentTag(params, allTagResults);
+
+                    // Get the categories for the filter menus
+                    //
+                    var filterCategoryCount = params.ec ? null : defaultFilterCount;
+                    apiController.getCategories(filterCategoryCount, function(filterCategoryResults) {
+        
+                        // Get the domains for the filter menus
+                        //
+                        var domainCount = params.ed ? null : defaultFilterCount;
+                        apiController.getDomains(domainCount, function(filterDomainResults) {
+        
+                            // Get the tags for the filter menus
+                            //
+                            var tagCount = params.et ? null : defaultFilterCount;
+                            apiController.getTags(tagCount, function(filterTagResults) {
+        
+                                // Do the search
+                                //
+                                apiController.search(params, function(searchResults) {
+        
+                                    res.render(
+                                        'v4-search.ejs', 
+                                        { 
+                                            css : ['/styles/v3-search.min.css'],
+                                            scripts : ['/scripts/v3-search.min.js'],
+                                            params : params,
+                                            currentCategory : currentCategory,
+                                            currentTag : currentTag,
+                                            allCategoryResults : allCategoryResults,
+                                            filterCategoryResults : filterCategoryResults,
+                                            filterDomainResults : filterDomainResults,
+                                            filterTagResults : filterTagResults,
+                                            searchResults : searchResults,
+                                            showcaseResults : [],
+                                            tooltips : false,
+                                        });
+                                }, function() { renderErrorPage(req, res) }); // apiController.search
+                            }, function() { renderErrorPage(req, res) }); // apiController.getTags
+                        }, function() { renderErrorPage(req, res) }); // apiController.getDomains
+                    }, function() { renderErrorPage(req, res) }); // apiController.getCategories
+                }); // tagController.attachTagMetadata
+            }, function() { renderErrorPage(req, res); }); // apiController.getTagsAll
+        }); // categoryController.attachCategoryMetadata
+    }, function() { renderErrorPage(req, res); }); // apiController.getCategoriesAll
+});
+
+
 app.get('/search-results', function(req, res) {
 
     var params = apiController.getSearchParameters(req.query);

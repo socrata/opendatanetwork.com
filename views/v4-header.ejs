@@ -8,12 +8,12 @@
     <title>Find the data you need to power your business, app, or analysis from across the open data ecosystem.</title>
     <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,800" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/styles/v3-app.min.css" rel="stylesheet">
+    <link href="/styles/v4-app.min.css" rel="stylesheet">
 <% css.forEach(function(path) { -%>
     <link href="<%= path %>" rel="stylesheet">
 <% }); -%>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="/scripts/v3-app.min.js"></script>
+    <script src="/scripts/v4-app.min.js"></script>
 <% scripts.forEach(function(o) { if (typeof o == 'string') { -%>
     <script src="<%= o %>"></script>
 <% } else { -%>
@@ -43,6 +43,7 @@
         <% if (params.domains.length > 0) { %><input type="hidden" name="domains" value="<%= params.domains.join(',') %>"><% } %>
         <% if (params.tags.length > 0) { %><input type="hidden" name="tags" value="<%= params.tags.join(',') %>"><% } %>
     </form>
+    <ul class="region-list" style="display:none"></ul>
     <div class="search-options-menu">
         <div class="search-options-menu-title">Search in</div>
         <div class="search-options-menu-all"><a><i class="fa fa-check"></i>All Categories</a></div>

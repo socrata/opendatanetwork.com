@@ -1,0 +1,159 @@
+<% include v4-header %>
+
+<script>var _params = <%- JSON.stringify(params) %>;</script>
+
+<section class="results-bar">
+
+    <label><strong><%= searchResults.resultSetSizeString %></strong> results
+    <% if (params.q) { %>
+        for "<strong><%= params.q %></strong>"
+    <% } %>
+    <% if (params.categories.length > 0) { %>
+        in
+        <% params.categories.forEach(function(category) { %>
+            <span class="applied-filter applied-filter-category"><%= category %> <a class="fa fa-times-circle"></a></span> 
+        <% }); %>
+    <% } %>
+    <% if (params.domains.length > 0) { %>
+        by
+        <% params.domains.forEach(function(domain) { %>
+            <span class="applied-filter applied-filter-domain"><%= domain %> <a class="fa fa-times-circle"></a></span> 
+        <% }); %>
+    <% } %>
+    <% if (params.tags.length > 0) { %>
+        with tag 
+        <% params.tags.forEach(function(tag) { %>
+            <span class="applied-filter applied-filter-tag"><%= getTag(tag) %> <a class="fa fa-times-circle"></a></span> 
+        <% }); %>
+    <% } %>
+    </label>
+
+</section>
+
+<section class="main">
+
+    <div class="filters-pane">
+
+        <div class="filters-section">
+            <strong>CATEGORIES</strong>
+            <ul class="filter-pane-categories">
+            <% filterCategoryResults.results.forEach(function(result) { %>
+                <li><a><span><i class="fa<%- getChecked(result.category, params.categories) %>"></i></span><%= result.category %></a></li>
+            <% }); %>
+            </ul>
+            <a class="view-more view-more-categories">
+              <% if (params.ec) { %>
+                <i class="fa fa-minus"></i><span>View Less</span>
+              <% } else { %>
+                <i class="fa fa-plus"></i><span>View More</span>
+              <% } %>
+            </a>
+            <strong>PUBLISHERS</strong>
+            <ul class="filter-pane-domains">
+            <% filterDomainResults.results.forEach(function(result) { %>
+                <li><a><span><i class="fa<%- getChecked(result.domain, params.domains) %>"></i></span><%= result.domain %></a></li>
+            <% }); %>
+            </ul>
+            <a class="view-more view-more-domains">
+              <% if (params.ed) { %>
+                <i class="fa fa-minus"></i><span>View Less</span>
+              <% } else { %>
+                <i class="fa fa-plus"></i><span>View More</span>
+              <% } %>
+            </a>
+            <strong>TAGS</strong>
+            <ul class="filter-pane-tags">
+            <% filterTagResults.results.forEach(function(result) { %>
+                <li><a><span><i class="fa<%- getChecked(result.tag, params.tags) %>"></i></span><%= getTag(result.tag) %></a></li>
+            <% }); %>
+            </ul>
+            <a class="view-more view-more-tags">
+              <% if (params.et) { %>
+                <i class="fa fa-minus"></i><span>View Less</span>
+              <% } else { %>
+                <i class="fa fa-plus"></i><span>View More</span>
+              <% } %>
+            </a>
+        </div>
+
+        <div class="about-section">
+            <ul>
+                <li><a class="blue-link" href="http://www.socrata.com/company-info/">About Socrata</a></li>
+                <li><a class="blue-link" href="http://www.opendatanetwork.com/join-open-data-network">Join the Network</a></li>
+                <li><p>*Categorizations are machine-determined and may differ from the categorization of the original publisher.</p></li>
+                <li><a class="socrata-link" href="http://www.socrata.com/company-info/"><img src="/images/v3-powered-by-socrata.png"></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="search-results-pane">
+      <% if (currentCategory && currentCategory.metadata && currentCategory.metadata.description) { %>
+        <div class="current-category">
+            <a class="fa fa-close"></a>
+            <strong><%= currentCategory.category %></strong> - <%- currentCategory.metadata.description %>
+        </div>
+      <% } else if (currentTag && currentTag.metadata && currentTag.metadata.description) { %>
+        <div class="current-category">
+            <a class="fa fa-close"></a>
+            <strong><%= currentTag.tag %></strong> - <%- currentTag.metadata.description %>
+        </div>
+      <% } %>
+        <ul>
+<% include v3-search-results %>
+        </ul>
+    </div>
+
+    <div class="showcase-pane">
+        <a class="fa fa-arrow-circle-o-right"></a>
+        <strong>SHOWCASE</strong>
+        <p>Here is a sampling of what can be created with this data.</p>
+        <ul>
+        <% showcaseResults.forEach(function(result) { %>
+            <li>
+                <a href="<%= result.url %>">
+                    <img class="showcase-image" src="/images/<%= result.image %>">
+                    <div class="showcase-info">
+                        <div class="showcase-info-publisher"><%= result.publisher %></div>
+                        <div class="showcase-info-title"><%= result.title %></div>
+                    </div>
+                </a>
+            </li>
+        <% }); %>
+        </ul>
+    </div>
+
+</section>
+
+<script type="text/javascript">
+(function() {
+var s = document.createElement("script");
+s.type = "text/javascript";
+s.async = true;
+s.src = '//api.usersnap.com/load/62eb5973-90ec-4b0c-b925-21f5dbea5355.js';
+var x = document.getElementsByTagName('script')[0];
+x.parentNode.insertBefore(s, x);
+})();
+</script>
+
+<%
+function getChecked(s, rg) {
+
+    for (var i in rg) {
+
+        if (rg[i].toLowerCase() == s.toLowerCase())
+            return ' fa-check';
+    }
+
+    return '';
+}
+
+function getTag(tag) {
+
+    switch (tag.toLowerCase()) {
+
+        case 'blds': return 'BLDS';
+        case 'lives': return 'LIVES';
+        default: return tag;
+    }
+}
+%>
