@@ -50,8 +50,14 @@ app.get('/join-open-data-network/complete', renderController.renderJoinOpenDataN
 app.get('/join-open-data-network', renderController.renderJoinOpenDataNetwork);
 app.get('/search', renderController.renderSearchPage);
 app.get('/search-results', renderController.renderSearchResults);
-app.get('/v4-search/:region', renderController.renderSearchWithRegionPage);
 app.get('/v4-search', renderController.renderSearchPage);
+
+app.get('/:region/growth', renderController.renderRegionPopulationChangePage);
+app.get('/:region/costs ', renderController.renderRegionCostsPage);
+app.get('/:region/population', renderController.renderRegionPopulationPage);
+app.get('/:region/revenue', renderController.renderRegionEarningsPage);
+app.get('/:region/education', renderController.renderRegionEducationPage);
+app.get('/:region', renderController.renderRegionPopulationChangePage);
 
 // Start listening
 //

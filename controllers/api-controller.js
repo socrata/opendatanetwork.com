@@ -25,9 +25,14 @@ function ApiController() {
 
 // Public methods
 //
-ApiController.prototype.getAutoCompleteName = function(name, successHandler, errorHandler) {
-    
-    var url = autoCompleteNameUrl + encodeURIComponent(name);
+ApiController.prototype.getAutoCompleteName = function(names, successHandler, errorHandler) {
+
+    //$where=autocomplete_name='Seattle%20city%20Washington' OR autocomplete_name='Portland%20city%20Oregon'
+
+    var url = baseFederalDemoUrl + '?$where=';
+    var pairs = names.map(function(name) { return "autocomplete_name='" + encodeURIComponent(name) + "'"; });
+
+    url += pairs.join(' OR ');
 
     console.log(url);
 
