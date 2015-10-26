@@ -11,7 +11,7 @@ var autoCompleteNameUrl = baseFederalDemoUrl + '/?autocomplete_name=';
 var cacheController = new CacheController();
 var categoriesUrl = baseCatalogUrl + '/categories';
 var defaultFilterCount = 10;
-var defaultSearchResultCount = 20;
+var defaultSearchResultCount = 60;
 var domainsUrl = baseCatalogUrl + '/domains'; 
 var maxDescriptionLength = 300;
 var searchUrl = baseCatalogUrl;
@@ -25,6 +25,21 @@ function ApiController() {
 
 // Public methods
 //
+ApiController.prototype.getDatasetsForRegions = function(params, successHandler, errorHandler) {
+
+    getFromApi(
+        getSearchUrlFromParametersV4(params),
+        function(results) {
+
+            annotateData(results);
+            annotateParams(results, params);
+
+            if (successHandler)
+                successHandler(results);
+        },
+        errorHandler);
+}
+
 ApiController.prototype.getAutoCompleteName = function(names, successHandler, errorHandler) {
 
     //$where=autocomplete_name='Seattle%20city%20Washington' OR autocomplete_name='Portland%20city%20Oregon'
@@ -83,7 +98,7 @@ ApiController.prototype.getSearchParameters = function(query) {
         q : query.q || '',
         page : page,
         offset : (page - 1) * defaultSearchResultCount,
-        limit : defaultSearchResultCount,        
+        limit : defaultSearchResultCount,
         categories : categories,
         domains : domains,
         regions : [],
@@ -93,6 +108,59 @@ ApiController.prototype.getSearchParameters = function(query) {
         et : et,
     };
 };
+
+ApiController.prototype.getSearchParametersV4 = function(req, completionHandler) {
+
+    var query = req.query;
+    var categories = getNormalizedArrayFromDelimitedString(query.categories);
+    var domains = getNormalizedArrayFromDelimitedString(query.domains);
+    var tags = getNormalizedArrayFromDelimitedString(query.tags);
+    var page = isNaN(query.page) ? 1 : parseInt(query.page);
+    var ec = getExpandedFiltersSetting(query.ec);
+    var ed = getExpandedFiltersSetting(query.ed);
+    var et = getExpandedFiltersSetting(query.et);
+
+    var params = {
+
+        categories : categories,
+        domains : domains,
+        limit : defaultSearchResultCount,
+        offset : (page - 1) * defaultSearchResultCount,
+        only : 'datasets',
+        page : page,
+        q : query.q || '',
+        regions: [],
+        tags : tags,
+        ec : ec,
+        ed : ed,
+        et : et,
+    };
+
+    // Regions are in the URL path segment, not a query parameter
+    //
+    if ((req.params.region == null) || (req.params.region.length == 0)) {
+
+        if (completionHandler) completionHandler(params);
+        return;
+    }
+
+    var parts = req.params.region.split2('_vs_');
+    var regions = parts.map(function(region) { return region.replace(/_/g, ' ') });
+
+    ApiController.prototype.getAutoCompleteName(regions, function(results) {
+
+        if (results.length > 0) {
+
+            params.regions = results.map(function(result) {
+                return { id : result.id, name : result.name };
+            });
+        }
+
+        console.log(JSON.stringify(params));
+
+        if (completionHandler) completionHandler(params);
+    });
+}
 
 ApiController.prototype.getTags = function(count, successHandler, errorHandler) {
 
@@ -114,7 +182,7 @@ ApiController.prototype.getTagsAll = function(successHandler, errorHandler) {
 ApiController.prototype.search = function(params, successHandler, errorHandler) {
 
     getFromApi(
-        getUrlFromSearchParameters(params),
+        getSearchUrlFromParameters(params),
         function(results) {
 
             annotateData(results);
@@ -205,7 +273,7 @@ function getNormalizedArrayFromDelimitedString(s) {
     return parts;
 }
 
-function getUrlFromSearchParameters(params) {
+function getSearchUrlFromParameters(params) {
 
     var url = searchUrl +
         '?offset=' + params.offset +
@@ -236,7 +304,57 @@ function getUrlFromSearchParameters(params) {
     return url;
 }
 
+function getSearchUrlFromParametersV4(params) {
+
+    var url = searchUrl +
+        '?offset=' + params.offset +
+        '&only=' + params.only +
+        '&limit=' + params.limit;
+
+    if (params.categories.length > 0)
+        url += '&categories=' + encodeURIComponent(params.categories.join(','));
+
+    if (params.domains.length > 0)
+        url += '&domains=' + encodeURIComponent(params.domains.join(','));
+
+    if (params.tags.length > 0)
+        url += '&tags=' + encodeURIComponent(params.tags.join(','));
+
+    if (params.ec)
+        url += '&ec=1';
+
+    if (params.ed)
+        url += '&ed=1';
+
+    if (params.et)
+        url += '&et=1';
+
+    if (((params.q != null) && (params.q.length > 0)) || (params.regions.length > 0)) {
+
+        url += '&q=';
+
+        if ((params.q != null) && (params.q.length > 0)) {
+
+            url += encodeURIComponent(params.q);
+        }
+        else {
+
+            if (params.regions.length > 0) {
+
+                // TODO: Ideally we would pass the regions as separate parameters.  Marc says this is coming.
+                //
+                var regions = params.regions.map(function(region) { return region.name; });
+                url += encodeURIComponent(regions.join(', '));
+            }
+        }
+    }
+
+    return url;
+}
+
 function getFromApi(url, successHandler, errorHandler) {
+
+    console.log(url);
 
     request(
         {
@@ -300,3 +418,15 @@ function truncateResults(count, results) {
             results.results.length = count;
     }
 }
+
+// Extensions
+//
+String.prototype.split2 = function(s) {
+
+    var rg = this.split(s);
+
+    if ((rg.length == 1) && (rg[0] == ''))
+        return [];
+
+    return rg;
+};

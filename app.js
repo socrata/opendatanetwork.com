@@ -20,7 +20,7 @@ app.use(helmet.xframe('deny'));
 //
 app.use('/images', express.static(__dirname + '/images'));
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist'));
-app.use('/scripts', express.static(__dirname + '/scripts/compressed'));
+app.use('/scripts', express.static(__dirname + '/scripts')); // TODO: compressed
 app.use('/styles', express.static(__dirname + '/styles/compressed'));
 app.use(favicon(__dirname + '/images/favicon.ico'));
 
@@ -50,14 +50,12 @@ app.get('/join-open-data-network/complete', renderController.renderJoinOpenDataN
 app.get('/join-open-data-network', renderController.renderJoinOpenDataNetwork);
 app.get('/search', renderController.renderSearchPage);
 app.get('/search-results', renderController.renderSearchResults);
-app.get('/v4-search', renderController.renderSearchPage);
 
-app.get('/:region/growth', renderController.renderRegionPopulationChangePage);
-app.get('/:region/costs ', renderController.renderRegionCostsPage);
-app.get('/:region/population', renderController.renderRegionPopulationPage);
-app.get('/:region/revenue', renderController.renderRegionEarningsPage);
-app.get('/:region/education', renderController.renderRegionEducationPage);
-app.get('/:region', renderController.renderRegionPopulationChangePage);
+app.get('/v4', renderController.renderHomePageV4);
+app.get('/v4-search', renderController.renderSearchPageV4);
+app.get('/v4-search-results', renderController.renderSearchResultsV4);
+
+app.get('/:region', renderController.renderSearchPageV4);
 
 // Start listening
 //
