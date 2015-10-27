@@ -48,14 +48,15 @@
 
     <div class="charts-column">
         <ul class="chart-tabs">
-            <li class="selected">All</li>
-            <li>Growth</li>
-            <li>Costs</li>
-            <li>Population</li>
-            <li>Revenue</li>
-            <li>Education</li>
+            <li<%- getSelectedVector('all') %>><a href="<%= getSearchPageUrl() %>">All</a></li>
+            <li<%- getSelectedVector('growth') %>><a href="<%= getSearchPageUrl('growth') %>">Growth</a></li>
+            <li<%- getSelectedVector('costs') %>><a href="<%= getSearchPageUrl('costs') %>">Costs</a></li>
+            <li<%- getSelectedVector('population') %>><a href="<%= getSearchPageUrl('population') %>">Population</a></li>
+            <li<%- getSelectedVector('revenue') %>><a href="<%= getSearchPageUrl('revenue') %>">Revenue</a></li>
+            <li<%- getSelectedVector('education') %>><a href="<%= getSearchPageUrl('education') %>">Education</a></li>
         </ul>
         <div class="charts">
+<% if (params.vector == 'all') { %>
             <h1>Population</h1>
             <div id="population-chart" class="chart"></div>
             <ul class="population"></ul>
@@ -72,6 +73,23 @@
             <ul class="gdp"></ul>
             <h1>Cost of Living</h1>
             <ul class="costOfLiving"></ul>
+        </div>
+<% } else if (params.vector == 'growth') { %>
+        <div>Growth</div>
+<% } else if (params.vector == 'costs') { %>
+        <div>Costs</div>
+<% } else if (params.vector == 'population') { %>
+
+            <h1>Population</h1>
+            <div id="population-chart" class="chart"></div>
+            <h1>Population Change</h1>
+            <div id="population-change-chart" class="chart"></div>
+
+<% } else if (params.vector == 'revenue') { %>
+        <div>Revenue</div>
+<% } else if (params.vector == 'education') { %>
+        <div>Education</div>
+<% } %>
         </div>
     </div>
 
@@ -116,7 +134,7 @@
 </html>
 
 <%
-function getSearchPageUrl() {
+function getSearchPageUrl(vector) {
 
     var url;
 
@@ -129,6 +147,9 @@ function getSearchPageUrl() {
         });
 
         url += regionNames.join('_vs_');
+
+        if (vector) 
+            url += '/' + vector;
     }
     else {
 
@@ -136,4 +157,13 @@ function getSearchPageUrl() {
     }
 
     return url;
-};%>
+}
+
+function getSelectedVector(vector) {
+
+console.log(vector + ' ' + params.vector);
+
+    return (vector == params.vector) ? ' class="selected"' : ''; 
+}
+
+%>

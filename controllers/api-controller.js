@@ -134,6 +134,7 @@ ApiController.prototype.getSearchParametersV4 = function(req, completionHandler)
         ec : ec,
         ed : ed,
         et : et,
+        vector : req.params.vector || 'all',
     };
 
     // Regions are in the URL path segment, not a query parameter
@@ -252,7 +253,7 @@ function getCategoryGlyphString(result) {
 }
 
 function getExpandedFiltersSetting(queryValue) {
-    
+
     return isNaN(queryValue) ? false : (parseInt(queryValue) == 1);
 }
 

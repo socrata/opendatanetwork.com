@@ -1,8 +1,8 @@
 function SearchPageController(params) {
 
     this.params = params;
-
-    var self = this;
+    
+    self = this;
 
     // Refine
     //
@@ -51,8 +51,6 @@ SearchPageController.prototype.fetchNextPage = function() {
 
     this.fetching = true;
     this.incrementPage();
-
-    var self = this;
 
     $.ajax(this.getSearchResultsUrl()).done(function(data, textStatus, jqXHR) {
 
@@ -157,4 +155,102 @@ SearchPageController.prototype.setAutoCompletedRegion = function(region) {
 
     this.params.autoCompletedRegion = region;
     this.params.page = 1;
+};
+
+SearchPageController.prototype.drawPopulationCharts = function() {
+
+    google.setOnLoadCallback(function() {
+
+        var apiController = new ApiController();
+        var regionIds = self.params.regions.map(function(region) { return region.id; });
+
+        apiController.getPopulationDatas(regionIds, function(data) { 
+
+            self.drawPopulationChart(regionIds, data);
+            self.drawPopulationChangeChart(regionIds, data);
+        });
+    });
+}
+
+SearchPageController.prototype.drawPopulationChart = function(regionIds, data) {
+
+    var years = [];
+    var year;
+
+    for (var i = 0; i < data.length; i++) {
+
+        var m = (i % regionIds.length);
+
+        if (m == 0) {
+
+            year = [];
+            year[0] = data[i].year;
+            years.push(year);
+        }
+
+        year[m + 1] = parseInt(data[i].population);
+    }
+
+    var header = ['Year'];
+
+    for (var i = 0; i < regionIds.length; i++) {
+        header[i + 1] = self.params.regions[i].name;
+    }
+
+    years.unshift(header);
+
+    var dataTable = google.visualization.arrayToDataTable(years);
+
+    var options = {
+        curveType : 'function',
+        legend : { position : 'bottom' },
+        pointShape : 'square',
+        pointSize : 8,
+        title : 'Population',
+    };
+
+    var chart = new google.visualization.LineChart(document.getElementById('population-chart'));
+    chart.draw(dataTable, options);
+};
+
+SearchPageController.prototype.drawPopulationChangeChart = function(regionIds, data) {
+
+    var years = [];
+    var year;
+
+    for (var i = 0; i < data.length; i++) {
+
+        var m = (i % regionIds.length);
+
+        if (m == 0) {
+
+            year = [];
+            year[0] = data[i].year;
+            years.push(year);
+        }
+
+        year[m + 1] = parseFloat(data[i].population_percent_change) / 100;
+    }
+
+    var header = ['Year'];
+
+    for (var i = 0; i < regionIds.length; i++) {
+        header[i + 1] = self.params.regions[i].name;
+    }
+
+    years.unshift(header);
+
+    var dataTable = google.visualization.arrayToDataTable(years);
+
+    var options = {
+        curveType : 'function',
+        legend : { position : 'bottom' },
+        pointShape : 'square',
+        pointSize : 8,
+        title : 'Population Change',
+        vAxis : { format : 'percent' },
+    };
+
+    var chart = new google.visualization.LineChart(document.getElementById('population-change-chart'));
+    chart.draw(dataTable, options);
 };

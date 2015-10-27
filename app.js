@@ -56,6 +56,7 @@ app.get('/v4-search', renderController.renderSearchPageV4);
 app.get('/v4-search-results', renderController.renderSearchResultsV4);
 
 app.get('/:region', renderController.renderSearchPageV4);
+app.get('/:region/:vector', renderController.renderSearchWithVectorPageV4);
 
 // Start listening
 //

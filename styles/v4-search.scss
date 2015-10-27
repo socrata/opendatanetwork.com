@@ -211,8 +211,22 @@ section.results
 .chart-tabs li.selected
 {
     border-bottom: 5px solid $blue-color;
-    color: $black-text-color;
     font-weight: 600;
+}
+
+.chart-tabs li a
+{
+    color: $dark-gray-text-color;
+}
+
+.chart-tabs li a:hover
+{
+    color: $blue-color;
+}
+
+.chart-tabs li.selected a 
+{
+    color: $black-text-color;
 }
 
 .charts

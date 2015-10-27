@@ -11,6 +11,8 @@ var tagController = new TagController();
 module.exports = RenderController;
 
 function RenderController() {
+
+    self = this;
 };
 
 // Error
@@ -71,7 +73,7 @@ RenderController.prototype.renderHomePage = function (req, res) {
                     tooltips : (req.cookies['tooltips-shown'] != '1'),
                 });
         });
-    }, function() { RenderController.prototype.renderErrorPage(req, res); });
+    }, function() { self.renderErrorPage(req, res); });
 };
 
 RenderController.prototype.renderSearchPage = function(req, res) {
@@ -137,14 +139,14 @@ RenderController.prototype.renderSearchPage = function(req, res) {
                                             showcaseResults : [],
                                             tooltips : false,
                                         });
-                                }, function() { RenderController.prototype.renderErrorPage(req, res) }); // apiController.search
-                            }, function() { RenderController.prototype.renderErrorPage(req, res) }); // apiController.getTags
-                        }, function() { RenderController.prototype.renderErrorPage(req, res) }); // apiController.getDomains
-                    }, function() { RenderController.prototype.renderErrorPage(req, res) }); // apiController.getCategories
+                                }, function() { self.renderErrorPage(req, res) }); // apiController.search
+                            }, function() { self.renderErrorPage(req, res) }); // apiController.getTags
+                        }, function() { self.renderErrorPage(req, res) }); // apiController.getDomains
+                    }, function() { self.renderErrorPage(req, res) }); // apiController.getCategories
                 }); // tagController.attachTagMetadata
-            }, function() { RenderController.prototype.renderErrorPage(req, res); }); // apiController.getTagsAll
+            }, function() { self.renderErrorPage(req, res); }); // apiController.getTagsAll
         }); // categoryController.attachCategoryMetadata
-    }, function() { RenderController.prototype.renderErrorPage(req, res); }); // apiController.getCategoriesAll
+    }, function() { self.renderErrorPage(req, res); }); // apiController.getCategoriesAll
 };
 
 RenderController.prototype.renderSearchResults = function(req, res) {
@@ -219,44 +221,66 @@ RenderController.prototype.renderHomePageV4 = function (req, res) {
                     });
              });
         });
-    }, function() { RenderController.prototype.renderErrorPage(req, res); });
+    }, function() { self.renderErrorPage(req, res); });
 };
 
 // Search
 //
-RenderController.prototype.renderSearchPageV4 = function(req, res) {
+RenderController.prototype.renderSearchWithVectorPageV4 = function(req, res) {
 
-    var self = this;
-
-    apiController.getCategoriesAll(function(allCategoryResults) {
+    if ((req.params.vector == 'growth') ||
+        (req.params.vector == 'costs') ||
+        (req.params.vector == 'population') ||
+        (req.params.vector == 'revenue') ||
+        (req.params.vector == 'education')) {
 
         apiController.getSearchParametersV4(req, function(params) {
 
-            apiController.getDatasetsForRegions(
-                params, 
-                function(results) {
-
-                    res.render(
-                        'v4-search.ejs', 
-                        {
-                            css : ['/styles/v4-search.min.css'],
-                            scripts : [
-                                '/scripts/v4-api-controller.js', // TODO: min
-                                '/scripts/v4-region-controller.js', // TODO: min
-                                '/scripts/v4-search-page-controller.js', // TODO: min
-                                '/scripts/v4-search.js', // TODO: min
-                                ],
-                            params : params,
-                            allCategoryResults : allCategoryResults,
-                            searchResults : results,
-                            tooltips : false
-                        });
-                }, 
-                function() {
-    
-                    self.renderErrorPage(req, res); 
-                });
+            self._renderSearchPageV4(req, res, params);
         });
+    }
+    else {
+
+        self.renderErrorPage(req, res); 
+    }
+};
+
+RenderController.prototype.renderSearchPageV4 = function(req, res) {
+
+    apiController.getSearchParametersV4(req, function(params) {
+
+        self._renderSearchPageV4(req, res, params);
+    });
+};
+
+RenderController.prototype._renderSearchPageV4 = function(req, res, params) {
+
+    apiController.getCategoriesAll(function(allCategoryResults) {
+
+        apiController.getDatasetsForRegions(
+            params, 
+            function(results) {
+
+                res.render(
+                    'v4-search.ejs', 
+                    {
+                        css : ['/styles/v4-search.min.css'],
+                        scripts : [
+                            '/scripts/v4-api-controller.js', // TODO: min
+                            '/scripts/v4-region-controller.js', // TODO: min
+                            '/scripts/v4-search-page-controller.js', // TODO: min
+                            '/scripts/v4-search.js', // TODO: min
+                            ],
+                        params : params,
+                        allCategoryResults : allCategoryResults,
+                        searchResults : results,
+                        tooltips : false
+                    });
+            }, 
+            function() {
+
+                self.renderErrorPage(req, res); 
+            });
     });
 };
 
