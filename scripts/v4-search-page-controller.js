@@ -46,35 +46,48 @@ SearchPageController.prototype.decrementPage = function() {
     this.params.page--;
 };
 
-SearchPageController.prototype.drawLineChart = function(chartId, data, options) {
+// Earnings
+//
+SearchPageController.prototype.drawEarningsData = function() {
 
-    var dataTable = google.visualization.arrayToDataTable(data);
-    var chart = new google.visualization.LineChart(document.getElementById(chartId));
+    var self = this;
 
-    chart.draw(dataTable, options);
-};
+    google.setOnLoadCallback(function() {
 
-SearchPageController.prototype.drawSteppedAreaChart = function(chartId, data, options) {
+        var regionIds = self.params.regions.map(function(region) { return region.id; });
+        var controller = new ApiController();
 
-    var dataTable = google.visualization.arrayToDataTable(data);
-    var chart = new google.visualization.SteppedAreaChart(document.getElementById(chartId));
+        controller.getEarningsData(regionIds, function(data) { 
 
-    chart.draw(dataTable, options);
+            self.drawEarningsChart(regionIds, data);
+            self.drawEarningsTable(regionIds, data);
+        });
+    });
 };
 
 SearchPageController.prototype.drawEarningsChart = function(regionIds, data) {
 
     var earnings = [];
 
-    // Less than high school
+    // Header
     //
-    var lessThanHighSchoolEarnings = ['Some High School'];
+    var header = ['Education Level'];
 
     for (var i = 0; i < regionIds.length; i++) {
-        lessThanHighSchoolEarnings[i + 1] = parseInt(data[i].median_earnings_less_than_high_school);
+        header[i + 1] = this.params.regions[i].name;
     }
 
-    earnings.push(lessThanHighSchoolEarnings);
+    earnings.push(header);
+
+    // Less than high school
+    //
+    var someHighSchoolEarnings = ['Some High School'];
+
+    for (var i = 0; i < regionIds.length; i++) {
+        someHighSchoolEarnings[i + 1] = parseInt(data[i].median_earnings_less_than_high_school);
+    }
+
+    earnings.push(someHighSchoolEarnings);
 
     // High school
     //
@@ -116,16 +129,6 @@ SearchPageController.prototype.drawEarningsChart = function(regionIds, data) {
 
     earnings.push(graduateDegreeEarnings);
 
-    // Header
-    //
-    var header = ['Education Level'];
-
-    for (var i = 0; i < regionIds.length; i++) {
-        header[i + 1] = this.params.regions[i].name;
-    }
-
-    earnings.unshift(header);
-
     SearchPageController.prototype.drawSteppedAreaChart('earnings-chart', earnings, {
 
         areaOpacity : 0,
@@ -137,23 +140,6 @@ SearchPageController.prototype.drawEarningsChart = function(regionIds, data) {
         vAxis : { format : 'currency' },
     });
 };
-
-SearchPageController.prototype.drawEarningsCharts = function() {
-
-    var self = this;
-
-    google.setOnLoadCallback(function() {
-
-        var regionIds = self.params.regions.map(function(region) { return region.id; });
-        var controller = new ApiController();
-
-        controller.getEarningsData(regionIds, function(data) { 
-
-            self.drawEarningsChart(regionIds, data);
-            self.drawEarningsTable(regionIds, data);
-        });
-    });
-}
 
 SearchPageController.prototype.drawEarningsTable = function(regionIds, data) {
 
@@ -194,82 +180,65 @@ SearchPageController.prototype.drawEarningsTable = function(regionIds, data) {
     $('#earnings-table').html(s);
 };
 
-SearchPageController.prototype.drawPopulationChart = function(regionIds, data) {
+// Education
+//
+SearchPageController.prototype.drawEducationData = function() {
 
-    var years = [];
-    var year;
+    var self = this;
 
-    for (var i = 0; i < data.length; i++) {
+    google.setOnLoadCallback(function() {
 
-        var m = (i % regionIds.length);
+        var regionIds = self.params.regions.map(function(region) { return region.id; });
+        var controller = new ApiController();
 
-        if (m == 0) {
+        controller.getEducationData(regionIds, function(data) { 
 
-            year = [];
-            year[0] = data[i].year;
-            years.push(year);
-        }
-
-        year[m + 1] = parseInt(data[i].population);
-    }
-
-    var header = ['Year'];
-
-    for (var i = 0; i < regionIds.length; i++) {
-        header[i + 1] = this.params.regions[i].name;
-    }
-
-    years.unshift(header);
-
-    SearchPageController.prototype.drawLineChart('population-chart', years, {
-
-        curveType : 'function',
-        legend : { position : 'bottom' },
-        pointShape : 'square',
-        pointSize : 8,
-        title : 'Population',
+            self.drawEducationTable(regionIds, data);
+        });
     });
 };
 
-SearchPageController.prototype.drawPopulationChangeChart = function(regionIds, data) {
+SearchPageController.prototype.drawEducationTable = function(regionIds, data) {
 
-    var years = [];
-    var year;
+    var s = '';
 
-    for (var i = 0; i < data.length; i++) {
-
-        var m = (i % regionIds.length);
-
-        if (m == 0) {
-
-            year = [];
-            year[0] = data[i].year;
-            years.push(year);
-        }
-
-        year[m + 1] = parseFloat(data[i].population_percent_change) / 100;
-    }
-
-    var header = ['Year'];
+    // Header
+    //
+    s += '<tr><th></th>';
 
     for (var i = 0; i < regionIds.length; i++) {
-        header[i + 1] = this.params.regions[i].name;
+        s += '<th>' + this.params.regions[i].name + '</th>';
     }
 
-    years.unshift(header);
+    // At least bachelor's
+    //
+    s += '</tr><tr><td>At Least Bachelor\'s Degree</td>';
 
-    SearchPageController.prototype.drawLineChart('population-change-chart', years, {
+    for (var i = 0; i < regionIds.length; i++) {
+        s += '<td>' + data[i].percent_bachelors_degree_or_higher + '%</td>';
+        
+        
+        // START RIGHT HERE: calculate and display the rank (95th percentile or whatever)
+        
+        
+    }
 
-        curveType : 'function',
-        legend : { position : 'bottom' },
-        pointShape : 'square',
-        pointSize : 8,
-        title : 'Population Change',
-        vAxis : { format : 'percent' },
-    });
+    // At least high school diploma
+    //
+    s += '</tr><tr><td>At Least High School Diploma</td>';
+
+    for (var i = 0; i < regionIds.length; i++) {
+        s += '<td>' + data[i].percent_high_school_graduate_or_higher + '%</td>';
+    }
+
+    s += '</tr>';
+
+    $('#education-table').html(s);
 };
 
-SearchPageController.prototype.drawPopulationCharts = function() {
+// Population
+//
+SearchPageController.prototype.drawPopulationData = function() {
 
     var self = this;
 
@@ -286,6 +255,109 @@ SearchPageController.prototype.drawPopulationCharts = function() {
     });
 }
 
+SearchPageController.prototype.drawPopulationChart = function(regionIds, data) {
+
+    var years = [];
+    var year;
+
+    // Header
+    //
+    var header = ['Year'];
+
+    for (var i = 0; i < regionIds.length; i++) {
+        header[i + 1] = this.params.regions[i].name;
+    }
+
+    years.push(header);
+
+    // Data
+    //
+    for (var i = 0; i < data.length; i++) {
+
+        var m = (i % regionIds.length);
+
+        if (m == 0) {
+
+            year = [];
+            year[0] = data[i].year;
+            years.push(year);
+        }
+
+        year[m + 1] = parseInt(data[i].population);
+    }
+
+    SearchPageController.prototype.drawLineChart('population-chart', years, {
+
+        curveType : 'function',
+        legend : { position : 'bottom' },
+        pointShape : 'square',
+        pointSize : 8,
+        title : 'Population',
+    });
+};
+
+SearchPageController.prototype.drawPopulationChangeChart = function(regionIds, data) {
+
+    var years = [];
+    var year;
+
+    // Header
+    //
+    var header = ['Year'];
+
+    for (var i = 0; i < regionIds.length; i++) {
+        header[i + 1] = this.params.regions[i].name;
+    }
+
+    years.push(header);
+
+    // Data
+    //
+    for (var i = 0; i < data.length; i++) {
+
+        var m = (i % regionIds.length);
+
+        if (m == 0) {
+
+            year = [];
+            year[0] = data[i].year;
+            years.push(year);
+        }
+
+        year[m + 1] = parseFloat(data[i].population_percent_change) / 100;
+    }
+
+    SearchPageController.prototype.drawLineChart('population-change-chart', years, {
+
+        curveType : 'function',
+        legend : { position : 'bottom' },
+        pointShape : 'square',
+        pointSize : 8,
+        title : 'Population Change',
+        vAxis : { format : 'percent' },
+    });
+};
+
+// Draw charts
+//
+SearchPageController.prototype.drawLineChart = function(chartId, data, options) {
+
+    var dataTable = google.visualization.arrayToDataTable(data);
+    var chart = new google.visualization.LineChart(document.getElementById(chartId));
+
+    chart.draw(dataTable, options);
+};
+
+SearchPageController.prototype.drawSteppedAreaChart = function(chartId, data, options) {
+
+    var dataTable = google.visualization.arrayToDataTable(data);
+    var chart = new google.visualization.SteppedAreaChart(document.getElementById(chartId));
+
+    chart.draw(dataTable, options);
+};
+
+// Paging
+//
 SearchPageController.prototype.fetchNextPage = function() {
 
     if (this.fetching || this.fetchedAll)

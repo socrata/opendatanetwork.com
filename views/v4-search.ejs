@@ -64,11 +64,10 @@
             <div id="population-change-chart" class="chart"></div>
             <h1>Earnings</h1>
             <div id="earnings-chart" class="chart"></div>
-
-
-
+            <table id="earnings-table"></table>
             <h1>Education</h1>
-            <ul class="education"></ul>
+            <table id="education-table"></table>
+            
             <h1>Occupations</h1>
             <ul class="occupations"></ul>
             <h1>GDP</h1>
@@ -78,9 +77,13 @@
             <label>Data from the 2013 U.S. Census American Community Survey</label>
 
 <% } else if (params.vector == 'growth') { %>
+
         <div>Growth</div>
+
 <% } else if (params.vector == 'costs') { %>
+
         <div>Costs</div>
+
 <% } else if (params.vector == 'population') { %>
 
             <h1>Population</h1>
@@ -97,7 +100,11 @@
             <label>Data from the 2013 U.S. Census American Community Survey</label>
 
 <% } else if (params.vector == 'education') { %>
-        <div>Education</div>
+
+            <h1>Education</h1>
+            <table id="education-table"></table>
+            <label>Data from the 2013 U.S. Census American Community Survey</label>
+
 <% } %>
         </div>
     </div>

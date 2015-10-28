@@ -9,6 +9,7 @@ function ApiController() {
     this.occupationsUrl = 'https://federal.demo.socrata.com/resource/qfcm-fw3i.json/?id=';
     this.populationUrl = 'https://federal.demo.socrata.com/resource/e3rd-zzmr.json?$order=year,name&$where='; //id='1600000US5363000' OR id='1600000US4159000'
     this.earningsUrl = 'https://federal.demo.socrata.com/resource/wmwh-4vak.json/?$where=';
+    this.educationUrl = 'https://federal.demo.socrata.com/resource/uf4m-5u8r.json/?$where=';
 }
 
 ApiController.prototype.getAutoCompleteNameSuggestions = function(searchTerm, completion) {
@@ -26,7 +27,7 @@ ApiController.prototype.getCostOfLivingData = function() {
 
         $('.costOfLiving').html(items.join(''));
     });
-}
+};
 
 ApiController.prototype.getEarningsData = function(regionIds, completion) {
 
@@ -34,21 +35,19 @@ ApiController.prototype.getEarningsData = function(regionIds, completion) {
        return 'id=\'' + regionId + '\''; 
     });
 
-    console.log(this.earningsUrl + encodeURI(segments.join(' OR ')));
-
     $.getJSON(this.earningsUrl + encodeURI(segments.join(' OR ')), completion);
-}
+};
 
-ApiController.prototype.getEducationData = function(id) {
+ApiController.prototype.getEducationData = function(regionIds, completion) {
 
-    $.getJSON(this.educationUrl + id, function(data) {
-
-        var s = '<li>High school or higher : ' + data[0].percent_high_school_graduate_or_higher + '%</li>';
-        s += '<li>Bachelor\'s or higher : ' + data[0].percent_bachelors_degree_or_higher + '%</li>';
-
-        $('.education').html(s);
+    var segments = regionIds.map(function(regionId) {
+       return 'id=\'' + regionId + '\''; 
     });
-}
+
+    console.log(this.educationUrl + encodeURI(segments.join(' OR ')));
+
+    $.getJSON(this.educationUrl + encodeURI(segments.join(' OR ')), completion);
+};
 
 ApiController.prototype.getGdpData = function() {
 
@@ -60,7 +59,7 @@ ApiController.prototype.getGdpData = function() {
 
         $('.gdp').html(items.join(''));
     });
-}
+};
 
 ApiController.prototype.getOccupationsData = function(id) {
 
@@ -72,7 +71,7 @@ ApiController.prototype.getOccupationsData = function(id) {
 
         $('.occupations').html(items.join(''));
     });
-}
+};
 
 ApiController.prototype.getPopulationData = function(regionIds, completion) {
 
