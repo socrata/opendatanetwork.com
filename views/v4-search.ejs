@@ -52,7 +52,7 @@
             <li<%- getSelectedVector('growth') %>><a href="<%= getSearchPageUrl('growth') %>">Growth</a></li>
             <li<%- getSelectedVector('costs') %>><a href="<%= getSearchPageUrl('costs') %>">Costs</a></li>
             <li<%- getSelectedVector('population') %>><a href="<%= getSearchPageUrl('population') %>">Population</a></li>
-            <li<%- getSelectedVector('revenue') %>><a href="<%= getSearchPageUrl('revenue') %>">Revenue</a></li>
+            <li<%- getSelectedVector('earnings') %>><a href="<%= getSearchPageUrl('earnings') %>">Earnings</a></li>
             <li<%- getSelectedVector('education') %>><a href="<%= getSearchPageUrl('education') %>">Education</a></li>
         </ul>
         <div class="charts">
@@ -62,18 +62,21 @@
             <ul class="population"></ul>
             <h1>Population Growth</h1>
             <div id="population-change-chart" class="chart"></div>
-            <ul class="population-change"></ul>
+            <h1>Earnings</h1>
+            <div id="earnings-chart" class="chart"></div>
+
+
+
             <h1>Education</h1>
             <ul class="education"></ul>
-            <h1>Earnings</h1>
-            <ul class="earnings"></ul>
             <h1>Occupations</h1>
             <ul class="occupations"></ul>
             <h1>GDP</h1>
             <ul class="gdp"></ul>
             <h1>Cost of Living</h1>
             <ul class="costOfLiving"></ul>
-        </div>
+            <label>Data from the 2013 U.S. Census American Community Survey</label>
+
 <% } else if (params.vector == 'growth') { %>
         <div>Growth</div>
 <% } else if (params.vector == 'costs') { %>
@@ -84,9 +87,15 @@
             <div id="population-chart" class="chart"></div>
             <h1>Population Change</h1>
             <div id="population-change-chart" class="chart"></div>
+            <label>Data from the 2013 U.S. Census American Community Survey</label>
 
-<% } else if (params.vector == 'revenue') { %>
-        <div>Revenue</div>
+<% } else if (params.vector == 'earnings') { %>
+
+            <h1>Earnings</h1>
+            <div id="earnings-chart" class="chart"></div>
+            <table id="earnings-table"></table>
+            <label>Data from the 2013 U.S. Census American Community Survey</label>
+
 <% } else if (params.vector == 'education') { %>
         <div>Education</div>
 <% } %>

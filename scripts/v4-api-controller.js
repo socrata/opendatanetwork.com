@@ -5,64 +5,39 @@ function ApiController() {
     this.autoCompleteNameSuggestUrl = 'https://federal.demo.socrata.com/views/7g2b-8brv/columns/autocomplete_name/suggest/{0}?size=10&fuzz=0';
     this.costOfLivingUrl = 'https://federal.demo.socrata.com/resource/hpnf-gnfu.json/?type=state&$limit=50000&year=2013&component=All&$order=name';
     this.educationUrl = 'https://federal.demo.socrata.com/resource/uf4m-5u8r.json/?id=';
-    this.earningsUrl = 'https://federal.demo.socrata.com/resource/wmwh-4vak.json/?id=';
     this.gdpUrl = 'https://federal.demo.socrata.com/resource/ks2j-vhr8.json/?type=state&$limit=50000&year=2013&$order=name';
     this.occupationsUrl = 'https://federal.demo.socrata.com/resource/qfcm-fw3i.json/?id=';
-    this.populationDataUrl = 'https://federal.demo.socrata.com/resource/e3rd-zzmr.json?$order=year,name&$where='; //id='1600000US5363000' OR id='1600000US4159000'
-    this.populationUrl = 'https://federal.demo.socrata.com/resource/e3rd-zzmr.json/?id=';
+    this.populationUrl = 'https://federal.demo.socrata.com/resource/e3rd-zzmr.json?$order=year,name&$where='; //id='1600000US5363000' OR id='1600000US4159000'
+    this.earningsUrl = 'https://federal.demo.socrata.com/resource/wmwh-4vak.json/?$where=';
 }
 
 ApiController.prototype.getAutoCompleteNameSuggestions = function(searchTerm, completion) {
 
-    var url = this.autoCompleteNameSuggestUrl.format(encodeURIComponent(searchTerm));
-
-    $.getJSON(url, function(data) {
-        
-        console.log('getAutoCompleteNameSuggestions returned');
-        if (completion) completion(data); 
-    });
+    $.getJSON(this.autoCompleteNameSuggestUrl.format(encodeURIComponent(searchTerm)), completion);
 };
 
-ApiController.prototype.getPopulationDatas = function(regionIds, completion) {
+ApiController.prototype.getCostOfLivingData = function() {
+
+    $.getJSON(this.costOfLivingUrl, function(data) {
+
+        var items = data.map(function(item) {
+            return '<li>' + item.name + ' : ' + item.index + '</li>'; 
+        });
+
+        $('.costOfLiving').html(items.join(''));
+    });
+}
+
+ApiController.prototype.getEarningsData = function(regionIds, completion) {
 
     var segments = regionIds.map(function(regionId) {
        return 'id=\'' + regionId + '\''; 
     });
 
-    var url = this.populationDataUrl + encodeURI(segments.join(' OR '));
-    
-    console.log(url);
-    
-    $.getJSON(url, completion);
-};
+    console.log(this.earningsUrl + encodeURI(segments.join(' OR ')));
 
-ApiController.prototype.getPopulationData = function(id, completion) {
-
-    $.getJSON(this.populationUrl + id, function(data) {
-
-        var items = data.map(function(item) {
-            return '<li>' + item.year + ' : ' + item.population + '</li>'; 
-        });
-
-        $('.population').html(items.join(''));
-
-        if (completion) completion(data);
-    });
-};
-
-ApiController.prototype.getPopulationChangeData = function(id, completion) {
-
-    $.getJSON(this.populationUrl + id, function(data) {
-
-        var items = data.map(function(item) {
-            return '<li>' + item.year + ' : ' + item.population_percent_change + '%</li>'; 
-        });
-
-        $('.population-change').html(items.join(''));
-
-        if (completion) completion(data);
-    });
-};
+    $.getJSON(this.earningsUrl + encodeURI(segments.join(' OR ')), completion);
+}
 
 ApiController.prototype.getEducationData = function(id) {
 
@@ -72,30 +47,6 @@ ApiController.prototype.getEducationData = function(id) {
         s += '<li>Bachelor\'s or higher : ' + data[0].percent_bachelors_degree_or_higher + '%</li>';
 
         $('.education').html(s);
-    });
-}
-
-ApiController.prototype.getEarningsData = function(id) {
-
-    $.getJSON(this.earningsUrl + id, function(data) {
-
-        var s = '<li>Median Earnings (All Workers) : $' + data[0].median_earnings + '</li>';
-        s += '<li>Median Female Earnings (Full Time) : $' + data[0].female_full_time_median_earnings + '</li>';
-        s += '<li>Median Male Earnings (Full Time) : $' + data[0].male_full_time_median_earnings + '</li>';
-
-        $('.earnings').html(s);
-    });
-}
-
-ApiController.prototype.getOccupationsData = function(id) {
-
-    $.getJSON(this.occupationsUrl + id, function(data) {
-
-        var items = data.map(function(item) {
-            return '<li>' + item.occupation + ' : ' + item.employed + ' : ' + Math.floor((item.employed / item.total_employed) * 100) + '%</li>'; 
-        });
-
-        $('.occupations').html(items.join(''));
     });
 }
 
@@ -111,14 +62,23 @@ ApiController.prototype.getGdpData = function() {
     });
 }
 
-ApiController.prototype.getCostOfLivingData = function() {
+ApiController.prototype.getOccupationsData = function(id) {
 
-    $.getJSON(this.costOfLivingUrl, function(data) {
+    $.getJSON(this.occupationsUrl + id, function(data) {
 
         var items = data.map(function(item) {
-            return '<li>' + item.name + ' : ' + item.index + '</li>'; 
+            return '<li>' + item.occupation + ' : ' + item.employed + ' : ' + Math.floor((item.employed / item.total_employed) * 100) + '%</li>'; 
         });
 
-        $('.costOfLiving').html(items.join(''));
+        $('.occupations').html(items.join(''));
     });
 }
+
+ApiController.prototype.getPopulationData = function(regionIds, completion) {
+
+    var segments = regionIds.map(function(regionId) {
+       return 'id=\'' + regionId + '\''; 
+    });
+
+    $.getJSON(this.populationUrl + encodeURI(segments.join(' OR ')), completion);
+};

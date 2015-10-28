@@ -240,10 +240,51 @@ section.results
     font-weight: 300;
 }
 
+.charts-column label
+{
+    color: $darker-gray-text-color;
+    display: block;
+    font-size: 12px;
+    margin: 50px 125px 0 0;
+    text-align: right;
+}
+
+.charts-column table
+{
+    border-spacing: 1px;
+    width: 100%;
+}
+
+.charts-column th
+{
+    font-size: 14px;
+    font-weight: normal;
+    padding: 10px 15px;
+    text-align: center;
+}
+
+.charts-column td
+{
+    background-color: $gray-background-color;
+    font-size: 14px;
+    padding: 10px 15px;
+    text-align: center;
+}
+
+.charts-column td:first-child
+{
+    text-align: left;
+}
+
+
 .chart 
 {
     height: 300px;
+    margin: 0 0 50px;
 }
+
+
+
 
 /* Controls */
 

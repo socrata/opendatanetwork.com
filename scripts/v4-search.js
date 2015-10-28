@@ -12,10 +12,7 @@ $(document).ready(function() {
         searchPageController.navigate();
     });
 
-//        apiController.getPopulationData(regionId);
-//        apiController.getPopulationChangeData(regionId);
 //        apiController.getEducationData(regionId);
-//        apiController.getEarningsData(regionId);
 //        apiController.getOccupationsData(regionId);
 //        apiController.getGdpData();
 //        apiController.getCostOfLivingData();
@@ -27,9 +24,18 @@ $(document).ready(function() {
     if (_params.regions.length > 0) {
 
         switch (_params.vector) {
-            
+
+            case 'all':
+                searchPageController.drawPopulationCharts();
+                searchPageController.drawEarningsCharts();
+                break;
+
             case 'population':
                 searchPageController.drawPopulationCharts();
+                break;
+                
+            case 'earnings':
+                searchPageController.drawEarningsCharts();
                 break;
         }
    }

@@ -231,7 +231,7 @@ RenderController.prototype.renderSearchWithVectorPageV4 = function(req, res) {
     if ((req.params.vector == 'growth') ||
         (req.params.vector == 'costs') ||
         (req.params.vector == 'population') ||
-        (req.params.vector == 'revenue') ||
+        (req.params.vector == 'earnings') ||
         (req.params.vector == 'education')) {
 
         apiController.getSearchParametersV4(req, function(params) {
@@ -266,6 +266,7 @@ RenderController.prototype._renderSearchPageV4 = function(req, res, params) {
                     {
                         css : ['/styles/v4-search.min.css'],
                         scripts : [
+                            '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
                             '/scripts/v4-api-controller.js', // TODO: min
                             '/scripts/v4-region-controller.js', // TODO: min
                             '/scripts/v4-search-page-controller.js', // TODO: min
