@@ -228,11 +228,12 @@ RenderController.prototype.renderHomePageV4 = function (req, res) {
 //
 RenderController.prototype.renderSearchWithVectorPageV4 = function(req, res) {
 
-    if ((req.params.vector == 'growth') ||
-        (req.params.vector == 'costs') ||
-        (req.params.vector == 'population') ||
+    if ((req.params.vector == 'population') ||
         (req.params.vector == 'earnings') ||
-        (req.params.vector == 'education')) {
+        (req.params.vector == 'education') ||
+        (req.params.vector == 'occupations') ||
+        (req.params.vector == 'gdp') ||
+        (req.params.vector == 'cost_of_living')) {
 
         apiController.getSearchParametersV4(req, function(params) {
 

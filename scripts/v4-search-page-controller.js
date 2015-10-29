@@ -46,6 +46,114 @@ SearchPageController.prototype.decrementPage = function() {
     this.params.page--;
 };
 
+// Cost of living
+//
+SearchPageController.prototype.drawCostOfLivingData = function() {
+
+    var self = this;
+
+    google.setOnLoadCallback(function() {
+
+        var regionIds = self.params.regions.map(function(region) { return region.id; });
+        var controller = new ApiController();
+
+        controller.getCostOfLivingData(regionIds, function(data) { 
+
+            self.drawCostOfLivingTable(regionIds, data);
+        });
+    });
+};
+
+SearchPageController.prototype.drawCostOfLivingTable = function(regionIds, data) {
+
+    // Format the data
+    //
+    var components = ['All', 'Goods', 'Other', 'Rents'];
+    var rows = [];
+
+    for (var i = 0; i < components.length; i++) {
+
+        var component = components[i];
+        var row = [component];
+
+        for (var j = 0; j < regionIds.length; j++) {
+
+            var o = this.getLatestCostOfLiving(data, regionIds[j], component);
+            row.push({
+                index : (o != null) ? parseInt(o.index) : 'NA',
+                percentile : (o != null) ? this.getPercentile(o.rank, o.total_ranks) : 'NA',
+            });
+        }
+
+        rows.push(row);
+    }
+
+    // Create the html
+    //
+    var s = '<tr><th></th>';
+
+    for (var i = 0; i < regionIds.length; i++) {
+        s += '<th colspan=\'2\'>' + this.params.regions[i].name + '</th>';
+    }
+    
+    s += '</tr>';
+    
+    for (var i = 0; i < rows.length; i++) {
+
+        var row = rows[i];
+
+        s += '<tr>';
+        s += '<td>' + row[0] + '</td>';
+
+        for (var j = 1; j < row.length; j++) {
+
+            s += '<td>' + row[j].index + '</td>';
+            s += '<td>' + row[j].percentile + '</td>';
+        }
+        
+        s += '</tr>';
+    }
+
+    $('#cost-of-living-table').html(s);
+};
+
+SearchPageController.prototype.getPercentile = function(rank, totalRanks) {
+
+    var totalRanks = parseInt(totalRanks);
+    var rank = parseInt(rank);
+    var percentile = parseInt(((totalRanks - rank) / totalRanks) * 100);
+
+    return numeral(percentile).format('0o');
+};
+
+SearchPageController.prototype.getLatestCostOfLiving = function(data, regionId, component) {
+
+    var datum = null;
+
+    for (var i = 0; i < data.length; i++) {
+
+        if (data[i].id != regionId)
+            continue;
+
+        if (data[i].component != component)
+            continue;
+
+        if (datum == null) {
+
+            datum = data[i];
+            continue;
+        }
+
+        if (data[i].year <= datum)
+            continue;
+
+        datum = data[i];
+    }
+    
+    return datum;
+};
+
+
 // Earnings
 //
 SearchPageController.prototype.drawEarningsData = function() {
@@ -207,7 +315,7 @@ SearchPageController.prototype.drawEducationTable = function(regionIds, data) {
     s += '<tr><th></th>';
 
     for (var i = 0; i < regionIds.length; i++) {
-        s += '<th>' + this.params.regions[i].name + '</th>';
+        s += '<th colspan=\'2\'>' + this.params.regions[i].name + '</th>';
     }
 
     // At least bachelor's
@@ -215,12 +323,13 @@ SearchPageController.prototype.drawEducationTable = function(regionIds, data) {
     s += '</tr><tr><td>At Least Bachelor\'s Degree</td>';
 
     for (var i = 0; i < regionIds.length; i++) {
+
+        var totalRanks = parseInt(data[i].total_ranks);
+        var rank = parseInt(data[i].percent_bachelors_degree_or_higher_rank);
+        var percentile = parseInt(((totalRanks - rank) / totalRanks) * 100);
+        
         s += '<td>' + data[i].percent_bachelors_degree_or_higher + '%</td>';
-        
-        
-        // START RIGHT HERE: calculate and display the rank (95th percentile or whatever)
-        
-        
+        s += '<td>' + numeral(percentile).format('0o') + '</td>';
     }
 
     // At least high school diploma
@@ -228,13 +337,64 @@ SearchPageController.prototype.drawEducationTable = function(regionIds, data) {
     s += '</tr><tr><td>At Least High School Diploma</td>';
 
     for (var i = 0; i < regionIds.length; i++) {
+
+        var totalRanks = parseInt(data[i].total_ranks);
+        var rank = parseInt(data[i].percent_high_school_graduate_or_higher);
+        var percentile = parseInt(((totalRanks - rank) / totalRanks) * 100);
+
         s += '<td>' + data[i].percent_high_school_graduate_or_higher + '%</td>';
+        s += '<td>' + numeral(percentile).format('0o') + '</td>';
     }
 
     s += '</tr>';
 
     $('#education-table').html(s);
 };
+
+// Occupations
+//
+SearchPageController.prototype.drawOccupationsData = function() {
+
+    var self = this;
+
+    google.setOnLoadCallback(function() {
+
+        var regionIds = self.params.regions.map(function(region) { return region.id; });
+        var controller = new ApiController();
+
+        controller.getOccupationsData(regionIds, function(data) { 
+
+            self.drawOccupationsTable(regionIds, data);
+        });
+    });
+};
+
+SearchPageController.prototype.drawOccupationsTable = function(regionIds, data) {
+
+    var s = '<tr><th></th>';
+
+    for (var i = 0; i < regionIds.length; i++) {
+        s += '<th colspan=\'2\'>' + this.params.regions[i].name + '</th>';
+    }
+
+    for (var i = 0; i < data.length; i++) {
+
+        if ((i % regionIds.length) == 0)
+            s += '</tr><tr><td>' + data[i].occupation + '</td>'; 
+
+        var totalRanks = parseInt(data[i].total_ranks);
+        var rank = parseInt(data[i].percent_employed_rank);
+        var percentile = parseInt(((totalRanks - rank) / totalRanks) * 100);
+
+        s += '<td>' + numeral(data[i].percent_employed).format('0.0') + '%</td>';
+        s += '<td>' + numeral(percentile).format('0o') + '</td>';
+    }
+
+    s += '</tr>';
+
+    $('#occupations-table').html(s);
+};
+
 
 // Population
 //
@@ -334,7 +494,7 @@ SearchPageController.prototype.drawPopulationChangeChart = function(regionIds, d
         pointShape : 'square',
         pointSize : 8,
         title : 'Population Change',
-        vAxis : { format : 'percent' },
+        vAxis : { format : '#.#%' },
     });
 };
 

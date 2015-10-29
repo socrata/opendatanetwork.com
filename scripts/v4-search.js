@@ -12,10 +12,6 @@ $(document).ready(function() {
         searchPageController.navigate();
     });
 
-//        apiController.getOccupationsData(regionId);
-//        apiController.getGdpData();
-//        apiController.getCostOfLivingData();
-
     // Charts
     //
     if (_params.regions.length > 0) {
@@ -26,6 +22,7 @@ $(document).ready(function() {
                 searchPageController.drawPopulationData();
                 searchPageController.drawEarningsData();
                 searchPageController.drawEducationData();
+                searchPageController.drawOccupationsData();
                 break;
 
             case 'population':
@@ -38,6 +35,14 @@ $(document).ready(function() {
                 
             case 'education':
                 searchPageController.drawEducationData();
+                break;
+
+            case 'occupations':
+                searchPageController.drawOccupationsData();
+                break;
+                
+            case 'cost_of_living':
+                searchPageController.drawCostOfLivingData();
                 break;
         }
    }

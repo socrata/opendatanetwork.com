@@ -47,15 +47,19 @@
 <% if ((params.regions != null) && (params.regions.length > 0)) { %>
 
     <div class="charts-column">
+
         <ul class="chart-tabs">
             <li<%- getSelectedVector('all') %>><a href="<%= getSearchPageUrl() %>">All</a></li>
-            <li<%- getSelectedVector('growth') %>><a href="<%= getSearchPageUrl('growth') %>">Growth</a></li>
-            <li<%- getSelectedVector('costs') %>><a href="<%= getSearchPageUrl('costs') %>">Costs</a></li>
             <li<%- getSelectedVector('population') %>><a href="<%= getSearchPageUrl('population') %>">Population</a></li>
             <li<%- getSelectedVector('earnings') %>><a href="<%= getSearchPageUrl('earnings') %>">Earnings</a></li>
             <li<%- getSelectedVector('education') %>><a href="<%= getSearchPageUrl('education') %>">Education</a></li>
+            <li<%- getSelectedVector('occupations') %>><a href="<%= getSearchPageUrl('occupations') %>">Occupations</a></li>
+            <li<%- getSelectedVector('gdp') %>><a href="<%= getSearchPageUrl('gdp') %>">GDP</a></li>
+            <li<%- getSelectedVector('cost_of_living') %>><a href="<%= getSearchPageUrl('cost_of_living') %>">Costs of Living</a></li>
         </ul>
+
         <div class="charts">
+
 <% if (params.vector == 'all') { %>
             <h1>Population</h1>
             <div id="population-chart" class="chart"></div>
@@ -67,22 +71,14 @@
             <table id="earnings-table"></table>
             <h1>Education</h1>
             <table id="education-table"></table>
-            
             <h1>Occupations</h1>
-            <ul class="occupations"></ul>
+            <table id="occupations-table"></table>
+            <h1>Cost of Living</h1>
+            <table id="cost-of-living-table"></table>
+
             <h1>GDP</h1>
             <ul class="gdp"></ul>
-            <h1>Cost of Living</h1>
-            <ul class="costOfLiving"></ul>
             <label>Data from the 2013 U.S. Census American Community Survey</label>
-
-<% } else if (params.vector == 'growth') { %>
-
-        <div>Growth</div>
-
-<% } else if (params.vector == 'costs') { %>
-
-        <div>Costs</div>
 
 <% } else if (params.vector == 'population') { %>
 
@@ -105,8 +101,25 @@
             <table id="education-table"></table>
             <label>Data from the 2013 U.S. Census American Community Survey</label>
 
+<% } else if (params.vector == 'occupations') { %>
+
+            <h1>Occupations</h1>
+            <table id="occupations-table"></table>
+            <label>Data from the 2013 U.S. Census American Community Survey</label>
+
+<% } else if (params.vector == 'gdp') { %>
+
+            <h1>GDP</h1>
+
+<% } else if (params.vector == 'cost_of_living') { %>
+
+            <h1>Cost of Living</h1>
+            <table id="cost-of-living-table"></table>
+            <label>Data from the 2013 U.S. Census American Community Survey</label>
+
 <% } %>
         </div>
+
     </div>
 
     <div class="controls-column">
@@ -177,9 +190,6 @@ function getSearchPageUrl(vector) {
 
 function getSelectedVector(vector) {
 
-console.log(vector + ' ' + params.vector);
-
     return (vector == params.vector) ? ' class="selected"' : ''; 
 }
-
 %>
