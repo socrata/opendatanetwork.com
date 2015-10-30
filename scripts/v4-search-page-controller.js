@@ -575,7 +575,7 @@ SearchPageController.prototype.drawPopulationData = function() {
 
 SearchPageController.prototype.drawPopulationChart = function(regionIds, data) {
 
-    var years = [];
+    var chartData = [];
     var year;
 
     // Header
@@ -586,7 +586,7 @@ SearchPageController.prototype.drawPopulationChart = function(regionIds, data) {
         header[i + 1] = this.params.regions[i].name;
     }
 
-    years.push(header);
+    chartData.push(header);
 
     // Data
     //
@@ -598,13 +598,13 @@ SearchPageController.prototype.drawPopulationChart = function(regionIds, data) {
 
             year = [];
             year[0] = data[i].year;
-            years.push(year);
+            chartData.push(year);
         }
 
         year[m + 1] = parseInt(data[i].population);
     }
 
-    SearchPageController.prototype.drawLineChart('population-chart', years, {
+    SearchPageController.prototype.drawLineChart('population-chart', chartData, {
 
         curveType : 'function',
         legend : { position : 'bottom' },
@@ -616,7 +616,7 @@ SearchPageController.prototype.drawPopulationChart = function(regionIds, data) {
 
 SearchPageController.prototype.drawPopulationChangeChart = function(regionIds, data) {
 
-    var years = [];
+    var chartData = [];
     var year;
 
     // Header
@@ -627,7 +627,7 @@ SearchPageController.prototype.drawPopulationChangeChart = function(regionIds, d
         header[i + 1] = this.params.regions[i].name;
     }
 
-    years.push(header);
+    chartData.push(header);
 
     // Data
     //
@@ -639,13 +639,13 @@ SearchPageController.prototype.drawPopulationChangeChart = function(regionIds, d
 
             year = [];
             year[0] = data[i].year;
-            years.push(year);
+            chartData.push(year);
         }
 
         year[m + 1] = parseFloat(data[i].population_percent_change) / 100;
     }
 
-    SearchPageController.prototype.drawLineChart('population-change-chart', years, {
+    SearchPageController.prototype.drawLineChart('population-change-chart', chartData, {
 
         curveType : 'function',
         legend : { position : 'bottom' },
@@ -712,7 +712,7 @@ SearchPageController.prototype.getSearchPageUrl = function() {
         var regionNames = this.params.regions.map(function(region) {
             return region.name.replace(/,/g, '').replace(/ /g, '_');
         });
-        
+
         if (this.params.autoCompletedRegion != null) {
         
         console.log(this.params.autoCompletedRegion);
@@ -720,13 +720,16 @@ SearchPageController.prototype.getSearchPageUrl = function() {
         }
 
         url += regionNames.join('_vs_');
+
+        if (this.params.vector)
+            url += '/' + this.params.vector;
     }
     else {
 
         url = '/v4-search';
     }
 
-    url +=  this.getSearchQueryString();
+    url += this.getSearchQueryString();
 
     return url;
 };

@@ -23,7 +23,7 @@
 
     <div class="text-entry" style="display:none;">
         <i class="fa fa-search"></i>
-        <form method="get" action="<%= getSearchPageUrl() %>">
+        <form method="get" action="<%= getSearchPageUrl(params.vector) %>">
             <input type="text" value="<%= params.q %>" id="q" name="q" autocomplete="off">
         </form>
         <ul class="region-list" style="display:none;"></ul>
@@ -173,8 +173,38 @@ function getSearchPageUrl(vector) {
         url = '/v4-search';
     }
 
+    url += getSearchQueryString();
+
     return url;
 }
+
+function getSearchQueryString() {
+
+    var url = '?q=' + encodeURIComponent(params.q);
+
+    if (params.page > 1)
+        url += '&page=' + params.page;
+
+    if (params.categories.length > 0)
+        url += '&categories=' + encodeURIComponent(params.categories.join(','));
+
+    if (params.domains.length > 0)
+        url += '&domains=' + encodeURIComponent(params.domains.join(','));
+
+    if (params.tags.length > 0)
+        url += '&tags=' + encodeURIComponent(params.tags.join(','));
+
+    if (params.ec)
+        url += '&ec=1';
+
+    if (params.ed)
+        url += '&ed=1';
+
+    if (params.et)
+        url += '&et=1';
+
+    return url;
+};
 
 function getSelectedVector(vector) {
 
