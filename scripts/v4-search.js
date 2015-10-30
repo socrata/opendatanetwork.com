@@ -18,13 +18,6 @@ $(document).ready(function() {
 
         switch (_params.vector) {
 
-            case 'all':
-                searchPageController.drawPopulationData();
-                searchPageController.drawEarningsData();
-                searchPageController.drawEducationData();
-                searchPageController.drawOccupationsData();
-                break;
-
             case 'population':
                 searchPageController.drawPopulationData();
                 break;
@@ -40,9 +33,13 @@ $(document).ready(function() {
             case 'occupations':
                 searchPageController.drawOccupationsData();
                 break;
-                
+
             case 'cost_of_living':
                 searchPageController.drawCostOfLivingData();
+                break;
+                
+            case 'gdp':
+                searchPageController.drawGdpData();
                 break;
         }
    }

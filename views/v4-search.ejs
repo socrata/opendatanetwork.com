@@ -49,50 +49,29 @@
     <div class="charts-column">
 
         <ul class="chart-tabs">
-            <li<%- getSelectedVector('all') %>><a href="<%= getSearchPageUrl() %>">All</a></li>
             <li<%- getSelectedVector('population') %>><a href="<%= getSearchPageUrl('population') %>">Population</a></li>
             <li<%- getSelectedVector('earnings') %>><a href="<%= getSearchPageUrl('earnings') %>">Earnings</a></li>
             <li<%- getSelectedVector('education') %>><a href="<%= getSearchPageUrl('education') %>">Education</a></li>
             <li<%- getSelectedVector('occupations') %>><a href="<%= getSearchPageUrl('occupations') %>">Occupations</a></li>
             <li<%- getSelectedVector('gdp') %>><a href="<%= getSearchPageUrl('gdp') %>">GDP</a></li>
-            <li<%- getSelectedVector('cost_of_living') %>><a href="<%= getSearchPageUrl('cost_of_living') %>">Costs of Living</a></li>
+            <li<%- getSelectedVector('cost_of_living') %>><a href="<%= getSearchPageUrl('cost_of_living') %>">Cost of Living</a></li>
         </ul>
 
         <div class="charts">
 
-<% if (params.vector == 'all') { %>
-            <h1>Population</h1>
-            <div id="population-chart" class="chart"></div>
-            <ul class="population"></ul>
-            <h1>Population Growth</h1>
-            <div id="population-change-chart" class="chart"></div>
-            <h1>Earnings</h1>
-            <div id="earnings-chart" class="chart"></div>
-            <table id="earnings-table"></table>
-            <h1>Education</h1>
-            <table id="education-table"></table>
-            <h1>Occupations</h1>
-            <table id="occupations-table"></table>
-            <h1>Cost of Living</h1>
-            <table id="cost-of-living-table"></table>
-
-            <h1>GDP</h1>
-            <ul class="gdp"></ul>
-            <label>Data from the 2013 U.S. Census American Community Survey</label>
-
-<% } else if (params.vector == 'population') { %>
+<% if (params.vector == 'population') { %>
 
             <h1>Population</h1>
-            <div id="population-chart" class="chart"></div>
+            <figure id="population-chart"></figure>
             <h1>Population Change</h1>
-            <div id="population-change-chart" class="chart"></div>
+            <figure id="population-change-chart"></figure>
             <label>Data from the 2013 U.S. Census American Community Survey</label>
 
 <% } else if (params.vector == 'earnings') { %>
 
             <h1>Earnings</h1>
-            <div id="earnings-chart" class="chart"></div>
             <table id="earnings-table"></table>
+            <figure id="earnings-chart"></figure>
             <label>Data from the 2013 U.S. Census American Community Survey</label>
 
 <% } else if (params.vector == 'education') { %>
@@ -110,17 +89,28 @@
 <% } else if (params.vector == 'gdp') { %>
 
             <h1>GDP</h1>
+            <figure id="per-capita-gdp-chart"></figure>
+            <figure id="per-capita-gdp-change-chart"></figure>
 
 <% } else if (params.vector == 'cost_of_living') { %>
 
             <h1>Cost of Living</h1>
             <table id="cost-of-living-table"></table>
+            <figure id="cost-of-living-all-chart"></figure>
+            <h1>Goods</h1>
+            <figure id="cost-of-living-goods-chart"></figure>
+            <h1>Rents</h1>
+            <figure id="cost-of-living-rents-chart"></figure>
+            <h1>Other</h1>
+            <figure id="cost-of-living-other-chart"></figure>
             <label>Data from the 2013 U.S. Census American Community Survey</label>
 
 <% } %>
         </div>
 
     </div>
+
+<% } %>
 
     <div class="controls-column">
         <div class="controls">
@@ -152,8 +142,6 @@
             <a href="http://www.socrata.com/company-info/"><img src="/images/v3-powered-by-socrata.png"></a>
         </div>
     </div>
-
-<% } %>
 
 </section>
 

@@ -59,10 +59,63 @@ SearchPageController.prototype.drawCostOfLivingData = function() {
 
         controller.getCostOfLivingData(regionIds, function(data) { 
 
+            self.drawCostOfLivingChart(regionIds, data);
             self.drawCostOfLivingTable(regionIds, data);
         });
     });
 };
+
+SearchPageController.prototype.drawCostOfLivingChart = function(regionIds, data) {
+
+    this.drawCostOfLivingChartForComponent('cost-of-living-all-chart', 'All', regionIds, data);
+    this.drawCostOfLivingChartForComponent('cost-of-living-goods-chart', 'Goods', regionIds, data);
+    this.drawCostOfLivingChartForComponent('cost-of-living-rents-chart', 'Rents', regionIds, data);
+    this.drawCostOfLivingChartForComponent('cost-of-living-other-chart', 'Other', regionIds, data);
+}
+
+SearchPageController.prototype.drawCostOfLivingChartForComponent = function(id, component, regionIds, data) {
+
+    var chartData = []
+
+    // Header
+    //
+    var header = ['Year'];
+
+    for (var i = 0; i < regionIds.length; i++) {
+        header[i + 1] = this.params.regions[i].name;
+    }
+
+    chartData.push(header);
+
+    // Format the data
+    //
+    var o = {};
+
+    for (var i = 0; i < data.length; i++) {
+
+        if (data[i].component != component)
+            continue;
+
+        if (o[data[i].year] == undefined) {
+            o[data[i].year] = [data[i].year];
+        }
+
+        o[data[i].year].push(parseFloat(data[i].index));
+    }
+
+    for (var key in o) {
+        chartData.push(o[key]);
+    }
+
+    SearchPageController.prototype.drawLineChart(id, chartData, {
+
+        curveType : 'function',
+        legend : { position : 'bottom' },
+        pointShape : 'square',
+        pointSize : 8,
+        title : component,
+    });
+}
 
 SearchPageController.prototype.drawCostOfLivingTable = function(regionIds, data) {
 
@@ -152,7 +205,6 @@ SearchPageController.prototype.getLatestCostOfLiving = function(data, regionId, 
     
     return datum;
 };
-
 
 // Earnings
 //
@@ -349,6 +401,112 @@ SearchPageController.prototype.drawEducationTable = function(regionIds, data) {
     s += '</tr>';
 
     $('#education-table').html(s);
+};
+
+// GDP data
+//
+SearchPageController.prototype.drawGdpData = function() {
+
+    var self = this;
+
+    google.setOnLoadCallback(function() {
+
+        var regionIds = self.params.regions.map(function(region) { return region.id; });
+        var controller = new ApiController();
+
+        controller.getGdpData(regionIds, function(data) { 
+
+            self.drawGdpChart(regionIds, data);
+            self.drawGdpChangeChart(regionIds, data);
+        });
+    });
+};
+
+SearchPageController.prototype.drawGdpChart = function(regionIds, data) {
+
+    var chartData = [];
+
+    // Header
+    //
+    var header = ['Year'];
+
+    for (var i = 0; i < regionIds.length; i++) {
+        header[i + 1] = this.params.regions[i].name;
+    }
+
+    chartData.push(header);
+
+    // Format the data
+    //
+    var o = {};
+
+    for (var i = 0; i < data.length; i++) {
+
+        if (o[data[i].year] == undefined) {
+            o[data[i].year] = [data[i].year];
+        }
+
+        o[data[i].year].push(parseFloat(data[i].per_capita_gdp));
+    }
+
+    for (var key in o) {
+        chartData.push(o[key]);
+    }
+
+    // Draw chart
+    //
+    SearchPageController.prototype.drawLineChart('per-capita-gdp-chart', chartData, {
+
+        curveType : 'function',
+        legend : { position : 'bottom' },
+        pointShape : 'square',
+        pointSize : 8,
+        title : 'Per Capita Real GDP over Time',
+    });
+};
+
+SearchPageController.prototype.drawGdpChangeChart = function(regionIds, data) {
+
+    var chartData = [];
+
+    // Header
+    //
+    var header = ['Year'];
+
+    for (var i = 0; i < regionIds.length; i++) {
+        header[i + 1] = this.params.regions[i].name;
+    }
+
+    chartData.push(header);
+
+    // Format the data
+    //
+    var o = {};
+
+    for (var i = 0; i < data.length; i++) {
+
+        if (o[data[i].year] == undefined) {
+            o[data[i].year] = [data[i].year];
+        }
+
+        o[data[i].year].push(parseFloat(data[i].per_capita_gdp_percent_change) / 100);
+    }
+
+    for (var key in o) {
+        chartData.push(o[key]);
+    }
+
+    // Draw chart
+    //
+    SearchPageController.prototype.drawLineChart('per-capita-gdp-change-chart', chartData, {
+
+        curveType : 'function',
+        legend : { position : 'bottom' },
+        pointShape : 'square',
+        pointSize : 8,
+        title : 'Annual Change in Per Capita GDP over Time',
+        vAxis : { format : '#.#%' },
+    });
 };
 
 // Occupations
