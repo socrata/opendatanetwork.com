@@ -132,8 +132,9 @@ SearchPageController.prototype.drawCostOfLivingTable = function(regionIds, data)
         for (var j = 0; j < regionIds.length; j++) {
 
             var o = this.getLatestCostOfLiving(data, regionIds[j], component);
+
             row.push({
-                index : (o != null) ? parseInt(o.index) : 'NA',
+                index : (o != null) ? parseFloat(o.index) : 'NA',
                 percentile : (o != null) ? this.getPercentile(o.rank, o.total_ranks) : 'NA',
             });
         }
@@ -205,7 +206,7 @@ SearchPageController.prototype.getLatestCostOfLiving = function(data, regionId, 
             continue;
         }
 
-        if (data[i].year <= datum)
+        if (parseInt(data[i].year) <= parseInt(datum.year))
             continue;
 
         datum = data[i];
