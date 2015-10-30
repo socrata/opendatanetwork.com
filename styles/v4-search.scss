@@ -284,6 +284,14 @@ section.results
     text-align: left;
 }
 
+.charts-column td.column-header
+{
+    background-color: transparent;
+    color: $dark-gray-text-color;
+    font-size: 12px;
+    padding: 5px 15px;
+}
+
 
 /* Controls */
 

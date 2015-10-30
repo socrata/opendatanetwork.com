@@ -141,14 +141,22 @@ SearchPageController.prototype.drawCostOfLivingTable = function(regionIds, data)
         rows.push(row);
     }
 
-    // Create the html
+    // Header
     //
     var s = '<tr><th></th>';
 
     for (var i = 0; i < regionIds.length; i++) {
         s += '<th colspan=\'2\'>' + this.params.regions[i].name + '</th>';
     }
-    
+
+    // Sub header
+    //
+    s += '</tr><tr><td class=\'column-header\'></td>';
+
+    for (var i = 0; i < regionIds.length; i++) {
+        s += '<td class=\'column-header\'>Value</td><td class=\'column-header\'>Percentile</td>';
+    }
+
     s += '</tr>';
     
     for (var i = 0; i < rows.length; i++) {
@@ -370,6 +378,14 @@ SearchPageController.prototype.drawEducationTable = function(regionIds, data) {
         s += '<th colspan=\'2\'>' + this.params.regions[i].name + '</th>';
     }
 
+    // Sub header
+    //
+    s += '</tr><tr><td class=\'column-header\'></td>';
+
+    for (var i = 0; i < regionIds.length; i++) {
+        s += '<td class=\'column-header\'>Percent</td><td class=\'column-header\'>Percentile</td>';
+    }
+
     // At least bachelor's
     //
     s += '</tr><tr><td>At Least Bachelor\'s Degree</td>';
@@ -533,6 +549,14 @@ SearchPageController.prototype.drawOccupationsTable = function(regionIds, data) 
 
     for (var i = 0; i < regionIds.length; i++) {
         s += '<th colspan=\'2\'>' + this.params.regions[i].name + '</th>';
+    }
+
+    // Sub header
+    //
+    s += '</tr><tr><td class=\'column-header\'></td>';
+
+    for (var i = 0; i < regionIds.length; i++) {
+        s += '<td class=\'column-header\'>Percent</td><td class=\'column-header\'>Percentile</td>';
     }
 
     for (var i = 0; i < data.length; i++) {
