@@ -1,4 +1,4 @@
-function RegionController(onClickRegion) {
+function AutoSuggestRegionController(onClickRegion) {
 
     $('#q').keyup(function() {
 

@@ -207,7 +207,7 @@ RenderController.prototype.renderHomePageV4 = function (req, res) {
                         css : ['/styles/v4-home.min.css', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css'],
                         scripts : [
                             '/scripts/v4-api-controller.js', // TODO: min
-                            '/scripts/v4-region-controller.js', // TODO: min
+                            '/scripts/v4-auto-suggest-region-controller.js', // TODO: min
                             '/scripts/v4-search-menu-controller.js', // TODO: min
                             '/scripts/v4-home.js', // TODO: min
                             '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js', 
@@ -269,7 +269,7 @@ RenderController.prototype._renderSearchPageV4 = function(req, res, params) {
                         scripts : [
                             '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
                             '/scripts/v4-api-controller.js', // TODO: min
-                            '/scripts/v4-region-controller.js', // TODO: min
+                            '/scripts/v4-auto-suggest-region-controller.js', // TODO: min
                             '/scripts/v4-search-page-controller.js', // TODO: min
                             '/scripts/v4-search.js', // TODO: min
                             ],

@@ -153,11 +153,9 @@ ApiController.prototype.getSearchParametersV4 = function(req, completionHandler)
         if (results.length > 0) {
 
             params.regions = results.map(function(result) {
-                return { id : result.id, name : result.name };
+                return { id : result.id, name : result.name, type : result.type };
             });
         }
-
-        console.log(JSON.stringify(params));
 
         if (completionHandler) completionHandler(params);
     });

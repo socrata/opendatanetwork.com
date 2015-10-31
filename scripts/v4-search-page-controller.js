@@ -3,6 +3,7 @@ function SearchPageController(params) {
     this.params = params;
     this.fetching = false;
     this.fetchedAll = false;
+    this.mostSimilar = [];
 
     var self = this;
 
@@ -681,6 +682,65 @@ SearchPageController.prototype.drawPopulationChangeChart = function(regionIds, d
     });
 };
 
+// Similar regions
+//
+SearchPageController.prototype.drawSimilarRegions = function(onClickRegion) {
+
+    if (this.params.length == 0) 
+        return;
+
+    var region = null;
+
+    for (var i = 0; i < this.params.regions.length; i++) {
+
+        if (this.params.regions[i].type != 'msa') {
+
+            region = this.params.regions[i];
+            break;
+        }
+    }
+
+    if (region == null)
+        return;
+
+    var controller = new ApiController();
+    var self = this;
+
+    controller.getSimilarRegions(region.id, function(data) { 
+
+        self.drawSimilarRegionsList(data, onClickRegion);
+    });
+};
+
+SearchPageController.prototype.drawSimilarRegionsList = function(data, onClickRegion) {
+    
+    var s = '';
+    
+    if (data.most_similar == undefined)
+        return;
+
+    this.mostSimilar = data.most_similar;
+
+    for (var i = 0; i < this.mostSimilar.length; i++) {
+
+        s += '<li><span><i class="fa"></i></span>' + this.mostSimilar[i].name + '</li>'
+    }
+
+    $('.similar-regions').html(s);
+    $('.similar-regions').slideToggle(100);
+
+    var self = this;
+
+    $('.similar-regions li span').click(function() {
+
+        $(this).children(":first").addClass('fa-check');
+
+        var index = $(this).parent().index();
+
+        onClickRegion(self.mostSimilar[index].name);
+    });
+};
+
 // Draw charts
 //
 SearchPageController.prototype.drawLineChart = function(chartId, data, options) {
@@ -730,7 +790,7 @@ SearchPageController.prototype.getSearchPageUrl = function() {
 
     var url;
 
-    if ((this.params.regions.length > 0) || (this.params.autoCompletedRegion != null)) {
+    if ((this.params.regions.length > 0) || (this.params.autoSuggestedRegion != null)) {
 
         url = '/';
 
@@ -738,10 +798,10 @@ SearchPageController.prototype.getSearchPageUrl = function() {
             return region.name.replace(/,/g, '').replace(/ /g, '_');
         });
 
-        if (this.params.autoCompletedRegion != null) {
+        if (this.params.autoSuggestedRegion != null) {
         
-        console.log(this.params.autoCompletedRegion);
-            regionNames.push(this.params.autoCompletedRegion.replace(/,/g, '').replace(/ /g, '_'));
+        console.log(this.params.autoSuggestedRegion);
+            regionNames.push(this.params.autoSuggestedRegion.replace(/,/g, '').replace(/ /g, '_'));
         }
 
         url += regionNames.join('_vs_');
@@ -811,8 +871,8 @@ SearchPageController.prototype.removeRegion = function(regionIndex) {
     this.params.page = 1;
 };
 
-SearchPageController.prototype.setAutoCompletedRegion = function(region) {
+SearchPageController.prototype.setAutoSuggestedRegion = function(region) {
 
-    this.params.autoCompletedRegion = region;
+    this.params.autoSuggestedRegion = region;
     this.params.page = 1;
 };

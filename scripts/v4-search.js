@@ -6,13 +6,21 @@ $(document).ready(function() {
 
     // Region controller
     //
-    new RegionController(function(region) {
+    new AutoSuggestRegionController(function(region) {
 
-        searchPageController.setAutoCompletedRegion(region);
+        searchPageController.setAutoSuggestedRegion(region);
         searchPageController.navigate();
     });
 
-    // Charts
+    // Similar regions
+    //
+    searchPageController.drawSimilarRegions(function(region) {
+
+        searchPageController.setAutoSuggestedRegion(region);
+        searchPageController.navigate();
+    });
+
+    // Chart column
     //
     if (_params.regions.length > 0) {
 

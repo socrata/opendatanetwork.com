@@ -118,13 +118,7 @@
             <div class="add-region">
                 <i class="fa fa-plus"></i><input type="text" placeholder="Add Location">
             </div>
-            <ul class="similar-regions">
-                <li><span><i class="fa fa-check"></i></span>Texas</li>
-                <li><span><i class="fa"></i></span>New York</li>
-                <li><span><i class="fa"></i></span>Florida</li>
-                <li><span><i class="fa"></i></span>Pennslyvania</li>
-                <li><span><i class="fa"></i></span>Illinois</li>
-            </ul>
+            <ul class="similar-regions" style="display:none"></ul>
             <h2>Places in California</h2>
             <ul class="places-in-region">
                 <li>Omare</li>
@@ -155,7 +149,7 @@ function getSearchPageUrl(vector) {
 
     var url;
 
-    if ((params.regions.length > 0) || (params.autoCompletedRegion != null)) {
+    if ((params.regions.length > 0) || (params.autoSuggestedRegion != null)) {
 
         url = '/';
 
