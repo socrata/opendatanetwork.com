@@ -10,7 +10,7 @@ function ApiController() {
     this.populationUrl = 'https://federal.demo.socrata.com/resource/e3rd-zzmr.json?$order=year,name&$where=';
     this.earningsUrl = 'https://federal.demo.socrata.com/resource/wmwh-4vak.json?$where=';
     this.educationUrl = 'https://federal.demo.socrata.com/resource/uf4m-5u8r.json?$where=';
-    this.similarRegionsUrl = 'http://socrata-peers.herokuapp.com/peers.json?vectors=population_change,earnings,occupation,education,geo,population&n=5&id=';
+    this.similarRegionsUrl = 'https://socrata-peers.herokuapp.com/peers.json?vectors=population_change,earnings,occupation,education,geo,population&n=5&id=';
 }
 
 ApiController.prototype.getAutoCompleteNameSuggestions = function(searchTerm, completion) {
