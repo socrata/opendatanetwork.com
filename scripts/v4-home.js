@@ -12,7 +12,7 @@ $(document).ready(function() {
 
     // Region controller
     //
-    new AutoSuggestRegionController(function(region) {
+    new AutoSuggestRegionController('#q', '.region-list', function(region) {
 
         $('#form').attr("action", region.replace(/ /g, '_'));
         $('#q').val('');

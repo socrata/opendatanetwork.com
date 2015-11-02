@@ -7,7 +7,21 @@ function SearchPageController(params) {
 
     var self = this;
 
-    // Refine
+    // Search bar icon
+    //
+    $('.fa-search').click(function() {
+
+        $('.summary').toggle();
+        $('.text-entry').toggle();
+        $('.text-entry input').select();
+
+        // Toggle the search icon from highlighted to highlight on hover
+        //
+        var o = $('.fa-search');
+        o.hasClass('selected') ? o.removeClass('selected') : o.addClass('selected');
+    });
+
+    // Region tokens
     //
     $('section.refine .fa-times-circle').click(function() { 
 
@@ -27,16 +41,24 @@ function SearchPageController(params) {
 
     }).scroll();
 
-    $('.fa-search').click(function() {
+    // Add location
+    //
+    new AutoSuggestRegionController('.add-region input[type="text"]', '.add-region ul', function(region) {
 
-        $('.summary').toggle();
-        $('.text-entry').toggle();
-        $('.text-entry input').select();
+        self.setAutoSuggestedRegion(region);
+        self.navigate();
+    });
 
-        // Toggle the search icon from highlighted to highlight on hover
-        //
-        var o = $('.fa-search');
-        o.hasClass('selected') ? o.removeClass('selected') : o.addClass('selected');
+    $('.add-region .fa-plus').click(function() {
+        $('.add-region input[type="text"]').focus();
+    });
+
+    // Similar regions
+    //
+    this.drawSimilarRegions(function(region) {
+
+        self.setAutoSuggestedRegion(region);
+        self.navigate();
     });
 }
 

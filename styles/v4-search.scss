@@ -2,6 +2,7 @@
 
 $black-text-color: #222;
 $darker-gray-text-color: #666;
+$blue-background-color: #3498db;
 $blue-color: #2980b9;
 $dark-gray-text-color: #7f8c8d;
 $footer-background-color: #e5e9eb;
@@ -334,6 +335,7 @@ section.results
 .add-region .fa-plus
 {
     color: $blue-color;
+    cursor: pointer;
     left: 6px;
     position: absolute;
     top: 6px;
@@ -350,6 +352,30 @@ section.results
     padding: 0 0 0 25px;
     margin: 0;
     width: 100%;
+}
+
+.add-region ul
+{
+    background-color: white;
+    border-top: 1px solid $gray-border-color;
+    margin: 0;
+    padding: 0;
+}
+
+.add-region li
+{
+    box-sizing: border-box;
+    cursor: pointer;
+    font-size: 14px;
+    list-style-type: none;
+    margin: 0;
+    padding: 5px 6px;
+}
+
+.add-region li:hover
+{
+    background-color: $blue-background-color;
+    color: white;
 }
 
 .similar-regions

@@ -4,17 +4,9 @@ $(document).ready(function() {
     //
     var searchPageController = new SearchPageController(_params);
 
-    // Region controller
+    // Main search box
     //
-    new AutoSuggestRegionController(function(region) {
-
-        searchPageController.setAutoSuggestedRegion(region);
-        searchPageController.navigate();
-    });
-
-    // Similar regions
-    //
-    searchPageController.drawSimilarRegions(function(region) {
+    new AutoSuggestRegionController('#q', '.region-list', function(region) {
 
         searchPageController.setAutoSuggestedRegion(region);
         searchPageController.navigate();

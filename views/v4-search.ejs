@@ -65,26 +65,22 @@
             <figure id="population-chart"></figure>
             <h1>Population Change</h1>
             <figure id="population-change-chart"></figure>
-            <label>Data from the 2013 U.S. Census American Community Survey</label>
 
 <% } else if (params.vector == 'earnings') { %>
 
             <h1>Earnings</h1>
             <table id="earnings-table"></table>
             <figure id="earnings-chart"></figure>
-            <label>Data from the 2013 U.S. Census American Community Survey</label>
 
 <% } else if (params.vector == 'education') { %>
 
             <h1>Education</h1>
             <table id="education-table"></table>
-            <label>Data from the 2013 U.S. Census American Community Survey</label>
 
 <% } else if (params.vector == 'occupations') { %>
 
             <h1>Occupations</h1>
             <table id="occupations-table"></table>
-            <label>Data from the 2013 U.S. Census American Community Survey</label>
 
 <% } else if (params.vector == 'gdp') { %>
 
@@ -103,9 +99,9 @@
             <figure id="cost-of-living-rents-chart"></figure>
             <h1>Other</h1>
             <figure id="cost-of-living-other-chart"></figure>
-            <label>Data from the 2013 U.S. Census American Community Survey</label>
 
 <% } %>
+            <label>Data from the 2013 U.S. Census American Community Survey</label>
         </div>
 
     </div>
@@ -117,6 +113,7 @@
             <h1>Compare this Data</h1>
             <div class="add-region">
                 <i class="fa fa-plus"></i><input type="text" placeholder="Add Location">
+                <ul style="display: none;"></ul>
             </div>
             <ul class="similar-regions" style="display:none"></ul>
             <h2>Places in California</h2>
