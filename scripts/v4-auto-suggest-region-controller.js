@@ -36,6 +36,11 @@ function AutoSuggestRegionController(inputTextSelector, resultListSelector, onCl
             self.selectRegion(self.selectedIndex);
             return;
         }
+        else if (e.keyCode == 27) { // esc 
+
+            $(resultListSelector).slideUp(100);
+            return;
+        }
 
         // Get the search value
         //

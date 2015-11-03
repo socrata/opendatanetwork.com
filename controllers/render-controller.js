@@ -7,13 +7,12 @@ var path = require('path');
 var apiController = new ApiController();
 var categoryController = new CategoryController();
 var tagController = new TagController();
+var defaultSearchResultCount = 60;
 
 module.exports = RenderController;
 
 function RenderController() {
-
-    self = this;
-};
+}
 
 // Error
 //
@@ -53,7 +52,7 @@ RenderController.prototype.renderHomePage = function (req, res) {
 
             // Get params
             //
-            var params = apiController.getSearchParameters(req.query);
+            var params = RenderController.prototype.getSearchParameters(req.query);
 
             // Render page
             //
@@ -73,7 +72,7 @@ RenderController.prototype.renderHomePage = function (req, res) {
                     tooltips : (req.cookies['tooltips-shown'] != '1'),
                 });
         });
-    }, function() { self.renderErrorPage(req, res); });
+    }, function() { RenderController.prototype.renderErrorPage(req, res); });
 };
 
 RenderController.prototype.renderSearchPage = function(req, res) {
@@ -88,7 +87,7 @@ RenderController.prototype.renderSearchPage = function(req, res) {
 
             // Get params
             //
-            var params = apiController.getSearchParameters(req.query);
+            var params = RenderController.prototype.getSearchParameters(req.query);
 
             // Get the current category
             //
@@ -139,19 +138,19 @@ RenderController.prototype.renderSearchPage = function(req, res) {
                                             showcaseResults : [],
                                             tooltips : false,
                                         });
-                                }, function() { self.renderErrorPage(req, res) }); // apiController.search
-                            }, function() { self.renderErrorPage(req, res) }); // apiController.getTags
-                        }, function() { self.renderErrorPage(req, res) }); // apiController.getDomains
-                    }, function() { self.renderErrorPage(req, res) }); // apiController.getCategories
+                                }, function() { RenderController.prototype.renderErrorPage(req, res) }); // apiController.search
+                            }, function() { RenderController.prototype.renderErrorPage(req, res) }); // apiController.getTags
+                        }, function() { RenderController.prototype.renderErrorPage(req, res) }); // apiController.getDomains
+                    }, function() { RenderController.prototype.renderErrorPage(req, res) }); // apiController.getCategories
                 }); // tagController.attachTagMetadata
-            }, function() { self.renderErrorPage(req, res); }); // apiController.getTagsAll
+            }, function() { RenderController.prototype.renderErrorPage(req, res); }); // apiController.getTagsAll
         }); // categoryController.attachCategoryMetadata
-    }, function() { self.renderErrorPage(req, res); }); // apiController.getCategoriesAll
+    }, function() { RenderController.prototype.renderErrorPage(req, res); }); // apiController.getCategoriesAll
 };
 
 RenderController.prototype.renderSearchResults = function(req, res) {
 
-    var params = apiController.getSearchParameters(req.query);
+    var params = RenderController.prototype.getSearchParameters(req.query);
 
     apiController.search(params, function(searchResults) {
 
@@ -171,6 +170,50 @@ RenderController.prototype.renderSearchResults = function(req, res) {
                 searchResults : searchResults,
             });
     });
+};
+
+
+RenderController.prototype.getSearchParameters = function(query) {
+
+    var categories = RenderController.prototype.getNormalizedArrayFromDelimitedString(query.categories);
+    var domains = RenderController.prototype.getNormalizedArrayFromDelimitedString(query.domains);
+    var tags = RenderController.prototype.getNormalizedArrayFromDelimitedString(query.tags);
+    var page = isNaN(query.page) ? 1 : parseInt(query.page);
+    var ec = RenderController.prototype.getExpandedFiltersSetting(query.ec);
+    var ed = RenderController.prototype.getExpandedFiltersSetting(query.ed);
+    var et = RenderController.prototype.getExpandedFiltersSetting(query.et);
+
+    return {
+        only : 'datasets',
+        q : query.q || '',
+        page : page,
+        offset : (page - 1) * defaultSearchResultCount,
+        limit : defaultSearchResultCount,
+        categories : categories,
+        domains : domains,
+        regions : [],
+        tags : tags,
+        ec : ec,
+        ed : ed,
+        et : et,
+    };
+};
+
+RenderController.prototype.getNormalizedArrayFromDelimitedString = function(s) {
+
+    if (s == null) 
+        return [];
+
+    var parts = s.split(',');
+
+    if ((parts.length == 1) && (parts[0] == ''))
+        parts = [];
+
+    for (var i in parts) {
+        parts[i] = parts[i].toLowerCase();
+    }
+
+    return parts;
 };
 
 
@@ -197,7 +240,7 @@ RenderController.prototype.renderHomePageV4 = function (req, res) {
 
             // Get params
             //
-            apiController.getSearchParametersV4(req, function(params) {
+            RenderController.prototype.getSearchParametersV4(req, function(params) {
 
                 // Render page
                 //
@@ -221,7 +264,7 @@ RenderController.prototype.renderHomePageV4 = function (req, res) {
                     });
              });
         });
-    }, function() { self.renderErrorPage(req, res); });
+    }, function() { RenderController.prototype.renderErrorPage(req, res); });
 };
 
 // Search
@@ -235,22 +278,22 @@ RenderController.prototype.renderSearchWithVectorPageV4 = function(req, res) {
         (req.params.vector == 'gdp') ||
         (req.params.vector == 'cost_of_living')) {
 
-        apiController.getSearchParametersV4(req, function(params) {
+        RenderController.prototype.getSearchParametersV4(req, function(params) {
 
-            self._renderSearchPageV4(req, res, params);
+            RenderController.prototype._renderSearchPageV4(req, res, params);
         });
     }
     else {
 
-        self.renderErrorPage(req, res); 
+        RenderController.prototype.renderErrorPage(req, res); 
     }
 };
 
 RenderController.prototype.renderSearchPageV4 = function(req, res) {
 
-    apiController.getSearchParametersV4(req, function(params) {
+    RenderController.prototype.getSearchParametersV4(req, function(params) {
 
-        self._renderSearchPageV4(req, res, params);
+        RenderController.prototype._renderSearchPageV4(req, res, params);
     });
 };
 
@@ -281,14 +324,14 @@ RenderController.prototype._renderSearchPageV4 = function(req, res, params) {
             }, 
             function() {
 
-                self.renderErrorPage(req, res); 
+                RenderController.prototype.renderErrorPage(req, res); 
             });
     });
 };
 
 RenderController.prototype.renderSearchResultsV4 = function(req, res) {
 
-    var params = apiController.getSearchParameters(req.query);
+    var params = RenderController.prototype.getSearchParameters(req.query);
 
     apiController.search(params, function(searchResults) {
 
@@ -310,6 +353,62 @@ RenderController.prototype.renderSearchResultsV4 = function(req, res) {
     });
 };
 
+RenderController.prototype.getSearchParametersV4 = function(req, completionHandler) {
+
+    var query = req.query;
+    var categories = RenderController.prototype.getNormalizedArrayFromDelimitedString(query.categories);
+    var domains = RenderController.prototype.getNormalizedArrayFromDelimitedString(query.domains);
+    var tags = RenderController.prototype.getNormalizedArrayFromDelimitedString(query.tags);
+    var page = isNaN(query.page) ? 1 : parseInt(query.page);
+    var ec = RenderController.prototype.getExpandedFiltersSetting(query.ec);
+    var ed = RenderController.prototype.getExpandedFiltersSetting(query.ed);
+    var et = RenderController.prototype.getExpandedFiltersSetting(query.et);
+
+    var params = {
+
+        categories : categories,
+        domains : domains,
+        limit : defaultSearchResultCount,
+        offset : (page - 1) * defaultSearchResultCount,
+        only : 'datasets',
+        page : page,
+        q : query.q || '',
+        regions: [],
+        tags : tags,
+        ec : ec,
+        ed : ed,
+        et : et,
+        vector : req.params.vector || 'population',
+    };
+
+    // Regions are in the URL path segment, not a query parameter
+    //
+    if ((req.params.region == null) || (req.params.region.length == 0)) {
+
+        if (completionHandler) completionHandler(params);
+        return;
+    }
+
+    var parts = req.params.region.split2('_vs_');
+    var regions = parts.map(function(region) { return region.replace(/_/g, ' ') });
+
+    apiController.getAutoCompleteName(regions, function(results) {
+
+        if (results.length > 0) {
+
+            params.regions = results.map(function(result) {
+                return { id : result.id, name : result.name, type : result.type };
+            });
+        }
+
+        if (completionHandler) completionHandler(params);
+    });
+};
+
+RenderController.prototype.getExpandedFiltersSetting = function(queryValue) {
+
+    return isNaN(queryValue) ? false : (parseInt(queryValue) == 1);
+};
 
 // Extensions
 //

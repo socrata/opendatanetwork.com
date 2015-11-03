@@ -13,42 +13,42 @@ function ApiController() {
     this.similarRegionsUrl = 'https://socrata-peers.herokuapp.com/peers.json?vectors=population_change,earnings,occupation,education,geo,population&n=5&id=';
 }
 
-ApiController.prototype.getAutoCompleteNameSuggestions = function(searchTerm, completion) {
+ApiController.prototype.getAutoCompleteNameSuggestions = function(searchTerm, completionHandler) {
 
-    $.getJSON(this.autoCompleteNameSuggestUrl.format(encodeURIComponent(searchTerm)), completion);
+    $.getJSON(this.autoCompleteNameSuggestUrl.format(encodeURIComponent(searchTerm)), completionHandler);
 };
 
-ApiController.prototype.getCostOfLivingData = function(regionIds, completion) {
+ApiController.prototype.getCostOfLivingData = function(regionIds, completionHandler) {
 
-    this.getData(this.costOfLivingUrl, regionIds, completion);
+    this.getData(this.costOfLivingUrl, regionIds, completionHandler);
 };
 
-ApiController.prototype.getEarningsData = function(regionIds, completion) {
+ApiController.prototype.getEarningsData = function(regionIds, completionHandler) {
 
-    this.getData(this.earningsUrl, regionIds, completion);
+    this.getData(this.earningsUrl, regionIds, completionHandler);
 };
 
-ApiController.prototype.getEducationData = function(regionIds, completion) {
+ApiController.prototype.getEducationData = function(regionIds, completionHandler) {
 
-    this.getData(this.educationUrl, regionIds, completion);
+    this.getData(this.educationUrl, regionIds, completionHandler);
 };
 
-ApiController.prototype.getGdpData = function(regionIds, completion) {
+ApiController.prototype.getGdpData = function(regionIds, completionHandler) {
 
-    this.getData(this.gdpUrl, regionIds, completion);
+    this.getData(this.gdpUrl, regionIds, completionHandler);
 };
 
-ApiController.prototype.getOccupationsData = function(regionIds, completion) {
+ApiController.prototype.getOccupationsData = function(regionIds, completionHandler) {
 
-    this.getData(this.occupationsUrl, regionIds, completion);
+    this.getData(this.occupationsUrl, regionIds, completionHandler);
 };
 
-ApiController.prototype.getPopulationData = function(regionIds, completion) {
+ApiController.prototype.getPopulationData = function(regionIds, completionHandler) {
 
-    this.getData(this.populationUrl, regionIds, completion);
+    this.getData(this.populationUrl, regionIds, completionHandler);
 };
 
-ApiController.prototype.getData = function(url, regionIds, completion) {
+ApiController.prototype.getData = function(url, regionIds, completionHandler) {
 
     var segments = regionIds.map(function(regionId) {
        return 'id=\'' + regionId + '\''; 
@@ -56,10 +56,10 @@ ApiController.prototype.getData = function(url, regionIds, completion) {
 
     console.log(url + encodeURI(segments.join(' OR ')));
 
-    $.getJSON(url + encodeURI(segments.join(' OR ')), completion);
+    $.getJSON(url + encodeURI(segments.join(' OR ')), completionHandler);
 };
 
-ApiController.prototype.getSimilarRegions = function(regionId, completion) {
+ApiController.prototype.getSimilarRegions = function(regionId, completionHandler) {
 
-    $.getJSON(this.similarRegionsUrl + regionId, completion);
+    $.getJSON(this.similarRegionsUrl + regionId, completionHandler);
 };

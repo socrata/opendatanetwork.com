@@ -49,6 +49,7 @@ function SearchPageController(params) {
     });
 
     $('.add-region .fa-plus').click(function() {
+
         $('.add-region input[type="text"]').focus();
     });
 
@@ -820,8 +821,6 @@ SearchPageController.prototype.getSearchPageUrl = function() {
         });
 
         if (this.params.autoSuggestedRegion != null) {
-        
-        console.log(this.params.autoSuggestedRegion);
             regionNames.push(this.params.autoSuggestedRegion.replace(/,/g, '').replace(/ /g, '_'));
         }
 

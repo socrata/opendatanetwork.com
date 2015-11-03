@@ -7,7 +7,7 @@ var request = require('request');
 var baseCatalogUrl = 'http://api.us.socrata.com/api/catalog/v1';
 var baseFederalDemoUrl = 'https://federal.demo.socrata.com/resource/7g2b-8brv';
 
-var autoCompleteNameUrl = baseFederalDemoUrl + '/?autocomplete_name=';
+var autoCompleteNameUrl = baseFederalDemoUrl + '/?$where={0}';
 var cacheController = new CacheController();
 var categoriesUrl = baseCatalogUrl + '/categories';
 var defaultFilterCount = 10;
@@ -42,15 +42,8 @@ ApiController.prototype.getDatasetsForRegions = function(params, successHandler,
 
 ApiController.prototype.getAutoCompleteName = function(names, successHandler, errorHandler) {
 
-    //$where=autocomplete_name='Seattle%20city%20Washington' OR autocomplete_name='Portland%20city%20Oregon'
-
-    var url = baseFederalDemoUrl + '?$where=';
     var pairs = names.map(function(name) { return "autocomplete_name='" + encodeURIComponent(name) + "'"; });
-
-    url += pairs.join(' OR ');
-
-    console.log(url);
-
+    var url = autoCompleteNameUrl.format(pairs.join('%20OR%20'));
     getFromApi(url, successHandler, errorHandler);
 }
 
@@ -82,84 +75,6 @@ ApiController.prototype.getDomains = function(count, successHandler, errorHandle
         },
         errorHandler);
 };
-
-ApiController.prototype.getSearchParameters = function(query) {
-
-    var categories = getNormalizedArrayFromDelimitedString(query.categories);
-    var domains = getNormalizedArrayFromDelimitedString(query.domains);
-    var tags = getNormalizedArrayFromDelimitedString(query.tags);
-    var page = isNaN(query.page) ? 1 : parseInt(query.page);
-    var ec = getExpandedFiltersSetting(query.ec);
-    var ed = getExpandedFiltersSetting(query.ed);
-    var et = getExpandedFiltersSetting(query.et);
-
-    return {
-        only : 'datasets',
-        q : query.q || '',
-        page : page,
-        offset : (page - 1) * defaultSearchResultCount,
-        limit : defaultSearchResultCount,
-        categories : categories,
-        domains : domains,
-        regions : [],
-        tags : tags,
-        ec : ec,
-        ed : ed,
-        et : et,
-    };
-};
-
-ApiController.prototype.getSearchParametersV4 = function(req, completionHandler) {
-
-    var query = req.query;
-    var categories = getNormalizedArrayFromDelimitedString(query.categories);
-    var domains = getNormalizedArrayFromDelimitedString(query.domains);
-    var tags = getNormalizedArrayFromDelimitedString(query.tags);
-    var page = isNaN(query.page) ? 1 : parseInt(query.page);
-    var ec = getExpandedFiltersSetting(query.ec);
-    var ed = getExpandedFiltersSetting(query.ed);
-    var et = getExpandedFiltersSetting(query.et);
-
-    var params = {
-
-        categories : categories,
-        domains : domains,
-        limit : defaultSearchResultCount,
-        offset : (page - 1) * defaultSearchResultCount,
-        only : 'datasets',
-        page : page,
-        q : query.q || '',
-        regions: [],
-        tags : tags,
-        ec : ec,
-        ed : ed,
-        et : et,
-        vector : req.params.vector || 'population',
-    };
-
-    // Regions are in the URL path segment, not a query parameter
-    //
-    if ((req.params.region == null) || (req.params.region.length == 0)) {
-
-        if (completionHandler) completionHandler(params);
-        return;
-    }
-
-    var parts = req.params.region.split2('_vs_');
-    var regions = parts.map(function(region) { return region.replace(/_/g, ' ') });
-
-    ApiController.prototype.getAutoCompleteName(regions, function(results) {
-
-        if (results.length > 0) {
-
-            params.regions = results.map(function(result) {
-                return { id : result.id, name : result.name, type : result.type };
-            });
-        }
-
-        if (completionHandler) completionHandler(params);
-    });
-}
 
 ApiController.prototype.getTags = function(count, successHandler, errorHandler) {
 
@@ -248,28 +163,6 @@ function getCategoryGlyphString(result) {
         case 'recreation': return 'fa-ticket';
         default: return 'fa-database';
     }
-}
-
-function getExpandedFiltersSetting(queryValue) {
-
-    return isNaN(queryValue) ? false : (parseInt(queryValue) == 1);
-}
-
-function getNormalizedArrayFromDelimitedString(s) {
-
-    if (s == null) 
-        return [];
-
-    var parts = s.split(',');
-
-    if ((parts.length == 1) && (parts[0] == ''))
-        parts = [];
-
-    for (var i in parts) {
-        parts[i] = parts[i].toLowerCase();
-    }
-
-    return parts;
 }
 
 function getSearchUrlFromParameters(params) {
@@ -420,6 +313,15 @@ function truncateResults(count, results) {
 
 // Extensions
 //
+String.prototype.format = function() {
+
+    var args = arguments;
+
+    return this.replace(/{(\d+)}/g, function(match, number) { 
+        return typeof args[number] != 'undefined' ? args[number] : match;
+    });
+};
+
 String.prototype.split2 = function(s) {
 
     var rg = this.split(s);
