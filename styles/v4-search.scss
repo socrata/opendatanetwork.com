@@ -46,7 +46,7 @@ section.refine .fa-search:hover
     color: $blue-color;
 }
 
-section.refine .selected
+section.refine  .selected-icon
 {
     color: $blue-color;
 }
@@ -372,7 +372,7 @@ section.results
     padding: 5px 6px;
 }
 
-.add-region li:hover
+.add-region li.selected
 {
     background-color: $blue-background-color;
     color: white;

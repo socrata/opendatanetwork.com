@@ -17,8 +17,7 @@ function SearchPageController(params) {
 
         // Toggle the search icon from highlighted to highlight on hover
         //
-        var o = $('.fa-search');
-        o.hasClass('selected') ? o.removeClass('selected') : o.addClass('selected');
+        $('.fa-search').toggleClass('selected-icon');
     });
 
     // Region tokens

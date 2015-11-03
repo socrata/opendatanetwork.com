@@ -100,7 +100,7 @@ footer
     padding: 0 30px;
 }
 
-.region-list li:hover
+.region-list li.selected
 {
     background-color: $blue-background-color;
     color: white;

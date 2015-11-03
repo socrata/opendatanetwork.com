@@ -1,7 +1,44 @@
 function AutoSuggestRegionController(inputTextSelector, resultListSelector, onClickRegion) {
 
-    $(inputTextSelector).keyup(function() {
+    this.options = [];
+    this.selectedIndex = -1;
+    this.resultListSelector = resultListSelector;
+    this.onClickRegion = onClickRegion;
 
+    var self = this;
+
+    // Key presses
+    //
+    $(inputTextSelector).keydown(function(e) {
+
+        if (e.keyCode == 38) { // up
+
+            e.preventDefault();
+
+            self.selectedIndex = (self.selectedIndex > -1) ? self.selectedIndex - 1 : -1;
+            self.updateListSelection();
+            return;
+        }
+        else if (e.keyCode == 40) { // down
+
+            e.preventDefault();
+
+            self.selectedIndex = (self.selectedIndex < self.options.length - 1) ? self.selectedIndex + 1 : self.options.length - 1;
+            self.updateListSelection();
+            return;
+        }
+        else if (e.keyCode == 13) { // enter
+
+            if ((self.selectedIndex == -1) || (self.selectedIndex >= self.options.length))
+                return;
+
+            e.preventDefault();
+            self.selectRegion(self.selectedIndex);
+            return;
+        }
+
+        // Get the search value
+        //
         var searchTerm = $(inputTextSelector).val().trim();
 
         if (searchTerm.length == 0) {
@@ -14,27 +51,56 @@ function AutoSuggestRegionController(inputTextSelector, resultListSelector, onCl
 
         apiController.getAutoCompleteNameSuggestions(searchTerm, function(data) {
 
+            self.options = data.options;
+            self.selectedIndex = -1;
+
             var regionList = $(resultListSelector);
 
-            if (data.options.length == 0) {
+            if (self.options.length == 0) {
 
                 regionList.slideUp(100);
                 return;
             }
 
-            var items = data.options.map(function(item) { return '<li>' + item.text + '</li>'; });
+            var items = self.options.map(function(item) { return '<li>' + item.text + '</li>'; });
 
             regionList.html(items.join(''));
 
-            $(resultListSelector + ' li').click(function(e) {
+            // Click event
+            //
+            $(resultListSelector + ' li').click(function() {
 
-                var region = data.options[$(this).index()].text; // pass just the text
+                self.selectRegion($(this).index()); 
+            });
 
-                if (onClickRegion) 
-                    onClickRegion(region);
+            // Mouse event
+            //   
+            $(resultListSelector + ' li').mouseenter(function() {
+
+                self.selectedIndex = $(this).index();
+                self.updateListSelection();
             });
 
             regionList.slideDown(100);
         });
     });
-}
+};
+
+AutoSuggestRegionController.prototype.selectRegion = function(index) {
+
+    if (this.onClickRegion) 
+        this.onClickRegion(this.options[index].text); // pass just the text
+};
+
+AutoSuggestRegionController.prototype.updateListSelection = function() {
+
+    var self = this;
+
+    $(this.resultListSelector + ' li').each(function(index) {
+
+        if (index == self.selectedIndex)
+            $(this).addClass('selected');
+        else
+            $(this).removeClass('selected');
+    });
+};
