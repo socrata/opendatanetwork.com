@@ -22,22 +22,6 @@ RenderController.prototype.renderErrorPage = function(req, res) {
     res.sendFile(path.resolve(__dirname + '/../views/static/error.html'));
 };
 
-// Join
-//
-RenderController.prototype.renderJoinOpenDataNetwork = function(req, res) {
-
-    res.locals.css = 'join.min.css';
-    res.locals.title = 'Join the Open Data Network.';
-    res.render('join.ejs');
-};
-
-RenderController.prototype.renderJoinOpenDataNetworkComplete = function(req, res) {
-
-    res.locals.css = 'join-complete.min.css';
-    res.locals.title = 'Thanks for joining the Open Data Network.';
-    res.render('join-complete.ejs');
-};
-
 // Home
 //
 RenderController.prototype.renderHomePage = function (req, res) {
@@ -52,195 +36,7 @@ RenderController.prototype.renderHomePage = function (req, res) {
 
             // Get params
             //
-            var params = RenderController.prototype.getSearchParameters(req.query);
-
-            // Render page
-            //
-            res.render(
-                'v3-home.ejs', 
-                {
-                    css : ['/styles/v3-home.min.css', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css'],
-                    scripts : [
-                        '/scripts/v3-home.min.js', 
-                        '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js', 
-                        {
-                            'url' : '//fast.wistia.net/static/popover-v1.js',
-                            'charset' : 'ISO-8859-1'
-                        }],
-                    params : params,
-                    allCategoryResults : allCategoryResults,
-                    tooltips : (req.cookies['tooltips-shown'] != '1'),
-                });
-        });
-    }, function() { RenderController.prototype.renderErrorPage(req, res); });
-};
-
-RenderController.prototype.renderSearchPage = function(req, res) {
-
-    var defaultFilterCount = 10;
-
-    // Get all categories for the header menus
-    //
-    apiController.getCategoriesAll(function(allCategoryResults) {
-
-        categoryController.attachCategoryMetadata(allCategoryResults, function(categoryResults) {
-
-            // Get params
-            //
-            var params = RenderController.prototype.getSearchParameters(req.query);
-
-            // Get the current category
-            //
-            var currentCategory = categoryController.getCurrentCategory(params, allCategoryResults);
-
-            // Get all tags
-            //
-            apiController.getTagsAll(function(allTagResults) {
-
-                tagController.attachTagMetadata(allTagResults, function(tagResults) {
-
-                    // Get the current tag
-                    //
-                    var currentTag = tagController.getCurrentTag(params, allTagResults);
-
-                    // Get the categories for the filter menus
-                    //
-                    var filterCategoryCount = params.ec ? null : defaultFilterCount;
-                    apiController.getCategories(filterCategoryCount, function(filterCategoryResults) {
-        
-                        // Get the domains for the filter menus
-                        //
-                        var domainCount = params.ed ? null : defaultFilterCount;
-                        apiController.getDomains(domainCount, function(filterDomainResults) {
-        
-                            // Get the tags for the filter menus
-                            //
-                            var tagCount = params.et ? null : defaultFilterCount;
-                            apiController.getTags(tagCount, function(filterTagResults) {
-        
-                                // Do the search
-                                //
-                                apiController.search(params, function(searchResults) {
-
-                                    res.render(
-                                        'v3-search.ejs', 
-                                        { 
-                                            css : ['/styles/v3-search.min.css'],
-                                            scripts : ['/scripts/v3-search.min.js'],
-                                            params : params,
-                                            currentCategory : currentCategory,
-                                            currentTag : currentTag,
-                                            allCategoryResults : allCategoryResults,
-                                            filterCategoryResults : filterCategoryResults,
-                                            filterDomainResults : filterDomainResults,
-                                            filterTagResults : filterTagResults,
-                                            searchResults : searchResults,
-                                            showcaseResults : [],
-                                            tooltips : false,
-                                        });
-                                }, function() { RenderController.prototype.renderErrorPage(req, res) }); // apiController.search
-                            }, function() { RenderController.prototype.renderErrorPage(req, res) }); // apiController.getTags
-                        }, function() { RenderController.prototype.renderErrorPage(req, res) }); // apiController.getDomains
-                    }, function() { RenderController.prototype.renderErrorPage(req, res) }); // apiController.getCategories
-                }); // tagController.attachTagMetadata
-            }, function() { RenderController.prototype.renderErrorPage(req, res); }); // apiController.getTagsAll
-        }); // categoryController.attachCategoryMetadata
-    }, function() { RenderController.prototype.renderErrorPage(req, res); }); // apiController.getCategoriesAll
-};
-
-RenderController.prototype.renderSearchResults = function(req, res) {
-
-    var params = RenderController.prototype.getSearchParameters(req.query);
-
-    apiController.search(params, function(searchResults) {
-
-        if (searchResults.results.length == 0) {
-
-            res.status(204);
-            res.end();
-            return;
-        }
-
-        res.render(
-            'v3-search-results.ejs',
-            {
-                css : [],
-                scripts : [],
-                params : params,
-                searchResults : searchResults,
-            });
-    });
-};
-
-
-RenderController.prototype.getSearchParameters = function(query) {
-
-    var categories = RenderController.prototype.getNormalizedArrayFromDelimitedString(query.categories);
-    var domains = RenderController.prototype.getNormalizedArrayFromDelimitedString(query.domains);
-    var tags = RenderController.prototype.getNormalizedArrayFromDelimitedString(query.tags);
-    var page = isNaN(query.page) ? 1 : parseInt(query.page);
-    var ec = RenderController.prototype.getExpandedFiltersSetting(query.ec);
-    var ed = RenderController.prototype.getExpandedFiltersSetting(query.ed);
-    var et = RenderController.prototype.getExpandedFiltersSetting(query.et);
-
-    return {
-        only : 'datasets',
-        q : query.q || '',
-        page : page,
-        offset : (page - 1) * defaultSearchResultCount,
-        limit : defaultSearchResultCount,
-        categories : categories,
-        domains : domains,
-        regions : [],
-        tags : tags,
-        ec : ec,
-        ed : ed,
-        et : et,
-    };
-};
-
-RenderController.prototype.getNormalizedArrayFromDelimitedString = function(s) {
-
-    if (s == null) 
-        return [];
-
-    var parts = s.split(',');
-
-    if ((parts.length == 1) && (parts[0] == ''))
-        parts = [];
-
-    for (var i in parts) {
-        parts[i] = parts[i].toLowerCase();
-    }
-
-    return parts;
-};
-
-
-
-
-
-
-
-
-// V4
-//
-
-// Home
-//
-RenderController.prototype.renderHomePageV4 = function (req, res) {
-
-    apiController.getCategoriesAll(function(allCategoryResults) {
-
-        categoryController.attachCategoryMetadata(allCategoryResults, function(allCategoryResults) {
-
-            // Set the tooltips shown cookie
-            //
-            res.cookie('tooltips-shown', '1', { expires: new Date(Date.now() + (1 * 24 * 60 * 60 * 1000)), httpOnly: true }); // one day
-
-            // Get params
-            //
-            RenderController.prototype.getSearchParametersV4(req, function(params) {
+            RenderController.prototype.getSearchParameters(req, function(params) {
 
                 // Render page
                 //
@@ -267,9 +63,25 @@ RenderController.prototype.renderHomePageV4 = function (req, res) {
     }, function() { RenderController.prototype.renderErrorPage(req, res); });
 };
 
+// Join
+//
+RenderController.prototype.renderJoinOpenDataNetwork = function(req, res) {
+
+    res.locals.css = 'join.min.css';
+    res.locals.title = 'Join the Open Data Network.';
+    res.render('join.ejs');
+};
+
+RenderController.prototype.renderJoinOpenDataNetworkComplete = function(req, res) {
+
+    res.locals.css = 'join-complete.min.css';
+    res.locals.title = 'Thanks for joining the Open Data Network.';
+    res.render('join-complete.ejs');
+};
+
 // Search
 //
-RenderController.prototype.renderSearchWithVectorPageV4 = function(req, res) {
+RenderController.prototype.renderSearchWithVectorPage = function(req, res) {
 
     if ((req.params.vector == 'population') ||
         (req.params.vector == 'earnings') ||
@@ -278,9 +90,9 @@ RenderController.prototype.renderSearchWithVectorPageV4 = function(req, res) {
         (req.params.vector == 'gdp') ||
         (req.params.vector == 'cost_of_living')) {
 
-        RenderController.prototype.getSearchParametersV4(req, function(params) {
+        RenderController.prototype.getSearchParameters(req, function(params) {
 
-            RenderController.prototype._renderSearchPageV4(req, res, params);
+            RenderController.prototype._renderSearchPage(req, res, params);
         });
     }
     else {
@@ -289,15 +101,15 @@ RenderController.prototype.renderSearchWithVectorPageV4 = function(req, res) {
     }
 };
 
-RenderController.prototype.renderSearchPageV4 = function(req, res) {
+RenderController.prototype.renderSearchPage = function(req, res) {
 
-    RenderController.prototype.getSearchParametersV4(req, function(params) {
+    RenderController.prototype.getSearchParameters(req, function(params) {
 
-        RenderController.prototype._renderSearchPageV4(req, res, params);
+        RenderController.prototype._renderSearchPage(req, res, params);
     });
 };
 
-RenderController.prototype._renderSearchPageV4 = function(req, res, params) {
+RenderController.prototype._renderSearchPage = function(req, res, params) {
 
     apiController.getCategoriesAll(function(allCategoryResults) {
 
@@ -329,7 +141,7 @@ RenderController.prototype._renderSearchPageV4 = function(req, res, params) {
     });
 };
 
-RenderController.prototype.renderSearchResultsV4 = function(req, res) {
+RenderController.prototype.renderSearchResults = function(req, res) {
 
     var params = RenderController.prototype.getSearchParameters(req.query);
 
@@ -353,7 +165,7 @@ RenderController.prototype.renderSearchResultsV4 = function(req, res) {
     });
 };
 
-RenderController.prototype.getSearchParametersV4 = function(req, completionHandler) {
+RenderController.prototype.getSearchParameters = function(req, completionHandler) {
 
     var query = req.query;
     var categories = RenderController.prototype.getNormalizedArrayFromDelimitedString(query.categories);
@@ -408,6 +220,23 @@ RenderController.prototype.getSearchParametersV4 = function(req, completionHandl
 RenderController.prototype.getExpandedFiltersSetting = function(queryValue) {
 
     return isNaN(queryValue) ? false : (parseInt(queryValue) == 1);
+};
+
+RenderController.prototype.getNormalizedArrayFromDelimitedString = function(s) {
+
+    if (s == null) 
+        return [];
+
+    var parts = s.split(',');
+
+    if ((parts.length == 1) && (parts[0] == ''))
+        parts = [];
+
+    for (var i in parts) {
+        parts[i] = parts[i].toLowerCase();
+    }
+
+    return parts;
 };
 
 // Extensions

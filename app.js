@@ -42,6 +42,7 @@ app.get('/open-data-census', function(req, res) { res.redirect(301, '/'); });
 app.get('/popular', function(req, res) { res.redirect(301, '/'); });
 app.get('/join', function(req, res) { res.redirect(301, '/join-open-data-network'); });
 app.get('/join/complete', function(req, res) { res.redirect(301, '/join-open-data-network/complete'); });
+app.get('/v4', function(req, res) { res.redirect(301, '/') });
 
 // Set up routes
 //
@@ -50,13 +51,8 @@ app.get('/join-open-data-network/complete', renderController.renderJoinOpenDataN
 app.get('/join-open-data-network', renderController.renderJoinOpenDataNetwork);
 app.get('/search', renderController.renderSearchPage);
 app.get('/search-results', renderController.renderSearchResults);
-
-app.get('/v4', renderController.renderHomePageV4);
-app.get('/v4-search', renderController.renderSearchPageV4);
-app.get('/v4-search-results', renderController.renderSearchResultsV4);
-
-app.get('/:region', renderController.renderSearchPageV4);
-app.get('/:region/:vector', renderController.renderSearchWithVectorPageV4);
+app.get('/:region', renderController.renderSearchPage);
+app.get('/:region/:vector', renderController.renderSearchWithVectorPage);
 
 // Start listening
 //

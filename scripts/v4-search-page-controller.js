@@ -831,7 +831,7 @@ SearchPageController.prototype.getSearchPageUrl = function() {
     }
     else {
 
-        url = '/v4-search';
+        url = '/search';
     }
 
     url += this.getSearchQueryString();
@@ -841,7 +841,7 @@ SearchPageController.prototype.getSearchPageUrl = function() {
 
 SearchPageController.prototype.getSearchResultsUrl = function() {
 
-    var searchResultsUrl = './v4-search-results'; 
+    var searchResultsUrl = './search-results'; 
     var url = searchResultsUrl + this.getSearchQueryString(); 
 
     return url;
