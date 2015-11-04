@@ -7,19 +7,6 @@ function SearchPageController(params) {
 
     var self = this;
 
-    // Search bar icon
-    //
-    $('.fa-search').click(function() {
-
-        $('.summary').toggle();
-        $('.text-entry').toggle();
-        $('.text-entry input').select();
-
-        // Toggle the search icon from highlighted to highlight on hover
-        //
-        $('.fa-search').toggleClass('selected-icon');
-    });
-
     // Region tokens
     //
     $('section.refine .fa-times-circle').click(function() { 
