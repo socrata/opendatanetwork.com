@@ -1,30 +1,5 @@
 <% include v4-header %>
 
-<section class="search-bar">
-    <form method="GET" action="v4-search" id="form" autocomplete="off">
-        <a class="fa fa-search search-link"></a><a class="fa fa-caret-down search-options-link"></a>
-        <span><input type="text" placeholder="Search the Open Data Network" name="q" id="q" value="<%= params.q %>"></span>
-    </form>
-    <ul class="region-list" style="display:none"></ul>
-    <div class="search-options-menu">
-        <div class="search-options-menu-title">Search in</div>
-        <div class="search-options-menu-all"><a><i class="fa fa-check"></i>All Categories</a></div>
-        <ul>
-          <% allCategoryResults.results.forEach(function(result) { %>
-            <li><a><i class="fa fa-check"></i><%= result.category %></a></li>
-          <% }) %>
-        </ul>
-    </div>
-  <% if (tooltips) { %>
-    <div class="search-textbox-tip">
-        <div><strong>Start your search here.</strong> Search for data like Crime, Budget, etc.</div>
-    </div>
-    <div class="search-dropdown-tip">
-        <div>Click here to refine your search.</div>
-    </div>
-  <% } %>
-</section>
-
 <section class="blue">
     <div class="container">
         <h1>Open Data Network</h1>

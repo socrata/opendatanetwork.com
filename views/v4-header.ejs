@@ -22,5 +22,12 @@
 </head>
 <body>
 <header>
-    <a class="logo" href="/" title="Open Data Network"></a>
+    <form method="GET" action="<%= searchPath %>" id="form" autocomplete="off">
+        <a class="logo" href="/" title="Open Data Network"></a>
+        <a class="fa fa-search search-link"></a>
+        <span>
+            <input type="text" placeholder="Search the Open Data Network" name="q" id="q" value="<%= params.q %>">
+            <ul class="region-list" style="display:none"></ul>
+        </span>
+    </form>
 </header>

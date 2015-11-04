@@ -1,3 +1,18 @@
+$(document).ready(function() {
+
+    // Attach handler to the search button
+    //
+    $('.search-link').click(function() {
+
+        var text = $('#q').val().trim();
+
+        if (text.length == 0)
+            $('#q').focus();
+        else
+            $('#form').submit();
+    });
+});
+
 // Array extensions
 //
 Array.prototype.includes = function(s) {

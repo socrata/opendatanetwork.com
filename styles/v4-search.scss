@@ -1,11 +1,13 @@
 /* Variables */
 
 $black-text-color: #222;
-$darker-gray-text-color: #666;
 $blue-background-color: #3498db;
 $blue-color: #2980b9;
 $brown-color: #8a6d3b;
+$dark-gray-background-color: #d2d6d7;
+$dark-gray-border-color: #bbb;
 $dark-gray-text-color: #7f8c8d;
+$darker-gray-text-color: #666;
 $footer-background-color: #e5e9eb;
 $gray-background-color: #ecf0f1;
 $gray-border-color: #d4d9dc;
@@ -24,50 +26,36 @@ $yellow-color: #fcf8e3;
     color: $gray-text-color;
 }
 
+/* Header */
+
+header 
+{
+    border-bottom: 1px solid $dark-gray-border-color;
+}
+
 /* Refine section */
 
 section.refine
 {
-    background-color: white;
+    background-color: $dark-gray-background-color;
     height: 60px;
     margin-top: 60px;
     text-align: left;
 }
 
-section.refine .fa-search
-{
-    color: $dark-gray-text-color;
-    cursor: pointer;
-    font-size: 24px;
-    line-height: 60px;
-    left: 30px;
-    position: absolute;
-    top: 0;
-}
-
-section.refine .fa-search:hover
-{
-    color: $blue-color;
-}
-
-section.refine  .selected-icon
-{
-    color: $blue-color;
-}
-
 section.refine .regions
 {
     display: inline;
-    margin: 0 0 0 5px;
     padding: 0;
 }
 
 section.refine .regions li
 {
-    border: 1px solid $gray-border-color;
+    background-color: white;
     border-radius: 2px;
     color: $blue-color;
     display: inline;
+    margin: 0 0 0 5px;
     padding: 5px 10px;
 }
 
@@ -81,54 +69,8 @@ section.refine .summary
 {
     font-size: 16px;
     line-height: 60px;
-    padding-left: 65px;
+    padding-left: 30px;
     position: relative;
-}
-
-section.refine .text-entry
-{
-    font-size: 24px;
-    line-height: 60px;
-    position: relative;
-}
-
-section.refine .text-entry input[type="text"]
-{
-    border: 0;
-    display: block;
-    font-size: 16px;
-    height: 58px;
-    line-height: 60px;
-    margin: 0;
-    outline: 0;
-    padding-left: 65px;
-    width: 100%;
-}
-
-.refine-button
-{
-    border-left: 1px solid $gray-border-color;
-    color: $black-text-color;
-    display: inline-block;
-    font-size: 14px;
-    float: right;
-    height: 60px;
-    line-height: 60px;
-    padding: 0 20px;
-}
-
-.refine-button .fa
-{
-    color: $darker-gray-text-color;
-    margin-left: 10px;
-}
-
-/* Region auto complete menu */
-
-.region-list
-{
-    border-top: 1px solid $gray-text-color;
-    line-height: 40px;
 }
 
 /* Results section */
@@ -145,7 +87,6 @@ section.results
 .datasets-column
 {
     background-color: $gray-background-color;
-    border-right: 1px solid $gray-border-color;
     display: table-cell;
     padding: 15px;
     text-align: left;

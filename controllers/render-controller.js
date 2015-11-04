@@ -43,20 +43,20 @@ RenderController.prototype.renderHomePage = function (req, res) {
                 res.render(
                     'v4-home.ejs', 
                     {
+                        allCategoryResults : allCategoryResults,
                         css : ['/styles/v4-home.min.css', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css'],
+                        params : params,
                         scripts : [
-                            '/scripts/v4-api-controller.js', // TODO: min
-                            '/scripts/v4-auto-suggest-region-controller.js', // TODO: min
-                            '/scripts/v4-search-menu-controller.js', // TODO: min
-                            '/scripts/v4-home.js', // TODO: min
                             '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js', 
                             {
                                 'url' : '//fast.wistia.net/static/popover-v1.js',
                                 'charset' : 'ISO-8859-1'
-                            }],
-                        params : params,
-                        allCategoryResults : allCategoryResults,
-                        tooltips : (req.cookies['tooltips-shown'] != '1'),
+                            },
+                            '/scripts/v4-api-controller.js', // TODO: min
+                            '/scripts/v4-auto-suggest-region-controller.js', // TODO: min
+                            '/scripts/v4-home.js' // TODO: min
+                        ],
+                        searchPath : '/search'
                     });
              });
         });
@@ -120,18 +120,19 @@ RenderController.prototype._renderSearchPage = function(req, res, params) {
                 res.render(
                     'v4-search.ejs', 
                     {
+                        allCategoryResults : allCategoryResults,
                         css : ['/styles/v4-search.min.css'],
+                        params : params,
                         scripts : [
                             '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
+                            '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
                             '/scripts/v4-api-controller.js', // TODO: min
                             '/scripts/v4-auto-suggest-region-controller.js', // TODO: min
                             '/scripts/v4-search-page-controller.js', // TODO: min
                             '/scripts/v4-search.js', // TODO: min
                             ],
-                        params : params,
-                        allCategoryResults : allCategoryResults,
-                        searchResults : results,
-                        tooltips : false
+                        searchPath : req.path,
+                        searchResults : results
                     });
             }, 
             function() {

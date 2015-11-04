@@ -1,15 +1,10 @@
 <% include v4-header %>
 
 <script>var _params = <%- JSON.stringify(params) %>;</script>
-<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart']}]}"></script>
 
 <section class="refine">
 
     <div class="summary">
-        <a class="refine-button">
-            Refine<i class="fa fa-caret-down"></i>
-        </a>
-        <i class="fa fa-search"></i>
         <label><strong><%= searchResults.resultSetSizeString %></strong> results for
         <% if (params.q.length > 0) { %>
             <strong><%= params.q %></strong>
@@ -19,14 +14,6 @@
             <li><%= region.name %> <a class="fa fa-times-circle"></a></li>
         <% }); %>
         </ul>
-    </div>
-
-    <div class="text-entry" style="display:none;">
-        <i class="fa fa-search"></i>
-        <form method="get" action="<%= getSearchPageUrl(params.vector) %>">
-            <input type="text" value="<%= params.q %>" id="q" name="q" autocomplete="off">
-        </form>
-        <ul class="region-list" style="display:none;"></ul>
     </div>
 
 </section>
