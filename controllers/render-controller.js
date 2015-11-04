@@ -30,10 +30,6 @@ RenderController.prototype.renderHomePage = function (req, res) {
 
         categoryController.attachCategoryMetadata(allCategoryResults, function(allCategoryResults) {
 
-            // Set the tooltips shown cookie
-            //
-            res.cookie('tooltips-shown', '1', { expires: new Date(Date.now() + (1 * 24 * 60 * 60 * 1000)), httpOnly: true }); // one day
-
             // Get params
             //
             RenderController.prototype.getSearchParameters(req, function(params) {
@@ -144,25 +140,26 @@ RenderController.prototype._renderSearchPage = function(req, res, params) {
 
 RenderController.prototype.renderSearchResults = function(req, res) {
 
-    var params = RenderController.prototype.getSearchParameters(req.query);
+    RenderController.prototype.getSearchParameters(req, function(params) {
 
-    apiController.search(params, function(searchResults) {
-
-        if (searchResults.results.length == 0) {
-
-            res.status(204);
-            res.end();
-            return;
-        }
-
-        res.render(
-            'v4-search-results.ejs',
-            {
-                css : [],
-                scripts : [],
-                params : params,
-                searchResults : searchResults,
-            });
+        apiController.search(params, function(searchResults) {
+    
+            if (searchResults.results.length == 0) {
+    
+                res.status(204);
+                res.end();
+                return;
+            }
+    
+            res.render(
+                (params.regions.length == 0) ? 'v4-search-results-regular.ejs' : 'v4-search-results-compact.ejs',
+                {
+                    css : [],
+                    scripts : [],
+                    params : params,
+                    searchResults : searchResults,
+                });
+        });
     });
 };
 

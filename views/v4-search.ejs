@@ -20,18 +20,21 @@
 
 <section class="results">
 
-    <div class="datasets-column">
+<% if (params.regions.length == 0) { %>
+
+    <div class="search-results-regular-column">
         <ul class="datasets">
-          <% searchResults.results.forEach(function(result) { %>
-              <li>
-                  <div><a class="name" href="<%= result.link %>"><%= result.resource.name %></a></div>
-                  <div><a class="domain" href="http://<%= result.metadata.domain %>"><%= result.metadata.domain %></a></div>
-              </li>
-          <% }); %>
+<% include v4-search-results-regular %>
         </ul>
     </div>
 
-<% if ((params.regions != null) && (params.regions.length > 0)) { %>
+<% } else { %>
+
+    <div class="search-results-compact-column">
+        <ul class="datasets">
+<% include v4-search-results-compact %>
+        </ul>
+    </div>
 
     <div class="charts-column">
 
@@ -93,8 +96,6 @@
 
     </div>
 
-<% } %>
-
     <div class="controls-column">
         <div class="controls">
             <h1>Compare this Data</h1>
@@ -112,6 +113,7 @@
                 <li>Cras</li>
             </ul>
         </div>
+
         <div class="footer">
             <ul class="footer-links">
                 <li><a class="blue-link" href="http://www.socrata.com/company-info/">About Socrata</a></li>
@@ -120,6 +122,8 @@
             <a href="http://www.socrata.com/company-info/"><img src="/images/v3-powered-by-socrata.png"></a>
         </div>
     </div>
+
+<% } %>
 
 </section>
 

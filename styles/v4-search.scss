@@ -82,16 +82,7 @@ section.results
     width: 100%;
 }
 
-/* Datasets */
-
-.datasets-column
-{
-    background-color: $gray-background-color;
-    display: table-cell;
-    padding: 15px;
-    text-align: left;
-    width: 300px;
-}
+/* Common datasets */
 
 .datasets
 {
@@ -113,16 +104,109 @@ section.results
     border: none;
 }
 
-.datasets li a.name 
+/* Compact width search results */
+
+.search-results-compact-column
+{
+    background-color: $gray-background-color;
+    display: table-cell;
+    padding: 15px;
+    text-align: left;
+    width: 300px;
+}
+
+.search-results-compact-column .name 
 {
     color: $black-text-color;
     font-size: 14px;
 }
 
-.datasets li a.domain 
+.search-results-compact-column .domain 
 {
     color: $blue-color;
     font-size: 14px;
+}
+
+/* Regular width search results */
+
+.search-results-regular-column
+{
+    background-color: $gray-background-color;
+    display: table-cell;
+    text-align: left;
+    vertical-align: top;
+}
+
+.search-results-regular-column ul
+{
+    border: 1px solid $gray-border-color;
+    margin: 30px;
+}
+
+.search-results-regular-column li
+{
+    color: $gray-text-color;
+    font-size: 14px;
+    list-style-type: none;
+    margin: 0;
+    padding: 15px 15px 15px 65px;
+    position: relative;
+}
+
+.search-results-regular-column .tag
+{
+    color: $gray-text-color;
+}
+
+.search-results-regular-column .tagLabel
+{
+    font-weight: 600;
+}
+
+.search-results-regular-column h2
+{
+    margin: 0;
+    font-size: 20px;
+    font-weight: 300;
+}
+
+.search-results-regular-column h2 a
+{
+    color: $black-text-color;
+}
+
+.search-results-regular-column a
+{
+    color: $blue-color;
+    cursor: pointer;
+}
+
+.search-results-regular-column p
+{
+    color: $black-text-color;
+}
+
+.search-results-regular-column li .fa
+{
+    color: $blue-color;
+    font-size: 32px;
+    float: left;
+    margin-left: -45px;
+    margin-top: 3px;
+}
+
+.search-results-regular-column li .api-link
+{
+    background-color: $green-color;
+    border-radius: 3px;
+    color: white;
+    float: right;
+    font-size: 14px;
+    font-weight: 600;
+    height: 34px;
+    line-height: 34px;
+    padding-left: 18px;
+    padding-right: 18px;
 }
 
 /* Charts */
@@ -392,118 +476,4 @@ section.results
 {
     color: $blue-color;
     font-size: 14px;
-}
-
-
-
-
-/* Descriptive search results */
-/* Results pane */
-
-.search-results-pane
-{
-    background-color: white;
-    display: table-cell;
-    vertical-align: top;
-}
-
-.search-results-pane ul
-{
-    margin: 0;
-    padding: 30px 30px 60px;
-}
-
-.search-results-pane li
-{
-    border-bottom: 1px solid $gray-border-color;
-    color: $gray-text-color;
-    font-size: 14px;
-    list-style-type: none;
-    margin: 0;
-    padding: 15px 0 15px 55px;
-    position: relative;
-}
-
-.search-results-pane .tag
-{
-    color: $gray-text-color;
-}
-
-.search-results-pane .tagLabel
-{
-    font-weight: 600;
-}
-
-.search-results-pane h2
-{
-    margin: 0;
-    font-size: 20px;
-    font-weight: 300;
-}
-
-.search-results-pane h2 a
-{
-    color: $black-text-color;
-}
-
-.search-results-pane a
-{
-    color: $blue-color;
-    cursor: pointer;
-}
-
-.search-results-pane p
-{
-    color: $black-text-color;
-}
-
-.search-results-pane li .fa
-{
-    color: $blue-color;
-    font-size: 32px;
-    float: left;
-    margin-left: -55px;
-    margin-top: 3px;
-}
-
-.search-results-pane li .api-link
-{
-    background-color: $green-color;
-    border-radius: 3px;
-    color: white;
-    float: right;
-    font-size: 14px;
-    font-weight: 600;
-    height: 34px;
-    line-height: 34px;
-    padding-left: 18px;
-    padding-right: 18px;
-}
-
-.search-results-pane .current-category
-{
-    background-color: $yellow-color;
-    border-bottom: 1px solid $yellow-border-color;
-    border-left: 5px solid $yellow-border-color;
-    border-right: 1px solid $yellow-border-color;
-    border-top: 1px solid $yellow-border-color;
-    color: $brown-color;
-    font-size: 14px;
-    margin: 30px 30px 0;
-    padding: 20px 40px 20px 30px;
-    position: relative;
-}
-
-.search-results-pane .current-category strong 
-{
-    text-transform: uppercase;
-}
-
-.search-results-pane .current-category .fa
-{
-    color: $brown-color;
-    font-size: 16px;
-    position: absolute;
-    right: 12px;
-    top: 12px;
 }

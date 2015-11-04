@@ -791,6 +791,8 @@ SearchPageController.prototype.fetchNextPage = function() {
     this.fetching = true;
     this.incrementPage();
 
+    var self = this;
+
     $.ajax(this.getSearchResultsUrl()).done(function(data, textStatus, jqXHR) {
 
         console.log(jqXHR.status + ' ' + textStatus);
@@ -841,7 +843,7 @@ SearchPageController.prototype.getSearchPageUrl = function() {
 
 SearchPageController.prototype.getSearchResultsUrl = function() {
 
-    var searchResultsUrl = './search-results'; 
+    var searchResultsUrl = this.params.regions.length == 0 ? '/search-results' : './search-results'; 
     var url = searchResultsUrl + this.getSearchQueryString(); 
 
     return url;
