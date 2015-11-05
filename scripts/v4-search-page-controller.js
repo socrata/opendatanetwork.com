@@ -7,6 +7,22 @@ function SearchPageController(params) {
 
     var self = this;
 
+    // Refine menus
+    //
+    $('.refine-link').mouseenter(function() {
+
+        $(this).addClass('refine-link-selected');
+        $(this).children('span').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
+        $(this).children('ul').slideDown(100);
+    });
+
+    $('.refine-link').mouseleave(function() {
+
+        $(this).removeClass('refine-link-selected');
+        $(this).children('span').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
+        $(this).children('ul').slideUp(100);
+    });
+
     // Region tokens
     //
     $('section.refine .fa-times-circle').click(function() { 

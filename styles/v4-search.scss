@@ -6,7 +6,9 @@ $blue-color: #2980b9;
 $brown-color: #8a6d3b;
 $dark-gray-background-color: #d2d6d7;
 $dark-gray-border-color: #bbb;
+$dark-gray-arrow-color: #b3b3b3;
 $dark-gray-text-color: #7f8c8d;
+$darker-gray-background-color: #545454;
 $darker-gray-text-color: #666;
 $footer-background-color: #e5e9eb;
 $gray-background-color: #ecf0f1;
@@ -14,9 +16,9 @@ $gray-border-color: #d4d9dc;
 $gray-check-border-color: #d1d1d1;
 $gray-text-color: #bdc3c7;
 $green-color: #27ae60;
+$orange-color: #ee3b3b;
 $yellow-border-color: #f1c40f;
 $yellow-color: #fcf8e3;
-
 
 *::-webkit-input-placeholder,
 *:-moz-placeholder,
@@ -41,6 +43,10 @@ section.refine
     height: 60px;
     margin-top: 60px;
     text-align: left;
+    font-size: 16px;
+    line-height: 60px;
+    padding: 0 0 0 30px;
+    position: relative;
 }
 
 section.refine .regions
@@ -65,13 +71,67 @@ section.refine .regions li .fa-times-circle
     margin-left: 5px;
 }
 
-section.refine .summary
+.refine-link
 {
+    color: $blue-color;
+    cursor: pointer;
+    display: inline-block;
     font-size: 16px;
-    line-height: 60px;
-    padding-left: 30px;
-    position: relative;
+    float: right;
 }
+
+.refine-link span
+{
+    padding: 0 25px;
+}
+
+.refine-link-selected
+{
+    background-color: $darker-gray-background-color;
+    color: white; 
+}
+
+.refine-link .fa
+{
+    color: $dark-gray-arrow-color;
+    margin-left: 10px;
+}
+
+.refine-link ul
+{
+    background-color: $darker-gray-background-color;
+    border-top: 1px solid $dark-gray-border-color;
+    display: block;
+    list-style-type: none;
+    margin: 0;
+    min-width: 145px;
+    padding: 0;
+    position: absolute;
+    z-index: 10;
+}
+
+.refine-link li
+{
+    color: white; 
+    font-size: 14px;
+    line-height: 40px;
+    margin: 0;
+    padding: 0 25px;
+}
+
+.refine-link li:hover
+{
+    background-color: $orange-color;
+}
+
+.refine-by-label
+{
+    color: $black-text-color;
+    float: right;
+    font-size: 14px;
+    margin-right: 40px;
+}
+
 
 /* Results section */
 
