@@ -4,12 +4,12 @@ function ApiController() {
 
     this.autoCompleteNameSuggestUrl = 'https://federal.demo.socrata.com/views/7g2b-8brv/columns/autocomplete_name/suggest/{0}?size=10&fuzz=0';
     this.costOfLivingUrl = 'https://federal.demo.socrata.com/resource/hpnf-gnfu.json?$order=name&$where=';
-    this.educationUrl = 'https://federal.demo.socrata.com/resource/uf4m-5u8r.json/?id=';
-    this.gdpUrl = 'https://federal.demo.socrata.com/resource/ks2j-vhr8.json?$where=';
-    this.occupationsUrl = 'https://federal.demo.socrata.com/resource/qfcm-fw3i.json?$order=occupation&$where=';
-    this.populationUrl = 'https://federal.demo.socrata.com/resource/e3rd-zzmr.json?$order=year,name&$where=';
     this.earningsUrl = 'https://federal.demo.socrata.com/resource/wmwh-4vak.json?$where=';
     this.educationUrl = 'https://federal.demo.socrata.com/resource/uf4m-5u8r.json?$where=';
+    this.gdpUrl = 'https://federal.demo.socrata.com/resource/ks2j-vhr8.json?$where=';
+    this.occupationsUrl = 'https://federal.demo.socrata.com/resource/qfcm-fw3i.json?$order=occupation&$where=';
+    this.placesInRegionUrl = 'https://federal.demo.socrata.com/resource/eyae-8jfy?parent_id=';
+    this.populationUrl = 'https://federal.demo.socrata.com/resource/e3rd-zzmr.json?$order=year,name&$where=';
     this.similarRegionsUrl = 'https://socrata-peers.herokuapp.com/peers.json?vectors=population_change,earnings,occupation,education,geo,population&n=5&id=';
 }
 
@@ -57,6 +57,11 @@ ApiController.prototype.getData = function(url, regionIds, completionHandler) {
     console.log(url + encodeURI(segments.join(' OR ')));
 
     $.getJSON(url + encodeURI(segments.join(' OR ')), completionHandler);
+};
+
+ApiController.prototype.getPlacesInRegion = function(regionId, completionHandler) {
+
+    $.getJSON(this.placesInRegionUrl + regionId, completionHandler);
 };
 
 ApiController.prototype.getSimilarRegions = function(regionId, completionHandler) {

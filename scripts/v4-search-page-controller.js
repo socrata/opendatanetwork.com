@@ -47,6 +47,14 @@ function SearchPageController(params) {
         self.setAutoSuggestedRegion(region);
         self.navigate();
     });
+
+    // Places in region
+    //
+    this.drawPlacesInRegion(function(region) {
+
+        self.setAutoSuggestedRegion(region);
+        self.navigate();
+    });
 }
 
 // Public methods
@@ -691,31 +699,68 @@ SearchPageController.prototype.drawPopulationChangeChart = function(regionIds, d
     });
 };
 
-// Similar regions
+// Places in region
 //
-SearchPageController.prototype.drawSimilarRegions = function(onClickRegion) {
+SearchPageController.prototype.drawPlacesInRegion = function(onClickRegion) {
 
-    if (this.params.length == 0) 
+    if (this.params.regions.length == 0) 
         return;
 
-    var region = null;
-
-    for (var i = 0; i < this.params.regions.length; i++) {
-
-        if (this.params.regions[i].type != 'msa') {
-
-            region = this.params.regions[i];
-            break;
-        }
-    }
-
-    if (region == null)
-        return;
+    var region = this.params.regions[0];
 
     var controller = new ApiController();
     var self = this;
 
+    controller.getPlacesInRegion(region.id, function(data) { 
+
+        if (data.length == 0)
+            return;
+
+        $('#places-in-region-header').text('Places in {0}'.format(region.name));
+        $('#places-in-region-header').slideToggle(100);
+        
+        self.drawPlacesInRegionList(data, onClickRegion);
+    });
+};
+
+SearchPageController.prototype.drawPlacesInRegionList = function(data, onClickRegion) {
+
+    var s = '';
+
+    if (data.length == 0)
+        return;
+
+    for (var i = 0; i < data.length; i++) {
+
+        s += '<li><span><i class="fa"></i></span>' + data[i].child_name + '</li>'
+    }
+
+    $('#places-in-region').html(s);
+    $('#places-in-region').slideToggle(100);
+
+    $('#places-in-region li span').click(function() {
+
+        $(this).children(":first").addClass('fa-check');
+
+        var index = $(this).parent().index();
+        onClickRegion(data[index].child_name);
+    });
+};
+
+// Similar regions
+//
+SearchPageController.prototype.drawSimilarRegions = function(onClickRegion) {
+
+    if (this.params.regions.length == 0) 
+        return;
+
+    var region = this.params.regions[0];
+    var controller = new ApiController();
+    var self = this;
+
     controller.getSimilarRegions(region.id, function(data) { 
+
+        $('#similar-regions-header').slideToggle(100);
 
         self.drawSimilarRegionsList(data, onClickRegion);
     });
@@ -728,25 +773,21 @@ SearchPageController.prototype.drawSimilarRegionsList = function(data, onClickRe
     if (data.most_similar == undefined)
         return;
 
-    this.mostSimilar = data.most_similar;
+    for (var i = 0; i < data.most_similar.length; i++) {
 
-    for (var i = 0; i < this.mostSimilar.length; i++) {
-
-        s += '<li><span><i class="fa"></i></span>' + this.mostSimilar[i].name + '</li>'
+        s += '<li><span><i class="fa"></i></span>' + data.most_similar[i].name + '</li>'
     }
 
-    $('.similar-regions').html(s);
-    $('.similar-regions').slideToggle(100);
-
-    var self = this;
-
-    $('.similar-regions li span').click(function() {
+    $('#similar-regions').html(s);
+    $('#similar-regions').slideToggle(100);
+    
+    $('#similar-regions li span').click(function() {
 
         $(this).children(":first").addClass('fa-check');
 
         var index = $(this).parent().index();
 
-        onClickRegion(self.mostSimilar[index].name);
+        onClickRegion(data.most_similar[index].name);
     });
 };
 
