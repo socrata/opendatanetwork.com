@@ -184,15 +184,6 @@ function getSearchUrlFromParameters(params) {
     if (params.tags.length > 0)
         url += '&tags=' + encodeURIComponent(params.tags.join(','));
 
-    if (params.ec)
-        url += '&ec=1';
-
-    if (params.ed)
-        url += '&ed=1';
-
-    if (params.et)
-        url += '&et=1';
-
     return url;
 }
 

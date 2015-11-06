@@ -47,7 +47,7 @@ function SearchPageController(params) {
     //
     new AutoSuggestRegionController('.add-region input[type="text"]', '.add-region ul', function(region) {
 
-        self.setAutoSuggestedRegion(region);
+        self.setAutoSuggestedRegion(region, false);
         self.navigate();
     });
 
@@ -60,7 +60,7 @@ function SearchPageController(params) {
     //
     this.drawSimilarRegions(function(region) {
 
-        self.setAutoSuggestedRegion(region);
+        self.setAutoSuggestedRegion(region, false);
         self.navigate();
     });
 
@@ -68,7 +68,7 @@ function SearchPageController(params) {
     //
     this.drawPlacesInRegion(function(region) {
 
-        self.setAutoSuggestedRegion(region);
+        self.setAutoSuggestedRegion(region, false);
         self.navigate();
     });
 }
@@ -860,16 +860,20 @@ SearchPageController.prototype.getSearchPageUrl = function() {
 
     if ((this.params.regions.length > 0) || (this.params.autoSuggestedRegion != null)) {
 
-        url = '/';
+        var regionNames = [];
 
-        var regionNames = this.params.regions.map(function(region) {
-            return region.name.replace(/,/g, '').replace(/ /g, '_');
-        });
+        if (this.params.resetRegions == false) {
+
+            regionNames = this.params.regions.map(function(region) {
+                return region.name.replace(/,/g, '').replace(/ /g, '_');
+            });
+        }
 
         if (this.params.autoSuggestedRegion != null) {
             regionNames.push(this.params.autoSuggestedRegion.replace(/,/g, '').replace(/ /g, '_'));
         }
 
+        url = '/';
         url += regionNames.join('_vs_');
 
         if (this.params.vector)
@@ -909,15 +913,6 @@ SearchPageController.prototype.getSearchQueryString = function() {
     if (this.params.tags.length > 0)
         url += '&tags=' + encodeURIComponent(this.params.tags.join(','));
 
-    if (this.params.ec)
-        url += '&ec=1';
-
-    if (this.params.ed)
-        url += '&ed=1';
-
-    if (this.params.et)
-        url += '&et=1';
-
     return url;
 };
 
@@ -937,8 +932,9 @@ SearchPageController.prototype.removeRegion = function(regionIndex) {
     this.params.page = 1;
 };
 
-SearchPageController.prototype.setAutoSuggestedRegion = function(region) {
+SearchPageController.prototype.setAutoSuggestedRegion = function(region, resetRegions) {
 
     this.params.autoSuggestedRegion = region;
+    this.params.resetRegions = resetRegions;
     this.params.page = 1;
 };

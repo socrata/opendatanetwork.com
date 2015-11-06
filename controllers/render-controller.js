@@ -170,9 +170,6 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
     var domains = RenderController.prototype.getNormalizedArrayFromDelimitedString(query.domains);
     var tags = RenderController.prototype.getNormalizedArrayFromDelimitedString(query.tags);
     var page = isNaN(query.page) ? 1 : parseInt(query.page);
-    var ec = RenderController.prototype.getExpandedFiltersSetting(query.ec);
-    var ed = RenderController.prototype.getExpandedFiltersSetting(query.ed);
-    var et = RenderController.prototype.getExpandedFiltersSetting(query.et);
 
     var params = {
 
@@ -184,10 +181,8 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
         page : page,
         q : query.q || '',
         regions: [],
+        resetRegions : false,
         tags : tags,
-        ec : ec,
-        ed : ed,
-        et : et,
         vector : req.params.vector || 'population',
     };
 
@@ -213,11 +208,6 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
 
         if (completionHandler) completionHandler(params);
     });
-};
-
-RenderController.prototype.getExpandedFiltersSetting = function(queryValue) {
-
-    return isNaN(queryValue) ? false : (parseInt(queryValue) == 1);
 };
 
 RenderController.prototype.getNormalizedArrayFromDelimitedString = function(s) {

@@ -8,7 +8,7 @@ $(document).ready(function() {
     //
     new AutoSuggestRegionController('#q', '.region-list', function(region) {
 
-        searchPageController.setAutoSuggestedRegion(region);
+        searchPageController.setAutoSuggestedRegion(region, true);
         searchPageController.navigate();
     });
 
