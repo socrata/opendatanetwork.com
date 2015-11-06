@@ -11,18 +11,24 @@
             <li>LIVES</li>
         </ul>
     </a>
+
     <a class="refine-link">
-        <span>Publisher<i class="fa fa-caret-down"></i></span>
-        <ul style="display:none">
-            <li>data.cityofchicago.org</li>
-            <li>data.cityofnewyork.us</li>
+        <span>Publishers<i class="fa fa-caret-down"></i></span>
+        <ul style="display:none" id="refine-menu-domains">
+          <% domainResults.results.forEach(function(result) { %>
+            <li><%= result.domain %></li>
+          <% }); %>
+            <li id="refine-menu-domains-view-more">View More...</li>
         </ul>
     </a>
+
     <a class="refine-link">
-        <span>Category<i class="fa fa-caret-down"></i></span>
-        <ul style="display:none">
-            <li>Infrastructure</li>
-            <li>Housing & Development</li>
+        <span>Categories<i class="fa fa-caret-down"></i></span>
+        <ul style="display:none" id="refine-menu-categories">
+          <% categoryResults.results.forEach(function(result) { %>
+            <li><i class="fa <%= result.metadata.icon %>"></i><%= result.category %></li>
+          <% }); %>
+            <li id="refine-menu-categories-view-more">View More...</li>
         </ul>
     </a>
 

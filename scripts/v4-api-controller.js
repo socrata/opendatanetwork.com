@@ -3,7 +3,9 @@
 function ApiController() {
 
     this.autoCompleteNameSuggestUrl = 'https://federal.demo.socrata.com/views/7g2b-8brv/columns/autocomplete_name/suggest/{0}?size=10&fuzz=0';
+    this.categoriesUrl = '/categories.json';
     this.costOfLivingUrl = 'https://federal.demo.socrata.com/resource/hpnf-gnfu.json?$order=name&$where=';
+    this.domainsUrl = 'http://api.us.socrata.com/api/catalog/v1/domains';
     this.earningsUrl = 'https://federal.demo.socrata.com/resource/wmwh-4vak.json?$where=';
     this.educationUrl = 'https://federal.demo.socrata.com/resource/uf4m-5u8r.json?$where=';
     this.gdpUrl = 'https://federal.demo.socrata.com/resource/ks2j-vhr8.json?$where=';
@@ -57,6 +59,16 @@ ApiController.prototype.getData = function(url, regionIds, completionHandler) {
     console.log(url + encodeURI(segments.join(' OR ')));
 
     $.getJSON(url + encodeURI(segments.join(' OR ')), completionHandler);
+};
+
+ApiController.prototype.getDomains = function(completionHandler) {
+
+    $.getJSON(this.domainsUrl, completionHandler);
+};
+
+ApiController.prototype.getCategories = function(completionHandler) {
+
+    $.getJSON(this.categoriesUrl, completionHandler);
 };
 
 ApiController.prototype.getPlacesInRegion = function(regionId, completionHandler) {

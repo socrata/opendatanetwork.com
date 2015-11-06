@@ -14,17 +14,22 @@ module.exports = RenderController;
 function RenderController() {
 }
 
-// Error
+// Public methods - Categories json
 //
-RenderController.prototype.renderErrorPage = function(req, res) {
+RenderController.prototype.renderCategoriesJson = function(req, res) {
 
-    res.status(503);
-    res.sendFile(path.resolve(__dirname + '/../views/static/error.html'));
+    apiController.getCategoriesAll(function(allCategoryResults) {
+
+        categoryController.attachCategoryMetadata(allCategoryResults, function(allCategoryResults) {
+
+            res.send(JSON.stringify(allCategoryResults));
+        });
+    });
 };
 
 // Home
 //
-RenderController.prototype.renderHomePage = function (req, res) {
+RenderController.prototype.renderHomePage = function(req, res) {
 
     apiController.getCategoriesAll(function(allCategoryResults) {
 
@@ -32,7 +37,7 @@ RenderController.prototype.renderHomePage = function (req, res) {
 
             // Get params
             //
-            RenderController.prototype.getSearchParameters(req, function(params) {
+            getSearchParameters(req, function(params) {
 
                 // Render page
                 //
@@ -56,7 +61,7 @@ RenderController.prototype.renderHomePage = function (req, res) {
                     });
              });
         });
-    }, function() { RenderController.prototype.renderErrorPage(req, res); });
+    }, function() { renderErrorPage(req, res); });
 };
 
 // Join
@@ -68,6 +73,8 @@ RenderController.prototype.renderJoinOpenDataNetwork = function(req, res) {
     res.render('join.ejs');
 };
 
+// Join complete
+//
 RenderController.prototype.renderJoinOpenDataNetworkComplete = function(req, res) {
 
     res.locals.css = 'join-complete.min.css';
@@ -76,6 +83,16 @@ RenderController.prototype.renderJoinOpenDataNetworkComplete = function(req, res
 };
 
 // Search
+//
+RenderController.prototype.renderSearchPage = function(req, res) {
+
+    getSearchParameters(req, function(params) {
+
+        _renderSearchPage(req, res, params);
+    });
+};
+
+// Search with vector
 //
 RenderController.prototype.renderSearchWithVectorPage = function(req, res) {
 
@@ -86,58 +103,19 @@ RenderController.prototype.renderSearchWithVectorPage = function(req, res) {
         (req.params.vector == 'gdp') ||
         (req.params.vector == 'cost_of_living')) {
 
-        RenderController.prototype.getSearchParameters(req, function(params) {
+        getSearchParameters(req, function(params) {
 
-            RenderController.prototype._renderSearchPage(req, res, params);
+            _renderSearchPage(req, res, params);
         });
     }
     else {
 
-        RenderController.prototype.renderErrorPage(req, res); 
+        renderErrorPage(req, res); 
     }
 };
 
-RenderController.prototype.renderSearchPage = function(req, res) {
-
-    RenderController.prototype.getSearchParameters(req, function(params) {
-
-        RenderController.prototype._renderSearchPage(req, res, params);
-    });
-};
-
-RenderController.prototype._renderSearchPage = function(req, res, params) {
-
-    apiController.getCategoriesAll(function(allCategoryResults) {
-
-        apiController.getDatasetsForRegions(
-            params, 
-            function(results) {
-
-                res.render(
-                    'v4-search.ejs', 
-                    {
-                        allCategoryResults : allCategoryResults,
-                        css : ['/styles/v4-search.min.css'],
-                        params : params,
-                        scripts : [
-                            '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
-                            '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
-                            '/scripts/v4-api-controller.js', // TODO: min
-                            '/scripts/v4-auto-suggest-region-controller.js', // TODO: min
-                            '/scripts/v4-search-page-controller.js', // TODO: min
-                            '/scripts/v4-search.js', // TODO: min
-                            ],
-                        searchPath : req.path,
-                        searchResults : results
-                    });
-            }, 
-            function() {
-
-                RenderController.prototype.renderErrorPage(req, res); 
-            });
-    });
-};
-
+// Search results
+//
 RenderController.prototype.renderSearchResults = function(req, res) {
 
     RenderController.prototype.getSearchParameters(req, function(params) {
@@ -163,12 +141,54 @@ RenderController.prototype.renderSearchResults = function(req, res) {
     });
 };
 
-RenderController.prototype.getSearchParameters = function(req, completionHandler) {
+// Private functions
+//
+function _renderSearchPage(req, res, params) {
+
+    apiController.getCategories(5, function(categoryResults) {
+
+        categoryController.attachCategoryMetadata(categoryResults, function(categoryResults) {
+
+            apiController.getDomains(5, function(domainResults) {
+        
+                apiController.getDatasetsForRegions(
+                    params, 
+                    function(results) {
+        
+                        res.render(
+                            'v4-search.ejs', 
+                            {
+                                categoryResults : categoryResults,
+                                css : ['/styles/v4-search.min.css'],
+                                domainResults : domainResults,
+                                params : params,
+                                scripts : [
+                                    '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
+                                    '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
+                                    '/scripts/v4-api-controller.js', // TODO: min
+                                    '/scripts/v4-auto-suggest-region-controller.js', // TODO: min
+                                    '/scripts/v4-search-page-controller.js', // TODO: min
+                                    '/scripts/v4-search.js', // TODO: min
+                                    ],
+                                searchPath : req.path,
+                                searchResults : results
+                            });
+                    }, 
+                    function() {
+        
+                        renderErrorPage(req, res); 
+                    });
+            });
+        });
+    });
+};
+
+function getSearchParameters(req, completionHandler) {
 
     var query = req.query;
-    var categories = RenderController.prototype.getNormalizedArrayFromDelimitedString(query.categories);
-    var domains = RenderController.prototype.getNormalizedArrayFromDelimitedString(query.domains);
-    var tags = RenderController.prototype.getNormalizedArrayFromDelimitedString(query.tags);
+    var categories = getNormalizedArrayFromDelimitedString(query.categories);
+    var domains = getNormalizedArrayFromDelimitedString(query.domains);
+    var tags = getNormalizedArrayFromDelimitedString(query.tags);
     var page = isNaN(query.page) ? 1 : parseInt(query.page);
 
     var params = {
@@ -210,7 +230,7 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
     });
 };
 
-RenderController.prototype.getNormalizedArrayFromDelimitedString = function(s) {
+function getNormalizedArrayFromDelimitedString(s) {
 
     if (s == null) 
         return [];
@@ -225,6 +245,12 @@ RenderController.prototype.getNormalizedArrayFromDelimitedString = function(s) {
     }
 
     return parts;
+};
+
+function renderErrorPage(req, res) {
+
+    res.status(503);
+    res.sendFile(path.resolve(__dirname + '/../views/static/error.html'));
 };
 
 // Extensions

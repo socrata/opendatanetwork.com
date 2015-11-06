@@ -23,6 +23,32 @@ function SearchPageController(params) {
         $(this).children('ul').slideUp(100);
     });
 
+    $('#refine-menu-categories-view-more').click(function() {
+
+        var controller = new ApiController();
+        controller.getCategories(function(data) {
+
+            var s = data.results.map(function(result) {
+                return '<li><i class="fa ' + result.metadata.icon + '"></i>' + result.category + '</li>';
+            });
+
+            $('#refine-menu-categories').html(s);
+        });
+    });
+
+    $('#refine-menu-domains-view-more').click(function() {
+
+        var controller = new ApiController();
+        controller.getDomains(function(data) {
+
+            var s = data.results.map(function(result) {
+                return '<li>' + result.domain + '</li>';
+            });
+
+            $('#refine-menu-domains').html(s);
+        });
+    });
+
     // Region tokens
     //
     $('section.refine .fa-times-circle').click(function() { 

@@ -9,6 +9,7 @@ $dark-gray-border-color: #bbb;
 $dark-gray-arrow-color: #b3b3b3;
 $dark-gray-text-color: #7f8c8d;
 $darker-gray-background-color: #545454;
+$darker-gray-border-color: #5e5e5e;
 $darker-gray-text-color: #666;
 $footer-background-color: #e5e9eb;
 $gray-background-color: #ecf0f1;
@@ -17,8 +18,6 @@ $gray-check-border-color: #d1d1d1;
 $gray-text-color: #bdc3c7;
 $green-color: #27ae60;
 $orange-color: #ee3b3b;
-$yellow-border-color: #f1c40f;
-$yellow-color: #fcf8e3;
 
 *::-webkit-input-placeholder,
 *:-moz-placeholder,
@@ -112,16 +111,37 @@ section.refine .regions li .fa-times-circle
 
 .refine-link li
 {
+    border-top: 1px solid $darker-gray-border-color;
     color: white; 
     font-size: 14px;
     line-height: 40px;
     margin: 0;
-    padding: 0 25px;
+    padding: 0 20px;
+}
+
+.refine-link li:first-child
+{
+    border-top: 0;
 }
 
 .refine-link li:hover
 {
     background-color: $orange-color;
+}
+
+#refine-menu-categories li
+{
+    padding-left: 34px;
+    position: relative;
+    text-transform: capitalize;
+}
+
+#refine-menu-categories li .fa
+{
+    color: white;
+    left: 0;
+    position: absolute;
+    top: 13px;
 }
 
 .refine-by-label
@@ -131,7 +151,6 @@ section.refine .regions li .fa-times-circle
     font-size: 14px;
     margin-right: 25px;
 }
-
 
 /* Results section */
 

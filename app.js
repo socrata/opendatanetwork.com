@@ -47,6 +47,7 @@ app.get('/v4', function(req, res) { res.redirect(301, '/') });
 // Set up routes
 //
 app.get('/', renderController.renderHomePage);
+app.get('/categories.json', renderController.renderCategoriesJson);
 app.get('/join-open-data-network/complete', renderController.renderJoinOpenDataNetworkComplete);
 app.get('/join-open-data-network', renderController.renderJoinOpenDataNetwork);
 app.get('/search', renderController.renderSearchPage);
