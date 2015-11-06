@@ -774,19 +774,14 @@ SearchPageController.prototype.drawPlacesInRegionList = function(data, onClickRe
 
     for (var i = 0; i < data.length; i++) {
 
-        s += '<li><span><i class="fa"></i></span>' + data[i].child_name + '</li>'
+        s += '<li><a href="';
+        s += this.getSearchPageForRegionsAndVectorUrl(data[i].child_name) + '">';
+        s += data[i].child_name;
+        s += '</a></li>';
     }
 
     $('#places-in-region').html(s);
     $('#places-in-region').slideToggle(100);
-
-    $('#places-in-region li span').click(function() {
-
-        $(this).children(":first").addClass('fa-check');
-
-        var index = $(this).parent().index();
-        onClickRegion(data[index].child_name);
-    });
 };
 
 // Similar regions
@@ -802,8 +797,6 @@ SearchPageController.prototype.drawSimilarRegions = function(onClickRegion) {
 
     controller.getSimilarRegions(region.id, function(data) { 
 
-        $('#similar-regions-header').slideToggle(100);
-
         self.drawSimilarRegionsList(data, onClickRegion);
     });
 };
@@ -817,18 +810,15 @@ SearchPageController.prototype.drawSimilarRegionsList = function(data, onClickRe
 
     for (var i = 0; i < data.most_similar.length; i++) {
 
-        s += '<li><span><i class="fa"></i></span>' + data.most_similar[i].name + '</li>'
+        s += '<li><a><i class="fa fa-plus"></i>' + data.most_similar[i].name + '</a></li>'
     }
 
     $('#similar-regions').html(s);
     $('#similar-regions').slideToggle(100);
     
-    $('#similar-regions li span').click(function() {
-
-        $(this).children(":first").addClass('fa-check');
+    $('#similar-regions li a').click(function() {
 
         var index = $(this).parent().index();
-
         onClickRegion(data.most_similar[index].name);
     });
 };
@@ -880,39 +870,60 @@ SearchPageController.prototype.fetchNextPage = function() {
     });
 };
 
+SearchPageController.prototype.getSearchPageForRegionsAndVectorUrl = function(regions, vector, queryString) {
+
+    var url = '/';
+
+    if (typeof(regions) === 'string') {
+
+        url += regions.replace(/,/g, '').replace(/ /g, '_');
+    }
+    else if (Array.isArray(regions)) {
+
+        var regionNames = [];
+
+        regionNames = regions.map(function(region) {
+            return region.replace(/,/g, '').replace(/ /g, '_');
+        });
+
+        url += regionNames.join('_vs_');
+    }
+    else {
+
+        url += 'search';
+    }
+
+    if (vector)
+        url += '/' + vector;
+
+    if (queryString) 
+        url += queryString;
+
+    return url;
+};
+
 SearchPageController.prototype.getSearchPageUrl = function() {
 
-    var url;
-
-    if ((this.params.regions.length > 0) || (this.params.autoSuggestedRegion != null)) {
+    if ((this.params.regions.length > 0) || this.params.autoSuggestedRegion) {
 
         var regionNames = [];
 
         if (this.params.resetRegions == false) {
 
-            regionNames = this.params.regions.map(function(region) {
-                return region.name.replace(/,/g, '').replace(/ /g, '_');
+            regionNames = this.params.regions.map(function(region) { 
+                return region.name; 
             });
         }
 
-        if (this.params.autoSuggestedRegion != null) {
-            regionNames.push(this.params.autoSuggestedRegion.replace(/,/g, '').replace(/ /g, '_'));
-        }
+        if (this.params.autoSuggestedRegion)
+            regionNames.push(this.params.autoSuggestedRegion);
 
-        url = '/';
-        url += regionNames.join('_vs_');
-
-        if (this.params.vector)
-            url += '/' + this.params.vector;
+        return this.getSearchPageForRegionsAndVectorUrl(regionNames, this.params.vector, this.getSearchQueryString());
     }
     else {
 
-        url = '/search';
+        return this.getSearchPageForRegionsAndVectorUrl(null, this.params.vector, this.getSearchQueryString());
     }
-
-    url += this.getSearchQueryString();
-
-    return url;
 };
 
 SearchPageController.prototype.getSearchResultsUrl = function() {

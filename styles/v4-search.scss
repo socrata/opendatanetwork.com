@@ -39,8 +39,8 @@ header
 section.refine
 {
     background-color: $dark-gray-background-color;
-    height: 60px;
     margin-top: 60px;
+    min-height: 60px;
     text-align: left;
     font-size: 16px;
     line-height: 60px;
@@ -468,6 +468,8 @@ section.results
     border-top: 1px solid $gray-border-color;
     margin: 0;
     padding: 0;
+    position: absolute;
+    z-index: 10;
 }
 
 .add-region li
@@ -477,7 +479,7 @@ section.results
     font-size: 14px;
     list-style-type: none;
     margin: 0;
-    padding: 5px 6px;
+    padding: 5px 10px;
 }
 
 .add-region li.selected
@@ -486,9 +488,9 @@ section.results
     color: white;
 }
 
-/* Comparable places */
+/* Similar regions */
 
-.comparable-places
+#similar-regions
 {
     font-size: 14px;
     list-style-type: none;
@@ -496,29 +498,48 @@ section.results
     padding: 0;
 }
 
-.comparable-places li
+#similar-regions li
 {
-    margin: 0 0 5px;
-    padding-left: 28px;
+    margin: 0 0 10px;
+    padding: 0 0 0 26px;
     position: relative;
 }
 
-.comparable-places li span
+#similar-regions li .fa
 {
-    border: 1px solid $gray-check-border-color;
-    background-color: white;
-    cursor: pointer;
-    display: inline-block;
-    height: 16px;
-    line-height: 16px;
     position: absolute;
-    text-align: center;
-    left: 0;
-    top: 2px;
-    width: 16px;
+    left: 6px;
+    top: 4px;
 }
 
-.comparable-places-header 
+#similar-regions li a
+{
+    color: $blue-color;
+    cursor: pointer;
+}
+
+/* Places in region */
+
+#places-in-region
+{
+    font-size: 14px;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#places-in-region li
+{
+    margin: 0 0 5px;
+}
+
+#places-in-region li a
+{
+    color: $blue-color;
+    cursor: pointer;
+}
+
+#places-in-region-header 
 {
     font-size: 14px;
     font-weight: normal;

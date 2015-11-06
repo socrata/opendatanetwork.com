@@ -12,7 +12,7 @@ function ApiController() {
     this.occupationsUrl = 'https://federal.demo.socrata.com/resource/qfcm-fw3i.json?$order=occupation&$where=';
     this.placesInRegionUrl = 'https://federal.demo.socrata.com/resource/eyae-8jfy?parent_id=';
     this.populationUrl = 'https://federal.demo.socrata.com/resource/e3rd-zzmr.json?$order=year,name&$where=';
-    this.similarRegionsUrl = 'https://socrata-peers.herokuapp.com/peers.json?vectors=population_change,earnings,occupation,education,geo,population&n=5&id=';
+    this.similarRegionsUrl = 'https://socrata-peers.herokuapp.com/peers.json?vectors=population_change,earnings,occupation,education,population&n=5&id=';
 }
 
 ApiController.prototype.getAutoCompleteNameSuggestions = function(searchTerm, completionHandler) {
@@ -55,8 +55,6 @@ ApiController.prototype.getData = function(url, regionIds, completionHandler) {
     var segments = regionIds.map(function(regionId) {
        return 'id=\'' + regionId + '\''; 
     });
-
-    console.log(url + encodeURI(segments.join(' OR ')));
 
     $.getJSON(url + encodeURI(segments.join(' OR ')), completionHandler);
 };

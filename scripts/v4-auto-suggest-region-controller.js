@@ -3,13 +3,29 @@ function AutoSuggestRegionController(inputTextSelector, resultListSelector, onCl
     this.options = [];
     this.selectedIndex = -1;
     this.resultListSelector = resultListSelector;
-    this.onClickRegion = onClickRegion;
+    this.timer = null;
 
     var self = this;
 
-    // Key presses
+    // Click event
     //
-    $(inputTextSelector).keydown(function(e) {
+    $(resultListSelector + ' li').click(function() {
+
+        if (onClickRegion) 
+            onClickRegion(self.options[$(this).index()].text);
+    });
+
+    // Mouse event
+    //   
+    $(resultListSelector + ' li').mouseenter(function() {
+
+        self.selectedIndex = $(this).index();
+        self.updateListSelection();
+    });
+
+    // Keyboard event
+    //
+    $(inputTextSelector).keyup(function(e) {
 
         if (e.keyCode == 38) { // up
 
@@ -33,7 +49,10 @@ function AutoSuggestRegionController(inputTextSelector, resultListSelector, onCl
                 return;
 
             e.preventDefault();
-            self.selectRegion(self.selectedIndex);
+            
+            if (onClickRegion) 
+                onClickRegion(self.options[self.selectedIndex].text);
+
             return;
         }
         else if (e.keyCode == 27) { // esc 
@@ -42,59 +61,53 @@ function AutoSuggestRegionController(inputTextSelector, resultListSelector, onCl
             return;
         }
 
+        // Clear the timer
+        //
+        clearTimeout(this.timer);
+
         // Get the search value
         //
         var searchTerm = $(inputTextSelector).val().trim();
 
         if (searchTerm.length == 0) {
-
+    
             $(resultListSelector).slideUp(100);
             return;
         }
 
-        var apiController = new ApiController();
-
-        apiController.getAutoCompleteNameSuggestions(searchTerm, function(data) {
-
-            self.options = data.options;
-            self.selectedIndex = -1;
-
-            var regionList = $(resultListSelector);
-
-            if (self.options.length == 0) {
-
-                regionList.slideUp(100);
-                return;
-            }
-
-            var items = self.options.map(function(item) { return '<li>' + item.text + '</li>'; });
-
-            regionList.html(items.join(''));
-
-            // Click event
-            //
-            $(resultListSelector + ' li').click(function() {
-
-                self.selectRegion($(this).index()); 
-            });
-
-            // Mouse event
-            //   
-            $(resultListSelector + ' li').mouseenter(function() {
-
-                self.selectedIndex = $(this).index();
-                self.updateListSelection();
-            });
-
-            regionList.slideDown(100);
-        });
+        // Set new timer to auto suggest
+        //
+        this.timer = setTimeout(
+            function() {
+                self.autoSuggest(searchTerm, resultListSelector);
+            },
+            250);
     });
-};
+}
 
-AutoSuggestRegionController.prototype.selectRegion = function(index) {
+AutoSuggestRegionController.prototype.autoSuggest = function(searchTerm, resultListSelector) {
 
-    if (this.onClickRegion) 
-        this.onClickRegion(this.options[index].text); // pass just the text
+    var self = this;
+    var apiController = new ApiController();
+    
+    apiController.getAutoCompleteNameSuggestions(searchTerm, function(data) {
+
+        self.options = data.options;
+        self.selectedIndex = -1;
+
+        var regionList = $(resultListSelector);
+
+        if (self.options.length == 0) {
+
+            regionList.slideUp(100);
+            return;
+        }
+
+        var items = self.options.map(function(item) { return '<li>' + item.text + '</li>'; });
+
+        regionList.html(items.join(''));
+        regionList.slideDown(100);
+    });
 };
 
 AutoSuggestRegionController.prototype.updateListSelection = function() {
