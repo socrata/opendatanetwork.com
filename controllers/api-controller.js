@@ -10,12 +10,10 @@ var baseFederalDemoUrl = 'https://federal.demo.socrata.com/resource/7g2b-8brv';
 var autoCompleteNameUrl = baseFederalDemoUrl + '/?$where={0}';
 var cacheController = new CacheController();
 var categoriesUrl = baseCatalogUrl + '/categories';
-var defaultFilterCount = 10;
 var defaultSearchResultCount = 60;
 var domainsUrl = baseCatalogUrl + '/domains'; 
 var maxDescriptionLength = 300;
 var searchUrl = baseCatalogUrl;
-var tagsUrl = baseCatalogUrl + '/tags';
 var userAgent = 'www.opendatanetwork.com';
 
 module.exports = ApiController;
@@ -25,10 +23,10 @@ function ApiController() {
 
 // Public methods
 //
-ApiController.prototype.getDatasetsForRegions = function(params, successHandler, errorHandler) {
+ApiController.prototype.searchDatasets = function(params, successHandler, errorHandler) {
 
     getFromApi(
-        getSearchUrlFromParametersV4(params),
+        getSearchDatasetsUrl(params),
         function(results) {
 
             annotateData(results);
@@ -40,9 +38,12 @@ ApiController.prototype.getDatasetsForRegions = function(params, successHandler,
         errorHandler);
 }
 
-ApiController.prototype.getAutoCompleteName = function(names, successHandler, errorHandler) {
+ApiController.prototype.getAutoSuggestedRegions = function(names, successHandler, errorHandler) {
 
-    var pairs = names.map(function(name) { return "autocomplete_name='" + encodeURIComponent(name) + "'"; });
+    var pairs = names.map(function(name) { 
+        return "autocomplete_name='" + encodeURIComponent(name) + "'"; 
+    });
+    
     var url = autoCompleteNameUrl.format(pairs.join('%20OR%20'));
     getFromApi(url, successHandler, errorHandler);
 }
@@ -72,38 +73,6 @@ ApiController.prototype.getDomains = function(count, successHandler, errorHandle
 
             truncateResults(count, results);
             if (successHandler) successHandler(results); 
-        },
-        errorHandler);
-};
-
-ApiController.prototype.getTags = function(count, successHandler, errorHandler) {
-
-    getFromCacheOrApi(
-        tagsUrl, 
-        function(results) { 
-
-            truncateResults(count, results);
-            if (successHandler) successHandler(results); 
-        },
-        errorHandler);
-};
-
-ApiController.prototype.getTagsAll = function(successHandler, errorHandler) {
-
-    this.getTags(null, successHandler, errorHandler);
-};
-
-ApiController.prototype.search = function(params, successHandler, errorHandler) {
-
-    getFromApi(
-        getSearchUrlFromParameters(params),
-        function(results) {
-
-            annotateData(results);
-            annotateParams(results, params);
-
-            if (successHandler)
-                successHandler(results);
         },
         errorHandler);
 };
@@ -165,29 +134,7 @@ function getCategoryGlyphString(result) {
     }
 }
 
-function getSearchUrlFromParameters(params) {
-
-    var url = searchUrl +
-        '?offset=' + params.offset +
-        '&only=' + params.only +
-        '&limit=' + params.limit;
-
-    if ((params.q != null) && (params.q.length > 0))
-        url += '&q=' + encodeURIComponent(params.q);
-
-    if (params.categories.length > 0)
-        url += '&categories=' + encodeURIComponent(params.categories.join(','));
-
-    if (params.domains.length > 0)
-        url += '&domains=' + encodeURIComponent(params.domains.join(','));
-
-    if (params.tags.length > 0)
-        url += '&tags=' + encodeURIComponent(params.tags.join(','));
-
-    return url;
-}
-
-function getSearchUrlFromParametersV4(params) {
+function getSearchDatasetsUrl(params) {
 
     var url = searchUrl +
         '?offset=' + params.offset +
@@ -200,17 +147,8 @@ function getSearchUrlFromParametersV4(params) {
     if (params.domains.length > 0)
         url += '&domains=' + encodeURIComponent(params.domains.join(','));
 
-    if (params.tags.length > 0)
-        url += '&tags=' + encodeURIComponent(params.tags.join(','));
-
-    if (params.ec)
-        url += '&ec=1';
-
-    if (params.ed)
-        url += '&ed=1';
-
-    if (params.et)
-        url += '&et=1';
+    if (params.standards.length > 0)
+        url += '&standards=' + encodeURIComponent(params.standards.join(','));
 
     if (((params.q != null) && (params.q.length > 0)) || (params.regions.length > 0)) {
 

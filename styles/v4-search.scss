@@ -48,13 +48,13 @@ section.refine
     position: relative;
 }
 
-section.refine .regions
+.tokens
 {
     display: inline;
     padding: 0;
 }
 
-section.refine .regions li
+.tokens li
 {
     background-color: white;
     border-radius: 2px;
@@ -62,12 +62,18 @@ section.refine .regions li
     display: inline;
     margin: 0 0 0 5px;
     padding: 5px 10px;
+    white-space: nowrap;
 }
 
-section.refine .regions li .fa-times-circle
+.tokens li .fa-times-circle
 {
     cursor: pointer;
     margin-left: 5px;
+}
+
+.standard-token
+{
+    text-transform: uppercase;
 }
 
 .refine-link

@@ -6,7 +6,7 @@
 
     <a class="refine-link">
         <span>Standards<i class="fa fa-caret-down"></i></span>
-        <ul style="display:none">
+        <ul id="refine-menu-standards" style="display:none">
             <li>BLDS</li>
             <li>LIVES</li>
         </ul>
@@ -14,21 +14,21 @@
 
     <a class="refine-link">
         <span>Publishers<i class="fa fa-caret-down"></i></span>
-        <ul style="display:none" id="refine-menu-domains">
+        <ul id="refine-menu-domains" style="display:none">
           <% domainResults.results.forEach(function(result) { %>
             <li><%= result.domain %></li>
           <% }); %>
-            <li id="refine-menu-domains-view-more">View More...</li>
+            <li id="refine-menu-domains-view-more" class="refine-view-more">View More...</li>
         </ul>
     </a>
 
     <a class="refine-link">
         <span>Categories<i class="fa fa-caret-down"></i></span>
-        <ul style="display:none" id="refine-menu-categories">
+        <ul id="refine-menu-categories" style="display:none">
           <% categoryResults.results.forEach(function(result) { %>
             <li><i class="fa <%= result.metadata.icon %>"></i><%= result.category %></li>
           <% }); %>
-            <li id="refine-menu-categories-view-more">View More...</li>
+            <li id="refine-menu-categories-view-more" class="refine-view-more">View More...</li>
         </ul>
     </a>
 
@@ -40,9 +40,18 @@
         <strong><%= params.q %></strong>
     <% } %>
     
-    <ul class="regions">
+    <ul class="tokens">
     <% params.regions.forEach(function(region) { %>
-        <li><%= region.name %> <a class="fa fa-times-circle"></a></li>
+        <li class="region-token"><%= region.name %> <a class="fa fa-times-circle"></a></li>
+    <% }); %>
+    <% params.categories.forEach(function(category) { %>
+        <li class="category-token"><%= category %> <a class="fa fa-times-circle"></a></li>
+    <% }); %>
+    <% params.domains.forEach(function(domain) { %>
+        <li class="domain-token"><%= domain %> <a class="fa fa-times-circle"></a></li>
+    <% }); %>
+    <% params.standards.forEach(function(standard) { %>
+        <li class="standard-token"><%= standard %> <a class="fa fa-times-circle"></a></li>
     <% }); %>
     </ul>
 
@@ -196,8 +205,8 @@ function getSearchQueryString() {
     if (params.domains.length > 0)
         url += '&domains=' + encodeURIComponent(params.domains.join(','));
 
-    if (params.tags.length > 0)
-        url += '&tags=' + encodeURIComponent(params.tags.join(','));
+    if (params.standards.length > 0)
+        url += '&standards=' + encodeURIComponent(params.standards.join(','));
 
     return url;
 };

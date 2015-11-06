@@ -37,7 +37,7 @@ RenderController.prototype.renderHomePage = function(req, res) {
 
             // Get params
             //
-            getSearchParameters(req, function(params) {
+            RenderController.prototype.getSearchParameters(req, function(params) {
 
                 // Render page
                 //
@@ -86,7 +86,7 @@ RenderController.prototype.renderJoinOpenDataNetworkComplete = function(req, res
 //
 RenderController.prototype.renderSearchPage = function(req, res) {
 
-    getSearchParameters(req, function(params) {
+    RenderController.prototype.getSearchParameters(req, function(params) {
 
         _renderSearchPage(req, res, params);
     });
@@ -103,7 +103,7 @@ RenderController.prototype.renderSearchWithVectorPage = function(req, res) {
         (req.params.vector == 'gdp') ||
         (req.params.vector == 'cost_of_living')) {
 
-        getSearchParameters(req, function(params) {
+        RenderController.prototype.getSearchParameters(req, function(params) {
 
             _renderSearchPage(req, res, params);
         });
@@ -120,7 +120,7 @@ RenderController.prototype.renderSearchResults = function(req, res) {
 
     RenderController.prototype.getSearchParameters(req, function(params) {
 
-        apiController.search(params, function(searchResults) {
+        apiController.searchDatasets(params, function(searchResults) {
     
             if (searchResults.results.length == 0) {
     
@@ -151,7 +151,7 @@ function _renderSearchPage(req, res, params) {
 
             apiController.getDomains(5, function(domainResults) {
         
-                apiController.getDatasetsForRegions(
+                apiController.searchDatasets(
                     params, 
                     function(results) {
         
@@ -183,12 +183,12 @@ function _renderSearchPage(req, res, params) {
     });
 };
 
-function getSearchParameters(req, completionHandler) {
+RenderController.prototype.getSearchParameters = function(req, completionHandler) {
 
     var query = req.query;
     var categories = getNormalizedArrayFromDelimitedString(query.categories);
     var domains = getNormalizedArrayFromDelimitedString(query.domains);
-    var tags = getNormalizedArrayFromDelimitedString(query.tags);
+    var standards = getNormalizedArrayFromDelimitedString(query.standards);
     var page = isNaN(query.page) ? 1 : parseInt(query.page);
 
     var params = {
@@ -200,9 +200,9 @@ function getSearchParameters(req, completionHandler) {
         only : 'datasets',
         page : page,
         q : query.q || '',
-        regions: [],
+        regions : [],
         resetRegions : false,
-        tags : tags,
+        standards : standards,
         vector : req.params.vector || 'population',
     };
 
@@ -217,7 +217,7 @@ function getSearchParameters(req, completionHandler) {
     var parts = req.params.region.split2('_vs_');
     var regions = parts.map(function(region) { return region.replace(/_/g, ' ') });
 
-    apiController.getAutoCompleteName(regions, function(results) {
+    apiController.getAutoSuggestedRegions(regions, function(results) {
 
         if (results.length > 0) {
 

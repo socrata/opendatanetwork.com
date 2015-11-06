@@ -23,6 +23,10 @@ function SearchPageController(params) {
         $(this).children('ul').slideUp(100);
     });
 
+    // Categories
+    //
+    this.attachCategoriesClickHandlers();
+
     $('#refine-menu-categories-view-more').click(function() {
 
         var controller = new ApiController();
@@ -33,8 +37,13 @@ function SearchPageController(params) {
             });
 
             $('#refine-menu-categories').html(s);
+            self.attachCategoriesClickHandlers();
         });
     });
+
+    // Domains
+    //
+    this.attachDomainsClickHandlers();
 
     $('#refine-menu-domains-view-more').click(function() {
 
@@ -46,14 +55,37 @@ function SearchPageController(params) {
             });
 
             $('#refine-menu-domains').html(s);
+            self.attachDomainsClickHandlers();
         });
     });
-
-    // Region tokens
+    
+    // Standards
     //
-    $('section.refine .fa-times-circle').click(function() { 
+    this.attachStandardsClickHandlers();
+
+    // Tokens
+    //
+    $('.region-token .fa-times-circle').click(function() { 
 
         self.removeRegion($(this).parent().index());
+        self.navigate();
+    });
+
+    $('.category-token .fa-times-circle').click(function() { 
+
+        self.toggleCategory($(this).parent().text().toLowerCase().trim());
+        self.navigate();
+    });
+
+    $('.domain-token .fa-times-circle').click(function() { 
+
+        self.toggleDomain($(this).parent().text().toLowerCase().trim());
+        self.navigate();
+    });
+
+    $('.standard-token .fa-times-circle').click(function() { 
+
+        self.toggleStandard($(this).parent().text().toLowerCase().trim());
         self.navigate();
     });
 
@@ -101,6 +133,43 @@ function SearchPageController(params) {
 
 // Public methods
 //
+SearchPageController.prototype.attachCategoriesClickHandlers = function() {
+
+    var self = this;
+
+    $('#refine-menu-categories li:not(.refine-view-more)').click(function() {
+
+        self.toggleCategory($(this).text().toLowerCase().trim());
+        self.navigate();
+    });
+};
+
+SearchPageController.prototype.attachDomainsClickHandlers = function() {
+
+    var self = this;
+    
+    $('#refine-menu-domains li:not(.refine-view-more)').click(function() {
+
+        var domain = $(this).text().toLowerCase().trim();
+
+        self.toggleDomain(domain);
+        self.navigate();
+    });
+};
+
+SearchPageController.prototype.attachStandardsClickHandlers = function() {
+
+    var self = this;
+    
+    $('#refine-menu-standards li').click(function() {
+
+        var standard = $(this).text().toLowerCase().trim();
+
+        self.toggleStandard(standard);
+        self.navigate();
+    });
+};
+
 SearchPageController.prototype.decrementPage = function() {
 
     this.params.page--;
@@ -947,8 +1016,8 @@ SearchPageController.prototype.getSearchQueryString = function() {
     if (this.params.domains.length > 0)
         url += '&domains=' + encodeURIComponent(this.params.domains.join(','));
 
-    if (this.params.tags.length > 0)
-        url += '&tags=' + encodeURIComponent(this.params.tags.join(','));
+    if (this.params.standards.length > 0)
+        url += '&standards=' + encodeURIComponent(this.params.standards.join(','));
 
     return url;
 };
@@ -974,4 +1043,34 @@ SearchPageController.prototype.setAutoSuggestedRegion = function(region, resetRe
     this.params.autoSuggestedRegion = region;
     this.params.resetRegions = resetRegions;
     this.params.page = 1;
+};
+
+SearchPageController.prototype.toggleCategory = function(category) {
+
+    var i = this.params.categories.indexOf(category);
+
+    if (i > -1)
+        this.params.categories.splice(i, 1); // remove at index i
+    else
+        this.params.categories.push(category);
+};
+
+SearchPageController.prototype.toggleDomain = function(domain) {
+
+    var i = this.params.domains.indexOf(domain);
+
+    if (i > -1)
+        this.params.domains.splice(i, 1); // remove at index i
+    else
+        this.params.domains.push(domain);
+};
+
+SearchPageController.prototype.toggleStandard = function(standard) {
+
+    var i = this.params.standards.indexOf(standard);
+
+    if (i > -1)
+        this.params.standards.splice(i, 1); // remove at index i
+    else
+        this.params.standards.push(standard);
 };
