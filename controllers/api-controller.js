@@ -1,4 +1,5 @@
 var CacheController = require('./cache-controller');
+var SynonymController = require('./synonym-controller');
 
 var moment = require('moment');
 var numeral = require('numeral');
@@ -14,6 +15,7 @@ var defaultSearchResultCount = 60;
 var domainsUrl = baseCatalogUrl + '/domains'; 
 var maxDescriptionLength = 300;
 var searchUrl = baseCatalogUrl;
+var synonymController = new SynonymController();
 var userAgent = 'www.opendatanetwork.com';
 
 module.exports = ApiController;
@@ -25,17 +27,20 @@ function ApiController() {
 //
 ApiController.prototype.searchDatasets = function(params, successHandler, errorHandler) {
 
-    getFromApi(
-        getSearchDatasetsUrl(params),
-        function(results) {
+    getSearchDatasetsUrl(params, function(url) {
 
-            annotateData(results);
-            annotateParams(results, params);
+        getFromApi(
+            url,
+            function(results) {
 
-            if (successHandler)
-                successHandler(results);
-        },
-        errorHandler);
+                annotateData(results);
+                annotateParams(results, params);
+
+                if (successHandler)
+                    successHandler(results);
+            },
+            errorHandler);
+    });
 }
 
 ApiController.prototype.getAutoSuggestedRegions = function(names, successHandler, errorHandler) {
@@ -134,43 +139,58 @@ function getCategoryGlyphString(result) {
     }
 }
 
-function getSearchDatasetsUrl(params) {
+function getSearchDatasetsUrl(params, completionHandler) {
 
-    var url = searchUrl +
-        '?offset=' + params.offset +
-        '&only=' + params.only +
-        '&limit=' + params.limit;
+    // Look to see if there are synonyms for the query parameter
+    //
+    synonymController.getSynonyms(params.q, function(synonyms) {
 
-    if (params.categories.length > 0)
-        url += '&categories=' + encodeURIComponent(params.categories.join(','));
-
-    if (params.domains.length > 0)
-        url += '&domains=' + encodeURIComponent(params.domains.join(','));
-
-    if (params.standards.length > 0)
-        url += '&standards=' + encodeURIComponent(params.standards.join(','));
-
-    if (((params.q != null) && (params.q.length > 0)) || (params.regions.length > 0)) {
-
-        url += '&q=';
-
-        if ((params.q != null) && (params.q.length > 0)) {
-
-            url += encodeURIComponent(params.q);
-        }
-        else {
+        var url = searchUrl +
+            '?offset=' + params.offset +
+            '&only=' + params.only +
+            '&limit=' + params.limit;
+    
+        if (params.categories.length > 0)
+            url += '&categories=' + encodeURIComponent(params.categories.join(','));
+    
+        if (params.domains.length > 0)
+            url += '&domains=' + encodeURIComponent(params.domains.join(','));
+    
+        if ((synonyms.length > 0) || (params.regions.length > 0) || (params.standards.length > 0)) {
+    
+            url += '&q_internal=';
+    
+            var s = '';
+    
+            if (synonyms.length > 0) {
+                s += '(' + synonyms.join(' OR ') + ')';
+            }
 
             if (params.regions.length > 0) {
 
-                // TODO: Ideally we would pass the regions as separate parameters.  Marc says this is coming.
-                //
-                var regions = params.regions.map(function(region) { return region.name; });
-                url += encodeURIComponent(regions.join(', '));
-            }
-        }
-    }
+                if (s.length > 0)
+                    s += ' AND ';
 
-    return url;
+                var regionNames = params.regions.map(function(region) { return region.name; });
+                s += '(' + regionNames.join(' OR ') + ')';
+            }
+            
+            if (params.standards.length > 0) {
+
+                if (s.length > 0)
+                    s += ' AND ';
+
+                s += '(' + params.standards.join(' OR ') + ')';
+            }
+
+            console.log(s);
+
+            url += encodeURIComponent(s);
+        }
+
+        if (completionHandler)
+            completionHandler(url);
+    });
 }
 
 function getFromApi(url, successHandler, errorHandler) {
