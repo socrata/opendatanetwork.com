@@ -58,7 +58,6 @@ section.refine
 {
     background-color: white;
     border-radius: 2px;
-    color: $blue-color;
     display: inline;
     margin: 0 0 0 5px;
     padding: 5px 10px;
@@ -71,8 +70,24 @@ section.refine
     margin-left: 5px;
 }
 
+.category-token
+{
+    color: $orange-color;
+}
+
+.domain-token
+{
+    color: $orange-color;
+}
+
+.region-token
+{
+    color: $blue-color;
+}
+
 .standard-token
 {
+    color: $orange-color;
     text-transform: uppercase;
 }
 
@@ -513,6 +528,7 @@ section.results
 
 #similar-regions li .fa
 {
+    color: $blue-color;
     position: absolute;
     left: 6px;
     top: 4px;
@@ -520,7 +536,7 @@ section.results
 
 #similar-regions li a
 {
-    color: $blue-color;
+    color: $black-text-color;
     cursor: pointer;
 }
 

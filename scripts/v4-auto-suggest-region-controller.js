@@ -4,7 +4,8 @@ function AutoSuggestRegionController(inputTextSelector, resultListSelector, onCl
     this.selectedIndex = -1;
     this.resultListSelector = resultListSelector;
     this.timer = null;
-
+    
+    var autoSuggestDelay = 150;
     var self = this;
 
     // Click event
@@ -81,7 +82,7 @@ function AutoSuggestRegionController(inputTextSelector, resultListSelector, onCl
             function() {
                 self.autoSuggest(searchTerm, resultListSelector);
             },
-            250);
+            autoSuggestDelay);
     });
 }
 
