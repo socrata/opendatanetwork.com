@@ -843,10 +843,12 @@ class SearchPageController {
             "opacity": 0.65
         };
         
-        L.geoJson(myLines, {
-            style: myStyle
-        }).addTo(map);
-        
+/*        L.geoJson(
+            myLines, 
+            {
+                style: myStyle
+            }).addTo(map);
+*/        
         L.tileLayer('https://a.tiles.mapbox.com/v3/socrata-apps.ibp0l899/{z}/{x}/{y}.png').addTo(map);
     }
     
@@ -875,7 +877,7 @@ class SearchPageController {
                         $('#places-in-region-header').text('Places in {0}'.format(region.name));
                         $('#places-in-region-header').slideToggle(100);
 
-                        this.drawPlacesInRegionList(response);
+                        this.drawPlacesInRegionList(response, 10);
                     })
                     .catch(error => console.error(error));
 
@@ -922,14 +924,41 @@ class SearchPageController {
                 var countiesPromise = controller.getCountiesInState(stateId);
 
                 return Promise.all([placesPromise, countiesPromise])
-                    .then(values => Promise.resolve(values[0].concat(values[1])))
+                    .then(values => {
+
+                        var rg0 = this.removeCurrentRegions(values[0]);
+                        var rg1 = this.removeCurrentRegions(values[1]);
+
+                        return Promise.resolve(rg0.concat(rg1));
+                    })
                     .catch(error => console.error(error));
 
             default: return Promise.resolve([]);
         }
     }
 
-    drawPlacesInRegionList(data) {
+    removeCurrentRegions(regions, maxCount = 5) {
+
+        var count = 0;
+        var rg = [];
+
+        for (var i = 0; i < regions.length; i++) {
+
+            if (this.isRegionIdContainedInCurrentRegions(regions[i].child_id))
+                continue;
+
+            rg.push(regions[i]);
+
+            if (count == (maxCount - 1))
+                break;
+
+            count++;
+        }
+
+        return rg;
+    }
+
+    drawPlacesInRegionList(data, maxCount = 5) {
 
         var s = '';
 
@@ -948,7 +977,7 @@ class SearchPageController {
             s += data[i].child_name;
             s += '</a></li>';
 
-            if (count == 4)
+            if (count == (maxCount - 1))
                 break;
 
             count++;
