@@ -19,10 +19,6 @@ $(document).ready(function() {
         $('#form').submit();
     });
 
-    // Search menu controller
-    //
-    var searchMenu = new SearchMenuController();
-
     // Communities menu
     //
     $('#menu-item-communities').mouseenter(function() {

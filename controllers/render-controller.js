@@ -53,9 +53,9 @@ RenderController.prototype.renderHomePage = function(req, res) {
                                 'url' : '//fast.wistia.net/static/popover-v1.js',
                                 'charset' : 'ISO-8859-1'
                             },
-                            '/scripts/v4-api-controller.js', // TODO: min
-                            '/scripts/v4-auto-suggest-region-controller.js', // TODO: min
-                            '/scripts/v4-home.js' // TODO: min
+                            '/scripts/es5/v4-api-controller.js', // TODO: min
+                            '/scripts/es5/v4-auto-suggest-region-controller.js', // TODO: min
+                            '/scripts/es5/v4-home.js' // TODO: min
                         ],
                         searchPath : '/search'
                     });
@@ -159,17 +159,21 @@ function _renderSearchPage(req, res, params) {
                             'v4-search.ejs', 
                             {
                                 categoryResults : categoryResults,
-                                css : ['/styles/v4-search.min.css'],
+                                css : [
+                                    '//cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css',
+                                    '/styles/v4-search.min.css'
+                                ],
                                 domainResults : domainResults,
                                 params : params,
                                 scripts : [
+                                    '//cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js',
                                     '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
                                     '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
-                                    '/scripts/v4-api-controller.js', // TODO: min
-                                    '/scripts/v4-auto-suggest-region-controller.js', // TODO: min
-                                    '/scripts/v4-search-page-controller.js', // TODO: min
-                                    '/scripts/v4-search.js', // TODO: min
-                                    ],
+                                    '/scripts/es5/v4-api-controller.js', // TODO: min
+                                    '/scripts/es5/v4-auto-suggest-region-controller.js', // TODO: min
+                                    '/scripts/es5/v4-search-page-controller.js', // TODO: min
+                                    '/scripts/es5/v4-search.js', // TODO: min
+                                ],
                                 searchPath : req.path,
                                 searchResults : results
                             });

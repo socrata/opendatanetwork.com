@@ -21,7 +21,7 @@ module.exports = function(grunt) {
             },
             scripts: {
                 files: ['<%= project.scripts %>/*.js'],
-                tasks: ['uglify']
+                tasks: ['babel', 'uglify']
             },
         },
         nodemon: {
@@ -47,6 +47,21 @@ module.exports = function(grunt) {
                 }]
             }
         },
+        babel: {
+            options: {
+                sourceMap: 'both',
+                presets: ['es2015']
+            },
+            build: {
+                files: [ {
+                    expand: true,
+                    cwd: '<%= project.scripts %>',
+                    src: ['*.js'],
+                    dest: '<%= project.scripts %>/es5',
+                    ext: '.js'
+                }]
+            }
+        },
         uglify: {
             build: {
                 options: {
@@ -54,7 +69,7 @@ module.exports = function(grunt) {
                 },
                 files: [{
                     expand: true,
-                    cwd: '<%= project.scripts %>',
+                    cwd: '<%= project.scripts %>/es5',
                     src: ['*.js'],
                     dest: '<%= project.scripts %>/compressed',
                     ext: '.min.js'
@@ -65,5 +80,5 @@ module.exports = function(grunt) {
 
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
-    grunt.registerTask('default', ['sass','uglify']);
+    grunt.registerTask('default', ['sass', 'babel', 'uglify']);
 };
