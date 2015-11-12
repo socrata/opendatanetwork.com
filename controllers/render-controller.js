@@ -160,13 +160,13 @@ function _renderSearchPage(req, res, params) {
                             {
                                 categoryResults : categoryResults,
                                 css : [
-                                    '//cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css',
+                                    'http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css',
                                     '/styles/v4-search.min.css'
                                 ],
                                 domainResults : domainResults,
                                 params : params,
                                 scripts : [
-                                    '//cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js',
+                                    'http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js',
                                     '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
                                     '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
                                     '/scripts/es5/v4-api-controller.js', // TODO: min
