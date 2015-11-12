@@ -169,6 +169,8 @@ function _renderSearchPage(req, res, params) {
                                     '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
                                     '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
                                     '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
+                                    '//d3js.org/d3.v3.min.js',
+                                    '/scripts/third-party/d3.promise.js',
                                     '/scripts/es5/v4-api-controller.js', // TODO: min
                                     '/scripts/es5/v4-auto-suggest-region-controller.js', // TODO: min
                                     '/scripts/es5/v4-search-page-controller.js', // TODO: min

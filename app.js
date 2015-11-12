@@ -21,6 +21,7 @@ app.use(helmet.xframe('deny'));
 app.use('/images', express.static(__dirname + '/images'));
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist'));
 app.use('/scripts', express.static(__dirname + '/scripts')); // TODO: compressed
+app.use('/scripts/third-party', express.static(__dirname + '/scripts/third-party'));
 app.use('/styles', express.static(__dirname + '/styles/compressed'));
 app.use(favicon(__dirname + '/images/favicon.ico'));
 

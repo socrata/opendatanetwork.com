@@ -129,11 +129,7 @@ class SearchPageController {
     
         // Places in region
         //
-        this.drawPlacesInRegion(function(region) {
-    
-            self.setAutoSuggestedRegion(region, false);
-            self.navigate();
-        });
+        this.drawPlacesInRegion();
     }
 
     // Public methods
@@ -715,19 +711,17 @@ class SearchPageController {
     // Population
     //
     drawPopulationData() {
-    
-        var self = this;
-    
-        google.setOnLoadCallback(function() {
-    
-            var regionIds = self.params.regions.map(function(region) { return region.id; });
+
+        google.setOnLoadCallback(() => {
+
+            var regionIds = this.params.regions.map(function(region) { return region.id; });
             var controller = new ApiController();
-    
-            controller.getPopulationData(regionIds, function(data) { 
-    
-                self.drawPopulationMap();
-                self.drawPopulationChart(regionIds, data);
-                self.drawPopulationChangeChart(regionIds, data);
+
+            controller.getPopulationData(regionIds, (data) => { 
+
+                this.drawPopulationMap();
+                this.drawPopulationChart(regionIds, data);
+                this.drawPopulationChangeChart(regionIds, data);
             });
         });
     }
@@ -843,47 +837,100 @@ class SearchPageController {
     
     // Places in region
     //
-    drawPlacesInRegion(onClickRegion) {
-    
+    drawPlacesInRegion() {
+
         if (this.params.regions.length == 0) 
             return;
-    
+
         var region = this.params.regions[0];
-    
-        var controller = new ApiController();
-        var self = this;
-    
-        controller.getPlacesInRegion(region.id, function(data) { 
-    
-            if (data.length == 0)
+
+        switch (region.type) {
+
+            case 'nation': 
                 return;
+
+            case 'state':
+
+                this.drawPlacesInStateForRegion(region.id, region) // the region is a state
+                    .then(response => {
     
-            $('#places-in-region-header').text('Places in {0}'.format(region.name));
-            $('#places-in-region-header').slideToggle(100);
-            
-            self.drawPlacesInRegionList(data, onClickRegion);
-        });
+                        if (response.length == 0)
+                            return;
+
+                        $('#places-in-region-header').text('Places in {0}'.format(region.name));
+                        $('#places-in-region-header').slideToggle(100);
+                        this.drawPlacesInRegionList(response);
+                    })
+                    .catch(error => console.error(error));
+
+            default: 
+
+                var controller = new ApiController();
+
+                controller.getParentState(region)
+                    .then(response => {
+
+                        if (response.length == 0)
+                            return;
+
+                        var state = response[0];
+
+                        this.drawPlacesInStateForRegion(state.parent_id, region)
+                            .then(response => {
+
+                                if (response.length == 0)
+                                    return;
+
+                                $('#places-in-region-header').text('Places in {0}'.format(state.parent_name));
+                                $('#places-in-region-header').slideToggle(100);
+                                this.drawPlacesInRegionList(response);
+                            })
+                            .catch(error => console.error(error));
+                    });
+        }
     }
-    
-    drawPlacesInRegionList(data, onClickRegion) {
-    
+
+    drawPlacesInStateForRegion(stateId, region) {
+
+        var controller = new ApiController();
+
+        switch (region.type) {
+
+            case 'county': return controller.getCountiesInState(stateId);
+            case 'msa': return controller.getMetrosInState(stateId);
+            case 'place': return controller.getPlacesInState(stateId);
+            case 'state':
+
+                var placesPromise = controller.getPlacesInState(stateId);
+                var countiesPromise = controller.getCountiesInState(stateId);
+
+                return Promise.all([placesPromise, countiesPromise])
+                    .then(values => Promise.resolve(values[0].concat(values[1])))
+                    .catch(error => console.error(error));
+
+            default: return Promise.resolve([]);
+        }
+    }
+
+    drawPlacesInRegionList(data) {
+
         var s = '';
-    
+
         if (data.length == 0)
             return;
-    
+
         for (var i = 0; i < data.length; i++) {
-    
+
             s += '<li><a href="';
             s += this.getSearchPageForRegionsAndVectorUrl(data[i].child_name) + '">';
             s += data[i].child_name;
             s += '</a></li>';
         }
-    
+
         $('#places-in-region').html(s);
         $('#places-in-region').slideToggle(100);
     }
-    
+
     // Similar regions
     //
     drawSimilarRegions(onClickRegion) {
