@@ -27,41 +27,51 @@ class SearchPageController {
             $(this).children('span').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
             $(this).children('ul').slideUp(100);
         });
-    
+
         // Categories
         //
         this.attachCategoriesClickHandlers();
-    
+
         $('#refine-menu-categories-view-more').click(function() {
-    
+
             var controller = new ApiController();
-            controller.getCategories(function(data) {
-    
-                var s = data.results.map(function(result) {
-                    return '<li><i class="fa ' + result.metadata.icon + '"></i>' + result.category + '</li>';
-                });
-    
-                $('#refine-menu-categories').html(s);
-                self.attachCategoriesClickHandlers();
-            });
+
+            controller.getCategories()
+                .then(data => {
+
+                    var rg = data.results.map(function(result) {
+                        return '<li><i class="fa ' + result.metadata.icon + '"></i>' + result.category + '</li>';
+                    });
+
+                    var s = rg.join('');
+
+                    $('#refine-menu-categories').html(s);
+                    self.attachCategoriesClickHandlers();
+                })
+                .catch(error => console.error(error));
         });
-    
+
         // Domains
         //
         this.attachDomainsClickHandlers();
-    
+
         $('#refine-menu-domains-view-more').click(function() {
-    
+
             var controller = new ApiController();
-            controller.getDomains(function(data) {
-    
-                var s = data.results.map(function(result) {
-                    return '<li>' + result.domain + '</li>';
-                });
-    
-                $('#refine-menu-domains').html(s);
-                self.attachDomainsClickHandlers();
-            });
+
+            controller.getDomains()
+                .then(data => {
+
+                    var rg = data.results.map(function(result) {
+                        return '<li>' + result.domain + '</li>';
+                    });
+
+                    var s = rg.join('');
+
+                    $('#refine-menu-domains').html(s);
+                    self.attachDomainsClickHandlers();
+                })
+                .catch(error => console.error(error));
         });
         
         // Standards
@@ -968,12 +978,10 @@ class SearchPageController {
 
         var region = this.params.regions[0];
         var controller = new ApiController();
-        var self = this;
 
-        controller.getSimilarRegions(region.id, function(data) { 
-
-            self.drawSimilarRegionsList(data, onClickRegion);
-        });
+        controller.getSimilarRegions(region.id)
+            .then(data => this.drawSimilarRegionsList(data, onClickRegion))
+            .catch(error => console.error(error));
     }
 
     drawSimilarRegionsList(data, onClickRegion) {

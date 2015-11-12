@@ -14,7 +14,27 @@ class ApiController {
         this.parentStateUrl = 'https://federal.demo.socrata.com/resource/eyae-8jfy?parent_type=state&child_id={0}';
         this.placesInRegionUrl = 'https://federal.demo.socrata.com/resource/eyae-8jfy?parent_id=';
         this.populationUrl = 'https://federal.demo.socrata.com/resource/e3rd-zzmr.json?$order=year,name&$where=';
-        this.similarRegionsUrl = 'https://socrata-peers.herokuapp.com/peers.json?vectors=population_change,earnings,occupation,education,population&n=10&id=';
+        this.similarRegionsUrl = 'https://socrata-peers.herokuapp.com/peers.json?vectors=population_change,earnings,occupation,education,population&n=10&id={0}';
+    }
+
+    // Promises
+    //
+    getCategories() {
+
+        return d3.promise.json(this.categoriesUrl)
+            .catch(error => console.error(error));
+    }
+
+    getCountiesInState(stateId, limit = 10) {
+
+        return d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'county', limit))
+            .catch(error => console.error(error));
+    }
+
+    getDomains() {
+
+        return d3.promise.json(this.domainsUrl)
+            .catch(error => console.error(error));
     }
 
     getParentState(region) {
@@ -22,7 +42,7 @@ class ApiController {
         return d3.promise.json(this.parentStateUrl.format(region.id))
             .catch(error => console.error(error));
     }
-    
+
     getPlacesAndCountiesInState(stateId, limit = 10) {
 
         var placesPromise = d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'place', limit));
@@ -32,13 +52,7 @@ class ApiController {
             .then(values => Promise.resolve(values[0].concat(values[1])))
             .catch(error => console.error(error));
     }
-    
-    getCountiesInState(stateId, limit = 10) {
 
-        return d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'county', limit))
-            .catch(error => console.error(error));
-    }
-    
     getMetrosInState(stateId, limit = 10) {
 
         return d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'msa', limit))
@@ -51,6 +65,14 @@ class ApiController {
             .catch(error => console.error(error));
     }
 
+    getSimilarRegions(regionId) {
+
+        return d3.promise.json(this.similarRegionsUrl.format(regionId))
+            .catch(error => console.error(error));
+    }
+
+    // Callbacks
+    //
     getAutoCompleteNameSuggestions(searchTerm, completionHandler) {
 
         $.getJSON(this.autoCompleteNameSuggestUrl.format(encodeURIComponent(searchTerm)), completionHandler);
@@ -93,20 +115,5 @@ class ApiController {
         });
 
         $.getJSON(url + encodeURI(segments.join(' OR ')), completionHandler);
-    }
-
-    getDomains(completionHandler) {
-
-        $.getJSON(this.domainsUrl, completionHandler);
-    }
-
-    getCategories(completionHandler) {
-
-        $.getJSON(this.categoriesUrl, completionHandler);
-    }
-
-    getSimilarRegions(regionId, completionHandler) {
-
-        $.getJSON(this.similarRegionsUrl + regionId, completionHandler);
     }
 }
