@@ -811,7 +811,12 @@ class SearchPageController {
     
     drawPopulationMap() {
     
-        var map = L.map('map').setView([51.505, -0.09], 13);
+        var map = L.map(
+            'map',
+            {
+                zoomControl : false,
+            });
+
         map.setView(this.MAP_INITIAL_CENTER, this.MAP_INITIAL_ZOOM);
 
         var myLines = [{
@@ -853,12 +858,13 @@ class SearchPageController {
 
                 this.drawPlacesInStateForRegion(region.id, region) // the region is a state
                     .then(response => {
-    
+
                         if (response.length == 0)
                             return;
 
                         $('#places-in-region-header').text('Places in {0}'.format(region.name));
                         $('#places-in-region-header').slideToggle(100);
+
                         this.drawPlacesInRegionList(response);
                     })
                     .catch(error => console.error(error));
@@ -883,6 +889,7 @@ class SearchPageController {
 
                                 $('#places-in-region-header').text('Places in {0}'.format(state.parent_name));
                                 $('#places-in-region-header').slideToggle(100);
+
                                 this.drawPlacesInRegionList(response);
                             })
                             .catch(error => console.error(error));
@@ -919,45 +926,76 @@ class SearchPageController {
         if (data.length == 0)
             return;
 
+        var count = 0;
+
         for (var i = 0; i < data.length; i++) {
+
+            if (this.isRegionIdContainedInCurrentRegions(data[i].child_id))
+                continue;
 
             s += '<li><a href="';
             s += this.getSearchPageForRegionsAndVectorUrl(data[i].child_name) + '">';
             s += data[i].child_name;
             s += '</a></li>';
+
+            if (count == 4)
+                break;
+
+            count++;
         }
 
         $('#places-in-region').html(s);
         $('#places-in-region').slideToggle(100);
     }
 
+    isRegionIdContainedInCurrentRegions(regionId) {
+
+        for (var j = 0; j < this.params.regions.length; j++) {
+
+            if (regionId == this.params.regions[j].id)
+                return true;
+        }
+
+        return false;
+    }
+
     // Similar regions
     //
     drawSimilarRegions(onClickRegion) {
-    
+
         if (this.params.regions.length == 0) 
             return;
-    
+
         var region = this.params.regions[0];
         var controller = new ApiController();
         var self = this;
-    
+
         controller.getSimilarRegions(region.id, function(data) { 
-    
+
             self.drawSimilarRegionsList(data, onClickRegion);
         });
     }
-    
+
     drawSimilarRegionsList(data, onClickRegion) {
-        
+
         var s = '';
-        
+
         if (data.most_similar == undefined)
             return;
-    
+
+        var count = 0;
+
         for (var i = 0; i < data.most_similar.length; i++) {
-    
+
+            if (this.isRegionIdContainedInCurrentRegions(data.most_similar[i].id))
+                continue;
+
             s += '<li><a><i class="fa fa-plus"></i>' + data.most_similar[i].name + '</a></li>'
+
+            if (count == 4)
+                break;
+
+            count++;
         }
     
         $('#similar-regions').html(s);

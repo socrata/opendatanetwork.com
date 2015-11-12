@@ -14,7 +14,7 @@ class ApiController {
         this.parentStateUrl = 'https://federal.demo.socrata.com/resource/eyae-8jfy?parent_type=state&child_id={0}';
         this.placesInRegionUrl = 'https://federal.demo.socrata.com/resource/eyae-8jfy?parent_id=';
         this.populationUrl = 'https://federal.demo.socrata.com/resource/e3rd-zzmr.json?$order=year,name&$where=';
-        this.similarRegionsUrl = 'https://socrata-peers.herokuapp.com/peers.json?vectors=population_change,earnings,occupation,education,population&n=5&id=';
+        this.similarRegionsUrl = 'https://socrata-peers.herokuapp.com/peers.json?vectors=population_change,earnings,occupation,education,population&n=10&id=';
     }
 
     getParentState(region) {
@@ -23,7 +23,7 @@ class ApiController {
             .catch(error => console.error(error));
     }
     
-    getPlacesAndCountiesInState(stateId, limit = 5) {
+    getPlacesAndCountiesInState(stateId, limit = 10) {
 
         var placesPromise = d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'place', limit));
         var countiesPromise = d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'county', limit));
@@ -33,19 +33,19 @@ class ApiController {
             .catch(error => console.error(error));
     }
     
-    getCountiesInState(stateId, limit = 5) {
+    getCountiesInState(stateId, limit = 10) {
 
         return d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'county', limit))
             .catch(error => console.error(error));
     }
     
-    getMetrosInState(stateId, limit = 5) {
+    getMetrosInState(stateId, limit = 10) {
 
         return d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'msa', limit))
             .catch(error => console.error(error));
     }
 
-    getPlacesInState(stateId, limit = 5) {
+    getPlacesInState(stateId, limit = 10) {
 
         return d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'place', limit))
             .catch(error => console.error(error));
@@ -103,11 +103,6 @@ class ApiController {
     getCategories(completionHandler) {
 
         $.getJSON(this.categoriesUrl, completionHandler);
-    }
-
-    getPlacesInRegion(regionId, completionHandler) {
-
-        $.getJSON(this.placesInRegionUrl + regionId, completionHandler);
     }
 
     getSimilarRegions(regionId, completionHandler) {
