@@ -143,53 +143,76 @@ function getSearchDatasetsUrl(params, completionHandler) {
 
     // Look to see if there are synonyms for the query parameter
     //
-    synonymController.getSynonyms(params.q, function(synonyms) {
+    synonymController.getSynonyms(params.q, function(querySynonyms) {
 
-        var url = searchUrl +
-            '?offset=' + params.offset +
-            '&only=' + params.only +
-            '&limit=' + params.limit;
+        // Same for the vector
+        //
+        synonymController.getSynonyms(params.vector, function(vectorSynonyms) {
+
+            // Merge synonyms uniquely
+            //
+            var synonyms = [];
+
+            querySynonyms.forEach(function(item) {
+
+                if (synonyms.indexOf(item) < 0)
+                    synonyms.push(item);
+            });
+
+            vectorSynonyms.forEach(function(item) {
+
+                if (synonyms.indexOf(item) < 0)
+                    synonyms.push(item);
+            });
+
+            // Build the URL
+            //
+            var url = searchUrl +
+                '?offset=' + params.offset +
+                '&only=' + params.only +
+                '&limit=' + params.limit;
+        
+            if (params.categories.length > 0)
+                url += '&categories=' + encodeURIComponent(params.categories.join(','));
+        
+            if (params.domains.length > 0)
+                url += '&domains=' + encodeURIComponent(params.domains.join(','));
+
+            if ((synonyms.length > 0) || (params.regions.length > 0) || (params.standards.length > 0)) {
+        
+                url += '&q_internal=';
+        
+                var s = '';
+        
+                if (synonyms.length > 0) {
+                    s += '(' + synonyms.join(' OR ') + ')';
+                }
     
-        if (params.categories.length > 0)
-            url += '&categories=' + encodeURIComponent(params.categories.join(','));
+                if (params.regions.length > 0) {
     
-        if (params.domains.length > 0)
-            url += '&domains=' + encodeURIComponent(params.domains.join(','));
+                    if (s.length > 0)
+                        s += ' AND ';
     
-        if ((synonyms.length > 0) || (params.regions.length > 0) || (params.standards.length > 0)) {
+                    var regionNames = params.regions.map(function(region) { return region.name; });
+                    s += '(' + regionNames.join(' OR ') + ')';
+                }
+                
+                if (params.standards.length > 0) {
     
-            url += '&q_internal=';
+                    if (s.length > 0)
+                        s += ' AND ';
     
-            var s = '';
+                    s += '(' + params.standards.join(' OR ') + ')';
+                }
     
-            if (synonyms.length > 0) {
-                s += '(' + synonyms.join(' OR ') + ')';
+                console.log(s);
+    
+                url += encodeURIComponent(s);
             }
-
-            if (params.regions.length > 0) {
-
-                if (s.length > 0)
-                    s += ' AND ';
-
-                var regionNames = params.regions.map(function(region) { return region.name; });
-                s += '(' + regionNames.join(' OR ') + ')';
-            }
-            
-            if (params.standards.length > 0) {
-
-                if (s.length > 0)
-                    s += ' AND ';
-
-                s += '(' + params.standards.join(' OR ') + ')';
-            }
-
-            console.log(s);
-
-            url += encodeURIComponent(s);
-        }
-
-        if (completionHandler)
-            completionHandler(url);
+    
+            if (completionHandler)
+                completionHandler(url);
+        });
     });
 }
 

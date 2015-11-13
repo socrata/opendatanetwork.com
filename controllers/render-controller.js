@@ -14,7 +14,9 @@ module.exports = RenderController;
 function RenderController() {
 }
 
-// Public methods - Categories json
+// Public methods
+//
+// Categories json
 //
 RenderController.prototype.renderCategoriesJson = function(req, res) {
 
@@ -45,7 +47,10 @@ RenderController.prototype.renderHomePage = function(req, res) {
                     'v4-home.ejs', 
                     {
                         allCategoryResults : allCategoryResults,
-                        css : ['/styles/v4-home.min.css', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css'],
+                        css : [
+                            '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css',
+                            '/styles/v4-home.min.css'
+                        ],
                         params : params,
                         scripts : [
                             '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js', 
