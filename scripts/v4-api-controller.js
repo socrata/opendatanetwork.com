@@ -19,89 +19,87 @@ class ApiController {
 
     // Promises
     //
+    getAutoCompleteNameSuggestions(searchTerm) {
+
+        return d3.promise.json(this.autoCompleteNameSuggestUrl.format(encodeURIComponent(searchTerm)));
+    }
+
     getCategories() {
 
-        return d3.promise.json(this.categoriesUrl)
+        return d3.promise.json(this.categoriesUrl);
     }
 
     getChildRegions(regionId, limit = 10) {
 
-        return d3.promise.json(this.childRegionsUrl.format(regionId, limit))
-    }
-
-    getCountiesInState(stateId, limit = 10) {
-
-        return d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'county', limit))
-    }
-
-    getDomains() {
-
-        return d3.promise.json(this.domainsUrl)
-    }
-
-    getMetrosInState(stateId, limit = 10) {
-
-        return d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'msa', limit))
+        return d3.promise.json(this.childRegionsUrl.format(regionId, limit));
     }
 
     getCitiesInState(stateId, limit = 10) {
 
-        return d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'place', limit))
+        return d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'place', limit));
     }
 
-    getParentState(region) {
+    getCostOfLivingData(regionIds) {
 
-        return d3.promise.json(this.parentStateUrl.format(region.id))
+        return this.getData(this.costOfLivingUrl, regionIds);
     }
 
-    getSimilarRegions(regionId) {
+    getCountiesInState(stateId, limit = 10) {
 
-        return d3.promise.json(this.similarRegionsUrl.format(regionId))
+        return d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'county', limit));
     }
-
-    // Callbacks
-    //
-    getAutoCompleteNameSuggestions(searchTerm, completionHandler) {
-
-        $.getJSON(this.autoCompleteNameSuggestUrl.format(encodeURIComponent(searchTerm)), completionHandler);
-    }
-
-    getCostOfLivingData(regionIds, completionHandler) {
-
-        this.getData(this.costOfLivingUrl, regionIds, completionHandler);
-    }
-
-    getEarningsData(regionIds, completionHandler) {
-
-        this.getData(this.earningsUrl, regionIds, completionHandler);
-    }
-
-    getEducationData(regionIds, completionHandler) {
-
-        this.getData(this.educationUrl, regionIds, completionHandler);
-    }
-
-    getGdpData(regionIds, completionHandler) {
-
-        this.getData(this.gdpUrl, regionIds, completionHandler);
-    }
-
-    getOccupationsData(regionIds, completionHandler) {
-
-        this.getData(this.occupationsUrl, regionIds, completionHandler);
-    }
-
-    getPopulationData(regionIds, completionHandler) {
-
-        this.getData(this.populationUrl, regionIds, completionHandler);
-    }
-
-    getData(url, regionIds, completionHandler) {
+    
+    getData(url, regionIds) {
 
         var segments = regionIds.map(function(regionId) {
             return 'id=\'' + regionId + '\''; 
         });
 
-        $.getJSON(url + encodeURI(segments.join(' OR ')), completionHandler);
+        return d3.promise.json(url + encodeURI(segments.join(' OR ')));
+    }
+
+    getDomains() {
+
+        return d3.promise.json(this.domainsUrl);
+    }
+
+    getEarningsData(regionIds) {
+
+        return this.getData(this.earningsUrl, regionIds);
+    }
+
+    getEducationData(regionIds) {
+
+        return this.getData(this.educationUrl, regionIds);
+    }
+
+    getGdpData(regionIds) {
+
+        return this.getData(this.gdpUrl, regionIds);
+    }
+
+    getMetrosInState(stateId, limit = 10) {
+
+        return d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'msa', limit));
+    }
+
+    getOccupationsData(regionIds) {
+
+        return this.getData(this.occupationsUrl, regionIds);
+    }
+
+    getParentState(region) {
+
+        return d3.promise.json(this.parentStateUrl.format(region.id));
+    }
+
+    getPopulationData(regionIds) {
+
+        return this.getData(this.populationUrl, regionIds);
+    }
+
+    getSimilarRegions(regionId) {
+
+        return d3.promise.json(this.similarRegionsUrl.format(regionId));
     }
 }

@@ -72,47 +72,50 @@ class AutoSuggestRegionController {
 
     autoSuggest(searchTerm, resultListSelector) {
 
-        var self = this;
-        var apiController = new ApiController();
+        var controller = new ApiController();
 
-        apiController.getAutoCompleteNameSuggestions(searchTerm, function(data) {
+        controller.getAutoCompleteNameSuggestions(searchTerm)
+            .then(data => {
+    
+                this.options = data.options;
+                this.selectedIndex = -1;
+    
+                var regionList = $(resultListSelector);
+    
+                if (this.options.length == 0) {
+    
+                    regionList.slideUp(100);
+                    return;
+                }
+    
+                // Build the list items
+                //
+                var items = this.options.map(function(item) { return '<li>' + item.text + '</li>'; });
+                regionList.html(items.join(''));
+    
+                // Click event
+                //
+                var self = this;
 
-            self.options = data.options;
-            self.selectedIndex = -1;
-
-            var regionList = $(resultListSelector);
-
-            if (self.options.length == 0) {
-
-                regionList.slideUp(100);
-                return;
-            }
-
-            // Build the list items
-            //
-            var items = self.options.map(function(item) { return '<li>' + item.text + '</li>'; });
-            regionList.html(items.join(''));
-
-            // Click event
-            //
-            $(resultListSelector + ' li').click(function() {
-
-                if (self.onClickRegion) 
-                    self.onClickRegion(self.options[$(this).index()].text);
-            });
-
-            // Mouse event
-            //   
-            $(resultListSelector + ' li').mouseenter(function() {
-
-                self.selectedIndex = $(this).index();
-                self.updateListSelection();
-            });
-
-            // Slide the list down
-            //
-            regionList.slideDown(100);
-        });
+                $(resultListSelector + ' li').click(function() {
+    
+                    if (self.onClickRegion) 
+                        self.onClickRegion(self.options[$(this).index()].text);
+                });
+    
+                // Mouse event
+                //   
+                $(resultListSelector + ' li').mouseenter(function() {
+    
+                    self.selectedIndex = $(this).index();
+                    self.updateListSelection();
+                });
+    
+                // Slide the list down
+                //
+                regionList.slideDown(100);
+            })
+            .catch(error => console.error(error));
     }
 
     updateListSelection() {

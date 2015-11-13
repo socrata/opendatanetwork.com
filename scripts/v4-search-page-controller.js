@@ -189,19 +189,19 @@ class SearchPageController {
     // Cost of living
     //
     drawCostOfLivingData() {
-    
-        var self = this;
-    
-        google.setOnLoadCallback(function() {
-    
-            var regionIds = self.params.regions.map(function(region) { return region.id; });
+
+        google.setOnLoadCallback(() => {
+
+            var regionIds = this.params.regions.map(function(region) { return region.id; });
             var controller = new ApiController();
-    
-            controller.getCostOfLivingData(regionIds, function(data) { 
-    
-                self.drawCostOfLivingChart(regionIds, data);
-                self.drawCostOfLivingTable(regionIds, data);
-            });
+
+            controller.getCostOfLivingData(regionIds)
+                .then(data => { 
+
+                    this.drawCostOfLivingChart(regionIds, data);
+                    this.drawCostOfLivingTable(regionIds, data);
+                })
+                .catch(error => console.error(error));
         });
     }
     
@@ -358,19 +358,19 @@ class SearchPageController {
     // Earnings
     //
     drawEarningsData() {
+
+        google.setOnLoadCallback(() => {
     
-        var self = this;
-    
-        google.setOnLoadCallback(function() {
-    
-            var regionIds = self.params.regions.map(function(region) { return region.id; });
+            var regionIds = this.params.regions.map(function(region) { return region.id; });
             var controller = new ApiController();
     
-            controller.getEarningsData(regionIds, function(data) { 
+            controller.getEarningsData(regionIds)
+                .then(data => { 
     
-                self.drawEarningsChart(regionIds, data);
-                self.drawEarningsTable(regionIds, data);
-            });
+                    this.drawEarningsChart(regionIds, data);
+                    this.drawEarningsTable(regionIds, data);
+                })
+                .catch(error => console.error(error));
         });
     }
     
@@ -492,18 +492,15 @@ class SearchPageController {
     // Education
     //
     drawEducationData() {
-    
-        var self = this;
-    
-        google.setOnLoadCallback(function() {
-    
-            var regionIds = self.params.regions.map(function(region) { return region.id; });
+
+        google.setOnLoadCallback(() => {
+
+            var regionIds = this.params.regions.map(function(region) { return region.id; });
             var controller = new ApiController();
-    
-            controller.getEducationData(regionIds, function(data) { 
-    
-                self.drawEducationTable(regionIds, data);
-            });
+
+            controller.getEducationData(regionIds)
+                .then(data => this.drawEducationTable(regionIds, data))
+                .catch(error => console.error(error));
         });
     }
     
@@ -563,19 +560,19 @@ class SearchPageController {
     // GDP data
     //
     drawGdpData() {
-    
-        var self = this;
-    
-        google.setOnLoadCallback(function() {
-    
-            var regionIds = self.params.regions.map(function(region) { return region.id; });
+
+        google.setOnLoadCallback(() => {
+
+            var regionIds = this.params.regions.map(function(region) { return region.id; });
             var controller = new ApiController();
-    
-            controller.getGdpData(regionIds, function(data) { 
-    
-                self.drawGdpChart(regionIds, data);
-                self.drawGdpChangeChart(regionIds, data);
-            });
+
+            controller.getGdpData(regionIds)
+                .then(data => { 
+
+                    this.drawGdpChart(regionIds, data);
+                    this.drawGdpChangeChart(regionIds, data);
+                })
+                .catch(error => console.error(error));
         });
     }
     
@@ -669,18 +666,15 @@ class SearchPageController {
     // Occupations
     //
     drawOccupationsData() {
-    
-        var self = this;
-    
-        google.setOnLoadCallback(function() {
-    
-            var regionIds = self.params.regions.map(function(region) { return region.id; });
+
+        google.setOnLoadCallback(() => {
+
+            var regionIds = this.params.regions.map(function(region) { return region.id; });
             var controller = new ApiController();
-    
-            controller.getOccupationsData(regionIds, function(data) { 
-    
-                self.drawOccupationsTable(regionIds, data);
-            });
+
+            controller.getOccupationsData(regionIds)
+                .then(data => this.drawOccupationsTable(regionIds, data))
+                .catch(error => console.error(error));
         });
     }
     
@@ -727,12 +721,14 @@ class SearchPageController {
             var regionIds = this.params.regions.map(function(region) { return region.id; });
             var controller = new ApiController();
 
-            controller.getPopulationData(regionIds, (data) => { 
+            controller.getPopulationData(regionIds)
+                .then(data => { 
 
-                this.drawPopulationMap();
-                this.drawPopulationChart(regionIds, data);
-                this.drawPopulationChangeChart(regionIds, data);
-            });
+                    this.drawPopulationMap();
+                    this.drawPopulationChart(regionIds, data);
+                    this.drawPopulationChangeChart(regionIds, data);
+                })
+                .catch(error => console.error(error));
         });
     }
     
