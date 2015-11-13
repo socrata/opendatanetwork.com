@@ -4,6 +4,7 @@ class ApiController {
 
         this.autoCompleteNameSuggestUrl = 'https://federal.demo.socrata.com/views/7g2b-8brv/columns/autocomplete_name/suggest/{0}?size=10&fuzz=0';
         this.categoriesUrl = '/categories.json';
+        this.childRegionsUrl = 'https://federal.demo.socrata.com/resource/eyae-8jfy?parent_id={0}&$limit={1}';
         this.costOfLivingUrl = 'https://federal.demo.socrata.com/resource/hpnf-gnfu.json?$order=name&$where=';
         this.domainsUrl = 'https://api.us.socrata.com/api/catalog/v1/domains';
         this.earningsUrl = 'https://federal.demo.socrata.com/resource/wmwh-4vak.json?$where=';
@@ -12,7 +13,6 @@ class ApiController {
         this.mostPopulousRegionTypeUrl = 'https://federal.demo.socrata.com/resource/eyae-8jfy?parent_id={0}&child_type={1}&$limit={2}&$order=child_population desc';
         this.occupationsUrl = 'https://federal.demo.socrata.com/resource/qfcm-fw3i.json?$order=occupation&$where=';
         this.parentStateUrl = 'https://federal.demo.socrata.com/resource/eyae-8jfy?parent_type=state&child_id={0}';
-        this.placesInRegionUrl = 'https://federal.demo.socrata.com/resource/eyae-8jfy?parent_id=';
         this.populationUrl = 'https://federal.demo.socrata.com/resource/e3rd-zzmr.json?$order=year,name&$where=';
         this.similarRegionsUrl = 'https://socrata-peers.herokuapp.com/peers.json?vectors=population_change,earnings,occupation,education,population&n=10&id={0}';
     }
@@ -22,53 +22,41 @@ class ApiController {
     getCategories() {
 
         return d3.promise.json(this.categoriesUrl)
-            .catch(error => console.error(error));
+    }
+
+    getChildRegions(regionId, limit = 10) {
+
+        return d3.promise.json(this.childRegionsUrl.format(regionId, limit))
     }
 
     getCountiesInState(stateId, limit = 10) {
 
         return d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'county', limit))
-            .catch(error => console.error(error));
     }
 
     getDomains() {
 
         return d3.promise.json(this.domainsUrl)
-            .catch(error => console.error(error));
-    }
-
-    getParentState(region) {
-
-        return d3.promise.json(this.parentStateUrl.format(region.id))
-            .catch(error => console.error(error));
-    }
-
-    getPlacesAndCountiesInState(stateId, limit = 10) {
-
-        var placesPromise = d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'place', limit));
-        var countiesPromise = d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'county', limit));
-
-        return Promise.all([placesPromise, countiesPromise])
-            .then(values => Promise.resolve(values[0].concat(values[1])))
-            .catch(error => console.error(error));
     }
 
     getMetrosInState(stateId, limit = 10) {
 
         return d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'msa', limit))
-            .catch(error => console.error(error));
     }
 
-    getPlacesInState(stateId, limit = 10) {
+    getCitiesInState(stateId, limit = 10) {
 
         return d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'place', limit))
-            .catch(error => console.error(error));
+    }
+
+    getParentState(region) {
+
+        return d3.promise.json(this.parentStateUrl.format(region.id))
     }
 
     getSimilarRegions(regionId) {
 
         return d3.promise.json(this.similarRegionsUrl.format(regionId))
-            .catch(error => console.error(error));
     }
 
     // Callbacks

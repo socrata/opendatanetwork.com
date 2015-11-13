@@ -542,7 +542,7 @@ section.results
 
 /* Places in region */
 
-#places-in-region
+.places-in-region-list
 {
     font-size: 14px;
     list-style-type: none;
@@ -550,18 +550,18 @@ section.results
     padding: 0;
 }
 
-#places-in-region li
+.places-in-region-list li
 {
     margin: 0 0 5px;
 }
 
-#places-in-region li a
+.places-in-region-list li a
 {
     color: $blue-color;
     cursor: pointer;
 }
 
-#places-in-region-header 
+.places-in-region-header 
 {
     font-size: 14px;
     font-weight: normal;
