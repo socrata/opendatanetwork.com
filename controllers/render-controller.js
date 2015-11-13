@@ -53,6 +53,8 @@ RenderController.prototype.renderHomePage = function(req, res) {
                                 'url' : '//fast.wistia.net/static/popover-v1.js',
                                 'charset' : 'ISO-8859-1'
                             },
+                            '//d3js.org/d3.v3.min.js',
+                            '/scripts/third-party/d3.promise.js',
                             '/scripts/es5/v4-api-controller.js', // TODO: min
                             '/scripts/es5/v4-auto-suggest-region-controller.js', // TODO: min
                             '/scripts/es5/v4-home.js' // TODO: min
