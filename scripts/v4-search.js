@@ -25,6 +25,10 @@ $(document).ready(function() {
             case 'earnings':
                 searchPageController.drawEarningsData();
                 break;
+
+            case 'health':
+                searchPageController.drawHealthData();
+                break;
                 
             case 'education':
                 searchPageController.drawEducationData();

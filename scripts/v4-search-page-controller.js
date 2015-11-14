@@ -488,6 +488,107 @@ class SearchPageController {
     
         $('#earnings-table').html(s);
     }
+
+    // Health
+    //
+    drawHealthData() {
+    
+        var self = this;
+    
+        google.setOnLoadCallback(function() {
+    
+            var regionIds = self.params.regions.map(function(region) { return region.id; });
+            var controller = new ApiController();
+    
+            // RWJF County Health Rankings data
+            controller.getHealthRwjfChrData(regionIds, function(data) { 
+                self.drawRwjfChrTable(regionIds, data);
+            });
+            // CDC BRFSS Prevalence Data
+            // controller.getCdcBrfssPrevalenceData(regionIds, function(data) { 
+            //     self.drawCdcBrfssPrevalenceTable(regionIds, data);
+            // });
+
+        });
+    }
+    
+    drawRwjfChrTableRow(regionIds, data, first_td, var_label, var_key, fmt_str, addl_fmt = '') {
+        var s = '<tr>'+first_td+'<td>'+var_label+'</td>'
+        for (var i = 0; i < regionIds.length; i++) {
+            s += '<td>'
+            if(data[i] && data[i][var_key]){
+                s += numeral(data[i][var_key].replace(',','')).format(fmt_str) + addl_fmt
+            } else {
+                s += ''
+            }
+            s += '</td>';
+        }
+        s += '</tr>'
+        return s
+    }
+
+    drawRwjfChrTable(regionIds, data) {
+    
+        var s = '';
+
+        // first row, which is region names
+        s += '<tr><th></th><th></th>';
+        for (var i = 0; i < regionIds.length; i++) {
+            s += '<th>' + this.params.regions[i].name + '</th>';
+        }
+        s += '</tr>'
+
+        // HEALTH OUTCOMES
+        s += '<tr><td colspan='+numeral(regionIds.length)+1+'>HEALTH OUTCOMES</td></tr>'
+        // health outcomes - length of life - 1 measure
+        s += this.drawRwjfChrTableRow(regionIds, data, '<td rowspan=1>Length of Life</td>', 'Premature Death','premature_death_value','0,0')
+        // health outcomes - quality of life - 4 measures
+        s += this.drawRwjfChrTableRow(regionIds, data, '<td rowspan=4>Quality of Life</td>', 'Poor or fair health','poor_or_fair_health_value','0.0%')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Poor physical health days','poor_physical_health_days_value','0.0')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Poor mental health days','poor_mental_health_days_value','0.0')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Low birthweight','low_birthweight_value','0.0%')
+
+        // HEALTH FACTORS
+        s += '<tr><td colspan='+numeral(regionIds.length)+1+'>HEALTH FACTORS</td></tr>'
+        // health outcomes - health factors - 9 measures
+        s += this.drawRwjfChrTableRow(regionIds, data, '<td rowspan=9>Health Behaviors</td>', 'Adult smoking','adult_smoking_value','0.0%')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Adult obesity','adult_obesity_value','0.0%')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Food environment index','food_environment_index_value','0.0')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Physical inactivity','physical_inactivity_value','0.0%')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Access to exercise opportunities','access_to_exercise_opportunities_value','0.0%')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Excessive drinking','excessive_drinking_value','0.0%')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Alcohol-impaired driving deaths','alcohol_impaired_driving_deaths_value','0.0%')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Sexually transmitted infections','sexually_transmitted_infections_value','0,0')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Teen births','alcohol_impaired_driving_deaths_value','0,0')
+        // health outcomes - clinical care - 7 measures
+        s += this.drawRwjfChrTableRow(regionIds, data, '<td rowspan=7>Clinical Care</td>', 'Uninsured','uninsured_value','0.0%')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Primary care physicians','primary_care_physicians_value','0,0')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Dentists','dentists_value','0,0')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Mental health providers','mental_health_providers_value','0,0')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Preventable hospital stays','preventable_hospital_stays_value','0,0')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Diabetic monitoring','diabetic_screening_value','0.0%')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Mammography screening','mammography_screening_value','0.0%')
+
+        // health outcomes - social and economic factors - 9 measures
+        s += this.drawRwjfChrTableRow(regionIds, data, '<td rowspan=9>Social & Economic Factors</td>', 'High school graduation','high_school_graduation_value','0.0%')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Some college','some_college_value','0.0%')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Unemployment','unemployment_value','0.0%')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Children in poverty','children_in_poverty_value','0.0%')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Income inequality','income_inequality_value','0.0')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Children in single-parent households','children_in_single_parent_households_value','0.0%')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Social associations','social_associations_value','0.0')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Violent crime','violent_crime_value','0.0')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Injury deaths','injury_deaths_value','0.0')
+
+        // health outcomes - physical environment - 5 measures
+        s += this.drawRwjfChrTableRow(regionIds, data, '<td rowspan=5>Physical Environment</td>', 'Air pollution - particulate matter','air_pollution_particulate_matter_value','0.0')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Drinking water violations','drinking_water_violations_value','0.0%')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Severe housing problems','severe_housing_problems_value','0.0%')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Driving alone to work','driving_alone_to_work_value','0.0%')
+        s += this.drawRwjfChrTableRow(regionIds, data, '', 'Long commute - driving alone','long_commute_driving_alone_value','0.0%')
+
+        $('#rwjf-county-health-rankings-table').html(s);
+    }
     
     // Education
     //
