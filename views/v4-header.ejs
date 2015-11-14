@@ -36,6 +36,9 @@
             <% if (params.standards.length > 0) { %> 
             <input type="hidden" name="standards" value="<%= params.standards.join(',') %>">
             <% } %>
+            <% if (params.debug) { %> 
+            <input type="hidden" name="debug">
+            <% } %>
             <ul class="region-list" style="display:none"></ul>
         </span>
     </form>

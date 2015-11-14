@@ -7,7 +7,7 @@ var path = require('path');
 var apiController = new ApiController();
 var categoryController = new CategoryController();
 var tagController = new TagController();
-var defaultSearchResultCount = 60;
+var defaultSearchResultCount = 10;
 
 module.exports = RenderController;
 
@@ -152,45 +152,49 @@ RenderController.prototype.renderSearchResults = function(req, res) {
 //
 function _renderSearchPage(req, res, params) {
 
-    apiController.getCategories(5, function(categoryResults) {
+    apiController.getSearchDatasetsUrl(params, function(searchDatasetsUrl) {
 
-        categoryController.attachCategoryMetadata(categoryResults, function(categoryResults) {
+        apiController.getCategories(5, function(categoryResults) {
 
-            apiController.getDomains(5, function(domainResults) {
-        
-                apiController.searchDatasets(
-                    params, 
-                    function(results) {
-        
-                        res.render(
-                            'v4-search.ejs', 
-                            {
-                                categoryResults : categoryResults,
-                                css : [
-                                    '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css',
-                                    '/styles/v4-search.min.css'
-                                ],
-                                domainResults : domainResults,
-                                params : params,
-                                scripts : [
-                                    '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
-                                    '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
-                                    '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
-                                    '//d3js.org/d3.v3.min.js',
-                                    '/scripts/third-party/d3.promise.js',
-                                    '/scripts/es5/v4-api-controller.js', // TODO: min
-                                    '/scripts/es5/v4-auto-suggest-region-controller.js', // TODO: min
-                                    '/scripts/es5/v4-search-page-controller.js', // TODO: min
-                                    '/scripts/es5/v4-search.js', // TODO: min
-                                ],
-                                searchPath : req.path,
-                                searchResults : results
-                            });
-                    }, 
-                    function() {
-        
-                        renderErrorPage(req, res); 
-                    });
+            categoryController.attachCategoryMetadata(categoryResults, function(categoryResults) {
+    
+                apiController.getDomains(5, function(domainResults) {
+            
+                    apiController.searchDatasets(
+                        params, 
+                        function(results) {
+            
+                            res.render(
+                                'v4-search.ejs', 
+                                {
+                                    categoryResults : categoryResults,
+                                    css : [
+                                        '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css',
+                                        '/styles/v4-search.min.css'
+                                    ],
+                                    domainResults : domainResults,
+                                    params : params,
+                                    scripts : [
+                                        '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
+                                        '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
+                                        '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
+                                        '//d3js.org/d3.v3.min.js',
+                                        '/scripts/third-party/d3.promise.js',
+                                        '/scripts/es5/v4-api-controller.js', // TODO: min
+                                        '/scripts/es5/v4-auto-suggest-region-controller.js', // TODO: min
+                                        '/scripts/es5/v4-search-page-controller.js', // TODO: min
+                                        '/scripts/es5/v4-search.js', // TODO: min
+                                    ],
+                                    searchDatasetsUrl : searchDatasetsUrl,
+                                    searchPath : req.path,
+                                    searchResults : results
+                                });
+                        }, 
+                        function() {
+            
+                            renderErrorPage(req, res); 
+                        });
+                });
             });
         });
     });
@@ -218,6 +222,10 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
         standards : standards,
         vector : req.params.vector || 'population',
     };
+
+    // Debug
+    //
+    if (query.debug != null) params.debug = 1;
 
     // Regions are in the URL path segment, not a query parameter
     //

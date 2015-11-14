@@ -1,6 +1,7 @@
 <% include v4-header %>
 
 <script>var _params = <%- JSON.stringify(params) %>;</script>
+<% if (params.debug) { %><script>console.log(decodeURIComponent('<%- searchDatasetsUrl %>'));</script><% } %>
 
 <section class="refine">
 
@@ -210,6 +211,9 @@ function getSearchQueryString() {
 
     if (params.standards.length > 0)
         url += '&standards=' + encodeURIComponent(params.standards.join(','));
+
+    if (params.debug)
+        url += '&debug=';
 
     return url;
 };

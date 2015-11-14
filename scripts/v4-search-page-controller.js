@@ -825,26 +825,6 @@ class SearchPageController {
 
         map.setView(this.MAP_INITIAL_CENTER, this.MAP_INITIAL_ZOOM);
 
-        var myLines = [{
-            "type": "LineString",
-            "coordinates": [[-100, 40], [-105, 45], [-110, 55]]
-        }, {
-            "type": "LineString",
-            "coordinates": [[-105, 40], [-110, 45], [-115, 55]]
-        }];
-        
-        var myStyle = {
-            "color": "#ff7800",
-            "weight": 5,
-            "opacity": 0.65
-        };
-        
-/*        L.geoJson(
-            myLines, 
-            {
-                style: myStyle
-            }).addTo(map);
-*/        
         L.tileLayer('https://a.tiles.mapbox.com/v3/socrata-apps.ibp0l899/{z}/{x}/{y}.png').addTo(map);
     }
     
@@ -1128,9 +1108,7 @@ class SearchPageController {
         var self = this;
     
         $.ajax(this.getSearchResultsUrl()).done(function(data, textStatus, jqXHR) {
-    
-            console.log(jqXHR.status + ' ' + textStatus);
-    
+
             if (jqXHR.status == 204) { // no content
     
                 self.decrementPage();
@@ -1207,26 +1185,29 @@ class SearchPageController {
     
         return url;
     }
-    
+
     getSearchQueryString() {
-    
+
         var url = '?q=' + encodeURIComponent(this.params.q);
-    
+
         if (this.params.page > 1)
             url += '&page=' + this.params.page;
-    
+
         if (this.params.categories.length > 0)
             url += '&categories=' + encodeURIComponent(this.params.categories.join(','));
-    
+
         if (this.params.domains.length > 0)
             url += '&domains=' + encodeURIComponent(this.params.domains.join(','));
-    
+
         if (this.params.standards.length > 0)
             url += '&standards=' + encodeURIComponent(this.params.standards.join(','));
-    
+
+        if (this.params.debug)
+            url += '&debug=';
+
         return url;
     }
-    
+
     incrementPage() {
     
         this.params.page++;
