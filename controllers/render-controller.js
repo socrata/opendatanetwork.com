@@ -103,7 +103,8 @@ RenderController.prototype.renderSearchPage = function(req, res) {
 //
 RenderController.prototype.renderSearchWithVectorPage = function(req, res) {
 
-    if ((req.params.vector == 'population') ||
+    if ((req.params.vector == '') ||
+        (req.params.vector == 'population') ||
         (req.params.vector == 'earnings') ||
         (req.params.vector == 'education') ||
         (req.params.vector == 'occupations') ||
@@ -220,7 +221,7 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
         regions : [],
         resetRegions : false,
         standards : standards,
-        vector : req.params.vector || 'population',
+        vector : req.params.vector || '',
     };
 
     // Debug

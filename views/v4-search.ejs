@@ -79,17 +79,17 @@
     <div class="charts-column">
 
         <ul class="chart-tabs">
-            <li<%- getSelectedVector('population') %>><a href="<%= getSearchPageUrl('population') %>">Population</a></li>
-            <li<%- getSelectedVector('earnings') %>><a href="<%= getSearchPageUrl('earnings') %>">Earnings</a></li>
-            <li<%- getSelectedVector('education') %>><a href="<%= getSearchPageUrl('education') %>">Education</a></li>
-            <li<%- getSelectedVector('occupations') %>><a href="<%= getSearchPageUrl('occupations') %>">Occupations</a></li>
-            <li<%- getSelectedVector('gdp') %>><a href="<%= getSearchPageUrl('gdp') %>">GDP</a></li>
-            <li<%- getSelectedVector('cost_of_living') %>><a href="<%= getSearchPageUrl('cost_of_living') %>">Cost of Living</a></li>
+            <li<%- getSelectedVector(['','population']) %>><a href="<%= getSearchPageUrl('population') %>">Population</a></li>
+            <li<%- getSelectedVector(['earnings']) %>><a href="<%= getSearchPageUrl('earnings') %>">Earnings</a></li>
+            <li<%- getSelectedVector(['education']) %>><a href="<%= getSearchPageUrl('education') %>">Education</a></li>
+            <li<%- getSelectedVector(['occupations']) %>><a href="<%= getSearchPageUrl('occupations') %>">Occupations</a></li>
+            <li<%- getSelectedVector(['gdp']) %>><a href="<%= getSearchPageUrl('gdp') %>">GDP</a></li>
+            <li<%- getSelectedVector(['cost_of_living']) %>><a href="<%= getSearchPageUrl('cost_of_living') %>">Cost of Living</a></li>
         </ul>
 
         <div class="charts">
 
-<% if (params.vector == 'population') { %>
+<% if ((params.vector == '') || (params.vector == 'population')) { %>
 
             <div id="map"></div>
             <h1>Population</h1>
@@ -218,8 +218,14 @@ function getSearchQueryString() {
     return url;
 };
 
-function getSelectedVector(vector) {
+function getSelectedVector(vectors) {
 
-    return (vector == params.vector) ? ' class="selected"' : ''; 
+    for (var i in vectors) {
+
+        if (vectors[i] == params.vector) 
+            return ' class="selected"'; 
+    }
+
+    return ''; 
 }
 %>
