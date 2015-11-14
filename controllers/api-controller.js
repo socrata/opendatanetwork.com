@@ -6,7 +6,7 @@ var numeral = require('numeral');
 var request = require('request');
 
 var baseCatalogUrl = 'http://api.us.socrata.com/api/catalog/v1';
-var baseFederalDemoUrl = 'https://federal.demo.socrata.com/resource/7g2b-8brv';
+var baseFederalDemoUrl = 'https://odn.data.socrata.com/resource/7g2b-8brv';
 
 var autoCompleteNameUrl = baseFederalDemoUrl + '/?$where={0}';
 var cacheController = new CacheController();
