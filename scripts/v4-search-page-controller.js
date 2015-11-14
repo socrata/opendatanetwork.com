@@ -1122,7 +1122,7 @@ class SearchPageController {
         });
     }
     
-    getSearchPageForRegionsAndVectorUrl(regions, vector, queryString) {
+    getSearchPageForRegionsAndVectorUrl(regions, vector, searchResults, queryString) {
     
         var url = '/';
     
@@ -1148,42 +1148,42 @@ class SearchPageController {
         if (vector)
             url += '/' + vector;
     
+        if (searchResults)
+            url += '/search-results';
+    
         if (queryString) 
             url += queryString;
     
         return url;
     }
     
-    getSearchPageUrl() {
-    
+    getSearchPageUrl(searchResults) {
+
         if ((this.params.regions.length > 0) || this.params.autoSuggestedRegion) {
-    
+
             var regionNames = [];
-    
+
             if (this.params.resetRegions == false) {
-    
+
                 regionNames = this.params.regions.map(function(region) { 
                     return region.name; 
                 });
             }
-    
+
             if (this.params.autoSuggestedRegion)
                 regionNames.push(this.params.autoSuggestedRegion);
-    
-            return this.getSearchPageForRegionsAndVectorUrl(regionNames, this.params.vector, this.getSearchQueryString());
+
+            return this.getSearchPageForRegionsAndVectorUrl(regionNames, this.params.vector, searchResults, this.getSearchQueryString());
         }
         else {
-    
-            return this.getSearchPageForRegionsAndVectorUrl(null, this.params.vector, this.getSearchQueryString());
+
+            return this.getSearchPageForRegionsAndVectorUrl(null, this.params.vector, searchResults, this.getSearchQueryString());
         }
     }
     
     getSearchResultsUrl() {
-    
-        var searchResultsUrl = this.params.regions.length == 0 ? '/search-results' : './search-results'; 
-        var url = searchResultsUrl + this.getSearchQueryString(); 
-    
-        return url;
+
+        return this.getSearchPageUrl(true);
     }
 
     getSearchQueryString() {
