@@ -189,19 +189,19 @@ class SearchPageController {
     // Cost of living
     //
     drawCostOfLivingData() {
-    
-        var self = this;
-    
-        google.setOnLoadCallback(function() {
-    
-            var regionIds = self.params.regions.map(function(region) { return region.id; });
+
+        google.setOnLoadCallback(() => {
+
+            var regionIds = this.params.regions.map(function(region) { return region.id; });
             var controller = new ApiController();
-    
-            controller.getCostOfLivingData(regionIds, function(data) { 
-    
-                self.drawCostOfLivingChart(regionIds, data);
-                self.drawCostOfLivingTable(regionIds, data);
-            });
+
+            controller.getCostOfLivingData(regionIds)
+                .then(data => { 
+
+                    this.drawCostOfLivingChart(regionIds, data);
+                    this.drawCostOfLivingTable(regionIds, data);
+                })
+                .catch(error => console.error(error));
         });
     }
     
@@ -358,19 +358,19 @@ class SearchPageController {
     // Earnings
     //
     drawEarningsData() {
+
+        google.setOnLoadCallback(() => {
     
-        var self = this;
-    
-        google.setOnLoadCallback(function() {
-    
-            var regionIds = self.params.regions.map(function(region) { return region.id; });
+            var regionIds = this.params.regions.map(function(region) { return region.id; });
             var controller = new ApiController();
     
-            controller.getEarningsData(regionIds, function(data) { 
+            controller.getEarningsData(regionIds)
+                .then(data => { 
     
-                self.drawEarningsChart(regionIds, data);
-                self.drawEarningsTable(regionIds, data);
-            });
+                    this.drawEarningsChart(regionIds, data);
+                    this.drawEarningsTable(regionIds, data);
+                })
+                .catch(error => console.error(error));
         });
     }
     
@@ -493,23 +493,16 @@ class SearchPageController {
     //
     drawHealthData() {
     
-        var self = this;
-    
-        google.setOnLoadCallback(function() {
-    
-            var regionIds = self.params.regions.map(function(region) { return region.id; });
-            var controller = new ApiController();
-    
-            // RWJF County Health Rankings data
-            controller.getHealthRwjfChrData(regionIds, function(data) { 
-                self.drawRwjfChrTable(regionIds, data);
-            });
-            // CDC BRFSS Prevalence Data
-            // controller.getCdcBrfssPrevalenceData(regionIds, function(data) { 
-            //     self.drawCdcBrfssPrevalenceTable(regionIds, data);
-            // });
+        google.setOnLoadCallback(() => {
 
+            var regionIds = this.params.regions.map(function(region) { return region.id; });
+            var controller = new ApiController();
+
+            controller.getHealthRwjfChrData(regionIds)
+                .then(data => this.drawRwjfChrTable(regionIds, data))
+                .catch(error => console.error(error));
         });
+    
     }
     
     drawRwjfChrTableRow(regionIds, data, first_td, var_label, var_key, fmt_str, addl_fmt = '') {
@@ -593,18 +586,15 @@ class SearchPageController {
     // Education
     //
     drawEducationData() {
-    
-        var self = this;
-    
-        google.setOnLoadCallback(function() {
-    
-            var regionIds = self.params.regions.map(function(region) { return region.id; });
+
+        google.setOnLoadCallback(() => {
+
+            var regionIds = this.params.regions.map(function(region) { return region.id; });
             var controller = new ApiController();
-    
-            controller.getEducationData(regionIds, function(data) { 
-    
-                self.drawEducationTable(regionIds, data);
-            });
+
+            controller.getEducationData(regionIds)
+                .then(data => this.drawEducationTable(regionIds, data))
+                .catch(error => console.error(error));
         });
     }
     
@@ -664,19 +654,19 @@ class SearchPageController {
     // GDP data
     //
     drawGdpData() {
-    
-        var self = this;
-    
-        google.setOnLoadCallback(function() {
-    
-            var regionIds = self.params.regions.map(function(region) { return region.id; });
+
+        google.setOnLoadCallback(() => {
+
+            var regionIds = this.params.regions.map(function(region) { return region.id; });
             var controller = new ApiController();
-    
-            controller.getGdpData(regionIds, function(data) { 
-    
-                self.drawGdpChart(regionIds, data);
-                self.drawGdpChangeChart(regionIds, data);
-            });
+
+            controller.getGdpData(regionIds)
+                .then(data => { 
+
+                    this.drawGdpChart(regionIds, data);
+                    this.drawGdpChangeChart(regionIds, data);
+                })
+                .catch(error => console.error(error));
         });
     }
     
@@ -770,18 +760,15 @@ class SearchPageController {
     // Occupations
     //
     drawOccupationsData() {
-    
-        var self = this;
-    
-        google.setOnLoadCallback(function() {
-    
-            var regionIds = self.params.regions.map(function(region) { return region.id; });
+
+        google.setOnLoadCallback(() => {
+
+            var regionIds = this.params.regions.map(function(region) { return region.id; });
             var controller = new ApiController();
-    
-            controller.getOccupationsData(regionIds, function(data) { 
-    
-                self.drawOccupationsTable(regionIds, data);
-            });
+
+            controller.getOccupationsData(regionIds)
+                .then(data => this.drawOccupationsTable(regionIds, data))
+                .catch(error => console.error(error));
         });
     }
     
@@ -828,12 +815,14 @@ class SearchPageController {
             var regionIds = this.params.regions.map(function(region) { return region.id; });
             var controller = new ApiController();
 
-            controller.getPopulationData(regionIds, (data) => { 
+            controller.getPopulationData(regionIds)
+                .then(data => { 
 
-                this.drawPopulationMap();
-                this.drawPopulationChart(regionIds, data);
-                this.drawPopulationChangeChart(regionIds, data);
-            });
+                    this.drawPopulationMap();
+                    this.drawPopulationChart(regionIds, data);
+                    this.drawPopulationChangeChart(regionIds, data);
+                })
+                .catch(error => console.error(error));
         });
     }
     
@@ -930,26 +919,6 @@ class SearchPageController {
 
         map.setView(this.MAP_INITIAL_CENTER, this.MAP_INITIAL_ZOOM);
 
-        var myLines = [{
-            "type": "LineString",
-            "coordinates": [[-100, 40], [-105, 45], [-110, 55]]
-        }, {
-            "type": "LineString",
-            "coordinates": [[-105, 40], [-110, 45], [-115, 55]]
-        }];
-        
-        var myStyle = {
-            "color": "#ff7800",
-            "weight": 5,
-            "opacity": 0.65
-        };
-        
-/*        L.geoJson(
-            myLines, 
-            {
-                style: myStyle
-            }).addTo(map);
-*/        
         L.tileLayer('https://a.tiles.mapbox.com/v3/socrata-apps.ibp0l899/{z}/{x}/{y}.png').addTo(map);
     }
     
@@ -964,78 +933,129 @@ class SearchPageController {
 
         switch (region.type) {
 
-            case 'nation': 
-                return;
-
-            case 'state':
-
-                this.drawPlacesInStateForRegion(region.id, region) // the region is a state
-                    .then(response => {
-
-                        if (response.length == 0)
-                            return;
-
-                        $('#places-in-region-header').text('Places in {0}'.format(region.name));
-                        $('#places-in-region-header').slideToggle(100);
-
-                        this.drawPlacesInRegionList(response, 10);
-                    })
-                    .catch(error => console.error(error));
-
-            default: 
-
-                var controller = new ApiController();
-
-                controller.getParentState(region)
-                    .then(response => {
-
-                        if (response.length == 0)
-                            return;
-
-                        var state = response[0];
-
-                        this.drawPlacesInStateForRegion(state.parent_id, region)
-                            .then(response => {
-
-                                if (response.length == 0)
-                                    return;
-
-                                $('#places-in-region-header').text('Places in {0}'.format(state.parent_name));
-                                $('#places-in-region-header').slideToggle(100);
-
-                                this.drawPlacesInRegionList(response);
-                            })
-                            .catch(error => console.error(error));
-                    });
+            case 'nation': this.drawChildPlacesInRegion(region, 'Regions in {0}'.format(region.name)); break;
+            case 'region': this.drawChildPlacesInRegion(region, 'Divisions in {0}'.format(region.name)); break;
+            case 'division': this.drawChildPlacesInRegion(region, 'States in {0}'.format(region.name)); break;
+            case 'state': this.drawCitiesAndCountiesInState(region); break;
+            case 'county': this.drawOtherCountiesInState(region); break;
+            case 'msa': this.drawOtherMetrosInState(region); break;
+            case 'place': this.drawOtherCitiesInState(region); break;
         }
     }
 
-    drawPlacesInStateForRegion(stateId, region) {
+    drawChildPlacesInRegion(region, label) {
 
         var controller = new ApiController();
 
-        switch (region.type) {
+        controller.getChildRegions(region.id)
+            .then(response => {
+        
+                this.drawPlacesInRegionHeader('#places-in-region-header-0', label);
+                this.drawPlacesInRegionList('#places-in-region-list-0', response);
+            })
+            .catch(error => console.error(error));
+    }
 
-            case 'county': return controller.getCountiesInState(stateId);
-            case 'msa': return controller.getMetrosInState(stateId);
-            case 'place': return controller.getPlacesInState(stateId);
-            case 'state':
+    drawCitiesAndCountiesInState(region) {
 
-                var placesPromise = controller.getPlacesInState(stateId);
-                var countiesPromise = controller.getCountiesInState(stateId);
+        var controller = new ApiController();
+        var citiesPromise = controller.getCitiesInState(region.id);
+        var countiesPromise = controller.getCountiesInState(region.id);
 
-                return Promise.all([placesPromise, countiesPromise])
-                    .then(values => {
+        return Promise.all([citiesPromise, countiesPromise])
+            .then(values => {
 
-                        var rg0 = this.removeCurrentRegions(values[0]);
-                        var rg1 = this.removeCurrentRegions(values[1]);
+                if (values.length == 0)
+                    return;
 
-                        return Promise.resolve(rg0.concat(rg1));
+                if (values[0].length > 0) {
+
+                    this.drawPlacesInRegionHeader('#places-in-region-header-0', 'Places in {0}'.format(region.name));
+                    this.drawPlacesInRegionList('#places-in-region-list-0', values[0]);
+                }
+                
+                if (values[1].length > 0) {
+
+                    this.drawPlacesInRegionHeader('#places-in-region-header-1', 'Counties in {0}'.format(region.name));
+                    this.drawPlacesInRegionList('#places-in-region-list-1', values[1]);
+                }
+            })
+            .catch(error => console.error(error));
+    }
+
+    drawOtherCitiesInState(region) {
+
+        var controller = new ApiController();
+
+        controller.getParentState(region)
+            .then(response => {
+    
+                if (response.length == 0)
+                    return;
+    
+                var state = response[0];
+    
+                controller.getCitiesInState(state.parent_id)
+                    .then(response => {
+        
+                        if (response.length == 0)
+                            return;
+        
+                        this.drawPlacesInRegionHeader('#places-in-region-header-0', 'Places in {0}'.format(state.parent_name));
+                        this.drawPlacesInRegionList('#places-in-region-list-0', response);
                     })
                     .catch(error => console.error(error));
+            });
+    }
 
-            default: return Promise.resolve([]);
-        }
+    drawOtherCountiesInState(region) {
+
+        var controller = new ApiController();
+
+        controller.getParentState(region)
+            .then(response => {
+    
+                if (response.length == 0)
+                    return;
+    
+                var state = response[0];
+                
+                controller.getCountiesInState(state.parent_id)
+                    .then(response => {
+        
+                        if (response.length == 0)
+                            return;
+        
+                        this.drawPlacesInRegionHeader('#places-in-region-header-0', 'Counties in {0}'.format(state.parent_name));
+                        this.drawPlacesInRegionList('#places-in-region-list-0', response);
+                    })
+                    .catch(error => console.error(error));
+            });
+    }
+
+    drawOtherMetrosInState(region) {
+
+        var controller = new ApiController();
+
+        controller.getParentState(region)
+            .then(response => {
+    
+                if (response.length == 0)
+                    return;
+    
+                var state = response[0];
+    
+                controller.getMetrosInState(state.parent_id)
+                    .then(response => {
+        
+                        if (response.length == 0)
+                            return;
+        
+                        this.drawPlacesInRegionHeader('#places-in-region-header-0', 'Metropolitan Areas in {0}'.format(state.parent_name));
+                        this.drawPlacesInRegionList('#places-in-region-list-0', response);
+                    })
+                    .catch(error => console.error(error));
+            });
     }
 
     removeCurrentRegions(regions, maxCount = 5) {
@@ -1059,7 +1079,12 @@ class SearchPageController {
         return rg;
     }
 
-    drawPlacesInRegionList(data, maxCount = 5) {
+    drawPlacesInRegionHeader(headerId, label) {
+
+        $(headerId).text(label).slideToggle(100);
+    }
+
+    drawPlacesInRegionList(listId, data, maxCount = 5) {
 
         var s = '';
 
@@ -1084,8 +1109,8 @@ class SearchPageController {
             count++;
         }
 
-        $('#places-in-region').html(s);
-        $('#places-in-region').slideToggle(100);
+        $(listId).html(s);
+        $(listId).slideToggle(100);
     }
 
     isRegionIdContainedInCurrentRegions(regionId) {
@@ -1177,9 +1202,7 @@ class SearchPageController {
         var self = this;
     
         $.ajax(this.getSearchResultsUrl()).done(function(data, textStatus, jqXHR) {
-    
-            console.log(jqXHR.status + ' ' + textStatus);
-    
+
             if (jqXHR.status == 204) { // no content
     
                 self.decrementPage();
@@ -1193,7 +1216,7 @@ class SearchPageController {
         });
     }
     
-    getSearchPageForRegionsAndVectorUrl(regions, vector, queryString) {
+    getSearchPageForRegionsAndVectorUrl(regions, vector, searchResults, queryString) {
     
         var url = '/';
     
@@ -1219,63 +1242,66 @@ class SearchPageController {
         if (vector)
             url += '/' + vector;
     
+        if (searchResults)
+            url += '/search-results';
+    
         if (queryString) 
             url += queryString;
     
         return url;
     }
     
-    getSearchPageUrl() {
-    
+    getSearchPageUrl(searchResults) {
+
         if ((this.params.regions.length > 0) || this.params.autoSuggestedRegion) {
-    
+
             var regionNames = [];
-    
+
             if (this.params.resetRegions == false) {
-    
+
                 regionNames = this.params.regions.map(function(region) { 
                     return region.name; 
                 });
             }
-    
+
             if (this.params.autoSuggestedRegion)
                 regionNames.push(this.params.autoSuggestedRegion);
-    
-            return this.getSearchPageForRegionsAndVectorUrl(regionNames, this.params.vector, this.getSearchQueryString());
+
+            return this.getSearchPageForRegionsAndVectorUrl(regionNames, this.params.vector, searchResults, this.getSearchQueryString());
         }
         else {
-    
-            return this.getSearchPageForRegionsAndVectorUrl(null, this.params.vector, this.getSearchQueryString());
+
+            return this.getSearchPageForRegionsAndVectorUrl(null, this.params.vector, searchResults, this.getSearchQueryString());
         }
     }
     
     getSearchResultsUrl() {
-    
-        var searchResultsUrl = this.params.regions.length == 0 ? '/search-results' : './search-results'; 
-        var url = searchResultsUrl + this.getSearchQueryString(); 
-    
-        return url;
+
+        return this.getSearchPageUrl(true);
     }
-    
+
     getSearchQueryString() {
-    
+
         var url = '?q=' + encodeURIComponent(this.params.q);
-    
+
         if (this.params.page > 1)
             url += '&page=' + this.params.page;
-    
+
         if (this.params.categories.length > 0)
             url += '&categories=' + encodeURIComponent(this.params.categories.join(','));
-    
+
         if (this.params.domains.length > 0)
             url += '&domains=' + encodeURIComponent(this.params.domains.join(','));
-    
+
         if (this.params.standards.length > 0)
             url += '&standards=' + encodeURIComponent(this.params.standards.join(','));
-    
+
+        if (this.params.debug)
+            url += '&debug=';
+
         return url;
     }
-    
+
     incrementPage() {
     
         this.params.page++;

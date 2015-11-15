@@ -17,7 +17,7 @@ SynonymController.prototype.getSynonyms = function(q, completionHandler) {
 
         var key = q.toLowerCase().trim();
 
-        // If empty, just call teh completion handler with an empty array
+        // If empty, just call the completion handler with an empty array
         //
         if (key.length == 0) {
             

@@ -52,10 +52,11 @@ app.get('/categories.json', renderController.renderCategoriesJson);
 app.get('/join-open-data-network/complete', renderController.renderJoinOpenDataNetworkComplete);
 app.get('/join-open-data-network', renderController.renderJoinOpenDataNetwork);
 app.get('/search', renderController.renderSearchPage);
-app.get('/search-results', renderController.renderSearchResults);
+app.get('/search/search-results', renderController.renderSearchResults);
 app.get('/:region', renderController.renderSearchPage);
 app.get('/:region/search-results', renderController.renderSearchResults);
 app.get('/:region/:vector', renderController.renderSearchWithVectorPage);
+app.get('/:region/:vector/search-results', renderController.renderSearchResults);
 
 // Start listening
 //

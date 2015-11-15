@@ -1,6 +1,7 @@
 <% include v4-header %>
 
 <script>var _params = <%- JSON.stringify(params) %>;</script>
+<% if (params.debug) { %><script>console.log(decodeURIComponent('<%- searchDatasetsUrl %>'));</script><% } %>
 
 <section class="refine">
 
@@ -78,18 +79,18 @@
     <div class="charts-column">
 
         <ul class="chart-tabs">
-            <li<%- getSelectedVector('population') %>><a href="<%= getSearchPageUrl('population') %>">Population</a></li>
-            <li<%- getSelectedVector('earnings') %>><a href="<%= getSearchPageUrl('earnings') %>">Earnings</a></li>
-            <li<%- getSelectedVector('education') %>><a href="<%= getSearchPageUrl('education') %>">Education</a></li>
-            <li<%- getSelectedVector('occupations') %>><a href="<%= getSearchPageUrl('occupations') %>">Occupations</a></li>
-            <li<%- getSelectedVector('gdp') %>><a href="<%= getSearchPageUrl('gdp') %>">GDP</a></li>
-            <li<%- getSelectedVector('cost_of_living') %>><a href="<%= getSearchPageUrl('cost_of_living') %>">Cost of Living</a></li>
-            <li<%- getSelectedVector('health') %>><a href="<%= getSearchPageUrl('health') %>">Health</a></li>
+            <li<%- getSelectedVector(['','population']) %>><a href="<%= getSearchPageUrl('population') %>">Population</a></li>
+            <li<%- getSelectedVector(['earnings']) %>><a href="<%= getSearchPageUrl('earnings') %>">Earnings</a></li>
+            <li<%- getSelectedVector(['education']) %>><a href="<%= getSearchPageUrl('education') %>">Education</a></li>
+            <li<%- getSelectedVector(['occupations']) %>><a href="<%= getSearchPageUrl('occupations') %>">Occupations</a></li>
+            <li<%- getSelectedVector(['gdp']) %>><a href="<%= getSearchPageUrl('gdp') %>">GDP</a></li>
+            <li<%- getSelectedVector(['cost_of_living']) %>><a href="<%= getSearchPageUrl('cost_of_living') %>">Cost of Living</a></li>
+            <li<%- getSelectedVector(['health']) %>><a href="<%= getSearchPageUrl('health') %>">Health</a></li>
         </ul>
 
         <div class="charts">
 
-<% if (params.vector == 'population') { %>
+<% if ((params.vector == '') || (params.vector == 'population')) { %>
 
             <div id="map"></div>
             <h1>Population</h1>
@@ -158,8 +159,10 @@
                 <ul style="display: none;"></ul>
             </div>
             <ul id="similar-regions" style="display:none"></ul>
-            <h2 id="places-in-region-header" style="display:none"></h2>
-            <ul id="places-in-region" style="display:none"></ul>
+            <h2 id="places-in-region-header-0" class="places-in-region-header" style="display:none"></h2>
+            <ul id="places-in-region-list-0" class="places-in-region-list" style="display:none"></ul>
+            <h2 id="places-in-region-header-1" class="places-in-region-header" style="display:none"></h2>
+            <ul id="places-in-region-list-1" class="places-in-region-list" style="display:none"></ul>
         </div>
         <div class="footer">
             <ul class="footer-links">
@@ -223,11 +226,20 @@ function getSearchQueryString() {
     if (params.standards.length > 0)
         url += '&standards=' + encodeURIComponent(params.standards.join(','));
 
+    if (params.debug)
+        url += '&debug=';
+
     return url;
 };
 
-function getSelectedVector(vector) {
+function getSelectedVector(vectors) {
 
-    return (vector == params.vector) ? ' class="selected"' : ''; 
+    for (var i in vectors) {
+
+        if (vectors[i] == params.vector) 
+            return ' class="selected"'; 
+    }
+
+    return ''; 
 }
 %>

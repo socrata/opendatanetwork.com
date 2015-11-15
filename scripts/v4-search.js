@@ -21,7 +21,7 @@ $(document).ready(function() {
             case 'population':
                 searchPageController.drawPopulationData();
                 break;
-                
+
             case 'earnings':
                 searchPageController.drawEarningsData();
                 break;
@@ -44,6 +44,10 @@ $(document).ready(function() {
                 
             case 'gdp':
                 searchPageController.drawGdpData();
+                break;
+                
+            default:
+                searchPageController.drawPopulationData();
                 break;
         }
    }
