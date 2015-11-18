@@ -17,8 +17,9 @@ class Complete {
 
 
 class Results {
-    constructor(type, resultSelection) {
+    constructor(type, resultSelection, onSelect) {
         this.type = type;
+        this.onSelect = onSelect;
 
         this.container = resultSelection
             .append('div')
@@ -75,14 +76,14 @@ class Results {
             .append('li')
             .html(option => option.text)
             .on('click', option => {
-                console.log(option);
+                this.onSelect(option.text);
             });
     }
 }
 
 
 class AutoSuggestRegionController {
-    constructor(inputSelector, resultSelector, onClickRegion) {
+    constructor(inputSelector, resultSelector) {
         const self = this;
 
         d3.select(inputSelector).on('input', function() {
@@ -101,7 +102,10 @@ class AutoSuggestRegionController {
         const datasetComplete = new Complete(datasetURL, datasetResults);
 
         const regionURL = autocompleteURL(domain, '7g2b-8brv', 'autocomplete_name');
-        const regionResults = new Results('Regions', this.resultSelection);
+        const regionSelect = region => {
+            this.navigate({'action': region.replace(/ /g, '_')});
+        }
+        const regionResults = new Results('Regions', this.resultSelection, regionSelect);
         const regionComplete = new Complete(regionURL, regionResults);
 
         const publisherURL = autocompleteURL(domain, '8ae5-ghum', 'domain');
@@ -114,6 +118,15 @@ class AutoSuggestRegionController {
 
         this.completers = [datasetComplete, regionComplete,
                            publisherComplete, categoryComplete];
+
+        this.$form = $('form');
+        this.$query = $('q');
+    }
+
+    navigate(params) {
+        this.$form.attr(params);
+        this.$query.val('');
+        this.$form.submit();
     }
 
     suggest(term) {
