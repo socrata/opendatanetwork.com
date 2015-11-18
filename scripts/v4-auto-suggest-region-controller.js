@@ -1,10 +1,9 @@
 
 
 class Complete {
-    constructor(type, queryBuilder, resultSelection) {
-        this.type = type;
+    constructor(queryBuilder, results) {
         this.queryBuilder = queryBuilder;
-        this.results = new Results(type, resultSelection);
+        this.results = results;
     }
 
     get(query) {
@@ -74,7 +73,10 @@ class Results {
             .data(options)
             .enter()
             .append('li')
-            .html(option => option.text);
+            .html(option => option.text)
+            .on('click', option => {
+                console.log(option);
+            });
     }
 }
 
@@ -95,16 +97,20 @@ class AutoSuggestRegionController {
         this.resultSelection = d3.select(resultSelector);
 
         const datasetURL = autocompleteURL(domain, 'fpum-bjbr', 'name');
-        const datasetComplete = new Complete('Datasets', datasetURL, this.resultSelection);
+        const datasetResults = new Results('Datasets', this.resultSelection);
+        const datasetComplete = new Complete(datasetURL, datasetResults);
 
         const regionURL = autocompleteURL(domain, '7g2b-8brv', 'autocomplete_name');
-        const regionComplete = new Complete('Regions', regionURL, this.resultSelection);
+        const regionResults = new Results('Regions', this.resultSelection);
+        const regionComplete = new Complete(regionURL, regionResults);
 
         const publisherURL = autocompleteURL(domain, '8ae5-ghum', 'domain');
-        const publisherComplete = new Complete('Publishers', publisherURL, this.resultSelection);
+        const publisherResults = new Results('Publishers', this.resultSelection);
+        const publisherComplete = new Complete(publisherURL, publisherResults);
 
         const categoryURL = autocompleteURL(domain, '864v-r7tf', 'category');
-        const categoryComplete = new Complete('Categories', categoryURL, this.resultSelection);
+        const categoryResults = new Results('Categories', this.resultSelection);
+        const categoryComplete = new Complete(categoryURL, categoryResults);
 
         this.completers = [datasetComplete, regionComplete,
                            publisherComplete, categoryComplete];
