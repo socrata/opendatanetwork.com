@@ -100,16 +100,16 @@ class AutoSuggestRegionController {
         this.selection = selection;
 
         const datasetURL = autocompleteURL(domain, 'fpum-bjbr', 'name');
-        const datasetComplete = new Complete('Dataset', datasetURL, selection);
+        const datasetComplete = new Complete('Datasets', datasetURL, selection);
 
         const regionURL = autocompleteURL(domain, '7g2b-8brv', 'autocomplete_name');
-        const regionComplete = new Complete('Region', regionURL, selection);
+        const regionComplete = new Complete('Regions', regionURL, selection);
 
         const publisherURL = autocompleteURL(domain, '8ae5-ghum', 'domain');
-        const publisherComplete = new Complete('Publisher', publisherURL, selection);
+        const publisherComplete = new Complete('Publishers', publisherURL, selection);
 
         const categoryURL = autocompleteURL(domain, '864v-r7tf', 'category');
-        const categoryComplete = new Complete('Category', categoryURL, selection);
+        const categoryComplete = new Complete('Categories', categoryURL, selection);
 
         this.completers = [datasetComplete, regionComplete,
                            publisherComplete, categoryComplete];
