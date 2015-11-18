@@ -98,22 +98,31 @@ class AutoSuggestRegionController {
         this.resultSelection = d3.select(resultSelector);
 
         const datasetURL = autocompleteURL(domain, 'fpum-bjbr', 'name');
-        const datasetResults = new Results('Datasets', this.resultSelection);
+        const datasetSelect = dataset => {
+            this.navigate(`/search?q=${dataset}`);
+        }
+        const datasetResults = new Results('Datasets', this.resultSelection, datasetSelect);
         const datasetComplete = new Complete(datasetURL, datasetResults);
 
         const regionURL = autocompleteURL(domain, '7g2b-8brv', 'autocomplete_name');
         const regionSelect = region => {
-            this.navigate({'action': region.replace(/ /g, '_')});
+            this.navigate(`/${region.replace(/ /g, '_')}`);
         }
         const regionResults = new Results('Regions', this.resultSelection, regionSelect);
         const regionComplete = new Complete(regionURL, regionResults);
 
         const publisherURL = autocompleteURL(domain, '8ae5-ghum', 'domain');
-        const publisherResults = new Results('Publishers', this.resultSelection);
+        const publisherSelect = publisher => {
+            this.navigate(`/search?domains=${publisher}`);
+        }
+        const publisherResults = new Results('Publishers', this.resultSelection, publisherSelect);
         const publisherComplete = new Complete(publisherURL, publisherResults);
 
         const categoryURL = autocompleteURL(domain, '864v-r7tf', 'category');
-        const categoryResults = new Results('Categories', this.resultSelection);
+        const categorySelect = category => {
+            this.navigate(`/search?categories=${category}`);
+        }
+        const categoryResults = new Results('Categories', this.resultSelection, categorySelect);
         const categoryComplete = new Complete(categoryURL, categoryResults);
 
         this.completers = [datasetComplete, regionComplete,
@@ -123,10 +132,8 @@ class AutoSuggestRegionController {
         this.$query = $('q');
     }
 
-    navigate(params) {
-        this.$form.attr(params);
-        this.$query.val('');
-        this.$form.submit();
+    navigate(path) {
+        window.location.href = path;
     }
 
     suggest(term) {
