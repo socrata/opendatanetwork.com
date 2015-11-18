@@ -1,10 +1,10 @@
 
 
 class Complete {
-    constructor(type, queryBuilder, selection) {
+    constructor(type, queryBuilder, resultSelection) {
         this.type = type;
         this.queryBuilder = queryBuilder;
-        this.results = new Results(type, selection);
+        this.results = new Results(type, resultSelection);
     }
 
     get(query) {
@@ -18,10 +18,10 @@ class Complete {
 
 
 class Results {
-    constructor(type, selection) {
+    constructor(type, resultSelection) {
         this.type = type;
 
-        this.container = selection
+        this.container = resultSelection
             .append('div')
             .attr('class', 'autocomplete-results-container')
             .style('display', 'none');
@@ -80,119 +80,41 @@ class Results {
 
 
 class AutoSuggestRegionController {
+    constructor(inputSelector, resultSelector, onClickRegion) {
+        const self = this;
 
-    constructor(inputTextSelector, resultListSelector, onClickRegion) {
-
-        this.options = [];
-        this.selectedIndex = -1;
-        this.resultListSelector = resultListSelector;
-        this.timer = null;
-        this.onClickRegion = onClickRegion;
-
-        var autoSuggestDelay = 150;
+        d3.select(inputSelector).on('input', function() {
+            self.suggest(this.value);
+        });
 
         function autocompleteURL(domain, fxf, column) {
             return query => `https://${domain}/views/${fxf}/columns/${column}/suggest/${query}?size=5`;
         }
 
         const domain = 'odn.data.socrata.com';
-        const selection = d3.select(resultListSelector);
-        this.selection = selection;
+        this.resultSelection = d3.select(resultSelector);
 
         const datasetURL = autocompleteURL(domain, 'fpum-bjbr', 'name');
-        const datasetComplete = new Complete('Datasets', datasetURL, selection);
+        const datasetComplete = new Complete('Datasets', datasetURL, this.resultSelection);
 
         const regionURL = autocompleteURL(domain, '7g2b-8brv', 'autocomplete_name');
-        const regionComplete = new Complete('Regions', regionURL, selection);
+        const regionComplete = new Complete('Regions', regionURL, this.resultSelection);
 
         const publisherURL = autocompleteURL(domain, '8ae5-ghum', 'domain');
-        const publisherComplete = new Complete('Publishers', publisherURL, selection);
+        const publisherComplete = new Complete('Publishers', publisherURL, this.resultSelection);
 
         const categoryURL = autocompleteURL(domain, '864v-r7tf', 'category');
-        const categoryComplete = new Complete('Categories', categoryURL, selection);
+        const categoryComplete = new Complete('Categories', categoryURL, this.resultSelection);
 
         this.completers = [datasetComplete, regionComplete,
                            publisherComplete, categoryComplete];
-
-
-        // Keyboard event
-        //
-        $(inputTextSelector).keyup((e) => {
-
-            if (e.keyCode == 38) { // up
-
-                e.preventDefault();
-
-                this.selectedIndex = (this.selectedIndex > -1) ? this.selectedIndex - 1 : -1;
-                this.updateListSelection();
-                return;
-            }
-            else if (e.keyCode == 40) { // down
-
-                e.preventDefault();
-
-                this.selectedIndex = (this.selectedIndex < this.options.length - 1) ? this.selectedIndex + 1 : this.options.length - 1;
-                this.updateListSelection();
-                return;
-            }
-            else if (e.keyCode == 13) { // enter
-
-                if ((this.selectedIndex == -1) || (this.selectedIndex >= this.options.length))
-                    return;
-
-                e.preventDefault();
-
-                if (this.onClickRegion)
-                    this.onClickRegion(this.options[this.selectedIndex].text);
-
-                return;
-            }
-            else if (e.keyCode == 27) { // esc
-
-                $(resultListSelector).slideUp(100);
-                return;
-            }
-
-            // Clear the timer
-            //
-            clearTimeout(this.timer);
-
-            // Get the search value
-            //
-            var searchTerm = $(inputTextSelector).val().trim();
-
-            if (searchTerm.length == 0) {
-
-                $(resultListSelector).slideUp(100);
-                return;
-            }
-
-            // Set new timer to auto suggest
-            //
-            this.timer = setTimeout(
-                () => { this.autoSuggest(searchTerm); },
-                autoSuggestDelay);
-        });
     }
 
-    autoSuggest(searchTerm) {
-        this.selection.style('display', 'block');
+    suggest(term) {
+        this.resultSelection.style('display', 'block');
 
         this.completers.forEach(completer => {
-            completer.get(searchTerm)
-        });
-    }
-
-    updateListSelection() {
-
-        var self = this;
-
-        $(this.resultListSelector + ' li').each(function(index) {
-
-            if (index == self.selectedIndex)
-                $(this).addClass('selected');
-            else
-                $(this).removeClass('selected');
+            completer.get(term)
         });
     }
 }
