@@ -84,11 +84,11 @@ class Results {
         console.log(options);
 
         this.results
-            .selectAll('p')
+            .selectAll('li')
             .data(options)
             .enter()
-            .append('p')
-            .text(option => option.text);
+            .append('li')
+            .html(option => option.text);
     }
 }
 
@@ -188,8 +188,13 @@ class AutoSuggestRegionController {
     }
 
     autoSuggest(searchTerm, resultListSelector) {
+        const selection = d3.select(resultListSelector);
+        selection.style('display', 'block');
+        selection.html('');
+
+
         this.completers.forEach(completer => {
-            const results = new Results(completer.type, d3.select(resultListSelector));
+            const results = new Results(completer.type, selection);
             results.handle(completer.get(searchTerm));
         });
     }
