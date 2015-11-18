@@ -75,6 +75,12 @@ class Results {
             .enter()
             .append('li')
             .html(option => option.text)
+            .on('mouseover', function() {
+                d3.select(this).classed('selected', true);
+            })
+            .on('mouseout', function() {
+                d3.select(this).classed('selected', false);
+            })
             .on('click', option => {
                 this.onSelect(option.text);
             });
