@@ -1,29 +1,17 @@
 
-class AutocompleteResult {
-    constructor(type, title) {
-        this.type = type;
-        this.title = title;
-    }
-
-    show(selection) {
-        selection
-            .append('p')
-            .text(this.title)
-    }
-}
-
 
 class Complete {
-    constructor(type, queryBuilder) {
+    constructor(type, queryBuilder, selection) {
         this.type = type;
         this.queryBuilder = queryBuilder;
+        this.results = new Results(type, selection);
     }
 
     get(query) {
         if (query == '') {
             return [];
         } else {
-            return $.getJSON(this.queryBuilder(query));
+            this.results.handle($.getJSON(this.queryBuilder(query)));
         }
     }
 }
@@ -81,8 +69,6 @@ class Results {
     }
 
     show(options) {
-        console.log(options);
-
         this.results
             .selectAll('li')
             .data(options)
@@ -110,18 +96,20 @@ class AutoSuggestRegionController {
         }
 
         const domain = 'odn.data.socrata.com';
+        const selection = d3.select(resultListSelector);
+        this.selection = selection;
 
         const datasetURL = autocompleteURL(domain, 'fpum-bjbr', 'name');
-        const datasetComplete = new Complete('Dataset', datasetURL);
+        const datasetComplete = new Complete('Dataset', datasetURL, selection);
 
         const regionURL = autocompleteURL(domain, '7g2b-8brv', 'autocomplete_name');
-        const regionComplete = new Complete('Region', regionURL);
+        const regionComplete = new Complete('Region', regionURL, selection);
 
         const publisherURL = autocompleteURL(domain, '8ae5-ghum', 'domain');
-        const publisherComplete = new Complete('Publisher', publisherURL);
+        const publisherComplete = new Complete('Publisher', publisherURL, selection);
 
         const categoryURL = autocompleteURL(domain, '864v-r7tf', 'category');
-        const categoryComplete = new Complete('Category', categoryURL);
+        const categoryComplete = new Complete('Category', categoryURL, selection);
 
         this.completers = [datasetComplete, regionComplete,
                            publisherComplete, categoryComplete];
@@ -182,20 +170,16 @@ class AutoSuggestRegionController {
             // Set new timer to auto suggest
             //
             this.timer = setTimeout(
-                () => { this.autoSuggest(searchTerm, resultListSelector); },
+                () => { this.autoSuggest(searchTerm); },
                 autoSuggestDelay);
         });
     }
 
-    autoSuggest(searchTerm, resultListSelector) {
-        const selection = d3.select(resultListSelector);
-        selection.style('display', 'block');
-        selection.html('');
-
+    autoSuggest(searchTerm) {
+        this.selection.style('display', 'block');
 
         this.completers.forEach(completer => {
-            const results = new Results(completer.type, selection);
-            results.handle(completer.get(searchTerm));
+            completer.get(searchTerm)
         });
     }
 
