@@ -89,53 +89,14 @@ class Results {
 
 
 class AutoSuggestRegionController {
-    constructor(inputSelector, resultSelector) {
-        const self = this;
+    constructor(inputSelection, resultSelection, completers) {
+        this.completers = completers;
+        this.resultSelection = resultSelection;
 
-        d3.select(inputSelector).on('input', function() {
+        const self = this;
+        inputSelection.on('input', function() {
             self.suggest(this.value);
         });
-
-        function autocompleteURL(domain, fxf, column) {
-            return query => `https://${domain}/views/${fxf}/columns/${column}/suggest/${query}?size=5`;
-        }
-
-        const domain = 'odn.data.socrata.com';
-        this.resultSelection = d3.select(resultSelector);
-
-        const datasetURL = autocompleteURL(domain, 'fpum-bjbr', 'name');
-        const datasetSelect = dataset => {
-            this.navigate(`/search?q=${dataset}`);
-        }
-        const datasetResults = new Results('Datasets', this.resultSelection, datasetSelect);
-        const datasetComplete = new Complete(datasetURL, datasetResults);
-
-        const regionURL = autocompleteURL(domain, '7g2b-8brv', 'autocomplete_name');
-        const regionSelect = region => {
-            this.navigate(`/${region.replace(/ /g, '_')}`);
-        }
-        const regionResults = new Results('Regions', this.resultSelection, regionSelect);
-        const regionComplete = new Complete(regionURL, regionResults);
-
-        const publisherURL = autocompleteURL(domain, '8ae5-ghum', 'domain');
-        const publisherSelect = publisher => {
-            this.navigate(`/search?domains=${publisher}`);
-        }
-        const publisherResults = new Results('Publishers', this.resultSelection, publisherSelect);
-        const publisherComplete = new Complete(publisherURL, publisherResults);
-
-        const categoryURL = autocompleteURL(domain, '864v-r7tf', 'category');
-        const categorySelect = category => {
-            this.navigate(`/search?categories=${category}`);
-        }
-        const categoryResults = new Results('Categories', this.resultSelection, categorySelect);
-        const categoryComplete = new Complete(categoryURL, categoryResults);
-
-        this.completers = [datasetComplete, regionComplete,
-                           publisherComplete, categoryComplete];
-
-        this.$form = $('form');
-        this.$query = $('q');
     }
 
     navigate(path) {
