@@ -1,39 +1,4 @@
 
-const selectByTopic = (() => {
-    const domain = 'odn.data.socrata.com';
-    const fxf = 'pfgp-ifph';
-
-    function urlFor(column) {
-        return query => `https://${domain}/views/${fxf}/columns/${column}/suggest/${query}?size=5`;
-    }
-
-    function navigate(path) {
-        window.location.href = path;
-    }
-
-    function complete(column) {
-        return (inputSelector, resultSelector) => {
-            const inputSelection = d3.select('.add-region-input');
-            const resultSelection = d3.select('.add-region-results');
-
-            const url = urlFor(column);
-            const select = region => navigate(`/search?q=${region}`);
-            const results = new Results('Regions with Data', resultSelection, select);
-            const complete = new Complete(url, results);
-
-            new AutoSuggestRegionController(inputSelection, resultSelection, [complete]);
-        }
-    }
-
-    const selects = new Map();
-    selects.set('population', complete('population'));
-    selects.set('earnings', complete('earnings'));
-    selects.set('education', complete('education'));
-    selects.set('occupations', complete('occupations'));
-    selects.set('cost_of_living', complete('rpp'));
-    selects.set('gdp', complete('gdp'));
-    return selects;
-})();
 
 
 class SearchPageController {
@@ -156,15 +121,7 @@ class SearchPageController {
 
         // Add location
         //
-        const inputSelector = '.add-region-input';
-        const resultSelector = '.add-region-results';
-        const defaultSuggest = selectByTopic.get('population');
-        const vector = this.params.vector;
-        if (selectByTopic.has(vector)) {
-            selectByTopic.get(vector)(inputSelector, resultSelector);
-        } else {
-            defaultSuggest(inputSelector, resultSelector);
-        }
+        sourceComplete('.add-region-input', '.add-region-results', this.params.vector).listen();
 
         $('.add-region .fa-plus').click(function() {
 
