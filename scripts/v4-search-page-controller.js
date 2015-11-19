@@ -2,27 +2,28 @@ class SearchPageController {
 
     constructor(params) {
 
-        this.MAP_INITIAL_CENTER = [37.1669, -95.9669];
-        this.MAP_INITIAL_ZOOM = 4.0;
-        
+        this.MAP_COLOR_SCALE = colorbrewer.RdYlBu[9],
+        this.MAP_INITIAL_ZOOM = 10.0;
+        this.MAP_RADIUS_SCALE = [500, 2000];
+
         this.params = params;
         this.fetching = false;
         this.fetchedAll = false;
         this.mostSimilar = [];
-    
+
         var self = this;
-    
+
         // Refine menus
         //
         $('.refine-link').mouseenter(function() {
-    
+
             $(this).addClass('refine-link-selected');
             $(this).children('span').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
             $(this).children('ul').slideDown(100);
         });
-    
+
         $('.refine-link').mouseleave(function() {
-    
+
             $(this).removeClass('refine-link-selected');
             $(this).children('span').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
             $(this).children('ul').slideUp(100);
@@ -167,25 +168,25 @@ class SearchPageController {
             self.navigate();
         });
     }
-    
+
     attachStandardsClickHandlers() {
-    
+
         var self = this;
-        
+
         $('#refine-menu-standards li').click(function() {
-    
+
             var standard = $(this).text().toLowerCase().trim();
-    
+
             self.toggleStandard(standard);
             self.navigate();
         });
     }
-    
+
     decrementPage() {
-    
+
         this.params.page--;
     }
-    
+
     // Cost of living
     //
     drawCostOfLivingData() {
@@ -366,14 +367,15 @@ class SearchPageController {
     
             controller.getEarningsData(regionIds)
                 .then(data => { 
-    
+
+                    this.drawEarningsMap();
                     this.drawEarningsChart(regionIds, data);
                     this.drawEarningsTable(regionIds, data);
                 })
                 .catch(error => console.error(error));
         });
     }
-    
+
     drawEarningsChart(regionIds, data) {
     
         var earnings = [];
@@ -449,7 +451,66 @@ class SearchPageController {
             vAxis : { format : 'currency' },
         });
     }
-    
+
+    drawEarningsMap() {
+
+        const controller = new ApiController();
+        var regionPlaces;
+        var placeMap = {};
+
+        controller.getPlaces()
+            .then(placesResponse => {
+
+                regionPlaces = this.getPlacesForRegion(placesResponse);
+                placesResponse.forEach(place => placeMap[place.id] = place); // init the place map
+
+                return controller.getEarningsByPlace()
+            })
+            .then(earningsResponse => {
+
+                // Get map data
+                //
+                const earningsPlaces = [];
+
+                earningsResponse.forEach(item => {
+
+                    if (item.median_earnings == 0)
+                        return;
+
+                    if (item.id in placeMap) {
+
+                        earningsPlaces.push({
+                            coordinates : placeMap[item.id].location.coordinates,
+                            id : item.id,
+                            name : item.name,
+                            value : parseInt(item.median_earnings),
+                        })
+                    }
+                });
+
+                earningsPlaces.sort((a, b) => b.value - a.value); // desc
+                const earnings = _.map(earningsPlaces, x => { return x.value });
+
+                // Init map
+                //
+                const radiusScale = this.getRadiusScaleLinear(earnings)
+                const colorScale = this.getColorScale(earnings)
+
+                const coordinates = regionPlaces[0].location.coordinates;
+                const center = [coordinates[1], coordinates[0]];
+                const map = L.map('map', { zoomControl : true });
+
+                L.tileLayer('https://a.tiles.mapbox.com/v3/socrata-apps.ibp0l899/{z}/{x}/{y}.png').addTo(map);
+                map.setView(center, this.MAP_INITIAL_ZOOM);
+
+                // Populate map
+                //
+                this.drawCirclesForPlaces(map, earningsPlaces, radiusScale, colorScale);
+                this.drawMarkersForPlaces(map, regionPlaces);
+            })
+            .catch(error => console.error(error));
+    }
+
     drawEarningsTable(regionIds, data) {
     
         var s = '';
@@ -814,20 +875,52 @@ class SearchPageController {
             vAxis : { format : '#.#%' },
         });
     }
-    
+
     drawPopulationMap() {
-    
-        var map = L.map(
-            'map',
-            {
-                zoomControl : false,
-            });
 
-        map.setView(this.MAP_INITIAL_CENTER, this.MAP_INITIAL_ZOOM);
+        const controller = new ApiController();
+        const places = [];
 
-        L.tileLayer('https://a.tiles.mapbox.com/v3/socrata-apps.ibp0l899/{z}/{x}/{y}.png').addTo(map);
+        controller.getPlaces()
+            .then(placesResponse => {
+
+                // Set place value to earnings data
+                //
+                placesResponse.forEach(item => {
+                    places.push({
+                        coordinates : item.location.coordinates,
+                        name : item.name,
+                        id : item.id,
+                        value : parseInt(item.population),
+                    })
+                });
+
+                // Get map data
+                //
+                const populatedPlaces = places.sort((a, b) => b.value - a.value);
+                const regionPlaces = this.getPlacesForRegion(placesResponse);
+                const populations = _.map(populatedPlaces, x => { return x.value });
+
+                // Init map
+                //
+                const radiusScale = this.getRadiusScaleLog(populations)
+                const colorScale = this.getColorScale(populations)
+
+                const coordinates = regionPlaces[0].location.coordinates;
+                const center = [coordinates[1], coordinates[0]];
+                const map = L.map('map', { zoomControl : true });
+
+                L.tileLayer('https://a.tiles.mapbox.com/v3/socrata-apps.ibp0l899/{z}/{x}/{y}.png').addTo(map);
+                map.setView(center, this.MAP_INITIAL_ZOOM);
+
+                // Populate map
+                //
+                this.drawCirclesForPlaces(map, populatedPlaces, radiusScale, colorScale);
+                this.drawMarkersForPlaces(map, regionPlaces);
+            })
+            .catch(error => console.error(error));
     }
-    
+
     // Places in region
     //
     drawPlacesInRegion() {
@@ -1094,7 +1187,111 @@ class SearchPageController {
     
         chart.draw(dataTable, options);
     }
-    
+
+    // Maps
+    //
+    getRadiusScaleLinear(values) {
+
+        return d3.scale.linear()
+            .domain(d3.extent(values))
+            .range(this.MAP_RADIUS_SCALE);
+    }
+
+    getRadiusScaleLog(values) {
+
+        return d3.scale.log()
+            .domain(d3.extent(values))
+            .range(this.MAP_RADIUS_SCALE);
+    }
+
+    getColorScale(values) {
+
+        const domain = (() => {
+
+            const step = 1.0 / this.MAP_COLOR_SCALE.length;
+
+            function quantile(value, index, list) {
+                return d3.quantile(values, (index + 1) * step);
+            }
+
+            return _.map(this.MAP_COLOR_SCALE.slice(1), quantile);
+        })();
+
+        return d3.scale.quantile()
+            .domain(domain)
+            .range(this.MAP_COLOR_SCALE);
+    }
+
+    drawCirclesForPlaces(map, places, radiusScale, colorScale) {
+
+        places.forEach(place => {
+
+            var feature = {
+                "type": "Feature",
+                "properties": {
+                    "name": place.name
+                },
+                "geometry": {
+                    "coordinates": place.coordinates,
+                    "type": "Point",
+                }
+            };
+
+            const options = {
+                fillColor: colorScale(place.value),
+                fillOpacity: 1,
+                opacity: 0,
+                radius: 8,
+                stroke: false,
+                weight: 0,
+            };
+
+            L.geoJson(
+                feature, 
+                {
+                    pointToLayer: (feature, latlng) => {
+                        return L.circle(latlng, radiusScale(place.value ), options);
+                    }
+                }
+            ).addTo(map);
+        });
+    }
+
+    drawMarkersForPlaces(map, places) {
+
+        places.forEach(place => {
+
+            var feature = {
+                "type": "Feature",
+                "properties": {
+                    "name": place.name
+                },
+                "geometry": {
+                    "coordinates": place.location.coordinates,
+                    "type": "Point",
+                }
+            };
+
+            L.geoJson(feature).addTo(map);
+        });
+    }
+
+    getPlacesForRegion(data) {
+
+        var places = [];
+
+        data.forEach(place => {
+
+            this.params.regions.forEach(region => {
+
+                if (place.id == region.id)
+                    places.push(place);
+            })
+        });
+
+        return places;
+    }
+
     // Paging
     //
     fetchNextPage() {
@@ -1180,7 +1377,7 @@ class SearchPageController {
             return this.getSearchPageForRegionsAndVectorUrl(null, this.params.vector, searchResults, this.getSearchQueryString());
         }
     }
-    
+
     getSearchResultsUrl() {
 
         return this.getSearchPageUrl(true);
