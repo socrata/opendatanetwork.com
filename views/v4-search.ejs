@@ -85,6 +85,7 @@
             <li<%- getSelectedVector(['occupations']) %>><a href="<%= getSearchPageUrl('occupations') %>">Occupations</a></li>
             <li<%- getSelectedVector(['gdp']) %>><a href="<%= getSearchPageUrl('gdp') %>">GDP</a></li>
             <li<%- getSelectedVector(['cost_of_living']) %>><a href="<%= getSearchPageUrl('cost_of_living') %>">Cost of Living</a></li>
+            <li<%- getSelectedVector(['health']) %>><a href="<%= getSearchPageUrl('health') %>">Health</a></li>
         </ul>
 
         <div class="charts">
@@ -119,6 +120,19 @@
             <h1>GDP</h1>
             <figure id="per-capita-gdp-chart"></figure>
             <figure id="per-capita-gdp-change-chart"></figure>
+
+<% } else if (params.vector == 'health') { %>
+
+            <h1>Health</h1>
+            <h2 style='font-weight: normal;'>RWJF County Health Rankings</h2>
+            <p>
+                The Robert Wood Johnson Foundation produces health rankings for states and counties. 
+                They explore many aspects of health including quality of life, health behaviors,
+                access to clinical care, socioeconomic factors, and environmental factors.
+            </p>
+
+            <table id="rwjf-county-health-rankings-table"></table>
+            <label>Data from RWJF County Health Rankings. <a href='http://www.countyhealthrankings.org/'>Source</a> | <a href='https://odn.data.socrata.com/d/6a3g-pbaa'>ODN Dataset</a> | <a href='https://dev.socrata.com/foundry/#/odn.data.socrata.com/6a3g-pbaa'>API</a></label>
 
 <% } else if (params.vector == 'cost_of_living') { %>
 

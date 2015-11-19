@@ -110,6 +110,7 @@ RenderController.prototype.renderSearchWithVectorPage = function(req, res) {
         (req.params.vector == 'education') ||
         (req.params.vector == 'occupations') ||
         (req.params.vector == 'gdp') ||
+        (req.params.vector == 'health') ||
         (req.params.vector == 'cost_of_living')) {
 
         RenderController.prototype.getSearchParameters(req, function(params) {
