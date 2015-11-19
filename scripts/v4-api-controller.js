@@ -13,6 +13,7 @@ class ApiController {
         this.educationUrl = 'https://federal.demo.socrata.com/resource/uf4m-5u8r.json?$where=';
         this.gdpUrl = 'https://federal.demo.socrata.com/resource/ks2j-vhr8.json?$where=';
         this.mostPopulousRegionTypeUrl = 'https://federal.demo.socrata.com/resource/eyae-8jfy?parent_id={0}&child_type={1}&$limit={2}&$order=child_population desc';
+        this.occupationsByPlaceUrl = 'https://federal.demo.socrata.com/resource/qfcm-fw3i.json?occupation={0}&type=place&$limit=50000&$where=population%20%3E%205000';
         this.occupationsUrl = 'https://federal.demo.socrata.com/resource/qfcm-fw3i.json?$order=occupation&$where=';
         this.parentStateUrl = 'https://federal.demo.socrata.com/resource/eyae-8jfy?parent_type=state&child_id={0}';
         this.placesUrl = 'https://federal.demo.socrata.com/resource/gm3u-gw57.json/?type=place&$limit=50000&$where=population%20%3E%205000';
@@ -98,6 +99,11 @@ class ApiController {
     getMetrosInState(stateId, limit = 10) {
 
         return d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'msa', limit));
+    }
+
+    getOccupationsByPlace(occupation) {
+
+        return d3.promise.json(this.occupationsByPlaceUrl.format(occupation));
     }
 
     getOccupationsData(regionIds) {

@@ -457,8 +457,8 @@ class SearchPageController {
         const controller = new ApiController();
         const placesPromise = controller.getPlaces();
         const earningsPromise = controller.getEarningsByPlace();
-        
-        return Promise.all([placesPromise, earningsPromise])
+
+        Promise.all([placesPromise, earningsPromise])
             .then(values => {
 
                 const placesResponse = values[0];
@@ -897,11 +897,79 @@ class SearchPageController {
             var controller = new ApiController();
 
             controller.getOccupationsData(regionIds)
-                .then(data => this.drawOccupationsTable(regionIds, data))
+                .then(data => {
+
+                    this.drawOccupationsMap();
+                    this.drawOccupationsTable(regionIds, data)
+                })
                 .catch(error => console.error(error));
         });
     }
     
+    drawOccupationsMap() {
+
+        const controller = new ApiController();
+        const placesPromise = controller.getPlaces();
+        const occupationsPromise = controller.getOccupationsByPlace('Management'); // TODO: take from the dropdown when we have it.
+
+        Promise.all([placesPromise, occupationsPromise])
+            .then(values => {
+
+                const placesResponse = values[0];
+                const occupationsResponse = values[1];
+
+                // Get the geo coordinates for each region
+                //
+                const regionPlaces = this.getPlacesForRegion(placesResponse);
+
+                // Create a place lookup table
+                //
+                const placeMap = {};
+                placesResponse.forEach(place => placeMap[place.id] = place); // init the place map
+
+                // Get map data
+                //
+                const occupationsPlaces = [];
+
+                occupationsResponse.forEach(item => {
+
+                    if (item.percent_employed == 0)
+                        return;
+
+                    if (item.id in placeMap) {
+
+                        occupationsPlaces.push({
+                            coordinates : placeMap[item.id].location.coordinates,
+                            id : item.id,
+                            name : item.name,
+                            value : parseInt(item.percent_employed),
+                        })
+                    }
+                });
+
+                occupationsPlaces.sort((a, b) => b.value - a.value); // desc
+                const earnings = _.map(occupationsPlaces, x => { return x.value });
+
+                // Init map
+                //
+                const radiusScale = this.getRadiusScaleLinear(earnings)
+                const colorScale = this.getColorScale(earnings)
+
+                const coordinates = regionPlaces[0].location.coordinates;
+                const center = [coordinates[1], coordinates[0]];
+                const map = L.map('map', { zoomControl : true });
+
+                L.tileLayer('https://a.tiles.mapbox.com/v3/socrata-apps.ibp0l899/{z}/{x}/{y}.png').addTo(map);
+                map.setView(center, this.MAP_INITIAL_ZOOM);
+
+                // Populate map
+                //
+                this.drawCirclesForPlaces(map, occupationsPlaces, radiusScale, colorScale);
+                this.drawMarkersForPlaces(map, regionPlaces);
+            })
+            .catch(error => console.error(error));
+    }
+
     drawOccupationsTable(regionIds, data) {
     
         var s = '<tr><th></th>';
