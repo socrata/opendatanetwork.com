@@ -29,7 +29,7 @@ $(document).ready(function() {
             case 'health':
                 searchPageController.drawHealthData();
                 break;
-                
+
             case 'education':
                 searchPageController.drawEducationData();
                 break;
@@ -41,11 +41,11 @@ $(document).ready(function() {
             case 'cost_of_living':
                 searchPageController.drawCostOfLivingData();
                 break;
-                
+
             case 'gdp':
                 searchPageController.drawGdpData();
                 break;
-                
+
             default:
                 searchPageController.drawPopulationData();
                 break;
