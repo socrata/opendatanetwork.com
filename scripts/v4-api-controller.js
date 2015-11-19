@@ -2,7 +2,7 @@ class ApiController {
 
     constructor() {
 
-        this.autoCompleteNameSuggestUrl = 'https://federal.demo.socrata.com/views/7g2b-8brv/columns/autocomplete_name/suggest/{0}?size=10&fuzz=0';
+        this.autoCompleteNameSuggestUrl = 'https://odn.data.socrata.com/views/7g2b-8brv/columns/autocomplete_name/suggest/{0}?size=10&fuzz=0';
         this.categoriesUrl = '/categories.json';
         this.childRegionsUrl = 'https://federal.demo.socrata.com/resource/eyae-8jfy?parent_id={0}&$limit={1}';
         this.costOfLivingUrl = 'https://federal.demo.socrata.com/resource/hpnf-gnfu.json?$order=name&$where=';
@@ -17,6 +17,10 @@ class ApiController {
         this.placesUrl = 'https://federal.demo.socrata.com/resource/gm3u-gw57.json/?type=place&$limit=50000&$where=population%20%3E%205000';
         this.populationUrl = 'https://federal.demo.socrata.com/resource/e3rd-zzmr.json?$order=year,name&$where=';
         this.similarRegionsUrl = 'https://socrata-peers.herokuapp.com/peers.json?vectors=population_change,earnings,occupation,education,population&n=10&id={0}';
+        this.healthDataUrls = {
+            rwjf_county_health_rankings_2015: "https://odn.data.socrata.com/resource/7ayp-utp2.json?$where=",
+            cdc_brfss_prevalence_2011_2013: "https://odn.data.socrata.com/resource/n4rt-3rmd.json?$where="
+        }
     }
 
     // Promises
@@ -59,7 +63,7 @@ class ApiController {
 
         return d3.promise.json(url + encodeURI(segments.join(' OR ')));
     }
-
+    
     getDomains() {
 
         return d3.promise.json(this.domainsUrl);
@@ -113,5 +117,10 @@ class ApiController {
     getSimilarRegions(regionId) {
 
         return d3.promise.json(this.similarRegionsUrl.format(regionId));
+    }
+
+    // health data retrievers
+    getHealthRwjfChrData(regionIds) {
+        return this.getData(this.healthDataUrls.rwjf_county_health_rankings_2015, regionIds);
     }
 }
