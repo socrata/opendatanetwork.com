@@ -657,10 +657,78 @@ class SearchPageController {
             var controller = new ApiController();
 
             controller.getEducationData(regionIds)
-                .then(data => this.drawEducationTable(regionIds, data))
+                .then(data => {
+
+                    this.drawEducationMap();
+                    this.drawEducationTable(regionIds, data)
+                })
                 .catch(error => console.error(error));
         });
     }
+
+    drawEducationMap() {
+
+        const controller = new ApiController();
+        const placesPromise = controller.getPlaces();
+        const educationPromise = controller.getEducationByPlace();
+        
+        return Promise.all([placesPromise, educationPromise])
+            .then(values => {
+
+                const placesResponse = values[0];
+                const educationResponse = values[1];
+
+                // Get the geo coordinates for each region
+                //
+                const regionPlaces = this.getPlacesForRegion(placesResponse);
+
+                // Create a place lookup table
+                //
+                const placeMap = {};
+                placesResponse.forEach(place => placeMap[place.id] = place); // init the place map
+
+                // Get map data
+                //
+                const educationPlaces = [];
+
+                educationResponse.forEach(item => {
+
+                    if (item.percent_bachelors_degree_or_higher == 0)
+                        return;
+
+                    if (item.id in placeMap) {
+
+                        educationPlaces.push({
+                            coordinates : placeMap[item.id].location.coordinates,
+                            id : item.id,
+                            name : item.name,
+                            value : parseInt(item.percent_bachelors_degree_or_higher),
+                        })
+                    }
+                });
+
+                educationPlaces.sort((a, b) => b.value - a.value); // desc
+                const earnings = _.map(educationPlaces, x => { return x.value });
+
+                // Init map
+                //
+                const radiusScale = this.getRadiusScaleLinear(earnings)
+                const colorScale = this.getColorScale(earnings)
+
+                const coordinates = regionPlaces[0].location.coordinates;
+                const center = [coordinates[1], coordinates[0]];
+                const map = L.map('map', { zoomControl : true });
+
+                L.tileLayer('https://a.tiles.mapbox.com/v3/socrata-apps.ibp0l899/{z}/{x}/{y}.png').addTo(map);
+                map.setView(center, this.MAP_INITIAL_ZOOM);
+
+                // Populate map
+                //
+                this.drawCirclesForPlaces(map, educationPlaces, radiusScale, colorScale);
+                this.drawMarkersForPlaces(map, regionPlaces);
+            })
+            .catch(error => console.error(error));
+        }
 
     drawEducationTable(regionIds, data) {
 

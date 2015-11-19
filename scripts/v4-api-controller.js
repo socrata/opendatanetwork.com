@@ -7,8 +7,9 @@ class ApiController {
         this.childRegionsUrl = 'https://federal.demo.socrata.com/resource/eyae-8jfy?parent_id={0}&$limit={1}';
         this.costOfLivingUrl = 'https://federal.demo.socrata.com/resource/hpnf-gnfu.json?$order=name&$where=';
         this.domainsUrl = 'https://api.us.socrata.com/api/catalog/v1/domains';
-        this.earningsByPlaceUrl = 'https://federal.demo.socrata.com/resource/wmwh-4vak.json/?type=place&$limit=50000&$where=population%20%3E%205000'
+        this.earningsByPlaceUrl = 'https://federal.demo.socrata.com/resource/wmwh-4vak.json/?type=place&$limit=50000&$where=population%20%3E%205000';
         this.earningsUrl = 'https://federal.demo.socrata.com/resource/wmwh-4vak.json?$where=';
+        this.educationByPlaceUrl = 'https://federal.demo.socrata.com/resource/uf4m-5u8r.json?type=place&$limit=50000&$where=population%20%3E%205000';
         this.educationUrl = 'https://federal.demo.socrata.com/resource/uf4m-5u8r.json?$where=';
         this.gdpUrl = 'https://federal.demo.socrata.com/resource/ks2j-vhr8.json?$where=';
         this.mostPopulousRegionTypeUrl = 'https://federal.demo.socrata.com/resource/eyae-8jfy?parent_id={0}&child_type={1}&$limit={2}&$order=child_population desc';
@@ -77,6 +78,11 @@ class ApiController {
     getEarningsData(regionIds) {
 
         return this.getData(this.earningsUrl, regionIds);
+    }
+
+    getEducationByPlace() {
+
+        return d3.promise.json(this.educationByPlaceUrl);
     }
 
     getEducationData(regionIds) {
