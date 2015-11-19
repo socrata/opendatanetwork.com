@@ -107,11 +107,15 @@ class AutoSuggestRegionController {
     }
 
     suggest(term) {
-        this.resultSelection.style('display', 'block');
+        if (term == '') {
+            this.resultSelection.style('display', 'none');
+        } else {
+            this.resultSelection.style('display', 'block');
 
-        this.completers.forEach(completer => {
-            completer.get(term)
-        });
+            this.completers.forEach(completer => {
+                completer.get(term)
+            });
+        }
     }
 }
 
