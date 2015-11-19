@@ -455,18 +455,23 @@ class SearchPageController {
     drawEarningsMap() {
 
         const controller = new ApiController();
-        var regionPlaces;
-        var placeMap = {};
+        const placesPromise = controller.getPlaces();
+        const earningsPromise = controller.getEarningsByPlace();
+        
+        return Promise.all([placesPromise, earningsPromise])
+            .then(values => {
 
-        controller.getPlaces()
-            .then(placesResponse => {
+                const placesResponse = values[0];
+                const earningsResponse = values[1];
 
-                regionPlaces = this.getPlacesForRegion(placesResponse);
+                // Get the geo coordinates for each region
+                //
+                const regionPlaces = this.getPlacesForRegion(placesResponse);
+
+                // Create a place lookup table
+                //
+                const placeMap = {};
                 placesResponse.forEach(place => placeMap[place.id] = place); // init the place map
-
-                return controller.getEarningsByPlace()
-            })
-            .then(earningsResponse => {
 
                 // Get map data
                 //
@@ -512,15 +517,13 @@ class SearchPageController {
     }
 
     drawEarningsTable(regionIds, data) {
-    
-        var s = '';
-    
-        s += '<tr><th></th>';
-    
+
+        var s = '<tr><th></th>';
+
         for (var i = 0; i < regionIds.length; i++) {
             s += '<th>' + this.params.regions[i].name + '</th>';
         }
-    
+
         // Median earnings all
         //
         s += '</tr><tr><td>Median Earnings (All Workers)</td>';
@@ -528,28 +531,28 @@ class SearchPageController {
         for (var i = 0; i < regionIds.length; i++) {
             s += '<td>' + numeral(data[i].median_earnings).format('$0,0') + '</td>';
         }
-    
+
         // Median earnings female
         //
         s += '</tr><tr><td>Median Female Earnings (Full Time)</td>';
-    
+
         for (var i = 0; i < regionIds.length; i++) {
             s += '<td>' + numeral(data[i].female_full_time_median_earnings).format('$0,0') + '</td>';
         }
-    
+
         // Median earnings male
         //
         s += '</tr><tr><td>Median Male Earnings (Full Time)</td>';
-    
+
         for (var i = 0; i < regionIds.length; i++) {
             s += '<td>' + numeral(data[i].male_full_time_median_earnings).format('$0,0') + '</td>';
         }
-    
+
         s += '</tr>';
-    
+
         $('#earnings-table').html(s);
     }
-    
+
     // Education
     //
     drawEducationData() {
@@ -564,14 +567,12 @@ class SearchPageController {
                 .catch(error => console.error(error));
         });
     }
-    
+
     drawEducationTable(regionIds, data) {
-    
-        var s = '';
-    
+
         // Header
         //
-        s += '<tr><th></th>';
+        var s = '<tr><th></th>';
     
         for (var i = 0; i < regionIds.length; i++) {
             s += '<th colspan=\'2\'>' + this.params.regions[i].name + '</th>';
@@ -1085,12 +1086,11 @@ class SearchPageController {
 
     drawPlacesInRegionList(listId, data, maxCount = 5) {
 
-        var s = '';
-
         if (data.length == 0)
             return;
 
         var count = 0;
+        var s = '';
 
         for (var i = 0; i < data.length; i++) {
 
@@ -1140,12 +1140,11 @@ class SearchPageController {
 
     drawSimilarRegionsList(data, onClickRegion) {
 
-        var s = '';
-
         if (data.most_similar == undefined)
             return;
 
         var count = 0;
+        var s = '';
 
         for (var i = 0; i < data.most_similar.length; i++) {
 
