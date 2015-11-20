@@ -1,4 +1,9 @@
 module.exports = function(grunt) {
+    var baseScripts = [
+        'compiled/v4-app.js',
+        'compiled/v4-api-controller.js',
+        'compiled/v4-auto-suggest-region-controller.js'
+    ];
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -68,18 +73,12 @@ module.exports = function(grunt) {
                 sourceMapStyle: 'embed'
             },
             home: {
-                src: ['compiled/v4-app.js',
-                      'compiled/v4-api-controller.js',
-                      'compiled/v4-auto-suggest-region-controller.js',
-                      'compiled/v4-home.js'],
+                src: baseScripts.concat(['compiled/v4-home.js']),
                 dest: 'concat/home.js'
             },
             search: {
-                src: ['compiled/v4-app.js',
-                      'compiled/v4-api-controller.js',
-                      'compiled/v4-auto-suggest-region-controller.js',
-                      'compiled/v4-search-page-controller.js',
-                      'compiled/v4-search.js'],
+                src: baseScripts.concat(['compiled/v4-search-page-controller.js',
+                                         'compiled/v4-search.js']),
                 dest: 'concat/search.js'
             }
         },
