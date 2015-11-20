@@ -1,15 +1,15 @@
 module.exports = function(grunt) {
     var baseScripts = [
-        'compiled/v4-app.js',
-        'compiled/v4-api-controller.js',
-        'compiled/constants.js',
-        'compiled/region-lookup.js',
-        'compiled/autocomplete.js',
-        'compiled/multi-complete.js',
-        'compiled/source-complete.js'
+        'scripts/v4-app.js',
+        'scripts/v4-api-controller.js',
+        'scripts/constants.js',
+        'scripts/region-lookup.js',
+        'scripts/autocomplete.js',
+        'scripts/multi-complete.js',
+        'scripts/source-complete.js'
     ];
 
-    grunt.initConfig({
+    var config = {
         pkg: grunt.file.readJSON('package.json'),
         project: {
             scripts: 'scripts',
@@ -56,42 +56,61 @@ module.exports = function(grunt) {
                 }]
             }
         },
+        concat: {
+            options: {
+                sourceMap: true,
+                sourceMapStyle: 'embed',
+                process: function(src, filepath) {
+                    return '// ' + filepath + '\n' + src;
+                }
+            },
+            home: {
+                src: baseScripts.concat(['scripts/v4-home.js']),
+                dest: 'lib/home.es6.js'
+            },
+            search: {
+                src: baseScripts.concat(['scripts/v4-search-page-controller.js',
+                                         'scripts/v4-search.js']),
+                dest: 'lib/search.es6.js'
+            }
+        },
         babel: {
             options: {
-                sourceMap: 'both',
+                sourceMap: true,
                 presets: ['es2015']
             },
-            build: {
-                files: [ {
-                    expand: true,
-                    cwd: '<%= project.scripts %>',
-                    src: ['*.js'],
-                    dest: 'compiled',
-                    ext: '.js'
-                }]
+            home: {
+                src: 'lib/home.es6.js',
+                dest: 'lib/home.js'
+            },
+            search: {
+                src: 'lib/search.es6.js',
+                dest: 'lib/search.js'
             }
         },
         uglify: {
             options: {
                 sourceMap: true,
-                sourceMapName: function(name) {
-                    console.log(name);
-                },
                 mangle: false
             },
             home: {
-                src: baseScripts.concat(['compiled/v4-home.js']),
+                options: {
+                    sourceMapIn: 'lib/home.js.map'
+                },
+                src: 'lib/home.js',
                 dest: 'lib/home.min.js'
             },
             search: {
-                src: baseScripts.concat(['compiled/v4-search-page-controller.js',
-                                         'compiled/v4-search.js']),
+                options: {
+                    sourceMapIn: 'lib/search.js.map'
+                },
+                src: 'lib/search.js',
                 dest: 'lib/search.min.js'
             }
         }
-    });
+    };
 
+    grunt.initConfig(config);
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
-
-    grunt.registerTask('default', ['sass', 'babel', 'uglify']);
+    grunt.registerTask('default', ['sass', 'concat', 'babel', 'uglify']);
 };

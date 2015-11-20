@@ -8,6 +8,5 @@ node_modules
 *.map
 
 # grunt build process
-compiled/
-concat/
+lib/
 
