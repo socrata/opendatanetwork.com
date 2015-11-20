@@ -1,3 +1,4 @@
+
 $(document).ready(function() {
 
     // Search page controller
@@ -6,11 +7,7 @@ $(document).ready(function() {
 
     // Main search box
     //
-    new AutoSuggestRegionController('#q', '.region-list', function(region) {
-
-        searchPageController.setAutoSuggestedRegion(region, true);
-        searchPageController.navigate();
-    });
+    multiComplete('#q', '.region-list').listen();
 
     // Chart column
     //
