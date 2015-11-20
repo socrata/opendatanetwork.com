@@ -36,7 +36,7 @@ a:hover
     text-decoration: none;
 }
 
-.cb 
+.cb
 {
     clear: both;
 }
@@ -48,7 +48,7 @@ a:hover
 
 /* Header */
 
-header 
+header
 {
     background-color: $black-text-color;
     border-bottom: 1px solid $black-text-color;
@@ -79,7 +79,7 @@ header form
     width: 100%;
 }
 
-header .fa-search 
+header .fa-search
 {
     background-color: $orange-color;
     color: white;
@@ -120,11 +120,11 @@ footer
     text-align: left;
 }
 
-/* Region auto complete menu */
+/* Autocomplete */
 
 .region-list
 {
-    line-height: 40px;
+    line-height: 2em;
     border: 1px solid $gray-text-color;
     list-style-type: none;
     margin: 0;
@@ -133,21 +133,31 @@ footer
     z-index: 100;
 }
 
-.region-list li
+.autocomplete-results-container
 {
     background-color: white;
-    cursor: pointer;
-    font-size: 14px;
-    padding: 0 30px;
-}
 
-.region-list li.selected
-{
-    background-color: $blue-background-color;
-    color: white;
-}
+    .autocomplete-results-title
+    {
+        color: black;
+        font-size: 15px;
+        font-weight: bold;
+        padding: 0 1em;
+        margin: 0;
+    }
 
-/* health vector overrides */
-.charts-column #rwjf-county-health-rankings-table td.align-left{
-    text-align: left;
+    .autocomplete-results
+    {
+        li
+        {
+            font-size: 13px;
+            padding: 0 2em;
+        }
+
+        li.selected
+        {
+            background-color: $blue-background-color;
+            color: white;
+        }
+    }
 }

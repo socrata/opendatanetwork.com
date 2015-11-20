@@ -1,6 +1,6 @@
-$(document).ready(function() {
 
-    // Slider 
+$(document).ready(function() {
+    // Slider
     //
     $('.slider').slick({
         arrows: false,
@@ -10,14 +10,9 @@ $(document).ready(function() {
         slidesToShow: 5,
     });
 
-    // Region controller
+    // Autocomplete
     //
-    new AutoSuggestRegionController('#q', '.region-list', function(region) {
-
-        $('#form').attr("action", region.replace(/ /g, '_'));
-        $('#q').val('');
-        $('#form').submit();
-    });
+    multiComplete('#q', '.region-list').listen();
 
     // Search button
     //
@@ -29,7 +24,7 @@ $(document).ready(function() {
     //
     $('#menu-item-communities').mouseenter(function() {
 
-        $('#menu-communities').slideToggle(100); 
+        $('#menu-communities').slideToggle(100);
         $('#menu-item-communities').addClass('selected');
 
         searchMenu.hideOptionsMenu();
@@ -41,3 +36,4 @@ $(document).ready(function() {
         $('#menu-item-communities').removeClass('selected');
     });
 });
+
