@@ -12,7 +12,7 @@ class AutoSuggestRegionController {
 
         // Keyboard event
         //
-        $(inputTextSelector).keyup((e) => {
+        $(inputTextSelector).keydown((e) => {
 
             if (e.keyCode == 38) { // up
 
@@ -31,7 +31,7 @@ class AutoSuggestRegionController {
                 return;
             }
             else if (e.keyCode == 13) { // enter
-    
+
                 if ((this.selectedIndex == -1) || (this.selectedIndex >= this.options.length))
                     return;
 

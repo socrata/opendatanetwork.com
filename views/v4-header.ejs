@@ -7,6 +7,7 @@
     <meta name="keywords" content="open data, government data, housing data, restaurant inspecitions data, transit data, health data, crime data, permit data" />
     <title>Find the data you need to power your business, app, or analysis from across the open data ecosystem.</title>
     <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,800" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Lato:400,700,900" rel="stylesheet" type="text/css">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="/styles/v4-app.min.css" rel="stylesheet">
 <% css.forEach(function(path) { -%>
@@ -21,25 +22,3 @@
 <% }}); -%>
 </head>
 <body>
-<header>
-    <form method="GET" action="<%= searchPath %>" id="form" autocomplete="off">
-        <a class="logo" href="/" title="Open Data Network"></a>
-        <a class="fa fa-search search-link"></a>
-        <span>
-            <input type="text" placeholder="Search the Open Data Network" name="q" id="q" value="<%= params.q %>">
-            <% if (params.categories.length > 0) { %> 
-            <input type="hidden" name="categories" value="<%= params.categories.join(',') %>">
-            <% } %>
-            <% if (params.domains.length > 0) { %> 
-            <input type="hidden" name="domains" value="<%= params.domains.join(',') %>">
-            <% } %>
-            <% if (params.standards.length > 0) { %> 
-            <input type="hidden" name="standards" value="<%= params.standards.join(',') %>">
-            <% } %>
-            <% if (params.debug) { %> 
-            <input type="hidden" name="debug">
-            <% } %>
-            <ul class="region-list" style="display:none"></ul>
-        </span>
-    </form>
-</header>

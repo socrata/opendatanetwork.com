@@ -19,6 +19,12 @@ $(document).ready(function() {
         $('#form').submit();
     });
 
+    // Search button
+    //
+    $('#search-button').click(() => {
+        $('#form').submit();
+    });
+
     // Communities menu
     //
     $('#menu-item-communities').mouseenter(function() {
