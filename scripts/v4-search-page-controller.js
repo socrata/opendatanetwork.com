@@ -122,10 +122,13 @@ class SearchPageController {
         // Add location
         //
         function selectRegion(autocompleteName) {
-
-
-            this.setAutoSuggestedRegion(region, false);
-            this.navigate();
+            RegionLookup.byAutocompleteName(autocompleteName)
+                .then(region => {
+                    self.setAutoSuggestedRegion(region.name, false);
+                    self.navigate();
+                }, error => {
+                    throw error;
+                });
         }
 
         sourceComplete('.add-region-input',
