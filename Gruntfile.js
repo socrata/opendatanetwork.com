@@ -57,9 +57,30 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: '<%= project.scripts %>',
                     src: ['*.js'],
-                    dest: '<%= project.scripts %>/es5',
+                    dest: 'compiled',
                     ext: '.js'
                 }]
+            }
+        },
+        concat: {
+            options: {
+                sourceMap: true,
+                sourceMapStyle: 'embed'
+            },
+            home: {
+                src: ['compiled/v4-app.js',
+                      'compiled/v4-api-controller.js',
+                      'compiled/v4-auto-suggest-region-controller.js',
+                      'compiled/v4-home.js'],
+                dest: 'concat/home.js'
+            },
+            search: {
+                src: ['compiled/v4-app.js',
+                      'compiled/v4-api-controller.js',
+                      'compiled/v4-auto-suggest-region-controller.js',
+                      'compiled/v4-search-page-controller.js',
+                      'compiled/v4-search.js'],
+                dest: 'concat/search.js'
             }
         },
         uglify: {
@@ -69,9 +90,9 @@ module.exports = function(grunt) {
                 },
                 files: [{
                     expand: true,
-                    cwd: '<%= project.scripts %>/es5',
+                    cwd: 'concat',
                     src: ['*.js'],
-                    dest: '<%= project.scripts %>/compressed',
+                    dest: 'lib',
                     ext: '.min.js'
                 }]
             }
@@ -80,5 +101,5 @@ module.exports = function(grunt) {
 
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
-    grunt.registerTask('default', ['sass', 'babel', 'uglify']);
+    grunt.registerTask('default', ['sass', 'babel', 'concat', 'uglify']);
 };

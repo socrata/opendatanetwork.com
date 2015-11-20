@@ -13,7 +13,6 @@
     <link href="<%= path %>" rel="stylesheet">
 <% }); -%>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="/scripts/v4-app.js"></script>
 <% scripts.forEach(function(o) { if (typeof o == 'string') { -%>
     <script src="<%= o %>"></script>
 <% } else { -%>
@@ -27,16 +26,16 @@
         <a class="fa fa-search search-link"></a>
         <span>
             <input type="text" placeholder="Search the Open Data Network" name="q" id="q" value="<%= params.q %>">
-            <% if (params.categories.length > 0) { %> 
+            <% if (params.categories.length > 0) { %>
             <input type="hidden" name="categories" value="<%= params.categories.join(',') %>">
             <% } %>
-            <% if (params.domains.length > 0) { %> 
+            <% if (params.domains.length > 0) { %>
             <input type="hidden" name="domains" value="<%= params.domains.join(',') %>">
             <% } %>
-            <% if (params.standards.length > 0) { %> 
+            <% if (params.standards.length > 0) { %>
             <input type="hidden" name="standards" value="<%= params.standards.join(',') %>">
             <% } %>
-            <% if (params.debug) { %> 
+            <% if (params.debug) { %>
             <input type="hidden" name="debug">
             <% } %>
             <ul class="region-list" style="display:none"></ul>

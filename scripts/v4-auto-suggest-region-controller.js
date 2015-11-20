@@ -183,13 +183,13 @@ const sourceComplete = (() => {
         window.location.href = path;
     }
 
-    return (inputSelector, resultSelector, name) => {
+    return (inputSelector, resultSelector, name, select) => {
         const inputSelection = d3.select(inputSelector);
         const resultSelection = d3.select(resultSelector);
 
         const column = nameToColumn.has(name) ? nameToColumn.get(name) : defaultColumn;
         const url = urlFor(column);
-        const select = region => navigate(`/${region.replace(/ /g, '_')}`);
+        // const select = region => navigate(`/${region.replace(/ /g, '_')}`);
         const results = new Results('Regions with Data', resultSelection, select);
         const complete = new Complete(url, results);
 

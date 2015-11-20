@@ -40,7 +40,7 @@
     <% if (params.q.length > 0) { %>
         <strong><%= params.q %></strong>
     <% } %>
-    
+
     <ul class="tokens">
     <% params.regions.forEach(function(region) { %>
         <li class="region-token"><%= region.name %> <a class="fa fa-times-circle"></a></li>
@@ -141,8 +141,8 @@
         <div class="controls">
             <h1>Compare this Data</h1>
             <div class="add-region">
-                <i class="fa fa-plus"></i><input type="text" placeholder="Add Location">
-                <ul style="display: none;"></ul>
+                <i class="fa fa-plus"></i><input class="add-region-input" type="text" placeholder="Add Location">
+                <ul class="add-region-results" style="display: none;"></ul>
             </div>
             <ul id="similar-regions" style="display:none"></ul>
             <h2 id="places-in-region-header-0" class="places-in-region-header" style="display:none"></h2>
@@ -183,7 +183,7 @@ function getSearchPageUrl(vector) {
 
         url += regionNames.join('_vs_');
 
-        if (vector) 
+        if (vector)
             url += '/' + vector;
     }
     else {
@@ -222,10 +222,10 @@ function getSelectedVector(vectors) {
 
     for (var i in vectors) {
 
-        if (vectors[i] == params.vector) 
-            return ' class="selected"'; 
+        if (vectors[i] == params.vector)
+            return ' class="selected"';
     }
 
-    return ''; 
+    return '';
 }
 %>

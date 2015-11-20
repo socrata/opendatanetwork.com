@@ -48,11 +48,11 @@ class ApiController {
 
         return d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'county', limit));
     }
-    
+
     getData(url, regionIds) {
 
         var segments = regionIds.map(function(regionId) {
-            return 'id=\'' + regionId + '\''; 
+            return 'id=\'' + regionId + '\'';
         });
 
         return d3.promise.json(url + encodeURI(segments.join(' OR ')));

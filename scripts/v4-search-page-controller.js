@@ -121,7 +121,17 @@ class SearchPageController {
 
         // Add location
         //
-        sourceComplete('.add-region-input', '.add-region-results', this.params.vector).listen();
+        function selectRegion(autocompleteName) {
+
+
+            this.setAutoSuggestedRegion(region, false);
+            this.navigate();
+        }
+
+        sourceComplete('.add-region-input',
+                       '.add-region-results',
+                       this.params.vector,
+                       selectRegion).listen();
 
         $('.add-region .fa-plus').click(function() {
 

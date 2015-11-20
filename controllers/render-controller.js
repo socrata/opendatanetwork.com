@@ -44,7 +44,7 @@ RenderController.prototype.renderHomePage = function(req, res) {
                 // Render page
                 //
                 res.render(
-                    'v4-home.ejs', 
+                    'v4-home.ejs',
                     {
                         allCategoryResults : allCategoryResults,
                         css : [
@@ -53,16 +53,14 @@ RenderController.prototype.renderHomePage = function(req, res) {
                         ],
                         params : params,
                         scripts : [
-                            '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js', 
+                            '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js',
                             {
                                 'url' : '//fast.wistia.net/static/popover-v1.js',
                                 'charset' : 'ISO-8859-1'
                             },
                             '//d3js.org/d3.v3.min.js',
                             '/scripts/third-party/d3.promise.js',
-                            '/scripts/es5/v4-api-controller.js', // TODO: min
-                            '/scripts/es5/v4-auto-suggest-region-controller.js', // TODO: min
-                            '/scripts/es5/v4-home.js' // TODO: min
+                            '/lib/home.min.js'
                         ],
                         searchPath : '/search'
                     });
@@ -118,7 +116,7 @@ RenderController.prototype.renderSearchWithVectorPage = function(req, res) {
     }
     else {
 
-        renderErrorPage(req, res); 
+        renderErrorPage(req, res);
     }
 };
 
@@ -129,14 +127,14 @@ RenderController.prototype.renderSearchResults = function(req, res) {
     RenderController.prototype.getSearchParameters(req, function(params) {
 
         apiController.searchDatasets(params, function(searchResults) {
-    
+
             if (searchResults.results.length == 0) {
-    
+
                 res.status(204);
                 res.end();
                 return;
             }
-    
+
             res.render(
                 (params.regions.length == 0) ? 'v4-search-results-regular.ejs' : 'v4-search-results-compact.ejs',
                 {
@@ -158,15 +156,15 @@ function _renderSearchPage(req, res, params) {
         apiController.getCategories(5, function(categoryResults) {
 
             categoryController.attachCategoryMetadata(categoryResults, function(categoryResults) {
-    
+
                 apiController.getDomains(5, function(domainResults) {
-            
+
                     apiController.searchDatasets(
-                        params, 
+                        params,
                         function(results) {
-            
+
                             res.render(
-                                'v4-search.ejs', 
+                                'v4-search.ejs',
                                 {
                                     categoryResults : categoryResults,
                                     css : [
@@ -181,19 +179,16 @@ function _renderSearchPage(req, res, params) {
                                         '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
                                         '//d3js.org/d3.v3.min.js',
                                         '/scripts/third-party/d3.promise.js',
-                                        '/scripts/es5/v4-api-controller.js', // TODO: min
-                                        '/scripts/es5/v4-auto-suggest-region-controller.js', // TODO: min
-                                        '/scripts/es5/v4-search-page-controller.js', // TODO: min
-                                        '/scripts/es5/v4-search.js', // TODO: min
+                                        '/lib/search.min.js'
                                     ],
                                     searchDatasetsUrl : searchDatasetsUrl,
                                     searchPath : req.path,
                                     searchResults : results
                                 });
-                        }, 
+                        },
                         function() {
-            
-                            renderErrorPage(req, res); 
+
+                            renderErrorPage(req, res);
                         });
                 });
             });
@@ -254,7 +249,7 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
 
 function getNormalizedArrayFromDelimitedString(s) {
 
-    if (s == null) 
+    if (s == null)
         return [];
 
     var parts = s.split(',');
