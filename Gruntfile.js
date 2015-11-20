@@ -2,9 +2,11 @@ module.exports = function(grunt) {
     var baseScripts = [
         'compiled/v4-app.js',
         'compiled/v4-api-controller.js',
-        'compiled/v4-auto-suggest-region-controller.js',
         'compiled/constants.js',
-        'compiled/region-lookup.js'
+        'compiled/region-lookup.js',
+        'compiled/autocomplete.js',
+        'compiled/multi-complete.js',
+        'compiled/source-complete.js'
     ];
 
     grunt.initConfig({
