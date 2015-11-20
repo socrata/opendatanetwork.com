@@ -44,12 +44,12 @@ RenderController.prototype.renderHomePage = function(req, res) {
                 // Render page
                 //
                 res.render(
-                    'v4-home.ejs',
+                    'home.ejs',
                     {
                         allCategoryResults : allCategoryResults,
                         css : [
                             '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css',
-                            '/styles/v4-home.min.css'
+                            '/styles/home.min.css'
                         ],
                         params : params,
                         scripts : [
@@ -138,7 +138,7 @@ RenderController.prototype.renderSearchResults = function(req, res) {
             }
 
             res.render(
-                (params.regions.length == 0) ? 'v4-search-results-regular.ejs' : 'v4-search-results-compact.ejs',
+                (params.regions.length == 0) ? 'search-results-regular.ejs' : 'search-results-compact.ejs',
                 {
                     css : [],
                     scripts : [],
@@ -166,12 +166,12 @@ function _renderSearchPage(req, res, params) {
                         function(results) {
 
                             res.render(
-                                'v4-search.ejs',
+                                'search.ejs',
                                 {
                                     categoryResults : categoryResults,
                                     css : [
                                         '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css',
-                                        '/styles/v4-search.min.css'
+                                        '/styles/search.min.css'
                                     ],
                                     domainResults : domainResults,
                                     params : params,

@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
     var baseScripts = [
-        'scripts/v4-app.js',
-        'scripts/v4-api-controller.js',
+        'scripts/app.js',
+        'scripts/api-controller.js',
         'scripts/constants.js',
         'scripts/region-lookup.js',
         'scripts/autocomplete.js',
@@ -65,12 +65,12 @@ module.exports = function(grunt) {
                 }
             },
             home: {
-                src: baseScripts.concat(['scripts/v4-home.js']),
+                src: baseScripts.concat(['scripts/home.js']),
                 dest: 'lib/home.es6.js'
             },
             search: {
-                src: baseScripts.concat(['scripts/v4-search-page-controller.js',
-                                         'scripts/v4-search.js']),
+                src: baseScripts.concat(['scripts/search-page-controller.js',
+                                         'scripts/search.js']),
                 dest: 'lib/search.es6.js'
             }
         },
