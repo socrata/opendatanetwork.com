@@ -570,7 +570,7 @@ class SearchPageController {
     }
     
     drawRwjfChrTableRow(regionIds, data, first_td, var_label, var_key, fmt_str, addl_fmt = '') {
-        var s = '<tr>'+first_td+'<td>'+var_label+'</td>'
+        var s = '<tr>'+first_td+'<td class=\'align-left\'>'+var_label+'</td>'
         for (var i = 0; i < regionIds.length; i++) {
             s += '<td>'
             if(data[i] && data[i][var_key]){
