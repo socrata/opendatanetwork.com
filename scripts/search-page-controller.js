@@ -1370,10 +1370,11 @@ class SearchPageController {
         if (this.params.regions.length == 0)
             return;
 
-        var region = this.params.regions[0];
-        var controller = new ApiController();
+        const region = this.params.regions[0];
+        const controller = new ApiController();
 
-        controller.getSimilarRegions(region.id)
+        controller.getSupportedVectors(region.id)
+            .then(data => controller.getSimilarRegions(region.id, data.available_vectors))
             .then(data => this.drawSimilarRegionsList(data, onClickRegion))
             .catch(error => console.error(error));
     }

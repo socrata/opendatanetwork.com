@@ -18,7 +18,8 @@ class ApiController {
         this.parentStateUrl = 'https://odn.data.socrata.com/resource/eyae-8jfy?parent_type=state&child_id={0}';
         this.placesUrl = 'https://odn.data.socrata.com/resource/gm3u-gw57.json/?type=place&$limit=50000&$where=population%20%3E%205000';
         this.populationUrl = 'https://odn.data.socrata.com/resource/e3rd-zzmr.json?$order=year,name&$where=';
-        this.similarRegionsUrl = 'https://socrata-peers.herokuapp.com/peers.json?vectors=population_change,earnings,occupation,education,population&n=10&id={0}';
+        this.similarRegionsUrl = 'https://socrata-peers.herokuapp.com/peers.json?id={0}&vectors={1}&n=10';
+        this.supportedVectorsUrls = 'http://socrata-peers.herokuapp.com/supported.json?id={0}';
         this.healthDataUrls = {
             rwjf_county_health_rankings_2015: "https://odn.data.socrata.com/resource/7ayp-utp2.json?$where=",
             cdc_brfss_prevalence_2011_2013: "https://odn.data.socrata.com/resource/n4rt-3rmd.json?$where="
@@ -126,9 +127,14 @@ class ApiController {
         return d3.promise.json(this.placesUrl);
     }
 
-    getSimilarRegions(regionId) {
+    getSimilarRegions(regionId, vectors) {
 
-        return d3.promise.json(this.similarRegionsUrl.format(regionId));
+        return d3.promise.json(this.similarRegionsUrl.format(regionId, vectors.join(',')));
+    }
+    
+    getSupportedVectors(regionId) {
+        
+        return d3.promise.json(this.supportedVectorsUrls.format(regionId));
     }
 
     // health data retrievers
