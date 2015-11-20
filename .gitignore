@@ -5,6 +5,7 @@
 node_modules
 
 *.swp
+*.map
 
 # grunt build process
 compiled/

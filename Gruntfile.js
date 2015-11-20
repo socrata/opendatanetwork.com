@@ -71,38 +71,27 @@ module.exports = function(grunt) {
                 }]
             }
         },
-        concat: {
+        uglify: {
             options: {
                 sourceMap: true,
-                sourceMapStyle: 'embed'
+                sourceMapName: function(name) {
+                    console.log(name);
+                },
+                mangle: false
             },
             home: {
                 src: baseScripts.concat(['compiled/v4-home.js']),
-                dest: 'concat/home.js'
+                dest: 'lib/home.min.js'
             },
             search: {
                 src: baseScripts.concat(['compiled/v4-search-page-controller.js',
                                          'compiled/v4-search.js']),
-                dest: 'concat/search.js'
-            }
-        },
-        uglify: {
-            build: {
-                options: {
-                    mangle: false
-                },
-                files: [{
-                    expand: true,
-                    cwd: 'concat',
-                    src: ['*.js'],
-                    dest: 'lib',
-                    ext: '.min.js'
-                }]
+                dest: 'lib/search.min.js'
             }
         }
     });
 
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
-    grunt.registerTask('default', ['sass', 'babel', 'concat', 'uglify']);
+    grunt.registerTask('default', ['sass', 'babel', 'uglify']);
 };
