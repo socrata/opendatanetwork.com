@@ -5,6 +5,8 @@ const MapConstants = {
     // Change to 0.15 to make the maps look like Data Lens
     BASE_LAYER_OPACITY: 0.5,
     // See http://bl.ocks.org/mbostock/5577023 for a visual index of Color Brewer colors
+    COLOR_SCALE: colorbrewer.RdYlBu[9],
+    SCALE: Scales.quantile,
     ATTRIBUTION: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
 
     INITIAL_CENTER: [37.1669, -95.9669], // Center of US

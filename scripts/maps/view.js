@@ -4,13 +4,14 @@ class MapView {
         this.map = map;
         this.model = model;
         this.topoLayers = topoLayers;
+        this.scale = MapConstants.SCALE(this.model.values(), MapConstants.COLOR_SCALE);
     }
 
     display() {
-        this.styleLayers();
+        this.drawLayers();
     }
 
-    styleLayers() {
+    drawLayers() {
         const getStyle = layer => {
             const id = layer.feature.id;
 
@@ -21,7 +22,7 @@ class MapView {
                     stroke: true,
                     color: MapConstants.REGION_BORDER_COLOR,
                     weight: MapConstants.REGION_BORDER_WEIGHT,
-                    fillColor: 'red',
+                    fillColor: this.scale(region.value),
                     fillOpacity: MapConstants.REGION_FILL_OPACITY
                 };
             } else { // if we don't have data for it it's reference layer

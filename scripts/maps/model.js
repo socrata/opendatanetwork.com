@@ -60,5 +60,9 @@ class MapModel {
             $.getJSON(url).then(success, failure);
         });
     }
+
+    values() {
+        return this.regions.map(region => region.value);
+    }
 }
 
