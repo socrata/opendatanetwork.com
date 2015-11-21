@@ -3,7 +3,7 @@ class MapContainer {
     constructor(selector, topology) {
         this.selection = d3.select(selector);
         this.topology = topology;
-        this.topoLayers = omnivore.topojson.parse(topology);
+        this.topoLayer = omnivore.topojson.parse(topology);
         this.tooltip = new TooltipControl();
 
         this.map = this.createMap();
@@ -28,16 +28,15 @@ class MapContainer {
             attribution: MapConstants.ATTRIBUTION
         }).addTo(map);
 
-        console.log(this.tooltip);
         map.addControl(this.tooltip);
 
-        this.topoLayers.addTo(map);
+        map.addLayer(this.topoLayer);
 
         return map;
     }
 
     display(model) {
-        const view = new MapView(this.map, model, this.topoLayers, this.selection, this.tooltip);
+        const view = new MapView(this.map, model, this.topoLayer, this.selection, this.tooltip);
 
         view.display()
     }
