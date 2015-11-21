@@ -1,25 +1,23 @@
 
 class MapView {
-    constructor(map, model, topoLayers, container, legend, tooltip) {
-        this.map = map;
+    constructor(model, topoLayers, legend, tooltip) {
         this.model = model;
         this.scale = model.scale(MapConstants.SCALE, MapConstants.COLOR_SCALE);
         this.topoLayers = topoLayers;
-        this.container = container;
         this.legend = legend;
         this.tooltip = tooltip;
     }
 
     display() {
-        this.drawLayers();
-        this.drawScale();
+        this.updateLayers();
+        this.updateLegend();
     }
 
-    drawScale() {
+    updateLegend() {
         this.legend.update(this.scale, this.model.variable);
     }
 
-    drawLayers() {
+    updateLayers() {
         const styleLayer = layer => {
             const id = layer.feature.id;
 
@@ -56,10 +54,6 @@ class MapView {
         }
 
         this.topoLayers.eachLayer(styleLayer);
-    }
-
-    remove() {
-
     }
 }
 

@@ -40,7 +40,7 @@ class MapContainer {
     }
 
     display(model) {
-        const view = new MapView(this.map, model, this.topoLayer, this.selection, this.legend, this.tooltip);
+        const view = new MapView(model, this.topoLayer, this.legend, this.tooltip);
 
         view.display()
     }
