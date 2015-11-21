@@ -21,35 +21,33 @@ class MapView {
         return map;
     }
 
-    display(model) {
-        function styleLayer(layer) {
-            const id = layer.feature.id;
+    getStyle(model, layer) {
+        const id = layer.feature.id;
 
-            if (model.regionById.has(id)) {
-                const region = model.regionById.get(id);
+        if (model.regionById.has(id)) {
+            const region = model.regionById.get(id);
 
-                const regionStyle = {
-                    stroke: true,
-                    color: MapConstants.REGION_BORDER_COLOR,
-                    weight: MapConstants.REGION_BORDER_WEIGHT,
-                    fillColor: 'red',
-                    fillOpacity: MapConstants.REGION_FILL_OPACITY
-                };
-
-                layer.setStyle(regionStyle);
-            } else { // if we don't have data for it it's reference layer
-                layer.setStyle({
-                    stroke: true,
-                    color: MapConstants.REFERENCE_BORDER_COLOR,
-                    weight: MapConstants.REFERENCE_BORDER_WEIGHT,
-                    fill: false,
-                    clickable: false
-                });
-            }
+            return {
+                stroke: true,
+                color: MapConstants.REGION_BORDER_COLOR,
+                weight: MapConstants.REGION_BORDER_WEIGHT,
+                fillColor: 'red',
+                fillOpacity: MapConstants.REGION_FILL_OPACITY
+            };
+        } else { // if we don't have data for it it's reference layer
+            return {
+                stroke: true,
+                color: MapConstants.REFERENCE_BORDER_COLOR,
+                weight: MapConstants.REFERENCE_BORDER_WEIGHT,
+                fill: false,
+                clickable: false
+            };
         }
+    }
 
+    display(model) {
         omnivore.topojson.parse(this.topology)
-            .eachLayer(styleLayer)
+            .eachLayer(layer => layer.setStyle(this.getStyle(model, layer)))
             .addTo(this.map);
     }
 }
