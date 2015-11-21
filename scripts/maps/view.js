@@ -3,8 +3,8 @@ class MapView {
     constructor(map, model, topoLayers) {
         this.map = map;
         this.model = model;
+        this.scale = model.scale(MapConstants.SCALE, MapConstants.COLOR_SCALE);
         this.topoLayers = topoLayers;
-        this.scale = MapConstants.SCALE(this.model.values(), MapConstants.COLOR_SCALE);
     }
 
     display() {

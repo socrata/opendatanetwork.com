@@ -64,5 +64,12 @@ class MapModel {
     values() {
         return this.regions.map(region => region.value);
     }
+
+    scale(scaleFunction, range) {
+        if (this.variable.reverse || false)
+            range.reverse();
+
+        return scaleFunction(this.values(), range);
+    }
 }
 
