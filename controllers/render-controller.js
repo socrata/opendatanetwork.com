@@ -179,6 +179,7 @@ function _renderSearchPage(req, res, params) {
                                         '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
                                         '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
                                         '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
+                                        '/scripts/third-party/leaflet-omnivore.min.js',
                                         '/scripts/third-party/colorbrewer.min.js',
                                         '/scripts/third-party/d3.min.js',
                                         '/scripts/third-party/d3.promise.min.js',
