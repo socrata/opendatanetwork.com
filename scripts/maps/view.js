@@ -1,7 +1,54 @@
 
 class MapView {
+    constructor(map, model, topoLayers) {
+        this.map = map;
+        this.model = model;
+        this.topoLayers = topoLayers;
+    }
+
+    display() {
+        this.styleLayers();
+    }
+
+    styleLayers() {
+        const getStyle = layer => {
+            const id = layer.feature.id;
+
+            if (this.model.regionById.has(id)) {
+                const region = this.model.regionById.get(id);
+
+                return {
+                    stroke: true,
+                    color: MapConstants.REGION_BORDER_COLOR,
+                    weight: MapConstants.REGION_BORDER_WEIGHT,
+                    fillColor: 'red',
+                    fillOpacity: MapConstants.REGION_FILL_OPACITY
+                };
+            } else { // if we don't have data for it it's reference layer
+                return {
+                    stroke: true,
+                    color: MapConstants.REFERENCE_BORDER_COLOR,
+                    weight: MapConstants.REFERENCE_BORDER_WEIGHT,
+                    fill: false,
+                    clickable: false
+                };
+            }
+        }
+
+        this.topoLayers.eachLayer(layer => {
+            layer.setStyle(getStyle(layer))
+        });
+    }
+
+    remove() {
+
+    }
+}
+
+
+class MapContainer {
     constructor(cssID, topology) {
-        this.map = MapView.createMap(cssID);
+        this.map = MapContainer.createMap(cssID);
         this.topology = topology;
     }
 
@@ -21,34 +68,13 @@ class MapView {
         return map;
     }
 
-    getStyle(model, layer) {
-        const id = layer.feature.id;
-
-        if (model.regionById.has(id)) {
-            const region = model.regionById.get(id);
-
-            return {
-                stroke: true,
-                color: MapConstants.REGION_BORDER_COLOR,
-                weight: MapConstants.REGION_BORDER_WEIGHT,
-                fillColor: 'red',
-                fillOpacity: MapConstants.REGION_FILL_OPACITY
-            };
-        } else { // if we don't have data for it it's reference layer
-            return {
-                stroke: true,
-                color: MapConstants.REFERENCE_BORDER_COLOR,
-                weight: MapConstants.REFERENCE_BORDER_WEIGHT,
-                fill: false,
-                clickable: false
-            };
-        }
-    }
 
     display(model) {
-        omnivore.topojson.parse(this.topology)
-            .eachLayer(layer => layer.setStyle(this.getStyle(model, layer)))
+        const topoLayers = omnivore.topojson.parse(this.topology)
             .addTo(this.map);
+
+        const view = new MapView(this.map, model, topoLayers);
+        view.display()
     }
 }
 

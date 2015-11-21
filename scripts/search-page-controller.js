@@ -1138,7 +1138,7 @@ class SearchPageController {
 
         TopoModel.get(testRegion)
             .then(topology => {
-                const view = new MapView('map', topology);
+                const view = new MapContainer('map', topology);
 
                 MapModel.create(testSource, testRegion, testVariable)
                     .then(model => {
