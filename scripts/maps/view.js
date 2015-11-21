@@ -50,6 +50,11 @@ class MapContainer {
     constructor(cssID, topology) {
         this.map = MapContainer.createMap(cssID);
         this.topology = topology;
+        this.topoLayers = MapContainer.parseTopology(topology, this.map);
+    }
+
+    static parseTopology(topology, map) {
+        return omnivore.topojson.parse(topology).addTo(map);
     }
 
     static createMap(id) {
@@ -68,12 +73,9 @@ class MapContainer {
         return map;
     }
 
-
     display(model) {
-        const topoLayers = omnivore.topojson.parse(this.topology)
-            .addTo(this.map);
+        const view = new MapView(this.map, model, this.topoLayers);
 
-        const view = new MapView(this.map, model, topoLayers);
         view.display()
     }
 }
