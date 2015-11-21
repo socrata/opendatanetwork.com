@@ -243,7 +243,13 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
         if (results.length > 0) {
 
             params.regions = results.map(function(result) {
-                return { id : result.id, name : result.name, type : result.type };
+                
+                return { 
+                    autoCompleteName : result.autocomplete_name,
+                    id : result.id, 
+                    name : result.name, 
+                    type : result.type
+                };
             });
         }
 
