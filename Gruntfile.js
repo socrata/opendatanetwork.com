@@ -6,7 +6,9 @@ module.exports = function(grunt) {
         'scripts/region-lookup.js',
         'scripts/autocomplete.js',
         'scripts/multi-complete.js',
-        'scripts/source-complete.js'
+        'scripts/source-complete.js',
+        'scripts/maps/constants.js',
+        'scripts/maps/model.js'
     ];
 
     var config = {
