@@ -1,5 +1,11 @@
 
-class Scales {
+class Scale {
+    constructor(values, range, scale) {
+        this.values = values;
+        this.range = range;
+        this.scale = scale;
+    }
+
     static quantile(values, range) {
         values.sort();
 
@@ -8,9 +14,11 @@ class Scales {
             return d3.quantile(values, (index + 1) * step);
         });
 
-        return d3.scale.quantile()
+        const scale = d3.scale.quantile()
             .domain(domain)
             .range(range);
+
+        return new Scale(values, range, scale);
     }
 }
 

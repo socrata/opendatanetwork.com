@@ -1133,7 +1133,8 @@ class SearchPageController {
             column: 'population',
             params: {'year': 2013},
             value: parseFloat,
-            format: a => a
+            format: a => a,
+            reverse: true
         };
 
         TopoModel.get(testRegion)
