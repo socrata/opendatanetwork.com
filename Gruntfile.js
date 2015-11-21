@@ -15,7 +15,7 @@ module.exports = function(grunt) {
         'scripts/maps/model.js',
         'scripts/maps/view.js',
         'scripts/maps/container.js',
-        'scripts/maps/tooltip.js'
+        'scripts/maps/scale-control.js'
     ];
 
     var config = {
