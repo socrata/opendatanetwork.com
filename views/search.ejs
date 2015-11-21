@@ -1,4 +1,5 @@
-<% include v4-header %>
+<% include header %>
+<% include search-bar %>
 
 <script>var _params = <%- JSON.stringify(params) %>;</script>
 <% if (params.debug) { %><script>console.log(decodeURIComponent('<%- searchDatasetsUrl %>'));</script><% } %>
@@ -40,7 +41,7 @@
     <% if (params.q.length > 0) { %>
         <strong><%= params.q %></strong>
     <% } %>
-    
+
     <ul class="tokens">
     <% params.regions.forEach(function(region) { %>
         <li class="region-token"><%= region.name %> <a class="fa fa-times-circle"></a></li>
@@ -64,7 +65,7 @@
 
     <div class="search-results-regular-column">
         <ul class="datasets">
-<% include v4-search-results-regular %>
+<% include search-results-regular %>
         </ul>
     </div>
 
@@ -72,7 +73,7 @@
 
     <div class="search-results-compact-column">
         <ul class="datasets">
-<% include v4-search-results-compact %>
+<% include search-results-compact %>
         </ul>
     </div>
 
@@ -201,8 +202,8 @@
         <div class="controls">
             <h1>Compare this Data</h1>
             <div class="add-region">
-                <i class="fa fa-plus"></i><input type="text" placeholder="Add Location">
-                <ul style="display: none;"></ul>
+                <i class="fa fa-plus"></i><input class="add-region-input" type="text" placeholder="Add Location">
+                <ul class="add-region-results" style="display: none;"></ul>
             </div>
             <ul id="similar-regions" style="display:none"></ul>
             <h2 id="places-in-region-header-0" class="places-in-region-header" style="display:none"></h2>
@@ -223,7 +224,7 @@
 
 </section>
 
-<% include v4-google-analytics %>
+<% include google-analytics %>
 
 </body>
 </html>
@@ -243,7 +244,7 @@ function getSearchPageUrl(vector) {
 
         url += regionNames.join('_vs_');
 
-        if (vector) 
+        if (vector)
             url += '/' + vector;
     }
     else {
@@ -282,10 +283,10 @@ function getSelectedVector(vectors) {
 
     for (var i in vectors) {
 
-        if (vectors[i] == params.vector) 
-            return ' class="selected"'; 
+        if (vectors[i] == params.vector)
+            return ' class="selected"';
     }
 
-    return ''; 
+    return '';
 }
 %>

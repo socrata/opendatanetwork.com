@@ -1,6 +1,15 @@
 module.exports = function(grunt) {
+    var baseScripts = [
+        'scripts/app.js',
+        'scripts/api-controller.js',
+        'scripts/constants.js',
+        'scripts/region-lookup.js',
+        'scripts/autocomplete.js',
+        'scripts/multi-complete.js',
+        'scripts/source-complete.js'
+    ];
 
-    grunt.initConfig({
+    var config = {
         pkg: grunt.file.readJSON('package.json'),
         project: {
             scripts: 'scripts',
@@ -47,38 +56,61 @@ module.exports = function(grunt) {
                 }]
             }
         },
+        concat: {
+            options: {
+                sourceMap: true,
+                sourceMapStyle: 'embed',
+                process: function(src, filepath) {
+                    return '// ' + filepath + '\n' + src;
+                }
+            },
+            home: {
+                src: baseScripts.concat(['scripts/home.js']),
+                dest: 'lib/home.es6.js'
+            },
+            search: {
+                src: baseScripts.concat(['scripts/search-page-controller.js',
+                                         'scripts/search.js']),
+                dest: 'lib/search.es6.js'
+            }
+        },
         babel: {
             options: {
-                sourceMap: 'both',
+                sourceMap: true,
                 presets: ['es2015']
             },
-            build: {
-                files: [ {
-                    expand: true,
-                    cwd: '<%= project.scripts %>',
-                    src: ['*.js'],
-                    dest: '<%= project.scripts %>/es5',
-                    ext: '.js'
-                }]
+            home: {
+                src: 'lib/home.es6.js',
+                dest: 'lib/home.js'
+            },
+            search: {
+                src: 'lib/search.es6.js',
+                dest: 'lib/search.js'
             }
         },
         uglify: {
-            build: {
+            options: {
+                sourceMap: true,
+                mangle: false
+            },
+            home: {
                 options: {
-                    mangle: false
+                    sourceMapIn: 'lib/home.js.map'
                 },
-                files: [{
-                    expand: true,
-                    cwd: '<%= project.scripts %>/es5',
-                    src: ['*.js'],
-                    dest: '<%= project.scripts %>/compressed',
-                    ext: '.min.js'
-                }]
+                src: 'lib/home.js',
+                dest: 'lib/home.min.js'
+            },
+            search: {
+                options: {
+                    sourceMapIn: 'lib/search.js.map'
+                },
+                src: 'lib/search.js',
+                dest: 'lib/search.min.js'
             }
         }
-    });
+    };
 
+    grunt.initConfig(config);
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
-
-    grunt.registerTask('default', ['sass', 'babel', 'uglify']);
+    grunt.registerTask('default', ['sass', 'concat', 'babel', 'uglify']);
 };
