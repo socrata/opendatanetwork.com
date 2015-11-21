@@ -150,9 +150,9 @@ class MapView {
 
 
 class MapContainer {
-    constructor(cssID, topology) {
-        this.selection = d3.select(`#${cssID}`);
-        this.map = MapContainer.createMap(cssID);
+    constructor(selector, topology) {
+        this.selection = d3.select(selector);
+        this.map = MapContainer.createMap(this.selection);
         this.topology = topology;
         this.topoLayers = MapContainer.parseTopology(topology, this.map);
     }
@@ -161,7 +161,13 @@ class MapContainer {
         return omnivore.topojson.parse(topology).addTo(map);
     }
 
-    static createMap(id) {
+    static createMap(selection) {
+        const id = 'leaflet-map';
+        const container = selection
+            .append('div')
+            .attr('class', 'map-container')
+            .attr('id', id);
+
         const map = L.map(id, {
             minZoom: MapConstants.MIN_ZOOM,
             maxZoom: MapConstants.MAX_ZOOM

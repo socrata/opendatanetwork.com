@@ -1129,17 +1129,17 @@ class SearchPageController {
         const testRegion = MapConstants.REGIONS.state;
 
         const testVariable = {
-            name: 'population 2013',
+            name: 'Population (2013)',
             column: 'population',
             params: {'year': 2013},
             value: parseFloat,
-            format: a => a,
+            format: d3.format(',.0f'),
             reverse: true
         };
 
         TopoModel.get(testRegion)
             .then(topology => {
-                const view = new MapContainer('map', topology);
+                const view = new MapContainer('#map', topology);
 
                 MapModel.create(testSource, testRegion, testVariable)
                     .then(model => {

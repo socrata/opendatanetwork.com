@@ -171,7 +171,8 @@ function _renderSearchPage(req, res, params) {
                                     categoryResults : categoryResults,
                                     css : [
                                         '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css',
-                                        '/styles/search.min.css'
+                                        '/styles/search.min.css',
+                                        '/styles/maps.min.css'
                                     ],
                                     domainResults : domainResults,
                                     params : params,

@@ -29,7 +29,7 @@ $orange-color: #ee3b3b;
 
 /* Header */
 
-header 
+header
 {
     border-bottom: 1px solid $dark-gray-border-color;
 }
@@ -108,7 +108,7 @@ section.refine
 .refine-link-selected
 {
     background-color: $darker-gray-background-color;
-    color: white; 
+    color: white;
 }
 
 .refine-link .fa
@@ -133,7 +133,7 @@ section.refine
 .refine-link li
 {
     border-top: 1px solid $darker-gray-border-color;
-    color: white; 
+    color: white;
     font-size: 14px;
     line-height: 40px;
     margin: 0;
@@ -215,13 +215,13 @@ section.results
     width: 300px;
 }
 
-.search-results-compact-column .name 
+.search-results-compact-column .name
 {
     color: $black-text-color;
     font-size: 14px;
 }
 
-.search-results-compact-column .domain 
+.search-results-compact-column .domain
 {
     color: $blue-color;
     font-size: 14px;
@@ -355,7 +355,7 @@ section.results
     color: $blue-color;
 }
 
-.chart-tabs li.selected a 
+.chart-tabs li.selected a
 {
     color: $black-text-color;
 }
@@ -380,7 +380,7 @@ section.results
     text-align: center;
 }
 
-.charts-column figure 
+.charts-column figure
 {
     height: 300px;
     margin: 0 0 50px;
@@ -561,7 +561,7 @@ section.results
     cursor: pointer;
 }
 
-.places-in-region-header 
+.places-in-region-header
 {
     font-size: 14px;
     font-weight: normal;
@@ -590,10 +590,3 @@ section.results
     font-size: 14px;
 }
 
-/* Maps */
-
-#map
-{
-    height: 500px;
-    margin: 0 -35px;
-}
