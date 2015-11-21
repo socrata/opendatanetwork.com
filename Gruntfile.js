@@ -7,6 +7,9 @@ module.exports = function(grunt) {
         'scripts/autocomplete.js',
         'scripts/multi-complete.js',
         'scripts/source-complete.js',
+    ];
+
+    var mapScripts = [
         'scripts/maps/scales.js',
         'scripts/maps/constants.js',
         'scripts/maps/model.js',
@@ -73,8 +76,9 @@ module.exports = function(grunt) {
                 dest: 'lib/home.es6.js'
             },
             search: {
-                src: baseScripts.concat(['scripts/search-page-controller.js',
-                                         'scripts/search.js']),
+                src: baseScripts.concat(mapScripts).concat(
+                    ['scripts/search-page-controller.js',
+                     'scripts/search.js']),
                 dest: 'lib/search.es6.js'
             }
         },
