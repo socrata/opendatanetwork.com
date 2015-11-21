@@ -1120,12 +1120,13 @@ class SearchPageController {
     }
 
     drawPopulationMap() {
-
         const testSource = {
             name: 'population',
             domain: 'odn.data.socrata.com',
             fxf: 'e3rd-zzmr'
         };
+
+        const testRegion = MapConstants.REGIONS.state;
 
         const testVariable = {
             name: 'population 2013',
@@ -1135,10 +1136,17 @@ class SearchPageController {
             format: a => a
         };
 
-        const view = new MapView('map');
+        TopoModel.get(testRegion)
+            .then(topology => {
+                const view = new MapView('map', topology);
 
-        MapModel.create(testSource, MapConstants.REGIONS.state, testVariable)
-            .then(view.display, error => {
+                MapModel.create(testSource, testRegion, testVariable)
+                    .then(model => {
+                        view.display(model)
+                    }, error => {
+                        throw error;
+                    });
+            }, error => {
                 throw error;
             });
     }

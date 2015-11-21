@@ -1,7 +1,8 @@
 
 class MapView {
-    constructor(cssID) {
+    constructor(cssID, topology) {
         this.map = MapView.createMap(cssID);
+        this.topology = topology;
     }
 
     static createMap(id) {
@@ -20,8 +21,7 @@ class MapView {
         return map;
     }
 
-    show(model) {
-        console.log(model);
+    display(model) {
     }
 }
 
