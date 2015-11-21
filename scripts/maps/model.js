@@ -17,6 +17,13 @@ class MapModel {
         this.region = region;
         this.variable = variable;
         this.regions = regions;
+        this.regionById = MapModel.makeLookup(regions, region => region.id);
+    }
+
+    static makeLookup(list, key) {
+        const lookup = new Map();
+        _.each(list, element => lookup.set(key(element), element));
+        return lookup;
     }
 
     static create(source, region, variable) {
