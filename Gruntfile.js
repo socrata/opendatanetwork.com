@@ -13,7 +13,8 @@ module.exports = function(grunt) {
         'scripts/maps/scales.js',
         'scripts/maps/constants.js',
         'scripts/maps/model.js',
-        'scripts/maps/view.js'
+        'scripts/maps/view.js',
+        'scripts/maps/container.js'
     ];
 
     var config = {
