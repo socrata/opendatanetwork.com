@@ -2,19 +2,16 @@
 class MapContainer {
     constructor(selector, topology) {
         this.selection = d3.select(selector);
-        this.map = MapContainer.createMap(this.selection);
         this.topology = topology;
-        this.topoLayers = MapContainer.parseTopology(topology, this.map);
-        this.tooltip = new MapTooltip(this.selection);
+        this.topoLayers = omnivore.topojson.parse(topology);
+        this.tooltip = new TooltipControl();
+
+        this.map = this.createMap();
     }
 
-    static parseTopology(topology, map) {
-        return omnivore.topojson.parse(topology).addTo(map);
-    }
-
-    static createMap(selection) {
+    createMap() {
         const id = 'leaflet-map';
-        const container = selection
+        const container = this.selection
             .append('div')
             .attr('class', 'map-container')
             .attr('id', id);
@@ -30,6 +27,11 @@ class MapContainer {
             opacity: MapConstants.BASE_LAYER_OPACITY,
             attribution: MapConstants.ATTRIBUTION
         }).addTo(map);
+
+        console.log(this.tooltip);
+        map.addControl(this.tooltip);
+
+        this.topoLayers.addTo(map);
 
         return map;
     }

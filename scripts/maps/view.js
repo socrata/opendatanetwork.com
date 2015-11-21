@@ -1,11 +1,12 @@
 
 class MapView {
-    constructor(map, model, topoLayers, container) {
+    constructor(map, model, topoLayers, container, tooltip) {
         this.map = map;
         this.model = model;
         this.scale = model.scale(MapConstants.SCALE, MapConstants.COLOR_SCALE);
         this.topoLayers = topoLayers;
         this.container = container;
+        this.tooltip = tooltip;
     }
 
     display() {
@@ -28,18 +29,12 @@ class MapView {
                     fillOpacity: MapConstants.REGION_FILL_OPACITY
                 };
 
-                let currentPopupID = '';
                 const events = {
-                    mouseover: () => {
-                        if (currentPopupID !== id) {
-                            currentPopupID = id;
-                            layer.openPopup();
-                        }
-                    }
+                    mouseover: () => this.tooltip.showRegion(region),
+                    mouseout: () => this.tooltip.hide()
                 };
 
                 layer.setStyle(style);
-                layer.bindPopup(region.name);
                 layer.on(events);
 
             } else { // if we don't have data for it it's reference layer
