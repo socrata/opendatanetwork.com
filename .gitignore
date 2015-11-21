@@ -7,6 +7,9 @@ node_modules
 *.swp
 *.map
 
+*.geojson
+geo/*/
+
 # grunt build process
 lib/
 
