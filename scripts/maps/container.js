@@ -2,8 +2,11 @@
 class MapContainer {
     constructor(selector, topology) {
         this.selection = d3.select(selector);
+
         this.topology = topology;
         this.topoLayer = omnivore.topojson.parse(topology);
+
+        this.legend = new LegendControl();
         this.tooltip = new TooltipControl();
 
         this.map = this.createMap();
@@ -28,6 +31,7 @@ class MapContainer {
             attribution: MapConstants.ATTRIBUTION
         }).addTo(map);
 
+        map.addControl(this.legend);
         map.addControl(this.tooltip);
 
         map.addLayer(this.topoLayer);
@@ -36,7 +40,7 @@ class MapContainer {
     }
 
     display(model) {
-        const view = new MapView(this.map, model, this.topoLayer, this.selection, this.tooltip);
+        const view = new MapView(this.map, model, this.topoLayer, this.selection, this.legend, this.tooltip);
 
         view.display()
     }

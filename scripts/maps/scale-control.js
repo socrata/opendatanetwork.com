@@ -1,29 +1,30 @@
 
-const ScaleControl = L.Control.extend({
-    initialize: function(scale, variable) {
-        this.scale = scale;
-        this.variable = variable;
-    },
-
+const LegendControl = L.Control.extend({
     options: {
         position: 'bottomleft'
     },
 
     onAdd: function(map) {
         const container = L.DomUtil.create('div', 'legend-container');
+        this.container = d3.select(container);
+        return container;
+    },
 
-        const legendContainer = d3.select(container)
+    update: function(scale, variable) {
+        this.container.selectAll('*').remove();
+
+        const legendContainer = this.container
             .append('div')
             .attr('class', 'legend-container');
 
         const dimension = 10;
-        const range = this.scale.range.slice();
+        const range = scale.range.slice();
         range.reverse();
         const height = range.length * dimension;
         const width = 200;
         const xOffset = width / 2;
 
-        const values = _.filter(this.scale.values, value => !(isNaN(value)))
+        const values = _.filter(scale.values, value => !(isNaN(value)))
         const [min, max] = d3.extent(values);
         const lowerQuartile = d3.quantile(values, 0.25);
         const median = d3.median(values);
@@ -45,7 +46,7 @@ const ScaleControl = L.Control.extend({
             .attr('class', 'legend-name')
             .attr('text-anchor', 'middle')
             .attr('x', xOffset + dimension / 2).attr('y', dimension * 1.2)
-            .text(this.variable.name);
+            .text(variable.name);
 
         const tickGroup = legend
             .append('g')
@@ -79,7 +80,7 @@ const ScaleControl = L.Control.extend({
         ticks
             .append('text')
             .attr('class', 'tick-value')
-            .text(tick => this.variable.format(tick[0]))
+            .text(tick => variable.format(tick[0]))
             .attr('alignment-baseline', baseline)
             .attr('transform', `translate(${dimension * 2 + padding}, 0)`);
 
@@ -109,8 +110,6 @@ const ScaleControl = L.Control.extend({
             .attr('class', 'legend-box')
             .attr('x', xOffset).attr('y', dimension * 3)
             .attr('width', dimension).attr('height', height);
-
-        return container;
     }
 });
 

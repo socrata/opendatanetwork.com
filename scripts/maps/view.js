@@ -1,17 +1,22 @@
 
 class MapView {
-    constructor(map, model, topoLayers, container, tooltip) {
+    constructor(map, model, topoLayers, container, legend, tooltip) {
         this.map = map;
         this.model = model;
         this.scale = model.scale(MapConstants.SCALE, MapConstants.COLOR_SCALE);
         this.topoLayers = topoLayers;
         this.container = container;
+        this.legend = legend;
         this.tooltip = tooltip;
     }
 
     display() {
-        this.map.addControl(new ScaleControl(this.scale, this.model.variable));
         this.drawLayers();
+        this.drawScale();
+    }
+
+    drawScale() {
+        this.legend.update(this.scale, this.model.variable);
     }
 
     drawLayers() {
