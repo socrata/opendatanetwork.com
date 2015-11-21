@@ -7,7 +7,7 @@ class Scale {
     }
 
     static quantile(values, range) {
-        values.sort();
+        values.sort(d3.ascending);
 
         const step = 1.0 / range.length;
         const domain = _.map(range.slice(1), (value, index) => {
