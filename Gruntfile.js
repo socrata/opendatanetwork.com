@@ -7,6 +7,7 @@ module.exports = function(grunt) {
         'scripts/autocomplete.js',
         'scripts/multi-complete.js',
         'scripts/source-complete.js',
+        'scripts/maps/scales.js',
         'scripts/maps/constants.js',
         'scripts/maps/model.js',
         'scripts/maps/view.js'
