@@ -12,7 +12,14 @@ class TopoModel {
 
 
 class MapModel {
-    static regionData(source, region, variable) {
+    constructor(source, region, variable, regions) {
+        this.source = source;
+        this.region = region;
+        this.variable = variable;
+        this.regions = regions;
+    }
+
+    static create(source, region, variable) {
         return new Promise((resolve, reject) => {
             const baseParams = {
                 'type': region.id,
@@ -36,7 +43,7 @@ class MapModel {
                     };
                 });
 
-                resolve(regions);
+                resolve(new MapModel(source, region, variable, regions));
             }
 
             function failure(error) {
@@ -47,22 +54,4 @@ class MapModel {
         });
     }
 }
-
-const testSource = {
-    name: 'population',
-    domain: 'odn.data.socrata.com',
-    fxf: 'e3rd-zzmr'
-};
-
-const testVariable = {
-    name: 'population 2013',
-    column: 'population',
-    params: {'year': 2013},
-    value: parseFloat,
-    format: a => a
-};
-
-
-MapModel.regionData(testSource, MapConstants.REGIONS.state, testVariable)
-    .then(regions => console.log(regions));
 

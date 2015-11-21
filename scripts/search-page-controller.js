@@ -1030,7 +1030,9 @@ class SearchPageController {
                     this.drawPopulationChart(regionIds, data);
                     this.drawPopulationChangeChart(regionIds, data);
                 })
-                .catch(error => console.error(error));
+                .catch(error => {
+                    throw error;
+                });
         });
     }
 
@@ -1119,47 +1121,26 @@ class SearchPageController {
 
     drawPopulationMap() {
 
-        const controller = new ApiController();
-        const places = [];
+        const testSource = {
+            name: 'population',
+            domain: 'odn.data.socrata.com',
+            fxf: 'e3rd-zzmr'
+        };
 
-        controller.getPlaces()
-            .then(placesResponse => {
+        const testVariable = {
+            name: 'population 2013',
+            column: 'population',
+            params: {'year': 2013},
+            value: parseFloat,
+            format: a => a
+        };
 
-                // Set place value to earnings data
-                //
-                placesResponse.forEach(item => {
-                    places.push({
-                        coordinates : item.location.coordinates,
-                        name : item.name,
-                        id : item.id,
-                        value : parseInt(item.population),
-                    })
-                });
+        const view = new MapView('map');
 
-                // Get map data
-                //
-                const populatedPlaces = places.sort((a, b) => b.value - a.value);
-                const regionPlaces = this.getPlacesForRegion(placesResponse);
-                const populations = _.map(populatedPlaces, x => { return x.value });
-
-                // Init map
-                //
-                const radiusScale = this.getRadiusScaleLog(populations)
-                const colorScale = this.getColorScale(populations)
-
-                const coordinates = regionPlaces[0].location.coordinates;
-                const center = [coordinates[1], coordinates[0]];
-                const map = L.map('map', { zoomControl : true });
-
-                L.tileLayer('https://a.tiles.mapbox.com/v3/socrata-apps.ibp0l899/{z}/{x}/{y}.png').addTo(map);
-                map.setView(center, this.MAP_INITIAL_ZOOM);
-
-                // Populate map
-                //
-                this.drawCirclesForPlaces(map, populatedPlaces, radiusScale, colorScale);
-                this.drawMarkersForPlaces(map, regionPlaces);
-            })
-            .catch(error => console.error(error));
+        MapModel.create(testSource, MapConstants.REGIONS.state, testVariable)
+            .then(view.display, error => {
+                throw error;
+            });
     }
 
     // Places in region

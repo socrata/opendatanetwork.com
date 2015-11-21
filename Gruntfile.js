@@ -8,7 +8,8 @@ module.exports = function(grunt) {
         'scripts/multi-complete.js',
         'scripts/source-complete.js',
         'scripts/maps/constants.js',
-        'scripts/maps/model.js'
+        'scripts/maps/model.js',
+        'scripts/maps/view.js'
     ];
 
     var config = {

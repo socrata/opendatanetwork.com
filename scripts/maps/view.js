@@ -1,5 +1,32 @@
 
-maps.view = function(selection, config, model, selected) {
+class MapView {
+    constructor(cssID) {
+        this.map = MapView.createMap(cssID);
+    }
+
+    static createMap(id) {
+        const map = L.map(id, {
+            minZoom: MapConstants.MIN_ZOOM,
+            maxZoom: MapConstants.MAX_ZOOM
+        });
+
+        map.setView(MapConstants.INITIAL_CENTER, MapConstants.INITIAL_ZOOM);
+
+        L.tileLayer(MapConstants.BASE_LAYER_URL, {
+            opacity: MapConstants.BASE_LAYER_OPACITY,
+            attribution: MapConstants.ATTRIBUTION
+        }).addTo(map);
+
+        return map;
+    }
+
+    show(model) {
+        console.log(model);
+    }
+}
+
+
+const aasdasd = function(selection, config, model, selected) {
     const container = selection
         .append('div')
         .attr('class', 'dynamic-map-container');
