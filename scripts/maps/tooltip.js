@@ -1,38 +1,36 @@
 
-maps.tooltip = function(container) {
-    const tooltipDiv = container
-        .append("div")
-        .attr("class", "tooltip");
+class MapTooltip {
+    constructor(container) {
+        this.container = container
+            .append('div')
+            .attr('class', 'tooltip');
 
-    const name = tooltipDiv
-        .append("div")
-        .attr("class", "name");
+        this.name = this.container
+            .append('div')
+            .attr('class', 'name');
 
-    const value = tooltipDiv
-        .append("div")
-        .attr("class", "value");
-
-    const valueName = value
-        .append("span")
-        .attr("class", "value-name");
-
-    const valueFormatted = value
-        .append("span")
-        .attr("class", "value-formatted");
-
-    function show(region) {
-        tooltipDiv.style("display", "inline");
-
-        name.text(region.name);
-        valueName.text(region.valueName);
-        valueFormatted.text(region.valueFormatted);
+        this.value = this.container
+            .append('div')
+            .attr('class', 'value');
     }
 
-    function hide() {
-        tooltipDiv.style("display", "none");
+    show(name, value) {
+        this.name.text(name);
+        this.value.text(value);
+
+        this.unhide();
     }
 
-    hide();
+    showRegion(region) {
+        this.show(region.name, `${region.valueName}: ${region.valueFormatted}`);
+    }
 
-    return {show, hide};
+    hide() {
+        console.log(this);
+        this.container.style('display', 'none');
+    }
+
+    unhide() {
+        this.container.style('display', 'inline');
+    }
 }

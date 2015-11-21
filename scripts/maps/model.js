@@ -46,6 +46,7 @@ class MapModel {
                         type: region.type,
                         name: region.name,
                         value: value,
+                        valueName: variable.name,
                         valueFormatted: variable.format(value)
                     };
                 });

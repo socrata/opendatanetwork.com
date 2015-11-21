@@ -14,7 +14,8 @@ module.exports = function(grunt) {
         'scripts/maps/constants.js',
         'scripts/maps/model.js',
         'scripts/maps/view.js',
-        'scripts/maps/container.js'
+        'scripts/maps/container.js',
+        'scripts/maps/tooltip.js'
     ];
 
     var config = {

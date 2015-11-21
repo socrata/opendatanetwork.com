@@ -5,6 +5,7 @@ class MapContainer {
         this.map = MapContainer.createMap(this.selection);
         this.topology = topology;
         this.topoLayers = MapContainer.parseTopology(topology, this.map);
+        this.tooltip = new MapTooltip(this.selection);
     }
 
     static parseTopology(topology, map) {
@@ -34,7 +35,7 @@ class MapContainer {
     }
 
     display(model) {
-        const view = new MapView(this.map, model, this.topoLayers, this.selection);
+        const view = new MapView(this.map, model, this.topoLayers, this.selection, this.tooltip);
 
         view.display()
     }
