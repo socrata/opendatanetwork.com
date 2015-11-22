@@ -32,11 +32,13 @@ var mapScripts = [
 function js(src, dest) {
     return function() {
         return gulp.src(src)
+            .pipe(cached(dest))
             .pipe(sourcemaps.init())
             .pipe(babel())
             .pipe(concat(dest))
             .pipe(uglify())
             .pipe(sourcemaps.write('.'))
+            .pipe(remember(dest))
             .pipe(gulp.dest('lib'));
     };
 }
@@ -53,6 +55,8 @@ var searchScripts = baseScripts
     .concat(['src/search-page-controller.js', 'src/search.js']);
 
 gulp.task('search', js(searchScripts, 'search.min.js'));
+
+gulp.watch('src/**/*.js', ['home', 'search']);
 
 
 gulp.task('default', ['home', 'search']);
