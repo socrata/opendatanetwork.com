@@ -6,6 +6,8 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var cached = require('gulp-cached');
 var remember = require('gulp-remember');
+var sass = require('gulp-sass');
+var rename = require('gulp-rename');
 
 var baseScripts = [
     'src/app.js',
@@ -59,5 +61,13 @@ gulp.task('search', js(searchScripts, 'search.min.js'));
 gulp.watch('src/**/*.js', ['home', 'search']);
 
 
-gulp.task('default', ['home', 'search']);
+gulp.task('sass', function() {
+    return gulp.src(['styles/**/*.scss', 'styles/**/*.sass'])
+        .pipe(sourcemaps.init())
+        .pipe(sass({outputStyle: 'compressed'}))
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('styles/compressed'));
+});
+
+gulp.task('default', ['home', 'search', 'sass']);
 

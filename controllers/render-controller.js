@@ -49,7 +49,7 @@ RenderController.prototype.renderHomePage = function(req, res) {
                         allCategoryResults : allCategoryResults,
                         css : [
                             '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css',
-                            '/styles/home.min.css'
+                            '/styles/home.css'
                         ],
                         params : params,
                         scripts : [
@@ -74,7 +74,7 @@ RenderController.prototype.renderHomePage = function(req, res) {
 //
 RenderController.prototype.renderJoinOpenDataNetwork = function(req, res) {
 
-    res.locals.css = 'join.min.css';
+    res.locals.css = 'join.css';
     res.locals.title = 'Join the Open Data Network.';
     res.render('join.ejs');
 };
@@ -83,7 +83,7 @@ RenderController.prototype.renderJoinOpenDataNetwork = function(req, res) {
 //
 RenderController.prototype.renderJoinOpenDataNetworkComplete = function(req, res) {
 
-    res.locals.css = 'join-complete.min.css';
+    res.locals.css = 'join-complete.css';
     res.locals.title = 'Thanks for joining the Open Data Network.';
     res.render('join-complete.ejs');
 };
@@ -171,8 +171,8 @@ function _renderSearchPage(req, res, params) {
                                     categoryResults : categoryResults,
                                     css : [
                                         '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css',
-                                        '/styles/search.min.css',
-                                        '/styles/maps.min.css'
+                                        '/styles/search.css',
+                                        '/styles/maps.css'
                                     ],
                                     domainResults : domainResults,
                                     params : params,
