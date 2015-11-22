@@ -38,17 +38,11 @@ class MapContainer {
             .attr('class', 'map-container')
             .attr('id', id);
 
-        const map = L.map(id, {
-            minZoom: MapConstants.MIN_ZOOM,
-            maxZoom: MapConstants.MAX_ZOOM
-        });
-
+        const map = L.map(id, MapConstants.MAP_OPTIONS);
         map.setView(MapConstants.INITIAL_CENTER, MapConstants.INITIAL_ZOOM);
 
-        L.tileLayer(MapConstants.BASE_LAYER_URL, {
-            opacity: MapConstants.BASE_LAYER_OPACITY,
-            attribution: MapConstants.ATTRIBUTION
-        }).addTo(map);
+        const baseLayer = L.tileLayer(MapConstants.BASE_LAYER_URL, MapConstants.BASE_LAYER);
+        map.addLayer(baseLayer);
 
         map.addControl(this.legend);
         map.addControl(this.tooltip);
