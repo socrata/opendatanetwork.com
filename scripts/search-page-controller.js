@@ -1135,7 +1135,7 @@ class SearchPageController {
                 {
                     name: 'Population Change',
                     column: 'population_percent_change',
-                    years: [2009, 2010, 2011, 2012, 2013],
+                    years: [2010, 2011, 2012, 2013],
                     value: parseFloat,
                     format: value => `${d3.format('.2f')(value)}%`
                 }
