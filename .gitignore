@@ -11,5 +11,6 @@ node_modules
 geo/*/
 
 # grunt build process
-lib/
+lib/*.es6.js
+lib/*.js
 

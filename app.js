@@ -22,7 +22,7 @@ app.use('/images', express.static(__dirname + '/images'));
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist'));
 app.use('/lib', express.static(__dirname + '/lib'));
 app.use('/geo', express.static(__dirname + '/geo'));
-app.use('/scripts/third-party', express.static(__dirname + '/scripts/third-party'));
+app.use('/lib/third-party', express.static(__dirname + '/scripts/third-party'));
 app.use('/styles', express.static(__dirname + '/styles/compressed'));
 app.use(favicon(__dirname + '/images/favicon.ico'));
 

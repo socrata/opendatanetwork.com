@@ -58,9 +58,9 @@ RenderController.prototype.renderHomePage = function(req, res) {
                                 'url' : '//fast.wistia.net/static/popover-v1.js',
                                 'charset' : 'ISO-8859-1'
                             },
-                            '/scripts/third-party/d3.min.js',
-                            '/scripts/third-party/d3.promise.min.js',
-                            '/scripts/third-party/lodash.min.js',
+                            '/lib/third-party/d3.min.js',
+                            '/lib/third-party/d3.promise.min.js',
+                            '/lib/third-party/lodash.min.js',
                             '/lib/home.min.js'
                         ],
                         searchPath : '/search'
@@ -180,11 +180,11 @@ function _renderSearchPage(req, res, params) {
                                         '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
                                         '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
                                         '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
-                                        '/scripts/third-party/leaflet-omnivore.min.js',
-                                        '/scripts/third-party/colorbrewer.min.js',
-                                        '/scripts/third-party/d3.min.js',
-                                        '/scripts/third-party/d3.promise.min.js',
-                                        '/scripts/third-party/lodash.min.js',
+                                        '/lib/third-party/leaflet-omnivore.min.js',
+                                        '/lib/third-party/colorbrewer.min.js',
+                                        '/lib/third-party/d3.min.js',
+                                        '/lib/third-party/d3.promise.min.js',
+                                        '/lib/third-party/lodash.min.js',
                                         '/lib/search.min.js'
                                     ],
                                     searchDatasetsUrl : searchDatasetsUrl,
@@ -245,11 +245,11 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
         if (results.length > 0) {
 
             params.regions = results.map(function(result) {
-                
-                return { 
+
+                return {
                     autoCompleteName : result.autocomplete_name,
-                    id : result.id, 
-                    name : result.name, 
+                    id : result.id,
+                    name : result.name,
                     type : result.type
                 };
             });
