@@ -10,18 +10,19 @@ class MapContainer {
 
         this.legend = new LegendControl();
         this.tooltip = new TooltipControl();
+        this.variableControl = new VariableControl(source.variables);
 
         this.map = this.createMap();
     }
 
     static create(selector, source, region) {
         return new Promise((resolve, reject) => {
-            TopoModel.get(region).then(topology => {
-                const selection = d3.select(selector);
-                resolve(new MapContainer(selection, source, region, topology));
-            }, error => {
-                throw error;
-            });
+            TopoModel.get(region)
+                .then(topology => {
+                    const selection = d3.select(selector);
+
+                    resolve(new MapContainer(selection, source, region, topology));
+                }, reject);
         });
     }
 
@@ -46,16 +47,21 @@ class MapContainer {
 
         map.addControl(this.legend);
         map.addControl(this.tooltip);
+        map.addControl(this.variableControl);
 
         map.addLayer(this.topoLayer);
 
         return map;
     }
 
-    display(model) {
-        const view = new MapView(model, this.topoLayer, this.legend, this.tooltip);
-
-        view.display()
+    display(variable) {
+        MapModel.create(this.source, this.region, variable)
+            .then(model => {
+                const view = new MapView(model, this.topoLayer, this.legend, this.tooltip);
+                view.display();
+            }, error => {
+                throw error;
+            });
     }
 }
 
