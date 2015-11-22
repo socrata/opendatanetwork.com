@@ -13,12 +13,11 @@ const VariableControl = L.Control.extend({
         const container = L.DomUtil.create('div', 'variable-container');
         this.container = d3.select(container);
 
-        let variable = this.variables[0];
-        let year = variable.years[variable.years.length - 1];
-        console.log(year);
+        let currentVariable = this.variables[0];
+        let currentYear = currentVariable.years[currentVariable.years.length - 1];
 
         const update = () => {
-            this.callback(variable, year);
+            this.callback(currentVariable, currentYear);
         }
 
         update();
@@ -33,8 +32,8 @@ const VariableControl = L.Control.extend({
             .append('select')
             .attr('class', 'variable-select')
             .on('change', () => {
-                variable = optionDatum(variableSelect);
-                setYearOptions(variable);
+                currentVariable = optionDatum(variableSelect);
+                updateYearOptions();
                 update();
             });
 
@@ -43,6 +42,7 @@ const VariableControl = L.Control.extend({
             .data(this.variables)
             .enter()
             .append('option')
+            .property('selected', variable => variable === currentVariable)
             .attr('value', variable => variable.name)
             .text(variable => variable.name);
 
@@ -50,26 +50,27 @@ const VariableControl = L.Control.extend({
             .append('select')
             .attr('class', 'year-select')
             .on('change', () => {
-                year = optionDatum(yearSelect);
+                currentYear = optionDatum(yearSelect);
                 update();
             });
 
-        function setYearOptions(variable) {
+        function updateYearOptions() {
             yearSelect.selectAll('option').remove();
 
-            if (! _.contains(variable.years, year))
-                year = variable.years[variable.years.length - 1];
+            if (! _.contains(currentVariable.years, currentYear))
+                currentYear = currentVariable.years[currentVariable.years.length - 1];
 
             yearSelect
                 .selectAll('option')
-                .data(variable.years)
+                .data(currentVariable.years)
                 .enter()
                 .append('option')
+                .property('selected', year => year === currentYear)
                 .attr('value', year => year)
                 .text(year => year);
         }
 
-        setYearOptions(variable);
+        updateYearOptions();
 
         return container;
     }
