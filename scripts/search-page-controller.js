@@ -1144,8 +1144,8 @@ class SearchPageController {
 
         const region = MapConstants.REGIONS.state;
 
-        MapContainer.create('#map', source, region).then(map => {
-            console.log('map created');
+        MapContainer.create('#map', source, region).catch(error => {
+            throw error;
         });
     }
 

@@ -34,7 +34,7 @@ const MapConstants = {
     GAZETTEER_URL: 'https://federal.demo.socrata.com/resource/gm3u-gw57.json',
     ROSTER_URL: 'https://federal.demo.socrata.com/resource/7g2b-8brv.json',
 
-    TOPOJSON_DIRECTORY: 'geo/',
+    TOPOJSON_DIRECTORY: '/geo/',
     TOPOJSON_SUFFIX: '.topo.json',
 
     REGIONS: {
