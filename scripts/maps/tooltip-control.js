@@ -6,7 +6,8 @@ const TooltipControl = L.Control.extend({
 
     onAdd: function(map) {
         const containerDiv = L.DomUtil.create('div', 'tooltip');
-        this.container = d3.select(containerDiv);
+        this.container = d3.select(containerDiv)
+            .style('display', 'none');
 
         this.name = this.container
             .append('div')
