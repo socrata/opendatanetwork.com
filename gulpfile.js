@@ -3,6 +3,7 @@ var gulp = require('gulp');
 var sourcemaps = require('gulp-sourcemaps');
 var babel = require('gulp-babel');
 var concat = require('gulp-concat');
+var uglify = require('gulp-uglify');
 var cached = require('gulp-cached');
 var remember = require('gulp-remember');
 
@@ -34,6 +35,7 @@ function js(src, dest) {
             .pipe(sourcemaps.init())
             .pipe(babel())
             .pipe(concat(dest))
+            .pipe(uglify())
             .pipe(sourcemaps.write('.'))
             .pipe(gulp.dest('lib'));
     };
