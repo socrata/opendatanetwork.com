@@ -7,7 +7,7 @@ class Complete {
     }
 
     get(query) {
-        if (query == '') {
+        if (query === '') {
             return [];
         } else {
             this.results.handle($.getJSON(this.queryBuilder(query)));
@@ -53,17 +53,17 @@ class Results {
             this.empty();
 
             const options = results.options;
-            if (options.length == 0) {
+            if (options.length === 0) {
                 this.hide();
             } else {
                 this.unhide();
                 this.show(options);
             }
-        }
+        };
 
         const failure = error => {
             throw error;
-        }
+        };
 
         resultsPromise.then(success, failure);
     }
@@ -107,13 +107,13 @@ class AutoSuggestRegionController {
     }
 
     suggest(term) {
-        if (term == '') {
+        if (term === '') {
             this.resultSelection.style('display', 'none');
         } else {
             this.resultSelection.style('display', 'block');
 
             this.completers.forEach(completer => {
-                completer.get(term)
+                completer.get(term);
             });
         }
     }

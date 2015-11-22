@@ -22,7 +22,7 @@ class ApiController {
         this.healthDataUrls = {
             rwjf_county_health_rankings_2015: "https://odn.data.socrata.com/resource/7ayp-utp2.json?$where=",
             cdc_brfss_prevalence_2011_2013: "https://odn.data.socrata.com/resource/n4rt-3rmd.json?$where="
-        }
+        };
     }
 
     // Promises

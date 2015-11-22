@@ -24,7 +24,7 @@ const LegendControl = L.Control.extend({
         const width = 200;
         const xOffset = width / 2;
 
-        const values = _.filter(scale.values, value => !(isNaN(value)))
+        const values = _.filter(scale.values, value => !(isNaN(value)));
         const [min, max] = d3.extent(values);
         const lowerQuartile = d3.quantile(values, 0.25);
         const median = d3.median(values);

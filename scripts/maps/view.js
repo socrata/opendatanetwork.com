@@ -51,7 +51,7 @@ class MapView {
 
                 layer.setStyle(style);
             }
-        }
+        };
 
         this.topoLayers.eachLayer(styleLayer);
     }

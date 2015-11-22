@@ -18,7 +18,7 @@ const VariableControl = L.Control.extend({
 
         const update = () => {
             this.callback(currentVariable, currentYear);
-        }
+        };
 
         update();
 

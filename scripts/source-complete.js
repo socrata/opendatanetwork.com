@@ -32,6 +32,6 @@ const sourceComplete = (() => {
         const complete = new Complete(url, results);
 
         return new AutoSuggestRegionController(inputSelection, resultSelection, [complete]);
-    }
+    };
 })();
 

@@ -4,5 +4,5 @@ const Constants = {
 
     // maximum number of results from Socrata
     LIMIT: 50000
-}
+};
 
