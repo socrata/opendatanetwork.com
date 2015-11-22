@@ -1120,36 +1120,33 @@ class SearchPageController {
     }
 
     drawPopulationMap() {
-        const testSource = {
+        const source = {
             name: 'population',
             domain: 'odn.data.socrata.com',
-            fxf: 'e3rd-zzmr'
+            fxf: 'e3rd-zzmr',
+            variables: [
+                {
+                    name: 'Population',
+                    column: 'population',
+                    years: [2009, 2010, 2011, 2012, 2013],
+                    value: parseFloat,
+                    format: d3.format(',.0f')
+                },
+                {
+                    name: 'Population Change',
+                    column: 'population_percent_change',
+                    years: [2009, 2010, 2011, 2012, 2013],
+                    value: parseFloat,
+                    format: value => `${d3.format('.2f')}%`
+                }
+            ]
         };
 
-        const testRegion = MapConstants.REGIONS.state;
+        const region = MapConstants.REGIONS.state;
 
-        const testVariable = {
-            name: 'Population (2013)',
-            column: 'population',
-            params: {'year': 2013},
-            value: parseFloat,
-            format: d3.format(',.0f'),
-            reverse: true
-        };
-
-        TopoModel.get(testRegion)
-            .then(topology => {
-                const view = new MapContainer('#map', topology);
-
-                MapModel.create(testSource, testRegion, testVariable)
-                    .then(model => {
-                        view.display(model)
-                    }, error => {
-                        throw error;
-                    });
-            }, error => {
-                throw error;
-            });
+        MapContainer.create('#map', source, region).then(map => {
+            console.log('map created');
+        });
     }
 
     // Places in region

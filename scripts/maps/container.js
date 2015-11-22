@@ -1,7 +1,9 @@
 
 class MapContainer {
-    constructor(selector, topology) {
-        this.selection = d3.select(selector);
+    constructor(selection, source, region, topology) {
+        this.selection = selection;
+        this.source = source;
+        this.region = region;
 
         this.topology = topology;
         this.topoLayer = omnivore.topojson.parse(topology);
@@ -10,6 +12,17 @@ class MapContainer {
         this.tooltip = new TooltipControl();
 
         this.map = this.createMap();
+    }
+
+    static create(selector, source, region) {
+        return new Promise((resolve, reject) => {
+            TopoModel.get(region).then(topology => {
+                const selection = d3.select(selector);
+                resolve(new MapContainer(selection, source, region, topology));
+            }, error => {
+                throw error;
+            });
+        });
     }
 
     createMap() {
