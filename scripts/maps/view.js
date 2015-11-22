@@ -14,7 +14,7 @@ class MapView {
     }
 
     updateLegend() {
-        this.legend.update(this.scale, this.model.variable);
+        this.legend.update(this.scale, this.model.variable, this.model.year);
     }
 
     updateLayers() {

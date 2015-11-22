@@ -10,7 +10,7 @@ const LegendControl = L.Control.extend({
         return container;
     },
 
-    update: function(scale, variable) {
+    update: function(scale, variable, year) {
         this.container.selectAll('*').remove();
 
         const legendContainer = this.container
@@ -46,7 +46,7 @@ const LegendControl = L.Control.extend({
             .attr('class', 'legend-name')
             .attr('text-anchor', 'middle')
             .attr('x', xOffset + dimension / 2).attr('y', dimension * 1.2)
-            .text(variable.name);
+            .text(`${variable.name} (${year})`);
 
         const tickGroup = legend
             .append('g')

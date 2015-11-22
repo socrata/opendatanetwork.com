@@ -12,10 +12,11 @@ class TopoModel {
 
 
 class MapModel {
-    constructor(source, region, variable, regions) {
+    constructor(source, region, variable, year, regions) {
         this.source = source;
         this.region = region;
         this.variable = variable;
+        this.year = year;
         this.regions = regions;
         this.regionById = MapModel.makeLookup(regions, region => region.id);
     }
@@ -26,12 +27,20 @@ class MapModel {
         return lookup;
     }
 
-    static create(source, region, variable) {
+    static create(source, region, variable, year) {
+        const idColumn = source.idColumn || 'id';
+        const typeColumn = source.typeColumn || 'type';
+        const nameColumn = source.nameColumn || 'name';
+        const yearColumn = source.yearColumn || 'year';
+
         return new Promise((resolve, reject) => {
+            const baseColumns = [idColumn, typeColumn, nameColumn, yearColumn];
+            const columns = baseColumns.concat([variable.column]);
             const baseParams = {
                 'type': region.id,
-                '$select': ['id', 'type', 'name'].concat([variable.column]).join(),
-                '$limit': Constants.LIMIT
+                '$select': columns.join(),
+                '$limit': Constants.LIMIT,
+                [yearColumn]: year
             };
 
             const params = _.extend({}, baseParams, variable.params);
@@ -47,11 +56,12 @@ class MapModel {
                         name: region.name,
                         value: value,
                         valueName: variable.name,
-                        valueFormatted: variable.format(value)
+                        valueFormatted: variable.format(value),
+                        year: year
                     };
                 });
 
-                resolve(new MapModel(source, region, variable, regions));
+                resolve(new MapModel(source, region, variable, year, regions));
             }
 
             function failure(error) {

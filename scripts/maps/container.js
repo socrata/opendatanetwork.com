@@ -51,11 +51,20 @@ class MapContainer {
 
         map.addLayer(this.topoLayer);
 
+        this.displayFirst();
+
         return map;
     }
 
-    display(variable) {
-        MapModel.create(this.source, this.region, variable)
+    displayFirst() {
+        const variable = this.source.variables[0];
+        const year = variable.years[variable.years.length - 1];
+
+        this.display(variable, year);
+    }
+
+    display(variable, year) {
+        MapModel.create(this.source, this.region, variable, year)
             .then(model => {
                 const view = new MapView(model, this.topoLayer, this.legend, this.tooltip);
                 view.display();

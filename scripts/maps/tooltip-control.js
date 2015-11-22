@@ -27,7 +27,8 @@ const TooltipControl = L.Control.extend({
     },
 
     showRegion: function(region) {
-        this.show(region.name, `${region.valueName}: ${region.valueFormatted}`);
+        this.show(region.name,
+                  `${region.valueName} (${region.year}): ${region.valueFormatted}`);
     },
 
     hide: function() {
