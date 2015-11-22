@@ -10,7 +10,12 @@ class MapContainer {
 
         this.legend = new LegendControl();
         this.tooltip = new TooltipControl();
-        this.variableControl = new VariableControl(source.variables);
+
+        const callback = (variable, year) => {
+            this.display(variable, year);
+        };
+
+        this.variableControl = new VariableControl(source.variables, callback);
 
         this.map = this.createMap();
     }
@@ -51,16 +56,7 @@ class MapContainer {
 
         map.addLayer(this.topoLayer);
 
-        this.displayFirst();
-
         return map;
-    }
-
-    displayFirst() {
-        const variable = this.source.variables[0];
-        const year = variable.years[variable.years.length - 1];
-
-        this.display(variable, year);
     }
 
     display(variable, year) {
