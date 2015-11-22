@@ -143,7 +143,7 @@ class SearchPageController {
 
         // Similar regions
         //
-        this.drawSimilarRegions(function(region) {
+        this.drawSimilarRegions(region => {
 
             self.setAutoSuggestedRegion(region, false);
             self.navigate();
@@ -1357,10 +1357,11 @@ class SearchPageController {
         if (this.params.regions.length == 0)
             return;
 
-        var region = this.params.regions[0];
-        var controller = new ApiController();
+        const region = this.params.regions[0];
+        const controller = new ApiController();
 
-        controller.getSimilarRegions(region.id)
+        controller.getSupportedVectors(region.id)
+            .then(data => controller.getSimilarRegions(region.id, data.available_vectors))
             .then(data => this.drawSimilarRegionsList(data, onClickRegion))
             .catch(error => console.error(error));
     }
@@ -1373,12 +1374,16 @@ class SearchPageController {
         var count = 0;
         var s = '';
 
+        // Get the displayed regions
+        //
+        const displayedRegions = [];
+
         for (var i = 0; i < data.most_similar.length; i++) {
 
             if (this.isRegionIdContainedInCurrentRegions(data.most_similar[i].id))
                 continue;
-
-            s += '<li><a><i class="fa fa-plus"></i>' + data.most_similar[i].name + '</a></li>'
+                
+            displayedRegions.push(data.most_similar[i]);
 
             if (count == 4)
                 break;
@@ -1386,13 +1391,33 @@ class SearchPageController {
             count++;
         }
 
+        // Build list items
+        //
+        for (var i = 0; i < displayedRegions.length; i++) {
+            s += '<li><a><i class="fa fa-plus"></i>' + displayedRegions[i].name + '</a></li>'
+        }
+
+        // Display the list
+        //
         $('#similar-regions').html(s);
         $('#similar-regions').slideToggle(100);
 
+        // Hook up the click handler
+        //
         $('#similar-regions li a').click(function() {
 
-            var index = $(this).parent().index();
-            onClickRegion(data.most_similar[index].name);
+            const index = $(this).parent().index();
+            const controller = new ApiController();
+
+            controller.getPlaceFromRoster(displayedRegions[index].id)
+                .then(data => {
+
+                    if (data.length == 0)
+                        return;
+
+                    onClickRegion(data[0].autocomplete_name);
+                })
+                .catch(error => console.error(error));
         });
     }
 
@@ -1586,12 +1611,8 @@ class SearchPageController {
 
             var regionNames = [];
 
-            if (this.params.resetRegions == false) {
-
-                regionNames = this.params.regions.map(function(region) {
-                    return region.name;
-                });
-            }
+            if (this.params.resetRegions == false)
+                regionNames = this.params.regions.map(region => region.autoCompleteName);
 
             if (this.params.autoSuggestedRegion)
                 regionNames.push(this.params.autoSuggestedRegion);
