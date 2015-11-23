@@ -6,20 +6,14 @@
 
 This document describes the data-driven aspects of the OpenDataNetwork.com website, details how and where the site is hosted and the lists location of the source tree.
 
-##Getting Setup###
-
-This is a Node.js web site.  [NPM](https://www.npmjs.org/) and [Grunt](http://gruntjs.com/) should be installed to build the site.  To deploy, the [Heroku Toolbelt](https://toolbelt.heroku.com/) is required.
-
-The site uses SASS for CSS generation, and uses Uglify for JavaScript compression.  It uses Express and EJS for template rendering.
-
-One page - /census - uses a PostgreSQL database.  You need to install [Postgres.app](http://postgresapp.com/) on your mac and pull down the census database from our instance on Heroku or create a database locally run the node script (/tasks/schema.js) to create the single table.
-
-To get started, simply clone down the site and install all packages by typing the following from the source directory:
-
-	$ git clone https://github.com/socrata/opendatanetwork.com.git
-	$ npm install
-
 ## Development
+
+This is a [Node.js](https://nodejs.org/) site.
+Install `node` along with `npm` to get started.
+
+### Dependencies
+
+Install all dependencies with `npm install`.
 
 ### Build
 
