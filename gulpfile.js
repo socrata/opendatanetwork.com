@@ -62,7 +62,7 @@ gulp.task('search', js(searchScripts, 'search.min.js'));
 gulp.task('js', ['home', 'search']);
 
 
-gulp.task('sass', function() {
+gulp.task('css', function() {
     return gulp.src(['styles/**/*.scss', 'styles/**/*.sass'])
         .pipe(sourcemaps.init())
         .pipe(sass({outputStyle: 'compressed'}))
@@ -71,11 +71,11 @@ gulp.task('sass', function() {
 });
 
 
-gulp.task('build', ['js', 'sass']);
+gulp.task('build', ['js', 'css']);
 
 gulp.task('watch', ['build'], function() {
     gulp.watch('src/**/*.js', ['js']);
-    gulp.watch(['styles/*.sass', 'styles/*.scss'], ['sass']);
+    gulp.watch(['styles/*.sass', 'styles/*.scss'], ['css']);
 });
 
 gulp.task('start', function() {

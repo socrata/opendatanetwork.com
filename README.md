@@ -19,14 +19,16 @@ To get started, simply clone down the site and install all packages by typing th
 	$ git clone https://github.com/socrata/opendatanetwork.com.git
 	$ npm install
 
-I used nodemon to run this site locally.  Type the following to start the node listening:
+## Development
 
-	$ grunt nodemon
+### Build
 
-The site can now be browsed locally at:
-
-	http://localhost:3000
-
+The build process is automated using `gulp` and configured with `gulpfile.js`.
+ - `gulp js`: build javascript
+ - `gulp css`: build css
+ - `gulp build`: build javascript and css
+ - `gulp watch` (or `gulp`): rebuild source on change
+ - `gulp start`: run local webserver at [localhost:3000](http://localhost:3000)
 
 ##Source Files##
 
@@ -34,32 +36,9 @@ The Open Data Network web site source files are located in Github.
 
 [https://github.com/socrata/opendatanetwork.com]()
 
-All the JSON files which hold the data to be displayed in the slider, the tiles list, the decision tree on the /explore page and the list of data portals is stored in /data folder.  
+All the JSON files which hold the data to be displayed in the slider, the tiles list, the decision tree on the /explore page and the list of data portals is stored in /data folder.
 
 [https://github.com/socrata/opendatanetwork.com/tree/master/data]()
-
-
-###Compressing CSS###
-
-After making a change to the CSS, you will want to compress the files to create the minified versions which the site uses.  Do this from the source directory.  Type:  
-
-	$ grunt sass
-
-Minified versions of the .css files will be written to the /styles/compressed and will have the extension .min.css.
-
-
-###Compressing JavaScript###
-
-Similarly, to compress the JavaScript, type:
-
-	$ grunt uglify
-	
-Just like the CSS, minified versions of the .js files will be written to the /scripts/compressed and will have the extension .min.js.
-
-To compress everything:
-
-	$ grunt
-
 
 ##JSON Data Files##
 
