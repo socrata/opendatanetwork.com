@@ -1,12 +1,23 @@
 module.exports = function(grunt) {
     var baseScripts = [
-        'scripts/app.js',
-        'scripts/api-controller.js',
-        'scripts/constants.js',
-        'scripts/region-lookup.js',
-        'scripts/autocomplete.js',
-        'scripts/multi-complete.js',
-        'scripts/source-complete.js'
+        'src/app.js',
+        'src/api-controller.js',
+        'src/constants.js',
+        'src/region-lookup.js',
+        'src/autocomplete.js',
+        'src/multi-complete.js',
+        'src/source-complete.js',
+    ];
+
+    var mapScripts = [
+        'src/maps/scales.js',
+        'src/maps/constants.js',
+        'src/maps/model.js',
+        'src/maps/view.js',
+        'src/maps/container.js',
+        'src/maps/scale-control.js',
+        'src/maps/tooltip-control.js',
+        'src/maps/variable-control.js'
     ];
 
     var config = {
@@ -50,7 +61,7 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     cwd: '<%= project.styles %>',
-                    src: ['*.scss'],
+                    src: ['*.scss', '*.sass'],
                     dest: '<%= project.styles %>/compressed',
                     ext: '.min.css'
                 }]
@@ -65,12 +76,13 @@ module.exports = function(grunt) {
                 }
             },
             home: {
-                src: baseScripts.concat(['scripts/home.js']),
+                src: baseScripts.concat(['src/home.js']),
                 dest: 'lib/home.es6.js'
             },
             search: {
-                src: baseScripts.concat(['scripts/search-page-controller.js',
-                                         'scripts/search.js']),
+                src: baseScripts.concat(mapScripts).concat(
+                    ['src/search-page-controller.js',
+                     'src/search.js']),
                 dest: 'lib/search.es6.js'
             }
         },
