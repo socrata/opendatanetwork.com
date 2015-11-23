@@ -3,7 +3,7 @@ const MapConstants = {
     // Same base layer as Data Lens
     BASE_LAYER_URL: 'https://a.tiles.mapbox.com/v3/socrata-apps.ibp0l899/{z}/{x}/{y}.png',
     BASE_LAYER: {
-        opacity: 0.15 // Change to 0.15 to make the maps look like Data Lens
+        opacity: 0.5 // Change to 0.15 to make the maps look like Data Lens
     },
 
     // See http://bl.ocks.org/mbostock/5577023 for a visual index of Color Brewer colors

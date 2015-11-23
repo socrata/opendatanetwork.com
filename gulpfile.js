@@ -8,6 +8,7 @@ var cached = require('gulp-cached');
 var remember = require('gulp-remember');
 var sass = require('gulp-sass');
 var rename = require('gulp-rename');
+var nodemon = require('gulp-nodemon');
 
 var baseScripts = [
     'src/app.js',
@@ -37,10 +38,10 @@ function js(src, dest) {
             .pipe(cached(dest))
             .pipe(sourcemaps.init())
             .pipe(babel())
+            .pipe(remember(dest))
             .pipe(concat(dest))
             .pipe(uglify())
             .pipe(sourcemaps.write('.'))
-            .pipe(remember(dest))
             .pipe(gulp.dest('lib'));
     };
 }
@@ -58,10 +59,10 @@ var searchScripts = baseScripts
 
 gulp.task('search', js(searchScripts, 'search.min.js'));
 
-gulp.watch('src/**/*.js', ['home', 'search']);
+gulp.task('js', ['home', 'search']);
 
 
-gulp.task('sass', function() {
+gulp.task('css', function() {
     return gulp.src(['styles/**/*.scss', 'styles/**/*.sass'])
         .pipe(sourcemaps.init())
         .pipe(sass({outputStyle: 'compressed'}))
@@ -69,5 +70,20 @@ gulp.task('sass', function() {
         .pipe(gulp.dest('styles/compressed'));
 });
 
-gulp.task('default', ['home', 'search', 'sass']);
+
+gulp.task('build', ['js', 'css']);
+
+gulp.task('watch', ['build'], function() {
+    gulp.watch('src/**/*.js', ['js']);
+    gulp.watch(['styles/*.sass', 'styles/*.scss'], ['css']);
+});
+
+gulp.task('start', function() {
+    return nodemon({
+        script: 'app.js',
+        watch: ['lib/', 'styles/compressed/']
+    });
+});
+
+gulp.task('default', ['watch']);
 
