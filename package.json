@@ -32,6 +32,7 @@
     "gulp-babel": "^6.1.0",
     "gulp-cached": "^1.1.0",
     "gulp-concat": "^2.6.0",
+    "gulp-nodemon": "^2.0.4",
     "gulp-remember": "^0.3.0",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.1.0",
