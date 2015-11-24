@@ -81,7 +81,7 @@ gulp.task('watch', ['build'], function() {
 gulp.task('start', function() {
     return nodemon({
         script: 'app.js',
-        watch: ['lib/', 'styles/compressed/']
+        watch: ['lib/', 'styles/compressed/', 'controllers/', 'data/']
     });
 });
 
