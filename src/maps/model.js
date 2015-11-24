@@ -32,6 +32,8 @@ class MapModel {
         const typeColumn = source.typeColumn || 'type';
         const nameColumn = source.nameColumn || 'name';
         const yearColumn = source.yearColumn || 'year';
+        const hasPopulation = source.hasPopulation || false;
+        const populationColumn = source.populationColumn || 'population';
 
         return new Promise((resolve, reject) => {
             const baseColumns = [idColumn, typeColumn, nameColumn, yearColumn];
@@ -42,8 +44,9 @@ class MapModel {
                 '$limit': Constants.LIMIT,
                 [yearColumn]: year
             };
+            const sortParams = hasPopulation ? {'$order': `${populationColumn} DESC`} : {};
 
-            const params = _.extend({}, baseParams, variable.params);
+            const params = _.extend({}, baseParams, sortParams, variable.params);
             const url = `https://${source.domain}/resource/${source.fxf}.json?${$.param(params)}`;
 
             function success(results) {

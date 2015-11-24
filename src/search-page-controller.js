@@ -1124,6 +1124,7 @@ class SearchPageController {
             name: 'population',
             domain: 'odn.data.socrata.com',
             fxf: 'e3rd-zzmr',
+            hasPopulation: true,
             variables: [
                 {
                     name: 'Population',
@@ -1142,7 +1143,7 @@ class SearchPageController {
             ]
         };
 
-        const region = MapConstants.REGIONS.state;
+        const region = MapConstants.REGIONS.place;
 
         MapContainer.create('#map', source, region).catch(error => {
             throw error;
@@ -1382,7 +1383,7 @@ class SearchPageController {
 
             if (this.isRegionIdContainedInCurrentRegions(data.most_similar[i].id))
                 continue;
-                
+
             displayedRegions.push(data.most_similar[i]);
 
             if (count == 4)

@@ -17,20 +17,40 @@ class MapView {
         this.legend.update(this.scale, this.model.variable, this.model.year);
     }
 
+    getStyle(region) {
+        const type = this.model.region.type;
+        const baseStyle = {
+            stroke: true,
+            color: MapConstants.REGION_BORDER_COLOR,
+            weight: MapConstants.REGION_BORDER_WEIGHT,
+            fillColor: this.scale.scale(region.value),
+            fillOpacity: MapConstants.REGION_FILL_OPACITY
+        };
+
+        function additionalStyle() {
+            if (type == 'point') {
+                return {
+                    stroke: false
+                };
+            } else if (type == 'choropleth') {
+                return {
+                    stroke: true
+                };
+            } else {
+                return {};
+            }
+        }
+
+        return _.extend(baseStyle, additionalStyle());
+    }
+
     updateLayers() {
         const styleLayer = layer => {
             const id = layer.feature.id;
 
             if (this.model.regionById.has(id)) {
                 const region = this.model.regionById.get(id);
-
-                const style = {
-                    stroke: true,
-                    color: MapConstants.REGION_BORDER_COLOR,
-                    weight: MapConstants.REGION_BORDER_WEIGHT,
-                    fillColor: this.scale.scale(region.value),
-                    fillOpacity: MapConstants.REGION_FILL_OPACITY
-                };
+                const style = this.getStyle(region);
 
                 const events = {
                     mouseover: () => this.tooltip.showRegion(region),

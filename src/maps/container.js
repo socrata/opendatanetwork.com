@@ -6,7 +6,7 @@ class MapContainer {
         this.region = region;
 
         this.topology = topology;
-        this.topoLayer = omnivore.topojson.parse(topology);
+        this.topoLayer = MapContainer.parseTopology(region, topology);
 
         this.legend = new LegendControl();
         this.tooltip = new TooltipControl();
@@ -18,6 +18,22 @@ class MapContainer {
         this.variableControl = new VariableControl(source.variables, callback);
 
         this.map = this.createMap();
+    }
+
+    static parseTopology(region, topology) {
+        if (region.type == 'choropleth') {
+            return omnivore.topojson.parse(topology);
+        } else if (region.type == 'point') {
+            const layer = L.geoJson(null, {
+                pointToLayer: (feature, coordinate) => {
+                    return L.circle(coordinate, 5000);
+                }
+            });
+
+            return omnivore.topojson.parse(topology, null, layer);
+        } else {
+            console.error('${region.type} is not a valid region type');
+        }
     }
 
     static create(selector, source, region) {
