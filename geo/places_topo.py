@@ -15,13 +15,15 @@ import csv
 import json
 
 
-PATH = 'data/gazetteer/formatted/gazetteer.csv'
+PATH = 'gazetteer.csv'
+NUMBER = 5000 # exports NUMBER most populous cities
 
 def get_places():
     with open(PATH, encoding='latin') as csv_file:
         reader = csv.DictReader(csv_file)
 
-        return [row for row in reader if row.get('type') == 'place']
+        return [row for row in reader
+                if row.get('type') == 'place']
 
 
 def to_topojson(places):
@@ -29,7 +31,7 @@ def to_topojson(places):
         return {
             'type': 'Point',
             'id': place.get('id'),
-            'coordinates': [place.get('longitude'), place.get('latitude')]
+            'coordinates': [float(place.get('longitude')), float(place.get('latitude'))]
         }
 
     return {
@@ -45,7 +47,8 @@ def to_topojson(places):
 
 if __name__ == '__main__':
     places = get_places()
-    topojson = to_topojson(places)
+    sorted_places = sorted(places, key=lambda row: int(row.get('population')), reverse=True)
+    topojson = to_topojson(sorted_places[:NUMBER])
 
     with open('places.topo.json', 'w') as out:
         json.dump(topojson, out)
