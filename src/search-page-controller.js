@@ -1143,9 +1143,8 @@ class SearchPageController {
             ]
         };
 
-        const region = MapConstants.REGIONS.place;
-
-        MapContainer.create('#map', source, region).catch(error => {
+        const regions = this.params.regions;
+        MapContainer.createWithRegions('#map', source, regions).catch(error => {
             throw error;
         });
     }

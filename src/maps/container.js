@@ -47,6 +47,24 @@ class MapContainer {
         });
     }
 
+    static createWithRegions(selector, source, regions) {
+        const defaultRegion = MapConstants.REGIONS[MapConstants.DEFAULT_REGION];
+        function getMapRegion(region) {
+            const type = region.type;
+
+            if (type in MapConstants.REGIONS) {
+                return MapConstants.REGIONS[type];
+            } else {
+                console.error(`region not found for type: ${type}`);
+                return defaultRegion;
+            }
+        }
+
+        const region = regions.length > 0 ? getMapRegion(regions[0]) : defaultRegion;
+        console.log(region);
+        return MapContainer.create(selector, source, region);
+    }
+
     createMap() {
         const id = 'leaflet-map';
         const container = this.selection

@@ -45,6 +45,8 @@ const MapConstants = {
         county: {name: 'Counties', id: 'county', topo: 'county', type: 'choropleth'},
         msa: {name: 'Metros', id: 'msa', topo: 'cbsa', type: 'choropleth'},
         place: {name: 'Cities', id: 'place', topo: 'places', type: 'point'}
-    }
+    },
+
+    DEFAULT_REGION: 'state'
 };
 
