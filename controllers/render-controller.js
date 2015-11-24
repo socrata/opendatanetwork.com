@@ -244,20 +244,42 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
 
         if (results.length > 0) {
 
-            params.regions = results.map(function(result) {
+            var orderedRegions = [];
 
-                return {
-                    autoCompleteName : result.autocomplete_name,
-                    id : result.id,
-                    name : result.name,
-                    type : result.type
-                };
-            });
+            for (var i in regions) {
+
+                var region = getRegionFromResultsByAutoCompleteName(results, regions[i]);
+
+                if (region != null)
+                    orderedRegions.push(region);
+            }
+
+            params.regions = orderedRegions;
         }
 
         if (completionHandler) completionHandler(params);
     });
 };
+
+function getRegionFromResultsByAutoCompleteName(results, regionAutoCompleteName) {
+
+    for (var i in results) {
+
+        var result = results[i];
+
+        if (regionAutoCompleteName == result.autocomplete_name) {
+
+            return {
+                autoCompleteName : result.autocomplete_name,
+                id : result.id,
+                name : result.name,
+                type : result.type
+            };
+        }
+    }
+
+    return null;
+}
 
 function getNormalizedArrayFromDelimitedString(s) {
 
