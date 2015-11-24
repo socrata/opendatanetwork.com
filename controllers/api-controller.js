@@ -6,14 +6,12 @@ var numeral = require('numeral');
 var request = require('request');
 
 var baseCatalogUrl = 'http://api.us.socrata.com/api/catalog/v1';
-var baseFederalDemoUrl = 'https://odn.data.socrata.com/resource/7g2b-8brv';
-
-var autoCompleteNameUrl = baseFederalDemoUrl + '/?$where={0}';
 var cacheController = new CacheController();
 var categoriesUrl = baseCatalogUrl + '/categories';
 var defaultSearchResultCount = 10;
 var domainsUrl = baseCatalogUrl + '/domains'; 
 var maxDescriptionLength = 300;
+var rosterUrl = 'https://odn.data.socrata.com/resource/7g2b-8brv/?$where={0}';
 var searchUrl = baseCatalogUrl;
 var synonymController = new SynonymController();
 var userAgent = 'www.opendatanetwork.com';
@@ -49,7 +47,7 @@ ApiController.prototype.getAutoSuggestedRegions = function(names, successHandler
         return "autocomplete_name='" + encodeURIComponent(name) + "'"; 
     });
     
-    var url = autoCompleteNameUrl.format(pairs.join('%20OR%20'));
+    var url = rosterUrl.format(pairs.join(' OR '));
     getFromApi(url, successHandler, errorHandler);
 }
 

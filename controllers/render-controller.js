@@ -63,7 +63,8 @@ RenderController.prototype.renderHomePage = function(req, res) {
                             '/lib/third-party/lodash.min.js',
                             '/lib/home.min.js'
                         ],
-                        searchPath : '/search'
+                        searchPath : '/search',
+                        title : 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.'
                     });
              });
         });
@@ -189,7 +190,8 @@ function _renderSearchPage(req, res, params) {
                                     ],
                                     searchDatasetsUrl : searchDatasetsUrl,
                                     searchPath : req.path,
-                                    searchResults : results
+                                    searchResults : results,
+                                    title : RenderController.prototype.getSearchPageTitle(params)
                                 });
                         },
                         function() {
@@ -200,6 +202,43 @@ function _renderSearchPage(req, res, params) {
             });
         });
     });
+};
+
+RenderController.prototype.getSearchPageTitle = function(params) {
+
+    var rg = []
+
+    switch (params.vector) {
+
+        case 'population': rg.push('Population'); break;
+        case 'earnings': rg.push('Earnings'); break;
+        case 'education': rg.push('Education'); break;
+        case 'occupations': rg.push('Occupations'); break;
+        case 'gdp': rg.push('Economic'); break;
+        case 'health': rg.push('Health'); break;
+        case 'cost_of_living': rg.push('Cost of Living'); break;
+        default: rg.push('Population'); break;
+    }
+
+    var categories = params.categories.map(function(category) { return category.capitalize(); });
+    rg = rg.concat(categories);
+
+    var standards = params.standards.map(function(standard) { return standard.toUpperCase(); });
+    rg = rg.concat(standards);
+
+    var s = englishJoin(rg);
+    s += ' Data';
+
+    if (params.regions.length > 0) {
+
+        s += ' for ';
+        var regionNames = params.regions.map(function(region) { return region.name; });
+        s += englishJoin(regionNames);
+    }
+
+    s += ' on the Open Data Network';
+
+    return s;
 };
 
 RenderController.prototype.getSearchParameters = function(req, completionHandler) {
@@ -261,6 +300,21 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
     });
 };
 
+function englishJoin(list) {
+
+    var s = '';
+
+    for (var i = 0; i < list.length; i++) {
+
+        if (i > 0)
+            s += (i == list.length - 1) ? ' and ' : ', ';
+
+        s += list[i];
+    }
+    
+    return s;
+}
+
 function getRegionFromResultsByAutoCompleteName(results, regionAutoCompleteName) {
 
     for (var i in results) {
@@ -306,6 +360,11 @@ function renderErrorPage(req, res) {
 
 // Extensions
 //
+String.prototype.capitalize = function() {
+
+    return this.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+}
+
 String.prototype.split2 = function(s) {
 
     var rg = this.split(s);

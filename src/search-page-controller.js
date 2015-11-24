@@ -1683,6 +1683,8 @@ class SearchPageController {
             this.params.categories.splice(i, 1); // remove at index i
         else
             this.params.categories.push(category);
+
+        this.params.page = 1;
     }
 
     toggleDomain(domain) {
@@ -1693,6 +1695,8 @@ class SearchPageController {
             this.params.domains.splice(i, 1); // remove at index i
         else
             this.params.domains.push(domain);
+
+        this.params.page = 1;
     }
 
     toggleStandard(standard) {
@@ -1703,5 +1707,7 @@ class SearchPageController {
             this.params.standards.splice(i, 1); // remove at index i
         else
             this.params.standards.push(standard);
+
+        this.params.page = 1;
     }
 }
