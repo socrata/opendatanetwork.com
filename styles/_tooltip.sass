@@ -1,0 +1,18 @@
+
+.tooltip
+    position: relative
+    top: 1em
+    right: 1em
+    z-index: 100
+
+    color: $background-color
+    background-color: $primary-color
+    padding: 0.5em
+
+    .name
+        font-weight: bold
+
+    .value
+        .value-name::after
+            content: ': '
+
