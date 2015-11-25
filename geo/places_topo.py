@@ -31,7 +31,10 @@ def to_topojson(places):
         return {
             'type': 'Point',
             'id': place.get('id'),
-            'coordinates': [float(place.get('longitude')), float(place.get('latitude'))]
+            'coordinates': [float(place.get('longitude')), float(place.get('latitude'))],
+            'properties': {
+                'population': int(place.get('population'))
+            }
         }
 
     return {
