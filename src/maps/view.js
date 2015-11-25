@@ -18,16 +18,18 @@ class MapView {
     }
 
     getStyle(region) {
-        const type = this.model.region.type;
         const baseStyle = {
             stroke: true,
+            fill: true,
             color: MapConstants.REGION_BORDER_COLOR,
             weight: MapConstants.REGION_BORDER_WEIGHT,
             fillColor: this.scale.scale(region.value),
             fillOpacity: MapConstants.REGION_FILL_OPACITY
         };
 
-        function additionalStyle() {
+        const additionalStyle = (() => {
+            const type = this.model.region.type;
+
             if (type == 'point') {
                 return {
                     stroke: false
@@ -39,9 +41,9 @@ class MapView {
             } else {
                 return {};
             }
-        }
+        })();
 
-        return _.extend(baseStyle, additionalStyle());
+        return _.extend(baseStyle, additionalStyle);
     }
 
     updateLayers() {

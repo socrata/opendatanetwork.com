@@ -8,7 +8,7 @@ class MapContainer {
         this.regionIDs = new Set(regions.map(region => region.id));
 
         this.topology = topology;
-        this.topoLayer = MapContainer.parseTopology(regionType, topology);
+        this.topoLayer = this.parseTopology(regionType, topology);
 
         this.legend = new LegendControl();
         this.tooltip = new TooltipControl();
@@ -24,28 +24,41 @@ class MapContainer {
         this.zoomToSelectedRegions();
     }
 
-    static parseTopology(region, topology) {
-        if (region.type == 'choropleth') {
-            return omnivore.topojson.parse(topology);
-        } else if (region.type == 'point') {
-            const objects = topology.objects;
-            const features = topology.objects[Object.keys(objects)[0]].geometries;
-            const population = feature => feature.properties.population;
-            const populations = features.map(population);
-            const radiusScale = MapConstants.POINT_RADIUS_SCALE()
-                .domain(d3.extent(populations))
-                .range(MapConstants.POINT_RADIUS_RANGE_METERS);
-
-            const layer = L.geoJson(null, {
-                pointToLayer: (feature, coordinate) => {
-                    return L.circle(coordinate, radiusScale(population(feature)));
-                }
-            });
-
-            return omnivore.topojson.parse(topology, null, layer);
-        } else {
-            console.error('${region.type} is not a valid region type');
+    parseTopology(region, topology) {
+        const baseOptions = {
+            style: feature => {
+                return {
+                    stroke: false,
+                    fill: false
+                };
+            }
         }
+
+        const additionalOptions = (() => {
+            const type = this.regionType.type;
+
+            if (type == 'point') {
+                const objects = topology.objects;
+                const features = topology.objects[Object.keys(objects)[0]].geometries;
+                const population = feature => feature.properties.population;
+                const populations = features.map(population);
+                const radiusScale = MapConstants.POINT_RADIUS_SCALE()
+                    .domain(d3.extent(populations))
+                    .range(MapConstants.POINT_RADIUS_RANGE_METERS);
+
+                return {
+                    pointToLayer: (feature, coordinate) => {
+                        return L.circle(coordinate, radiusScale(population(feature)));
+                    }
+                };
+            } else {
+                return {};
+            }
+        })();
+
+        const options = _.extend(baseOptions, additionalOptions);
+        const layer = L.geoJson(null, options);
+        return omnivore.topojson.parse(topology, null, layer);
     }
 
     static create(selector, source, regions) {
