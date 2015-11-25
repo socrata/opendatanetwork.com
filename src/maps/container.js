@@ -25,25 +25,28 @@ class MapContainer {
     }
 
     parseTopology(region, topology) {
-        const baseStyle = {
-            color: MapConstants.REGION_BORDER_COLOR,
-            weight: MapConstants.REGION_BORDER_WEIGHT,
-            fillOpacity: MapConstants.REGION_FILL_OPACITY
-        };
-
-        const pointStyle = {
-            stroke: false
-        };
-
         const choropleth = this.regionType.type == 'choropleth';
 
-        const style = choropleth ?
-            baseStyle :
-            _.extend({}, baseStyle, pointStyle);
+        const baseOptions = () => {
+            const baseStyle = {
+                fill: false,
+                color: MapConstants.REGION_BORDER_COLOR,
+                weight: MapConstants.REGION_BORDER_WEIGHT,
+                fillOpacity: MapConstants.REGION_FILL_OPACITY
+            };
 
-        const baseOptions = {
-            style: () => style
-        };
+            const pointStyle = {
+                stroke: false
+            };
+
+            const style = choropleth ?
+                baseStyle :
+                _.extend({}, baseStyle, pointStyle);
+
+            return {
+                style: () => style
+            };
+        }
 
         const pointOptions = () => {
             const objects = topology.objects;
@@ -62,8 +65,8 @@ class MapContainer {
         }
 
         const options = choropleth ?
-            baseOptions :
-            _.extend({}, baseOptions, pointOptions());
+            baseOptions() :
+            _.extend({}, baseOptions(), pointOptions());
 
         const layer = L.geoJson(null, options);
         return omnivore.topojson.parse(topology, null, layer);
@@ -121,13 +124,41 @@ class MapContainer {
         this.map.fitBounds(group.getBounds(), MapConstants.AUTO_ZOOM_OPTIONS);
     }
 
+    update(model) {
+        const scale = model.scale(MapConstants.SCALE, MapConstants.COLOR_SCALE);
+
+        this.updateLegend(model, scale);
+        this.updateLayers(model, scale);
+    }
+
+    updateLegend(model, scale) {
+        this.legend.update(scale, model.variable, model.year);
+    }
+
+    updateLayers(model, scale) {
+        this.topoLayer.eachLayer(layer => {
+            const id = layer.feature.id;
+
+            if (model.regionById.has(id)) {
+                const region = model.regionById.get(id);
+
+                layer.setStyle({
+                    fill: true,
+                    fillColor: scale.scale(region.value)
+                });
+
+                layer.on({
+                    mouseover: () => this.tooltip.showRegion(region)
+                });
+            }
+        });
+    }
+
     display(variable, year) {
         MapModel.create(this.source, this.regionType, variable, year)
-            .then(model => {
-                const view = new MapView(model, this.topoLayer, this.legend, this.tooltip);
-                view.display();
-            }, error => {
-                throw error;
+            .then(model => this.update(model))
+            .catch(error => {
+                throw error
             });
     }
 }
