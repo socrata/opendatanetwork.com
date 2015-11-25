@@ -25,8 +25,6 @@ class MapContainer {
     }
 
     static parseTopology(region, topology) {
-        console.log(topology);
-
         if (region.type == 'choropleth') {
             return omnivore.topojson.parse(topology);
         } else if (region.type == 'point') {
