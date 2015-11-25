@@ -24,6 +24,7 @@ app.use('/lib', express.static(__dirname + '/lib'));
 app.use('/geo', express.static(__dirname + '/geo'));
 app.use('/lib/third-party', express.static(__dirname + '/scripts/third-party'));
 app.use('/styles', express.static(__dirname + '/styles/compressed'));
+app.use('/styles/third-party', express.static(__dirname + '/styles/third-party'));
 app.use(favicon(__dirname + '/images/favicon.ico'));
 
 // Set up static file routes

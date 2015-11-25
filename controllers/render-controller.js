@@ -172,6 +172,7 @@ function _renderSearchPage(req, res, params) {
                                     categoryResults : categoryResults,
                                     css : [
                                         '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css',
+                                        '/styles/third-party/featherlight.min.css',
                                         '/styles/search.css',
                                         '/styles/maps.css'
                                     ],
@@ -181,17 +182,18 @@ function _renderSearchPage(req, res, params) {
                                         '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
                                         '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
                                         '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
-                                        '/lib/third-party/leaflet-omnivore.min.js',
                                         '/lib/third-party/colorbrewer.min.js',
                                         '/lib/third-party/d3.min.js',
                                         '/lib/third-party/d3.promise.min.js',
+                                        '/lib/third-party/featherlight.min.js',
+                                        '/lib/third-party/leaflet-omnivore.min.js',
                                         '/lib/third-party/lodash.min.js',
                                         '/lib/search.min.js'
                                     ],
                                     searchDatasetsUrl : searchDatasetsUrl,
                                     searchPath : req.path,
                                     searchResults : results,
-                                    title : RenderController.prototype.getSearchPageTitle(params)
+                                    title : getSearchPageTitle(params)
                                 });
                         },
                         function() {
@@ -202,43 +204,6 @@ function _renderSearchPage(req, res, params) {
             });
         });
     });
-};
-
-RenderController.prototype.getSearchPageTitle = function(params) {
-
-    var rg = []
-
-    switch (params.vector) {
-
-        case 'population': rg.push('Population'); break;
-        case 'earnings': rg.push('Earnings'); break;
-        case 'education': rg.push('Education'); break;
-        case 'occupations': rg.push('Occupations'); break;
-        case 'gdp': rg.push('Economic'); break;
-        case 'health': rg.push('Health'); break;
-        case 'cost_of_living': rg.push('Cost of Living'); break;
-        default: rg.push('Population'); break;
-    }
-
-    var categories = params.categories.map(function(category) { return category.capitalize(); });
-    rg = rg.concat(categories);
-
-    var standards = params.standards.map(function(standard) { return standard.toUpperCase(); });
-    rg = rg.concat(standards);
-
-    var s = englishJoin(rg);
-    s += ' Data';
-
-    if (params.regions.length > 0) {
-
-        s += ' for ';
-        var regionNames = params.regions.map(function(region) { return region.name; });
-        s += englishJoin(regionNames);
-    }
-
-    s += ' on the Open Data Network';
-
-    return s;
 };
 
 RenderController.prototype.getSearchParameters = function(req, completionHandler) {
@@ -298,6 +263,43 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
 
         if (completionHandler) completionHandler(params);
     });
+};
+
+function getSearchPageTitle(params) {
+
+    var rg = []
+
+    switch (params.vector) {
+
+        case 'population': rg.push('Population'); break;
+        case 'earnings': rg.push('Earnings'); break;
+        case 'education': rg.push('Education'); break;
+        case 'occupations': rg.push('Occupations'); break;
+        case 'gdp': rg.push('Economic'); break;
+        case 'health': rg.push('Health'); break;
+        case 'cost_of_living': rg.push('Cost of Living'); break;
+        default: rg.push('Population'); break;
+    }
+
+    var categories = params.categories.map(function(category) { return category.capitalize(); });
+    rg = rg.concat(categories);
+
+    var standards = params.standards.map(function(standard) { return standard.toUpperCase(); });
+    rg = rg.concat(standards);
+
+    var s = englishJoin(rg);
+    s += ' Data';
+
+    if (params.regions.length > 0) {
+
+        s += ' for ';
+        var regionNames = params.regions.map(function(region) { return region.name; });
+        s += englishJoin(regionNames);
+    }
+
+    s += ' on the Open Data Network';
+
+    return s;
 };
 
 function englishJoin(list) {
