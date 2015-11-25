@@ -1,8 +1,8 @@
 
 class MapView {
-    constructor(selection, source, regionType, regions, features) {
-        this.selection = selection;
+    constructor(source, regionType, regions, features) {
         this.source = source;
+
         this.regionType = regionType;
         this.regions = regions;
         this.regionIDs = new Set(regions.map(region => region.id));
@@ -14,8 +14,6 @@ class MapView {
         this.variableControl = new VariableControl(source.variables, (variable, year) => {
             this.display(variable, year);
         });
-
-        this.createMap();
     }
 
     /**
@@ -71,7 +69,7 @@ class MapView {
         return omnivore.topojson.parse(topojson, null, layer);
     }
 
-    static create(selector, source, regions) {
+    static create(source, regions) {
         if (regions.length < 1) throw 'regions cannot be empty';
 
         const regionType = MapConstants.REGIONS[regions[0].type];
@@ -83,16 +81,15 @@ class MapView {
             TopoModel.get(regionType)
                 .then(topojson => {
                     const features = MapView._features(topojson);
-                    const selection = d3.select(selector);
 
-                    resolve(new MapView(selection, source, regionType, regionsOfType, features));
+                    resolve(new MapView(source, regionType, regionsOfType, features));
                 }, reject);
         });
     }
 
-    createMap() {
+    show(selector) {
         const id = 'leaflet-map';
-        const container = this.selection
+        const container = d3.select(selector)
             .append('div')
             .attr('class', 'map-container')
             .attr('id', id);

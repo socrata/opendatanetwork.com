@@ -1122,9 +1122,10 @@ class SearchPageController {
         const source = MapSources.population;
         const regions = this.params.regions;
 
-        MapView.create('#map', source, regions).catch(error => {
-            throw error;
-        });
+        MapView.create(source, regions)
+            .then(view => view.show(selector), error => {
+                throw error;
+            });
     }
 
     // Places in region
