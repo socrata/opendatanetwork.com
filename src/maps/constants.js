@@ -1,6 +1,9 @@
 
 const MapConstants = {
-    MAP_ID: 'leaflet-map',
+    // Maximum number of regions to display
+    LIMIT: 5000,
+
+    CSS_ID: 'leaflet-map',
 
     // Same base layer as Data Lens
     BASE_LAYER_URL: 'https://a.tiles.mapbox.com/v3/socrata-apps.ibp0l899/{z}/{x}/{y}.png',
@@ -12,8 +15,7 @@ const MapConstants = {
     COLOR_SCALE: colorbrewer.RdYlBu[9],
     SCALE: Scale.quantile,
 
-    // Leaflet map options:
-    // http://leafletjs.com/reference.html#map-class
+    // http://leafletjs.com/reference.html#map-options
     MAP_OPTIONS: {
         minZoom: 3.0,
         maxZoom: 12.0,
@@ -24,6 +26,7 @@ const MapConstants = {
     INITIAL_CENTER: [37.1669, -95.9669], // Center of US
     INITIAL_ZOOM: 4.0,
 
+    // http://leafletjs.com/reference.html#map-fitboundsoptions
     AUTO_ZOOM_OPTIONS: {
         animate: false,
         maxZoom: 10.0
@@ -47,11 +50,6 @@ const MapConstants = {
         weight: 3,
         opacity: 1
     },
-
-    LOADING_TOOLTIP_NAME: 'Loading',
-
-    GAZETTEER_URL: 'https://federal.demo.socrata.com/resource/gm3u-gw57.json',
-    ROSTER_URL: 'https://federal.demo.socrata.com/resource/7g2b-8brv.json',
 
     TOPOJSON_DIRECTORY: '/geo/',
     TOPOJSON_SUFFIX: '.topo.json',

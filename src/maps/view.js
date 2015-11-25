@@ -20,9 +20,9 @@ class MapView {
         const container = d3.select(selector)
             .append('div')
             .attr('class', 'map-container')
-            .attr('id', MapConstants.MAP_ID);
+            .attr('id', MapConstants.CSS_ID);
 
-        const map = L.map(MapConstants.MAP_ID, MapConstants.MAP_OPTIONS);
+        const map = L.map(MapConstants.CSS_ID, MapConstants.MAP_OPTIONS);
         map.setView(MapConstants.INITIAL_CENTER, MapConstants.INITIAL_ZOOM);
 
         const baseLayer = L.tileLayer(MapConstants.BASE_LAYER_URL, MapConstants.BASE_LAYER);

@@ -41,7 +41,7 @@ class MapModel {
             const baseParams = {
                 'type': region.id,
                 '$select': columns.join(),
-                '$limit': Constants.LIMIT,
+                '$limit': MapConstants.LIMIT,
                 [yearColumn]: year
             };
             const sortParams = hasPopulation ? {'$order': `${populationColumn} DESC`} : {};
