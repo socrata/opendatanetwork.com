@@ -1,5 +1,7 @@
 
 const MapConstants = {
+    MAP_ID: 'leaflet-map',
+
     // Same base layer as Data Lens
     BASE_LAYER_URL: 'https://a.tiles.mapbox.com/v3/socrata-apps.ibp0l899/{z}/{x}/{y}.png',
     BASE_LAYER: {
