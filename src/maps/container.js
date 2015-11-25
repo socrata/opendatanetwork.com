@@ -25,38 +25,46 @@ class MapContainer {
     }
 
     parseTopology(region, topology) {
+        const baseStyle = {
+            color: MapConstants.REGION_BORDER_COLOR,
+            weight: MapConstants.REGION_BORDER_WEIGHT,
+            fillOpacity: MapConstants.REGION_FILL_OPACITY
+        };
+
+        const pointStyle = {
+            stroke: false
+        };
+
+        const choropleth = this.regionType.type == 'choropleth';
+
+        const style = choropleth ?
+            baseStyle :
+            _.extend({}, baseStyle, pointStyle);
+
         const baseOptions = {
-            style: feature => {
-                return {
-                    stroke: false,
-                    fill: false
-                };
-            }
+            style: () => style
+        };
+
+        const pointOptions = () => {
+            const objects = topology.objects;
+            const features = topology.objects[Object.keys(objects)[0]].geometries;
+            const population = feature => feature.properties.population;
+            const populations = features.map(population);
+            const radiusScale = MapConstants.POINT_RADIUS_SCALE()
+                .domain(d3.extent(populations))
+                .range(MapConstants.POINT_RADIUS_RANGE_METERS);
+
+            return {
+                pointToLayer: (feature, coordinate) => {
+                    return L.circle(coordinate, radiusScale(population(feature)));
+                }
+            };
         }
 
-        const additionalOptions = (() => {
-            const type = this.regionType.type;
+        const options = choropleth ?
+            baseOptions :
+            _.extend({}, baseOptions, pointOptions());
 
-            if (type == 'point') {
-                const objects = topology.objects;
-                const features = topology.objects[Object.keys(objects)[0]].geometries;
-                const population = feature => feature.properties.population;
-                const populations = features.map(population);
-                const radiusScale = MapConstants.POINT_RADIUS_SCALE()
-                    .domain(d3.extent(populations))
-                    .range(MapConstants.POINT_RADIUS_RANGE_METERS);
-
-                return {
-                    pointToLayer: (feature, coordinate) => {
-                        return L.circle(coordinate, radiusScale(population(feature)));
-                    }
-                };
-            } else {
-                return {};
-            }
-        })();
-
-        const options = _.extend(baseOptions, additionalOptions);
         const layer = L.geoJson(null, options);
         return omnivore.topojson.parse(topology, null, layer);
     }
