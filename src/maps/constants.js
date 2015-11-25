@@ -22,6 +22,10 @@ const MapConstants = {
     INITIAL_CENTER: [37.1669, -95.9669], // Center of US
     INITIAL_ZOOM: 4.0,
 
+    AUTO_ZOOM_OPTIONS: {
+        padding: [100.0, 100.0]
+    },
+
     REGION_BORDER_COLOR: '#34495e',
     REGION_BORDER_WEIGHT: 1,
     REGION_FILL_OPACITY: 1,

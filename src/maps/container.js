@@ -5,6 +5,7 @@ class MapContainer {
         this.source = source;
         this.regionType = regionType;
         this.regions = regions;
+        this.regionIDs = new Set(regions.map(region => region.id));
 
         this.topology = topology;
         this.topoLayer = MapContainer.parseTopology(regionType, topology);
@@ -19,6 +20,8 @@ class MapContainer {
         this.variableControl = new VariableControl(source.variables, callback);
 
         this.map = this.createMap();
+
+        this.zoomToSelectedRegions();
     }
 
     static parseTopology(region, topology) {
@@ -75,6 +78,18 @@ class MapContainer {
         map.addLayer(this.topoLayer);
 
         return map;
+    }
+
+    zoomToSelectedRegions() {
+        const selectedLayers = [];
+
+        this.topoLayer.eachLayer(layer => {
+            if (this.regionIDs.has(layer.feature.id))
+                selectedLayers.push(layer);
+        });
+
+        const group = new L.featureGroup(selectedLayers);
+        this.map.fitBounds(group.getBounds(), MapConstants.AUTO_ZOOM_OPTIONS);
     }
 
     display(variable, year) {
