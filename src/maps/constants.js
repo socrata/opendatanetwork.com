@@ -32,9 +32,14 @@ const MapConstants = {
     POINT_RADIUS_SCALE: d3.scale.log,
     POINT_RADIUS_RANGE_METERS: [500, 2000],
 
-    REGION_BORDER_COLOR: '#34495e',
-    REGION_BORDER_WEIGHT: 1,
-    REGION_FILL_OPACITY: 1,
+    // http://leafletjs.com/reference.html#path-options
+    BASE_STYLE: {
+        color: '#34495e',
+        weight: 1,
+        opacity: 1,
+        fill: false,
+        fillOpacity: 1
+    },
 
     SELECTED_STYLE: {
         stroke: true,
@@ -42,9 +47,6 @@ const MapConstants = {
         weight: 3,
         opacity: 1
     },
-
-    REFERENCE_BORDER_COLOR: '#2c3e50',
-    REFERENCE_BORDER_WEIGHT: 2,
 
     LOADING_TOOLTIP_NAME: 'Loading',
 

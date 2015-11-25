@@ -110,20 +110,13 @@ class MapView {
 
     static _features(topojson, choropleth) {
         const baseOptions = () => {
-            const baseStyle = {
-                fill: false,
-                color: MapConstants.REGION_BORDER_COLOR,
-                weight: MapConstants.REGION_BORDER_WEIGHT,
-                fillOpacity: MapConstants.REGION_FILL_OPACITY
-            };
-
             const pointStyle = {
                 stroke: false
             };
 
             const style = choropleth ?
-                baseStyle :
-                _.extend({}, baseStyle, pointStyle);
+                MapConstants.BASE_STYLE :
+                _.extend({}, MapConstants.BASE_STYLE, pointStyle);
 
             return {
                 style: () => style
