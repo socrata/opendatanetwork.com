@@ -7,20 +7,15 @@ class MapView {
         this.regions = regions;
         this.regionIDs = new Set(regions.map(region => region.id));
 
-        this.topoLayer = features;
+        this.features = features;
 
         this.legend = new LegendControl();
         this.tooltip = new TooltipControl();
-
-        const callback = (variable, year) => {
+        this.variableControl = new VariableControl(source.variables, (variable, year) => {
             this.display(variable, year);
-        };
+        });
 
-        this.variableControl = new VariableControl(source.variables, callback);
-
-        this.map = this.createMap();
-
-        this.zoomToSelectedRegions();
+        this.createMap();
     }
 
     /**
@@ -112,36 +107,33 @@ class MapView {
         map.addControl(this.tooltip);
         map.addControl(this.variableControl);
 
-        map.addLayer(this.topoLayer);
+        map.addLayer(this.features);
 
-        return map;
-    }
-
-    zoomToSelectedRegions() {
+        // Zoom to selected regions.
         const selectedLayers = [];
 
-        this.topoLayer.eachLayer(layer => {
+        this.features.eachLayer(layer => {
             if (this.regionIDs.has(layer.feature.id))
                 selectedLayers.push(layer);
         });
 
         const group = new L.featureGroup(selectedLayers);
-        this.map.fitBounds(group.getBounds(), MapConstants.AUTO_ZOOM_OPTIONS);
+        map.fitBounds(group.getBounds(), MapConstants.AUTO_ZOOM_OPTIONS);
     }
 
     update(model) {
         const scale = model.scale(MapConstants.SCALE, MapConstants.COLOR_SCALE);
 
         this.updateLegend(model, scale);
-        this.updateLayers(model, scale);
+        this.updateFeatures(model, scale);
     }
 
     updateLegend(model, scale) {
         this.legend.update(scale, model.variable, model.year);
     }
 
-    updateLayers(model, scale) {
-        this.topoLayer.eachLayer(layer => {
+    updateFeatures(model, scale) {
+        this.features.eachLayer(layer => {
             const id = layer.feature.id;
 
             if (model.regionById.has(id)) {
@@ -153,7 +145,8 @@ class MapView {
                 });
 
                 layer.on({
-                    mouseover: () => this.tooltip.showRegion(region)
+                    mouseover: () => this.tooltip.showRegion(region),
+                    mouseout: () => this.tooltip.hide()
                 });
             }
         });
