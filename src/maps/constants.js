@@ -23,7 +23,8 @@ const MapConstants = {
     INITIAL_ZOOM: 4.0,
 
     AUTO_ZOOM_OPTIONS: {
-        padding: [100.0, 100.0]
+        animate: false,
+        maxZoom: 10.0
     },
 
     POINT_RADIUS_SCALE: d3.scale.log,

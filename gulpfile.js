@@ -28,7 +28,8 @@ var mapScripts = [
     'src/maps/container.js',
     'src/maps/scale-control.js',
     'src/maps/tooltip-control.js',
-    'src/maps/variable-control.js'
+    'src/maps/variable-control.js',
+    'src/data/map-sources.js'
 ];
 
 
