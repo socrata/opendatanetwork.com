@@ -22,6 +22,13 @@ const MapConstants = {
     INITIAL_CENTER: [37.1669, -95.9669], // Center of US
     INITIAL_ZOOM: 4.0,
 
+    AUTO_ZOOM_OPTIONS: {
+        padding: [100.0, 100.0]
+    },
+
+    POINT_RADIUS_SCALE: d3.scale.log,
+    POINT_RADIUS_RANGE_METERS: [500, 2000],
+
     REGION_BORDER_COLOR: '#34495e',
     REGION_BORDER_WEIGHT: 1,
     REGION_FILL_OPACITY: 1,
@@ -38,12 +45,15 @@ const MapConstants = {
     TOPOJSON_SUFFIX: '.topo.json',
 
     REGIONS: {
-        nation: {name: 'USA', id: 'nation', topo: 'nation'},
-        region: {name: 'Regions', id: 'region', topo: 'region'},
-        division: {name: 'Divisions', id: 'division', topo: 'division'},
-        state: {name: 'States', id: 'state', topo: 'state'},
-        county: {name: 'Counties', id: 'county', topo: 'county'},
-        msa: {name: 'Metros', id: 'msa', topo: 'cbsa'},
-        place: {name: 'Cities', id: 'place', topo: 'state'}
-    }
+        nation: {name: 'USA', id: 'nation', topo: 'nation', type: 'choropleth'},
+        region: {name: 'Regions', id: 'region', topo: 'region', type: 'choropleth'},
+        division: {name: 'Divisions', id: 'division', topo: 'division', type: 'choropleth'},
+        state: {name: 'States', id: 'state', topo: 'state', type: 'choropleth'},
+        county: {name: 'Counties', id: 'county', topo: 'county', type: 'choropleth'},
+        msa: {name: 'Metros', id: 'msa', topo: 'cbsa', type: 'choropleth'},
+        place: {name: 'Cities', id: 'place', topo: 'places', type: 'point'}
+    },
+
+    DEFAULT_REGION: 'state'
 };
+
