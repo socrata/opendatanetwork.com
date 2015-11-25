@@ -25,12 +25,22 @@ class MapContainer {
     }
 
     static parseTopology(region, topology) {
+        console.log(topology);
+
         if (region.type == 'choropleth') {
             return omnivore.topojson.parse(topology);
         } else if (region.type == 'point') {
+            const objects = topology.objects;
+            const features = topology.objects[Object.keys(objects)[0]].geometries;
+            const population = feature => feature.properties.population;
+            const populations = features.map(population);
+            const radiusScale = MapConstants.POINT_RADIUS_SCALE()
+                .domain(d3.extent(populations))
+                .range(MapConstants.POINT_RADIUS_RANGE_METERS);
+
             const layer = L.geoJson(null, {
                 pointToLayer: (feature, coordinate) => {
-                    return L.circle(coordinate, 5000);
+                    return L.circle(coordinate, radiusScale(population(feature)));
                 }
             });
 

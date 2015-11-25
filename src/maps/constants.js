@@ -26,6 +26,9 @@ const MapConstants = {
         padding: [100.0, 100.0]
     },
 
+    POINT_RADIUS_SCALE: d3.scale.log,
+    POINT_RADIUS_RANGE_METERS: [500, 2000],
+
     REGION_BORDER_COLOR: '#34495e',
     REGION_BORDER_WEIGHT: 1,
     REGION_FILL_OPACITY: 1,
