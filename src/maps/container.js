@@ -1,12 +1,13 @@
 
 class MapContainer {
-    constructor(selection, source, region, topology) {
+    constructor(selection, source, topology, regionType, regions) {
         this.selection = selection;
         this.source = source;
-        this.region = region;
+        this.regionType = regionType;
+        this.regions = regions;
 
         this.topology = topology;
-        this.topoLayer = MapContainer.parseTopology(region, topology);
+        this.topoLayer = MapContainer.parseTopology(regionType, topology);
 
         this.legend = new LegendControl();
         this.tooltip = new TooltipControl();
@@ -36,33 +37,22 @@ class MapContainer {
         }
     }
 
-    static create(selector, source, region) {
+    static create(selector, source, regions) {
+        if (regions.length < 1) throw 'regions cannot be empty';
+
+        const regionType = MapConstants.REGIONS[regions[0].type];
+        const regionsOfType = _.filter(regions, region => {
+            return region.type == regionType.id;
+        });
+
         return new Promise((resolve, reject) => {
-            TopoModel.get(region)
+            TopoModel.get(regionType)
                 .then(topology => {
                     const selection = d3.select(selector);
 
-                    resolve(new MapContainer(selection, source, region, topology));
+                    resolve(new MapContainer(selection, source, topology, regionType, regionsOfType));
                 }, reject);
         });
-    }
-
-    static createWithRegions(selector, source, regions) {
-        const defaultRegion = MapConstants.REGIONS[MapConstants.DEFAULT_REGION];
-        function getMapRegion(region) {
-            const type = region.type;
-
-            if (type in MapConstants.REGIONS) {
-                return MapConstants.REGIONS[type];
-            } else {
-                console.error(`region not found for type: ${type}`);
-                return defaultRegion;
-            }
-        }
-
-        const region = regions.length > 0 ? getMapRegion(regions[0]) : defaultRegion;
-        console.log(region);
-        return MapContainer.create(selector, source, region);
     }
 
     createMap() {
@@ -88,7 +78,7 @@ class MapContainer {
     }
 
     display(variable, year) {
-        MapModel.create(this.source, this.region, variable, year)
+        MapModel.create(this.source, this.regionType, variable, year)
             .then(model => {
                 const view = new MapView(model, this.topoLayer, this.legend, this.tooltip);
                 view.display();

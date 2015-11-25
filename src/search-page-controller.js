@@ -1144,7 +1144,7 @@ class SearchPageController {
         };
 
         const regions = this.params.regions;
-        MapContainer.createWithRegions('#map', source, regions).catch(error => {
+        MapContainer.create('#map', source, regions).catch(error => {
             throw error;
         });
     }
