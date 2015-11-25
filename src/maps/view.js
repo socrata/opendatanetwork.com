@@ -1,14 +1,13 @@
 
 class MapView {
-    constructor(selection, source, topology, regionType, regions) {
+    constructor(selection, source, regionType, regions, features) {
         this.selection = selection;
         this.source = source;
         this.regionType = regionType;
         this.regions = regions;
         this.regionIDs = new Set(regions.map(region => region.id));
 
-        this.topology = topology;
-        this.topoLayer = this.parseTopology(regionType, topology);
+        this.topoLayer = features;
 
         this.legend = new LegendControl();
         this.tooltip = new TooltipControl();
@@ -24,9 +23,14 @@ class MapView {
         this.zoomToSelectedRegions();
     }
 
-    parseTopology(region, topology) {
-        const choropleth = this.regionType.type == 'choropleth';
-
+    /**
+     * Extracts Leaflet GeoJSON features from the given TopoJSON.
+     *
+     * @param topojson - TopoJSON object.
+     * @param choropleth {boolean} - Whether the map is a choropleth or point map.
+     * @return Leaflet GeoJSON layer.
+     */
+    static _features(topojson, choropleth) {
         const baseOptions = () => {
             const baseStyle = {
                 fill: false,
@@ -49,8 +53,8 @@ class MapView {
         };
 
         const pointOptions = () => {
-            const objects = topology.objects;
-            const features = topology.objects[Object.keys(objects)[0]].geometries;
+            const objects = topojson.objects;
+            const features = topojson.objects[Object.keys(objects)[0]].geometries;
             const population = feature => feature.properties.population;
             const populations = features.map(population);
             const radiusScale = MapConstants.POINT_RADIUS_SCALE()
@@ -69,7 +73,7 @@ class MapView {
             _.extend({}, baseOptions(), pointOptions());
 
         const layer = L.geoJson(null, options);
-        return omnivore.topojson.parse(topology, null, layer);
+        return omnivore.topojson.parse(topojson, null, layer);
     }
 
     static create(selector, source, regions) {
@@ -82,10 +86,11 @@ class MapView {
 
         return new Promise((resolve, reject) => {
             TopoModel.get(regionType)
-                .then(topology => {
+                .then(topojson => {
+                    const features = MapView._features(topojson);
                     const selection = d3.select(selector);
 
-                    resolve(new MapView(selection, source, topology, regionType, regionsOfType));
+                    resolve(new MapView(selection, source, regionType, regionsOfType, features));
                 }, reject);
         });
     }
