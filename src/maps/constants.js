@@ -36,6 +36,13 @@ const MapConstants = {
     REGION_BORDER_WEIGHT: 1,
     REGION_FILL_OPACITY: 1,
 
+    SELECTED_STYLE: {
+        stroke: true,
+        color: '#8e44ad',
+        weight: 3,
+        opacity: 1
+    },
+
     REFERENCE_BORDER_COLOR: '#2c3e50',
     REFERENCE_BORDER_WEIGHT: 2,
 

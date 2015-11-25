@@ -71,11 +71,16 @@ class MapView {
 
             if (model.regionById.has(id)) {
                 const region = model.regionById.get(id);
-
-                layer.setStyle({
+                const selected = this.regionIDs.has(region.id);
+                const baseStyle = {
                     fill: true,
                     fillColor: scale.scale(region.value)
-                });
+                };
+                const style = selected ?
+                    _.extend(baseStyle, MapConstants.SELECTED_STYLE) :
+                    baseStyle;
+
+                layer.setStyle(style);
 
                 layer.on({
                     mouseover: () => this.tooltip.showRegion(region),
@@ -95,7 +100,7 @@ class MapView {
 
         return new Promise((resolve, reject) => {
             function success(topojson) {
-                const features = MapView._features(topojson);
+                const features = MapView._features(topojson, regionType.type == 'choropleth');
                 resolve(new MapView(source, regionType, regionsOfType, features));
             }
 
