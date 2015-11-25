@@ -1,6 +1,4 @@
 
-
-
 class SearchPageController {
 
     constructor(params) {
@@ -1124,7 +1122,7 @@ class SearchPageController {
         const source = MapSources.population;
         const regions = this.params.regions;
 
-        MapContainer.create('#map', source, regions).catch(error => {
+        MapView.create('#map', source, regions).catch(error => {
             throw error;
         });
     }

@@ -1,5 +1,5 @@
 
-class MapContainer {
+class MapView {
     constructor(selection, source, topology, regionType, regions) {
         this.selection = selection;
         this.source = source;
@@ -46,7 +46,7 @@ class MapContainer {
             return {
                 style: () => style
             };
-        }
+        };
 
         const pointOptions = () => {
             const objects = topology.objects;
@@ -62,7 +62,7 @@ class MapContainer {
                     return L.circle(coordinate, radiusScale(population(feature)));
                 }
             };
-        }
+        };
 
         const options = choropleth ?
             baseOptions() :
@@ -85,7 +85,7 @@ class MapContainer {
                 .then(topology => {
                     const selection = d3.select(selector);
 
-                    resolve(new MapContainer(selection, source, topology, regionType, regionsOfType));
+                    resolve(new MapView(selection, source, topology, regionType, regionsOfType));
                 }, reject);
         });
     }
@@ -158,7 +158,7 @@ class MapContainer {
         MapModel.create(this.source, this.regionType, variable, year)
             .then(model => this.update(model))
             .catch(error => {
-                throw error
+                throw error;
             });
     }
 }
