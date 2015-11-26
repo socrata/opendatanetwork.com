@@ -68,6 +68,24 @@ const MapSources = {
             ['High School Graduation Rate', 'percent_high_school_graduate_or_higher', format.percent],
             ['College Graduation Rate', 'percent_bachelors_degree_or_higher', format.percent]
         ])
+    },
+
+    occupations: {
+        name: 'occupations',
+        domain: DOMAIN,
+        fxf: 'qfcm-fw3i',
+        hasPopulation: true,
+        variables: ['Management', 'Business and Finance', 'Computers and Math', 'Engineering', 'Social Sciences', 'Social Services', 'Legal', 'Education', 'Media', 'Healthcare', 'Health Technicians', 'Health Support', 'Fire Fighting', 'Law Enforcement', 'Food Service', 'Janitorial', 'Personal Care', 'Sales', 'Office and Administration', 'Farming, Fishing, Foresty', 'Construction and Extraction', 'Repair', 'Production', 'Transportation', 'Material Moving']
+            .map(occupation => {
+                return {
+                    name: occupation,
+                    column: 'percent_employed',
+                    params: {occupation},
+                    years: [2013],
+                    value: parseFloat,
+                    format: format.percent
+                };
+            })
     }
 };
 
