@@ -41,7 +41,7 @@ const MapSources = {
         domain: DOMAIN,
         fxf: 'wmwh-4vak',
         hasPopulation: true,
-        variables: variableGenerator([2013], parseFloat)([
+        variables: variableGenerator()([
             ['Median Earnings', 'median_earnings', format.dollar],
             ['Median Female Earnings', 'female_median_earnings', format.dollar],
             ['Median Male Earnings', 'male_median_earnings', format.dollar],
@@ -56,6 +56,17 @@ const MapSources = {
             ['Earnings $65,000 to $74,999', 'percent_with_earnings_65000_to_74999', format.percent],
             ['Earnings $75,000 to $99,999', 'percent_with_earnings_75000_to_99999', format.percent],
             ['Earnings over $100,000', 'percent_with_earnings_over_100000', format.percent]
+        ])
+    },
+
+    education: {
+        name: 'education',
+        domain: DOMAIN,
+        fxf: 'uf4m-5u8r',
+        hasPopulation: true,
+        variables: variableGenerator()([
+            ['High School Graduation Rate', 'percent_high_school_graduate_or_higher', format.percent],
+            ['College Graduation Rate', 'percent_bachelors_degree_or_higher', format.percent]
         ])
     }
 };
