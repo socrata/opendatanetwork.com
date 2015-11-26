@@ -461,67 +461,14 @@ class SearchPageController {
     }
 
     drawEarningsMap() {
+        const selector = '#map';
+        const source = MapSources.earnings;
+        const regions = this.params.regions;
 
-        const controller = new ApiController();
-        const placesPromise = controller.getPlaces();
-        const earningsPromise = controller.getEarningsByPlace();
-
-        Promise.all([placesPromise, earningsPromise])
-            .then(values => {
-
-                const placesResponse = values[0];
-                const earningsResponse = values[1];
-
-                // Get the geo coordinates for each region
-                //
-                const regionPlaces = this.getPlacesForRegion(placesResponse);
-
-                // Create a place lookup table
-                //
-                const placeMap = {};
-                placesResponse.forEach(place => placeMap[place.id] = place); // init the place map
-
-                // Get map data
-                //
-                const earningsPlaces = [];
-
-                earningsResponse.forEach(item => {
-
-                    if (item.median_earnings == 0)
-                        return;
-
-                    if (item.id in placeMap) {
-
-                        earningsPlaces.push({
-                            coordinates : placeMap[item.id].location.coordinates,
-                            id : item.id,
-                            name : item.name,
-                            value : parseInt(item.median_earnings),
-                        })
-                    }
-                });
-
-                earningsPlaces.sort((a, b) => b.value - a.value); // desc
-                const earnings = _.map(earningsPlaces, x => { return x.value });
-
-                // Init map
-                //
-                const radiusScale = this.getRadiusScaleLinear(earnings)
-                const colorScale = this.getColorScale(earnings)
-
-                const coordinates = regionPlaces[0].location.coordinates;
-                const center = [coordinates[1], coordinates[0]];
-                const map = L.map('map', { zoomControl : true });
-
-                L.tileLayer('https://a.tiles.mapbox.com/v3/socrata-apps.ibp0l899/{z}/{x}/{y}.png').addTo(map);
-                map.setView(center, this.MAP_INITIAL_ZOOM);
-
-                // Populate map
-                //
-                this.drawCirclesForPlaces(map, earningsPlaces, radiusScale, colorScale);
-                this.drawMarkersForPlaces(map, regionPlaces);
-            })
-            .catch(error => console.error(error));
+        MapView.create(source, regions)
+            .then(view => view.show(selector), error => {
+                throw error;
+            });
     }
 
     drawEarningsTable(regionIds, data) {
