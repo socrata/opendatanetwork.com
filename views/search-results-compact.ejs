@@ -1,6 +1,14 @@
 <% searchResults.results.forEach(function(result) { %>
     <li>
-        <div><a class="name" href="<%= result.link %>"><%= result.resource.name %></a></div>
+        <div>
+            <a class="name" 
+                dataset-api-link="http://dev.socrata.com/foundry/#/<%= result.metadata.domain %>/<%= result.resource.nbe_fxf %>"
+                dataset-id="<%= result.resource.id %>"
+                dataset-last-updated="<%= result.resource.updatedAtString.toUpperCase() %>"
+                dataset-link="<%= result.link %>"
+                dataset-publisher="<%= result.metadata.domain %>"
+                dataset-tags="<%= result.classification.tags.join(', ') %>"><%= result.resource.name %></a>
+        </div>
         <div><a class="domain" href="http://<%= result.metadata.domain %>"><%= result.metadata.domain %></a></div>
     </li>
 <% }); %>

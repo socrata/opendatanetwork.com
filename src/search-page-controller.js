@@ -175,6 +175,34 @@ class SearchPageController {
         });
     }
 
+    attachDatasetClickHandlers() {
+
+        const self = this;
+
+        $('.datasets .name').unbind('click').click(function() {
+
+            const controller = new ApiController();
+            const domain = $(this).attr('dataset-publisher');
+            const id = $(this).attr('dataset-id');
+
+            controller.getDatasetSummary(domain, id)
+                .then(result => {
+
+                    self.showDatasetPopup({
+
+                        apiLink : $(this).attr('dataset-api-link'),
+                        description: result.description || '',
+                        domain : $(this).attr('dataset-publisher'),
+                        id : $(this).attr('dataset-id'),
+                        lastUpdated : $(this).attr('dataset-last-updated'),
+                        link : $(this).attr('dataset-link'),
+                        name : $(this).text(),
+                        tags : $(this).attr('dataset-tags'),
+                    });
+                });
+        });
+    }
+
     attachDomainsClickHandlers() {
 
         var self = this;
@@ -1351,6 +1379,8 @@ class SearchPageController {
 
             $('.datasets').append(data);
             self.fetching = false;
+
+            self.attachDatasetClickHandlers();
         });
     }
 
@@ -1457,6 +1487,45 @@ class SearchPageController {
         this.params.autoSuggestedRegion = region;
         this.params.resetRegions = resetRegions;
         this.params.page = 1;
+    }
+
+    showDatasetPopup(data) {
+
+        $('#dataset-lightbox h1').text(data.name);
+        $('#dataset-lightbox .publisher').text(data.domain);
+        $('#dataset-lightbox .publisher').attr('href', 'http://' + data.domain);
+        $('#dataset-lightbox .last-updated').text(data.lastUpdated);
+        $('#dataset-lightbox .blue-button').attr('href', data.apiLink);
+        $('#dataset-lightbox .orange-button').attr('href', data.link);
+        $('#dataset-lightbox .tags span').text(data.tags);
+
+        if ((data.description.length == 0) && (data.tags.length == 0)) {
+
+            $('#dataset-lightbox .description-container').hide(0);
+            $('#dataset-lightbox .description').hide(0);
+            $('#dataset-lightbox .tags').hide(0);
+        }
+        else {
+
+            $('#dataset-lightbox .description-container').show(0);
+
+            if (data.description.length > 0)
+                $('#dataset-lightbox .description').html(data.description.replace('\n', '<br>')).show(0);
+            else
+                $('#dataset-lightbox .description').hide(0);
+
+            if (data.tags.length > 0) {
+
+                $('#dataset-lightbox .tags span').text(data.tags);
+                $('#dataset-lightbox .tags').show(0);
+            }
+            else {
+
+                $('#dataset-lightbox .tags').hide(0);
+            }
+        }
+
+        $.featherlight('#dataset-lightbox');
     }
 
     toggleCategory(category) {
