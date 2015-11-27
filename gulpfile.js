@@ -25,7 +25,7 @@ var mapScripts = [
     'src/maps/constants.js',
     'src/maps/model.js',
     'src/maps/view.js',
-    'src/maps/scale-control.js',
+    'src/maps/legend-control.js',
     'src/maps/tooltip-control.js',
     'src/maps/variable-control.js',
     'src/maps/format.js',
