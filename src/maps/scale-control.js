@@ -13,16 +13,17 @@ const LegendControl = L.Control.extend({
     update: function(scale, variable, year) {
         this.container.selectAll('*').remove();
 
-        const legendContainer = this.container
-            .append('div')
-            .attr('class', 'legend-container');
-
         const dimension = 10;
         const range = scale.range.slice();
         range.reverse();
         const height = range.length * dimension;
         const width = 200;
         const xOffset = width / 2;
+
+        const legendContainer = this.container
+            .append('div')
+            .attr('class', 'legend-container')
+            .style('width', width);
 
         const values = _.filter(scale.values, value => !(isNaN(value)));
         const [min, max] = d3.extent(values);
@@ -38,15 +39,8 @@ const LegendControl = L.Control.extend({
         const legend = legendContainer
             .append('svg')
             .attr('width', width)
-            .attr('height', height + 30 + dimension * 3)
+            .attr('height', height + 30)
             .attr('class', 'legend');
-
-        const legendName = legend
-            .append('text')
-            .attr('class', 'legend-name')
-            .attr('text-anchor', 'middle')
-            .attr('x', xOffset + dimension / 2).attr('y', dimension * 1.2)
-            .text(`${variable.name} (${year})`);
 
         const tickGroup = legend
             .append('g')
@@ -59,7 +53,7 @@ const LegendControl = L.Control.extend({
             .append('g')
             .attr('class', 'tick')
             .attr('transform', (__, index) => {
-                return `translate(${xOffset}, ${3 * dimension + index * tickStep})`;
+                return `translate(${xOffset}, ${dimension + index * tickStep})`;
             });
 
         ticks
@@ -99,7 +93,7 @@ const LegendControl = L.Control.extend({
             .append('rect')
             .attr('class', 'legend-element')
             .attr('x', xOffset)
-            .attr('y', (__, index) => (index + 3) * dimension)
+            .attr('y', (__, index) => (index + 1) * dimension)
             .attr('width', dimension)
             .attr('height', dimension)
             .style('stroke', 'none')
@@ -108,7 +102,7 @@ const LegendControl = L.Control.extend({
         legend
             .append('rect')
             .attr('class', 'legend-box')
-            .attr('x', xOffset).attr('y', dimension * 3)
+            .attr('x', xOffset).attr('y', dimension)
             .attr('width', dimension).attr('height', height);
     }
 });

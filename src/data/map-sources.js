@@ -47,15 +47,15 @@ const MapSources = {
             ['Median Male Earnings', 'male_median_earnings', format.dollar],
             ['Median Female Earnings (Full Time)', 'female_full_time_median_earnings', format.dollar],
             ['Median Male Earnings (Full Time)', 'male_full_time_median_earnings', format.dollar],
-            ['Earnings less than $10,000', 'percent_with_earnings_1_to_9999', format.percent],
-            ['Earnings $10,000 to $14,999', 'percent_with_earnings_10000_to_14999', format.percent],
-            ['Earnings $15,000 to $24,999', 'percent_with_earnings_15000_to_24999', format.percent],
-            ['Earnings $25,000 to $34,999', 'percent_with_earnings_25000_to_34999', format.percent],
-            ['Earnings $35,000 to $49,999', 'percent_with_earnings_35000_to_49999', format.percent],
-            ['Earnings $50,000 to $64,999', 'percent_with_earnings_50000_to_64999', format.percent],
-            ['Earnings $65,000 to $74,999', 'percent_with_earnings_65000_to_74999', format.percent],
-            ['Earnings $75,000 to $99,999', 'percent_with_earnings_75000_to_99999', format.percent],
-            ['Earnings over $100,000', 'percent_with_earnings_over_100000', format.percent]
+            ['Percent Earning less than $10,000', 'percent_with_earnings_1_to_9999', format.percent],
+            ['Percent Earning $10,000 to $14,999', 'percent_with_earnings_10000_to_14999', format.percent],
+            ['Percent Earning $15,000 to $24,999', 'percent_with_earnings_15000_to_24999', format.percent],
+            ['Percent Earning $25,000 to $34,999', 'percent_with_earnings_25000_to_34999', format.percent],
+            ['Percent Earning $35,000 to $49,999', 'percent_with_earnings_35000_to_49999', format.percent],
+            ['Percent Earning $50,000 to $64,999', 'percent_with_earnings_50000_to_64999', format.percent],
+            ['Percent Earning $65,000 to $74,999', 'percent_with_earnings_65000_to_74999', format.percent],
+            ['Percent Earning $75,000 to $99,999', 'percent_with_earnings_75000_to_99999', format.percent],
+            ['Percent Earning over $100,000', 'percent_with_earnings_over_100000', format.percent]
         ])
     },
 
