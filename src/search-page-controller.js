@@ -387,7 +387,7 @@ class SearchPageController {
 
             controller.getEarningsData(regionIds)
                 .then(data => {
-                    this.drawEarningsMap();
+                    this.drawMap(MapSources.earnings);
                     this.drawEarningsChart(regionIds, data);
                     this.drawEarningsTable(regionIds, data);
                 })
@@ -469,10 +469,6 @@ class SearchPageController {
             title : 'Earnings by Education Level',
             vAxis : { format : 'currency' },
         });
-    }
-
-    drawEarningsMap() {
-        this.drawMap(MapSources.earnings);
     }
 
     drawEarningsTable(regionIds, data) {
@@ -617,16 +613,11 @@ class SearchPageController {
 
             controller.getEducationData(regionIds)
                 .then(data => {
-
-                    this.drawEducationMap();
+                    this.drawMap(MapSources.education);
                     this.drawEducationTable(regionIds, data)
                 })
                 .catch(error => console.error(error));
         });
-    }
-
-    drawEducationMap() {
-        this.drawMap(MapSources.education);
     }
 
     drawEducationTable(regionIds, data) {
@@ -691,7 +682,6 @@ class SearchPageController {
 
             controller.getGdpData(regionIds)
                 .then(data => {
-
                     this.drawMap(MapSources.gdp);
                     this.drawGdpChart(regionIds, data);
                     this.drawGdpChangeChart(regionIds, data);
@@ -798,16 +788,11 @@ class SearchPageController {
 
             controller.getOccupationsData(regionIds)
                 .then(data => {
-
-                    this.drawOccupationsMap();
+                    this.drawMap(MapSources.occupations);
                     this.drawOccupationsTable(regionIds, data)
                 })
                 .catch(error => console.error(error));
         });
-    }
-
-    drawOccupationsMap() {
-        this.drawMap(MapSources.occupations);
     }
 
     drawOccupationsTable(regionIds, data) {
@@ -855,8 +840,7 @@ class SearchPageController {
 
             controller.getPopulationData(regionIds)
                 .then(data => {
-
-                    this.drawPopulationMap();
+                    this.drawMap(MapSources.population);
                     this.drawPopulationChart(regionIds, data);
                     this.drawPopulationChangeChart(regionIds, data);
                 })
@@ -947,10 +931,6 @@ class SearchPageController {
             title : 'Population Change',
             vAxis : { format : '#.#%' },
         });
-    }
-
-    drawPopulationMap() {
-        this.drawMap(MapSources.population);
     }
 
     // Places in region
