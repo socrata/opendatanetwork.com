@@ -218,6 +218,7 @@ class SearchPageController {
             controller.getCostOfLivingData(regionIds)
                 .then(data => {
 
+                    this.drawMap(MapSources.rpp);
                     this.drawCostOfLivingChart(regionIds, data);
                     this.drawCostOfLivingTable(regionIds, data);
                 })

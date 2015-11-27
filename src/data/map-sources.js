@@ -108,6 +108,24 @@ const MapSources = {
                 format: format.percent
             }
         ]
+    },
+
+    rpp: {
+        name: 'rpp',
+        domain: DOMAIN,
+        fxf: 'hpnf-gnfu',
+        variables: ['All', 'Goods', 'Rents', 'Other'].map(
+            component => {
+                return {
+                    name: component,
+                    column: 'index',
+                    reverse: true,
+                    params: {component},
+                    years: _.range(2008, 2014),
+                    value: parseFloat,
+                    format: d3.format('.1f')
+                };
+            })
     }
 };
 
