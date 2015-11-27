@@ -691,6 +691,7 @@ class SearchPageController {
             controller.getGdpData(regionIds)
                 .then(data => {
 
+                    this.drawMap(MapSources.gdp);
                     this.drawGdpChart(regionIds, data);
                     this.drawGdpChangeChart(regionIds, data);
                 })

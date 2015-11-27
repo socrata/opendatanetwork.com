@@ -86,6 +86,28 @@ const MapSources = {
                     format: format.percent
                 };
             })
+    },
+
+    gdp: {
+        name: 'gdp',
+        domain: DOMAIN,
+        fxf: 'ks2j-vhr8',
+        variables: [
+            {
+                name: 'GDP per Capita',
+                column: 'per_capita_gdp',
+                years: _.range(2001, 2014),
+                value: parseFloat,
+                format: format.dollar
+            },
+            {
+                name: 'Annual Change in GDP',
+                column: 'per_capita_gdp_percent_change',
+                years: _.range(2002, 2014),
+                value: parseFloat,
+                format: format.percent
+            }
+        ]
     }
 };
 
