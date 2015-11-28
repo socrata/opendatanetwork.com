@@ -16,7 +16,7 @@ function multiComplete(inputSelector, resultSelector) {
     const datasetURL = autocompleteURL(domain, 'fpum-bjbr', 'encoded');
     const datasetSelect = option => {
         const [domain, fxf] = option.attributes;
-        navigate(`http://${domain}/`);
+        navigate(`http://${domain}/dataset/${fxf}`);
     };
     const showOption = option => {
         return `<span class='dataset-name'>${option.text}</span> \
