@@ -13,9 +13,15 @@ function multiComplete(inputSelector, resultSelector) {
     const inputSelection = d3.select(inputSelector);
     const resultSelection = d3.select(resultSelector);
 
-    const datasetURL = autocompleteURL(domain, 'fpum-bjbr', 'name');
+    const datasetURL = autocompleteURL(domain, 'fpum-bjbr', 'encoded');
     const datasetSelect = dataset => navigate(`/search?q=${dataset}`);
-    const datasetResults = new Results('Datasets', resultSelection, datasetSelect);
+    const showResult = result => {
+        return `<span class='dataset-name'>${result.text}</span> \
+                <span class='dataset-domain'>${result.attributes[0]}</span>`;
+
+    };
+    const datasetResults = new Results('Datasets', resultSelection, datasetSelect,
+                                       true, showResult);
     const datasetComplete = new Complete(datasetURL, datasetResults);
 
     const regionURL = autocompleteURL(domain, '7g2b-8brv', 'autocomplete_name');
