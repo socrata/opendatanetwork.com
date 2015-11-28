@@ -17,9 +17,13 @@ class Complete {
 
 
 class Results {
-    constructor(type, resultSelection, onSelect) {
+    constructor(type, resultSelection, onSelect,
+                encoded = false, showOption = result => result.text) {
+
         this.type = type;
         this.onSelect = onSelect;
+        this.encoded = encoded;
+        this.showOption = showOption;
 
         this.container = resultSelection
             .append('div')
@@ -68,13 +72,30 @@ class Results {
         resultsPromise.then(success, failure);
     }
 
+    decode(option) {
+        if (this.encoded) {
+            const allText = option.text;
+            const index = allText.lastIndexOf(' ');
+            const text = allText.substring(0, index);
+            const base64 = allText.substring(index);
+            const ascii = atob(base64);
+            const attributes = ascii.split(Constants.AUTOCOMPLETE_SEPARATOR);
+
+            return {text, attributes};
+        } else {
+            return {text: option.text};
+        }
+    }
+
     show(options) {
+        const decoded = options.map(option => this.decode(option));
+
         this.results
             .selectAll('li')
-            .data(options)
+            .data(decoded)
             .enter()
             .append('li')
-            .html(option => option.text)
+            .html(this.showOption)
             .on('mouseover', function() {
                 d3.select(this).classed('selected', true);
             })
@@ -82,7 +103,7 @@ class Results {
                 d3.select(this).classed('selected', false);
             })
             .on('click', option => {
-                this.onSelect(option.text);
+                this.onSelect(option);
             });
     }
 }

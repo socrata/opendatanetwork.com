@@ -49,7 +49,8 @@ RenderController.prototype.renderHomePage = function(req, res) {
                         allCategoryResults : allCategoryResults,
                         css : [
                             '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css',
-                            '/styles/home.css'
+                            '/styles/home.css',
+                            '/styles/main.css'
                         ],
                         params : params,
                         scripts : [
@@ -174,7 +175,8 @@ function _renderSearchPage(req, res, params) {
                                         '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css',
                                         '/styles/third-party/featherlight.min.css',
                                         '/styles/search.css',
-                                        '/styles/maps.css'
+                                        '/styles/maps.css',
+                                        '/styles/main.css'
                                     ],
                                     domainResults : domainResults,
                                     params : params,
@@ -313,7 +315,7 @@ function englishJoin(list) {
 
         s += list[i];
     }
-    
+
     return s;
 }
 
