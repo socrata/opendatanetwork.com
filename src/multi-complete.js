@@ -14,28 +14,31 @@ function multiComplete(inputSelector, resultSelector) {
     const resultSelection = d3.select(resultSelector);
 
     const datasetURL = autocompleteURL(domain, 'fpum-bjbr', 'encoded');
-    const datasetSelect = dataset => navigate(`/search?q=${dataset}`);
-    const showResult = result => {
-        return `<span class='dataset-name'>${result.text}</span> \
-                <span class='dataset-domain'>${result.attributes[0]}</span>`;
+    const datasetSelect = option => {
+        const [domain, fxf] = option.attributes;
+        navigate(`http://${domain}/`);
+    };
+    const showOption = option => {
+        return `<span class='dataset-name'>${option.text}</span> \
+                <span class='dataset-domain'>${option.attributes[0]}</span>`;
 
     };
     const datasetResults = new Results('Datasets', resultSelection, datasetSelect,
-                                       true, showResult);
+                                       true, showOption);
     const datasetComplete = new Complete(datasetURL, datasetResults);
 
     const regionURL = autocompleteURL(domain, '7g2b-8brv', 'autocomplete_name');
-    const regionSelect = region => navigate(`/${region.replace(/ /g, '_')}`);
+    const regionSelect = region => navigate(`/${region.text.replace(/ /g, '_')}`);
     const regionResults = new Results('Regions', resultSelection, regionSelect);
     const regionComplete = new Complete(regionURL, regionResults);
 
     const publisherURL = autocompleteURL(domain, '8ae5-ghum', 'domain');
-    const publisherSelect = publisher => navigate(`/search?domains=${publisher}`);
+    const publisherSelect = publisher => navigate(`/search?domains=${publisher.text}`);
     const publisherResults = new Results('Publishers', resultSelection, publisherSelect);
     const publisherComplete = new Complete(publisherURL, publisherResults);
 
     const categoryURL = autocompleteURL(domain, '864v-r7tf', 'category');
-    const categorySelect = category => navigate(`/search?categories=${category}`);
+    const categorySelect = category => navigate(`/search?categories=${category.text}`);
     const categoryResults = new Results('Categories', resultSelection, categorySelect);
     const categoryComplete = new Complete(categoryURL, categoryResults);
 

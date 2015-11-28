@@ -18,12 +18,12 @@ class Complete {
 
 class Results {
     constructor(type, resultSelection, onSelect,
-                encoded = false, showResult = result => result.text) {
+                encoded = false, showOption = result => result.text) {
 
         this.type = type;
         this.onSelect = onSelect;
         this.encoded = encoded;
-        this.showResult = showResult;
+        this.showOption = showOption;
 
         this.container = resultSelection
             .append('div')
@@ -95,7 +95,7 @@ class Results {
             .data(decoded)
             .enter()
             .append('li')
-            .html(this.showResult)
+            .html(this.showOption)
             .on('mouseover', function() {
                 d3.select(this).classed('selected', true);
             })
@@ -103,7 +103,7 @@ class Results {
                 d3.select(this).classed('selected', false);
             })
             .on('click', option => {
-                this.onSelect(option.text);
+                this.onSelect(option);
             });
     }
 }
