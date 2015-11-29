@@ -7,11 +7,7 @@ class Complete {
     }
 
     get(query) {
-        if (query === '') {
-            return [];
-        } else {
-            this.results.handle($.getJSON(this.queryBuilder(query)));
-        }
+        return $.getJSON(this.queryBuilder(query));
     }
 }
 
@@ -109,22 +105,58 @@ class Results {
 }
 
 
-class AutoSuggestRegionController {
-    constructor(inputSelection, resultSelection, completers) {
-        this.inputSelection = inputSelection;
-        this.resultSelection = resultSelection;
-        this.completers = completers;
+class Autosuggest{
+    constructor(inputSelector, resultSelector, sources) {
+        this.input = d3.select(inputSelector);
+        this.results = d3.select(resultSelector);
+
+        this.sources = sources.map(Autosuggest.parseSource);
     }
 
+    static parseSource(source) {
+        const encoded = source.encoded || [];
+        const show = source.show || (option => option.text);
+        const url = term =>
+            Constants.AUTOCOMPLETE_URL(source.domain, source.fxf, source.column, term);
+        const get = term => $.getJSON(url(term));
+
+        return _.extend(source, {encoded, show, url, get});
+    }
+
+    hide() {
+        this.results.style('display', 'none');
+    }
+
+    unhide() {
+        this.results.style('diplay', 'block');
+    }
+
+    listen() {
+
+    }
+
+    suggest(term) {
+        if (term === '') {
+            this.hide();
+        } else {
+            this.sources.forEach(source => {
+                console.log(source);
+                console.log(source.get(term));
+                source.get(term).then(results => {
+                    console.log(results);
+                }, error => { throw error; });
+            });
+        }
+    }
+}
+
+
+class AutoSuggestRegionController {
     listen() {
         const self = this;
         self.inputSelection.on('input', function() {
             self.suggest(this.value);
         });
-    }
-
-    navigate(path) {
-        window.location.href = path;
     }
 
     suggest(term) {
@@ -133,9 +165,14 @@ class AutoSuggestRegionController {
         } else {
             this.resultSelection.style('display', 'block');
 
-            this.completers.forEach(completer => {
-                completer.get(term);
+            this.working = true;
+            const promises = this.completers.map(completer => completer.get(term));
+
+            Promise.all(promises).then(values => {
+
             });
+
+
         }
     }
 }
