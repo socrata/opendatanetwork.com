@@ -133,7 +133,7 @@ class AutosuggestSource {
             const ascii = atob(base64);
             const attributes = ascii.split(Constants.AUTOCOMPLETE_SEPARATOR);
 
-            return _.extend({text}, _.zip(this.encoded, attributes));
+            return _.extend({text}, _.object(this.encoded, attributes));
         } else {
             return {text: option.text};
         }
@@ -169,7 +169,7 @@ class AutosuggestResults {
         this.title = this.container
             .append('p')
             .attr('class', 'autocomplete-results-title')
-            .text(this.type);
+            .text(this.source.name);
 
         this.results = this.container
             .append('div')
@@ -191,6 +191,7 @@ class AutosuggestResults {
     display(term) {
         return new Promise((resolve, reject) => {
             this.source.get(term).then(options => {
+                console.log(options);
                 this.empty();
 
                 if (options.length === 0) {
@@ -208,20 +209,18 @@ class AutosuggestResults {
 
 class Autosuggest {
     constructor(inputSelector, resultSelector, sources) {
-        this.inputSelection = d3.select(inputSelector);
-        this.resultSelection = d3.select(resultSelector);
+        this.inputSelection = d3.select(inputSelector)
+            .on('keydown', () => this.keydown(d3.event.keyCode));
+        this.resultSelection = d3.select(resultSelector)
+            .style('display', 'block');
 
         this.sources = sources.map(AutosuggestSource.fromJSON);
         this.results = this.sources.map(source =>
                 new AutosuggestResults(source, this.resultSelection));
-    }
 
-    hide() {
-        this.results.style('display', 'none');
-    }
-
-    unhide() {
-        this.results.style('diplay', 'block');
+        this.ready = false;
+        this.options = [];
+        this.index = -1;
     }
 
     listen() {
@@ -232,12 +231,50 @@ class Autosuggest {
         if (term === '') {
             this.hide();
         } else {
+            let completed = 0;
+
             this.results.forEach(result => {
-                result.display(term).then(div => {
-                    console.log(div);
+                result.display(term).then(options => {
+                    completed += 1;
+
+                    if (completed === this.sources.length) {
+                        this.ready = true;
+                        this.options = this.resultSelection.selectAll('li')[0];
+                    }
                 });
             });
         }
+    }
+
+    keydown(keyCode) {
+        console.log(this.ready);
+
+        if (keyCode == 38) {
+            this.up();
+        } else if (keyCode == 40) {
+            this.down();
+        }
+
+        this.updateSelected();
+    }
+
+    down() {
+        if (this.index < this.options.length - 1) {
+            this.index += 1;
+        }
+    }
+
+    up() {
+        if (this.index > 0) {
+            this.index -= 1;
+        }
+    }
+
+    updateSelected() {
+        this.options.map((element, index) => {
+            d3.select(element)
+                .classed('selected', index == this.index);
+        });
     }
 }
 
