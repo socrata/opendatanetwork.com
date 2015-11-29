@@ -191,7 +191,6 @@ class AutosuggestResults {
     display(term) {
         return new Promise((resolve, reject) => {
             this.source.get(term).then(options => {
-                console.log(options);
                 this.empty();
 
                 if (options.length === 0) {
@@ -207,10 +206,14 @@ class AutosuggestResults {
     }
 }
 
+function delay(milliseconds) {
+    return new Promise((resolve, reject) => {
+        setTimeout(resolve, milliseconds);
+    });
+}
+
 class Autosuggest {
-    constructor(inputSelector, resultSelector, sources) {
-        this.inputSelection = d3.select(inputSelector)
-            .on('keydown', () => this.keydown(d3.event.keyCode));
+    constructor(resultSelector, sources) {
         this.resultSelection = d3.select(resultSelector)
             .style('display', 'block');
 
@@ -221,10 +224,30 @@ class Autosuggest {
         this.ready = false;
         this.options = [];
         this.index = -1;
+
+        this._typing = false;
+        this._ready = true;
+        this._currentTerm = '';
     }
 
-    listen() {
+    listen(inputSelector) {
+        const self = this;
 
+        const input = d3.select(inputSelector)
+            .on('keydown', function() {
+                self.keydown(d3.event.keyCode);
+            })
+            .on('input', function() {
+                self.throttledSuggest(this.value);
+            });
+    }
+
+    throttledSuggest(term) {
+        delay(Constants.AUTOCOMPLETE_WAIT_MS).then(() => {
+            if (term === this._currentTerm) {
+                this.suggest(term);
+            }
+        });
     }
 
     suggest(term) {
@@ -232,6 +255,7 @@ class Autosuggest {
             this.hide();
         } else {
             let completed = 0;
+
 
             this.results.forEach(result => {
                 result.display(term).then(options => {
@@ -247,8 +271,6 @@ class Autosuggest {
     }
 
     keydown(keyCode) {
-        console.log(this.ready);
-
         if (keyCode == 38) {
             this.up();
         } else if (keyCode == 40) {

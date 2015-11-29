@@ -43,8 +43,8 @@ function multiComplete(inputSelector, resultSelector) {
         }
     ];
 
-    const autosuggest = new Autosuggest(inputSelector, resultSelector, sources);
-    autosuggest.suggest('seattle');
+    const autosuggest = new Autosuggest(resultSelector, sources);
+    autosuggest.listen(inputSelector);
 
     return autosuggest;
 }

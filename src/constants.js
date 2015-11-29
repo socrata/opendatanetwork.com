@@ -5,6 +5,7 @@ const Constants = {
     AUTOCOMPLETE_SEPARATOR: ':',
     AUTOCOMPLETE_URL: (domain, fxf, column, term) => {
         return `https://${domain}/views/${fxf}/columns/${column}/suggest/${term}?size=5`;
-    }
+    },
+    AUTOCOMPLETE_WAIT_MS: 150
 };
 
