@@ -148,10 +148,14 @@ class AutosuggestSource {
             .html(option => this.show(option))
             .on('click', option => this.select(option))
             .on('mouseover', function() {
-                d3.select(this).classed('selected', true);
+                d3.select(this)
+                    .classed('selected', true)
+                    .classed('hovered', true);
             })
             .on('mouseout', function() {
-                d3.select(this).classed('selected', false);
+                d3.select(this)
+                    .classed('selected', false)
+                    .classed('hovered', true);
             })[0];
     }
 }
@@ -201,7 +205,6 @@ class AutosuggestResults {
                     resolve(this.source.display(this.results, options));
                 }
             }, error => { throw error; });
-
         });
     }
 }
@@ -236,6 +239,7 @@ class Autosuggest {
         const input = d3.select(inputSelector)
             .on('keydown', function() {
                 self.keydown(d3.event.keyCode);
+                d3.event.stopPropagation();
             })
             .on('input', function() {
                 self.throttledSuggest(this.value);
@@ -248,6 +252,8 @@ class Autosuggest {
                 this.suggest(term);
             }
         });
+
+        this._currentTerm = term;
     }
 
     suggest(term) {
@@ -256,7 +262,6 @@ class Autosuggest {
         } else {
             let completed = 0;
 
-
             this.results.forEach(result => {
                 result.display(term).then(options => {
                     completed += 1;
@@ -264,6 +269,7 @@ class Autosuggest {
                     if (completed === this.sources.length) {
                         this.ready = true;
                         this.options = this.resultSelection.selectAll('li')[0];
+                        console.log(this.options);
                     }
                 });
             });
@@ -271,13 +277,22 @@ class Autosuggest {
     }
 
     keydown(keyCode) {
-        if (keyCode == 38) {
-            this.up();
-        } else if (keyCode == 40) {
-            this.down();
-        }
+        if (this.ready) {
+            this.updateIndex();
+            console.log(this.index);
 
-        this.updateSelected();
+            if (keyCode == 38) {
+                this.up();
+            } else if (keyCode == 40) {
+                this.down();
+            }
+
+            console.log(this.index);
+
+            this.updateSelected();
+        } else {
+            console.log('not ready');
+        }
     }
 
     down() {
@@ -292,8 +307,15 @@ class Autosuggest {
         }
     }
 
+    updateIndex() {
+        this.options.forEach((element, index) => {
+            if (d3.select(element).classed('hovered'))
+                this.index = index;
+        });
+    }
+
     updateSelected() {
-        this.options.map((element, index) => {
+        this.options.forEach((element, index) => {
             d3.select(element)
                 .classed('selected', index == this.index);
         });
