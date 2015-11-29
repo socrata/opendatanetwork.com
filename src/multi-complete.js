@@ -17,7 +17,7 @@ function multiComplete(inputSelector, resultSelector) {
             select: option => navigate(`http://${option.domain}/dataset/${option.fxf}`),
             show: option => {
                 return `<span class='dataset-name'>${option.text}</span> \
-                        <span class='dataset-domain'>${option.attributes[0]}</span>`;
+                        <span class='dataset-domain'>${option.domain}</span>`;
             }
         },
         {
