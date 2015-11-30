@@ -127,11 +127,9 @@ class AutosuggestResults {
         this.updateOptions(_.flatten(nestedSelections));
     }
 
-    onMouseover(eventIndex) {
+    updateSelected() {
         this.options.forEach((option, index) => {
-            if (index !== eventIndex) {
-                option.classed('selected', false);
-            }
+            option.classed('selected', index === this.index);
         });
     }
 
@@ -139,8 +137,35 @@ class AutosuggestResults {
         this.options = options.map(option => d3.select(option));
 
         this.options.forEach((option, index) => {
-            option.on('mouseover.results', () => this.onMouseover(index));
+            option.on('mouseover.results', () => {
+                this.index = index;
+                this.updateSelected();
+            });
         });
+    }
+
+    keydown(keyCode) {
+        console.log(keyCode);
+
+        if (keyCode == 38) {
+            this.up();
+        } else if (keyCode == 40) {
+            this.down();
+        }
+
+        this.updateSelected();
+    }
+
+    down() {
+        if (this.index < this.options.length - 1) {
+            this.index += 1;
+        }
+    }
+
+    up() {
+        if (this.index > 0) {
+            this.index -= 1;
+        }
     }
 }
 
@@ -170,7 +195,7 @@ class Autosuggest {
 
         const input = d3.select(inputSelector)
             .on('keydown', function() {
-                self.keydown(d3.event.keyCode);
+                self.results.keydown(d3.event.keyCode);
                 d3.event.stopPropagation();
             })
             .on('input', function() {
@@ -198,51 +223,6 @@ class Autosuggest {
                 this.results.show(this.sources, allOptions);
             });
         }
-    }
-
-    keydown(keyCode) {
-        if (this.ready) {
-            this.updateIndex();
-            console.log(this.index);
-
-            if (keyCode == 38) {
-                this.up();
-            } else if (keyCode == 40) {
-                this.down();
-            }
-
-            console.log(this.index);
-
-            this.updateSelected();
-        } else {
-            console.log('not ready');
-        }
-    }
-
-    down() {
-        if (this.index < this.options.length - 1) {
-            this.index += 1;
-        }
-    }
-
-    up() {
-        if (this.index > 0) {
-            this.index -= 1;
-        }
-    }
-
-    updateIndex() {
-        this.options.forEach((element, index) => {
-            if (d3.select(element).classed('hovered'))
-                this.index = index;
-        });
-    }
-
-    updateSelected() {
-        this.options.forEach((element, index) => {
-            d3.select(element)
-                .classed('selected', index == this.index);
-        });
     }
 }
 
