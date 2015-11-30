@@ -39,7 +39,8 @@ function multiComplete(inputSelector, resultSelector) {
             domain: domain,
             fxf: '864v-r7tf',
             column: 'category',
-            select: option => navigate(`/search?categories=${option.text}`)
+            select: option => navigate(`/search?categories=${option.text}`),
+            show: option => `<span class='capitalize'>${option.text}</span`
         }
     ];
 
