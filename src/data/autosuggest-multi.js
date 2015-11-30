@@ -14,7 +14,13 @@ function multiComplete(inputSelector, resultSelector) {
             fxf: 'fpum-bjbr',
             column: 'encoded',
             encoded: ['domain', 'fxf'],
-            select: option => navigate(`http://${option.domain}/dataset/${option.fxf}`),
+            select: option => {
+                const name = option.text;
+                const domain = option.domain;
+
+                DatasetPopup.show({name, domain});
+                // navigate(`http://${option.domain}/dataset/${option.fxf}`)
+            },
             show: option => {
                 return `<span class='dataset-name'>${option.text}</span> \
                         <span class='dataset-domain'>${option.domain}</span>`;
