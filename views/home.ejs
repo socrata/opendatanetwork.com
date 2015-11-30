@@ -12,11 +12,11 @@
             developers, and analysts that use, reuse, and enrich data.  The members of the network work<br>
             together to share best practices, adopt standards, and advocate for open data broadly.
         </p>
-        <form id="form" method="GET" action="/search" autocomplete="off">
+        <div id="form">
             <a id="search-button" class="fa fa-search"></a>
-            <span><input type="text" id="q" name="q" placeholder="Search the Open Data Network"></span>
+            <span><input type="text" id="q" placeholder="Search the Open Data Network"></span>
             <ul class="region-list" style="display:none"></ul>
-        </form>
+        </div>
     </div>
 </section>
 
@@ -24,7 +24,7 @@
     <div class="container">
         <h4>Data Categories</h4>
         <ul>
-          <% allCategoryResults.results.forEach(function(result) { %> 
+          <% allCategoryResults.results.forEach(function(result) { %>
             <li>
                 <a class="icon" href="/search?categories=<%= encodeURIComponent(result.category) %>"><i class="fa <%= result.metadata.icon %>"></i></a>
                 <a href="/search?categories=<%= encodeURIComponent(result.category) %>"><h3><%= result.category %></h3></a>
@@ -43,7 +43,7 @@
             <div><img src="/images/v3-building-eye.png"></div>
             <div><img src="/images/v3-civic-insight.png"></div>
             <div><img src="/images/v3-basic-gov.png"></div>
-            <div><img src="/images/v3-build-fax.png"></div>            
+            <div><img src="/images/v3-build-fax.png"></div>
             <div><img src="/images/v3-realty-trac.png"></div>
             <div><img src="/images/v3-site-compli.png"></div>
             <div><img src="/images/v3-ontodia.png"></div>

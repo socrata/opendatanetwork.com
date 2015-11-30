@@ -168,16 +168,21 @@ class AutosuggestResults {
         this.updateSelected();
     }
 
+    up() {
+        if (this.index >= 0) {
+            this.index -= 1;
+        }
+    }
+
     down() {
         if (this.index < this.options.length - 1) {
             this.index += 1;
         }
     }
 
-    up() {
-        if (this.index >= 0) {
-            this.index -= 1;
-        }
+    enter() {
+        const selection = this.options[this.index];
+        selection.on('click')(selection.datum());
     }
 }
 
@@ -202,7 +207,7 @@ class Autosuggest {
 
         const input = d3.select(inputSelector)
             .on('keydown', function() {
-                self.results.keydown(d3.event.keyCode);
+                self.keydown(d3.event.keyCode);
                 d3.event.stopPropagation();
             })
             .on('input', function() {
@@ -233,6 +238,23 @@ class Autosuggest {
                     this.results.show(this.sources, allOptions);
                 }
             });
+        }
+    }
+
+    keydown(keyCode) {
+        if (keyCode == 13) {
+            this.enter();
+        } else {
+            this.results.keydown(keyCode);
+        }
+    }
+
+    enter() {
+        if (this.results.index < 0) {
+            console.log('asd');
+            window.location.href = `/search?${$.param({q: this._currentText})}`;
+        } else {
+            this.results.enter();
         }
     }
 }
