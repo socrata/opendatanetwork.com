@@ -96,34 +96,6 @@ footer
     z-index: 100;
 }
 
-.autocomplete-results-container
-{
-    background-color: white;
-
-    .autocomplete-results-title
-    {
-        color: black;
-        font-size: 15px;
-        font-weight: bold;
-        padding: 0 1em;
-        margin: 0;
-    }
-
-    .autocomplete-results
-    {
-        li
-        {
-            font-size: 13px;
-            padding: 0 2em;
-        }
-
-        li.selected
-        {
-            background-color: $blue-background-color;
-            color: white;
-        }
-    }
-}
 
 /* health vector overrides */
 .charts-column #rwjf-county-health-rankings-table td.align-left{

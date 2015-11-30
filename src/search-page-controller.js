@@ -120,7 +120,9 @@ class SearchPageController {
 
         // Add location
         //
-        function selectRegion(autocompleteName) {
+        function selectRegion(option) {
+            const autocompleteName = option.text;
+
             RegionLookup.byAutocompleteName(autocompleteName)
                 .then(region => {
                     self.setAutoSuggestedRegion(region.name, false);
@@ -130,10 +132,9 @@ class SearchPageController {
                 });
         }
 
-        sourceComplete('.add-region-input',
-                       '.add-region-results',
-                       this.params.vector,
-                       selectRegion).listen();
+        const sources = regionsWithData(this.params.vector, selectRegion);
+        const autosuggest = new Autosuggest('.add-region-results', sources);
+        autosuggest.listen('.add-region-input');
 
         $('.add-region .fa-plus').click(function() {
 
