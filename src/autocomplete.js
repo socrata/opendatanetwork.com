@@ -86,6 +86,16 @@ class AutosuggestResults {
 
         this.options = [];
         this.index = -1;
+
+        this.autohide();
+    }
+
+    autohide() {
+        d3.select('html')
+            .on('click.results', () => this.hide());
+
+        this.results
+            .on('click.results', () => d3.event.stopPropagation());
     }
 
     hide() {
