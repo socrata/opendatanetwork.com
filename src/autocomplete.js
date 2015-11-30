@@ -125,12 +125,7 @@ class AutosuggestResults {
         });
 
         this.updateOptions(_.flatten(nestedSelections));
-    }
-
-    updateSelected() {
-        this.options.forEach((option, index) => {
-            option.classed('selected', index === this.index);
-        });
+        this.unhide();
     }
 
     updateOptions(options) {
@@ -144,6 +139,12 @@ class AutosuggestResults {
                 this.index = -1;
                 this.updateSelected();
             });
+        });
+    }
+
+    updateSelected() {
+        this.options.forEach((option, index) => {
+            option.classed('selected', index === this.index);
         });
     }
 
@@ -178,15 +179,8 @@ function delay(milliseconds) {
 
 class Autosuggest {
     constructor(resultSelector, sources) {
-        this.resultSelection = d3.select(resultSelector)
-            .style('display', 'block');
-
         this.sources = sources.map(AutosuggestSource.fromJSON);
         this.results = new AutosuggestResults(resultSelector);
-
-        this.ready = false;
-        this.options = [];
-        this.index = -1;
 
         this._currentTerm = '';
     }
@@ -216,7 +210,7 @@ class Autosuggest {
 
     suggest(term) {
         if (term === '') {
-            this.hide();
+            this.results.hide();
         } else {
             const promises = this.sources.map(source => source.get(term));
 
