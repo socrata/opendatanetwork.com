@@ -177,12 +177,14 @@ function delay(milliseconds) {
     });
 }
 
+
 class Autosuggest {
     constructor(resultSelector, sources) {
         this.sources = sources.map(AutosuggestSource.fromJSON);
         this.results = new AutosuggestResults(resultSelector);
 
         this._currentTerm = '';
+        this._time = Date.now();
     }
 
     listen(inputSelector) {
@@ -212,10 +214,14 @@ class Autosuggest {
         if (term === '') {
             this.results.hide();
         } else {
+            const time = Date.now();
             const promises = this.sources.map(source => source.get(term));
 
             Promise.all(promises).then(allOptions => {
-                this.results.show(this.sources, allOptions);
+                if (time > this._time) {
+                    this._time = time;
+                    this.results.show(this.sources, allOptions);
+                }
             });
         }
     }
