@@ -140,52 +140,43 @@ class AutosuggestSource {
     }
 
     display(container, options) {
-        return container
+        const category = container
+            .append('div')
+            .attr('class', 'autocomplete-category');
+
+        const name = category
+            .append('p')
+            .attr('class', 'autocomplete-title')
+            .text(this.name);
+
+        return category
             .selectAll('li')
             .data(options)
             .enter()
             .append('li')
             .html(option => this.show(option))
             .on('click', option => this.select(option))
-            .on('mouseover', function() {
-                d3.select(this)
-                    .classed('selected', true)
-                    .classed('hovered', true);
+            .on('mouseover.source', function() {
+                d3.select(this).classed('selected hovered', true);
             })
-            .on('mouseout', function() {
-                d3.select(this)
-                    .classed('selected', false)
-                    .classed('hovered', true);
-            })[0];
+            .on('mouseout.source', function() {
+                d3.select(this).classed('selected hovered', false);
+            });
     }
 }
 
 
 class AutosuggestResults {
-    constructor(source, resultSelection) {
-        this.source = source;
-
-        this.container = resultSelection
-            .append('div')
-            .attr('class', 'autocomplete-results-container')
-            .style('display', 'none');
-
-        this.title = this.container
-            .append('p')
-            .attr('class', 'autocomplete-results-title')
-            .text(this.source.name);
-
-        this.results = this.container
-            .append('div')
-            .attr('class', 'autocomplete-results');
+    constructor(resultSelector) {
+        this.results = d3.select(resultSelector);
     }
 
     hide() {
-        this.container.style('display', 'none');
+        this.results.style('display', 'none');
     }
 
     unhide() {
-        this.container.style('display', 'block');
+        this.results.style('display', 'block');
     }
 
     empty() {
@@ -207,6 +198,17 @@ class AutosuggestResults {
             }, error => { throw error; });
         });
     }
+
+    show(sources, allOptions) {
+        this.empty();
+
+        sources.forEach((source, index) => {
+            const options = allOptions[index];
+
+            const selection = source.display(this.results, options);
+            console.log(selection);
+        });
+    }
 }
 
 function delay(milliseconds) {
@@ -221,15 +223,12 @@ class Autosuggest {
             .style('display', 'block');
 
         this.sources = sources.map(AutosuggestSource.fromJSON);
-        this.results = this.sources.map(source =>
-                new AutosuggestResults(source, this.resultSelection));
+        this.results = new AutosuggestResults(resultSelector);
 
         this.ready = false;
         this.options = [];
         this.index = -1;
 
-        this._typing = false;
-        this._ready = true;
         this._currentTerm = '';
     }
 
@@ -260,18 +259,10 @@ class Autosuggest {
         if (term === '') {
             this.hide();
         } else {
-            let completed = 0;
+            const promises = this.sources.map(source => source.get(term));
 
-            this.results.forEach(result => {
-                result.display(term).then(options => {
-                    completed += 1;
-
-                    if (completed === this.sources.length) {
-                        this.ready = true;
-                        this.options = this.resultSelection.selectAll('li')[0];
-                        console.log(this.options);
-                    }
-                });
+            Promise.all(promises).then(allOptions => {
+                this.results.show(this.sources, allOptions);
             });
         }
     }
