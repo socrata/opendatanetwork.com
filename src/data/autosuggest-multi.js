@@ -25,7 +25,10 @@ function multiComplete(inputSelector, resultSelector) {
             domain: domain,
             fxf: '7g2b-8brv',
             column: 'autocomplete_name',
-            select: option => navigate(`/${option.text.replace(/ /g, '_')}`)
+            select: option => {
+                console.log(option);
+                navigate(`/${option.text.replace(/ /g, '_')}`);
+            }
         },
         {
             name: 'Publishers',
