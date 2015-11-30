@@ -47,6 +47,9 @@ class AutosuggestSource {
     }
 
     display(container, options) {
+        if (options.length === 0)
+            return [];
+
         const category = container
             .append('div')
             .attr('class', 'autocomplete-category');
@@ -56,7 +59,11 @@ class AutosuggestSource {
             .attr('class', 'autocomplete-title')
             .text(this.name);
 
-        return category
+        const results = category
+            .append('div')
+            .attr('class', 'autocomplete-options');
+
+        return results
             .selectAll('li')
             .data(options)
             .enter()
@@ -68,7 +75,7 @@ class AutosuggestSource {
             })
             .on('mouseout.source', function() {
                 d3.select(this).classed('selected hovered', false);
-            });
+            })[0];
     }
 }
 
@@ -76,6 +83,9 @@ class AutosuggestSource {
 class AutosuggestResults {
     constructor(resultSelector) {
         this.results = d3.select(resultSelector);
+
+        this.options = [];
+        this.index = -1;
     }
 
     hide() {
@@ -109,11 +119,27 @@ class AutosuggestResults {
     show(sources, allOptions) {
         this.empty();
 
-        sources.forEach((source, index) => {
+        const nestedSelections = sources.map((source, index) => {
             const options = allOptions[index];
+            return source.display(this.results, options);
+        });
 
-            const selection = source.display(this.results, options);
-            console.log(selection);
+        this.updateOptions(_.flatten(nestedSelections));
+    }
+
+    onMouseover(eventIndex) {
+        this.options.forEach((option, index) => {
+            if (index !== eventIndex) {
+                option.classed('selected', false);
+            }
+        });
+    }
+
+    updateOptions(options) {
+        this.options = options.map(option => d3.select(option));
+
+        this.options.forEach((option, index) => {
+            option.on('mouseover.results', () => this.onMouseover(index));
         });
     }
 }
