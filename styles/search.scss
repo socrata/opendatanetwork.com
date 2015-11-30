@@ -443,6 +443,11 @@ section.results
     text-align: center;
 }
 
+.charts-column label a
+{
+    color: $blue-color;
+}
+
 .charts-column figure
 {
     height: 300px;
