@@ -140,13 +140,14 @@ class AutosuggestResults {
             option.on('mouseover.results', () => {
                 this.index = index;
                 this.updateSelected();
+            }).on('mouseout.results', () => {
+                this.index = -1;
+                this.updateSelected();
             });
         });
     }
 
     keydown(keyCode) {
-        console.log(keyCode);
-
         if (keyCode == 38) {
             this.up();
         } else if (keyCode == 40) {
@@ -163,7 +164,7 @@ class AutosuggestResults {
     }
 
     up() {
-        if (this.index > 0) {
+        if (this.index >= 0) {
             this.index -= 1;
         }
     }
