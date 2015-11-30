@@ -251,8 +251,8 @@ class Autosuggest {
 
     enter() {
         if (this.results.index < 0) {
-            console.log('asd');
-            window.location.href = `/search?${$.param({q: this._currentText})}`;
+            const path = `/search?${$.param({q: this._currentTerm})}`;
+            window.location.href = path;
         } else {
             this.results.enter();
         }
