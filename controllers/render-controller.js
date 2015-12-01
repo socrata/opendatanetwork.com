@@ -49,7 +49,8 @@ RenderController.prototype.renderHomePage = function(req, res) {
                         allCategoryResults : allCategoryResults,
                         css : [
                             '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css',
-                            '/styles/home.css'
+                            '/styles/home.css',
+                            '/styles/main.css'
                         ],
                         params : params,
                         scripts : [
@@ -63,7 +64,8 @@ RenderController.prototype.renderHomePage = function(req, res) {
                             '/lib/third-party/lodash.min.js',
                             '/lib/home.min.js'
                         ],
-                        searchPath : '/search'
+                        searchPath : '/search',
+                        title : 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.'
                     });
              });
         });
@@ -171,8 +173,10 @@ function _renderSearchPage(req, res, params) {
                                     categoryResults : categoryResults,
                                     css : [
                                         '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css',
+                                        '/styles/third-party/featherlight.min.css',
                                         '/styles/search.css',
-                                        '/styles/maps.css'
+                                        '/styles/maps.css',
+                                        '/styles/main.css'
                                     ],
                                     domainResults : domainResults,
                                     params : params,
@@ -180,16 +184,18 @@ function _renderSearchPage(req, res, params) {
                                         '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
                                         '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
                                         '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
-                                        '/lib/third-party/leaflet-omnivore.min.js',
                                         '/lib/third-party/colorbrewer.min.js',
                                         '/lib/third-party/d3.min.js',
                                         '/lib/third-party/d3.promise.min.js',
+                                        '/lib/third-party/featherlight.min.js',
+                                        '/lib/third-party/leaflet-omnivore.min.js',
                                         '/lib/third-party/lodash.min.js',
                                         '/lib/search.min.js'
                                     ],
                                     searchDatasetsUrl : searchDatasetsUrl,
                                     searchPath : req.path,
-                                    searchResults : results
+                                    searchResults : results,
+                                    title : getSearchPageTitle(params)
                                 });
                         },
                         function() {
@@ -244,20 +250,94 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
 
         if (results.length > 0) {
 
-            params.regions = results.map(function(result) {
+            var orderedRegions = [];
 
-                return {
-                    autoCompleteName : result.autocomplete_name,
-                    id : result.id,
-                    name : result.name,
-                    type : result.type
-                };
-            });
+            for (var i in regions) {
+
+                var region = getRegionFromResultsByAutoCompleteName(results, regions[i]);
+
+                if (region != null)
+                    orderedRegions.push(region);
+            }
+
+            params.regions = orderedRegions;
         }
 
         if (completionHandler) completionHandler(params);
     });
 };
+
+function getSearchPageTitle(params) {
+
+    var rg = []
+
+    switch (params.vector) {
+
+        case 'population': rg.push('Population'); break;
+        case 'earnings': rg.push('Earnings'); break;
+        case 'education': rg.push('Education'); break;
+        case 'occupations': rg.push('Occupations'); break;
+        case 'gdp': rg.push('Economic'); break;
+        case 'health': rg.push('Health'); break;
+        case 'cost_of_living': rg.push('Cost of Living'); break;
+        default: rg.push('Population'); break;
+    }
+
+    var categories = params.categories.map(function(category) { return category.capitalize(); });
+    rg = rg.concat(categories);
+
+    var standards = params.standards.map(function(standard) { return standard.toUpperCase(); });
+    rg = rg.concat(standards);
+
+    var s = englishJoin(rg);
+    s += ' Data';
+
+    if (params.regions.length > 0) {
+
+        s += ' for ';
+        var regionNames = params.regions.map(function(region) { return region.name; });
+        s += englishJoin(regionNames);
+    }
+
+    s += ' on the Open Data Network';
+
+    return s;
+};
+
+function englishJoin(list) {
+
+    var s = '';
+
+    for (var i = 0; i < list.length; i++) {
+
+        if (i > 0)
+            s += (i == list.length - 1) ? ' and ' : ', ';
+
+        s += list[i];
+    }
+
+    return s;
+}
+
+function getRegionFromResultsByAutoCompleteName(results, regionAutoCompleteName) {
+
+    for (var i in results) {
+
+        var result = results[i];
+
+        if (regionAutoCompleteName == result.autocomplete_name) {
+
+            return {
+                autoCompleteName : result.autocomplete_name,
+                id : result.id,
+                name : result.name,
+                type : result.type
+            };
+        }
+    }
+
+    return null;
+}
 
 function getNormalizedArrayFromDelimitedString(s) {
 
@@ -284,6 +364,11 @@ function renderErrorPage(req, res) {
 
 // Extensions
 //
+String.prototype.capitalize = function() {
+
+    return this.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+}
+
 String.prototype.split2 = function(s) {
 
     var rg = this.split(s);

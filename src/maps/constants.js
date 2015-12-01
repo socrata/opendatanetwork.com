@@ -1,5 +1,10 @@
 
 const MapConstants = {
+    // Maximum number of regions to display
+    LIMIT: 5000,
+
+    CSS_ID: 'leaflet-map',
+
     // Same base layer as Data Lens
     BASE_LAYER_URL: 'https://a.tiles.mapbox.com/v3/socrata-apps.ibp0l899/{z}/{x}/{y}.png',
     BASE_LAYER: {
@@ -10,8 +15,7 @@ const MapConstants = {
     COLOR_SCALE: colorbrewer.RdYlBu[9],
     SCALE: Scale.quantile,
 
-    // Leaflet map options:
-    // http://leafletjs.com/reference.html#map-class
+    // http://leafletjs.com/reference.html#map-options
     MAP_OPTIONS: {
         minZoom: 3.0,
         maxZoom: 12.0,
@@ -19,31 +23,52 @@ const MapConstants = {
         attributionControl: false
     },
 
+    ZOOM_CONTROL: true,
+    ZOOM_CONTROL_OPTIONS: {
+        position: 'topleft'
+    },
+
     INITIAL_CENTER: [37.1669, -95.9669], // Center of US
     INITIAL_ZOOM: 4.0,
 
-    REGION_BORDER_COLOR: '#34495e',
-    REGION_BORDER_WEIGHT: 1,
-    REGION_FILL_OPACITY: 1,
+    // http://leafletjs.com/reference.html#map-fitboundsoptions
+    AUTO_ZOOM_OPTIONS: {
+        animate: false,
+        maxZoom: 10.0
+    },
 
-    REFERENCE_BORDER_COLOR: '#2c3e50',
-    REFERENCE_BORDER_WEIGHT: 2,
+    POINT_RADIUS_SCALE: d3.scale.log,
+    POINT_RADIUS_RANGE_METERS: [500, 2000],
 
-    LOADING_TOOLTIP_NAME: 'Loading',
+    // http://leafletjs.com/reference.html#path-options
+    BASE_STYLE: {
+        color: '#34495e',
+        weight: 1,
+        opacity: 1,
+        fill: false,
+        fillOpacity: 1
+    },
 
-    GAZETTEER_URL: 'https://federal.demo.socrata.com/resource/gm3u-gw57.json',
-    ROSTER_URL: 'https://federal.demo.socrata.com/resource/7g2b-8brv.json',
+    SELECTED_STYLE: {
+        stroke: true,
+        color: '#8e44ad',
+        weight: 3,
+        opacity: 1
+    },
 
     TOPOJSON_DIRECTORY: '/geo/',
     TOPOJSON_SUFFIX: '.topo.json',
 
     REGIONS: {
-        nation: {name: 'USA', id: 'nation', topo: 'nation'},
-        region: {name: 'Regions', id: 'region', topo: 'region'},
-        division: {name: 'Divisions', id: 'division', topo: 'division'},
-        state: {name: 'States', id: 'state', topo: 'state'},
-        county: {name: 'Counties', id: 'county', topo: 'county'},
-        msa: {name: 'Metros', id: 'msa', topo: 'cbsa'},
-        place: {name: 'Cities', id: 'place', topo: 'state'}
-    }
+        nation: {name: 'USA', id: 'nation', topo: 'nation', type: 'choropleth'},
+        region: {name: 'Regions', id: 'region', topo: 'region', type: 'choropleth'},
+        division: {name: 'Divisions', id: 'division', topo: 'division', type: 'choropleth'},
+        state: {name: 'States', id: 'state', topo: 'state', type: 'choropleth'},
+        county: {name: 'Counties', id: 'county', topo: 'county', type: 'choropleth'},
+        msa: {name: 'Metros', id: 'msa', topo: 'cbsa', type: 'choropleth'},
+        place: {name: 'Cities', id: 'place', topo: 'places', type: 'point'}
+    },
+
+    DEFAULT_REGION: 'state'
 };
+

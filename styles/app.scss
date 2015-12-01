@@ -74,43 +74,6 @@ header .logo
     width: 270px;
 }
 
-header form
-{
-    width: 100%;
-}
-
-header .fa-search
-{
-    background-color: $orange-color;
-    color: white;
-    cursor: pointer;
-    float: right;
-    font-size: 22px;
-    height: 60px;
-    line-height: 60px;
-    margin-right: 300px;
-    text-align: center;
-    width: 100px;
-}
-
-header span
-{
-    display: block;
-    overflow: hidden;
-}
-
-header input[type="text"]
-{
-    border: 0;
-    box-sizing: border-box;
-    display: inline-block;
-    font-size: 16px;
-    line-height: 58px;
-    outline: none;
-    padding-left: 30px;
-    width: 100%;
-}
-
 /* Footer */
 
 footer
@@ -133,34 +96,6 @@ footer
     z-index: 100;
 }
 
-.autocomplete-results-container
-{
-    background-color: white;
-
-    .autocomplete-results-title
-    {
-        color: black;
-        font-size: 15px;
-        font-weight: bold;
-        padding: 0 1em;
-        margin: 0;
-    }
-
-    .autocomplete-results
-    {
-        li
-        {
-            font-size: 13px;
-            padding: 0 2em;
-        }
-
-        li.selected
-        {
-            background-color: $blue-background-color;
-            color: white;
-        }
-    }
-}
 
 /* health vector overrides */
 .charts-column #rwjf-county-health-rankings-table td.align-left{

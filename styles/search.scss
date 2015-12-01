@@ -27,11 +27,73 @@ $orange-color: #ee3b3b;
     color: $gray-text-color;
 }
 
+.hidden
+{
+    display: none;
+}
+
 /* Header */
 
 header
 {
     border-bottom: 1px solid $dark-gray-border-color;
+
+    .logo
+    {
+        @media (max-width: 640px) 
+        {
+            display:none;
+        }
+
+        @media (max-width: 1200px) 
+        {
+            width: 210px;
+        }
+    }
+
+    form
+    {
+        width: 100%;
+    }
+
+    .fa-search
+    {
+        background-color: $orange-color;
+        color: white;
+        cursor: pointer;
+        float: right;
+        font-size: 22px;
+        height: 60px;
+        line-height: 60px;
+        margin-right: 300px;
+        text-align: center;
+        width: 100px;
+
+        @media (max-width: 1200px) 
+        {
+            margin-right: 0;
+        }
+    }
+
+    span
+    {
+        display: block;
+        overflow: hidden;
+    }
+    
+    input[type="text"]
+    {
+        border: 0;
+        border-radius: 0; /* mobile safari */
+        box-sizing: border-box;
+        display: inline-block;
+        font-size: 16px;
+        line-height: 58px;
+        margin: 0;
+        outline: none;
+        padding-left: 30px;
+        width: 100%;
+    }
 }
 
 /* Refine section */
@@ -218,6 +280,7 @@ section.results
 .search-results-compact-column .name
 {
     color: $black-text-color;
+    cursor: pointer;
     font-size: 14px;
 }
 
@@ -378,6 +441,11 @@ section.results
     font-size: 12px;
     margin: 50px 0 0 0;
     text-align: center;
+}
+
+.charts-column label a
+{
+    color: $blue-color;
 }
 
 .charts-column figure
@@ -590,3 +658,75 @@ section.results
     font-size: 14px;
 }
 
+/* Dataset lightbox */
+
+#dataset-lightbox
+{
+    color: $dark-gray-text-color;
+    font-size: 14px;
+    padding: 0 20px 20px;
+    width: 700px;
+}
+
+#dataset-lightbox .title-container
+{
+    margin-bottom: 20px;
+}
+
+#dataset-lightbox h1
+{
+    color: $black-text-color;
+    font-size: 24px;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+}
+
+#dataset-lightbox .publisher
+{
+    color: $blue-color;
+}
+
+#dataset-lightbox .blue-button
+{
+    background-color: $blue-background-color; 
+}
+
+#dataset-lightbox .orange-button
+{
+    background-color: $orange-color; 
+}
+
+#dataset-lightbox .button
+{
+    border-radius: 5px;
+    color: white;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 40px;
+    padding: 0 18px;
+    margin: 0 5px 0 0;
+}
+
+#dataset-lightbox .button-container
+{
+    margin-bottom: 20px;
+}
+
+#dataset-lightbox .description-container
+{
+    border-top: 1px solid $gray-text-color;
+}
+
+#dataset-lightbox .description
+{
+    color: $black-text-color;
+}
+
+/* Feather light */
+
+.featherlight .featherlight-content
+{
+    border-radius: 5px;
+}

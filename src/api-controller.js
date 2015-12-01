@@ -6,6 +6,7 @@ class ApiController {
         this.categoriesUrl = '/categories.json';
         this.childRegionsUrl = 'https://odn.data.socrata.com/resource/eyae-8jfy?parent_id={0}&$limit={1}';
         this.costOfLivingUrl = 'https://odn.data.socrata.com/resource/hpnf-gnfu.json?$order=name&$where=';
+        this.datasetSummaryUrl = 'https://{0}/api/views/{1}.json';
         this.domainsUrl = 'https://api.us.socrata.com/api/catalog/v1/domains';
         this.earningsByPlaceUrl = 'https://odn.data.socrata.com/resource/wmwh-4vak.json/?type=place&$limit=50000&$where=population%20%3E%205000';
         this.earningsUrl = 'https://odn.data.socrata.com/resource/wmwh-4vak.json?$where=';
@@ -66,6 +67,11 @@ class ApiController {
         });
 
         return d3.promise.json(url + encodeURI(segments.join(' OR ')));
+    }
+
+    getDatasetSummary(domain, id) {
+
+        return d3.promise.json(this.datasetSummaryUrl.format(domain, id));
     }
 
     getDomains() {

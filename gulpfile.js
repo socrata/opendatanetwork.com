@@ -25,10 +25,20 @@ var mapScripts = [
     'src/maps/constants.js',
     'src/maps/model.js',
     'src/maps/view.js',
-    'src/maps/container.js',
-    'src/maps/scale-control.js',
+    'src/maps/legend-control.js',
     'src/maps/tooltip-control.js',
-    'src/maps/variable-control.js'
+    'src/maps/variable-control.js',
+    'src/maps/format.js',
+    'src/data/map-sources.js'
+];
+
+var autosuggestScripts = [
+    'src/autosuggest/base64.js',
+    'src/autosuggest/autosuggest-source.js',
+    'src/autosuggest/autosuggest-results.js',
+    'src/autosuggest/autosuggest.js',
+    'src/data/autosuggest-multi.js',
+    'src/data/autosuggest-sources.js'
 ];
 
 
@@ -48,12 +58,14 @@ function js(src, dest) {
 
 
 var homeScripts = baseScripts
+    .concat(autosuggestScripts)
     .concat(['src/home.js']);
 
 gulp.task('home', js(homeScripts, 'home.min.js'));
 
 
 var searchScripts = baseScripts
+    .concat(autosuggestScripts)
     .concat(mapScripts)
     .concat(['src/search-page-controller.js', 'src/search.js']);
 
@@ -81,7 +93,7 @@ gulp.task('watch', ['build'], function() {
 gulp.task('start', function() {
     return nodemon({
         script: 'app.js',
-        watch: ['lib/', 'styles/compressed/']
+        watch: ['lib/', 'styles/compressed/', 'controllers/', 'data/']
     });
 });
 

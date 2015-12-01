@@ -1,6 +1,4 @@
 
-
-
 class SearchPageController {
 
     constructor(params) {
@@ -119,9 +117,12 @@ class SearchPageController {
 
         }).scroll();
 
+
         // Add location
         //
-        function selectRegion(autocompleteName) {
+        function selectRegion(option) {
+            const autocompleteName = option.text;
+
             RegionLookup.byAutocompleteName(autocompleteName)
                 .then(region => {
                     self.setAutoSuggestedRegion(region.name, false);
@@ -131,10 +132,9 @@ class SearchPageController {
                 });
         }
 
-        sourceComplete('.add-region-input',
-                       '.add-region-results',
-                       this.params.vector,
-                       selectRegion).listen();
+        const sources = regionsWithData(this.params.vector, selectRegion);
+        const autosuggest = new Autosuggest('.add-region-results', sources);
+        autosuggest.listen('.add-region-input');
 
         $('.add-region .fa-plus').click(function() {
 
@@ -156,6 +156,15 @@ class SearchPageController {
 
     // Public methods
     //
+
+    drawMap(source) {
+        const selector = '#map';
+        const regions = this.params.regions;
+
+        MapView.create(source, regions)
+            .then(view => view.show(selector), error => { throw error; });
+    }
+
     attachCategoriesClickHandlers() {
 
         var self = this;
@@ -164,6 +173,34 @@ class SearchPageController {
 
             self.toggleCategory($(this).text().toLowerCase().trim());
             self.navigate();
+        });
+    }
+
+    attachDatasetClickHandlers() {
+
+        const self = this;
+
+        $('.datasets .name').unbind('click').click(function() {
+
+            const controller = new ApiController();
+            const domain = $(this).attr('dataset-publisher');
+            const id = $(this).attr('dataset-id');
+
+            controller.getDatasetSummary(domain, id)
+                .then(result => {
+
+                    self.showDatasetPopup({
+
+                        apiLink : $(this).attr('dataset-api-link'),
+                        description: result.description || '',
+                        domain : $(this).attr('dataset-publisher'),
+                        id : $(this).attr('dataset-id'),
+                        lastUpdated : $(this).attr('dataset-last-updated'),
+                        link : $(this).attr('dataset-link'),
+                        name : $(this).text(),
+                        tags : $(this).attr('dataset-tags'),
+                    });
+                });
         });
     }
 
@@ -210,6 +247,7 @@ class SearchPageController {
             controller.getCostOfLivingData(regionIds)
                 .then(data => {
 
+                    this.drawMap(MapSources.rpp);
                     this.drawCostOfLivingChart(regionIds, data);
                     this.drawCostOfLivingTable(regionIds, data);
                 })
@@ -378,7 +416,7 @@ class SearchPageController {
 
             controller.getEarningsData(regionIds)
                 .then(data => {
-                    this.drawEarningsMap();
+                    this.drawMap(MapSources.earnings);
                     this.drawEarningsChart(regionIds, data);
                     this.drawEarningsTable(regionIds, data);
                 })
@@ -460,70 +498,6 @@ class SearchPageController {
             title : 'Earnings by Education Level',
             vAxis : { format : 'currency' },
         });
-    }
-
-    drawEarningsMap() {
-
-        const controller = new ApiController();
-        const placesPromise = controller.getPlaces();
-        const earningsPromise = controller.getEarningsByPlace();
-
-        Promise.all([placesPromise, earningsPromise])
-            .then(values => {
-
-                const placesResponse = values[0];
-                const earningsResponse = values[1];
-
-                // Get the geo coordinates for each region
-                //
-                const regionPlaces = this.getPlacesForRegion(placesResponse);
-
-                // Create a place lookup table
-                //
-                const placeMap = {};
-                placesResponse.forEach(place => placeMap[place.id] = place); // init the place map
-
-                // Get map data
-                //
-                const earningsPlaces = [];
-
-                earningsResponse.forEach(item => {
-
-                    if (item.median_earnings == 0)
-                        return;
-
-                    if (item.id in placeMap) {
-
-                        earningsPlaces.push({
-                            coordinates : placeMap[item.id].location.coordinates,
-                            id : item.id,
-                            name : item.name,
-                            value : parseInt(item.median_earnings),
-                        })
-                    }
-                });
-
-                earningsPlaces.sort((a, b) => b.value - a.value); // desc
-                const earnings = _.map(earningsPlaces, x => { return x.value });
-
-                // Init map
-                //
-                const radiusScale = this.getRadiusScaleLinear(earnings)
-                const colorScale = this.getColorScale(earnings)
-
-                const coordinates = regionPlaces[0].location.coordinates;
-                const center = [coordinates[1], coordinates[0]];
-                const map = L.map('map', { zoomControl : true });
-
-                L.tileLayer('https://a.tiles.mapbox.com/v3/socrata-apps.ibp0l899/{z}/{x}/{y}.png').addTo(map);
-                map.setView(center, this.MAP_INITIAL_ZOOM);
-
-                // Populate map
-                //
-                this.drawCirclesForPlaces(map, earningsPlaces, radiusScale, colorScale);
-                this.drawMarkersForPlaces(map, regionPlaces);
-            })
-            .catch(error => console.error(error));
     }
 
     drawEarningsTable(regionIds, data) {
@@ -668,77 +642,12 @@ class SearchPageController {
 
             controller.getEducationData(regionIds)
                 .then(data => {
-
-                    this.drawEducationMap();
+                    this.drawMap(MapSources.education);
                     this.drawEducationTable(regionIds, data)
                 })
                 .catch(error => console.error(error));
         });
     }
-
-    drawEducationMap() {
-
-        const controller = new ApiController();
-        const placesPromise = controller.getPlaces();
-        const educationPromise = controller.getEducationByPlace();
-
-        return Promise.all([placesPromise, educationPromise])
-            .then(values => {
-
-                const placesResponse = values[0];
-                const educationResponse = values[1];
-
-                // Get the geo coordinates for each region
-                //
-                const regionPlaces = this.getPlacesForRegion(placesResponse);
-
-                // Create a place lookup table
-                //
-                const placeMap = {};
-                placesResponse.forEach(place => placeMap[place.id] = place); // init the place map
-
-                // Get map data
-                //
-                const educationPlaces = [];
-
-                educationResponse.forEach(item => {
-
-                    if (item.percent_bachelors_degree_or_higher == 0)
-                        return;
-
-                    if (item.id in placeMap) {
-
-                        educationPlaces.push({
-                            coordinates : placeMap[item.id].location.coordinates,
-                            id : item.id,
-                            name : item.name,
-                            value : parseInt(item.percent_bachelors_degree_or_higher),
-                        })
-                    }
-                });
-
-                educationPlaces.sort((a, b) => b.value - a.value); // desc
-                const earnings = _.map(educationPlaces, x => { return x.value });
-
-                // Init map
-                //
-                const radiusScale = this.getRadiusScaleLinear(earnings)
-                const colorScale = this.getColorScale(earnings)
-
-                const coordinates = regionPlaces[0].location.coordinates;
-                const center = [coordinates[1], coordinates[0]];
-                const map = L.map('map', { zoomControl : true });
-
-                L.tileLayer('https://a.tiles.mapbox.com/v3/socrata-apps.ibp0l899/{z}/{x}/{y}.png').addTo(map);
-                map.setView(center, this.MAP_INITIAL_ZOOM);
-
-                // Populate map
-                //
-                this.drawCirclesForPlaces(map, educationPlaces, radiusScale, colorScale);
-                this.drawMarkersForPlaces(map, regionPlaces);
-            })
-            .catch(error => console.error(error));
-        }
 
     drawEducationTable(regionIds, data) {
 
@@ -802,7 +711,7 @@ class SearchPageController {
 
             controller.getGdpData(regionIds)
                 .then(data => {
-
+                    this.drawMap(MapSources.gdp);
                     this.drawGdpChart(regionIds, data);
                     this.drawGdpChangeChart(regionIds, data);
                 })
@@ -908,76 +817,11 @@ class SearchPageController {
 
             controller.getOccupationsData(regionIds)
                 .then(data => {
-
-                    this.drawOccupationsMap();
+                    this.drawMap(MapSources.occupations);
                     this.drawOccupationsTable(regionIds, data)
                 })
                 .catch(error => console.error(error));
         });
-    }
-
-    drawOccupationsMap() {
-
-        const controller = new ApiController();
-        const placesPromise = controller.getPlaces();
-        const occupationsPromise = controller.getOccupationsByPlace('Management'); // TODO: take from the dropdown when we have it.
-
-        Promise.all([placesPromise, occupationsPromise])
-            .then(values => {
-
-                const placesResponse = values[0];
-                const occupationsResponse = values[1];
-
-                // Get the geo coordinates for each region
-                //
-                const regionPlaces = this.getPlacesForRegion(placesResponse);
-
-                // Create a place lookup table
-                //
-                const placeMap = {};
-                placesResponse.forEach(place => placeMap[place.id] = place); // init the place map
-
-                // Get map data
-                //
-                const occupationsPlaces = [];
-
-                occupationsResponse.forEach(item => {
-
-                    if (item.percent_employed == 0)
-                        return;
-
-                    if (item.id in placeMap) {
-
-                        occupationsPlaces.push({
-                            coordinates : placeMap[item.id].location.coordinates,
-                            id : item.id,
-                            name : item.name,
-                            value : parseInt(item.percent_employed),
-                        })
-                    }
-                });
-
-                occupationsPlaces.sort((a, b) => b.value - a.value); // desc
-                const earnings = _.map(occupationsPlaces, x => { return x.value });
-
-                // Init map
-                //
-                const radiusScale = this.getRadiusScaleLinear(earnings)
-                const colorScale = this.getColorScale(earnings)
-
-                const coordinates = regionPlaces[0].location.coordinates;
-                const center = [coordinates[1], coordinates[0]];
-                const map = L.map('map', { zoomControl : true });
-
-                L.tileLayer('https://a.tiles.mapbox.com/v3/socrata-apps.ibp0l899/{z}/{x}/{y}.png').addTo(map);
-                map.setView(center, this.MAP_INITIAL_ZOOM);
-
-                // Populate map
-                //
-                this.drawCirclesForPlaces(map, occupationsPlaces, radiusScale, colorScale);
-                this.drawMarkersForPlaces(map, regionPlaces);
-            })
-            .catch(error => console.error(error));
     }
 
     drawOccupationsTable(regionIds, data) {
@@ -1025,8 +869,7 @@ class SearchPageController {
 
             controller.getPopulationData(regionIds)
                 .then(data => {
-
-                    this.drawPopulationMap();
+                    this.drawMap(MapSources.population);
                     this.drawPopulationChart(regionIds, data);
                     this.drawPopulationChangeChart(regionIds, data);
                 })
@@ -1116,36 +959,6 @@ class SearchPageController {
             pointSize : 8,
             title : 'Population Change',
             vAxis : { format : '#.#%' },
-        });
-    }
-
-    drawPopulationMap() {
-        const source = {
-            name: 'population',
-            domain: 'odn.data.socrata.com',
-            fxf: 'e3rd-zzmr',
-            variables: [
-                {
-                    name: 'Population',
-                    column: 'population',
-                    years: [2009, 2010, 2011, 2012, 2013],
-                    value: parseFloat,
-                    format: d3.format(',.0f')
-                },
-                {
-                    name: 'Population Change',
-                    column: 'population_percent_change',
-                    years: [2010, 2011, 2012, 2013],
-                    value: parseFloat,
-                    format: value => `${d3.format('.2f')(value)}%`
-                }
-            ]
-        };
-
-        const region = MapConstants.REGIONS.state;
-
-        MapContainer.create('#map', source, region).catch(error => {
-            throw error;
         });
     }
 
@@ -1382,7 +1195,7 @@ class SearchPageController {
 
             if (this.isRegionIdContainedInCurrentRegions(data.most_similar[i].id))
                 continue;
-                
+
             displayedRegions.push(data.most_similar[i]);
 
             if (count == 4)
@@ -1567,6 +1380,8 @@ class SearchPageController {
 
             $('.datasets').append(data);
             self.fetching = false;
+
+            self.attachDatasetClickHandlers();
         });
     }
 
@@ -1675,6 +1490,45 @@ class SearchPageController {
         this.params.page = 1;
     }
 
+    showDatasetPopup(data) {
+
+        $('#dataset-lightbox h1').text(data.name);
+        $('#dataset-lightbox .publisher').text(data.domain);
+        $('#dataset-lightbox .publisher').attr('href', 'http://' + data.domain);
+        $('#dataset-lightbox .last-updated').text(data.lastUpdated);
+        $('#dataset-lightbox .blue-button').attr('href', data.apiLink);
+        $('#dataset-lightbox .orange-button').attr('href', data.link);
+        $('#dataset-lightbox .tags span').text(data.tags);
+
+        if ((data.description.length == 0) && (data.tags.length == 0)) {
+
+            $('#dataset-lightbox .description-container').hide(0);
+            $('#dataset-lightbox .description').hide(0);
+            $('#dataset-lightbox .tags').hide(0);
+        }
+        else {
+
+            $('#dataset-lightbox .description-container').show(0);
+
+            if (data.description.length > 0)
+                $('#dataset-lightbox .description').html(data.description.replace('\n', '<br>')).show(0);
+            else
+                $('#dataset-lightbox .description').hide(0);
+
+            if (data.tags.length > 0) {
+
+                $('#dataset-lightbox .tags span').text(data.tags);
+                $('#dataset-lightbox .tags').show(0);
+            }
+            else {
+
+                $('#dataset-lightbox .tags').hide(0);
+            }
+        }
+
+        $.featherlight('#dataset-lightbox');
+    }
+
     toggleCategory(category) {
 
         var i = this.params.categories.indexOf(category);
@@ -1683,6 +1537,8 @@ class SearchPageController {
             this.params.categories.splice(i, 1); // remove at index i
         else
             this.params.categories.push(category);
+
+        this.params.page = 1;
     }
 
     toggleDomain(domain) {
@@ -1693,6 +1549,8 @@ class SearchPageController {
             this.params.domains.splice(i, 1); // remove at index i
         else
             this.params.domains.push(domain);
+
+        this.params.page = 1;
     }
 
     toggleStandard(standard) {
@@ -1703,5 +1561,7 @@ class SearchPageController {
             this.params.standards.splice(i, 1); // remove at index i
         else
             this.params.standards.push(standard);
+
+        this.params.page = 1;
     }
 }
