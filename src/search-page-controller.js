@@ -309,58 +309,35 @@ class SearchPageController {
 
     drawCostOfLivingTable(regionIds, data) {
 
-        // Format the data
+        // Headers
         //
-        var components = ['All', 'Goods', 'Other', 'Rents'];
-        var rows = [];
-
-        for (var i = 0; i < components.length; i++) {
-
-            var component = components[i];
-            var row = [component];
-
-            for (var j = 0; j < regionIds.length; j++) {
-
-                var o = this.getLatestCostOfLiving(data, regionIds[j], component);
-
-                row.push({
-                    index : (o != null) ? parseFloat(o.index) : 'NA',
-                    percentile : (o != null) ? this.getPercentile(o.rank, o.total_ranks) : 'NA',
-                });
-            }
-
-            rows.push(row);
-        }
-
-        // Header
-        //
-        var s = '<tr><th></th>';
-
-        for (var i = 0; i < regionIds.length; i++) {
-            s += '<th colspan=\'2\'>' + this.params.regions[i].name + '</th>';
-        }
-
-        // Sub header
-        //
-        s += '</tr><tr><td class=\'column-header\'></td>';
-
-        for (var i = 0; i < regionIds.length; i++) {
-            s += '<td class=\'column-header\'>Value</td><td class=\'column-header\'>Percentile</td>';
-        }
-
+        var s = '<tr>';
+        s += '<th class=\'empty\'></th>';
+        s += '<th>All<br>(Value)</th>';
+        s += '<th>All<br>(Percentile)</th>';
+        s += '<th>Goods<br>(Value)</th>';
+        s += '<th>Goods<br>(Percentile)</th>';
+        s += '<th>Other<br>(Value)</th>';
+        s += '<th>Other<br>(Percentile)</th>';
+        s += '<th>Rents<br>(Value)</th>';
+        s += '<th>Rents<br>(Percentile)</th>';
         s += '</tr>';
 
-        for (var i = 0; i < rows.length; i++) {
+        const components = ['All', 'Goods', 'Other', 'Rents'];
 
-            var row = rows[i];
+        for (var i = 0; i < regionIds.length; i++) {
 
-            s += '<tr>';
-            s += '<td>' + row[0] + '</td>';
+            s += '<tr class=\'color-' + i + '\'>';
+            s += '<td>' + this.params.regions[i].name + '<div></div></td>';
 
-            for (var j = 1; j < row.length; j++) {
+            for (var j = 0; j < components.length; j++) {
 
-                s += '<td>' + row[j].index + '</td>';
-                s += '<td>' + row[j].percentile + '</td>';
+                const o = this.getLatestCostOfLiving(data, regionIds[i], components[j]);
+                const value = (o != null) ? parseFloat(o.index) : 'NA';
+                const percentile = (o != null) ? this.getPercentile(o.rank, o.total_ranks) : 'NA';
+                
+                s += '<td>' + value + '<div></div></td>';
+                s += '<td>' + percentile + '<div></div></td>';
             }
 
             s += '</tr>';
@@ -502,37 +479,22 @@ class SearchPageController {
 
     drawEarningsTable(regionIds, data) {
 
-        var s = '<tr><th></th>';
-
-        for (var i = 0; i < regionIds.length; i++) {
-            s += '<th>' + this.params.regions[i].name + '</th>';
-        }
-
-        // Median earnings all
-        //
-        s += '</tr><tr><td>Median Earnings (All Workers)</td>';
-
-        for (var i = 0; i < regionIds.length; i++) {
-            s += '<td>' + numeral(data[i].median_earnings).format('$0,0') + '</td>';
-        }
-
-        // Median earnings female
-        //
-        s += '</tr><tr><td>Median Female Earnings (Full Time)</td>';
-
-        for (var i = 0; i < regionIds.length; i++) {
-            s += '<td>' + numeral(data[i].female_full_time_median_earnings).format('$0,0') + '</td>';
-        }
-
-        // Median earnings male
-        //
-        s += '</tr><tr><td>Median Male Earnings (Full Time)</td>';
-
-        for (var i = 0; i < regionIds.length; i++) {
-            s += '<td>' + numeral(data[i].male_full_time_median_earnings).format('$0,0') + '</td>';
-        }
-
+        var s = '<tr>';
+        s += '<th class=\'empty\'></th>';
+        s += '<th>Median Earnings<br>(All Workers)</th>';
+        s += '<th>Median Female Earnings<br>(Full Time)</th>';
+        s += '<th>Median Male Earnings<br>(Full Time)</th>';
         s += '</tr>';
+
+        for (var i = 0; i < regionIds.length; i++) {
+
+            s += '<tr class=\'color-' + i + '\'>'
+            s += '<td>' + this.params.regions[i].name + '<div></div></td>';
+            s += '<td>' + numeral(data[i].median_earnings).format('$0,0') + '<div></div></td>';
+            s += '<td>' + numeral(data[i].female_full_time_median_earnings).format('$0,0') + '<div></div></td>';
+            s += '<td>' + numeral(data[i].male_full_time_median_earnings).format('$0,0') + '<div></div></td>';
+            s += '</tr>';
+        }
 
         $('#earnings-table').html(s);
     }
@@ -651,51 +613,33 @@ class SearchPageController {
 
     drawEducationTable(regionIds, data) {
 
-        // Header
-        //
-        var s = '<tr><th></th>';
-
-        for (var i = 0; i < regionIds.length; i++) {
-            s += '<th colspan=\'2\'>' + this.params.regions[i].name + '</th>';
-        }
-
-        // Sub header
-        //
-        s += '</tr><tr><td class=\'column-header\'></td>';
-
-        for (var i = 0; i < regionIds.length; i++) {
-            s += '<td class=\'column-header\'>Percent</td><td class=\'column-header\'>Percentile</td>';
-        }
-
-        // At least bachelor's
-        //
-        s += '</tr><tr><td>At Least Bachelor\'s Degree</td>';
-
-        for (var i = 0; i < regionIds.length; i++) {
-
-            var totalRanks = parseInt(data[i].total_ranks);
-            var rank = parseInt(data[i].percent_bachelors_degree_or_higher_rank);
-            var percentile = parseInt(((totalRanks - rank) / totalRanks) * 100);
-
-            s += '<td>' + data[i].percent_bachelors_degree_or_higher + '%</td>';
-            s += '<td>' + numeral(percentile).format('0o') + '</td>';
-        }
-
-        // At least high school diploma
-        //
-        s += '</tr><tr><td>At Least High School Diploma</td>';
-
-        for (var i = 0; i < regionIds.length; i++) {
-
-            var totalRanks = parseInt(data[i].total_ranks);
-            var rank = parseInt(data[i].percent_high_school_graduate_or_higher);
-            var percentile = parseInt(((totalRanks - rank) / totalRanks) * 100);
-
-            s += '<td>' + data[i].percent_high_school_graduate_or_higher + '%</td>';
-            s += '<td>' + numeral(percentile).format('0o') + '</td>';
-        }
-
+        var s = '<tr>';
+        s += '<th class=\'empty\'></th>';
+        s += '<th>At Least Bachelor\'s Degree<br>(Percent)</th>';
+        s += '<th>At Least Bachelor\'s Degree<br>(Percentile)</th>';
+        s += '<th>At Least High School Diploma<br>(Percent)</th>';
+        s += '<th>At Least High School Diploma<br>(Percentile)</th>';
         s += '</tr>';
+
+        for (var i = 0; i < regionIds.length; i++) {
+
+            s += '<tr class=\'color-' + i + '\'>'
+            s += '<td>' + this.params.regions[i].name + '<div></div></td>';
+
+            const totalRanks = parseInt(data[i].total_ranks);
+            const bachelorsRank = parseInt(data[i].percent_bachelors_degree_or_higher_rank);
+            const bachelorsPercentile = parseInt(((totalRanks - bachelorsRank) / totalRanks) * 100);
+
+            s += '<td>' + data[i].percent_bachelors_degree_or_higher + '%<div></div></td>';
+            s += '<td>' + numeral(bachelorsPercentile).format('0o') + '<div></div></td>';
+
+            const highSchoolRank = parseInt(data[i].percent_high_school_graduate_or_higher);
+            const highSchoolPercentile = parseInt(((totalRanks - highSchoolRank) / totalRanks) * 100);
+
+            s += '<td>' + data[i].percent_high_school_graduate_or_higher + '%<div></div></td>';
+            s += '<td>' + numeral(highSchoolPercentile).format('0o') + '<div></div></td>';
+            s += '</tr>'
+        }
 
         $('#education-table').html(s);
     }
@@ -826,31 +770,36 @@ class SearchPageController {
 
     drawOccupationsTable(regionIds, data) {
 
-        var s = '<tr><th></th>';
+        var s = '<tr>'
+        s += '<th class=\'empty\'></th>';
 
         for (var i = 0; i < regionIds.length; i++) {
-            s += '<th colspan=\'2\'>' + this.params.regions[i].name + '</th>';
+            s += '<th colspan=\'2\' class=\'color-' + i + '\'>' + this.params.regions[i].name + '<div></div></th>';
         }
+
+        s+= '</tr>'
 
         // Sub header
         //
-        s += '</tr><tr><td class=\'column-header\'></td>';
+        s += '<tr><td class=\'empty\'></td>';
 
         for (var i = 0; i < regionIds.length; i++) {
-            s += '<td class=\'column-header\'>Percent</td><td class=\'column-header\'>Percentile</td>';
+            s += '<td>Percent</td><td class=\'color-' + i + '\'>Percentile<div></div></td>';
         }
 
         for (var i = 0; i < data.length; i++) {
 
-            if ((i % regionIds.length) == 0)
+            const regionIndex = (i % regionIds.length);
+
+            if (regionIndex == 0)
                 s += '</tr><tr><td>' + data[i].occupation + '</td>';
 
-            var totalRanks = parseInt(data[i].total_ranks);
-            var rank = parseInt(data[i].percent_employed_rank);
-            var percentile = parseInt(((totalRanks - rank) / totalRanks) * 100);
+            const totalRanks = parseInt(data[i].total_ranks);
+            const rank = parseInt(data[i].percent_employed_rank);
+            const percentile = parseInt(((totalRanks - rank) / totalRanks) * 100);
 
             s += '<td>' + numeral(data[i].percent_employed).format('0.0') + '%</td>';
-            s += '<td>' + numeral(percentile).format('0o') + '</td>';
+            s += '<td class=\'color-' + regionIndex + '\'>' + numeral(percentile).format('0o') + '<div></div></td>';
         }
 
         s += '</tr>';
@@ -864,18 +813,17 @@ class SearchPageController {
 
         google.setOnLoadCallback(() => {
 
-            var regionIds = this.params.regions.map(function(region) { return region.id; });
-            var controller = new ApiController();
+            const regionIds = this.params.regions.map(function(region) { return region.id; });
+            const controller = new ApiController();
 
             controller.getPopulationData(regionIds)
                 .then(data => {
+
                     this.drawMap(MapSources.population);
                     this.drawPopulationChart(regionIds, data);
                     this.drawPopulationChangeChart(regionIds, data);
                 })
-                .catch(error => {
-                    throw error;
-                });
+                .catch(error => console.error(error));
         });
     }
 
