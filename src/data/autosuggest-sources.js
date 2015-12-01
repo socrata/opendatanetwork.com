@@ -13,7 +13,17 @@ const defaultColumn = 'population';
 const _withDataSource = {
     name: 'Regions with Data',
     domain: domain,
-    fxf: 'pfgp-ifph'
+    fxf: '68ht-6puw',
+    encoded: ['id', 'type', 'population'],
+    show: (selection, option) => {
+        selection.append('span')
+            .attr('class', 'name')
+            .text(option.text)
+            .append('span')
+            .attr('id', 'tag')
+            .text(option.type);
+    },
+    sort: option => -parseFloat(option.population)
 };
 
 function regionsWithData(name, select) {

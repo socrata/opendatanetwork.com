@@ -15,20 +15,35 @@ function multiComplete(inputSelector, resultSelector) {
             column: 'encoded',
             encoded: ['domain', 'fxf'],
             select: option => navigate(`http://${option.domain}/dataset/${option.fxf}`),
-            show: option => {
-                return `<span class='dataset-name'>${option.text}</span> \
-                        <span class='dataset-domain'>${option.domain}</span>`;
+            show: (selection, option) => {
+                selection.append('span')
+                    .attr('class', 'name')
+                    .text(option.text)
+                    .append('span')
+                    .attr('id', 'tag')
+                    .text(option.domain);
             }
         },
         {
             name: 'Regions',
             domain: domain,
-            fxf: '7g2b-8brv',
-            column: 'autocomplete_name',
+            fxf: '68ht-6puw',
+            column: 'all',
+            encoded: ['id', 'type', 'population'],
             select: option => {
-                console.log(option);
-                navigate(`/${option.text.replace(/ /g, '_')}`);
-            }
+                RegionLookup.byID(option.id).then(region => {
+                    navigate(`/${region.autocomplete_name.replace(/ /g, '_')}`);
+                }, error => { throw error; });
+            },
+            show: (selection, option) => {
+                selection.append('span')
+                    .attr('class', 'name')
+                    .text(option.text)
+                    .append('span')
+                    .attr('id', 'tag')
+                    .text(option.type);
+            },
+            sort: option => -parseFloat(option.population)
         },
         {
             name: 'Publishers',
@@ -43,7 +58,11 @@ function multiComplete(inputSelector, resultSelector) {
             fxf: '864v-r7tf',
             column: 'category',
             select: option => navigate(`/search?categories=${option.text}`),
-            show: option => `<span class='capitalize'>${option.text}</span`
+            show: (selection, option) => {
+                selection.append('span')
+                    .attr('class', 'capitalize')
+                    .text(option.text);
+            }
         }
     ];
 

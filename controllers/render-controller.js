@@ -49,6 +49,7 @@ RenderController.prototype.renderHomePage = function(req, res) {
                         allCategoryResults : allCategoryResults,
                         css : [
                             '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css',
+                            '/styles/third-party/featherlight.min.css',
                             '/styles/home.css',
                             '/styles/main.css'
                         ],
@@ -62,6 +63,7 @@ RenderController.prototype.renderHomePage = function(req, res) {
                             '/lib/third-party/d3.min.js',
                             '/lib/third-party/d3.promise.min.js',
                             '/lib/third-party/lodash.min.js',
+                            '/lib/third-party/featherlight.min.js',
                             '/lib/home.min.js'
                         ],
                         searchPath : '/search',

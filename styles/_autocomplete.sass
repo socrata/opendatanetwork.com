@@ -1,4 +1,6 @@
 
+$background-color: #3498db
+
 .autocomplete-category
     background-color: white
 
@@ -9,18 +11,29 @@
         padding: 0 1em
         margin: 0
 
-    .autocomplete-options
-        li
-            font-size: 13px
-            padding: 0 2em
-
-        li.selected
-            background-color: #3498db
-            color: white
+    .autocomplete-option
+        clear: both
+        font-size: 13px
+        padding: 0 2em
 
         .dataset-domain
             padding-left: 1em
 
         .capitalize
             text-transform: capitalize
+
+        #tag
+            display: inline
+            margin-left: 0.5em
+            padding: 0 0.25em
+            background-color: $background-color
+            color: white
+
+    .autocomplete-option.selected
+        background-color: $background-color
+        color: white
+
+        #tag
+            background-color: white
+            color: $background-color
 

@@ -121,15 +121,10 @@ class SearchPageController {
         // Add location
         //
         function selectRegion(option) {
-            const autocompleteName = option.text;
-
-            RegionLookup.byAutocompleteName(autocompleteName)
-                .then(region => {
-                    self.setAutoSuggestedRegion(region.name, false);
-                    self.navigate();
-                }, error => {
-                    throw error;
-                });
+            RegionLookup.byID(option.id).then(region => {
+                self.setAutoSuggestedRegion(region.name, false);
+                self.navigate();
+            }, error => { throw error; });
         }
 
         const sources = regionsWithData(this.params.vector, selectRegion);
@@ -189,8 +184,7 @@ class SearchPageController {
             controller.getDatasetSummary(domain, id)
                 .then(result => {
 
-                    self.showDatasetPopup({
-
+                    DatasetPopup.show({
                         apiLink : $(this).attr('dataset-api-link'),
                         description: result.description || '',
                         domain : $(this).attr('dataset-publisher'),
@@ -1554,45 +1548,6 @@ class SearchPageController {
         this.params.autoSuggestedRegion = region;
         this.params.resetRegions = resetRegions;
         this.params.page = 1;
-    }
-
-    showDatasetPopup(data) {
-
-        $('#dataset-lightbox h1').text(data.name);
-        $('#dataset-lightbox .publisher').text(data.domain);
-        $('#dataset-lightbox .publisher').attr('href', 'http://' + data.domain);
-        $('#dataset-lightbox .last-updated').text(data.lastUpdated);
-        $('#dataset-lightbox .blue-button').attr('href', data.apiLink);
-        $('#dataset-lightbox .orange-button').attr('href', data.link);
-        $('#dataset-lightbox .tags span').text(data.tags);
-
-        if ((data.description.length == 0) && (data.tags.length == 0)) {
-
-            $('#dataset-lightbox .description-container').hide(0);
-            $('#dataset-lightbox .description').hide(0);
-            $('#dataset-lightbox .tags').hide(0);
-        }
-        else {
-
-            $('#dataset-lightbox .description-container').show(0);
-
-            if (data.description.length > 0)
-                $('#dataset-lightbox .description').html(data.description.replace('\n', '<br>')).show(0);
-            else
-                $('#dataset-lightbox .description').hide(0);
-
-            if (data.tags.length > 0) {
-
-                $('#dataset-lightbox .tags span').text(data.tags);
-                $('#dataset-lightbox .tags').show(0);
-            }
-            else {
-
-                $('#dataset-lightbox .tags').hide(0);
-            }
-        }
-
-        $.featherlight('#dataset-lightbox');
     }
 
     toggleCategory(category) {
