@@ -121,15 +121,10 @@ class SearchPageController {
         // Add location
         //
         function selectRegion(option) {
-            const autocompleteName = option.text;
-
-            RegionLookup.byAutocompleteName(autocompleteName)
-                .then(region => {
-                    self.setAutoSuggestedRegion(region.name, false);
-                    self.navigate();
-                }, error => {
-                    throw error;
-                });
+            RegionLookup.byID(option.id).then(region => {
+                self.setAutoSuggestedRegion(region.name, false);
+                self.navigate();
+            }, error => { throw error; });
         }
 
         const sources = regionsWithData(this.params.vector, selectRegion);
