@@ -20,8 +20,14 @@ class Autosuggest {
 
         const input = d3.select(inputSelector)
             .on('keydown', function() {
-                self.keydown(d3.event.keyCode);
-                d3.event.stopPropagation();
+                const keyCode = d3.event.keyCode;
+
+                if (keyCode == 13) {
+                    d3.event.preventDefault();
+                    self.enter();
+                } else {
+                    self.results.keydown(keyCode);
+                }
             })
             .on('input', function() {
                 self.throttledSuggest(this.value);
@@ -51,14 +57,6 @@ class Autosuggest {
                     this.results.show(this.sources, allOptions);
                 }
             });
-        }
-    }
-
-    keydown(keyCode) {
-        if (keyCode == 13) {
-            this.enter();
-        } else {
-            this.results.keydown(keyCode);
         }
     }
 

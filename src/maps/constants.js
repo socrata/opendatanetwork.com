@@ -23,6 +23,11 @@ const MapConstants = {
         attributionControl: false
     },
 
+    ZOOM_CONTROL: true,
+    ZOOM_CONTROL_OPTIONS: {
+        position: 'topleft'
+    },
+
     INITIAL_CENTER: [37.1669, -95.9669], // Center of US
     INITIAL_ZOOM: 4.0,
 

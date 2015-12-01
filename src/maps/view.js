@@ -14,6 +14,7 @@ class MapView {
         this.variableControl = new VariableControl(source.variables, (variable, year) => {
             this.display(variable, year);
         });
+        this.zoomControl = new L.Control.Zoom(MapConstants.ZOOM_CONTROL_OPTIONS);
     }
 
     show(selector) {
@@ -31,6 +32,8 @@ class MapView {
         map.addControl(this.legend);
         map.addControl(this.tooltip);
         map.addControl(this.variableControl);
+        if (MapConstants.ZOOM_CONTROL)
+            map.addControl(this.zoomControl);
 
         map.addLayer(this.features);
 

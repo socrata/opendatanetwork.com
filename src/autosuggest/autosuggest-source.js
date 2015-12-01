@@ -36,9 +36,9 @@ class AutosuggestSource {
             const allText = option.text;
             const index = allText.lastIndexOf(' ');
             const text = allText.substring(0, index);
-            const base64 = allText.substring(index);
-            const ascii = atob(base64);
-            const attributes = ascii.split(Constants.AUTOCOMPLETE_SEPARATOR);
+            const base64 = allText.substring(index + 1);
+            const decoded = Base64.decode(base64);
+            const attributes = decoded.split(Constants.AUTOCOMPLETE_SEPARATOR);
 
             return _.extend({text}, _.object(this.encoded, attributes));
         } else {
