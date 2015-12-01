@@ -18,6 +18,14 @@ $gray-check-border-color: #d1d1d1;
 $gray-text-color: #bdc3c7;
 $green-color: #27ae60;
 $orange-color: #ee3b3b;
+$table-header-cell-gray: #eff2f3;
+$table-sub-header-text-gray: #a7a7a7;
+$table-border-gray: #c9c9c9;
+$region-color-0: #2980b9;
+$region-color-1: #ee3b3b;
+$region-color-2: #3bdbee;
+$region-color-3: #ff9900;
+$region-color-4: #109618;
 
 *::-webkit-input-placeholder,
 *:-moz-placeholder,
@@ -454,40 +462,179 @@ section.results
     margin: 0 0 50px;
 }
 
-.charts-column table
+.charts-column
 {
-    border-spacing: 1px;
-    margin: 0 0 50px;
-    width: 100%;
-}
+    table
+    {
+        border-collapse: collapse;
+        font-family: 'Myriad Pro';
+        margin: 0 auto 50px;
+        
+        td
+        {
+            border: 1px solid $table-border-gray;
+            font-weight: 600;
+            padding: 0px;
+            text-align: center;
+            position: relative;
+        }
 
-.charts-column th
-{
-    font-size: 14px;
-    font-weight: normal;
-    padding: 10px 15px;
-    text-align: center;
-}
+        .color-0
+        {
+            div
+            {
+                background-color: $region-color-0;
+            }
+        }
 
-.charts-column td
-{
-    background-color: $gray-background-color;
-    font-size: 14px;
-    padding: 10px 15px;
-    text-align: center;
-}
+        .color-1
+        {
+            div
+            {
+                background-color: $region-color-1;
+            }
+        }
 
-.charts-column td:first-child
-{
-    text-align: left;
-}
+        .color-2
+        {
+            div
+            {
+                background-color: $region-color-2;
+            }
+        }
 
-.charts-column td.column-header
-{
-    background-color: transparent;
-    color: $dark-gray-text-color;
-    font-size: 12px;
-    padding: 5px 15px;
+        .color-3
+        {
+            div
+            {
+                background-color: $region-color-3;
+            }
+        }
+
+        .color-4
+        {
+            div
+            {
+                background-color: $region-color-4;
+            }
+        }
+
+    }
+
+    table.vertical
+    {
+        tr:nth-child(2)
+        {
+            td
+            {
+                border: none;
+                color: $table-sub-header-text-gray;
+                font-size: 15px;
+            }
+        }
+
+        th
+        {
+            font-size: 15px;
+            padding: 10px 10px 0;
+            position: relative;
+            text-align: right;
+
+            div 
+            {
+                bottom: 0;
+                right: 0;
+                position: absolute;
+                top: 0;
+                width: 5px;
+            }
+        }
+
+        td
+        {
+            font-size: 22px;
+            padding: 10px;
+            position: relative;
+
+            div 
+            {
+                top: 0;
+                width: 5px;
+                right: 0;
+                position: absolute;
+                bottom: 0;
+            }
+        }
+
+        td:first-of-type
+        {
+            background-color: $table-header-cell-gray;
+            border: 1px solid $table-border-gray;
+            color: $black-text-color;
+            font-size: 13px;
+            font-weight: normal;
+            padding: 10px;
+        }
+
+        td.empty
+        {
+            background-color: transparent;
+            border: none;
+        }
+    }
+
+    table.horizontal
+    {
+        th
+        {
+            background-color: $table-header-cell-gray;
+            border: 1px solid $table-border-gray;
+            color: $black-text-color;
+            font-size: 13px;
+            font-weight: normal;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th.empty
+        {
+            background-color: transparent;
+            border: none;
+        }
+
+        td
+        {
+            font-size: 22px;
+            padding: 10px;
+            position: relative;
+            text-align: center;
+
+            div 
+            {
+                bottom: 0;
+                height: 5px;
+                left: 0;
+                position: absolute;
+                right: 0;
+            }
+        }
+
+        td.empty
+        {
+            background-color: transparent;
+            border: none;
+        }
+
+        td:first-of-type
+        {
+            border: 1px solid transparent;
+            border-right: 1px solid $table-border-gray;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 10px 10px 10px 0;
+            text-align: left;
+        }
+    }
 }
 
 
