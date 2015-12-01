@@ -619,6 +619,12 @@ section.results
             }
         }
 
+        td.empty
+        {
+            background-color: transparent;
+            border: none;
+        }
+
         td:first-of-type
         {
             border: 1px solid transparent;
