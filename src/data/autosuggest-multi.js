@@ -47,8 +47,9 @@ function multiComplete(inputSelector, resultSelector) {
                     .text(option.text)
                     .append('span')
                     .attr('class', 'region-type')
-                    .text(option.type);
-            }
+                    .text(option.population);
+            },
+            sort: option => -parseFloat(option.population)
         },
         {
             name: 'Publishers',
