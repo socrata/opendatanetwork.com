@@ -31,9 +31,7 @@ function multiComplete(inputSelector, resultSelector) {
             column: 'all',
             encoded: ['id', 'type', 'population'],
             select: option => {
-                RegionLookup.byID(option.id).then(region => {
-                    navigate(`/${region.autocomplete_name.replace(/ /g, '_')}`);
-                }, error => { throw error; });
+                navigate(`/${option.text.replace(/ /g, '_')}`);
             },
             show: (selection, option) => {
                 selection.append('span')

@@ -9,9 +9,9 @@ var baseCatalogUrl = 'http://api.us.socrata.com/api/catalog/v1';
 var cacheController = new CacheController();
 var categoriesUrl = baseCatalogUrl + '/categories';
 var defaultSearchResultCount = 10;
-var domainsUrl = baseCatalogUrl + '/domains'; 
+var domainsUrl = baseCatalogUrl + '/domains';
 var maxDescriptionLength = 300;
-var rosterUrl = 'https://odn.data.socrata.com/resource/7g2b-8brv/?$where={0}';
+var rosterUrl = 'https://odn.data.socrata.com/resource/bdeb-mf9k/?$where={0}';
 var searchUrl = baseCatalogUrl;
 var synonymController = new SynonymController();
 var userAgent = 'www.opendatanetwork.com';
@@ -43,10 +43,10 @@ ApiController.prototype.searchDatasets = function(params, successHandler, errorH
 
 ApiController.prototype.getAutoSuggestedRegions = function(names, successHandler, errorHandler) {
 
-    var pairs = names.map(function(name) { 
-        return "autocomplete_name='" + encodeURIComponent(name) + "'"; 
+    var pairs = names.map(function(name) {
+        return "name='" + encodeURIComponent(name) + "'";
     });
-    
+
     var url = rosterUrl.format(pairs.join(' OR '));
     getFromApi(url, successHandler, errorHandler);
 }
@@ -54,11 +54,11 @@ ApiController.prototype.getAutoSuggestedRegions = function(names, successHandler
 ApiController.prototype.getCategories = function(count, successHandler, errorHandler) {
 
     getFromCacheOrApi(
-        categoriesUrl, 
+        categoriesUrl,
         function(results) {
 
             truncateResults(count, results);
-            if (successHandler) successHandler(results); 
+            if (successHandler) successHandler(results);
         },
         errorHandler);
 };
@@ -71,16 +71,17 @@ ApiController.prototype.getCategoriesAll = function(successHandler, errorHandler
 ApiController.prototype.getDomains = function(count, successHandler, errorHandler) {
 
     getFromCacheOrApi(
-        domainsUrl, 
-        function(results) { 
+        domainsUrl,
+        function(results) {
 
             truncateResults(count, results);
-            if (successHandler) successHandler(results); 
+            if (successHandler) successHandler(results);
         },
         errorHandler);
 };
 
 ApiController.prototype.getSearchDatasetsUrl = function(params, completionHandler) {
+    console.log(params);
 
     // Look to see if there are synonyms for the query parameter
     //
@@ -111,37 +112,37 @@ ApiController.prototype.getSearchDatasetsUrl = function(params, completionHandle
             var url = searchUrl +
                 '?offset=' + params.offset +
                 '&limit=' + params.limit;
-        
+
             if (params.categories.length > 0)
                 url += '&categories=' + encodeURIComponent(params.categories.join(','));
-        
+
             if (params.domains.length > 0)
                 url += '&domains=' + encodeURIComponent(params.domains.join(','));
 
             if ((synonyms.length > 0) || (params.regions.length > 0) || (params.standards.length > 0)) {
-        
+
                 url += '&q_internal=';
-        
+
                 var s = '';
-        
+
                 if (synonyms.length > 0) {
                     s += '(' + synonyms.join(' OR ') + ')';
                 }
-    
+
                 if (params.regions.length > 0) {
-    
+
                     if (s.length > 0)
                         s += ' AND ';
-    
+
                     var regionNames = params.regions.map(function(region) { return region.name; });
                     s += '(' + regionNames.join(' OR ') + ')';
                 }
-                
+
                 if (params.standards.length > 0) {
-    
+
                     if (s.length > 0)
                         s += ' AND ';
-    
+
                     s += '(' + params.standards.join(' OR ') + ')';
                 }
 
@@ -220,9 +221,9 @@ function getFromApi(url, successHandler, errorHandler) {
 
     request(
         {
-            url: url, 
+            url: url,
             headers: { 'User-Agent' : userAgent }
-        }, 
+        },
         function(err, resp) {
 
             console.log('Get from api: ' + url);
@@ -266,7 +267,7 @@ function getFromCacheOrApi(url, successHandler, errorHandler) {
         // Not in cache so get from the API
         //
         getFromApi(
-            url, 
+            url,
             function(results) { cacheController.set(url, results, successHandler); },
             errorHandler);
     });
@@ -287,7 +288,7 @@ String.prototype.format = function() {
 
     var args = arguments;
 
-    return this.replace(/{(\d+)}/g, function(match, number) { 
+    return this.replace(/{(\d+)}/g, function(match, number) {
         return typeof args[number] != 'undefined' ? args[number] : match;
     });
 };

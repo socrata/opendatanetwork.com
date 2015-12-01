@@ -1,6 +1,6 @@
 
 const Constants = {
-    ROSTER_URL: 'https://federal.demo.socrata.com/resource/7g2b-8brv.json',
+    ROSTER_URL: 'https://federal.demo.socrata.com/resource/bdeb-mf9k.json',
 
     AUTOCOMPLETE_SEPARATOR: ':',
     AUTOCOMPLETE_URL: (domain, fxf, column, term) => {

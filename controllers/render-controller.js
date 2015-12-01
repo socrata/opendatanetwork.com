@@ -327,10 +327,9 @@ function getRegionFromResultsByAutoCompleteName(results, regionAutoCompleteName)
 
         var result = results[i];
 
-        if (regionAutoCompleteName == result.autocomplete_name) {
+        if (regionAutoCompleteName == result.name) {
 
             return {
-                autoCompleteName : result.autocomplete_name,
                 id : result.id,
                 name : result.name,
                 type : result.type

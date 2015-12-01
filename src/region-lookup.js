@@ -41,9 +41,5 @@ class RegionLookup {
     static byID(id) {
         return RegionLookup.getOne({id: id});
     }
-
-    static byAutocompleteName(name) {
-        return RegionLookup.getOne({autocomplete_name: name});
-    }
 }
 

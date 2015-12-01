@@ -2,7 +2,6 @@ class ApiController {
 
     constructor() {
 
-        this.autoCompleteNameSuggestUrl = 'https://odn.data.socrata.com/views/7g2b-8brv/columns/autocomplete_name/suggest/{0}?size=10&fuzz=0';
         this.categoriesUrl = '/categories.json';
         this.childRegionsUrl = 'https://odn.data.socrata.com/resource/eyae-8jfy?parent_id={0}&$limit={1}';
         this.costOfLivingUrl = 'https://odn.data.socrata.com/resource/hpnf-gnfu.json?$order=name&$where=';
@@ -30,11 +29,6 @@ class ApiController {
 
     // Promises
     //
-    getAutoCompleteNameSuggestions(searchTerm) {
-
-        return d3.promise.json(this.autoCompleteNameSuggestUrl.format(encodeURIComponent(searchTerm)));
-    }
-
     getCategories() {
 
         return d3.promise.json(this.categoriesUrl);

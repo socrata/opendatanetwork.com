@@ -329,7 +329,7 @@ class SearchPageController {
                 const o = this.getLatestCostOfLiving(data, regionIds[i], components[j]);
                 const value = (o != null) ? parseFloat(o.index) : 'NA';
                 const percentile = (o != null) ? this.getPercentile(o.rank, o.total_ranks) : 'NA';
-                
+
                 s += '<td>' + value + '<div></div></td>';
                 s += '<td>' + percentile + '<div></div></td>';
             }
@@ -1264,7 +1264,7 @@ class SearchPageController {
                     if (data.length == 0)
                         return;
 
-                    onClickRegion(data[0].autocomplete_name);
+                    onClickRegion(data[0].name);
                 })
                 .catch(error => console.error(error));
         });
@@ -1291,7 +1291,7 @@ class SearchPageController {
 
         chart.draw(dataTable, options);
     }
-    
+
     applyStandardOptions(options) {
 
         options.series = {
@@ -1487,7 +1487,7 @@ class SearchPageController {
             var regionNames = [];
 
             if (this.params.resetRegions == false)
-                regionNames = this.params.regions.map(region => region.autoCompleteName);
+                regionNames = this.params.regions.map(region => region.name);
 
             if (this.params.autoSuggestedRegion)
                 regionNames.push(this.params.autoSuggestedRegion);
