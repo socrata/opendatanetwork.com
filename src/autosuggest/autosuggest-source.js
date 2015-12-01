@@ -1,6 +1,6 @@
 
 class AutosuggestSource {
-    constructor(name, domain, fxf, column, encoded, select, show) {
+    constructor(name, domain, fxf, column, encoded, select, show, sort) {
         this.name = name;
         this.domain = domain;
         this.fxf = fxf;
@@ -8,14 +8,17 @@ class AutosuggestSource {
         this.encoded = encoded;
         this.select = select;
         this.show = show;
+        this.sort = sort;
     }
 
     static fromJSON(json) {
         const encoded = json.encoded || [];
-        const show = json.show || (option => option.text);
+        const show = json.show || ((selection, option) => {
+            selection.append('span').text(option.text);
+        });
 
         return new AutosuggestSource(json.name, json.domain, json.fxf, json.column,
-                                     encoded, json.select, show);
+                                     encoded, json.select, show, json.sort);
     }
 
     get(term) {
@@ -23,7 +26,13 @@ class AutosuggestSource {
             if (term === '') {
                 resolve([]);
             } else {
-                const url = Constants.AUTOCOMPLETE_URL(this.domain, this.fxf, this.column, term);
+                const baseURL = Constants.AUTOCOMPLETE_URL(this.domain, this.fxf, this.column, term);
+                const size = this.sort ?
+                    Constants.AUTOCOMPLETE_MAX_OPTIONS :
+                    Constants.AUTOCOMPLETE_SHOWN_OPTIONS;
+                const params = {size};
+                const url = `${baseURL}?${$.param(params)}`;
+
                 $.getJSON(url).then(response => {
                     resolve(response.options.map(option => this.decode(option)));
                 }, reject);
@@ -50,6 +59,9 @@ class AutosuggestSource {
         if (options.length === 0)
             return [];
 
+        if (this.sort)
+            options = _.sortBy(options, this.sort).slice(0, Constants.AUTOCOMPLETE_SHOWN_OPTIONS);
+
         const category = container
             .append('div')
             .attr('class', 'autocomplete-category');
@@ -63,12 +75,16 @@ class AutosuggestSource {
             .append('div')
             .attr('class', 'autocomplete-options');
 
+        const self = this;
         return results
             .selectAll('li')
             .data(options)
             .enter()
             .append('li')
-            .html(option => this.show(option))
+            .attr('class', 'autocomplete-option')
+            .each(function(option) {
+                self.show(d3.select(this), option);
+            })
             .on('click', option => this.select(option))
             .on('mouseover.source', function() {
                 d3.select(this).classed('selected hovered', true);
