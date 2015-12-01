@@ -23,11 +23,10 @@ function multiComplete(inputSelector, resultSelector) {
             },
             show: (selection, option) => {
                 selection.append('span')
-                    .attr('class', 'dataset-name')
-                    .text(option.text);
-
-                selection.append('span')
-                    .attr('class', 'dataset-domain')
+                    .attr('class', 'name')
+                    .text(option.text)
+                    .append('span')
+                    .attr('id', 'tag')
                     .text(option.domain);
             }
         },
@@ -42,11 +41,11 @@ function multiComplete(inputSelector, resultSelector) {
             },
             show: (selection, option) => {
                 selection.append('span')
-                    .attr('class', 'region-name')
+                    .attr('class', 'name')
                     .text(option.text)
                     .append('span')
-                    .attr('class', 'region-type')
-                    .text(option.population);
+                    .attr('id', 'tag')
+                    .text(option.type);
             },
             sort: option => -parseFloat(option.population)
         },

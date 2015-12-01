@@ -81,6 +81,7 @@ class AutosuggestSource {
             .data(options)
             .enter()
             .append('li')
+            .attr('class', 'autocomplete-option')
             .each(function(option) {
                 self.show(d3.select(this), option);
             })
