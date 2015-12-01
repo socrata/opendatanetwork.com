@@ -38,7 +38,6 @@ function multiComplete(inputSelector, resultSelector) {
             column: 'all',
             encoded: ['id', 'type', 'population'],
             select: option => {
-                console.log(option);
                 navigate(`/${option.text.replace(/ /g, '_')}`);
             },
             show: (selection, option) => {

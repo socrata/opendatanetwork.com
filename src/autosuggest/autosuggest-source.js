@@ -26,7 +26,13 @@ class AutosuggestSource {
             if (term === '') {
                 resolve([]);
             } else {
-                const url = Constants.AUTOCOMPLETE_URL(this.domain, this.fxf, this.column, term);
+                const baseURL = Constants.AUTOCOMPLETE_URL(this.domain, this.fxf, this.column, term);
+                const size = this.sort ?
+                    Constants.AUTOCOMPLETE_MAX_OPTIONS :
+                    Constants.AUTOCOMPLETE_SHOWN_OPTIONS;
+                const params = {size};
+                const url = `${baseURL}?${$.param(params)}`;
+
                 $.getJSON(url).then(response => {
                     resolve(response.options.map(option => this.decode(option)));
                 }, reject);
@@ -54,7 +60,7 @@ class AutosuggestSource {
             return [];
 
         if (this.sort)
-            options = _.sortBy(options, this.sort);
+            options = _.sortBy(options, this.sort).slice(0, Constants.AUTOCOMPLETE_SHOWN_OPTIONS);
 
         const category = container
             .append('div')
