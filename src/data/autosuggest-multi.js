@@ -29,11 +29,15 @@ function multiComplete(inputSelector, resultSelector) {
         {
             name: 'Regions',
             domain: domain,
-            fxf: '7g2b-8brv',
-            column: 'autocomplete_name',
+            fxf: '68ht-6puw',
+            column: 'all',
+            encoded: ['id', 'type', 'population'],
             select: option => {
                 console.log(option);
                 navigate(`/${option.text.replace(/ /g, '_')}`);
+            },
+            show: option => {
+                return option.population
             }
         },
         {
