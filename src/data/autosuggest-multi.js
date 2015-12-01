@@ -21,9 +21,14 @@ function multiComplete(inputSelector, resultSelector) {
                 DatasetPopup.show({name, domain});
                 // navigate(`http://${option.domain}/dataset/${option.fxf}`)
             },
-            show: option => {
-                return `<span class='dataset-name'>${option.text}</span> \
-                        <span class='dataset-domain'>${option.domain}</span>`;
+            show: (selection, option) => {
+                selection.append('span')
+                    .attr('class', 'dataset-name')
+                    .text(option.text);
+
+                selection.append('span')
+                    .attr('class', 'dataset-domain')
+                    .text(option.domain);
             }
         },
         {
@@ -36,8 +41,13 @@ function multiComplete(inputSelector, resultSelector) {
                 console.log(option);
                 navigate(`/${option.text.replace(/ /g, '_')}`);
             },
-            show: option => {
-                return option.population
+            show: (selection, option) => {
+                selection.append('span')
+                    .attr('class', 'region-name')
+                    .text(option.text)
+                    .append('span')
+                    .attr('class', 'region-type')
+                    .text(option.type);
             }
         },
         {
@@ -53,7 +63,11 @@ function multiComplete(inputSelector, resultSelector) {
             fxf: '864v-r7tf',
             column: 'category',
             select: option => navigate(`/search?categories=${option.text}`),
-            show: option => `<span class='capitalize'>${option.text}</span`
+            show: (selection, option) => {
+                selection.append('span')
+                    .attr('class', 'capitalize')
+                    .text(option.text);
+            }
         }
     ];
 

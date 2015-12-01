@@ -12,7 +12,9 @@ class AutosuggestSource {
 
     static fromJSON(json) {
         const encoded = json.encoded || [];
-        const show = json.show || (option => option.text);
+        const show = json.show || ((selection, option) => {
+            selection.append('span').text(option.text);
+        });
 
         return new AutosuggestSource(json.name, json.domain, json.fxf, json.column,
                                      encoded, json.select, show);
@@ -63,12 +65,15 @@ class AutosuggestSource {
             .append('div')
             .attr('class', 'autocomplete-options');
 
+        const self = this;
         return results
             .selectAll('li')
             .data(options)
             .enter()
             .append('li')
-            .html(option => this.show(option))
+            .each(function(option) {
+                self.show(d3.select(this), option);
+            })
             .on('click', option => this.select(option))
             .on('mouseover.source', function() {
                 d3.select(this).classed('selected hovered', true);
