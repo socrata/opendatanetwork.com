@@ -1189,6 +1189,8 @@ class SearchPageController {
         var dataTable = google.visualization.arrayToDataTable(data);
         var chart = new google.visualization.LineChart(document.getElementById(chartId));
 
+        this.applyStandardOptions(options);
+
         chart.draw(dataTable, options);
     }
 
@@ -1197,7 +1199,29 @@ class SearchPageController {
         var dataTable = google.visualization.arrayToDataTable(data);
         var chart = new google.visualization.SteppedAreaChart(document.getElementById(chartId));
 
+        this.applyStandardOptions(options);
+
         chart.draw(dataTable, options);
+    }
+    
+    applyStandardOptions(options) {
+
+        options.series = {
+            0: { color: '#2980b9' },
+            1: { color: '#ee3b3b' },
+            2: { color: '#3bdbee' },
+            3: { color: '#ff9900' },
+            4: { color: '#109618' },
+        };
+
+        options.legend = {
+            position: 'top',
+            maxLines: 4,
+            textStyle: {
+                color: '#222',
+                fontSize: 14
+            }
+        };
     }
 
     // Maps
