@@ -37,7 +37,10 @@ class MapView {
 
         map.addLayer(this.features);
 
-        // Zoom to selected regions.
+        this.zoomToSelected(map);
+    }
+
+    zoomToSelected(map) {
         const selectedLayers = [];
 
         this.features.eachLayer(layer => {
@@ -46,7 +49,12 @@ class MapView {
         });
 
         const group = new L.featureGroup(selectedLayers);
+        console.log(map.getZoom());
         map.fitBounds(group.getBounds(), MapConstants.AUTO_ZOOM_OPTIONS);
+
+        if (selectedLayers.length === 1) {
+            map.zoomOut(MapConstants.AUTO_ZOOM_OUT, MapConstants.AUTO_ZOOM_OPTIONS);
+        }
     }
 
     display(variable, year) {

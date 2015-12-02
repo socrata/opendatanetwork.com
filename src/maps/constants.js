@@ -37,6 +37,7 @@ const MapConstants = {
         animate: false,
         maxZoom: 10.0
     },
+    AUTO_ZOOM_OUT: 1, // amount to zoom out with only one selected region
 
     POINT_RADIUS_SCALE: d3.scale.log,
     POINT_RADIUS_RANGE_METERS: [500, 2000],
