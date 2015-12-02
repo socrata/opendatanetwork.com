@@ -235,56 +235,60 @@ class SearchPageController {
 
         google.setOnLoadCallback(() => {
 
-            var regionIds = this.params.regions.map(function(region) { return region.id; });
-            var controller = new ApiController();
+            const controller = new ApiController();
+            const promises = this.params.regions.map(region => controller.getCostOfLivingData(region.id));
 
-            controller.getCostOfLivingData(regionIds)
+            Promise.all(promises)
                 .then(data => {
 
                     this.drawMap(MapSources.rpp);
-                    this.drawCostOfLivingChart(regionIds, data);
-                    this.drawCostOfLivingTable(regionIds, data);
+                    this.drawCostOfLivingChart(data);
+                    this.drawCostOfLivingTable(data);
                 })
                 .catch(error => console.error(error));
         });
     }
 
-    drawCostOfLivingChart(regionIds, data) {
+    drawCostOfLivingChart(data) {
 
-        this.drawCostOfLivingChartForComponent('cost-of-living-all-chart', 'All', regionIds, data);
-        this.drawCostOfLivingChartForComponent('cost-of-living-goods-chart', 'Goods', regionIds, data);
-        this.drawCostOfLivingChartForComponent('cost-of-living-rents-chart', 'Rents', regionIds, data);
-        this.drawCostOfLivingChartForComponent('cost-of-living-other-chart', 'Other', regionIds, data);
+        this.drawCostOfLivingChartForComponent('cost-of-living-all-chart', 'All', data);
+        this.drawCostOfLivingChartForComponent('cost-of-living-goods-chart', 'Goods', data);
+        this.drawCostOfLivingChartForComponent('cost-of-living-rents-chart', 'Rents', data);
+        this.drawCostOfLivingChartForComponent('cost-of-living-other-chart', 'Other', data);
     }
 
-    drawCostOfLivingChartForComponent(id, component, regionIds, data) {
+    drawCostOfLivingChartForComponent(id, component, data) {
 
-        var chartData = []
+        const chartData = []
 
         // Header
         //
-        var header = ['Year'];
+        const header = ['Year'];
 
-        for (var i = 0; i < regionIds.length; i++) {
-            header[i + 1] = this.params.regions[i].name;
+        for (var i = 0; i < this.params.regions.length; i++) {
+            header.push(this.params.regions[i].name);
         }
 
         chartData.push(header);
 
         // Format the data
         //
-        var o = {};
+        const o = {};
 
         for (var i = 0; i < data.length; i++) {
 
-            if (data[i].component != component)
-                continue;
+            const regionValues = data[i];
 
-            if (o[data[i].year] == undefined) {
-                o[data[i].year] = [data[i].year];
+            for (var j = 0; j < regionValues.length; j++) {
+
+                if (regionValues[j].component != component)
+                    continue;
+                    
+                if (o[regionValues[j].year] == undefined)
+                    o[regionValues[j].year] = [regionValues[j].year];
+
+                o[regionValues[j].year].push(parseFloat(regionValues[j].index));
             }
-
-            o[data[i].year].push(parseFloat(data[i].index));
         }
 
         for (var key in o) {
@@ -301,7 +305,7 @@ class SearchPageController {
         });
     }
 
-    drawCostOfLivingTable(regionIds, data) {
+    drawCostOfLivingTable(data) {
 
         // Headers
         //
@@ -319,14 +323,14 @@ class SearchPageController {
 
         const components = ['All', 'Goods', 'Other', 'Rents'];
 
-        for (var i = 0; i < regionIds.length; i++) {
+        for (var i = 0; i < this.params.regions.length; i++) {
 
             s += '<tr class=\'color-' + i + '\'>';
             s += '<td>' + this.params.regions[i].name + '<div></div></td>';
 
             for (var j = 0; j < components.length; j++) {
 
-                const o = this.getLatestCostOfLiving(data, regionIds[i], components[j]);
+                const o = this.getLatestCostOfLiving(data[0], this.params.regions[i].id, components[j]);
                 const value = (o != null) ? parseFloat(o.index) : 'NA';
                 const percentile = (o != null) ? this.getPercentile(o.rank, o.total_ranks) : 'NA';
 
@@ -382,79 +386,80 @@ class SearchPageController {
 
         google.setOnLoadCallback(() => {
 
-            var regionIds = this.params.regions.map(function(region) { return region.id; });
-            var controller = new ApiController();
+            const controller = new ApiController();
+            const promises = this.params.regions.map(region => controller.getEarningsData(region.id));
 
-            controller.getEarningsData(regionIds)
+            Promise.all(promises)
                 .then(data => {
+
                     this.drawMap(MapSources.earnings);
-                    this.drawEarningsChart(regionIds, data);
-                    this.drawEarningsTable(regionIds, data);
+                    this.drawEarningsChart(data);
+                    this.drawEarningsTable(data);
                 })
                 .catch(error => console.error(error));
         });
     }
 
-    drawEarningsChart(regionIds, data) {
+    drawEarningsChart(data) {
 
-        var earnings = [];
+        const earnings = [];
 
         // Header
         //
-        var header = ['Education Level'];
+        const header = ['Education Level'];
 
-        for (var i = 0; i < regionIds.length; i++) {
-            header[i + 1] = this.params.regions[i].name;
+        for (var i = 0; i < this.params.regions.length; i++) {
+            header.push(this.params.regions[i].name);
         }
 
         earnings.push(header);
 
         // Less than high school
         //
-        var someHighSchoolEarnings = ['Some High School'];
+        const someHighSchoolEarnings = ['Some High School'];
 
-        for (var i = 0; i < regionIds.length; i++) {
-            someHighSchoolEarnings[i + 1] = parseInt(data[i].median_earnings_less_than_high_school);
+        for (var i = 0; i < this.params.regions.length; i++) {
+            someHighSchoolEarnings.push(parseInt(data[i][0].median_earnings_less_than_high_school));
         }
 
         earnings.push(someHighSchoolEarnings);
 
         // High school
         //
-        var highSchoolEarnings = ['High School'];
+        const highSchoolEarnings = ['High School'];
 
-        for (var i = 0; i < regionIds.length; i++) {
-            highSchoolEarnings[i + 1] = parseInt(data[i].median_earnings_high_school);
+        for (var i = 0; i < this.params.regions.length; i++) {
+            highSchoolEarnings.push(parseInt(data[i][0].median_earnings_high_school));
         }
 
         earnings.push(highSchoolEarnings);
 
         // Some college
         //
-        var someCollegeEarnings = ['Some College'];
+        const someCollegeEarnings = ['Some College'];
 
-        for (var i = 0; i < regionIds.length; i++) {
-            someCollegeEarnings[i + 1] = parseInt(data[i].median_earnings_some_college_or_associates);
+        for (var i = 0; i < this.params.regions.length; i++) {
+            someCollegeEarnings.push(parseInt(data[i][0].median_earnings_some_college_or_associates));
         }
 
         earnings.push(someCollegeEarnings);
 
         // Bachelor's
         //
-        var bachelorsEarnings = ['Bachelor\'s'];
+        const bachelorsEarnings = ['Bachelor\'s'];
 
-        for (var i = 0; i < regionIds.length; i++) {
-            bachelorsEarnings[i + 1] = parseInt(data[i].median_earnings_bachelor_degree);
+        for (var i = 0; i < this.params.regions.length; i++) {
+            bachelorsEarnings.push(parseInt(data[i][0].median_earnings_bachelor_degree));
         }
 
         earnings.push(bachelorsEarnings);
 
         // Graduate degree
         //
-        var graduateDegreeEarnings = ['Graduate Degree'];
+        const graduateDegreeEarnings = ['Graduate Degree'];
 
-        for (var i = 0; i < regionIds.length; i++) {
-            graduateDegreeEarnings[i + 1] = parseInt(data[i].median_earnings_graduate_or_professional_degree);
+        for (var i = 0; i < this.params.regions.length; i++) {
+            graduateDegreeEarnings.push(parseInt(data[i][0].median_earnings_graduate_or_professional_degree));
         }
 
         earnings.push(graduateDegreeEarnings);
@@ -471,7 +476,7 @@ class SearchPageController {
         });
     }
 
-    drawEarningsTable(regionIds, data) {
+    drawEarningsTable(data) {
 
         var s = '<tr>';
         s += '<td class=\'empty\'></td>';
@@ -480,13 +485,13 @@ class SearchPageController {
         s += '<td class=\'category-header\'>Median Male Earnings<br>(Full Time)</td>';
         s += '</tr>';
 
-        for (var i = 0; i < regionIds.length; i++) {
+        for (var i = 0; i < this.params.regions.length; i++) {
 
             s += '<tr class=\'color-' + i + '\'>'
             s += '<td>' + this.params.regions[i].name + '<div></div></td>';
-            s += '<td>' + numeral(data[i].median_earnings).format('$0,0') + '<div></div></td>';
-            s += '<td>' + numeral(data[i].female_full_time_median_earnings).format('$0,0') + '<div></div></td>';
-            s += '<td>' + numeral(data[i].male_full_time_median_earnings).format('$0,0') + '<div></div></td>';
+            s += '<td>' + numeral(data[i][0].median_earnings).format('$0,0') + '<div></div></td>';
+            s += '<td>' + numeral(data[i][0].female_full_time_median_earnings).format('$0,0') + '<div></div></td>';
+            s += '<td>' + numeral(data[i][0].male_full_time_median_earnings).format('$0,0') + '<div></div></td>';
             s += '</tr>';
         }
 
@@ -499,23 +504,23 @@ class SearchPageController {
 
         google.setOnLoadCallback(() => {
 
-            const regionIds = this.params.regions.map(function(region) { return region.id; });
             const controller = new ApiController();
+            const promises = this.params.regions.map(region => controller.getHealthRwjfChrData(region.id));
 
-            controller.getHealthRwjfChrData(regionIds)
+            Promise.all(promises)
                 .then(data => {
 
-                    this.drawHealthDataOutcomesTable(regionIds, data);
-                    this.drawHealthBehaviorsTable(regionIds, data);
-                    this.drawHealthClinicalCareTable(regionIds, data);
-                    this.drawHealthSocialEconomicFactorsTable(regionIds, data);
-                    this.drawHealthPhysicalEnvironmentTable(regionIds, data);
+                    this.drawHealthDataOutcomesTable(data);
+                    this.drawHealthBehaviorsTable(data);
+                    this.drawHealthClinicalCareTable(data);
+                    this.drawHealthSocialEconomicFactorsTable(data);
+                    this.drawHealthPhysicalEnvironmentTable(data);
                 })
                 .catch(error => console.error(error));
         });
     }
 
-    drawHealthDataOutcomesTable(regionIds, data) {
+    drawHealthDataOutcomesTable(data) {
 
         var s = '<tr>';
         s += '<th class=\'empty\'></th>';
@@ -534,23 +539,25 @@ class SearchPageController {
         s += '<td class=\'category-header\'>Low Birth Weight</td>';
         s += '</tr>';
 
-        for (var i = 0; i < regionIds.length; i++) {
+        for (var i = 0; i < this.params.regions.length; i++) {
+
+            const regionData = data[i][0];
 
             s += '<tr class=\'color-' + i + '\'>';
             s += '<td>' + this.params.regions[i].name + '<div></div></td>';
-            s += this.drawHealthDataTableCell(i, data, 'premature_death_value', '0,0');
+            s += this.drawHealthDataTableCell(regionData, 'premature_death_value', '0,0');
             s += '<td class=\'empty\'></td>';
-            s += this.drawHealthDataTableCell(i, data, 'poor_or_fair_health_value', '0.0%');
-            s += this.drawHealthDataTableCell(i, data, 'poor_physical_health_days_value', '0.0');
-            s += this.drawHealthDataTableCell(i, data, 'poor_mental_health_days_value', '0.0');
-            s += this.drawHealthDataTableCell(i, data, 'low_birthweight_value', '0.0');
+            s += this.drawHealthDataTableCell(regionData, 'poor_or_fair_health_value', '0.0%');
+            s += this.drawHealthDataTableCell(regionData, 'poor_physical_health_days_value', '0.0');
+            s += this.drawHealthDataTableCell(regionData, 'poor_mental_health_days_value', '0.0');
+            s += this.drawHealthDataTableCell(regionData, 'low_birthweight_value', '0.0');
             s += '</tr>';
         }
 
         $('#rwjf-county-health-outcomes-table').html(s);
     };
 
-    drawHealthBehaviorsTable(regionIds, data) {
+    drawHealthBehaviorsTable(data) {
 
         var s = '<tr>';
         s += '<th class=\'empty\'></th>';
@@ -570,26 +577,28 @@ class SearchPageController {
         s += '<td class=\'category-header\'>Teen Births</td>';
         s += '</tr>';
 
-        for (var i = 0; i < regionIds.length; i++) {
+        for (var i = 0; i < this.params.regions.length; i++) {
+
+            const regionData = data[i][0];
 
             s += '<tr class=\'color-' + i + '\'>';
             s += '<td>' + this.params.regions[i].name + '<div></div></td>';
-            s += this.drawHealthDataTableCell(i, data, 'adult_smoking_value', '0.0%');
-            s += this.drawHealthDataTableCell(i, data, 'adult_obesity_value', '0.0%');
-            s += this.drawHealthDataTableCell(i, data, 'food_environment_index_value', '0.0');
-            s += this.drawHealthDataTableCell(i, data, 'physical_inactivity_value', '0.0%');
-            s += this.drawHealthDataTableCell(i, data, 'access_to_exercise_opportunities_value', '0.0%');
-            s += this.drawHealthDataTableCell(i, data, 'excessive_drinking_value', '0.0%');
-            s += this.drawHealthDataTableCell(i, data, 'alcohol_impaired_driving_deaths_value', '0.0%');
-            s += this.drawHealthDataTableCell(i, data, 'sexually_transmitted_infections_value', '0,0');
-            s += this.drawHealthDataTableCell(i, data, 'teen_births_value', '0,0');
+            s += this.drawHealthDataTableCell(regionData, 'adult_smoking_value', '0.0%');
+            s += this.drawHealthDataTableCell(regionData, 'adult_obesity_value', '0.0%');
+            s += this.drawHealthDataTableCell(regionData, 'food_environment_index_value', '0.0');
+            s += this.drawHealthDataTableCell(regionData, 'physical_inactivity_value', '0.0%');
+            s += this.drawHealthDataTableCell(regionData, 'access_to_exercise_opportunities_value', '0.0%');
+            s += this.drawHealthDataTableCell(regionData, 'excessive_drinking_value', '0.0%');
+            s += this.drawHealthDataTableCell(regionData, 'alcohol_impaired_driving_deaths_value', '0.0%');
+            s += this.drawHealthDataTableCell(regionData, 'sexually_transmitted_infections_value', '0,0');
+            s += this.drawHealthDataTableCell(regionData, 'teen_births_value', '0,0');
             s += '</tr>';
         }
 
         $('#rwjf-county-health-factors-table').html(s);
     };
 
-    drawHealthClinicalCareTable(regionIds, data) {
+    drawHealthClinicalCareTable(data) {
 
         var s = '<tr>';
         s += '<th class=\'empty\'></th>';
@@ -607,24 +616,26 @@ class SearchPageController {
         s += '<td class=\'category-header\'>Mammography Screening</td>';
         s += '</tr>';
 
-        for (var i = 0; i < regionIds.length; i++) {
+        for (var i = 0; i < this.params.regions.length; i++) {
+
+            const regionData = data[i][0];
 
             s += '<tr class=\'color-' + i + '\'>';
             s += '<td>' + this.params.regions[i].name + '<div></div></td>';
-            s += this.drawHealthDataTableCell(i, data, 'uninsured_value', '0.0%');
-            s += this.drawHealthDataTableCell(i, data, 'primary_care_physicians_value', '0,0');
-            s += this.drawHealthDataTableCell(i, data, 'dentists_value', '0,0');
-            s += this.drawHealthDataTableCell(i, data, 'mental_health_providers_value', '0,0');
-            s += this.drawHealthDataTableCell(i, data, 'preventable_hospital_stays_value', '0,0');
-            s += this.drawHealthDataTableCell(i, data, 'diabetic_screening_value', '0.0%');
-            s += this.drawHealthDataTableCell(i, data, 'mammography_screening_value', '0.0%');
+            s += this.drawHealthDataTableCell(regionData, 'uninsured_value', '0.0%');
+            s += this.drawHealthDataTableCell(regionData, 'primary_care_physicians_value', '0,0');
+            s += this.drawHealthDataTableCell(regionData, 'dentists_value', '0,0');
+            s += this.drawHealthDataTableCell(regionData, 'mental_health_providers_value', '0,0');
+            s += this.drawHealthDataTableCell(regionData, 'preventable_hospital_stays_value', '0,0');
+            s += this.drawHealthDataTableCell(regionData, 'diabetic_screening_value', '0.0%');
+            s += this.drawHealthDataTableCell(regionData, 'mammography_screening_value', '0.0%');
             s += '</tr>';
         }
 
         $('#rwjf-county-health-clinical-care-table').html(s);
     };
 
-    drawHealthSocialEconomicFactorsTable(regionIds, data) {
+    drawHealthSocialEconomicFactorsTable(data) {
 
         var s = '<tr>';
         s += '<th class=\'empty\'></th>';
@@ -644,26 +655,28 @@ class SearchPageController {
         s += '<td class=\'category-header\'>Injury Deaths</td>';
         s += '</tr>';
 
-        for (var i = 0; i < regionIds.length; i++) {
+        for (var i = 0; i < this.params.regions.length; i++) {
+
+            const regionData = data[i][0];
 
             s += '<tr class=\'color-' + i + '\'>';
             s += '<td>' + this.params.regions[i].name + '<div></div></td>';
-            s += this.drawHealthDataTableCell(i, data, 'high_school_graduation_value', '0.0%');
-            s += this.drawHealthDataTableCell(i, data, 'some_college_value', '0.0%');
-            s += this.drawHealthDataTableCell(i, data, 'unemployment_value', '0.0%');
-            s += this.drawHealthDataTableCell(i, data, 'children_in_poverty_value', '0.0%');
-            s += this.drawHealthDataTableCell(i, data, 'income_inequality_value', '0.0');
-            s += this.drawHealthDataTableCell(i, data, 'children_in_single_parent_households_value', '0.0%');
-            s += this.drawHealthDataTableCell(i, data, 'social_associations_value', '0.0');
-            s += this.drawHealthDataTableCell(i, data, 'violent_crime_value', '0.0');
-            s += this.drawHealthDataTableCell(i, data, 'injury_deaths_value', '0.0');
+            s += this.drawHealthDataTableCell(regionData, 'high_school_graduation_value', '0.0%');
+            s += this.drawHealthDataTableCell(regionData, 'some_college_value', '0.0%');
+            s += this.drawHealthDataTableCell(regionData, 'unemployment_value', '0.0%');
+            s += this.drawHealthDataTableCell(regionData, 'children_in_poverty_value', '0.0%');
+            s += this.drawHealthDataTableCell(regionData, 'income_inequality_value', '0.0');
+            s += this.drawHealthDataTableCell(regionData, 'children_in_single_parent_households_value', '0.0%');
+            s += this.drawHealthDataTableCell(regionData, 'social_associations_value', '0.0');
+            s += this.drawHealthDataTableCell(regionData, 'violent_crime_value', '0.0');
+            s += this.drawHealthDataTableCell(regionData, 'injury_deaths_value', '0.0');
             s += '</tr>';
         }
 
         $('#rwjf-county-health-social-economic-factors-table').html(s);
     };
 
-    drawHealthPhysicalEnvironmentTable(regionIds, data) {
+    drawHealthPhysicalEnvironmentTable(data) {
 
         var s = '<tr>';
         s += '<th class=\'empty\'></th>';
@@ -679,27 +692,29 @@ class SearchPageController {
         s += '<td class=\'category-header\'>Long Commute - Driving Alone</td>';
         s += '</tr>';
 
-        for (var i = 0; i < regionIds.length; i++) {
+        for (var i = 0; i < this.params.regions.length; i++) {
+
+            const regionData = data[i][0];
 
             s += '<tr class=\'color-' + i + '\'>';
             s += '<td>' + this.params.regions[i].name + '<div></div></td>';
-            s += this.drawHealthDataTableCell(i, data, 'air_pollution_particulate_matter_value', '0.0');
-            s += this.drawHealthDataTableCell(i, data, 'drinking_water_violations_value', '0.0%');
-            s += this.drawHealthDataTableCell(i, data, 'severe_housing_problems_value', '0.0%');
-            s += this.drawHealthDataTableCell(i, data, 'driving_alone_to_work_value', '0.0%');
-            s += this.drawHealthDataTableCell(i, data, 'long_commute_driving_alone_value', '0.0%');
+            s += this.drawHealthDataTableCell(regionData, 'air_pollution_particulate_matter_value', '0.0');
+            s += this.drawHealthDataTableCell(regionData, 'drinking_water_violations_value', '0.0%');
+            s += this.drawHealthDataTableCell(regionData, 'severe_housing_problems_value', '0.0%');
+            s += this.drawHealthDataTableCell(regionData, 'driving_alone_to_work_value', '0.0%');
+            s += this.drawHealthDataTableCell(regionData, 'long_commute_driving_alone_value', '0.0%');
             s += '</tr>';
         }
 
         $('#rwjf-county-health-physical-environment-table').html(s);
     };
 
-    drawHealthDataTableCell(i, data, var_key, fmt_str, addl_fmt = '') {
+    drawHealthDataTableCell(data, key, format) {
 
         var s = '<td>';
 
-        if (data[i] && data[i][var_key])
-            s += numeral(data[i][var_key].replace(',','')).format(fmt_str) + addl_fmt;
+        if (data[key] != undefined)
+            s += numeral(data[key].replace(',','')).format(format);
         else
             s += '';
 
@@ -714,19 +729,20 @@ class SearchPageController {
 
         google.setOnLoadCallback(() => {
 
-            var regionIds = this.params.regions.map(function(region) { return region.id; });
-            var controller = new ApiController();
+            const controller = new ApiController();
+            const promises = this.params.regions.map(region => controller.getEducationData(region.id));
 
-            controller.getEducationData(regionIds)
+            Promise.all(promises)
                 .then(data => {
+
                     this.drawMap(MapSources.education);
-                    this.drawEducationTable(regionIds, data)
+                    this.drawEducationTable(data)
                 })
                 .catch(error => console.error(error));
         });
     }
 
-    drawEducationTable(regionIds, data) {
+    drawEducationTable(data) {
 
         var s = '<tr>';
         s += '<td class=\'empty\'></td>';
@@ -736,22 +752,24 @@ class SearchPageController {
         s += '<td class=\'category-header\'>At Least High School Diploma<br>(Percentile)</td>';
         s += '</tr>';
 
-        for (var i = 0; i < regionIds.length; i++) {
+        for (var i = 0; i < data.length; i++) {
+
+            const regionData = data[i][0];
 
             s += '<tr class=\'color-' + i + '\'>'
             s += '<td>' + this.params.regions[i].name + '<div></div></td>';
 
-            const totalRanks = parseInt(data[i].total_ranks);
-            const bachelorsRank = parseInt(data[i].percent_bachelors_degree_or_higher_rank);
+            const totalRanks = parseInt(regionData.total_ranks);
+            const bachelorsRank = parseInt(regionData.percent_bachelors_degree_or_higher_rank);
             const bachelorsPercentile = parseInt(((totalRanks - bachelorsRank) / totalRanks) * 100);
 
-            s += '<td>' + data[i].percent_bachelors_degree_or_higher + '%<div></div></td>';
+            s += '<td>' + regionData.percent_bachelors_degree_or_higher + '%<div></div></td>';
             s += '<td>' + numeral(bachelorsPercentile).format('0o') + '<div></div></td>';
 
-            const highSchoolRank = parseInt(data[i].percent_high_school_graduate_or_higher);
+            const highSchoolRank = parseInt(regionData.percent_high_school_graduate_or_higher_rank);
             const highSchoolPercentile = parseInt(((totalRanks - highSchoolRank) / totalRanks) * 100);
 
-            s += '<td>' + data[i].percent_high_school_graduate_or_higher + '%<div></div></td>';
+            s += '<td>' + regionData.percent_high_school_graduate_or_higher + '%<div></div></td>';
             s += '<td>' + numeral(highSchoolPercentile).format('0o') + '<div></div></td>';
             s += '</tr>'
         }
@@ -765,28 +783,29 @@ class SearchPageController {
 
         google.setOnLoadCallback(() => {
 
-            var regionIds = this.params.regions.map(function(region) { return region.id; });
-            var controller = new ApiController();
+            const controller = new ApiController();
+            const promises = this.params.regions.map(region => controller.getGdpData(region.id));
 
-            controller.getGdpData(regionIds)
+            Promise.all(promises)
                 .then(data => {
+
                     this.drawMap(MapSources.gdp);
-                    this.drawGdpChart(regionIds, data);
-                    this.drawGdpChangeChart(regionIds, data);
+                    this.drawGdpChart(data);
+                    this.drawGdpChangeChart(data);
                 })
-                .catch(error => console.error(error));
+               .catch(error => console.error(error));
         });
     }
 
-    drawGdpChart(regionIds, data) {
+    drawGdpChart(data) {
 
-        var chartData = [];
+        const chartData = [];
 
         // Header
         //
-        var header = ['Year'];
+        const header = ['Year'];
 
-        for (var i = 0; i < regionIds.length; i++) {
+        for (var i = 0; i < this.params.regions.length; i++) {
             header[i + 1] = this.params.regions[i].name;
         }
 
@@ -794,15 +813,19 @@ class SearchPageController {
 
         // Format the data
         //
-        var o = {};
+        const o = {};
 
         for (var i = 0; i < data.length; i++) {
 
-            if (o[data[i].year] == undefined) {
-                o[data[i].year] = [data[i].year];
-            }
+            const regionValues = data[i];
 
-            o[data[i].year].push(parseFloat(data[i].per_capita_gdp));
+            for (var j = 0; j < regionValues.length; j++) {
+
+                if (o[regionValues[j].year] == undefined)
+                    o[regionValues[j].year] = [regionValues[j].year];
+
+                o[regionValues[j].year].push(parseFloat(regionValues[j].per_capita_gdp));
+            }
         }
 
         for (var key in o) {
@@ -821,15 +844,15 @@ class SearchPageController {
         });
     }
 
-    drawGdpChangeChart(regionIds, data) {
+    drawGdpChangeChart(data) {
 
-        var chartData = [];
+        const chartData = [];
 
         // Header
         //
-        var header = ['Year'];
+        const header = ['Year'];
 
-        for (var i = 0; i < regionIds.length; i++) {
+        for (var i = 0; i < this.params.regions.length; i++) {
             header[i + 1] = this.params.regions[i].name;
         }
 
@@ -837,15 +860,19 @@ class SearchPageController {
 
         // Format the data
         //
-        var o = {};
+        const o = {};
 
         for (var i = 0; i < data.length; i++) {
 
-            if (o[data[i].year] == undefined) {
-                o[data[i].year] = [data[i].year];
-            }
+            const regionValues = data[i];
 
-            o[data[i].year].push(parseFloat(data[i].per_capita_gdp_percent_change) / 100);
+            for (var j = 0; j < regionValues.length; j++) {
+
+                if (o[regionValues[j].year] == undefined)
+                    o[regionValues[j].year] = [regionValues[j].year];
+
+                o[regionValues[j].year].push(parseFloat(regionValues[j].per_capita_gdp_percent_change) / 100);
+            }
         }
 
         for (var key in o) {
@@ -871,53 +898,56 @@ class SearchPageController {
 
         google.setOnLoadCallback(() => {
 
-            var regionIds = this.params.regions.map(function(region) { return region.id; });
-            var controller = new ApiController();
 
-            controller.getOccupationsData(regionIds)
+            const controller = new ApiController();
+            const promises = this.params.regions.map(region => controller.getOccupationsData(region.id));
+
+            Promise.all(promises)
                 .then(data => {
+
                     this.drawMap(MapSources.occupations);
-                    this.drawOccupationsTable(regionIds, data)
+                    this.drawOccupationsTable(data)
                 })
                 .catch(error => console.error(error));
         });
     }
 
-    drawOccupationsTable(regionIds, data) {
+    drawOccupationsTable(data) {
 
         var s = '<tr>'
         s += '<th class=\'empty\'></th>';
 
-        for (var i = 0; i < regionIds.length; i++) {
+        for (var i = 0; i < this.params.regions.length; i++) {
             s += '<th colspan=\'2\' class=\'color-' + i + '\'>' + this.params.regions[i].name + '<div></div></th>';
         }
 
-        s+= '</tr>'
+        s += '</tr>'
 
         // Sub header
         //
         s += '<tr><td class=\'empty\'></td>';
 
-        for (var i = 0; i < regionIds.length; i++) {
+        for (var i = 0; i < this.params.regions.length; i++) {
             s += '<td>Percent</td><td class=\'color-' + i + '\'>Percentile<div></div></td>';
         }
 
-        for (var i = 0; i < data.length; i++) {
+        for (var i = 0; i < data[0].length; i++) {
 
-            const regionIndex = (i % regionIds.length);
+            s += '<tr><td class=\'category-header\'>' + data[0][i].occupation + '</td>';
 
-            if (regionIndex == 0)
-                s += '</tr><tr><td class=\'category-header\'>' + data[i].occupation + '</td>';
+            for (var j = 0; j < this.params.regions.length; j++) {
 
-            const totalRanks = parseInt(data[i].total_ranks);
-            const rank = parseInt(data[i].percent_employed_rank);
-            const percentile = parseInt(((totalRanks - rank) / totalRanks) * 100);
+                const regionData = data[j];
+                const totalRanks = parseInt(regionData[i].total_ranks);
+                const rank = parseInt(regionData[i].percent_employed_rank);
+                const percentile = parseInt(((totalRanks - rank) / totalRanks) * 100);
+    
+                s += '<td>' + numeral(regionData[i].percent_employed).format('0.0') + '%</td>';
+                s += '<td class=\'color-' + j + '\'>' + numeral(percentile).format('0o') + '<div></div></td>';
+            }
 
-            s += '<td>' + numeral(data[i].percent_employed).format('0.0') + '%</td>';
-            s += '<td class=\'color-' + regionIndex + '\'>' + numeral(percentile).format('0o') + '<div></div></td>';
+            s += '</tr>';
         }
-
-        s += '</tr>';
 
         $('#occupations-table').html(s);
     }
@@ -928,30 +958,29 @@ class SearchPageController {
 
         google.setOnLoadCallback(() => {
 
-            const regionIds = this.params.regions.map(function(region) { return region.id; });
             const controller = new ApiController();
+            const promises = this.params.regions.map(region => controller.getPopulationData(region.id));
 
-            controller.getPopulationData(regionIds)
+            Promise.all(promises)
                 .then(data => {
 
                     this.drawMap(MapSources.population);
-                    this.drawPopulationChart(regionIds, data);
-                    this.drawPopulationChangeChart(regionIds, data);
+                    this.drawPopulationChart(data);
+                    this.drawPopulationChangeChart(data);
                 })
                 .catch(error => console.error(error));
         });
     }
 
-    drawPopulationChart(regionIds, data) {
+    drawPopulationChart(data) {
 
-        var chartData = [];
-        var year;
+        const chartData = [];
 
         // Header
         //
-        var header = ['Year'];
+        const header = ['Year'];
 
-        for (var i = 0; i < regionIds.length; i++) {
+        for (var i = 0; i < this.params.regions.length; i++) {
             header[i + 1] = this.params.regions[i].name;
         }
 
@@ -959,18 +988,23 @@ class SearchPageController {
 
         // Data
         //
+        const o = {};
+
         for (var i = 0; i < data.length; i++) {
 
-            var m = (i % regionIds.length);
+            const regionValues = data[i];
 
-            if (m == 0) {
+            for (var j = 0; j < regionValues.length; j++) {
 
-                year = [];
-                year[0] = data[i].year;
-                chartData.push(year);
+                if (o[regionValues[j].year] == undefined)
+                    o[regionValues[j].year] = [regionValues[j].year];
+
+                o[regionValues[j].year].push(parseInt(regionValues[j].population));
             }
+        }
 
-            year[m + 1] = parseInt(data[i].population);
+        for (var key in o) {
+            chartData.push(o[key]);
         }
 
         this.drawLineChart('population-chart', chartData, {
@@ -983,16 +1017,15 @@ class SearchPageController {
         });
     }
 
-    drawPopulationChangeChart(regionIds, data) {
+    drawPopulationChangeChart(data) {
 
-        var chartData = [];
-        var year;
+        const chartData = [];
 
         // Header
         //
-        var header = ['Year'];
+        const header = ['Year'];
 
-        for (var i = 0; i < regionIds.length; i++) {
+        for (var i = 0; i < this.params.regions.length; i++) {
             header[i + 1] = this.params.regions[i].name;
         }
 
@@ -1000,18 +1033,23 @@ class SearchPageController {
 
         // Data
         //
+        const o = {};
+
         for (var i = 0; i < data.length; i++) {
 
-            var m = (i % regionIds.length);
+            const regionValues = data[i];
 
-            if (m == 0) {
+            for (var j = 0; j < regionValues.length; j++) {
 
-                year = [];
-                year[0] = data[i].year;
-                chartData.push(year);
+                if (o[regionValues[j].year] == undefined)
+                    o[regionValues[j].year] = [regionValues[j].year];
+
+                o[regionValues[j].year].push(parseFloat(regionValues[j].population_percent_change) / 100);
             }
+        }
 
-            year[m + 1] = parseFloat(data[i].population_percent_change) / 100;
+        for (var key in o) {
+            chartData.push(o[key]);
         }
 
         this.drawLineChart('population-change-chart', chartData, {
@@ -1060,6 +1098,7 @@ class SearchPageController {
     }
 
     drawCitiesAndCountiesInState(region) {
+
         var controller = new ApiController();
         var citiesPromise = controller.getCitiesInState(region.id);
         var countiesPromise = controller.getCountiesInState(region.id);
@@ -1242,10 +1281,12 @@ class SearchPageController {
     }
 
     drawSimilarRegionsList(data, onClickRegion) {
+
         const mostSimilar = data.most_similar;
         const regionPromises = mostSimilar.map(region => RegionLookup.byID(region.id));
 
         Promise.all(regionPromises).then(regions => {
+
             const selection = d3.select('#similar-regions');
 
             const links = selection
@@ -1262,7 +1303,6 @@ class SearchPageController {
             selection.style('display', 'block');
         }, error => { throw error; });
     }
-
 
     // Draw charts
     //
