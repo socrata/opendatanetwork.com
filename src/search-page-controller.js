@@ -1215,59 +1215,27 @@ class SearchPageController {
     }
 
     drawSimilarRegionsList(data, onClickRegion) {
+        const mostSimilar = data.most_similar;
+        const regionPromises = mostSimilar.map(region => RegionLookup.byID(region.id));
 
-        if (data.most_similar == undefined)
-            return;
+        Promise.all(regionPromises).then(regions => {
+            const selection = d3.select('#similar-regions');
 
-        var count = 0;
-        var s = '';
+            const links = selection
+                .selectAll('li')
+                .data(regions)
+                .enter()
+                .append('li')
+                .append('a')
+                .on('click', region => onClickRegion(region.name))
+                .text(region => region.name)
+                .append('i')
+                .attr('class', 'fa fa-plus');
 
-        // Get the displayed regions
-        //
-        const displayedRegions = [];
-
-        for (var i = 0; i < data.most_similar.length; i++) {
-
-            if (this.isRegionIdContainedInCurrentRegions(data.most_similar[i].id))
-                continue;
-
-            displayedRegions.push(data.most_similar[i]);
-
-            if (count == 4)
-                break;
-
-            count++;
-        }
-
-        // Build list items
-        //
-        for (var i = 0; i < displayedRegions.length; i++) {
-            s += '<li><a><i class="fa fa-plus"></i>' + displayedRegions[i].name + '</a></li>'
-        }
-
-        // Display the list
-        //
-        $('#similar-regions').html(s);
-        $('#similar-regions').slideToggle(100);
-
-        // Hook up the click handler
-        //
-        $('#similar-regions li a').click(function() {
-
-            const index = $(this).parent().index();
-            const controller = new ApiController();
-
-            controller.getPlaceFromRoster(displayedRegions[index].id)
-                .then(data => {
-
-                    if (data.length == 0)
-                        return;
-
-                    onClickRegion(data[0].name);
-                })
-                .catch(error => console.error(error));
-        });
+            selection.style('display', 'block');
+        }, error => { throw error; });
     }
+
 
     // Draw charts
     //
