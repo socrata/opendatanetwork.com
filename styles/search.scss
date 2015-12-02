@@ -459,8 +459,9 @@ section.results
 
 .charts-column figure
 {
-    height: 300px;
-    margin: 0 0 50px;
+    height: 320px;
+    max-width: 1000px;
+    margin: 0 auto 50px;
 }
 
 .charts-column
