@@ -33,14 +33,6 @@ function multiComplete(inputSelector, resultSelector) {
             select: option => {
                 navigate(`/${option.text.replace(/ /g, '_')}`);
             },
-            show: (selection, option) => {
-                selection.append('span')
-                    .attr('class', 'name')
-                    .text(option.text)
-                    .append('span')
-                    .attr('id', 'tag')
-                    .text(option.type);
-            },
             sort: option => -parseFloat(option.population)
         },
         {
