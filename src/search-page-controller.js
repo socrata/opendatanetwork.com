@@ -306,15 +306,15 @@ class SearchPageController {
         // Headers
         //
         var s = '<tr>';
-        s += '<th class=\'empty\'></th>';
-        s += '<th>All<br>(Value)</th>';
-        s += '<th>All<br>(Percentile)</th>';
-        s += '<th>Goods<br>(Value)</th>';
-        s += '<th>Goods<br>(Percentile)</th>';
-        s += '<th>Other<br>(Value)</th>';
-        s += '<th>Other<br>(Percentile)</th>';
-        s += '<th>Rents<br>(Value)</th>';
-        s += '<th>Rents<br>(Percentile)</th>';
+        s += '<td class=\'empty\'></td>';
+        s += '<td class=\'category-header\'>All<br>(Value)</td>';
+        s += '<td class=\'category-header\'>All<br>(Percentile)</td>';
+        s += '<td class=\'category-header\'>Goods<br>(Value)</td>';
+        s += '<td class=\'category-header\'>Goods<br>(Percentile)</td>';
+        s += '<td class=\'category-header\'>Other<br>(Value)</td>';
+        s += '<td class=\'category-header\'>Other<br>(Percentile)</td>';
+        s += '<td class=\'category-header\'>Rents<br>(Value)</td>';
+        s += '<td class=\'category-header\'>Rents<br>(Percentile)</td>';
         s += '</tr>';
 
         const components = ['All', 'Goods', 'Other', 'Rents'];
@@ -474,10 +474,10 @@ class SearchPageController {
     drawEarningsTable(regionIds, data) {
 
         var s = '<tr>';
-        s += '<th class=\'empty\'></th>';
-        s += '<th>Median Earnings<br>(All Workers)</th>';
-        s += '<th>Median Female Earnings<br>(Full Time)</th>';
-        s += '<th>Median Male Earnings<br>(Full Time)</th>';
+        s += '<td class=\'empty\'></td>';
+        s += '<td class=\'category-header\'>Median Earnings<br>(All Workers)</td>';
+        s += '<td class=\'category-header\'>Median Female Earnings<br>(Full Time)</td>';
+        s += '<td class=\'category-header\'>Median Male Earnings<br>(Full Time)</td>';
         s += '</tr>';
 
         for (var i = 0; i < regionIds.length; i++) {
@@ -506,10 +506,10 @@ class SearchPageController {
                 .then(data => {
 
                     this.drawHealthDataOutcomesTable(regionIds, data);
-                    this.drawHealthDataFactorsTable(regionIds, data);
-                    this.drawHealthDataClinicalCare(regionIds, data);
-                    this.drawHealthDataSocialEconomicFactors(regionIds, data);
-                    this.drawHealthDataPhysicalEnvironment(regionIds, data);
+                    this.drawHealthBehaviorsTable(regionIds, data);
+                    this.drawHealthClinicalCareTable(regionIds, data);
+                    this.drawHealthSocialEconomicFactorsTable(regionIds, data);
+                    this.drawHealthPhysicalEnvironmentTable(regionIds, data);
                 })
                 .catch(error => console.error(error));
         });
@@ -519,12 +519,19 @@ class SearchPageController {
 
         var s = '<tr>';
         s += '<th class=\'empty\'></th>';
-        s += '<th>Premature Death</th>';
+        s += '<th>Life Length</th>';
         s += '<th class=\'empty\'></th>';
-        s += '<th>Poor or Fair Health</th>';
-        s += '<th>Poor Physical Health Days</th>';
-        s += '<th>Poor Mental Health Days</th>';
-        s += '<th>Low Birth Weight</th>';
+        s += '<th colspan=\'4\'>Quality of Life</th>';
+        s += '</tr>';
+
+        s += '<tr>';
+        s += '<td class=\'empty\'></td>';
+        s += '<td class=\'category-header\'>Premature Death</td>';
+        s += '<td class=\'empty\'></td>';
+        s += '<td class=\'category-header\'>Poor or Fair Health</td>';
+        s += '<td class=\'category-header\'>Poor Physical Health Days</td>';
+        s += '<td class=\'category-header\'>Poor Mental Health Days</td>';
+        s += '<td class=\'category-header\'>Low Birth Weight</td>';
         s += '</tr>';
 
         for (var i = 0; i < regionIds.length; i++) {
@@ -543,19 +550,24 @@ class SearchPageController {
         $('#rwjf-county-health-outcomes-table').html(s);
     };
 
-    drawHealthDataFactorsTable(regionIds, data) {
+    drawHealthBehaviorsTable(regionIds, data) {
 
         var s = '<tr>';
         s += '<th class=\'empty\'></th>';
-        s += '<th>Adult Smoking</th>';
-        s += '<th>Adult Obesity</th>';
-        s += '<th>Food Environment Index</th>';
-        s += '<th>Physical Inactivity</th>';
-        s += '<th>Access to Exercise</th>';
-        s += '<th>Excessive Drinking</th>';
-        s += '<th>Alcohol Impaired Driving Deaths</th>';
-        s += '<th>Sexually Transmitted Infections</th>';
-        s += '<th>Teen Births</th>';
+        s += '<th colspan=\'9\'>Health Behaviors</th>';
+        s += '</tr>';
+
+        s += '<tr>';
+        s += '<td class=\'empty\'></td>';
+        s += '<td class=\'category-header\'>Adult Smoking</td>';
+        s += '<td class=\'category-header\'>Adult Obesity</td>';
+        s += '<td class=\'category-header\'>Food Environment Index</td>';
+        s += '<td class=\'category-header\'>Physical Inactivity</td>';
+        s += '<td class=\'category-header\'>Access to Exercise</td>';
+        s += '<td class=\'category-header\'>Excessive Drinking</td>';
+        s += '<td class=\'category-header\'>Alcohol Impaired Driving Deaths</td>';
+        s += '<td class=\'category-header\'>Sexually Transmitted Infections</td>';
+        s += '<td class=\'category-header\'>Teen Births</td>';
         s += '</tr>';
 
         for (var i = 0; i < regionIds.length; i++) {
@@ -570,24 +582,29 @@ class SearchPageController {
             s += this.drawHealthDataTableCell(i, data, 'excessive_drinking_value', '0.0%');
             s += this.drawHealthDataTableCell(i, data, 'alcohol_impaired_driving_deaths_value', '0.0%');
             s += this.drawHealthDataTableCell(i, data, 'sexually_transmitted_infections_value', '0,0');
-            s += this.drawHealthDataTableCell(i, data, 'alcohol_impaired_driving_deaths_value', '0,0');
+            s += this.drawHealthDataTableCell(i, data, 'teen_births_value', '0,0');
             s += '</tr>';
         }
 
         $('#rwjf-county-health-factors-table').html(s);
     };
 
-    drawHealthDataClinicalCare(regionIds, data) {
+    drawHealthClinicalCareTable(regionIds, data) {
 
         var s = '<tr>';
         s += '<th class=\'empty\'></th>';
-        s += '<th>Uninsured</th>';
-        s += '<th>Primary Care Physicians</th>';
-        s += '<th>Dentists</th>';
-        s += '<th>Mental Health Providers</th>';
-        s += '<th>Preventable Hospital Stays</th>';
-        s += '<th>Diabetic Monitoring</th>';
-        s += '<th>Mammography Screening</th>';
+        s += '<th colspan=\'7\'>Clinical Care</th>';
+        s += '</tr>';
+
+        s += '<tr>';
+        s += '<td class=\'empty\'></td>';
+        s += '<td class=\'category-header\'>Uninsured</td>';
+        s += '<td class=\'category-header\'>Primary Care Physicians</td>';
+        s += '<td class=\'category-header\'>Dentists</td>';
+        s += '<td class=\'category-header\'>Mental Health Providers</td>';
+        s += '<td class=\'category-header\'>Preventable Hospital Stays</td>';
+        s += '<td class=\'category-header\'>Diabetic Monitoring</td>';
+        s += '<td class=\'category-header\'>Mammography Screening</td>';
         s += '</tr>';
 
         for (var i = 0; i < regionIds.length; i++) {
@@ -607,19 +624,24 @@ class SearchPageController {
         $('#rwjf-county-health-clinical-care-table').html(s);
     };
 
-    drawHealthDataSocialEconomicFactors(regionIds, data) {
+    drawHealthSocialEconomicFactorsTable(regionIds, data) {
 
         var s = '<tr>';
         s += '<th class=\'empty\'></th>';
-        s += '<th>High School Graduation</th>';
-        s += '<th>Some College</th>';
-        s += '<th>Unemployment</th>';
-        s += '<th>Children in Poverty</th>';
-        s += '<th>Income Inequality</th>';
-        s += '<th>Children in Single-Parent Households</th>';
-        s += '<th>Social Associations</th>';
-        s += '<th>Violent Crime</th>';
-        s += '<th>Injury Deaths</th>';
+        s += '<th colspan=\'9\'>Social &amp; Economic Factors</th>';
+        s += '</tr>';
+
+        s += '<tr>';
+        s += '<td class=\'empty\'></td>';
+        s += '<td class=\'category-header\'>High School Graduation</td>';
+        s += '<td class=\'category-header\'>Some College</td>';
+        s += '<td class=\'category-header\'>Unemployment</td>';
+        s += '<td class=\'category-header\'>Children in Poverty</td>';
+        s += '<td class=\'category-header\'>Income Inequality</td>';
+        s += '<td class=\'category-header\'>Children in Single-Parent Households</td>';
+        s += '<td class=\'category-header\'>Social Associations</td>';
+        s += '<td class=\'category-header\'>Violent Crime</td>';
+        s += '<td class=\'category-header\'>Injury Deaths</td>';
         s += '</tr>';
 
         for (var i = 0; i < regionIds.length; i++) {
@@ -641,15 +663,20 @@ class SearchPageController {
         $('#rwjf-county-health-social-economic-factors-table').html(s);
     };
 
-    drawHealthDataPhysicalEnvironment(regionIds, data) {
+    drawHealthPhysicalEnvironmentTable(regionIds, data) {
 
         var s = '<tr>';
         s += '<th class=\'empty\'></th>';
-        s += '<th>Air Pollution - Particulate Matter</th>';
-        s += '<th>Drinking Water Violations</th>';
-        s += '<th>Severe Housing Problems</th>';
-        s += '<th>Driving Alone to Work</th>';
-        s += '<th>Long Commute - Driving Alone</th>';
+        s += '<th colspan=\'5\'>Physical Environment</th>';
+        s += '</tr>';
+
+        s += '<tr>';
+        s += '<td class=\'empty\'></td>';
+        s += '<td class=\'category-header\'>Air Pollution - Particulate Matter</td>';
+        s += '<td class=\'category-header\'>Drinking Water Violations</td>';
+        s += '<td class=\'category-header\'>Severe Housing Problems</td>';
+        s += '<td class=\'category-header\'>Driving Alone to Work</td>';
+        s += '<td class=\'category-header\'>Long Commute - Driving Alone</td>';
         s += '</tr>';
 
         for (var i = 0; i < regionIds.length; i++) {
@@ -702,11 +729,11 @@ class SearchPageController {
     drawEducationTable(regionIds, data) {
 
         var s = '<tr>';
-        s += '<th class=\'empty\'></th>';
-        s += '<th>At Least Bachelor\'s Degree<br>(Percent)</th>';
-        s += '<th>At Least Bachelor\'s Degree<br>(Percentile)</th>';
-        s += '<th>At Least High School Diploma<br>(Percent)</th>';
-        s += '<th>At Least High School Diploma<br>(Percentile)</th>';
+        s += '<td class=\'empty\'></td>';
+        s += '<td class=\'category-header\'>At Least Bachelor\'s Degree<br>(Percent)</td>';
+        s += '<td class=\'category-header\'>At Least Bachelor\'s Degree<br>(Percentile)</td>';
+        s += '<td class=\'category-header\'>At Least High School Diploma<br>(Percent)</td>';
+        s += '<td class=\'category-header\'>At Least High School Diploma<br>(Percentile)</td>';
         s += '</tr>';
 
         for (var i = 0; i < regionIds.length; i++) {
@@ -880,7 +907,7 @@ class SearchPageController {
             const regionIndex = (i % regionIds.length);
 
             if (regionIndex == 0)
-                s += '</tr><tr><td>' + data[i].occupation + '</td>';
+                s += '</tr><tr><td class=\'category-header\'>' + data[i].occupation + '</td>';
 
             const totalRanks = parseInt(data[i].total_ranks);
             const rank = parseInt(data[i].percent_employed_rank);

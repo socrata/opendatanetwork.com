@@ -566,7 +566,7 @@ section.results
             }
         }
 
-        td:first-of-type
+        td.category-header
         {
             background-color: $table-header-cell-gray;
             border: 1px solid $table-border-gray;
@@ -587,13 +587,10 @@ section.results
     {
         th
         {
-            background-color: $table-header-cell-gray;
-            border: 1px solid $table-border-gray;
             color: $black-text-color;
-            font-size: 13px;
-            font-weight: normal;
-            padding: 10px;
-            text-align: center;
+            font-size: 18px;
+            font-weight: 300;
+            padding: 0 0 10px 10px;
         }
 
         th.empty
@@ -617,6 +614,17 @@ section.results
                 position: absolute;
                 right: 0;
             }
+        }
+
+        td.category-header
+        {
+            background-color: $table-header-cell-gray;
+            border: 1px solid $table-border-gray;
+            color: $black-text-color;
+            font-size: 13px;
+            font-weight: normal;
+            padding: 10px;
+            text-align: center;
         }
 
         td.empty
