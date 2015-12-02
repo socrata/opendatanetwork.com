@@ -266,7 +266,7 @@ function getSearchPageUrl(vector) {
         url = '/';
 
         var regionNames = params.regions.map(function(region) {
-            return region.name.replace(/,/g, '').replace(/ /g, '_');
+            return region.name.replace(/ /g, '_');
         });
 
         url += regionNames.join('_vs_');
