@@ -120,7 +120,6 @@ ApiController.prototype.getSearchDatasetsUrl = function(params, completionHandle
                 url += '&domains=' + encodeURIComponent(params.domains.join(','));
 
             if ((synonyms.length > 0) || (params.regions.length > 0) || (params.standards.length > 0)) {
-
                 url += '&q_internal=';
 
                 var s = '';
@@ -130,11 +129,24 @@ ApiController.prototype.getSearchDatasetsUrl = function(params, completionHandle
                 }
 
                 if (params.regions.length > 0) {
-
                     if (s.length > 0)
                         s += ' AND ';
 
-                    var regionNames = params.regions.map(function(region) { return region.name; });
+                    var regionNames = params.regions.map(function(region) {
+                        var name = region.name;
+
+                        if (region.type === 'place' || region.type === 'county') {
+                            return name.split(', ')[0];
+                        } else if (region.type === 'msa') {
+                            var words = name.split(' ');
+                            return words.slice(0, words.length - 3);
+                        } else {
+                            return name;
+                        }
+                    }).map(function(name) {
+                        return '"' + name + '"';
+                    });
+
                     s += '(' + regionNames.join(' OR ') + ')';
                 }
 
