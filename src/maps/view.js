@@ -49,10 +49,9 @@ class MapView {
         });
 
         const group = new L.featureGroup(selectedLayers);
-        console.log(map.getZoom());
         map.fitBounds(group.getBounds(), MapConstants.AUTO_ZOOM_OPTIONS);
 
-        if (selectedLayers.length === 1) {
+        if (this.regionType.type === 'choropleth' && selectedLayers.length === 1) {
             map.zoomOut(MapConstants.AUTO_ZOOM_OUT, MapConstants.AUTO_ZOOM_OPTIONS);
         }
     }
