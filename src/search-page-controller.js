@@ -1033,7 +1033,6 @@ class SearchPageController {
     }
 
     drawCitiesAndCountiesInState(region) {
-
         var controller = new ApiController();
         var citiesPromise = controller.getCitiesInState(region.id);
         var countiesPromise = controller.getCountiesInState(region.id);
@@ -1450,15 +1449,15 @@ class SearchPageController {
         var url = '/';
 
         if (typeof(regions) === 'string') {
-
-            url += regions.replace(/,/g, '').replace(/ /g, '_');
+            url += regions.replace(/ /g, '_');
         }
         else if (Array.isArray(regions)) {
 
             var regionNames = [];
 
             regionNames = regions.map(function(region) {
-                return region.replace(/,/g, '').replace(/ /g, '_');
+                return region
+                return region.replace(/ /g, '_');
             });
 
             url += regionNames.join('_vs_');
