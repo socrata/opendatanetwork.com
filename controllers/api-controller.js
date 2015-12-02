@@ -1,9 +1,14 @@
+'use strict';
+
 var CacheController = require('./cache-controller');
-var SynonymController = require('./synonym-controller');
+const Constants = require('./constants');
+const Synonyms = require('./synonyms');
 
 var moment = require('moment');
 var numeral = require('numeral');
 var request = require('request');
+var _ = require('lodash');
+var querystring = require('querystring');
 
 var baseCatalogUrl = 'http://api.us.socrata.com/api/catalog/v1';
 var cacheController = new CacheController();
@@ -13,8 +18,9 @@ var domainsUrl = baseCatalogUrl + '/domains';
 var maxDescriptionLength = 300;
 var rosterUrl = 'https://odn.data.socrata.com/resource/bdeb-mf9k/?$where={0}';
 var searchUrl = baseCatalogUrl;
-var synonymController = new SynonymController();
 var userAgent = 'www.opendatanetwork.com';
+
+const SYNONYMS = Synonyms.fromFile(Constants.SYNONYMS_FILE);
 
 module.exports = ApiController;
 
@@ -80,94 +86,42 @@ ApiController.prototype.getDomains = function(count, successHandler, errorHandle
         errorHandler);
 };
 
-ApiController.prototype.getSearchDatasetsUrl = function(params, completionHandler) {
-    console.log(params);
+ApiController.prototype.getSearchDatasetsUrl = function(requestParams, completionHandler) {
+    const querySynonyms = SYNONYMS.get(requestParams.q);
+    const vectorSynonyms = SYNONYMS.get(requestParams.vector.replace(/_/g, ' '));
+    const synonyms = _.unique(_.flatten([querySynonyms, vectorSynonyms]));
 
-    // Look to see if there are synonyms for the query parameter
-    //
-    synonymController.getSynonyms(params.q, function(querySynonyms) {
+    const regionNames = requestParams.regions.map(region => {
+        const name = region.name;
+        const type = region.type;
 
-        // Same for the vector
-        //
-        synonymController.getSynonyms(params.vector, function(vectorSynonyms) {
+        if (type === 'place' || type === 'county') {
+            return name.split(', ')[0];
+        } else if (type === 'msa') {
+            const words = name.split(' ');
+            return words.slice(0, words.length - 3);
+        } else {
+            return name;
+        }
+    }).map(name => `"${name}"`);
 
-            // Merge synonyms uniquely
-            //
-            var synonyms = [];
+    const allTerms = [synonyms, regionNames, requestParams.standards];
+    const query = allTerms
+        .filter(terms => terms.length > 0)
+        .map(terms => `(${terms.join(' OR ')})`)
+        .join(' AND ');
 
-            querySynonyms.forEach(function(item) {
-
-                if (synonyms.indexOf(item) < 0)
-                    synonyms.push(item);
-            });
-
-            vectorSynonyms.forEach(function(item) {
-
-                if (synonyms.indexOf(item) < 0)
-                    synonyms.push(item);
-            });
-
-            // Build the URL
-            //
-            var url = searchUrl +
-                '?offset=' + params.offset +
-                '&limit=' + params.limit;
-
-            if (params.categories.length > 0)
-                url += '&categories=' + encodeURIComponent(params.categories.join(','));
-
-            if (params.domains.length > 0)
-                url += '&domains=' + encodeURIComponent(params.domains.join(','));
-
-            if ((synonyms.length > 0) || (params.regions.length > 0) || (params.standards.length > 0)) {
-                url += '&q_internal=';
-
-                var s = '';
-
-                if (synonyms.length > 0) {
-                    s += '(' + synonyms.join(' OR ') + ')';
-                }
-
-                if (params.regions.length > 0) {
-                    if (s.length > 0)
-                        s += ' AND ';
-
-                    var regionNames = params.regions.map(function(region) {
-                        var name = region.name;
-
-                        if (region.type === 'place' || region.type === 'county') {
-                            return name.split(', ')[0];
-                        } else if (region.type === 'msa') {
-                            var words = name.split(' ');
-                            return words.slice(0, words.length - 3);
-                        } else {
-                            return name;
-                        }
-                    }).map(function(name) {
-                        return '"' + name + '"';
-                    });
-
-                    s += '(' + regionNames.join(' OR ') + ')';
-                }
-
-                if (params.standards.length > 0) {
-
-                    if (s.length > 0)
-                        s += ' AND ';
-
-                    s += '(' + params.standards.join(' OR ') + ')';
-                }
-
-                console.log(s);
-                url += encodeURIComponent(s);
-            }
-
-            url += '&only=' + params.only;
-
-            if (completionHandler)
-                completionHandler(url);
-        });
+    const categories = requestParams.categories || [];
+    const domains = requestParams.domains || [];
+    const allParams = _.extend({}, requestParams, {
+        categories: categories.join(','),
+        domains: domains.join(','),
+        q_internal: query,
     });
+    const params = _.omit(allParams, value => value === '' || value === []);
+
+    const url = `${Constants.CATALOG_URL}?${querystring.stringify(params)}`;
+    completionHandler(url);
 };
 
 // Private functions
@@ -228,9 +182,6 @@ function getCategoryGlyphString(result) {
 }
 
 function getFromApi(url, successHandler, errorHandler) {
-
-    console.log(url);
-
     request(
         {
             url: url,
@@ -238,20 +189,12 @@ function getFromApi(url, successHandler, errorHandler) {
         },
         function(err, resp) {
 
-            console.log('Get from api: ' + url);
-
             if (err) {
-
-                console.log('Could not connect to Socrata');
-
                 if (errorHandler) errorHandler();
                 return;
             }
 
             if (resp.statusCode != 200) {
-
-                console.log('Response: ' + resp.statusCode + ' ' + resp.body);
-
                 if (errorHandler) errorHandler();
                 return;
             }
