@@ -24,14 +24,14 @@ class MapTooltip {
         this.layer.bindPopup(this.popup);
 
         this.layer.on({
-            mouseover: () => this.open(),
+            mouseover: (e) => this.open(e),
             mouseout: () => this.close()
         });
     }
 
-    open() {
+    open(e) {
         if (!this.opened) {
-            this.layer.openPopup();
+            this.layer.openPopup(e.latlng);
             this.opened = true;
         }
     }

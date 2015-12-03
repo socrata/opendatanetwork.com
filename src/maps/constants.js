@@ -60,7 +60,7 @@ const MapConstants = {
 
     // http://leafletjs.com/reference.html#popup
     TOOLTIP_OPTIONS: {
-        offset: L.point(0, -10),
+        offset: L.point(0, -20),
         closeButton: false,
         closeOnClick: false
     },
