@@ -92,10 +92,21 @@ class MapView {
 
                 layer.setStyle(style);
 
+                const popup = L.popup()
+                    .setContent('hello')
+                    .setLatLng(layer.getBounds().getNorthEast());
+
+                layer.bindPopup(popup);
+
                 layer.on({
-                    mouseover: () => this.tooltip.showRegion(region),
-                    mouseout: () => this.tooltip.hide()
+                    mouseover: function() {
+                        this.openPopup();
+                    },
+                    mouseout: function() {
+                        this.closePopup();
+                    }
                 });
+
             }
         });
     }
