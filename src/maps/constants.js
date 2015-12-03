@@ -58,6 +58,11 @@ const MapConstants = {
         opacity: 1
     },
 
+    // http://leafletjs.com/reference.html#popup
+    TOOLTIP_OPTIONS: {
+        offset: L.point(0, -50)
+    },
+
     TOPOJSON_DIRECTORY: '/geo/',
     TOPOJSON_SUFFIX: '.topo.json',
 

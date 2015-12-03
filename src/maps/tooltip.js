@@ -3,10 +3,11 @@ class MapTooltip {
     constructor(region, layer) {
         this.region = region;
         this.layer = layer;
-        this.popup = L.popup()
+        this.popup = L.popup(MapConstants.TOOLTIP_OPTIONS)
             .setContent(this.content())
             .setLatLng(this.coordinates());
 
+        this.opened = false;
     }
 
     content() {
@@ -14,24 +15,30 @@ class MapTooltip {
     }
 
     coordinates() {
-        return this.layer.getBounds().getNorthEast();
+        return this.layer.getBounds().pad(2.0).getCenter();
     }
 
     listen() {
         this.layer.bindPopup(this.popup);
 
         this.layer.on({
-            mouseover: () =>  this.open(),
-            mouseout: () => this.close
+            mouseover: () => this.open(),
+            mouseout: () => this.close()
         });
     }
 
     open() {
-        this.layer.openPopup();
+        if (!this.opened) {
+            this.layer.openPopup();
+            this.opened = true;
+        }
     }
 
     close() {
-        this.layer.closePopup();
+        if (this.opened) {
+            if (this.layer.closePopup) this.layer.closePopup();
+            this.opened = false;
+        }
     }
 }
 
