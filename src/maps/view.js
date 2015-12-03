@@ -10,7 +10,6 @@ class MapView {
         this.features = features;
 
         this.legend = new LegendControl();
-        this.tooltip = new TooltipControl();
         this.variableControl = new VariableControl(source.variables, (variable, year) => {
             this.display(variable, year);
         });
@@ -30,7 +29,6 @@ class MapView {
         map.addLayer(baseLayer);
 
         map.addControl(this.legend);
-        map.addControl(this.tooltip);
         map.addControl(this.variableControl);
         if (MapConstants.ZOOM_CONTROL)
             map.addControl(this.zoomControl);
