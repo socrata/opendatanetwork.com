@@ -31,14 +31,15 @@ class MapTooltip {
 
     open(e) {
         if (!this.opened) {
-            this.layer.openPopup(e.latlng);
             this.opened = true;
+            this.layer.openPopup(e.latlng);
         }
     }
 
     close() {
         if (this.opened) {
             this.opened = false;
+            if (this.layer.closePopup) this.layer.closePopup();
         }
     }
 }
