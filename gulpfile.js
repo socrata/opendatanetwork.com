@@ -24,10 +24,11 @@ var mapScripts = [
     'src/maps/scales.js',
     'src/maps/constants.js',
     'src/maps/model.js',
-    'src/maps/view.js',
+    'src/maps/tooltip.js',
     'src/maps/legend-control.js',
     'src/maps/tooltip-control.js',
     'src/maps/variable-control.js',
+    'src/maps/view.js',
     'src/maps/format.js',
     'src/data/map-sources.js'
 ];

@@ -96,17 +96,8 @@ class MapView {
                     .setContent('hello')
                     .setLatLng(layer.getBounds().getNorthEast());
 
-                layer.bindPopup(popup);
-
-                layer.on({
-                    mouseover: function() {
-                        this.openPopup();
-                    },
-                    mouseout: function() {
-                        this.closePopup();
-                    }
-                });
-
+                const tooltip = new MapTooltip(region, layer);
+                tooltip.listen();
             }
         });
     }

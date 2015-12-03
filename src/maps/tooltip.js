@@ -1,36 +1,37 @@
 
 class MapTooltip {
-    constructor(container) {
-        this.container = container
-            .append('div')
-            .attr('class', 'tooltip');
+    constructor(region, layer) {
+        this.region = region;
+        this.layer = layer;
+        this.popup = L.popup()
+            .setContent(this.content())
+            .setLatLng(this.coordinates());
 
-        this.name = this.container
-            .append('div')
-            .attr('class', 'name');
-
-        this.value = this.container
-            .append('div')
-            .attr('class', 'value');
     }
 
-    show(name, value) {
-        this.name.text(name);
-        this.value.text(value);
-
-        this.unhide();
+    content() {
+        return `${this.region.name}`;
     }
 
-    showRegion(region) {
-        this.show(region.name, `${region.valueName}: ${region.valueFormatted}`);
+    coordinates() {
+        return this.layer.getBounds().getNorthEast();
     }
 
-    hide() {
-        console.log(this);
-        this.container.style('display', 'none');
+    listen() {
+        this.layer.bindPopup(this.popup);
+
+        this.layer.on({
+            mouseover: () =>  this.open(),
+            mouseout: () => this.close
+        });
     }
 
-    unhide() {
-        this.container.style('display', 'inline');
+    open() {
+        this.layer.openPopup();
+    }
+
+    close() {
+        this.layer.closePopup();
     }
 }
+
