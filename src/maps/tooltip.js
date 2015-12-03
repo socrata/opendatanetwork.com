@@ -36,7 +36,6 @@ class MapTooltip {
 
     close() {
         if (this.opened) {
-            if (this.layer.closePopup) this.layer.closePopup();
             this.opened = false;
         }
     }
