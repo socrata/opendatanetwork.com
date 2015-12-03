@@ -8,6 +8,7 @@
     "express": "^4.9.0",
     "helmet": "^0.4.1",
     "lodash": "3.10.1",
+    "htmlencode": "0.0.4",
     "moment": "^2.10.2",
     "node-cache": "^3.0.0",
     "numeral": "^1.5.3",

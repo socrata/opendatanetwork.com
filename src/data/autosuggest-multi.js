@@ -14,7 +14,7 @@ function multiComplete(inputSelector, resultSelector) {
             fxf: 'fpum-bjbr',
             column: 'encoded',
             encoded: ['domain', 'fxf'],
-            select: option => navigate(`http://${option.domain}/dataset/${option.fxf}`),
+            select: option => navigate(`/dataset/${option.domain}/${option.fxf}`),
             show: (selection, option) => {
                 selection.append('span')
                     .attr('class', 'name')
@@ -32,14 +32,6 @@ function multiComplete(inputSelector, resultSelector) {
             encoded: ['id', 'type', 'population'],
             select: option => {
                 navigate(`/${option.text.replace(/ /g, '_')}`);
-            },
-            show: (selection, option) => {
-                selection.append('span')
-                    .attr('class', 'name')
-                    .text(option.text)
-                    .append('span')
-                    .attr('id', 'tag')
-                    .text(option.type);
             },
             sort: option => -parseFloat(option.population)
         },

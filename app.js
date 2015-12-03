@@ -55,6 +55,7 @@ app.get('/join-open-data-network/complete', renderController.renderJoinOpenDataN
 app.get('/join-open-data-network', renderController.renderJoinOpenDataNetwork);
 app.get('/search', renderController.renderSearchPage);
 app.get('/search/search-results', renderController.renderSearchResults);
+app.get('/dataset/:domain/:id', renderController.renderDatasetPage);
 app.get('/:region', renderController.renderSearchPage);
 app.get('/:region/search-results', renderController.renderSearchResults);
 app.get('/:region/:vector', renderController.renderSearchWithVectorPage);
