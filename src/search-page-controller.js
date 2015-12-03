@@ -184,6 +184,8 @@ class SearchPageController {
             controller.getDatasetSummary(domain, id)
                 .then(result => {
 
+                    window.history.pushState(null, '', '/dataset/' + domain + '/' + id);
+
                     DatasetPopup.show({
                         apiLink : $(this).attr('dataset-api-link'),
                         description: result.description || '',

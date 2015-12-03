@@ -32,6 +32,9 @@ class DatasetPopup {
         }
 
         $.featherlight('#dataset-lightbox');
+
+        $.featherlight.defaults.afterClose = function() { 
+            window.history.back();
+        }
     }
 }
-

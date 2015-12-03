@@ -2,7 +2,9 @@ var ApiController = require('./api-controller');
 var CategoryController = require('./category-controller');
 var TagController = require('./tag-controller');
 
+var htmlencode = require('htmlencode');
 var path = require('path');
+var moment = require('moment');
 
 var apiController = new ApiController();
 var categoryController = new CategoryController();
@@ -27,6 +29,47 @@ RenderController.prototype.renderCategoriesJson = function(req, res) {
             res.send(JSON.stringify(allCategoryResults));
         });
     });
+};
+
+// Dataset
+//
+RenderController.prototype.renderDatasetPage = function(req, res) {
+
+    apiController.getDatasetSummary(
+        req.params.domain,
+        req.params.id,
+        function(dataset) {
+
+            RenderController.prototype.getSearchParameters(req, function(params) {
+
+                res.render(
+                    'dataset.ejs',
+                    {
+                        css : [
+                            '/styles/dataset.css'
+                        ],
+                        dataset: {
+                            descriptionHtml : htmlEncode(dataset.description).replace('\n', '<br>'),
+                            domain : req.params.domain,
+                            id : req.params.id,
+                            name : dataset.name,
+                            tags : dataset.tags || [],
+                            updatedAtString : moment(new Date(dataset.viewLastModified * 1000)).format('D MMM YYYY')
+                        },
+                        params : params,
+                        scripts : [
+                            '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
+                            '/lib/third-party/colorbrewer.min.js',
+                            '/lib/third-party/d3.min.js',
+                            '/lib/third-party/d3.promise.min.js',
+                            '/lib/third-party/lodash.min.js',
+                            '/lib/search.min.js',
+                        ],
+                        searchPath : '/search',
+                        title : 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.'
+                    });
+            }, function() { renderErrorPage(req, res); });
+        });
 };
 
 // Home
@@ -143,7 +186,7 @@ RenderController.prototype.renderSearchResults = function(req, res) {
             }
 
             res.render(
-                (params.regions.length == 0) ? 'search-results-regular.ejs' : 'search-results-compact.ejs',
+                (params.regions.length == 0) ? '_search-results-regular.ejs' : '_search-results-compact.ejs',
                 {
                     css : [],
                     scripts : [],
@@ -187,6 +230,7 @@ function _renderSearchPage(req, res, params) {
                                         '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
                                         '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
                                         '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
+                                        '/lib/third-party/browser-polyfill.min.js',
                                         '/lib/third-party/colorbrewer.min.js',
                                         '/lib/third-party/d3.min.js',
                                         '/lib/third-party/d3.promise.min.js',
@@ -357,6 +401,11 @@ function getNormalizedArrayFromDelimitedString(s) {
 
     return parts;
 };
+
+function htmlEncode(s) {
+
+    return s ? htmlencode.htmlEncode(s) : '';
+}
 
 function renderErrorPage(req, res) {
 
