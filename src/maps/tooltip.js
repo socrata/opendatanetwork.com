@@ -11,7 +11,8 @@ class MapTooltip {
     }
 
     content() {
-        return `${this.region.name}`;
+        return `<span class='name'>${this.region.name}</span>\
+                ${this.region.valueName}: ${this.region.valueFormatted}`;
     }
 
     coordinates() {
