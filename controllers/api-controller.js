@@ -8,6 +8,7 @@ var request = require('request');
 var baseCatalogUrl = 'http://api.us.socrata.com/api/catalog/v1';
 var cacheController = new CacheController();
 var categoriesUrl = baseCatalogUrl + '/categories';
+var datasetSummaryUrl = 'https://{0}/api/views/{1}.json';
 var defaultSearchResultCount = 10;
 var domainsUrl = baseCatalogUrl + '/domains';
 var maxDescriptionLength = 300;
@@ -23,6 +24,12 @@ function ApiController() {
 
 // Public methods
 //
+ApiController.prototype.getDatasetSummary = function(domain, id, successHandler, errorHandler) {
+
+    var url = datasetSummaryUrl.format(domain, id);
+    getFromApi(url, successHandler, errorHandler);
+}
+
 ApiController.prototype.searchDatasets = function(params, successHandler, errorHandler) {
 
     ApiController.prototype.getSearchDatasetsUrl(params, function(url) {

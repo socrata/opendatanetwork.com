@@ -1,5 +1,5 @@
-<% include header %>
-<% include search-bar %>
+<% include _header %>
+<% include _search-bar %>
 
 <script>var _params = <%- JSON.stringify(params) %>;</script>
 <% if (params.debug) { %><script>console.log(decodeURIComponent('<%- searchDatasetsUrl %>'));</script><% } %>
@@ -65,7 +65,7 @@
 
     <div class="search-results-regular-column">
         <ul class="datasets">
-<% include search-results-regular %>
+<% include _search-results-regular %>
         </ul>
     </div>
 
@@ -73,7 +73,7 @@
 
     <div class="search-results-compact-column">
         <ul class="datasets">
-<% include search-results-compact %>
+<% include _search-results-compact %>
         </ul>
     </div>
 
@@ -249,7 +249,7 @@
     </div>
 </div>
 
-<% include google-analytics %>
+<% include _google-analytics %>
 
 </body>
 </html>
