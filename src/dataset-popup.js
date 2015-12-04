@@ -8,7 +8,7 @@ class DatasetPopup {
 
         $('#dataset-lightbox h1').text(name);
         $('#dataset-lightbox .publisher').text(domain);
-        $('#dataset-lightbox .publisher').attr('href', `http://${domain}`);
+        $('#dataset-lightbox .publisher').attr('href', `https://${domain}`);
         $('#dataset-lightbox .tags span').text(tags);
 
         if (description.length === 0 && tags.length === 0) {
@@ -33,8 +33,8 @@ class DatasetPopup {
 
         $.featherlight('#dataset-lightbox');
 
-        $.featherlight.defaults.afterClose = function() { 
+        $.featherlight.defaults.afterClose = function() {
             window.history.back();
-        }
+        };
     }
 }
