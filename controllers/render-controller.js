@@ -295,26 +295,25 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
     //
     if (query.debug != null) params.debug = 1;
 
-    // Regions are in the URL path segment, not a query parameter
+    // Region ids are in the URL path segment, not a query parameter
     //
-    if ((req.params.region == null) || (req.params.region.length == 0)) {
+    if ((req.params.regionIds == null) || (req.params.regionIds.length == 0)) {
 
         if (completionHandler) completionHandler(params);
         return;
     }
 
-    var parts = req.params.region.split2('_vs_');
-    var regions = parts.map(function(region) { return region.replace(/_/g, ' ') });
+    var regionIds = req.params.regionIds.split2('-');
 
-    apiController.getAutoSuggestedRegions(regions, function(results) {
+    apiController.getAutoSuggestedRegions(regionIds, function(results) {
 
         if (results.length > 0) {
 
             var orderedRegions = [];
 
-            for (var i in regions) {
+            for (var i in regionIds) {
 
-                var region = getRegionFromResultsByAutoCompleteName(results, regions[i]);
+                var region = getRegionFromResultsById(results, regionIds[i]);
 
                 if (region != null)
                     orderedRegions.push(region);
@@ -379,13 +378,13 @@ function englishJoin(list) {
     return s;
 }
 
-function getRegionFromResultsByAutoCompleteName(results, regionAutoCompleteName) {
+function getRegionFromResultsById(results, regionId) {
 
     for (var i in results) {
 
         var result = results[i];
 
-        if (regionAutoCompleteName == result.name) {
+        if (regionId == result.id) {
 
             return {
                 id : result.id,

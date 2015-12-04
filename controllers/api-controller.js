@@ -54,13 +54,11 @@ ApiController.prototype.searchDatasets = function(params, successHandler, errorH
     });
 }
 
-ApiController.prototype.getAutoSuggestedRegions = function(names, successHandler, errorHandler) {
+ApiController.prototype.getAutoSuggestedRegions = function(regionIds, successHandler, errorHandler) {
 
-    var pairs = names.map(function(name) {
-        return "name='" + encodeURIComponent(name) + "'";
-    });
+    const pairs = regionIds.map(regionId => 'id=\'' + regionId + '\'');
+    const url = rosterUrl.format(pairs.join(' OR '));
 
-    var url = rosterUrl.format(pairs.join(' OR '));
     getFromApi(url, successHandler, errorHandler);
 }
 

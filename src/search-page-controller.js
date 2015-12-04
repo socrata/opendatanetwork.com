@@ -121,10 +121,12 @@ class SearchPageController {
         // Add location
         //
         function selectRegion(option) {
-            RegionLookup.byID(option.id).then(region => {
-                self.setAutoSuggestedRegion(region.name, false);
-                self.navigate();
-            }, error => { throw error; });
+
+            RegionLookup.byID(option.id)
+                .then(region => {
+                    self.setAutoSuggestedRegion({ id : region.id, name : region.name }, false);
+                    self.navigate();
+                }, error => { throw error; });
         }
 
         const sources = regionsWithData(this.params.vector, selectRegion);
@@ -1242,7 +1244,7 @@ class SearchPageController {
                 continue;
 
             s += '<li><a href="';
-            s += this.getSearchPageForRegionsAndVectorUrl(data[i].child_name) + '">';
+            s += this.getSearchPageForRegionsAndVectorUrl([data[i].child_id], [data[i].child_name]) + '">';
             s += data[i].child_name;
             s += '</a></li>';
 
@@ -1298,7 +1300,7 @@ class SearchPageController {
                 .enter()
                 .append('li')
                 .append('a')
-                .on('click', region => onClickRegion(region.name))
+                .on('click', region => onClickRegion({ id : region.id, name : region.name }))
                 .text(region => region.name)
                 .append('i')
                 .attr('class', 'fa fa-plus');
@@ -1482,27 +1484,25 @@ class SearchPageController {
         });
     }
 
-    getSearchPageForRegionsAndVectorUrl(regions, vector, searchResults, queryString) {
+    getSearchPageForRegionsAndVectorUrl(regionIds, regionNames, vector, searchResults, queryString) {
 
-        var url = '/';
+        var url = '';
 
-        if (typeof(regions) === 'string') {
-            url += regions.replace(/ /g, '_');
-        }
-        else if (Array.isArray(regions)) {
+        if (regionIds && (regionIds.length > 0)) {
 
-            var regionNames = [];
+            url += '/region/' + regionIds.join('-');
 
-            regionNames = regions.map(function(region) {
-                return region
-                return region.replace(/ /g, '_');
-            });
+            if (regionNames && (regionNames.length > 0)) {
 
-            url += regionNames.join('_vs_');
+                const parts = regionNames.map(regionName => regionName.replace(/ /g, '_').replace(/,/g, ''))
+                url += '/' + parts.join('-');
+            }
+            else
+                url += '/-';
         }
         else {
 
-            url += 'search';
+            url += '/search';
         }
 
         if (vector)
@@ -1521,19 +1521,26 @@ class SearchPageController {
 
         if ((this.params.regions.length > 0) || this.params.autoSuggestedRegion) {
 
+            var regionIds = [];
             var regionNames = [];
 
-            if (this.params.resetRegions == false)
+            if (this.params.resetRegions == false) { 
+
+                regionIds = this.params.regions.map(region => region.id);
                 regionNames = this.params.regions.map(region => region.name);
+            }
 
-            if (this.params.autoSuggestedRegion)
-                regionNames.push(this.params.autoSuggestedRegion);
+            if (this.params.autoSuggestedRegion) {
 
-            return this.getSearchPageForRegionsAndVectorUrl(regionNames, this.params.vector, searchResults, this.getSearchQueryString());
+                regionIds.push(this.params.autoSuggestedRegion.id);
+                regionNames.push(this.params.autoSuggestedRegion.name);
+            }
+
+            return this.getSearchPageForRegionsAndVectorUrl(regionIds, regionNames, this.params.vector, searchResults, this.getSearchQueryString());
         }
         else {
 
-            return this.getSearchPageForRegionsAndVectorUrl(null, this.params.vector, searchResults, this.getSearchQueryString());
+            return this.getSearchPageForRegionsAndVectorUrl(null, null, this.params.vector, searchResults, this.getSearchQueryString());
         }
     }
 
@@ -1544,24 +1551,27 @@ class SearchPageController {
 
     getSearchQueryString() {
 
-        var url = '?q=' + encodeURIComponent(this.params.q);
+        var parts = [];
+
+        if (this.params.q.length > 0) 
+            parts.push('q=' + encodeURIComponent(this.params.q));
 
         if (this.params.page > 1)
-            url += '&page=' + this.params.page;
+            parts.push('page=' + this.params.page);
 
         if (this.params.categories.length > 0)
-            url += '&categories=' + encodeURIComponent(this.params.categories.join(','));
+            parts.push('categories=' + encodeURIComponent(this.params.categories.join(',')));
 
         if (this.params.domains.length > 0)
-            url += '&domains=' + encodeURIComponent(this.params.domains.join(','));
+            parts.push('domains=' + encodeURIComponent(this.params.domains.join(',')));
 
         if (this.params.standards.length > 0)
-            url += '&standards=' + encodeURIComponent(this.params.standards.join(','));
+            parts.push('standards=' + encodeURIComponent(this.params.standards.join(',')));
 
         if (this.params.debug)
-            url += '&debug=';
+            parts.push('debug=');
 
-        return url;
+        return (parts.length > 0) ? '?' + parts.join('&') : '';
     }
 
     incrementPage() {

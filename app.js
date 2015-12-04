@@ -55,11 +55,13 @@ app.get('/join-open-data-network/complete', renderController.renderJoinOpenDataN
 app.get('/join-open-data-network', renderController.renderJoinOpenDataNetwork);
 app.get('/search', renderController.renderSearchPage);
 app.get('/search/search-results', renderController.renderSearchResults);
+app.get('/search/:vector', renderController.renderSearchPage);
 app.get('/dataset/:domain/:id', renderController.renderDatasetPage);
-app.get('/:region', renderController.renderSearchPage);
-app.get('/:region/search-results', renderController.renderSearchResults);
-app.get('/:region/:vector', renderController.renderSearchWithVectorPage);
-app.get('/:region/:vector/search-results', renderController.renderSearchResults);
+app.get('/region/:regionIds', renderController.renderSearchPage);
+app.get('/region/:regionIds/:regionNames', renderController.renderSearchPage);
+app.get('/region/:regionIds/:regionNames/search-results', renderController.renderSearchResults);
+app.get('/region/:regionIds/:regionNames/:vector', renderController.renderSearchWithVectorPage);
+app.get('/region/:regionIds/:regionNames/:vector/search-results', renderController.renderSearchResults);
 
 // Start listening
 //
