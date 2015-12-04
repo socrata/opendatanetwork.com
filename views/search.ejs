@@ -80,13 +80,9 @@
     <div class="charts-column">
 
         <ul class="chart-tabs">
-            <li<%- getSelectedVector(['','population']) %>><a href="<%= getSearchPageUrl('population') %>">Population</a></li>
-            <li<%- getSelectedVector(['earnings']) %>><a href="<%= getSearchPageUrl('earnings') %>">Earnings</a></li>
-            <li<%- getSelectedVector(['education']) %>><a href="<%= getSearchPageUrl('education') %>">Education</a></li>
-            <li<%- getSelectedVector(['occupations']) %>><a href="<%= getSearchPageUrl('occupations') %>">Occupations</a></li>
-            <li<%- getSelectedVector(['gdp']) %>><a href="<%= getSearchPageUrl('gdp') %>">GDP</a></li>
-            <li<%- getSelectedVector(['cost_of_living']) %>><a href="<%= getSearchPageUrl('cost_of_living') %>">Cost of Living</a></li>
-            <li<%- getSelectedVector(['health']) %>><a href="<%= getSearchPageUrl('health') %>">Health</a></li>
+          <% sources.forEach(function(source) { %>
+            <li<%- getSelectedVector(source) %>><a href="<%= getSearchPageUrl(source) %>"><%= getTabTitle(source) %></a></li>
+          <% }); %>
         </ul>
 
         <div class="charts">
@@ -104,7 +100,6 @@
                 <br />
                 Note: ODN datasets and APIs may differ in format from the original data in order to provide a user-friendly experience on this site.
             </label>
-
 
 <% } else if (params.vector == 'earnings') { %>
 
@@ -255,6 +250,21 @@
 </html>
 
 <%
+function getTabTitle(source) {
+
+    switch (source) {
+
+        case 'population': return 'Population';
+        case 'earnings': return 'Earnings';
+        case 'education': return 'Education';
+        case 'occupations': return 'Occupations';
+        case 'gdp': return 'GDP';
+        case 'cost_of_living': return 'Cost of Living';
+        case 'health': return 'Health';
+        default: return '';
+    }
+}
+
 function getSearchPageUrl(vector) {
 
     var url;
@@ -304,14 +314,11 @@ function getSearchQueryString() {
     return url;
 };
 
-function getSelectedVector(vectors) {
+function getSelectedVector(vector) {
 
-    for (var i in vectors) {
-
-        if (vectors[i] == params.vector)
-            return ' class="selected"';
-    }
-
-    return '';
+    if ((params.vector == vector) || ((params.vector == '') && (vector == 'population')))
+        return ' class="selected"';
+    else 
+        return '';
 }
 %>
