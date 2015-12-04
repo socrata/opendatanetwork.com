@@ -2,6 +2,7 @@
 class SearchPageController {
 
     constructor(params) {
+
         this.MAP_COLOR_SCALE = colorbrewer.RdYlBu[9],
         this.MAP_INITIAL_ZOOM = 10.0;
         this.MAP_RADIUS_SCALE = [500, 2000];
@@ -11,7 +12,7 @@ class SearchPageController {
         this.fetchedAll = false;
         this.mostSimilar = [];
 
-        var self = this;
+        const self = this;
 
         // Refine menus
         //
@@ -35,7 +36,7 @@ class SearchPageController {
 
         $('#refine-menu-categories-view-more').click(function() {
 
-            var controller = new ApiController();
+            const controller = new ApiController();
 
             controller.getCategories()
                 .then(data => {
@@ -58,7 +59,7 @@ class SearchPageController {
 
         $('#refine-menu-domains-view-more').click(function() {
 
-            var controller = new ApiController();
+            const controller = new ApiController();
 
             controller.getDomains()
                 .then(data => {
@@ -117,7 +118,6 @@ class SearchPageController {
 
         }).scroll();
 
-
         // Add location
         //
         function selectRegion(option) {
@@ -129,6 +129,7 @@ class SearchPageController {
 
         const sources = regionsWithData(this.params.vector, selectRegion);
         const autosuggest = new Autosuggest('.add-region-results', sources);
+
         autosuggest.listen('.add-region-input');
 
         $('.add-region .fa-plus').click(function() {
@@ -151,8 +152,8 @@ class SearchPageController {
 
     // Public methods
     //
-
     drawMap(source) {
+
         const selector = '#map';
         const regions = this.params.regions;
 
@@ -162,7 +163,7 @@ class SearchPageController {
 
     attachCategoriesClickHandlers() {
 
-        var self = this;
+        const self = this;
 
         $('#refine-menu-categories li:not(.refine-view-more)').click(function() {
 
@@ -202,7 +203,7 @@ class SearchPageController {
 
     attachDomainsClickHandlers() {
 
-        var self = this;
+        const self = this;
 
         $('#refine-menu-domains li:not(.refine-view-more)').click(function() {
 
@@ -215,7 +216,7 @@ class SearchPageController {
 
     attachStandardsClickHandlers() {
 
-        var self = this;
+        const self = this;
 
         $('#refine-menu-standards li').click(function() {
 
@@ -1462,7 +1463,7 @@ class SearchPageController {
         this.fetching = true;
         this.incrementPage();
 
-        var self = this;
+        const self = this;
 
         $.ajax(this.getSearchResultsUrl()).done(function(data, textStatus, jqXHR) {
 
