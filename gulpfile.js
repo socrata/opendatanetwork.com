@@ -18,6 +18,8 @@ var baseScripts = [
     'src/autocomplete.js',
     'src/multi-complete.js',
     'src/source-complete.js',
+    'src/data/sources.js',
+    'src/sources.js',
 ];
 
 var mapScripts = [
