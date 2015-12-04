@@ -1,14 +1,18 @@
 var ApiController = require('./api-controller');
 var CategoryController = require('./category-controller');
 var TagController = require('./tag-controller');
+var Sources = require('./sources');
 
+var _ = require('lodash');
 var htmlencode = require('htmlencode');
 var path = require('path');
 var moment = require('moment');
 
 var apiController = new ApiController();
 var categoryController = new CategoryController();
+var sources = Sources.getSources();
 var tagController = new TagController();
+
 var defaultSearchResultCount = 10;
 
 module.exports = RenderController;
@@ -161,6 +165,14 @@ RenderController.prototype.renderSearchWithVectorPage = function(req, res) {
 
         RenderController.prototype.getSearchParameters(req, function(params) {
 
+            // If the vector is unsupported, just redirect to the root
+            //
+            if (!_.includes(sources.forRegions(params.regions), req.params.vector)) {
+
+                res.redirect(301, '/');
+                return;
+            }
+
             _renderSearchPage(req, res, params);
         });
     }
@@ -242,6 +254,7 @@ function _renderSearchPage(req, res, params) {
                                     searchDatasetsUrl : searchDatasetsUrl,
                                     searchPath : req.path,
                                     searchResults : results,
+                                    sources : sources.forRegions(params.regions),
                                     title : getSearchPageTitle(params)
                                 });
                         },
