@@ -39,7 +39,6 @@ var autosuggestScripts = [
     'src/autosuggest/autosuggest-source.js',
     'src/autosuggest/autosuggest-results.js',
     'src/autosuggest/autosuggest.js',
-    'src/dataset-popup.js',
     'src/data/autosuggest-multi.js',
     'src/data/autosuggest-sources.js'
 ];

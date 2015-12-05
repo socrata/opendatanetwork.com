@@ -2,7 +2,7 @@
     <li>
         <a class="api-link" href="http://dev.socrata.com/foundry/#/<%= result.metadata.domain %>/<%= result.resource.nbe_fxf %>">API</a>
         <i class="fa <%= result.classification.categoryGlyphString %>"></i>
-        <h2><a href="<%= result.link %>"><%= result.resource.name %></a></h2>
+        <h2><a href="/dataset/<%= result.metadata.domain %>/<%= result.resource.id %>"><%= result.resource.name %></a></h2>
         <a href="http://<%= result.metadata.domain %>"><%= result.metadata.domain %></a> 
         <span>| Last Updated <%= result.resource.updatedAtString.toUpperCase() %></span>
         <p><%= result.resource.description %></p>

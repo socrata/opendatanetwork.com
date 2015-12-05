@@ -5,7 +5,8 @@ $dark-gray-background-color: #e5e9eb
 $dark-gray-border-color: #bbbbbb
 $dark-gray-text-color: #7f8c8d
 $gray-background-color: #ecf0f1
-$gray-border-color: #d4d9dc
+$bottom-gray-border-color: #d4d9dc
+$gray-border-color: #d1d1d1
 $gray-text-color: #bdc3c7
 $orange-color: #ee3b3b
 
@@ -24,14 +25,15 @@ body
 
 .main-section
     background-color: $gray-background-color
-    border-bottom: 1px solid $gray-border-color
+    border-bottom: 1px solid $bottom-gray-border-color
     box-sizing: border-box
     display: table
-    padding: 120px 50px 60px
+    padding: 90px 30px 30px
     width: 100%
 
     .dataset-container
         background-color: white
+        border: 1px solid $gray-text-color
         color: $dark-gray-text-color
         display: table-cell
         font-family: $fonts

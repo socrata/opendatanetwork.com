@@ -5,10 +5,6 @@ $(document).ready(function() {
     //
     var searchPageController = new SearchPageController(_params);
 
-    // Dataset popup
-    //
-    searchPageController.attachDatasetClickHandlers();
-
     // Main search box
     //
     multiComplete('#q', '.region-list').listen();

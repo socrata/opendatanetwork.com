@@ -174,35 +174,6 @@ class SearchPageController {
         });
     }
 
-    attachDatasetClickHandlers() {
-
-        const self = this;
-
-        $('.datasets .name').unbind('click').click(function() {
-
-            const controller = new ApiController();
-            const domain = $(this).attr('dataset-publisher');
-            const id = $(this).attr('dataset-id');
-
-            controller.getDatasetSummary(domain, id)
-                .then(result => {
-
-                    window.history.pushState(null, '', '/dataset/' + domain + '/' + id);
-
-                    DatasetPopup.show({
-                        apiLink : $(this).attr('dataset-api-link'),
-                        description: result.description || '',
-                        domain : $(this).attr('dataset-publisher'),
-                        id : $(this).attr('dataset-id'),
-                        lastUpdated : $(this).attr('dataset-last-updated'),
-                        link : $(this).attr('dataset-link'),
-                        name : $(this).text(),
-                        tags : $(this).attr('dataset-tags'),
-                    });
-                });
-        });
-    }
-
     attachDomainsClickHandlers() {
 
         const self = this;
@@ -1479,8 +1450,6 @@ class SearchPageController {
 
             $('.datasets').append(data);
             self.fetching = false;
-
-            self.attachDatasetClickHandlers();
         });
     }
 

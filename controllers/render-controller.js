@@ -96,7 +96,6 @@ RenderController.prototype.renderHomePage = function(req, res) {
                         allCategoryResults : allCategoryResults,
                         css : [
                             '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css',
-                            '/styles/third-party/featherlight.min.css',
                             '/styles/home.css',
                             '/styles/main.css'
                         ],
@@ -111,7 +110,6 @@ RenderController.prototype.renderHomePage = function(req, res) {
                             '/lib/third-party/d3.min.js',
                             '/lib/third-party/d3.promise.min.js',
                             '/lib/third-party/lodash.min.js',
-                            '/lib/third-party/featherlight.min.js',
                             '/lib/home.min.js'
                         ],
                         searchPath : '/search',
@@ -231,7 +229,6 @@ function _renderSearchPage(req, res, params) {
                                     categoryResults : categoryResults,
                                     css : [
                                         '/styles/third-party/leaflet.min.css',
-                                        '/styles/third-party/featherlight.min.css',
                                         '/styles/search.css',
                                         '/styles/maps.css',
                                         '/styles/main.css'
@@ -247,7 +244,6 @@ function _renderSearchPage(req, res, params) {
                                         '/lib/third-party/colorbrewer.min.js',
                                         '/lib/third-party/d3.min.js',
                                         '/lib/third-party/d3.promise.min.js',
-                                        '/lib/third-party/featherlight.min.js',
                                         '/lib/third-party/leaflet-omnivore.min.js',
                                         '/lib/third-party/lodash.min.js',
                                         '/lib/search.min.js'
