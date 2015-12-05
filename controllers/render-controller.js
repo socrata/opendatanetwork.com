@@ -1,3 +1,5 @@
+var _ = require('underscore');
+
 var ApiController = require('./api-controller');
 var CategoryController = require('./category-controller');
 var TagController = require('./tag-controller');
@@ -39,37 +41,64 @@ RenderController.prototype.renderDatasetPage = function(req, res) {
         req.params.domain,
         req.params.id,
         function(dataset) {
+          apiController.getStandardSchemas(
+              req.params.domain,
+              req.params.id,
+              function(schemas) {
+                  // Hilarious bug fix. When nothing matches, it returns "[]" instead of an actual empty array
+                  if(schemas.applied_schemas == "[]") {
+                    schemas.applied_schemas = [];
+                  }
 
-            RenderController.prototype.getSearchParameters(req, function(params) {
+                  var mapped_schemas = _.map(schemas.applied_schemas, function(sch, idx) {
+                    var uid = sch.url.match(/(\w{4}-\w{4})$/)[1]
+                    var query = _.collect(sch.query, function(v,k) { return k + "=" + v; }).join("&");
+                    return {
+                      name: sch.name,
+                      description: sch.description,
+                      uid: uid,
+                      query: 'http://' + req.params.domain + '/resource/' + uid +
+                        '?' + query,
+                      standard: sch.standardIds[0],
+                      required_columns: sch.columns,
+                      opt_columns: sch.optColumns
+                    }
+                  });
 
-                res.render(
-                    'dataset.ejs',
-                    {
-                        css : [
-                            '/styles/dataset.css'
-                        ],
-                        dataset: {
-                            descriptionHtml : htmlEncode(dataset.description).replace('\n', '<br>'),
-                            domain : req.params.domain,
-                            id : req.params.id,
-                            name : dataset.name,
-                            tags : dataset.tags || [],
-                            updatedAtString : moment(new Date(dataset.viewLastModified * 1000)).format('D MMM YYYY')
-                        },
-                        params : params,
-                        scripts : [
-                            '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
-                            '/lib/third-party/colorbrewer.min.js',
-                            '/lib/third-party/d3.min.js',
-                            '/lib/third-party/d3.promise.min.js',
-                            '/lib/third-party/lodash.min.js',
-                            '/lib/search.min.js',
-                        ],
-                        searchPath : '/search',
-                        title : 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.'
-                    });
-            }, function() { renderErrorPage(req, res); });
-        });
+                  RenderController.prototype.getSearchParameters(req, function(params) {
+
+                      res.render(
+                          'dataset.ejs',
+                          {
+                              css : [
+                                  '/styles/dataset.css'
+                              ],
+                              dataset: {
+                                  descriptionHtml : htmlEncode(dataset.description).replace('\n', '<br>'),
+                                  domain : req.params.domain,
+                                  id : req.params.id,
+                                  name : dataset.name,
+                                  tags : dataset.tags || [],
+                                  updatedAtString : moment(new Date(dataset.viewLastModified * 1000)).format('D MMM YYYY')
+                              },
+                              schemas: mapped_schemas,
+                              params : params,
+                              scripts : [
+                                  '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
+                                  '/lib/third-party/colorbrewer.min.js',
+                                  '/lib/third-party/d3.min.js',
+                                  '/lib/third-party/d3.promise.min.js',
+                                  '/lib/third-party/lodash.min.js',
+                                  '/lib/search.min.js',
+                              ],
+                              searchPath : '/search',
+                              title : 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.'
+                          }
+                      ); // render
+                  },
+                  function() { renderErrorPage(req, res); }); // getSearchParameters
+            }); // getStandardSchemas
+      }); // getdatasetsummary
 };
 
 // Home

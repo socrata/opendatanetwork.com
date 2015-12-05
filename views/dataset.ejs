@@ -20,7 +20,33 @@
         </div>
 <% } %>
     </div>
-    <div class="right-container"><!-- Add stuff here.  Change width in dataset.sass. --></div>
+    <div class="right-container">
+        <h2>Standard Schemas</h2>
+
+        <p>Together with the open data community, Socrata has mapped many datasets to open standards in order to provide more consistency between similar classes of data from different sources. Interested in participating? <a href="https://github.com/open-data-network/schema-mappings">Learn more and contribute!</a></p>
+
+        <% schemas.forEach(function(schema) { %>
+            <div class="schema">
+                <h3><%= schema.name %></h3>
+                <p><%= schema.description %></p>
+                <p>The below <a href="https://dev.socrata.com/docs/queries.html">SoQL query</a> automatically maps this dataset into the <%= schema.name %> standard. You can also augment it with other SoQL filters and parameters for additional functionality.</p>
+                <div class="query-container">
+                    <code class="sample-query"><%= schema.query %></code>
+                </div>
+                <p>For more details, view the <a href="https://github.com/open-data-network/schema-mappings/blob/master/schemas/<%= schema.standard %>.yml">schema definition on GitHub</a>.</p>
+            </div>
+        <% }); %>
+
+        <% if(schemas.length <= 0) { %>
+            <div class="schema">
+                <p>No schemas mapped for this dataset. <a href="https://github.com/open-data-network/schema-mappings">Want to add one?</a></p>
+            </div>
+        <% } else { %>
+            <div class="schema">
+              <p>Not seeing what you're looking for? <a href="https://github.com/open-data-network/schema-mappings">Contribute it!</a></p>
+            </div>
+        <% } %>
+    </div>
 </section>
 
 <% include _footer %>
