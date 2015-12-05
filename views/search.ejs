@@ -40,6 +40,8 @@
     <% if ((params.q.length > 0) || (params.regions.length > 0)) { %> results for <% } else { %> results <% }%>
     <% if (params.q.length > 0) { %>
         <strong><%= params.q %></strong>
+    <% } else { %>
+        <strong><%= getTabTitle(params.vector.length > 0 ? params.vector : 'population') %></strong>
     <% } %>
 
     <ul class="tokens">
