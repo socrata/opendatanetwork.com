@@ -230,7 +230,7 @@ function _renderSearchPage(req, res, params) {
                                 {
                                     categoryResults : categoryResults,
                                     css : [
-                                        '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css',
+                                        '/styles/third-party/leaflet.min.css',
                                         '/styles/third-party/featherlight.min.css',
                                         '/styles/search.css',
                                         '/styles/maps.css',
@@ -239,9 +239,10 @@ function _renderSearchPage(req, res, params) {
                                     domainResults : domainResults,
                                     params : params,
                                     scripts : [
-                                        '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
                                         '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
                                         '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
+                                        '/lib/third-party/leaflet/leaflet.min.js',
+                                        '/lib/third-party/leaflet/leaflet-omnivore.min.js',
                                         '/lib/third-party/browser-polyfill.min.js',
                                         '/lib/third-party/colorbrewer.min.js',
                                         '/lib/third-party/d3.min.js',
