@@ -71,11 +71,13 @@
 
 <% } else { %>
 
+<% if (searchResults.results.length > 0) { %>
     <div class="search-results-compact-column">
         <ul class="datasets">
 <% include _search-results-compact %>
         </ul>
     </div>
+<% } %>
 
     <div class="charts-column">
 
