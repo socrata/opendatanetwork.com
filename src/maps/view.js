@@ -10,6 +10,7 @@ class MapView {
         this.features = features;
 
         this.legend = new LegendControl();
+        this.tooltip = new TooltipControl();
         this.variableControl = new VariableControl(source.variables, (variable, year) => {
             this.display(variable, year);
         });
@@ -30,12 +31,14 @@ class MapView {
 
         map.addControl(this.legend);
         map.addControl(this.variableControl);
+        map.addControl(this.tooltip);
         if (MapConstants.ZOOM_CONTROL)
             map.addControl(this.zoomControl);
 
-        map.addLayer(this.features);
-
-        this.zoomToSelected(map);
+        map.whenReady(() => {
+            map.addLayer(this.features);
+            this.zoomToSelected(map);
+        });
     }
 
     zoomToSelected(map) {
@@ -90,12 +93,10 @@ class MapView {
 
                 layer.setStyle(style);
 
-                const popup = L.popup()
-                    .setContent('hello')
-                    .setLatLng(layer.getBounds().getNorthEast());
-
-                const tooltip = new MapTooltip(region, layer);
-                tooltip.listen();
+                layer.on({
+                    mouseover: () => this.tooltip.showRegion(region),
+                    mouseout: () => this.tooltip.hide()
+                });
             }
         });
     }
