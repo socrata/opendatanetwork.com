@@ -39,7 +39,7 @@ const LegendControl = L.Control.extend({
         const legend = legendContainer
             .append('svg')
             .attr('width', width)
-            .attr('height', height + 30)
+            .attr('height', height + 15)
             .attr('class', 'legend');
 
         const tickGroup = legend
