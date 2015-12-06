@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Find the data you need to power your business, app, or analysis from across the open data ecosystem." />
+    <meta name="keywords" content="open data, government data, housing data, restaurant inspecitions data, transit data, health data, crime data, permit data" />
+    <title><%= title %></title>
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,800" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Lato:400,700,900" rel="stylesheet" type="text/css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+<% css.forEach(function(path) { -%>
+    <link href="<%= path %>" rel="stylesheet">
+<% }); -%>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<% scripts.forEach(function(o) { if (typeof o == 'string') { -%>
+    <script src="<%= o %>"></script>
+<% } else { -%>
+    <script src="<%= o.url %>" charset="<%= o.charset %>"></script>
+<% }}); -%>
+</head>
+<body>

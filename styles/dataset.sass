@@ -1,0 +1,84 @@
+$black-text-color: #222222
+$blue-background-color: #3498db
+$blue-color: #2980b9
+$dark-gray-background-color: #e5e9eb
+$dark-gray-border-color: #bbbbbb
+$dark-gray-text-color: #7f8c8d
+$gray-background-color: #ecf0f1
+$bottom-gray-border-color: #d4d9dc
+$gray-border-color: #d1d1d1
+$gray-text-color: #bdc3c7
+$orange-color: #ee3b3b
+
+$fonts: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif
+$small: 0.75em
+$medium: 14px
+$large: 18px
+
+@import app
+@import autocomplete
+@import search-bar
+@import footer
+
+body
+    background-color: $dark-gray-background-color
+
+.main-section
+    background-color: $gray-background-color
+    border-bottom: 1px solid $bottom-gray-border-color
+    box-sizing: border-box
+    display: table
+    padding: 90px 30px 30px
+    width: 100%
+
+    .dataset-container
+        background-color: white
+        border: 1px solid $gray-text-color
+        color: $dark-gray-text-color
+        display: table-cell
+        font-family: $fonts
+        font-size: 14px
+        padding: 65px 90px
+        text-align: left
+    
+        h1
+            color: $black-text-color
+            font-size: 24px
+            font-weight: normal
+            margin: 0
+            padding: 0
+    
+        .publisher
+            color: $blue-color
+    
+        .blue-button
+            background-color: $blue-background-color
+    
+        .orange-button
+            background-color: $orange-color
+    
+        .button
+            border-radius: 5px
+            color: white
+            display: inline-block
+            font-size: 16px
+            font-weight: 600
+            line-height: 40px
+            padding: 0 18px
+            margin: 0 5px 0 0
+    
+        .title-container
+            margin-bottom: 20px
+    
+        .button-container
+            margin-bottom: 20px
+    
+        .description-container
+            border-top: 1px solid $gray-text-color
+    
+        .description
+            color: $black-text-color
+    
+    .right-container
+        display: table-cell
+        width: 0

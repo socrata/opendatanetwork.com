@@ -1,20 +1,28 @@
 var ApiController = require('./api-controller');
 var CategoryController = require('./category-controller');
 var TagController = require('./tag-controller');
+var Sources = require('./sources');
 
+var _ = require('lodash');
+var htmlencode = require('htmlencode');
 var path = require('path');
+var moment = require('moment');
 
 var apiController = new ApiController();
 var categoryController = new CategoryController();
+var sources = Sources.getSources();
 var tagController = new TagController();
-var defaultSearchResultCount = 60;
+
+var defaultSearchResultCount = 10;
 
 module.exports = RenderController;
 
 function RenderController() {
 }
 
-// Public methods - Categories json
+// Public methods
+//
+// Categories json
 //
 RenderController.prototype.renderCategoriesJson = function(req, res) {
 
@@ -25,6 +33,47 @@ RenderController.prototype.renderCategoriesJson = function(req, res) {
             res.send(JSON.stringify(allCategoryResults));
         });
     });
+};
+
+// Dataset
+//
+RenderController.prototype.renderDatasetPage = function(req, res) {
+
+    apiController.getDatasetSummary(
+        req.params.domain,
+        req.params.id,
+        function(dataset) {
+
+            RenderController.prototype.getSearchParameters(req, function(params) {
+
+                res.render(
+                    'dataset.ejs',
+                    {
+                        css : [
+                            '/styles/dataset.css'
+                        ],
+                        dataset: {
+                            descriptionHtml : htmlEncode(dataset.description).replace('\n', '<br>'),
+                            domain : req.params.domain,
+                            id : req.params.id,
+                            name : dataset.name,
+                            tags : dataset.tags || [],
+                            updatedAtString : moment(new Date(dataset.viewLastModified * 1000)).format('D MMM YYYY')
+                        },
+                        params : params,
+                        scripts : [
+                            '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
+                            '/lib/third-party/colorbrewer.min.js',
+                            '/lib/third-party/d3.min.js',
+                            '/lib/third-party/d3.promise.min.js',
+                            '/lib/third-party/lodash.min.js',
+                            '/lib/search.min.js',
+                        ],
+                        searchPath : '/search',
+                        title : 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.'
+                    });
+            }, function() { renderErrorPage(req, res); });
+        });
 };
 
 // Home
@@ -42,22 +91,29 @@ RenderController.prototype.renderHomePage = function(req, res) {
                 // Render page
                 //
                 res.render(
-                    'v4-home.ejs', 
+                    'home.ejs',
                     {
                         allCategoryResults : allCategoryResults,
-                        css : ['/styles/v4-home.min.css', '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css'],
+                        css : [
+                            '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css',
+                            '/styles/home.css',
+                            '/styles/main.css'
+                        ],
                         params : params,
                         scripts : [
-                            '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js', 
+                            '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js',
                             {
                                 'url' : '//fast.wistia.net/static/popover-v1.js',
                                 'charset' : 'ISO-8859-1'
                             },
-                            '/scripts/es5/v4-api-controller.js', // TODO: min
-                            '/scripts/es5/v4-auto-suggest-region-controller.js', // TODO: min
-                            '/scripts/es5/v4-home.js' // TODO: min
+                            '/lib/third-party/browser-polyfill.min.js',
+                            '/lib/third-party/d3.min.js',
+                            '/lib/third-party/d3.promise.min.js',
+                            '/lib/third-party/lodash.min.js',
+                            '/lib/home.min.js'
                         ],
-                        searchPath : '/search'
+                        searchPath : '/search',
+                        title : 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.'
                     });
              });
         });
@@ -68,7 +124,7 @@ RenderController.prototype.renderHomePage = function(req, res) {
 //
 RenderController.prototype.renderJoinOpenDataNetwork = function(req, res) {
 
-    res.locals.css = 'join.min.css';
+    res.locals.css = 'join.css';
     res.locals.title = 'Join the Open Data Network.';
     res.render('join.ejs');
 };
@@ -77,7 +133,7 @@ RenderController.prototype.renderJoinOpenDataNetwork = function(req, res) {
 //
 RenderController.prototype.renderJoinOpenDataNetworkComplete = function(req, res) {
 
-    res.locals.css = 'join-complete.min.css';
+    res.locals.css = 'join-complete.css';
     res.locals.title = 'Thanks for joining the Open Data Network.';
     res.render('join-complete.ejs');
 };
@@ -96,21 +152,31 @@ RenderController.prototype.renderSearchPage = function(req, res) {
 //
 RenderController.prototype.renderSearchWithVectorPage = function(req, res) {
 
-    if ((req.params.vector == 'population') ||
+    if ((req.params.vector == '') ||
+        (req.params.vector == 'population') ||
         (req.params.vector == 'earnings') ||
         (req.params.vector == 'education') ||
         (req.params.vector == 'occupations') ||
         (req.params.vector == 'gdp') ||
+        (req.params.vector == 'health') ||
         (req.params.vector == 'cost_of_living')) {
 
         RenderController.prototype.getSearchParameters(req, function(params) {
+
+            // If the vector is unsupported, just redirect to the root
+            //
+            if (!_.includes(sources.forRegions(params.regions), req.params.vector)) {
+
+                res.redirect(301, '/');
+                return;
+            }
 
             _renderSearchPage(req, res, params);
         });
     }
     else {
 
-        renderErrorPage(req, res); 
+        renderErrorPage(req, res);
     }
 };
 
@@ -121,16 +187,16 @@ RenderController.prototype.renderSearchResults = function(req, res) {
     RenderController.prototype.getSearchParameters(req, function(params) {
 
         apiController.searchDatasets(params, function(searchResults) {
-    
+
             if (searchResults.results.length == 0) {
-    
+
                 res.status(204);
                 res.end();
                 return;
             }
-    
+
             res.render(
-                (params.regions.length == 0) ? 'v4-search-results-regular.ejs' : 'v4-search-results-compact.ejs',
+                (params.regions.length == 0) ? '_search-results-regular.ejs' : '_search-results-compact.ejs',
                 {
                     css : [],
                     scripts : [],
@@ -145,45 +211,55 @@ RenderController.prototype.renderSearchResults = function(req, res) {
 //
 function _renderSearchPage(req, res, params) {
 
-    apiController.getCategories(5, function(categoryResults) {
+    apiController.getSearchDatasetsUrl(params, function(searchDatasetsUrl) {
 
-        categoryController.attachCategoryMetadata(categoryResults, function(categoryResults) {
+        apiController.getCategories(5, function(categoryResults) {
 
-            apiController.getDomains(5, function(domainResults) {
-        
-                apiController.searchDatasets(
-                    params, 
-                    function(results) {
-        
-                        res.render(
-                            'v4-search.ejs', 
-                            {
-                                categoryResults : categoryResults,
-                                css : [
-                                    '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css',
-                                    '/styles/v4-search.min.css'
-                                ],
-                                domainResults : domainResults,
-                                params : params,
-                                scripts : [
-                                    '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
-                                    '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
-                                    '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
-                                    '//d3js.org/d3.v3.min.js',
-                                    '/scripts/third-party/d3.promise.js',
-                                    '/scripts/es5/v4-api-controller.js', // TODO: min
-                                    '/scripts/es5/v4-auto-suggest-region-controller.js', // TODO: min
-                                    '/scripts/es5/v4-search-page-controller.js', // TODO: min
-                                    '/scripts/es5/v4-search.js', // TODO: min
-                                ],
-                                searchPath : req.path,
-                                searchResults : results
-                            });
-                    }, 
-                    function() {
-        
-                        renderErrorPage(req, res); 
-                    });
+            categoryController.attachCategoryMetadata(categoryResults, function(categoryResults) {
+
+                apiController.getDomains(5, function(domainResults) {
+
+                    apiController.searchDatasets(
+                        params,
+                        function(results) {
+
+                            res.render(
+                                'search.ejs',
+                                {
+                                    categoryResults : categoryResults,
+                                    css : [
+                                        '/styles/third-party/leaflet.min.css',
+                                        '/styles/search.css',
+                                        '/styles/maps.css',
+                                        '/styles/main.css'
+                                    ],
+                                    domainResults : domainResults,
+                                    params : params,
+                                    scripts : [
+                                        '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
+                                        '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
+                                        '/lib/third-party/leaflet/leaflet.min.js',
+                                        '/lib/third-party/leaflet/leaflet-omnivore.min.js',
+                                        '/lib/third-party/browser-polyfill.min.js',
+                                        '/lib/third-party/colorbrewer.min.js',
+                                        '/lib/third-party/d3.min.js',
+                                        '/lib/third-party/d3.promise.min.js',
+                                        '/lib/third-party/leaflet-omnivore.min.js',
+                                        '/lib/third-party/lodash.min.js',
+                                        '/lib/search.min.js'
+                                    ],
+                                    searchDatasetsUrl : searchDatasetsUrl,
+                                    searchPath : req.path,
+                                    searchResults : results,
+                                    sources : sources.forRegions(params.regions),
+                                    title : getSearchPageTitle(params)
+                                });
+                        },
+                        function() {
+
+                            renderErrorPage(req, res);
+                        });
+                });
             });
         });
     });
@@ -209,36 +285,118 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
         regions : [],
         resetRegions : false,
         standards : standards,
-        vector : req.params.vector || 'population',
+        vector : req.params.vector || '',
     };
 
-    // Regions are in the URL path segment, not a query parameter
+    // Debug
     //
-    if ((req.params.region == null) || (req.params.region.length == 0)) {
+    if (query.debug != null) params.debug = 1;
+
+    // Region ids are in the URL path segment, not a query parameter
+    //
+    if ((req.params.regionIds == null) || (req.params.regionIds.length == 0)) {
 
         if (completionHandler) completionHandler(params);
         return;
     }
 
-    var parts = req.params.region.split2('_vs_');
-    var regions = parts.map(function(region) { return region.replace(/_/g, ' ') });
+    var regionIds = req.params.regionIds.split2('-');
 
-    apiController.getAutoSuggestedRegions(regions, function(results) {
+    apiController.getAutoSuggestedRegions(regionIds, function(results) {
 
         if (results.length > 0) {
 
-            params.regions = results.map(function(result) {
-                return { id : result.id, name : result.name, type : result.type };
-            });
+            var orderedRegions = [];
+
+            for (var i in regionIds) {
+
+                var region = getRegionFromResultsById(results, regionIds[i]);
+
+                if (region != null)
+                    orderedRegions.push(region);
+            }
+
+            params.regions = orderedRegions;
         }
 
         if (completionHandler) completionHandler(params);
     });
 };
 
+function getSearchPageTitle(params) {
+
+    var rg = []
+
+    switch (params.vector) {
+
+        case 'population': rg.push('Population'); break;
+        case 'earnings': rg.push('Earnings'); break;
+        case 'education': rg.push('Education'); break;
+        case 'occupations': rg.push('Occupations'); break;
+        case 'gdp': rg.push('Economic'); break;
+        case 'health': rg.push('Health'); break;
+        case 'cost_of_living': rg.push('Cost of Living'); break;
+        default: rg.push('Population'); break;
+    }
+
+    var categories = params.categories.map(function(category) { return category.capitalize(); });
+    rg = rg.concat(categories);
+
+    var standards = params.standards.map(function(standard) { return standard.toUpperCase(); });
+    rg = rg.concat(standards);
+
+    var s = englishJoin(rg);
+    s += ' Data';
+
+    if (params.regions.length > 0) {
+
+        s += ' for ';
+        var regionNames = params.regions.map(function(region) { return region.name; });
+        s += englishJoin(regionNames);
+    }
+
+    s += ' on the Open Data Network';
+
+    return s;
+};
+
+function englishJoin(list) {
+
+    var s = '';
+
+    for (var i = 0; i < list.length; i++) {
+
+        if (i > 0)
+            s += (i == list.length - 1) ? ' and ' : ', ';
+
+        s += list[i];
+    }
+
+    return s;
+}
+
+function getRegionFromResultsById(results, regionId) {
+
+    for (var i in results) {
+
+        var result = results[i];
+
+        if (regionId == result.id) {
+
+            return {
+                id : result.id,
+                name : result.name,
+                type : result.type
+            };
+        }
+    }
+
+    return null;
+}
+
 function getNormalizedArrayFromDelimitedString(s) {
 
-    if (s == null) 
+    if (s == null)
         return [];
 
     var parts = s.split(',');
@@ -253,6 +411,11 @@ function getNormalizedArrayFromDelimitedString(s) {
     return parts;
 };
 
+function htmlEncode(s) {
+
+    return s ? htmlencode.htmlEncode(s) : '';
+}
+
 function renderErrorPage(req, res) {
 
     res.status(503);
@@ -261,6 +424,11 @@ function renderErrorPage(req, res) {
 
 // Extensions
 //
+String.prototype.capitalize = function() {
+
+    return this.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+}
+
 String.prototype.split2 = function(s) {
 
     var rg = this.split(s);

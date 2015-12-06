@@ -1,0 +1,334 @@
+<% include _header %>
+<% include _search-bar %>
+
+<script>var _params = <%- JSON.stringify(params) %>;</script>
+<% if (params.debug) { %><script>console.log(decodeURIComponent('<%- searchDatasetsUrl %>'));</script><% } %>
+
+<section class="refine">
+
+    <a class="refine-link">
+        <span>Standards<i class="fa fa-caret-down"></i></span>
+        <ul id="refine-menu-standards" style="display:none">
+            <li>BLDS</li>
+            <li>LIVES</li>
+        </ul>
+    </a>
+
+    <a class="refine-link">
+        <span>Publishers<i class="fa fa-caret-down"></i></span>
+        <ul id="refine-menu-domains" style="display:none">
+          <% domainResults.results.forEach(function(result) { %>
+            <li><%= result.domain %></li>
+          <% }); %>
+            <li id="refine-menu-domains-view-more" class="refine-view-more">View More...</li>
+        </ul>
+    </a>
+
+    <a class="refine-link">
+        <span>Categories<i class="fa fa-caret-down"></i></span>
+        <ul id="refine-menu-categories" style="display:none">
+          <% categoryResults.results.forEach(function(result) { %>
+            <li><i class="fa <%= result.metadata.icon %>"></i><%= result.category %></li>
+          <% }); %>
+            <li id="refine-menu-categories-view-more" class="refine-view-more">View More...</li>
+        </ul>
+    </a>
+
+    <label class="refine-by-label">Refine by:</label>
+
+    <label><strong><%= searchResults.resultSetSizeString %></strong>
+    <% if ((params.q.length > 0) || (params.regions.length > 0)) { %> results for <% } else { %> results <% }%>
+    <% if (params.q.length > 0) { %>
+        <strong><%= params.q %></strong>
+    <% } else if (params.regions.length > 0){ %>
+        <strong><%= getTabTitle(params.vector.length > 0 ? params.vector : 'population') %></strong>
+    <% } %>
+
+    <ul class="tokens">
+    <% params.regions.forEach(function(region) { %>
+        <li class="region-token"><%= region.name %> <a class="fa fa-times-circle"></a></li>
+    <% }); %>
+    <% params.categories.forEach(function(category) { %>
+        <li class="category-token"><%= category %> <a class="fa fa-times-circle"></a></li>
+    <% }); %>
+    <% params.domains.forEach(function(domain) { %>
+        <li class="domain-token"><%= domain %> <a class="fa fa-times-circle"></a></li>
+    <% }); %>
+    <% params.standards.forEach(function(standard) { %>
+        <li class="standard-token"><%= standard %> <a class="fa fa-times-circle"></a></li>
+    <% }); %>
+    </ul>
+
+</section>
+
+<section class="results">
+
+<% if (params.regions.length == 0) { %>
+
+    <div class="search-results-regular-column">
+        <ul class="datasets">
+<% include _search-results-regular %>
+        </ul>
+    </div>
+
+<% } else { %>
+
+<% if (searchResults.results.length > 0) { %>
+    <div class="search-results-compact-column">
+        <ul class="datasets">
+<% include _search-results-compact %>
+        </ul>
+    </div>
+<% } %>
+
+    <div class="charts-column">
+
+        <ul class="chart-tabs">
+          <% sources.forEach(function(source) { %>
+            <li<%- getSelectedVector(source) %>><a href="<%= getSearchPageUrl(source) %>"><%= getTabTitle(source) %></a></li>
+          <% }); %>
+        </ul>
+
+        <div class="charts">
+
+<% if ((params.vector == '') || (params.vector == 'population')) { %>
+
+            <div id="map"></div>
+            <h1>Population</h1>
+            <figure id="population-chart"></figure>
+            <h1>Population Change</h1>
+            <figure id="population-change-chart"></figure>
+            <label>
+                Data from the 2013 U.s. Census American Community Survey. <a href='https://www.census.gov/programs-surveys/acs/'>Data Source</a> | <a href='https://odn.data.socrata.com/view/va7f-2qjr?'>ODN Dataset</a> | <a href='https://dev.socrata.com/foundry/#/odn.data.socrata.com/e3rd-zzmr'>API</a> - <span class='info-icon' title='Note: ODN datasets and APIs are subject to change and may differ in format from the original source data.'></span>
+                <br />
+                Note: ODN datasets and APIs may differ in format from the original data in order to provide a user-friendly experience on this site.
+            </label>
+
+<% } else if (params.vector == 'earnings') { %>
+
+            <div id="map"></div>
+            <h1>Earnings</h1>
+            <table id="earnings-table" class="horizontal"></table>
+            <figure id="earnings-chart"></figure>
+            <label>
+                Data from the 2013 U.s. Census American Community Survey. <a href='https://www.census.gov/programs-surveys/acs/'>Data Source</a> | <a href='https://odn.data.socrata.com/view/6atn-pcse?'>ODN Dataset</a> | <a href='https://dev.socrata.com/foundry/#/odn.data.socrata.com/wmwh-4vak'>API</a> - <span class='info-icon' title='Note: ODN datasets and APIs are subject to change and may differ in format from the original source data.'></span>
+                <br />
+                Note: ODN datasets and APIs may differ in format from the original data in order to provide a user-friendly experience on this site.
+            </label>
+
+<% } else if (params.vector == 'education') { %>
+
+            <div id="map"></div>
+            <h1>Education</h1>
+            <table id="education-table" class="horizontal"></table>
+            <label>
+                Data from the 2013 U.s. Census American Community Survey. <a href='https://www.census.gov/programs-surveys/acs/'>Data Source</a> | <a href='https://odn.data.socrata.com/view/8vbc-rxrs?'>ODN Dataset</a> | <a href='https://dev.socrata.com/foundry/#/odn.data.socrata.com/uf4m-5u8r'>API</a> - <span class='info-icon' title='Note: ODN datasets and APIs are subject to change and may differ in format from the original source data.'></span>
+                <br />
+                Note: ODN datasets and APIs may differ in format from the original data in order to provide a user-friendly experience on this site.
+            </label>
+
+<% } else if (params.vector == 'occupations') { %>
+
+            <div id="map"></div>
+            <h1>Occupations</h1>
+            <table id="occupations-table" class="vertical"></table>
+            <label>
+                Data from the 2013 U.s. Census American Community Survey. <a href='https://www.census.gov/programs-surveys/acs/'>Data Source</a> | <a href='https://odn.data.socrata.com/view/36ax-ppuh'>ODN Dataset</a> | <a href='https://dev.socrata.com/foundry/#/odn.data.socrata.com/qfcm-fw3i'>API</a> - <span class='info-icon' title='Note: ODN datasets and APIs are subject to change and may differ in format from the original source data.'></span>
+                <br />
+                Note: ODN datasets and APIs may differ in format from the original data in order to provide a user-friendly experience on this site.
+            </label>
+
+<% } else if (params.vector == 'gdp') { %>
+
+            <div id="map"></div>
+            <h1>GDP</h1>
+            <figure id="per-capita-gdp-chart"></figure>
+            <figure id="per-capita-gdp-change-chart"></figure>
+            <label>
+                Data from United States Bureau of Economic Analysis. <a href='http://www.bea.gov/regional/'>Data Source</a> | <a href='https://odn.data.socrata.com/view/h7vs-8d3q'>ODN Dataset</a> | <a href='https://dev.socrata.com/foundry/#/odn.data.socrata.com/ks2j-vhr8'>API</a> - <span class='info-icon' title='Note: ODN datasets and APIs are subject to change and may differ in format from the original source data.'></span>
+                <br />
+                Note: ODN datasets and APIs may differ in format from the original data in order to provide a user-friendly experience on this site.
+            </label>
+
+<% } else if (params.vector == 'health') { %>
+
+            <h1>Health</h1>
+            <h2>RWJF County Health Rankings</h2>
+            <p>
+                The Robert Wood Johnson Foundation produces health rankings for states and counties.
+                They explore many aspects of health including quality of life, health behaviors,
+                access to clinical care, socioeconomic factors, and environmental factors.
+            </p>
+            <h1>Health Outcomes</h1>
+            <table id="rwjf-county-health-outcomes-table" class="horizontal"></table>
+            <h1>Health Factors</h1>
+            <table id="rwjf-county-health-factors-table" class="horizontal"></table>
+            <table id="rwjf-county-health-clinical-care-table" class="horizontal"></table>
+            <table id="rwjf-county-health-social-economic-factors-table" class="horizontal"></table>
+            <table id="rwjf-county-health-physical-environment-table" class="horizontal"></table>
+            <label>
+                Data from RWJF County Health Rankings. <a href='http://www.countyhealthrankings.org/'>Data Source</a> | <a href='https://odn.data.socrata.com/view/f24f-8rxv'>ODN Dataset</a> | <a href='https://dev.socrata.com/foundry/#/odn.data.socrata.com/6a3g-pbaa'>API</a> - <span class='info-icon' title='Note: ODN datasets and APIs are subject to change and may differ in format from the original source data.'></span>
+                <br>
+                Note: ODN datasets and APIs may differ in format from the original data in order to provide a user-friendly experience on this site.
+            </label>
+
+<% } else if (params.vector == 'cost_of_living') { %>
+
+            <div id="map"></div>
+            <h1>Cost of Living</h1>
+            <table id="cost-of-living-table" class="horizontal"></table>
+            <h1>All</h1>
+            <figure id="cost-of-living-all-chart"></figure>
+            <h1>Goods</h1>
+            <figure id="cost-of-living-goods-chart"></figure>
+            <h1>Rents</h1>
+            <figure id="cost-of-living-rents-chart"></figure>
+            <h1>Other</h1>
+            <figure id="cost-of-living-other-chart"></figure>
+            <label>
+                Data from United States Bureau of Economic Analysis. <a href='http://www.bea.gov/regional/'>Data Source</a> | <a href='https://odn.data.socrata.com/view/r8tp-bmpy'>ODN Dataset</a> | <a href='https://dev.socrata.com/foundry/#/odn.data.socrata.com/hpnf-gnfu'>API</a> - <span class='info-icon' title='Note: ODN datasets and APIs are subject to change and may differ in format from the original source data.'></span>
+                <br />
+                Note: ODN datasets and APIs may differ in format from the original data in order to provide a user-friendly experience on this site.
+            </label>
+
+<% } %>
+
+        </div>
+
+    </div>
+
+    <div class="controls-column">
+        <div class="controls">
+            <h1>Compare this Data</h1>
+            <div class="add-region">
+                <i class="fa fa-plus"></i><input class="add-region-input" type="text" placeholder="Add Location">
+                <ul class="add-region-results" style="display: none;"></ul>
+            </div>
+            <ul id="similar-regions" style="display:none"></ul>
+            <h2 id="places-in-region-header-0" class="places-in-region-header" style="display:none"></h2>
+            <ul id="places-in-region-list-0" class="places-in-region-list" style="display:none"></ul>
+            <h2 id="places-in-region-header-1" class="places-in-region-header" style="display:none"></h2>
+            <ul id="places-in-region-list-1" class="places-in-region-list" style="display:none"></ul>
+        </div>
+        <div class="footer">
+            <ul class="footer-links">
+                <li><a class="blue-link" href="http://www.socrata.com/company-info/">About Socrata</a></li>
+                <li><a class="blue-link" href="http://www.opendatanetwork.com/join-open-data-network">Join the Network</a></li>
+            </ul>
+            <a href="http://www.socrata.com/company-info/"><img src="/images/v3-powered-by-socrata.png"></a>
+        </div>
+    </div>
+
+<% } %>
+
+</section>
+
+<div class="hidden">
+    <div id="dataset-lightbox">
+        <div class="title-container">
+            <h1></h1>
+            <a class="publisher" target="_blank"></a> | Last Updated <span class="last-updated"></span>
+        </div>
+        <div class="button-container">
+            <a class="blue-button button" target="_blank">View API</a>
+            <a class="orange-button button" target="_blank">View Data</a>
+        </div>
+        <div class="description-container">
+            <p class="description"></p>
+            <p class="tags">Tags: <span></span></p>
+        </div>
+    </div>
+</div>
+
+<% include _google-analytics %>
+<% include _usersnap %>
+
+</body>
+</html>
+
+<%
+function getTabTitle(source) {
+
+    switch (source) {
+
+        case 'population': return 'Population';
+        case 'earnings': return 'Earnings';
+        case 'education': return 'Education';
+        case 'occupations': return 'Occupations';
+        case 'gdp': return 'GDP';
+        case 'cost_of_living': return 'Cost of Living';
+        case 'health': return 'Health';
+        default: return '';
+    }
+}
+
+function getSearchPageUrl(vector) {
+
+    var url;
+
+    if (params.regions.length > 0) {
+
+        url = '/region';
+
+        // Region ids
+        //
+        var regionIds = params.regions.map(function(region) {
+            return region.id; 
+        });
+        
+        url += '/' + regionIds.join('-');
+
+        // Region names
+        //
+        var regionNames = params.regions.map(function(region) {
+            return region.name.replace(/ /g, '_').replace(/,/g, '');
+        });
+
+        url += '/' + regionNames.join('-');
+
+        if (vector)
+            url += '/' + vector;
+    }
+    else {
+
+        url = '/search';
+    }
+
+    url += getSearchQueryString();
+
+    return url;
+}
+
+function getSearchQueryString() {
+
+    var parts = [];
+
+    if (params.q.length > 0)
+        parts.push('q=' + encodeURIComponent(params.q));
+
+    if (params.page > 1)
+        parts.push('page=' + params.page);
+
+    if (params.categories.length > 0)
+        parts.push('categories=' + encodeURIComponent(params.categories.join(',')));
+
+    if (params.domains.length > 0)
+        parts.push('domains=' + encodeURIComponent(params.domains.join(',')));
+
+    if (params.standards.length > 0)
+        parts.push('standards=' + encodeURIComponent(params.standards.join(',')));
+
+    if (params.debug)
+        parts.push('debug=');
+
+    return (parts.length > 0) ? '?' + parts.join('&') : '';
+};
+
+function getSelectedVector(vector) {
+
+    if ((params.vector == vector) || ((params.vector == '') && (vector == 'population')))
+        return ' class="selected"';
+    else 
+        return '';
+}
+%>

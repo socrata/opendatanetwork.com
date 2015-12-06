@@ -1,22 +1,27 @@
+'use strict';
+
 var CacheController = require('./cache-controller');
-var SynonymController = require('./synonym-controller');
+const Constants = require('./constants');
+const Synonyms = require('./synonyms');
 
 var moment = require('moment');
 var numeral = require('numeral');
 var request = require('request');
+var _ = require('lodash');
+var querystring = require('querystring');
 
 var baseCatalogUrl = 'http://api.us.socrata.com/api/catalog/v1';
-var baseFederalDemoUrl = 'https://federal.demo.socrata.com/resource/7g2b-8brv';
-
-var autoCompleteNameUrl = baseFederalDemoUrl + '/?$where={0}';
 var cacheController = new CacheController();
 var categoriesUrl = baseCatalogUrl + '/categories';
-var defaultSearchResultCount = 60;
-var domainsUrl = baseCatalogUrl + '/domains'; 
+var datasetSummaryUrl = 'https://{0}/api/views/{1}.json';
+var defaultSearchResultCount = 10;
+var domainsUrl = baseCatalogUrl + '/domains';
 var maxDescriptionLength = 300;
+var rosterUrl = 'https://odn.data.socrata.com/resource/bdeb-mf9k/?$where={0}';
 var searchUrl = baseCatalogUrl;
-var synonymController = new SynonymController();
 var userAgent = 'www.opendatanetwork.com';
+
+const SYNONYMS = Synonyms.fromFile(Constants.SYNONYMS_FILE);
 
 module.exports = ApiController;
 
@@ -25,9 +30,15 @@ function ApiController() {
 
 // Public methods
 //
+ApiController.prototype.getDatasetSummary = function(domain, id, successHandler, errorHandler) {
+
+    var url = datasetSummaryUrl.format(domain, id);
+    getFromApi(url, successHandler, errorHandler);
+}
+
 ApiController.prototype.searchDatasets = function(params, successHandler, errorHandler) {
 
-    getSearchDatasetsUrl(params, function(url) {
+    ApiController.prototype.getSearchDatasetsUrl(params, function(url) {
 
         getFromApi(
             url,
@@ -43,24 +54,22 @@ ApiController.prototype.searchDatasets = function(params, successHandler, errorH
     });
 }
 
-ApiController.prototype.getAutoSuggestedRegions = function(names, successHandler, errorHandler) {
+ApiController.prototype.getAutoSuggestedRegions = function(regionIds, successHandler, errorHandler) {
 
-    var pairs = names.map(function(name) { 
-        return "autocomplete_name='" + encodeURIComponent(name) + "'"; 
-    });
-    
-    var url = autoCompleteNameUrl.format(pairs.join('%20OR%20'));
+    const pairs = regionIds.map(regionId => 'id=\'' + regionId + '\'');
+    const url = rosterUrl.format(pairs.join(' OR '));
+
     getFromApi(url, successHandler, errorHandler);
 }
 
 ApiController.prototype.getCategories = function(count, successHandler, errorHandler) {
 
     getFromCacheOrApi(
-        categoriesUrl, 
+        categoriesUrl,
         function(results) {
 
             truncateResults(count, results);
-            if (successHandler) successHandler(results); 
+            if (successHandler) successHandler(results);
         },
         errorHandler);
 };
@@ -73,13 +82,51 @@ ApiController.prototype.getCategoriesAll = function(successHandler, errorHandler
 ApiController.prototype.getDomains = function(count, successHandler, errorHandler) {
 
     getFromCacheOrApi(
-        domainsUrl, 
-        function(results) { 
+        domainsUrl,
+        function(results) {
 
             truncateResults(count, results);
-            if (successHandler) successHandler(results); 
+            if (successHandler) successHandler(results);
         },
         errorHandler);
+};
+
+ApiController.prototype.getSearchDatasetsUrl = function(requestParams, completionHandler) {
+    const querySynonyms = SYNONYMS.get(requestParams.q);
+    const vectorSynonyms = SYNONYMS.get(requestParams.vector.replace(/_/g, ' '));
+    const synonyms = _.unique(_.flatten([querySynonyms, vectorSynonyms]));
+
+    const regionNames = requestParams.regions.map(region => {
+        const name = region.name;
+        const type = region.type;
+
+        if (type === 'place' || type === 'county') {
+            return name.split(', ')[0];
+        } else if (type === 'msa') {
+            const words = name.split(' ');
+            return words.slice(0, words.length - 3);
+        } else {
+            return name;
+        }
+    }).map(name => `"${name}"`);
+
+    const allTerms = [synonyms, regionNames, requestParams.standards];
+    const query = allTerms
+        .filter(terms => terms.length > 0)
+        .map(terms => `(${terms.join(' OR ')})`)
+        .join(' AND ');
+
+    const categories = requestParams.categories || [];
+    const domains = requestParams.domains || [];
+    const allParams = _.extend({}, requestParams, {
+        categories: categories.join(','),
+        domains: domains.join(','),
+        q_internal: query,
+    });
+    const params = _.omit(allParams, value => value === '' || value === []);
+
+    const url = `${Constants.CATALOG_URL}?${querystring.stringify(params)}`;
+    completionHandler(url);
 };
 
 // Private functions
@@ -139,85 +186,20 @@ function getCategoryGlyphString(result) {
     }
 }
 
-function getSearchDatasetsUrl(params, completionHandler) {
-
-    // Look to see if there are synonyms for the query parameter
-    //
-    synonymController.getSynonyms(params.q, function(synonyms) {
-
-        var url = searchUrl +
-            '?offset=' + params.offset +
-            '&only=' + params.only +
-            '&limit=' + params.limit;
-    
-        if (params.categories.length > 0)
-            url += '&categories=' + encodeURIComponent(params.categories.join(','));
-    
-        if (params.domains.length > 0)
-            url += '&domains=' + encodeURIComponent(params.domains.join(','));
-    
-        if ((synonyms.length > 0) || (params.regions.length > 0) || (params.standards.length > 0)) {
-    
-            url += '&q_internal=';
-    
-            var s = '';
-    
-            if (synonyms.length > 0) {
-                s += '(' + synonyms.join(' OR ') + ')';
-            }
-
-            if (params.regions.length > 0) {
-
-                if (s.length > 0)
-                    s += ' AND ';
-
-                var regionNames = params.regions.map(function(region) { return region.name; });
-                s += '(' + regionNames.join(' OR ') + ')';
-            }
-            
-            if (params.standards.length > 0) {
-
-                if (s.length > 0)
-                    s += ' AND ';
-
-                s += '(' + params.standards.join(' OR ') + ')';
-            }
-
-            console.log(s);
-
-            url += encodeURIComponent(s);
-        }
-
-        if (completionHandler)
-            completionHandler(url);
-    });
-}
-
 function getFromApi(url, successHandler, errorHandler) {
-
-    console.log(url);
-
     request(
         {
-            url: url, 
+            url: url,
             headers: { 'User-Agent' : userAgent }
-        }, 
+        },
         function(err, resp) {
 
-            console.log('Get from api: ' + url);
-
             if (err) {
-
-                console.log('Could not connect to Socrata');
-
                 if (errorHandler) errorHandler();
                 return;
             }
 
             if (resp.statusCode != 200) {
-
-                console.log('Response: ' + resp.statusCode + ' ' + resp.body);
-
                 if (errorHandler) errorHandler();
                 return;
             }
@@ -245,7 +227,7 @@ function getFromCacheOrApi(url, successHandler, errorHandler) {
         // Not in cache so get from the API
         //
         getFromApi(
-            url, 
+            url,
             function(results) { cacheController.set(url, results, successHandler); },
             errorHandler);
     });
@@ -266,7 +248,7 @@ String.prototype.format = function() {
 
     var args = arguments;
 
-    return this.replace(/{(\d+)}/g, function(match, number) { 
+    return this.replace(/{(\d+)}/g, function(match, number) {
         return typeof args[number] != 'undefined' ? args[number] : match;
     });
 };

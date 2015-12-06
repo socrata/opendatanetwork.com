@@ -1,0 +1,27 @@
+<% include _header %>
+<% include _search-bar %>
+
+<script>var _params = <%- JSON.stringify(params) %>;</script>
+
+<section class="main-section">
+    <div class="dataset-container">
+        <div class="title-container">
+            <h1><%= dataset.name %></h1>
+            <a class="publisher" href="http://<%= dataset.domain %>"><%= dataset.domain %></a> | Last Updated <span class="last-updated"><%= dataset.updatedAtString %></span>
+        </div>
+        <div class="button-container">
+            <a class="blue-button button" href="http://dev.socrata.com/foundry/#/<%= dataset.domain %>/<%= dataset.id %>">View API</a>
+            <a class="orange-button button" href="https://<%= dataset.domain %>/d/<%= dataset.id %>">View Data</a>
+        </div>
+<% if ((dataset.descriptionHtml.length > 0) || (dataset.tags.length > 0)) { %>
+        <div class="description-container">
+            <% if (dataset.descriptionHtml.length > 0) { %><p class="description"><%- dataset.descriptionHtml %></p><% } %>
+            <% if (dataset.tags.length > 0) { %><p class="tags">Tags: <span><%= dataset.tags.join(', ') %></span></p><% } %>
+        </div>
+<% } %>
+    </div>
+    <div class="right-container"><!-- Add stuff here.  Change width in dataset.sass. --></div>
+</section>
+
+<% include _usersnap %>
+<% include _footer %>

@@ -1,0 +1,8 @@
+<% searchResults.results.forEach(function(result) { %>
+    <li>
+        <div>
+            <a class="name" href="/dataset/<%= result.metadata.domain %>/<%= result.resource.id %>"><%= result.resource.name %></a>
+        </div>
+        <div><a class="domain" href="http://<%= result.metadata.domain %>"><%= result.metadata.domain %></a></div>
+    </li>
+<% }); %>
