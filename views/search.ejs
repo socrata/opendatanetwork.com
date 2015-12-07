@@ -36,10 +36,9 @@
 
     <label class="refine-by-label">Refine by:</label>
 
-    <label><strong><%= searchResults.resultSetSizeString %></strong>
-    <% if ((params.q.length > 0) || (params.regions.length > 0)) { %> results for <% } else { %> results <% }%>
-    <% if (params.q.length > 0) { %>
-        <strong><%= params.q %></strong>
+    <label>
+    <% if (params.q.length > 0) { %> 
+        <strong><%= searchResults.resultSetSizeString %></strong> results for <strong><%= params.q %></strong>
     <% } else if (params.regions.length > 0){ %>
         <strong><%= getTabTitle(params.vector.length > 0 ? params.vector : 'population') %></strong>
     <% } %>
