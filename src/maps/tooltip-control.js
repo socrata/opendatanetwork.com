@@ -1,7 +1,7 @@
 
 const TooltipControl = L.Control.extend({
     options: {
-        position: 'topright'
+        position: 'bottomright'
     },
 
     onAdd: function(map) {
@@ -24,6 +24,7 @@ const TooltipControl = L.Control.extend({
         let mapX = offset.left;
         let mapY = offset.top;
         const mapWidth = $map.width();
+        const mapHeight = $map.height();
 
         window.onresize = () => {
             const offset = $map.offset();
@@ -34,10 +35,10 @@ const TooltipControl = L.Control.extend({
         document.addEventListener('mousemove', (e) => {
             if (this.shown) {
                 const x = e.pageX - mapX - mapWidth;
-                const y = e.pageY - mapY;
+                const y = e.pageY - mapY - mapHeight;
                 this.container
                     .style('left', `${x - 20}px`)
-                    .style('top', `${y + 20}px`);
+                    .style('top', `${y - 10}px`);
             }
         });
 
