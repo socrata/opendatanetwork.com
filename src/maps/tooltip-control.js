@@ -17,6 +17,22 @@ const TooltipControl = L.Control.extend({
             .append('div')
             .attr('class', 'value');
 
+        this.shown = false;
+
+        const $map = $('#map');
+        const { left: mapX, top: mapY } = $map.offset();
+        const mapWidth = $map.width();
+
+        document.addEventListener('mousemove', (e) => {
+            if (this.shown) {
+                const x = e.pageX - mapX - mapWidth;
+                const y = e.pageY - mapY;
+                this.container
+                    .style('left', `${x - 20}px`)
+                    .style('top', `${y + 20}px`);
+            }
+        }, false);
+
         return containerDiv;
     },
 
@@ -33,10 +49,13 @@ const TooltipControl = L.Control.extend({
     },
 
     hide: function() {
+        this.shown = false;
         this.container.style('display', 'none');
     },
 
     unhide: function() {
+        this.shown = true;
         this.container.style('display', 'inline');
     }
 });
+
