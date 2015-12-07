@@ -1,7 +1,8 @@
 
 class AutosuggestSource {
-    constructor(name, domain, fxf, column, encoded, select, show, sort) {
+    constructor(name, image, domain, fxf, column, encoded, select, show, sort) {
         this.name = name;
+        this.image = image;
         this.domain = domain;
         this.fxf = fxf;
         this.column = column;
@@ -17,7 +18,7 @@ class AutosuggestSource {
             selection.append('span').text(option.text);
         });
 
-        return new AutosuggestSource(json.name, json.domain, json.fxf, json.column,
+        return new AutosuggestSource(json.name, json.image, json.domain, json.fxf, json.column,
                                      encoded, json.select, show, json.sort);
     }
 
@@ -66,15 +67,17 @@ class AutosuggestSource {
             .append('li')
             .attr('class', 'autocomplete-category');
 
-        const name = category
-            .append('label')
-            .attr('class', 'autocomplete-title')
-            .text(this.name);
+        if (this.image) {
+            const name = category
+                .append('label')
+                .attr('class', 'autocomplete-title')
+                .text(this.name);
 
-        const image = category
-            .append('div')
-            .append('i')
-            .attr('class', 'fa fa-globe');
+            const image = category
+                .append('div')
+                .append('i')
+                .attr('class', `fa ${this.image}`);
+        }
 
         const results = category
             .append('ul')
