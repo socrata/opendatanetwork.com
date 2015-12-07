@@ -9,6 +9,12 @@ $(document).ready(function() {
     //
     multiComplete('#q', '.region-list').listen();
 
+    // Selected category (yellow box)
+    //
+    $('.fa-close').click(function() {
+        $('.current-category').fadeOut();
+    });
+    
     // Chart column
     //
     if (_params.regions.length > 0) {

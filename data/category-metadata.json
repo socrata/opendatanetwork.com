@@ -29,7 +29,7 @@
     },
     "health" : {
         "icon" : "fa-heart",
-        "description" : "The Health category contains data, from across the Open Data Network&trade; of publishers, related to health, hospital locations, infectious diseases, restaurants, deaths, and vaccination.*",
+        "description" : "The Health category contains data, from across the Open Data Network&trade; of publishers, related to health, hospital locations, infectious diseases, restaurants, deaths, and vaccination.",
         "showcase" : [
             {
                 "image" : "v3-showcase-4.png",
@@ -41,62 +41,62 @@
     },
     "transportation" : {
         "icon" : "fa-car",
-        "description" : "The Transportation category contains data, from across the Open Data Network&trade; of publishers, related to transportation, taxis, uberlyft, bikes, parking, buses, road congestion, road repair, ferries, bridges, rideshare and tolls.*",
+        "description" : "The Transportation category contains data, from across the Open Data Network&trade; of publishers, related to transportation, taxis, uberlyft, bikes, parking, buses, road congestion, road repair, ferries, bridges, rideshare and tolls.",
         "showcase" : []
     },
     "economy" : {
         "icon" : "fa-line-chart",
-        "description" : "The Economy category contains data, from across the Open Data Network&trade; of publishers, related to the economy, permits, licenses, business locations, and jobs.*",
+        "description" : "The Economy category contains data, from across the Open Data Network&trade; of publishers, related to the economy, permits, licenses, business locations, and jobs.",
         "showcase" : []
     },
     "finance" : {
         "icon" : "fa-money",
-        "description" : "The Finance category contains data, from across the Open Data Network&trade; of publishers, related to finance, government spending, salaries, budgets, revenues, and taxes.*",
+        "description" : "The Finance category contains data, from across the Open Data Network&trade; of publishers, related to finance, government spending, salaries, budgets, revenues, and taxes.",
         "showcase" : []
     },
     "geographical & map" : {
         "icon" : "fa-globe",
-        "description" : "The Geographical &amp; Map category contains data, from across the Open Data Network&trade; of publishers, related to transporation, politices, finance, business, health, and the environment.*",
+        "description" : "The Geographical &amp; Map category contains data, from across the Open Data Network&trade; of publishers, related to transporation, politices, finance, business, health, and the environment.",
         "showcase" : []
     },
     "social services" : {
         "icon" : "fa-child",
-        "description" : "The Social Services category contains data, from across the Open Data Network&trade; of publishers, related to social services, homelessness, child protective services, rehab, welfare, and 311 data.*",
+        "description" : "The Social Services category contains data, from across the Open Data Network&trade; of publishers, related to social services, homelessness, child protective services, rehab, welfare, and 311 data.",
         "showcase" : []
     },
     "environment" : {
         "icon" : "fa-leaf",
-        "description" : "The Environment category contains data, from across the Open Data Network&trade; of publishers, related to the environment, environmental waste, air, energy, climate, and recycling.*",
+        "description" : "The Environment category contains data, from across the Open Data Network&trade; of publishers, related to the environment, environmental waste, air, energy, climate, and recycling.",
         "showcase" : []
     },
     "politics" : {
         "icon" : "fa-database",
-        "description" : "The Politics category contains data, from across the Open Data Network&trade; of publishers, related to politics.*",
+        "description" : "The Politics category contains data, from across the Open Data Network&trade; of publishers, related to politics.",
         "showcase" : []
     },
     "public safety" : {
         "icon" : "fa-shield",
-        "description" : "The Public Safety category contains data, from across the Open Data Network&trade; of publishers, related to public safety, 911 data, ambulance, emergency, fire, police, prison, evacuation, arrests, and crime.*",
+        "description" : "The Public Safety category contains data, from across the Open Data Network&trade; of publishers, related to public safety, 911 data, ambulance, emergency, fire, police, prison, evacuation, arrests, and crime.",
         "showcase" : []
     },
     "housing & development" : {
         "icon" : "fa-building",
-        "description" : "The Housing &amp; Development category contains data, from across the Open Data Network&trade; of publishers, related to housing, construction, zoning, building info, and land use.*",
+        "description" : "The Housing &amp; Development category contains data, from across the Open Data Network&trade; of publishers, related to housing, construction, zoning, building info, and land use.",
         "showcase" : []
     },
     "infrastructure" : {
         "icon" : "fa-road",
-        "description" : "The Infrastructure category contains data, from across the Open Data Network&trade; of publishers, related to infrastructure, streets, 311 data, parking, and construction.*",
+        "description" : "The Infrastructure category contains data, from across the Open Data Network&trade; of publishers, related to infrastructure, streets, 311 data, parking, and construction.",
         "showcase" : []
     },
     "education" : {
         "icon" : "fa-graduation-cap",
-        "description" : "The Education category contains data, from across the Open Data Network&trade; of publishers, related to education, school locations, school exams, school performance, and after-school programs.*",
+        "description" : "The Education category contains data, from across the Open Data Network&trade; of publishers, related to education, school locations, school exams, school performance, and after-school programs.",
         "showcase" : []
     },
     "recreation" : {
         "icon" : "fa-ticket",
-        "description" : "The Recreation category contains data, from across the Open Data Network&trade; of publishers, related to recreation, parks, art, boating, and libraries.*",
+        "description" : "The Recreation category contains data, from across the Open Data Network&trade; of publishers, related to recreation, parks, art, boating, and libraries.",
         "showcase" : []
     }
 }
