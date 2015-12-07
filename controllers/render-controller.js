@@ -57,7 +57,7 @@ RenderController.prototype.renderDatasetPage = function(req, res) {
                       name: sch.name,
                       description: sch.description,
                       uid: uid,
-                      query: 'http://' + req.params.domain + '/resource/' + uid +
+                      query: 'https://' + req.params.domain + '/resource/' + uid +
                         '?' + query,
                       standard: sch.standardIds[0],
                       required_columns: sch.columns,
