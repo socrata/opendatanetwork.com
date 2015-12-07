@@ -1600,5 +1600,13 @@ class SearchPageController {
             this.params.tags.push(standard);
 
         this.params.page = 1;
+
+        // Selecting a standard (tag) resets any other search filter
+        //
+        this.params.categories = [];
+        this.params.domains = [];
+        this.params.q = '';
+        this.params.regions = [];
+        this.params.vector = '';
     }
 }
