@@ -63,17 +63,22 @@ class AutosuggestSource {
             options = _.sortBy(options, this.sort).slice(0, Constants.AUTOCOMPLETE_SHOWN_OPTIONS);
 
         const category = container
-            .append('div')
+            .append('li')
             .attr('class', 'autocomplete-category');
 
         const name = category
-            .append('p')
+            .append('label')
             .attr('class', 'autocomplete-title')
             .text(this.name);
 
-        const results = category
+        const image = category
             .append('div')
-            .attr('class', 'autocomplete-options');
+            .append('i')
+            .attr('class', 'fa fa-globe');
+
+        const results = category
+            .append('ul')
+            .attr('class', 'autocomplete-options sub-list');
 
         const self = this;
         return results

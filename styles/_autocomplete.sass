@@ -1,39 +1,69 @@
 
 $background-color: #3498db
 
-.autocomplete-category
+.region-list
     background-color: white
+    border: 1px solid #d1d1d1
+    margin: 0
+    padding: 0
+    position: relative
+    z-index: 100
 
-    .autocomplete-title
-        color: black
-        font-size: 15px
-        font-weight: bold
-        padding: 0 1em
+    li
+        border-top: 1px solid #d1d1d1
+        position: relative
+
+    li:first-of-type
+        border-top: none
+
+    .sub-list
+        padding-left: 115px
+        position: relative
+
+    .sub-list li
+        border-top-color: #eee
+        cursor: pointer
+        padding: 10px
+
+    .sub-list li:hover
+        background-color: #3498db
+        color: white
+
+    ul
+        line-height: 20px
         margin: 0
+        padding: 0
 
-    .autocomplete-option
-        clear: both
-        font-size: 13px
-        padding: 0 2em
+    li
+        color: #7f8c8d
+        list-style-type: none
+        font-size: 14px
 
-        .dataset-domain
-            padding-left: 1em
+    div
+        left: 0
+        position: absolute
+        text-align: center
+        top: 30px
+        width: 115px
 
-        .capitalize
-            text-transform: capitalize
+    label
+        color: #222
+        display: block
+        font-size: 14px
+        left: 0;
+        line-height: 22px;
+        padding: 10px 0
+        position: absolute
+        text-align: center
+        text-transform: uppercase
+        width: 115px
 
-        #tag
-            display: inline
-            margin-left: 0.5em
-            padding: 0 0.25em
-            background-color: $background-color
-            color: white
+    .fa
+        color: #222
+        font-size: 32px
+        margin: 0 auto
 
     .autocomplete-option.selected
         background-color: $background-color
         color: white
-
-        #tag
-            background-color: white
-            color: $background-color
 
