@@ -73,10 +73,12 @@ class AutosuggestSource {
                 .attr('class', 'autocomplete-title')
                 .text(this.name);
 
-            const image = category
-                .append('div')
-                .append('i')
-                .attr('class', `fa ${this.image}`);
+            if (options.length > 1) {
+                const image = category
+                    .append('div')
+                    .append('i')
+                    .attr('class', `fa ${this.image}`);
+            }
         }
 
         const results = category
