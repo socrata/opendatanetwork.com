@@ -27,8 +27,7 @@ class MapBounds {
     }
 
     quadrant([x, y]) {
-        return [x - this.centerX > 0 ? 1 : -1,
-                y - this.centerY > 0 ? 1 : -1];
+        return [x - this.centerX < 0, y - this.centerY < 0];
     }
 }
 
@@ -40,7 +39,9 @@ const TooltipControl = L.Control.extend({
     onAdd: function(map) {
         const containerDiv = L.DomUtil.create('div', 'tooltip');
         this.container = d3.select(containerDiv)
-            .style('display', 'none');
+            .style('display', 'none')
+            .attr('id', 'tooltip');
+        this.$container = $(this.container[0]);
 
         this.name = this.container
             .append('div')
@@ -59,17 +60,18 @@ const TooltipControl = L.Control.extend({
         };
 
         document.addEventListener('mousemove', (e) => {
-            const point = [e.pageX, e.pageY];
-            if (bounds.atEdge(point)) {
-                const pan = bounds.quadrant(point).map(x => x * MapConstants.PAN_SPEED);
-                map.panBy(pan, MapConstants.PAN_OPTIONS);
-            }
-
             if (this.shown) {
+                const point = [e.pageX, e.pageY];
                 const [x, y] = bounds.normalize(point);
+                const [left, top] = bounds.quadrant(point);
+
+                const p = MapConstants.TOOLTIP_PADDING;
+                const dispX = left ? x + this.width + p : x - p;
+                const dispY = top ? y + this.height + p : y - p;
+
                 this.container
-                    .style('left', `${x - 20}px`)
-                    .style('top', `${y - 10}px`);
+                    .style('left', `${dispX}px`)
+                    .style('top', `${dispY}px`);
             }
         });
 
@@ -79,6 +81,9 @@ const TooltipControl = L.Control.extend({
     show: function(name, value) {
         this.name.text(name);
         this.value.text(value);
+
+        this.width = this.$container.width();
+        this.height = 48;
 
         this.unhide();
     },
