@@ -65,6 +65,9 @@ const MapConstants = {
         closeOnClick: false
     },
 
+    // Map will pan if cursor within TOOLTIP_EDGE pixels of edge.
+    TOOLTIP_EDGE: 100,
+
     TOPOJSON_DIRECTORY: '/geo/',
     TOPOJSON_SUFFIX: '.topo.json',
 
