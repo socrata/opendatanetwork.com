@@ -23,14 +23,12 @@ const MapSources = {
                 name: 'Population',
                 column: 'population',
                 years: [2009, 2010, 2011, 2012, 2013],
-                value: parseFloat,
                 format: format.integer
             },
             {
                 name: 'Population Change',
                 column: 'population_percent_change',
                 years: [2010, 2011, 2012, 2013],
-                value: parseFloat,
                 format: format.percent
             }
         ]
@@ -82,7 +80,6 @@ const MapSources = {
                     column: 'percent_employed',
                     params: {occupation},
                     years: [2013],
-                    value: parseFloat,
                     format: format.percent
                 };
             })
@@ -97,14 +94,12 @@ const MapSources = {
                 name: 'GDP per Capita',
                 column: 'per_capita_gdp',
                 years: _.range(2001, 2014),
-                value: parseFloat,
                 format: format.dollar
             },
             {
                 name: 'Annual Change in GDP',
                 column: 'per_capita_gdp_percent_change',
                 years: _.range(2002, 2014),
-                value: parseFloat,
                 format: format.percent
             }
         ]
@@ -122,8 +117,24 @@ const MapSources = {
                     reverse: true,
                     params: {component},
                     years: _.range(2008, 2014),
-                    value: parseFloat,
                     format: d3.format('.1f')
+                };
+            })
+    },
+
+    health: {
+        name: 'health',
+        domain: DOMAIN,
+        fxf: '7ayp-utp2',
+        variables: ['Adult Smoking', 'Adult Obesity',
+                    'Physical Inactivity', 'Excessive Drinking'].map(
+            name => {
+                return {
+                    name: `${name} Rate`,
+                    column: `${name.toLowerCase().replace(/\s/g, '_')}_value`,
+                    years: [2015],
+                    reverse: true,
+                    format: format.ratio
                 };
             })
     }

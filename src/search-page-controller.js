@@ -259,7 +259,7 @@ class SearchPageController {
 
                 if (regionValues[j].component != component)
                     continue;
-                    
+
                 if (o[regionValues[j].year] == undefined)
                     o[regionValues[j].year] = [regionValues[j].year];
 
@@ -486,6 +486,7 @@ class SearchPageController {
             Promise.all(promises)
                 .then(data => {
 
+                    this.drawMap(MapSources.health);
                     this.drawHealthDataOutcomesTable(data);
                     this.drawHealthBehaviorsTable(data);
                     this.drawHealthClinicalCareTable(data);
@@ -917,7 +918,7 @@ class SearchPageController {
                 const totalRanks = parseInt(regionData[i].total_ranks);
                 const rank = parseInt(regionData[i].percent_employed_rank);
                 const percentile = parseInt(((totalRanks - rank) / totalRanks) * 100);
-    
+
                 s += '<td>' + numeral(regionData[i].percent_employed).format('0.0') + '%</td>';
                 s += '<td class=\'color-' + j + '\'>' + numeral(percentile).format('0o') + '<div></div></td>';
             }
@@ -1493,7 +1494,7 @@ class SearchPageController {
             var regionIds = [];
             var regionNames = [];
 
-            if (this.params.resetRegions == false) { 
+            if (this.params.resetRegions == false) {
 
                 regionIds = this.params.regions.map(region => region.id);
                 regionNames = this.params.regions.map(region => region.name);
@@ -1522,7 +1523,7 @@ class SearchPageController {
 
         var parts = [];
 
-        if (this.params.q.length > 0) 
+        if (this.params.q.length > 0)
             parts.push('q=' + encodeURIComponent(this.params.q));
 
         if (this.params.page > 1)

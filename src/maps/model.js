@@ -34,6 +34,7 @@ class MapModel {
         const yearColumn = source.yearColumn || 'year';
         const hasPopulation = source.hasPopulation || false;
         const populationColumn = source.populationColumn || 'population';
+        const valueFunction = source.value || parseFloat;
 
         return new Promise((resolve, reject) => {
             const baseColumns = [idColumn, typeColumn, nameColumn, yearColumn];
@@ -51,7 +52,7 @@ class MapModel {
 
             function success(results) {
                 const regions = results.map(region => {
-                    const value = variable.value(region[variable.column]);
+                    const value = valueFunction(region[variable.column]);
 
                     return {
                         id: region.id,
@@ -80,10 +81,12 @@ class MapModel {
     }
 
     scale(scaleFunction, range) {
-        if (this.variable.reverse || false)
-            range.reverse();
+        const newRange = range.slice(0);
 
-        return scaleFunction(this.values(), range);
+        if (this.variable.reverse || false)
+            newRange.reverse();
+
+        return scaleFunction(this.values(), newRange);
     }
 }
 
