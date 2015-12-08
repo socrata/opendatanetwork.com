@@ -1,4 +1,23 @@
 
+class MapBounds {
+    constructor($div) {
+        this.$div = $div;
+        this.update();
+    }
+
+    update() {
+        const { left: x1, top: y1 } = this.$div.offset();
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = this.x1 + this.$div.width();
+        this.y2 = this.y1 + this.$div.height();
+    }
+
+    normalize(x, y) {
+        return [x - this.x2, y - this.y2];
+    }
+}
+
 const TooltipControl = L.Control.extend({
     options: {
         position: 'bottomright'
@@ -19,23 +38,15 @@ const TooltipControl = L.Control.extend({
 
         this.shown = false;
 
-        const $map = $('#map');
-        const offset = $map.offset();
-        let mapX = offset.left;
-        let mapY = offset.top;
-        const mapWidth = $map.width();
-        const mapHeight = $map.height();
+        const bounds = new MapBounds($('#map'));
 
         window.onresize = () => {
-            const offset = $map.offset();
-            mapX = offset.left;
-            mapY = offset.top;
+            bounds.update();
         };
 
         document.addEventListener('mousemove', (e) => {
             if (this.shown) {
-                const x = e.pageX - mapX - mapWidth;
-                const y = e.pageY - mapY - mapHeight;
+                const [x, y] = bounds.normalize(e.pageX, e.pageY);
                 this.container
                     .style('left', `${x - 20}px`)
                     .style('top', `${y - 10}px`);
