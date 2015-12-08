@@ -19,13 +19,6 @@ class MapBounds {
         return [x - this.x2, y - this.y2];
     }
 
-    atEdge([x, y], threshold=MapConstants.TOOLTIP_EDGE) {
-        return (x - this.x1 > 0 && x - this.x1 < threshold) ||
-               (x - this.x2 < 0 && x - this.x2 > -threshold) ||
-               (y - this.y1 > 0 && y - this.y1 < threshold) ||
-               (y - this.y2 < 0 && y - this.y2 > -threshold);
-    }
-
     quadrant([x, y]) {
         return [x - this.centerX < 0, y - this.centerY < 0];
     }
