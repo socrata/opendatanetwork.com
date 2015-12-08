@@ -80,10 +80,12 @@ class MapModel {
     }
 
     scale(scaleFunction, range) {
-        if (this.variable.reverse || false)
-            range.reverse();
+        const newRange = range.slice(0);
 
-        return scaleFunction(this.values(), range);
+        if (this.variable.reverse || false)
+            newRange.reverse();
+
+        return scaleFunction(this.values(), newRange);
     }
 }
 

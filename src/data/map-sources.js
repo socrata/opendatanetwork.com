@@ -126,6 +126,24 @@ const MapSources = {
                     format: d3.format('.1f')
                 };
             })
+    },
+
+    health: {
+        name: 'health',
+        domain: DOMAIN,
+        fxf: '7ayp-utp2',
+        variables: ['Adult Smoking', 'Adult Obesity',
+                    'Physical Inactivity', 'Excessive Drinking'].map(
+            name => {
+                return {
+                    name: `${name} Rate`,
+                    column: `${name.toLowerCase().replace(/\s/g, '_')}_value`,
+                    years: [2015],
+                    reverse: true,
+                    value: parseFloat,
+                    format: format.ratio
+                };
+            })
     }
 };
 

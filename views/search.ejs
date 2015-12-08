@@ -37,15 +37,15 @@
     <label class="refine-by-label">Refine by:</label>
 
     <label>
-<% if (params.q.length > 0) { %> 
+<% if (params.q.length > 0) { %>
       <% if (searchResults.results.length > 0) { %>
         <strong><%= searchResults.resultSetSizeString %></strong> results for <strong><%= params.q %></strong>
       <% } else { %>
         <strong><%= getTabTitle(params.vector.length > 0 ? params.vector : 'population') %></strong>
-      <% } %>      
+      <% } %>
 <% } else { %>
       <% if (searchResults.results.length > 0) { %>
-        <strong><%= searchResults.resultSetSizeString %></strong> results for 
+        <strong><%= searchResults.resultSetSizeString %></strong> results for
       <% } %>
         <strong><%= getTabTitle(params.vector.length > 0 ? params.vector : 'population') %></strong>
 <% } %>
@@ -171,6 +171,7 @@
 
 <% } else if (params.vector == 'health') { %>
 
+            <div id="map"></div>
             <h1>Health</h1>
             <h2>RWJF County Health Rankings</h2>
             <p>
@@ -292,9 +293,9 @@ function getSearchPageUrl(vector) {
         // Region ids
         //
         var regionIds = params.regions.map(function(region) {
-            return region.id; 
+            return region.id;
         });
-        
+
         url += '/' + regionIds.join('-');
 
         // Region names
@@ -347,7 +348,7 @@ function getSelectedVector(vector) {
 
     if ((params.vector == vector) || ((params.vector == '') && (vector == 'population')))
         return ' class="selected"';
-    else 
+    else
         return '';
 }
 %>
