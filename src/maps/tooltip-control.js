@@ -61,7 +61,8 @@ const TooltipControl = L.Control.extend({
         document.addEventListener('mousemove', (e) => {
             const point = [e.pageX, e.pageY];
             if (bounds.atEdge(point)) {
-                console.log(bounds.quadrant(point));
+                const pan = bounds.quadrant(point).map(x => x * MapConstants.PAN_SPEED);
+                map.panBy(pan, MapConstants.PAN_OPTIONS);
             }
 
             if (this.shown) {
