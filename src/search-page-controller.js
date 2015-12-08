@@ -1258,17 +1258,19 @@ class SearchPageController {
     }
 
     drawSimilarRegionsList(data, onClickRegion) {
-
         const mostSimilar = data.most_similar;
         const regionPromises = mostSimilar.map(region => RegionLookup.byID(region.id));
 
         Promise.all(regionPromises).then(regions => {
-
             const selection = d3.select('#similar-regions');
+            const selectedRegionsIDs = this.params.regions.map(region => region.id);
+            const unselectedRegions = regions.filter(region => {
+                return ! _.contains(selectedRegionsIDs, region.id);
+            });
 
             const links = selection
                 .selectAll('li')
-                .data(regions)
+                .data(unselectedRegions.slice(0, Constants.PEER_REGIONS))
                 .enter()
                 .append('li')
                 .append('a')
