@@ -1,4 +1,29 @@
 
+class MapBounds {
+    constructor($div) {
+        this.$div = $div;
+        this.update();
+    }
+
+    update() {
+        const { left: x1, top: y1 } = this.$div.offset();
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = this.x1 + this.$div.width();
+        this.y2 = this.y1 + this.$div.height();
+        this.centerX = this.x1 + (this.x2 - this.x1) / 2;
+        this.centerY = this.y1 + (this.y2 - this.y1) / 2;
+    }
+
+    normalize([x, y]) {
+        return [x - this.x2, y - this.y2];
+    }
+
+    quadrant([x, y]) {
+        return [x - this.centerX < 0, y - this.centerY < 0];
+    }
+}
+
 const TooltipControl = L.Control.extend({
     options: {
         position: 'bottomright'
@@ -7,7 +32,9 @@ const TooltipControl = L.Control.extend({
     onAdd: function(map) {
         const containerDiv = L.DomUtil.create('div', 'tooltip');
         this.container = d3.select(containerDiv)
-            .style('display', 'none');
+            .style('display', 'none')
+            .attr('id', 'tooltip');
+        this.$container = $(this.container[0]);
 
         this.name = this.container
             .append('div')
@@ -19,26 +46,25 @@ const TooltipControl = L.Control.extend({
 
         this.shown = false;
 
-        const $map = $('#map');
-        const offset = $map.offset();
-        let mapX = offset.left;
-        let mapY = offset.top;
-        const mapWidth = $map.width();
-        const mapHeight = $map.height();
+        const bounds = new MapBounds($('#leaflet-map'));
 
         window.onresize = () => {
-            const offset = $map.offset();
-            mapX = offset.left;
-            mapY = offset.top;
+            bounds.update();
         };
 
         document.addEventListener('mousemove', (e) => {
             if (this.shown) {
-                const x = e.pageX - mapX - mapWidth;
-                const y = e.pageY - mapY - mapHeight;
+                const point = [e.pageX, e.pageY];
+                const [x, y] = bounds.normalize(point);
+                const [left, top] = bounds.quadrant(point);
+
+                const p = MapConstants.TOOLTIP_PADDING;
+                const dispX = left ? x + this.width + p : x - p;
+                const dispY = top ? y + this.height + p : y - p;
+
                 this.container
-                    .style('left', `${x - 20}px`)
-                    .style('top', `${y - 10}px`);
+                    .style('left', `${dispX}px`)
+                    .style('top', `${dispY}px`);
             }
         });
 
@@ -48,6 +74,9 @@ const TooltipControl = L.Control.extend({
     show: function(name, value) {
         this.name.text(name);
         this.value.text(value);
+
+        this.width = this.$container.width();
+        this.height = 48;
 
         this.unhide();
     },

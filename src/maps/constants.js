@@ -64,6 +64,7 @@ const MapConstants = {
         closeButton: false,
         closeOnClick: false
     },
+    TOOLTIP_PADDING: 16,
 
     TOPOJSON_DIRECTORY: '/geo/',
     TOPOJSON_SUFFIX: '.topo.json',
