@@ -31,71 +31,76 @@ body
     padding: 90px 30px 30px
     width: 100%
 
-    .dataset-container
-        background-color: white
+    .dataset-wrapper
         border: 1px solid $gray-text-color
-        color: $dark-gray-text-color
-        display: table-cell
-        font-family: $fonts
-        font-size: 14px
-        padding: 65px 90px
-        text-align: left
-    
-        h1
-            color: $black-text-color
-            font-size: 24px
-            font-weight: normal
-            margin: 0
-            padding: 0
-    
-        .publisher
-            color: $blue-color
-    
-        .blue-button
-            background-color: $blue-background-color
-    
-        .orange-button
-            background-color: $orange-color
-    
-        .button
-            border-radius: 5px
-            color: white
-            display: inline-block
-            font-size: 16px
-            font-weight: 600
-            line-height: 40px
-            padding: 0 18px
-            margin: 0 5px 0 0
-    
-        .title-container
-            margin-bottom: 20px
-    
-        .button-container
-            margin-bottom: 20px
-    
-        .description-container
-            border-top: 1px solid $gray-text-color
-    
-        .description
-            color: $black-text-color
-    
-    .right-container
-        font-size: 14px
-        color: #222
-        display: table-cell
-        width: 30%
-        max-width: 300px
-        padding: 20px
-        margin-left: 10px
-        background-color: white
 
-        h1, h2, h3, h4
-            font-family: "Lato","Helvetica Neue", Helvetica,Arial,sans-serif
+        .dataset-container
+            background-color: white
+            color: $dark-gray-text-color
+            display: table-cell
+            font-family: $fonts
+            font-size: 14px
+            padding: 65px 90px
+            text-align: left
+        
+            h1
+                color: $black-text-color
+                font-size: 24px
+                font-weight: normal
+                margin: 0
+                padding: 0
+        
+            .publisher
+                color: $blue-color
+        
+            .blue-button
+                background-color: $blue-background-color
+        
+            .orange-button
+                background-color: $orange-color
+        
+            .button
+                border-radius: 5px
+                color: white
+                display: inline-block
+                font-size: 16px
+                font-weight: 600
+                line-height: 40px
+                padding: 0 18px
+                margin: 0 5px 0 0
+        
+            .title-container
+                margin-bottom: 20px
+        
+            .button-container
+                margin-bottom: 20px
+        
+            .description-container
+                border-top: 1px solid $gray-text-color
+        
+            .description
+                color: $black-text-color
+        
+        .right-container
+            background-color: white
+            color: #222
+            display: table-cell
+            font-size: 14px
+            margin-left: 10px
+            max-width: 300px
+            padding: 30px
+            text-align: left 
+            width: 30%
 
-        .query-container
-            background-color: #F5F5F5
-            padding: 10px
+            h1, h2, h3, h4
+                font-family: "Lato","Helvetica Neue", Helvetica,Arial,sans-serif
 
-            code
-                padding: 20px
-                word-wrap: break-word
+            .query-container
+                background-color: #F5F5F5
+                padding: 10px
+
+                code
+                    word-wrap: break-word
+
+                    a
+                      color: #222

@@ -65,7 +65,8 @@ RenderController.prototype.renderDatasetPage = function(req, res) {
                         '?' + query,
                       standard: sch.standardIds[0],
                       required_columns: sch.columns,
-                      opt_columns: sch.optColumns
+                      opt_columns: sch.optColumns,
+                      direct_map: (query.length == 0)
                     }
                   });
 
@@ -83,6 +84,7 @@ RenderController.prototype.renderDatasetPage = function(req, res) {
                                   id : req.params.id,
                                   name : dataset.name,
                                   tags : dataset.tags || [],
+                                  columns : dataset.columns,
                                   updatedAtString : moment(new Date(dataset.viewLastModified * 1000)).format('D MMM YYYY')
                               },
                               schemas: mapped_schemas,
