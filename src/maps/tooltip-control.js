@@ -11,17 +11,24 @@ class MapBounds {
         this.y1 = y1;
         this.x2 = this.x1 + this.$div.width();
         this.y2 = this.y1 + this.$div.height();
+        this.centerX = this.x1 + (this.x2 - this.x1) / 2;
+        this.centerY = this.y1 + (this.y2 - this.y1) / 2;
     }
 
-    normalize(x, y) {
+    normalize([x, y]) {
         return [x - this.x2, y - this.y2];
     }
 
-    atEdge(x, y, threshold=MapConstants.TOOLTIP_EDGE) {
+    atEdge([x, y], threshold=MapConstants.TOOLTIP_EDGE) {
         return (x - this.x1 > 0 && x - this.x1 < threshold) ||
                (x - this.x2 < 0 && x - this.x2 > -threshold) ||
                (y - this.y1 > 0 && y - this.y1 < threshold) ||
                (y - this.y2 < 0 && y - this.y2 > -threshold);
+    }
+
+    quadrant([x, y]) {
+        return [x - this.centerX > 0 ? 1 : -1,
+                y - this.centerY > 0 ? 1 : -1];
     }
 }
 
@@ -52,11 +59,13 @@ const TooltipControl = L.Control.extend({
         };
 
         document.addEventListener('mousemove', (e) => {
-            if (bounds.atEdge(e.pageX, e.pageY))
-                console.log('edge');
+            const point = [e.pageX, e.pageY];
+            if (bounds.atEdge(point)) {
+                console.log(bounds.quadrant(point));
+            }
 
             if (this.shown) {
-                const [x, y] = bounds.normalize(e.pageX, e.pageY);
+                const [x, y] = bounds.normalize(point);
                 this.container
                     .style('left', `${x - 20}px`)
                     .style('top', `${y - 10}px`);
