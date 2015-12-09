@@ -271,7 +271,8 @@ class SearchPageController {
             chartData.push(o[key]);
         }
 
-        this.drawLineChart(id, chartData, {
+        const dataTable = google.visualization.arrayToDataTable(chartData);
+        this.drawLineChart(id, dataTable, {
 
             curveType : 'function',
             legend : { position : 'bottom' },
@@ -811,7 +812,8 @@ class SearchPageController {
 
         // Draw chart
         //
-        this.drawLineChart('per-capita-gdp-chart', chartData, {
+        const dataTable = google.visualization.arrayToDataTable(chartData);
+        this.drawLineChart('per-capita-gdp-chart', dataTable, {
 
             curveType : 'function',
             legend : { position : 'bottom' },
@@ -858,7 +860,8 @@ class SearchPageController {
 
         // Draw chart
         //
-        this.drawLineChart('per-capita-gdp-change-chart', chartData, {
+        const dataTable = google.visualization.arrayToDataTable(chartData);
+        this.drawLineChart('per-capita-gdp-change-chart', dataTable, {
 
             curveType : 'function',
             legend : { position : 'bottom' },
@@ -984,7 +987,8 @@ class SearchPageController {
             chartData.push(o[key]);
         }
 
-        this.drawLineChart('population-chart', chartData, {
+        const dataTable = google.visualization.arrayToDataTable(chartData);
+        this.drawLineChart('population-chart', dataTable, {
 
             curveType : 'function',
             legend : { position : 'bottom' },
@@ -1029,7 +1033,14 @@ class SearchPageController {
             chartData.push(o[key]);
         }
 
-        this.drawLineChart('population-change-chart', chartData, {
+        const dataTable = google.visualization.arrayToDataTable(chartData);
+        const formatter = new google.visualization.NumberFormat( { pattern : '#.##%' } );
+
+        for (var i = 0; i < this.params.regions.length; i++) {
+            formatter.format(dataTable, i + 1);
+        }
+
+        this.drawLineChart('population-change-chart', dataTable, {
 
             curveType : 'function',
             legend : { position : 'bottom' },
@@ -1285,10 +1296,9 @@ class SearchPageController {
 
     // Draw charts
     //
-    drawLineChart(chartId, data, options) {
+    drawLineChart(chartId, dataTable, options) {
 
-        var dataTable = google.visualization.arrayToDataTable(data);
-        var chart = new google.visualization.LineChart(document.getElementById(chartId));
+        const chart = new google.visualization.LineChart(document.getElementById(chartId));
 
         this.applyStandardOptions(options);
 
