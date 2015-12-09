@@ -209,6 +209,8 @@ class SearchPageController {
     //
     drawCostOfLivingData() {
 
+        this.drawMap(MapSources.rpp);
+
         google.setOnLoadCallback(() => {
 
             const controller = new ApiController();
@@ -217,7 +219,6 @@ class SearchPageController {
             Promise.all(promises)
                 .then(data => {
 
-                    this.drawMap(MapSources.rpp);
                     this.drawCostOfLivingChart(data);
                     this.drawCostOfLivingTable(data);
                 })
@@ -361,6 +362,8 @@ class SearchPageController {
     //
     drawEarningsData() {
 
+        this.drawMap(MapSources.earnings);
+
         google.setOnLoadCallback(() => {
 
             const controller = new ApiController();
@@ -369,7 +372,6 @@ class SearchPageController {
             Promise.all(promises)
                 .then(data => {
 
-                    this.drawMap(MapSources.earnings);
                     this.drawEarningsChart(data);
                     this.drawEarningsTable(data);
                 })
@@ -479,6 +481,8 @@ class SearchPageController {
     //
     drawHealthData() {
 
+        this.drawMap(MapSources.health);
+
         google.setOnLoadCallback(() => {
 
             const controller = new ApiController();
@@ -487,7 +491,6 @@ class SearchPageController {
             Promise.all(promises)
                 .then(data => {
 
-                    this.drawMap(MapSources.health);
                     this.drawHealthDataOutcomesTable(data);
                     this.drawHealthBehaviorsTable(data);
                     this.drawHealthClinicalCareTable(data);
@@ -705,17 +708,15 @@ class SearchPageController {
     //
     drawEducationData() {
 
+        this.drawMap(MapSources.education);
+
         google.setOnLoadCallback(() => {
 
             const controller = new ApiController();
             const promises = this.params.regions.map(region => controller.getEducationData(region.id));
 
             Promise.all(promises)
-                .then(data => {
-
-                    this.drawMap(MapSources.education);
-                    this.drawEducationTable(data)
-                })
+                .then(data => this.drawEducationTable(data))
                 .catch(error => console.error(error));
         });
     }
@@ -759,6 +760,8 @@ class SearchPageController {
     //
     drawGdpData() {
 
+        this.drawMap(MapSources.gdp);
+
         google.setOnLoadCallback(() => {
 
             const controller = new ApiController();
@@ -767,7 +770,6 @@ class SearchPageController {
             Promise.all(promises)
                 .then(data => {
 
-                    this.drawMap(MapSources.gdp);
                     this.drawGdpChart(data);
                     this.drawGdpChangeChart(data);
                 })
@@ -876,18 +878,15 @@ class SearchPageController {
     //
     drawOccupationsData() {
 
-        google.setOnLoadCallback(() => {
+        this.drawMap(MapSources.occupations);
 
+        google.setOnLoadCallback(() => {
 
             const controller = new ApiController();
             const promises = this.params.regions.map(region => controller.getOccupationsData(region.id));
 
             Promise.all(promises)
-                .then(data => {
-
-                    this.drawMap(MapSources.occupations);
-                    this.drawOccupationsTable(data)
-                })
+                .then(data => this.drawOccupationsTable(data))
                 .catch(error => console.error(error));
         });
     }
@@ -936,6 +935,8 @@ class SearchPageController {
     //
     drawPopulationData() {
 
+        this.drawMap(MapSources.population);
+
         google.setOnLoadCallback(() => {
 
             const controller = new ApiController();
@@ -944,7 +945,6 @@ class SearchPageController {
             Promise.all(promises)
                 .then(data => {
 
-                    this.drawMap(MapSources.population);
                     this.drawPopulationChart(data);
                     this.drawPopulationChangeChart(data);
                 })
