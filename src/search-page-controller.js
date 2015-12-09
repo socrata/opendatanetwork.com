@@ -1597,7 +1597,13 @@ class SearchPageController {
 
         // Selecting a standard (tag) resets any other search filter
         //
-        this.params.tags = [tag];
+        var i = this.params.tags.indexOf(tag);
+
+        if (i > -1)
+            this.params.tags.splice(i, 1); // remove at index i
+        else
+            this.params.tags = [tag];
+
         this.params.page = 1;
         this.params.categories = [];
         this.params.domains = [];
