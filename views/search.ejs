@@ -36,21 +36,21 @@
 
     <label class="refine-by-label">Refine by:</label>
 
-<% if (params.regions.length > 0) { %>
-
-    <% if (searchResults.results.length > 0) { %>
-        <strong><%= searchResults.resultSetSizeString %></strong> results for
-    <% } %>
+<% if (params.q.length > 0) { %> 
+      <% if (searchResults.results.length > 0) { %>
+        <strong><%= searchResults.resultSetSizeString %></strong> results for <strong><%= params.q %></strong>
+      <% } else { %>
         <strong><%= getTabTitle(params.vector.length > 0 ? params.vector : 'population') %></strong>
 
 <% } else { %>
-
-    <% if (params.q.length > 0) { %>
-        <strong><%= searchResults.resultSetSizeString %></strong> results for <strong><%= params.q %></strong>
-    <% } else { %>
+    <% if (searchResults.results.length > 0) { %>
+      <% if (params.regions.length > 0) { %>
+        <strong><%= searchResults.resultSetSizeString %></strong> results for 
+        <strong><%= getTabTitle(params.vector.length > 0 ? params.vector : 'population') %></strong>
+      <% } else { %>
         <strong><%= searchResults.resultSetSizeString %></strong> results
+      <% } %>
     <% } %>
-
 <% } %>
 
     <ul class="tokens">

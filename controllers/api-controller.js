@@ -21,6 +21,7 @@ var rosterUrl = 'https://odn.data.socrata.com/resource/bdeb-mf9k/?$where={0}';
 var searchUrl = baseCatalogUrl;
 var tagsUrl = baseCatalogUrl + '/tags';
 var userAgent = 'www.opendatanetwork.com';
+var athenaUrl = 'https://socrata-athena.herokuapp.com/schema/v1/applied/';
 
 const SYNONYMS = Synonyms.fromFile(Constants.SYNONYMS_FILE);
 
@@ -146,6 +147,10 @@ ApiController.prototype.getTagsAll = function(successHandler, errorHandler) {
 
     this.getTags(null, successHandler, errorHandler);
 };
+
+ApiController.prototype.getStandardSchemas = function(domain, id, successHandler, errorHandler) {
+    getFromApi(athenaUrl + id, successHandler, errorHandler);
+}
 
 // Private functions
 //
