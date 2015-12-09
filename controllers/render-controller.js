@@ -1,5 +1,6 @@
 var ApiController = require('./api-controller');
 var CategoryController = require('./category-controller');
+var LocationsController = require('./locations-controller');
 var TagController = require('./tag-controller');
 var Sources = require('./sources');
 
@@ -10,6 +11,7 @@ var moment = require('moment');
 
 var apiController = new ApiController();
 var categoryController = new CategoryController();
+var locationsController = new LocationsController();
 var sources = Sources.getSources();
 var tagController = new TagController();
 
@@ -84,36 +86,38 @@ RenderController.prototype.renderHomePage = function(req, res) {
 
         categoryController.attachCategoryMetadata(allCategoryResults, function(allCategoryResults) {
 
-            // Get params
-            //
-            RenderController.prototype.getSearchParameters(req, function(params) {
+            locationsController.getLocations(function(locations) {
 
-                // Render page
-                //
-                res.render(
-                    'home.ejs',
-                    {
-                        allCategoryResults : allCategoryResults,
-                        css : [
-                            '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css',
-                            '/styles/home.css',
-                            '/styles/main.css'
-                        ],
-                        params : params,
-                        scripts : [
-                            '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js',
-                            {
-                                'url' : '//fast.wistia.net/static/popover-v1.js',
-                                'charset' : 'ISO-8859-1'
-                            },
-                            '/lib/third-party/browser-polyfill.min.js',
-                            '/lib/third-party/d3.min.js',
-                            '/lib/third-party/d3.promise.min.js',
-                            '/lib/third-party/lodash.min.js',
-                            '/lib/home.min.js'
-                        ],
-                        searchPath : '/search',
-                        title : 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.'
+                RenderController.prototype.getSearchParameters(req, function(params) {
+    
+                    // Render page
+                    //
+                    res.render(
+                        'home.ejs',
+                        {
+                            allCategoryResults : allCategoryResults,
+                            css : [
+                                '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css',
+                                '/styles/home.css',
+                                '/styles/main.css'
+                            ],
+                            locations : locations,
+                            params : params,
+                            scripts : [
+                                '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js',
+                                {
+                                    'url' : '//fast.wistia.net/static/popover-v1.js',
+                                    'charset' : 'ISO-8859-1'
+                                },
+                                '/lib/third-party/browser-polyfill.min.js',
+                                '/lib/third-party/d3.min.js',
+                                '/lib/third-party/d3.promise.min.js',
+                                '/lib/third-party/lodash.min.js',
+                                '/lib/home.min.js'
+                            ],
+                            searchPath : '/search',
+                            title : 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.'
+                        });
                     });
              });
         });

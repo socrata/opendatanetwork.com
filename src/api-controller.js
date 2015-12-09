@@ -11,6 +11,7 @@ class ApiController {
         this.educationUrl = 'https://odn.data.socrata.com/resource/uf4m-5u8r.json?id={0}';
         this.gdpUrl = 'https://odn.data.socrata.com/resource/ks2j-vhr8.json?id={0}';
         this.mostPopulousRegionTypeUrl = 'https://odn.data.socrata.com/resource/eyae-8jfy?parent_id={0}&child_type={1}&$limit={2}&$order=child_population desc';
+        this.mostPopulousStatesUrl = 'https://odn.data.socrata.com/resource/eyae-8jfy?$where=child_type=\'state\'&$order=child_population desc&$limit={0}';
         this.occupationsUrl = 'https://odn.data.socrata.com/resource/qfcm-fw3i.json?$order=occupation&id={0}';
         this.parentStateUrl = 'https://odn.data.socrata.com/resource/eyae-8jfy?parent_type=state&child_id={0}';
         this.populationUrl = 'https://odn.data.socrata.com/resource/e3rd-zzmr.json?id={0}';
@@ -75,6 +76,11 @@ class ApiController {
     getMetrosInState(stateId, limit = 10) {
 
         return d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'msa', limit));
+    }
+
+    getMostPopulousStates(limit = 8) {
+
+        return d3.promise.json(this.mostPopulousStatesUrl.format(limit));
     }
 
     getOccupationsData(regionId) {

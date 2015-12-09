@@ -1,5 +1,6 @@
 
 $(document).ready(function() {
+
     // Slider
     //
     $('.slider').slick({
