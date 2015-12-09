@@ -41,11 +41,8 @@ class SearchPageController {
             controller.getCategories()
                 .then(data => {
 
-                    var rg = data.results.map(function(result) {
-                        return '<li><i class="fa ' + result.metadata.icon + '"></i>' + result.category + '</li>';
-                    });
-
-                    var s = rg.join('');
+                    const rg = data.results.map(result => '<li><i class="fa ' + result.metadata.icon + '"></i>' + result.category + '</li>');
+                    const s = rg.join('');
 
                     $('#refine-menu-categories').html(s);
                     self.attachCategoriesClickHandlers();
@@ -64,11 +61,8 @@ class SearchPageController {
             controller.getDomains()
                 .then(data => {
 
-                    var rg = data.results.map(function(result) {
-                        return '<li>' + result.domain + '</li>';
-                    });
-
-                    var s = rg.join('');
+                    const rg = data.results.map(result => '<li>' + result.domain + '</li>');
+                    const s = rg.join('');
 
                     $('#refine-menu-domains').html(s);
                     self.attachDomainsClickHandlers();
@@ -110,7 +104,7 @@ class SearchPageController {
         //
         $(window).on('scroll', function() {
 
-            var bottomOffsetToBeginRequest = 1000;
+            const bottomOffsetToBeginRequest = 1000;
 
             if ($(window).scrollTop() >= $(document).height() - $(window).height() - bottomOffsetToBeginRequest) {
                 self.fetchNextPage();
@@ -180,7 +174,7 @@ class SearchPageController {
 
         $('#refine-menu-domains li:not(.refine-view-more)').click(function() {
 
-            var domain = $(this).text().toLowerCase().trim();
+            const domain = $(this).text().toLowerCase().trim();
 
             self.toggleDomain(domain);
             self.navigate();
@@ -193,7 +187,7 @@ class SearchPageController {
 
         $('#refine-menu-tags li').click(function() {
 
-            var tag = $(this).text().toLowerCase().trim();
+            const tag = $(this).text().toLowerCase().trim();
 
             self.toggleTag(tag);
             self.navigate();
@@ -322,11 +316,11 @@ class SearchPageController {
         $('#cost-of-living-table').html(s);
     }
 
-    getPercentile(rank, totalRanks) {
+    getPercentile(rankString, totalRanksString) {
 
-        var totalRanks = parseInt(totalRanks);
-        var rank = parseInt(rank);
-        var percentile = parseInt(((totalRanks - rank) / totalRanks) * 100);
+        const totalRanks = parseInt(totalRanksString);
+        const rank = parseInt(rankString);
+        const percentile = parseInt(((totalRanks - rank) / totalRanks) * 100);
 
         return numeral(percentile).format('0o');
     }
@@ -1058,7 +1052,7 @@ class SearchPageController {
         if (this.params.regions.length == 0)
             return;
 
-        var region = this.params.regions[0];
+        const region = this.params.regions[0];
 
         switch (region.type) {
 
@@ -1074,7 +1068,7 @@ class SearchPageController {
 
     drawChildPlacesInRegion(region, label) {
 
-        var controller = new ApiController();
+        const controller = new ApiController();
 
         controller.getChildRegions(region.id)
             .then(response => {
@@ -1087,9 +1081,9 @@ class SearchPageController {
 
     drawCitiesAndCountiesInState(region) {
 
-        var controller = new ApiController();
-        var citiesPromise = controller.getCitiesInState(region.id);
-        var countiesPromise = controller.getCountiesInState(region.id);
+        const controller = new ApiController();
+        const citiesPromise = controller.getCitiesInState(region.id);
+        const countiesPromise = controller.getCountiesInState(region.id);
 
         return Promise.all([citiesPromise, countiesPromise])
             .then(values => {
@@ -1114,7 +1108,7 @@ class SearchPageController {
 
     drawOtherCitiesInState(region) {
 
-        var controller = new ApiController();
+        const controller = new ApiController();
 
         controller.getParentState(region)
             .then(response => {
@@ -1122,7 +1116,7 @@ class SearchPageController {
                 if (response.length == 0)
                     return;
 
-                var state = response[0];
+                const state = response[0];
 
                 controller.getCitiesInState(state.parent_id)
                     .then(response => {
@@ -1139,7 +1133,7 @@ class SearchPageController {
 
     drawOtherCountiesInState(region) {
 
-        var controller = new ApiController();
+        const controller = new ApiController();
 
         controller.getParentState(region)
             .then(response => {
@@ -1147,7 +1141,7 @@ class SearchPageController {
                 if (response.length == 0)
                     return;
 
-                var state = response[0];
+                const state = response[0];
 
                 controller.getCountiesInState(state.parent_id)
                     .then(response => {
@@ -1164,7 +1158,7 @@ class SearchPageController {
 
     drawOtherMetrosInState(region) {
 
-        var controller = new ApiController();
+        const controller = new ApiController();
 
         controller.getParentState(region)
             .then(response => {
@@ -1172,7 +1166,7 @@ class SearchPageController {
                 if (response.length == 0)
                     return;
 
-                var state = response[0];
+                const state = response[0];
 
                 controller.getMetrosInState(state.parent_id)
                     .then(response => {
@@ -1307,8 +1301,8 @@ class SearchPageController {
 
     drawSteppedAreaChart(chartId, data, options) {
 
-        var dataTable = google.visualization.arrayToDataTable(data);
-        var chart = new google.visualization.SteppedAreaChart(document.getElementById(chartId));
+        const dataTable = google.visualization.arrayToDataTable(data);
+        const chart = new google.visualization.SteppedAreaChart(document.getElementById(chartId));
 
         this.applyStandardOptions(options);
 
@@ -1373,7 +1367,7 @@ class SearchPageController {
 
         places.forEach(place => {
 
-            var feature = {
+            const feature = {
                 "type": "Feature",
                 "properties": {
                     "name": place.name
@@ -1408,7 +1402,7 @@ class SearchPageController {
 
         places.forEach(place => {
 
-            var feature = {
+            const feature = {
                 "type": "Feature",
                 "properties": {
                     "name": place.name
@@ -1425,7 +1419,7 @@ class SearchPageController {
 
     getPlacesForRegion(data) {
 
-        var places = [];
+        const places = [];
 
         data.forEach(place => {
 
@@ -1533,7 +1527,7 @@ class SearchPageController {
 
     getSearchQueryString() {
 
-        var parts = [];
+        const parts = [];
 
         if (this.params.q.length > 0)
             parts.push('q=' + encodeURIComponent(this.params.q));
@@ -1584,7 +1578,7 @@ class SearchPageController {
 
     toggleCategory(category) {
 
-        var i = this.params.categories.indexOf(category);
+        const i = this.params.categories.indexOf(category);
 
         if (i > -1)
             this.params.categories.splice(i, 1); // remove at index i
@@ -1596,7 +1590,7 @@ class SearchPageController {
 
     toggleDomain(domain) {
 
-        var i = this.params.domains.indexOf(domain);
+        const i = this.params.domains.indexOf(domain);
 
         if (i > -1)
             this.params.domains.splice(i, 1); // remove at index i
@@ -1610,7 +1604,7 @@ class SearchPageController {
 
         // Selecting a standard (tag) resets any other search filter
         //
-        var i = this.params.tags.indexOf(tag);
+        const i = this.params.tags.indexOf(tag);
 
         if (i > -1)
             this.params.tags.splice(i, 1); // remove at index i
