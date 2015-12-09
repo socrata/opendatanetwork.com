@@ -1560,6 +1560,9 @@ class SearchPageController {
 
         this.params.regions.splice(regionIndex, 1); // remove at index i
         this.params.page = 1;
+
+        if (this.params.regions.length == 0) // when the last region is removed so should the vector be removed.
+            this.params.vector = '';
     }
 
     setAutoSuggestedRegion(region, resetRegions) {
