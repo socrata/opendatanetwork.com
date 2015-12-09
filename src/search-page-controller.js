@@ -1593,19 +1593,12 @@ class SearchPageController {
         this.params.page = 1;
     }
 
-    toggleTag(standard) {
-
-        var i = this.params.tags.indexOf(standard);
-
-        if (i > -1)
-            this.params.tags.splice(i, 1); // remove at index i
-        else
-            this.params.tags.push(standard);
-
-        this.params.page = 1;
+    toggleTag(tag) {
 
         // Selecting a standard (tag) resets any other search filter
         //
+        this.params.tags = [tag];
+        this.params.page = 1;
         this.params.categories = [];
         this.params.domains = [];
         this.params.q = '';
