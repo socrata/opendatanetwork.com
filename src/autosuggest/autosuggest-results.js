@@ -100,7 +100,6 @@ class AutosuggestResults {
     }
 
     enter() {
-        console.log('asd');
         const selection = this.options[this.index];
         selection.on('click')(selection.datum());
     }

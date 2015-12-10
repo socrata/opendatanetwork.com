@@ -19,6 +19,7 @@ var domainsUrl = baseCatalogUrl + '/domains';
 var maxDescriptionLength = 300;
 var rosterUrl = 'https://odn.data.socrata.com/resource/bdeb-mf9k/?$where={0}';
 var searchUrl = baseCatalogUrl;
+var tagsUrl = baseCatalogUrl + '/tags';
 var userAgent = 'www.opendatanetwork.com';
 
 const SYNONYMS = Synonyms.fromFile(Constants.SYNONYMS_FILE);
@@ -110,7 +111,7 @@ ApiController.prototype.getSearchDatasetsUrl = function(requestParams, completio
         }
     }).map(name => `"${name}"`);
 
-    const allTerms = [synonyms, regionNames, requestParams.standards];
+    const allTerms = [synonyms, regionNames, requestParams.tags];
     const query = allTerms
         .filter(terms => terms.length > 0)
         .map(terms => `(${terms.join(' OR ')})`)
@@ -118,15 +119,32 @@ ApiController.prototype.getSearchDatasetsUrl = function(requestParams, completio
 
     const categories = requestParams.categories || [];
     const domains = requestParams.domains || [];
+    const tags = requestParams.tags || [];
+    
     const allParams = _.extend({}, requestParams, {
-        categories: categories.join(','),
-        domains: domains.join(','),
         q_internal: query,
     });
     const params = _.omit(allParams, value => value === '' || value === []);
 
     const url = `${Constants.CATALOG_URL}?${querystring.stringify(params)}`;
     completionHandler(url);
+};
+
+ApiController.prototype.getTags = function(count, successHandler, errorHandler) {
+
+    getFromCacheOrApi(
+        tagsUrl, 
+        function(results) { 
+
+            truncateResults(count, results);
+            if (successHandler) successHandler(results); 
+        },
+        errorHandler);
+};
+
+ApiController.prototype.getTagsAll = function(successHandler, errorHandler) {
+
+    this.getTags(null, successHandler, errorHandler);
 };
 
 // Private functions

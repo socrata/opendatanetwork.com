@@ -8,7 +8,7 @@
 
     <a class="refine-link">
         <span>Standards<i class="fa fa-caret-down"></i></span>
-        <ul id="refine-menu-standards" style="display:none">
+        <ul id="refine-menu-tags" style="display:none">
             <li>BLDS</li>
             <li>LIVES</li>
         </ul>
@@ -36,10 +36,9 @@
 
     <label class="refine-by-label">Refine by:</label>
 
-    <label><strong><%= searchResults.resultSetSizeString %></strong>
-    <% if ((params.q.length > 0) || (params.regions.length > 0)) { %> results for <% } else { %> results <% }%>
-    <% if (params.q.length > 0) { %>
-        <strong><%= params.q %></strong>
+    <label>
+    <% if (params.q.length > 0) { %> 
+        <strong><%= searchResults.resultSetSizeString %></strong> results for <strong><%= params.q %></strong>
     <% } else if (params.regions.length > 0){ %>
         <strong><%= getTabTitle(params.vector.length > 0 ? params.vector : 'population') %></strong>
     <% } %>
@@ -54,8 +53,8 @@
     <% params.domains.forEach(function(domain) { %>
         <li class="domain-token"><%= domain %> <a class="fa fa-times-circle"></a></li>
     <% }); %>
-    <% params.standards.forEach(function(standard) { %>
-        <li class="standard-token"><%= standard %> <a class="fa fa-times-circle"></a></li>
+    <% params.tags.forEach(function(tag) { %>
+        <li class="standard-token"><%= tag %> <a class="fa fa-times-circle"></a></li>
     <% }); %>
     </ul>
 
@@ -66,6 +65,19 @@
 <% if (params.regions.length == 0) { %>
 
     <div class="search-results-regular-column">
+
+      <% if (currentCategory && currentCategory.metadata && currentCategory.metadata.description) { %>
+        <div class="current-category">
+            <a class="fa fa-close"></a>
+            <strong><%= currentCategory.category %></strong> - <%- currentCategory.metadata.description %>
+        </div>
+      <% } else if (currentTag && currentTag.metadata && currentTag.metadata.description) { %>
+        <div class="current-category">
+            <a class="fa fa-close"></a>
+            <strong><%= currentTag.tag %></strong> - <%- currentTag.metadata.description %>
+        </div>
+      <% } %>
+
         <ul class="datasets">
 <% include _search-results-regular %>
         </ul>
@@ -315,8 +327,8 @@ function getSearchQueryString() {
     if (params.domains.length > 0)
         parts.push('domains=' + encodeURIComponent(params.domains.join(',')));
 
-    if (params.standards.length > 0)
-        parts.push('standards=' + encodeURIComponent(params.standards.join(',')));
+    if (params.tags.length > 0)
+        parts.push('tags=' + encodeURIComponent(params.tags.join(',')));
 
     if (params.debug)
         parts.push('debug=');

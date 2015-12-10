@@ -10,6 +10,7 @@ function multiComplete(inputSelector, resultSelector) {
     const sources = [
         {
             name: 'Datasets',
+            image: 'fa-bar-chart',
             domain: domain,
             fxf: 'fpum-bjbr',
             column: 'encoded',
@@ -26,6 +27,7 @@ function multiComplete(inputSelector, resultSelector) {
         },
         {
             name: 'Regions',
+            image: 'fa-globe',
             domain: domain,
             fxf: '68ht-6puw',
             column: 'all',
@@ -37,6 +39,7 @@ function multiComplete(inputSelector, resultSelector) {
         },
         {
             name: 'Publishers',
+            image: 'fa-newspaper-o',
             domain: domain,
             fxf: '8ae5-ghum',
             column: 'domain',
@@ -44,6 +47,7 @@ function multiComplete(inputSelector, resultSelector) {
         },
         {
             name: 'Categories',
+            image: 'fa-fighter-jet',
             domain: domain,
             fxf: '864v-r7tf',
             column: 'category',

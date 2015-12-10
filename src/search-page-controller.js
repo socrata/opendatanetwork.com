@@ -78,7 +78,7 @@ class SearchPageController {
 
         // Standards
         //
-        this.attachStandardsClickHandlers();
+        this.attachTagsClickHandlers();
 
         // Tokens
         //
@@ -102,7 +102,7 @@ class SearchPageController {
 
         $('.standard-token .fa-times-circle').click(function() {
 
-            self.toggleStandard($(this).parent().text().toLowerCase().trim());
+            self.toggleTag($(this).parent().text().toLowerCase().trim());
             self.navigate();
         });
 
@@ -187,15 +187,15 @@ class SearchPageController {
         });
     }
 
-    attachStandardsClickHandlers() {
+    attachTagsClickHandlers() {
 
         const self = this;
 
-        $('#refine-menu-standards li').click(function() {
+        $('#refine-menu-tags li').click(function() {
 
-            var standard = $(this).text().toLowerCase().trim();
+            var tag = $(this).text().toLowerCase().trim();
 
-            self.toggleStandard(standard);
+            self.toggleTag(tag);
             self.navigate();
         });
     }
@@ -1534,8 +1534,8 @@ class SearchPageController {
         if (this.params.domains.length > 0)
             parts.push('domains=' + encodeURIComponent(this.params.domains.join(',')));
 
-        if (this.params.standards.length > 0)
-            parts.push('standards=' + encodeURIComponent(this.params.standards.join(',')));
+        if (this.params.tags.length > 0)
+            parts.push('tags=' + encodeURIComponent(this.params.tags.join(',')));
 
         if (this.params.debug)
             parts.push('debug=');
@@ -1590,15 +1590,23 @@ class SearchPageController {
         this.params.page = 1;
     }
 
-    toggleStandard(standard) {
+    toggleTag(standard) {
 
-        var i = this.params.standards.indexOf(standard);
+        var i = this.params.tags.indexOf(standard);
 
         if (i > -1)
-            this.params.standards.splice(i, 1); // remove at index i
+            this.params.tags.splice(i, 1); // remove at index i
         else
-            this.params.standards.push(standard);
+            this.params.tags.push(standard);
 
         this.params.page = 1;
+
+        // Selecting a standard (tag) resets any other search filter
+        //
+        this.params.categories = [];
+        this.params.domains = [];
+        this.params.q = '';
+        this.params.regions = [];
+        this.params.vector = '';
     }
 }

@@ -1,7 +1,8 @@
 
 class AutosuggestSource {
-    constructor(name, domain, fxf, column, encoded, select, show, sort) {
+    constructor(name, image, domain, fxf, column, encoded, select, show, sort) {
         this.name = name;
+        this.image = image;
         this.domain = domain;
         this.fxf = fxf;
         this.column = column;
@@ -17,7 +18,7 @@ class AutosuggestSource {
             selection.append('span').text(option.text);
         });
 
-        return new AutosuggestSource(json.name, json.domain, json.fxf, json.column,
+        return new AutosuggestSource(json.name, json.image, json.domain, json.fxf, json.column,
                                      encoded, json.select, show, json.sort);
     }
 
@@ -63,17 +64,26 @@ class AutosuggestSource {
             options = _.sortBy(options, this.sort).slice(0, Constants.AUTOCOMPLETE_SHOWN_OPTIONS);
 
         const category = container
-            .append('div')
+            .append('li')
             .attr('class', 'autocomplete-category');
 
-        const name = category
-            .append('p')
-            .attr('class', 'autocomplete-title')
-            .text(this.name);
+        if (this.image) {
+            const name = category
+                .append('label')
+                .attr('class', 'autocomplete-title')
+                .text(this.name);
+
+            if (options.length > 1) {
+                const image = category
+                    .append('div')
+                    .append('i')
+                    .attr('class', `fa ${this.image}`);
+            }
+        }
 
         const results = category
-            .append('div')
-            .attr('class', 'autocomplete-options');
+            .append('ul')
+            .attr('class', 'autocomplete-options sub-list');
 
         const self = this;
         return results
