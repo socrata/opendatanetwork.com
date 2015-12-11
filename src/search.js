@@ -14,7 +14,7 @@ $(document).ready(function() {
     $('.fa-close').click(function() {
         $('.current-category').fadeOut();
     });
-    
+
     // Chart column
     //
     if (_params.regions.length > 0) {
@@ -31,6 +31,9 @@ $(document).ready(function() {
 
             case 'health':
                 searchPageController.drawHealthData();
+                jQuery("#cdc-brfss-overall-health-chart-selector").on('change',function(){
+                    searchPageController.drawBrfssCharts();
+                })
                 break;
 
             case 'education':
