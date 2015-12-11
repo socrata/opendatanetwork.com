@@ -162,18 +162,33 @@
                 Note: ODN datasets and APIs may differ in format from the original data in order to provide a user-friendly experience on this site.
             </label>
 
-<% } else if (params.vector == 'health') { %>
+<% } else if (params.vector == 'health') { console.log(params) %>
 
             <h1>Health</h1>
+
+            <div id='cdc-brfss'>
+                <h2>CDC Behavioral Risk Factor Surveillance System (BRFSS) Data: Overall Health</h2>
+                <p>The Behavioral Risk Factor Surveillance System (BRFSS) is the nation's premier system of health-related telephone surveys that collect state data about U.S. residents regarding their health-related risk behaviors, chronic health conditions, and use of preventive services. Established in 1984 with 15 states, BRFSS now collects data in all 50 states as well as the District of Columbia and three U.S. territories. BRFSS completes more than 400,000 adult interviews each year, making it the largest continuously conducted health survey system in the world.</p>
+
+                <figure id="cdc-brfss-overall-health-excellent-chart"></figure>
+                <label>
+                    Data from CDC's Behavioral Risk Factor Surveillance System. <a href='https://chronicdata.cdc.gov/Behavioral-Risk-Factors/Behavioral-Risk-Factor-Surveillance-System-BRFSS-P/dttw-5yxu'>Data Source</a> | <a href='#'>ODN Dataset</a> | <a href='#'>API</a> - <span class='info-icon' title='Note: ODN datasets and APIs are subject to change and may differ in format from the original source data.'></span>
+                    <br>
+                    Note: ODN datasets and APIs may differ in format from the original data in order to provide a user-friendly experience on this site.
+                </label>
+            </div>
+
+
+
             <h2>RWJF County Health Rankings</h2>
             <p>
                 The Robert Wood Johnson Foundation produces health rankings for states and counties.
                 They explore many aspects of health including quality of life, health behaviors,
                 access to clinical care, socioeconomic factors, and environmental factors.
             </p>
-            <h1>Health Outcomes</h1>
+            <h3>Health Outcomes</h3>
             <table id="rwjf-county-health-outcomes-table" class="horizontal"></table>
-            <h1>Health Factors</h1>
+            <h3>Health Factors</h3>
             <table id="rwjf-county-health-factors-table" class="horizontal"></table>
             <table id="rwjf-county-health-clinical-care-table" class="horizontal"></table>
             <table id="rwjf-county-health-social-economic-factors-table" class="horizontal"></table>
