@@ -556,17 +556,21 @@ class SearchPageController {
         }
 
         this.drawLineChart('cdc-brfss-overall-health-excellent-chart', chartData, {
-
             curveType : 'function',
             legend : { position : 'bottom' },
             pointShape : 'square',
             pointSize : 8,
+            vAxis: {
+                title: "Crude Percentage",
+            },
+            hAxis: {
+                title: "Year",
+            },
             title : 'Crude Percentage Responded \'Excellent\' to \'How is your general health?\'',
         });
     }
 
     drawHealthDataOutcomesTable(data) {
-        console.log(data)
 
         var s = '<tr>';
         s += '<th class=\'empty\'></th>';
