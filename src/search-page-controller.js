@@ -498,7 +498,7 @@ class SearchPageController {
                 .catch(error => console.error(error));
 
             const state_regions = this.params.regions.filter(function(region,n){return region['type'] == "state"})
-            if(state_regions.length == this.params.regions.length){
+            if(state_regions.length > 0){
 
                 const cdcPromise = state_regions.map(region => 
                     controller.getHealthCdcBrfssPrevalenceOverallHealthData(region.id)
@@ -521,14 +521,15 @@ class SearchPageController {
     }
 
     drawBrfssOverallHealthChart(data) {
+        const state_regions = this.params.regions.filter(function(region,n){return region['type'] == "state"})
         const chartData = [];
 
         // Header
         //
         const header = ['Year'];
 
-        for (var i = 0; i < this.params.regions.length; i++) {
-            header[i + 1] = this.params.regions[i].name;
+        for (var i = 0; i < state_regions.length; i++) {
+            header[i + 1] = state_regions[i].name;
         }
 
         chartData.push(header);
