@@ -31,6 +31,9 @@ $(document).ready(function() {
 
             case 'health':
                 searchPageController.drawHealthData();
+                jQuery("#cdc-brfss-overall-health-chart-selector").on('change',function(){
+                    searchPageController.drawBrfssCharts();
+                })
                 break;
 
             case 'education':

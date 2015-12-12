@@ -476,13 +476,16 @@ class SearchPageController {
     drawHealthData() {
 
         this.drawMap(MapSources.health);
+        this.drawBrfssCharts()
 
         google.setOnLoadCallback(() => {
 
             const controller = new ApiController();
-            const promises = this.params.regions.map(region => controller.getHealthRwjfChrData(region.id));
+            const rwjfPromise = this.params.regions.map(region => 
+                controller.getHealthRwjfChrData(region.id)
+            );
 
-            Promise.all(promises)
+            Promise.all(rwjfPromise)
                 .then(data => {
 
                     this.drawHealthDataOutcomesTable(data);
@@ -492,7 +495,71 @@ class SearchPageController {
                     this.drawHealthPhysicalEnvironmentTable(data);
                 })
                 .catch(error => console.error(error));
+
+
         });
+    }
+
+    drawBrfssCharts(){
+      const state_regions = this.params.regions.filter(function(region,n){return region['type'] == "state"})
+      if(state_regions.length > 0){
+          const response = jQuery("#cdc-brfss-overall-health-chart-selector").val()
+          const cdcPromise = state_regions.map(region => 
+              new ApiController().getHealthCdcBrfssPrevalenceOverallHealthData(region.id, response)
+          );
+
+          Promise.all(cdcPromise)
+              .then(data => {
+                  this.drawBrfssOverallHealthChart(data, response);
+              })
+              .catch(error => console.error(error));
+
+      } else {
+          jQuery("#cdc-brfss").hide()
+      }
+    }
+
+    drawBrfssOverallHealthChart(data, response) {
+        const state_regions = this.params.regions.filter(function(region,n){return region['type'] == "state"})
+        const chartData = [];
+
+        // Header
+        //
+        const header = ['Year'];
+        for (var i = 0; i < state_regions.length; i++) {
+          header[i + 1] = state_regions[i].name;
+        }
+        chartData.push(header);
+
+        // Data
+        //
+        const o = {};
+        for (var i = 0; i < data.length; i++) {
+          const regionValues = data[i];
+          for (var j = 0; j < regionValues.length; j++) {
+              if (o[regionValues[j].year] == undefined)
+                  o[regionValues[j].year] = [regionValues[j].year];
+              o[regionValues[j].year].push(parseInt(regionValues[j].data_value));
+          }
+        }
+
+        for (var key in o) {
+          chartData.push(o[key]);
+        }
+
+        const dataTable = google.visualization.arrayToDataTable(chartData);
+        this.drawLineChart('cdc-brfss-overall-health-chart', dataTable, {
+            curveType : 'function',
+            legend : { position : 'bottom' },
+            pointShape : 'square',
+            pointSize : 8,
+            vAxis: {
+              title: "Crude Percentage of Respondents",
+            },
+            hAxis: {
+              title: "Year",
+            },
+        })
     }
 
     drawHealthDataOutcomesTable(data) {
