@@ -306,7 +306,7 @@ class SearchPageController {
 
             for (var j = 0; j < components.length; j++) {
 
-                const o = this.getLatestCostOfLiving(data[i], this.params.regions[i].id, components[j]);
+                const o = this.getLatestCostOfLiving(data[0], this.params.regions[i].id, components[j]);
                 const value = (o != null) ? parseFloat(o.index) : 'NA';
                 const percentile = (o != null) ? this.getPercentile(o.rank, o.total_ranks) : 'NA';
 
