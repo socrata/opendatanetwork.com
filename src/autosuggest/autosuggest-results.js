@@ -96,6 +96,8 @@ class AutosuggestResults {
     down() {
         if (this.index < this.options.length - 1) {
             this.index += 1;
+        } else if(this.index == -1) {
+            this.index = this.options.length - 1
         }
     }
 
