@@ -11,14 +11,15 @@ class ApiController {
         this.educationUrl = 'https://odn.data.socrata.com/resource/uf4m-5u8r.json?id={0}';
         this.gdpUrl = 'https://odn.data.socrata.com/resource/ks2j-vhr8.json?id={0}';
         this.mostPopulousRegionTypeUrl = 'https://odn.data.socrata.com/resource/eyae-8jfy?parent_id={0}&child_type={1}&$limit={2}&$order=child_population desc';
+        this.mostPopulousStatesUrl = 'https://odn.data.socrata.com/resource/eyae-8jfy?$where=child_type=\'state\'&$order=child_population desc&$limit={0}';
         this.occupationsUrl = 'https://odn.data.socrata.com/resource/qfcm-fw3i.json?$order=occupation&id={0}';
         this.parentStateUrl = 'https://odn.data.socrata.com/resource/eyae-8jfy?parent_type=state&child_id={0}';
         this.populationUrl = 'https://odn.data.socrata.com/resource/e3rd-zzmr.json?id={0}';
-        this.similarRegionsUrl = 'https://socrata-peers.herokuapp.com/peers.json?id={0}&vectors={1}&n=5';
+        this.similarRegionsUrl = `https://socrata-peers.herokuapp.com/peers.json?id={0}&vectors={1}&n=${Constants.PEER_REGIONS_MAX}`;
         this.supportedVectorsUrls = 'https://socrata-peers.herokuapp.com/supported.json?id={0}';
         this.healthDataUrls = {
             rwjf_county_health_rankings_2015: "https://odn.data.socrata.com/resource/7ayp-utp2.json?id={0}",
-            cdc_brfss_prevalence_2011_2013: "https://odn.data.socrata.com/resource/n4rt-3rmd.json?id={0}"
+            cdc_brfss_prevalence_overall_health: "https://odn.data.socrata.com/resource/n4rt-3rmd.json?break_out_category=Overall&topic=Overall%20Health&response={0}&_geoid={1}"
         };
     }
 
@@ -77,6 +78,11 @@ class ApiController {
         return d3.promise.json(this.mostPopulousRegionTypeUrl.format(stateId, 'msa', limit));
     }
 
+    getMostPopulousStates(limit = 8) {
+
+        return d3.promise.json(this.mostPopulousStatesUrl.format(limit));
+    }
+
     getOccupationsData(regionId) {
 
         return d3.promise.json(this.occupationsUrl.format(regionId));
@@ -106,4 +112,10 @@ class ApiController {
 
         return d3.promise.json(this.healthDataUrls.rwjf_county_health_rankings_2015.format(regionId));
     }
+
+    getHealthCdcBrfssPrevalenceOverallHealthData(regionId, response) {
+
+        return d3.promise.json(this.healthDataUrls.cdc_brfss_prevalence_overall_health.format(response,regionId));
+    }
+
 }

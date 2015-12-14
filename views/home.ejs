@@ -37,6 +37,46 @@
     </div>
 </section>
 
+<section class="states">
+    <div class="container">
+        <h4>Geographical Regions</h4>
+        <ul class="states-list">
+
+          <% locations.forEach(function(location) { %>
+            <li class="state">
+                <h3>
+                    <i class="fa fa-map-marker"></i>
+                    <a href="/region/<%= location.id %>/<%= location.name %>"><%= location.name %></a>
+                </h3>
+                <ul class="regions-list">
+                  <% for (var i = 0; i < location.msas.length; i++) { %>
+                    <li class="region">
+                        <a href="<%= location.msas[i].url %>"><%= location.msas[i].name %></a>
+                    </li>
+                  <% } %>
+                </ul>
+                <ul class="regions-list">
+                  <% for (var i = 0; i < location.counties.length; i++) { %>
+                    <li class="region">
+                        <a href="<%= location.counties[i].url %>"><%= location.counties[i].name %></a>
+                    </li>
+                  <% } %>
+                </ul>
+                <ul class="regions-list">
+                  <% for (var i = 0; i < location.cities.length; i++) { %>
+                    <li class="region">
+                        <a href="<%= location.cities[i].url %>"><%= location.cities[i].name %></a>
+                    </li>
+                  <% } %>
+                </ul>
+             </li>
+          <% }) %>
+
+        </ul>
+        <div class="cb"></div>
+    </div>
+</section>
+
 <section class="partners">
     <div class="container">
         <h4>Partners</h4>

@@ -41,11 +41,8 @@ class SearchPageController {
             controller.getCategories()
                 .then(data => {
 
-                    var rg = data.results.map(function(result) {
-                        return '<li><i class="fa ' + result.metadata.icon + '"></i>' + result.category + '</li>';
-                    });
-
-                    var s = rg.join('');
+                    const rg = data.results.map(result => '<li><i class="fa ' + result.metadata.icon + '"></i>' + result.category + '</li>');
+                    const s = rg.join('');
 
                     $('#refine-menu-categories').html(s);
                     self.attachCategoriesClickHandlers();
@@ -64,11 +61,8 @@ class SearchPageController {
             controller.getDomains()
                 .then(data => {
 
-                    var rg = data.results.map(function(result) {
-                        return '<li>' + result.domain + '</li>';
-                    });
-
-                    var s = rg.join('');
+                    const rg = data.results.map(result => '<li>' + result.domain + '</li>');
+                    const s = rg.join('');
 
                     $('#refine-menu-domains').html(s);
                     self.attachDomainsClickHandlers();
@@ -110,7 +104,7 @@ class SearchPageController {
         //
         $(window).on('scroll', function() {
 
-            var bottomOffsetToBeginRequest = 1000;
+            const bottomOffsetToBeginRequest = 1000;
 
             if ($(window).scrollTop() >= $(document).height() - $(window).height() - bottomOffsetToBeginRequest) {
                 self.fetchNextPage();
@@ -180,7 +174,7 @@ class SearchPageController {
 
         $('#refine-menu-domains li:not(.refine-view-more)').click(function() {
 
-            var domain = $(this).text().toLowerCase().trim();
+            const domain = $(this).text().toLowerCase().trim();
 
             self.toggleDomain(domain);
             self.navigate();
@@ -193,7 +187,7 @@ class SearchPageController {
 
         $('#refine-menu-tags li').click(function() {
 
-            var tag = $(this).text().toLowerCase().trim();
+            const tag = $(this).text().toLowerCase().trim();
 
             self.toggleTag(tag);
             self.navigate();
@@ -209,6 +203,8 @@ class SearchPageController {
     //
     drawCostOfLivingData() {
 
+        this.drawMap(MapSources.rpp);
+
         google.setOnLoadCallback(() => {
 
             const controller = new ApiController();
@@ -217,7 +213,6 @@ class SearchPageController {
             Promise.all(promises)
                 .then(data => {
 
-                    this.drawMap(MapSources.rpp);
                     this.drawCostOfLivingChart(data);
                     this.drawCostOfLivingTable(data);
                 })
@@ -259,7 +254,7 @@ class SearchPageController {
 
                 if (regionValues[j].component != component)
                     continue;
-                    
+
                 if (o[regionValues[j].year] == undefined)
                     o[regionValues[j].year] = [regionValues[j].year];
 
@@ -271,7 +266,8 @@ class SearchPageController {
             chartData.push(o[key]);
         }
 
-        this.drawLineChart(id, chartData, {
+        const dataTable = google.visualization.arrayToDataTable(chartData);
+        this.drawLineChart(id, dataTable, {
 
             curveType : 'function',
             legend : { position : 'bottom' },
@@ -320,11 +316,11 @@ class SearchPageController {
         $('#cost-of-living-table').html(s);
     }
 
-    getPercentile(rank, totalRanks) {
+    getPercentile(rankString, totalRanksString) {
 
-        var totalRanks = parseInt(totalRanks);
-        var rank = parseInt(rank);
-        var percentile = parseInt(((totalRanks - rank) / totalRanks) * 100);
+        const totalRanks = parseInt(totalRanksString);
+        const rank = parseInt(rankString);
+        const percentile = parseInt(((totalRanks - rank) / totalRanks) * 100);
 
         return numeral(percentile).format('0o');
     }
@@ -360,6 +356,8 @@ class SearchPageController {
     //
     drawEarningsData() {
 
+        this.drawMap(MapSources.earnings);
+
         google.setOnLoadCallback(() => {
 
             const controller = new ApiController();
@@ -368,7 +366,6 @@ class SearchPageController {
             Promise.all(promises)
                 .then(data => {
 
-                    this.drawMap(MapSources.earnings);
                     this.drawEarningsChart(data);
                     this.drawEarningsTable(data);
                 })
@@ -478,12 +475,17 @@ class SearchPageController {
     //
     drawHealthData() {
 
+        this.drawMap(MapSources.health);
+        this.drawBrfssCharts()
+
         google.setOnLoadCallback(() => {
 
             const controller = new ApiController();
-            const promises = this.params.regions.map(region => controller.getHealthRwjfChrData(region.id));
+            const rwjfPromise = this.params.regions.map(region => 
+                controller.getHealthRwjfChrData(region.id)
+            );
 
-            Promise.all(promises)
+            Promise.all(rwjfPromise)
                 .then(data => {
 
                     this.drawHealthDataOutcomesTable(data);
@@ -493,7 +495,71 @@ class SearchPageController {
                     this.drawHealthPhysicalEnvironmentTable(data);
                 })
                 .catch(error => console.error(error));
+
+
         });
+    }
+
+    drawBrfssCharts(){
+      const state_regions = this.params.regions.filter(function(region,n){return region['type'] == "state"})
+      if(state_regions.length > 0){
+          const response = jQuery("#cdc-brfss-overall-health-chart-selector").val()
+          const cdcPromise = state_regions.map(region => 
+              new ApiController().getHealthCdcBrfssPrevalenceOverallHealthData(region.id, response)
+          );
+
+          Promise.all(cdcPromise)
+              .then(data => {
+                  this.drawBrfssOverallHealthChart(data, response);
+              })
+              .catch(error => console.error(error));
+
+      } else {
+          jQuery("#cdc-brfss").hide()
+      }
+    }
+
+    drawBrfssOverallHealthChart(data, response) {
+        const state_regions = this.params.regions.filter(function(region,n){return region['type'] == "state"})
+        const chartData = [];
+
+        // Header
+        //
+        const header = ['Year'];
+        for (var i = 0; i < state_regions.length; i++) {
+          header[i + 1] = state_regions[i].name;
+        }
+        chartData.push(header);
+
+        // Data
+        //
+        const o = {};
+        for (var i = 0; i < data.length; i++) {
+          const regionValues = data[i];
+          for (var j = 0; j < regionValues.length; j++) {
+              if (o[regionValues[j].year] == undefined)
+                  o[regionValues[j].year] = [regionValues[j].year];
+              o[regionValues[j].year].push(parseInt(regionValues[j].data_value));
+          }
+        }
+
+        for (var key in o) {
+          chartData.push(o[key]);
+        }
+
+        const dataTable = google.visualization.arrayToDataTable(chartData);
+        this.drawLineChart('cdc-brfss-overall-health-chart', dataTable, {
+            curveType : 'function',
+            legend : { position : 'bottom' },
+            pointShape : 'square',
+            pointSize : 8,
+            vAxis: {
+              title: "Crude Percentage of Respondents",
+            },
+            hAxis: {
+              title: "Year",
+            },
+        })
     }
 
     drawHealthDataOutcomesTable(data) {
@@ -703,17 +769,15 @@ class SearchPageController {
     //
     drawEducationData() {
 
+        this.drawMap(MapSources.education);
+
         google.setOnLoadCallback(() => {
 
             const controller = new ApiController();
             const promises = this.params.regions.map(region => controller.getEducationData(region.id));
 
             Promise.all(promises)
-                .then(data => {
-
-                    this.drawMap(MapSources.education);
-                    this.drawEducationTable(data)
-                })
+                .then(data => this.drawEducationTable(data))
                 .catch(error => console.error(error));
         });
     }
@@ -757,6 +821,8 @@ class SearchPageController {
     //
     drawGdpData() {
 
+        this.drawMap(MapSources.gdp);
+
         google.setOnLoadCallback(() => {
 
             const controller = new ApiController();
@@ -765,7 +831,6 @@ class SearchPageController {
             Promise.all(promises)
                 .then(data => {
 
-                    this.drawMap(MapSources.gdp);
                     this.drawGdpChart(data);
                     this.drawGdpChangeChart(data);
                 })
@@ -810,7 +875,8 @@ class SearchPageController {
 
         // Draw chart
         //
-        this.drawLineChart('per-capita-gdp-chart', chartData, {
+        const dataTable = google.visualization.arrayToDataTable(chartData);
+        this.drawLineChart('per-capita-gdp-chart', dataTable, {
 
             curveType : 'function',
             legend : { position : 'bottom' },
@@ -857,7 +923,8 @@ class SearchPageController {
 
         // Draw chart
         //
-        this.drawLineChart('per-capita-gdp-change-chart', chartData, {
+        const dataTable = google.visualization.arrayToDataTable(chartData);
+        this.drawLineChart('per-capita-gdp-change-chart', dataTable, {
 
             curveType : 'function',
             legend : { position : 'bottom' },
@@ -872,18 +939,15 @@ class SearchPageController {
     //
     drawOccupationsData() {
 
-        google.setOnLoadCallback(() => {
+        this.drawMap(MapSources.occupations);
 
+        google.setOnLoadCallback(() => {
 
             const controller = new ApiController();
             const promises = this.params.regions.map(region => controller.getOccupationsData(region.id));
 
             Promise.all(promises)
-                .then(data => {
-
-                    this.drawMap(MapSources.occupations);
-                    this.drawOccupationsTable(data)
-                })
+                .then(data => this.drawOccupationsTable(data))
                 .catch(error => console.error(error));
         });
     }
@@ -917,7 +981,7 @@ class SearchPageController {
                 const totalRanks = parseInt(regionData[i].total_ranks);
                 const rank = parseInt(regionData[i].percent_employed_rank);
                 const percentile = parseInt(((totalRanks - rank) / totalRanks) * 100);
-    
+
                 s += '<td>' + numeral(regionData[i].percent_employed).format('0.0') + '%</td>';
                 s += '<td class=\'color-' + j + '\'>' + numeral(percentile).format('0o') + '<div></div></td>';
             }
@@ -932,6 +996,8 @@ class SearchPageController {
     //
     drawPopulationData() {
 
+        this.drawMap(MapSources.population);
+
         google.setOnLoadCallback(() => {
 
             const controller = new ApiController();
@@ -940,7 +1006,6 @@ class SearchPageController {
             Promise.all(promises)
                 .then(data => {
 
-                    this.drawMap(MapSources.population);
                     this.drawPopulationChart(data);
                     this.drawPopulationChangeChart(data);
                 })
@@ -983,7 +1048,8 @@ class SearchPageController {
             chartData.push(o[key]);
         }
 
-        this.drawLineChart('population-chart', chartData, {
+        const dataTable = google.visualization.arrayToDataTable(chartData);
+        this.drawLineChart('population-chart', dataTable, {
 
             curveType : 'function',
             legend : { position : 'bottom' },
@@ -1028,7 +1094,14 @@ class SearchPageController {
             chartData.push(o[key]);
         }
 
-        this.drawLineChart('population-change-chart', chartData, {
+        const dataTable = google.visualization.arrayToDataTable(chartData);
+        const formatter = new google.visualization.NumberFormat( { pattern : '#.##%' } );
+
+        for (var i = 0; i < this.params.regions.length; i++) {
+            formatter.format(dataTable, i + 1);
+        }
+
+        this.drawLineChart('population-change-chart', dataTable, {
 
             curveType : 'function',
             legend : { position : 'bottom' },
@@ -1046,7 +1119,7 @@ class SearchPageController {
         if (this.params.regions.length == 0)
             return;
 
-        var region = this.params.regions[0];
+        const region = this.params.regions[0];
 
         switch (region.type) {
 
@@ -1062,7 +1135,7 @@ class SearchPageController {
 
     drawChildPlacesInRegion(region, label) {
 
-        var controller = new ApiController();
+        const controller = new ApiController();
 
         controller.getChildRegions(region.id)
             .then(response => {
@@ -1075,9 +1148,9 @@ class SearchPageController {
 
     drawCitiesAndCountiesInState(region) {
 
-        var controller = new ApiController();
-        var citiesPromise = controller.getCitiesInState(region.id);
-        var countiesPromise = controller.getCountiesInState(region.id);
+        const controller = new ApiController();
+        const citiesPromise = controller.getCitiesInState(region.id);
+        const countiesPromise = controller.getCountiesInState(region.id);
 
         return Promise.all([citiesPromise, countiesPromise])
             .then(values => {
@@ -1102,7 +1175,7 @@ class SearchPageController {
 
     drawOtherCitiesInState(region) {
 
-        var controller = new ApiController();
+        const controller = new ApiController();
 
         controller.getParentState(region)
             .then(response => {
@@ -1110,7 +1183,7 @@ class SearchPageController {
                 if (response.length == 0)
                     return;
 
-                var state = response[0];
+                const state = response[0];
 
                 controller.getCitiesInState(state.parent_id)
                     .then(response => {
@@ -1127,7 +1200,7 @@ class SearchPageController {
 
     drawOtherCountiesInState(region) {
 
-        var controller = new ApiController();
+        const controller = new ApiController();
 
         controller.getParentState(region)
             .then(response => {
@@ -1135,7 +1208,7 @@ class SearchPageController {
                 if (response.length == 0)
                     return;
 
-                var state = response[0];
+                const state = response[0];
 
                 controller.getCountiesInState(state.parent_id)
                     .then(response => {
@@ -1152,7 +1225,7 @@ class SearchPageController {
 
     drawOtherMetrosInState(region) {
 
-        var controller = new ApiController();
+        const controller = new ApiController();
 
         controller.getParentState(region)
             .then(response => {
@@ -1160,7 +1233,7 @@ class SearchPageController {
                 if (response.length == 0)
                     return;
 
-                var state = response[0];
+                const state = response[0];
 
                 controller.getMetrosInState(state.parent_id)
                     .then(response => {
@@ -1257,17 +1330,19 @@ class SearchPageController {
     }
 
     drawSimilarRegionsList(data, onClickRegion) {
-
         const mostSimilar = data.most_similar;
         const regionPromises = mostSimilar.map(region => RegionLookup.byID(region.id));
 
         Promise.all(regionPromises).then(regions => {
-
             const selection = d3.select('#similar-regions');
+            const selectedRegionsIDs = this.params.regions.map(region => region.id);
+            const unselectedRegions = regions.filter(region => {
+                return ! _.contains(selectedRegionsIDs, region.id);
+            });
 
             const links = selection
                 .selectAll('li')
-                .data(regions)
+                .data(unselectedRegions.slice(0, Constants.PEER_REGIONS))
                 .enter()
                 .append('li')
                 .append('a')
@@ -1282,10 +1357,9 @@ class SearchPageController {
 
     // Draw charts
     //
-    drawLineChart(chartId, data, options) {
+    drawLineChart(chartId, dataTable, options) {
 
-        var dataTable = google.visualization.arrayToDataTable(data);
-        var chart = new google.visualization.LineChart(document.getElementById(chartId));
+        const chart = new google.visualization.LineChart(document.getElementById(chartId));
 
         this.applyStandardOptions(options);
 
@@ -1294,8 +1368,8 @@ class SearchPageController {
 
     drawSteppedAreaChart(chartId, data, options) {
 
-        var dataTable = google.visualization.arrayToDataTable(data);
-        var chart = new google.visualization.SteppedAreaChart(document.getElementById(chartId));
+        const dataTable = google.visualization.arrayToDataTable(data);
+        const chart = new google.visualization.SteppedAreaChart(document.getElementById(chartId));
 
         this.applyStandardOptions(options);
 
@@ -1360,7 +1434,7 @@ class SearchPageController {
 
         places.forEach(place => {
 
-            var feature = {
+            const feature = {
                 "type": "Feature",
                 "properties": {
                     "name": place.name
@@ -1395,7 +1469,7 @@ class SearchPageController {
 
         places.forEach(place => {
 
-            var feature = {
+            const feature = {
                 "type": "Feature",
                 "properties": {
                     "name": place.name
@@ -1412,7 +1486,7 @@ class SearchPageController {
 
     getPlacesForRegion(data) {
 
-        var places = [];
+        const places = [];
 
         data.forEach(place => {
 
@@ -1493,7 +1567,7 @@ class SearchPageController {
             var regionIds = [];
             var regionNames = [];
 
-            if (this.params.resetRegions == false) { 
+            if (this.params.resetRegions == false) {
 
                 regionIds = this.params.regions.map(region => region.id);
                 regionNames = this.params.regions.map(region => region.name);
@@ -1520,9 +1594,9 @@ class SearchPageController {
 
     getSearchQueryString() {
 
-        var parts = [];
+        const parts = [];
 
-        if (this.params.q.length > 0) 
+        if (this.params.q.length > 0)
             parts.push('q=' + encodeURIComponent(this.params.q));
 
         if (this.params.page > 1)
@@ -1557,6 +1631,9 @@ class SearchPageController {
 
         this.params.regions.splice(regionIndex, 1); // remove at index i
         this.params.page = 1;
+
+        if (this.params.regions.length == 0) // when the last region is removed so should the vector be removed.
+            this.params.vector = '';
     }
 
     setAutoSuggestedRegion(region, resetRegions) {
@@ -1568,7 +1645,7 @@ class SearchPageController {
 
     toggleCategory(category) {
 
-        var i = this.params.categories.indexOf(category);
+        const i = this.params.categories.indexOf(category);
 
         if (i > -1)
             this.params.categories.splice(i, 1); // remove at index i
@@ -1580,7 +1657,7 @@ class SearchPageController {
 
     toggleDomain(domain) {
 
-        var i = this.params.domains.indexOf(domain);
+        const i = this.params.domains.indexOf(domain);
 
         if (i > -1)
             this.params.domains.splice(i, 1); // remove at index i
@@ -1590,19 +1667,18 @@ class SearchPageController {
         this.params.page = 1;
     }
 
-    toggleTag(standard) {
+    toggleTag(tag) {
 
-        var i = this.params.tags.indexOf(standard);
+        // Selecting a standard (tag) resets any other search filter
+        //
+        const i = this.params.tags.indexOf(tag);
 
         if (i > -1)
             this.params.tags.splice(i, 1); // remove at index i
         else
-            this.params.tags.push(standard);
+            this.params.tags = [tag];
 
         this.params.page = 1;
-
-        // Selecting a standard (tag) resets any other search filter
-        //
         this.params.categories = [];
         this.params.domains = [];
         this.params.q = '';
