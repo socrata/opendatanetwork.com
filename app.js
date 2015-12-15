@@ -62,6 +62,7 @@ app.get('/region/:regionIds/:regionNames', renderController.renderSearchPage);
 app.get('/region/:regionIds/:regionNames/search-results', renderController.renderSearchResults);
 app.get('/region/:regionIds/:regionNames/:vector', renderController.renderSearchWithVectorPage);
 app.get('/region/:regionIds/:regionNames/:vector/search-results', renderController.renderSearchResults);
+app.get('/sitemap', renderController.renderSitemap);
 
 // Start listening
 //

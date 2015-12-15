@@ -22,6 +22,7 @@ var searchUrl = baseCatalogUrl;
 var tagsUrl = baseCatalogUrl + '/tags';
 var userAgent = 'www.opendatanetwork.com';
 var athenaUrl = 'https://socrata-athena.herokuapp.com/schema/v1/applied/';
+var regionsUrl = 'https://odn.data.socrata.com/resource/eyae-8jfy?$order=child_population desc';
 
 const SYNONYMS = Synonyms.fromFile(Constants.SYNONYMS_FILE);
 
@@ -32,6 +33,11 @@ function ApiController() {
 
 // Public methods
 //
+ApiController.prototype.getRegions = function(successHandler, errorHandler) {
+
+    getFromApi(regionsUrl, successHandler, errorHandler);
+}
+
 ApiController.prototype.getDatasetSummary = function(domain, id, successHandler, errorHandler) {
 
     var url = datasetSummaryUrl.format(domain, id);
