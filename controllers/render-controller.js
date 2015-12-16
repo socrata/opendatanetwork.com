@@ -1,4 +1,3 @@
-var _ = require('underscore');
 
 var ApiController = require('./api-controller');
 var CategoryController = require('./category-controller');
@@ -120,7 +119,7 @@ RenderController.prototype.renderHomePage = function(req, res) {
             locationsController.getLocations(function(locations) {
 
                 RenderController.prototype.getSearchParameters(req, function(params) {
-    
+
                     // Render page
                     //
                     res.render(
@@ -259,7 +258,7 @@ function _renderSearchPage(req, res, params) {
                 // Get all tags
                 //
                 apiController.getTagsAll(function(allTagResults) {
-    
+
                     tagController.attachTagMetadata(allTagResults, function(tagResults) {
 
                         // Get the current tag
@@ -267,11 +266,11 @@ function _renderSearchPage(req, res, params) {
                         var currentTag = tagController.getCurrentTag(params, allTagResults);
 
                         apiController.getDomains(5, function(domainResults) {
-        
+
                             apiController.searchDatasets(
                                 params,
                                 function(results) {
-        
+
                                     res.render(
                                         'search.ejs',
                                         {
@@ -307,7 +306,7 @@ function _renderSearchPage(req, res, params) {
                                         });
                                 },
                                 function() {
-        
+
                                     renderErrorPage(req, res);
                                 });
                         });
