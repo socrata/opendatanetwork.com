@@ -2,16 +2,41 @@
 
 const _ = require('lodash');
 
-const REGION_TYPES = {
-    'nation'    : ['population', 'education', 'earnings', 'occupations'],
-    'region'    : ['population', 'education', 'earnings', 'occupations'],
-    'division'  : ['population', 'education', 'earnings', 'occupations'],
-    'place'     : ['population', 'education', 'earnings', 'occupations'],
-    'zip_code'  : ['population', 'education', 'earnings', 'occupations'],
-    'state'     : ['population', 'education', 'earnings', 'occupations', 'gdp', 'cost_of_living', 'health'],
-    'msa'       : ['population', 'education', 'earnings', 'occupations', 'gdp', 'cost_of_living'],
-    'county'    : ['population', 'education', 'earnings', 'occupations', 'health']
-};
+const ALL_REGIONS = ['nation', 'region', 'division', 'state', 'county',
+                     'msa', 'place', 'zip_code'];
+
+const SOURCES = [
+    {
+        name: 'population',
+        regions: ALL_REGIONS
+    },
+    {
+        name: 'education',
+        regions: ALL_REGIONS
+    },
+    {
+        name: 'earnings',
+        regions: ALL_REGIONS
+    },
+    {
+        name: 'occupations',
+        regions: ALL_REGIONS
+    },
+    {
+        name: 'gdp',
+        regions: ['state', 'msa'],
+        include: region => _.contains(region.name, 'Metro')
+    },
+    {
+        name: 'cost_of_living',
+        regions: ['state', 'msa'],
+        include: region => _.contains(region.name, 'Metro')
+    },
+    {
+        name: 'health',
+        regions: ['state', 'county']
+    }
+];
 
 class Sources {
 
@@ -19,13 +44,23 @@ class Sources {
         this.sources = sources;
     }
 
+    supports(source, regions) {
+        return regions.filter(region => {
+            const include = source.include || (region => true);
+            return _.contains(source.regions, region.type) && include(region);
+        }).length == regions.length;
+    }
+
     forRegions(regions) {
-        return _.intersection(...regions.map(region => this.sources[region.type]));
+        return this.sources
+            .filter(source => this.supports(source, regions))
+            .map(source => source.name);
     }
 
     static getSources() {
-        return new Sources(REGION_TYPES);
+        return new Sources(SOURCES);
     }
 }
 
 module.exports = Sources;
+
