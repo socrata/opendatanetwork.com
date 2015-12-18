@@ -100,7 +100,7 @@ class MapView {
                         html: `<div class="name">${region.name}</div>
                             <div class="value">${region.valueName} (${region.year}): ${region.valueFormatted}</div>`
                     });
-                    const latlng = layer.getLatLng();
+                    const latlng = MapView.center(layer);
                     const marker = L.marker(latlng, {icon});
                     markers.push(marker);
                     marker.addTo(this.map);
@@ -117,6 +117,16 @@ class MapView {
                 });
             }
         });
+    }
+
+    static center(layer) {
+        if (layer.getLatLng) {
+            return layer.getLatLng();
+        } else {
+            const latlngs = layer.getLatLngs();
+            const bounds = L.latLngBounds(_.flatten(latlngs));
+            return bounds.getCenter();
+        }
     }
 
     static create(source, regions) {
