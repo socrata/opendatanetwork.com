@@ -24,6 +24,7 @@ class MapView {
             .attr('id', MapConstants.CSS_ID);
 
         const map = L.map(MapConstants.CSS_ID, MapConstants.MAP_OPTIONS);
+        this.map = map;
         map.setView(MapConstants.INITIAL_CENTER, MapConstants.INITIAL_ZOOM);
 
         const baseLayer = L.tileLayer(MapConstants.BASE_LAYER_URL, MapConstants.BASE_LAYER);
@@ -43,7 +44,6 @@ class MapView {
 
     zoomToSelected(map) {
         const selectedLayers = [];
-
         this.features.eachLayer(layer => {
             if (this.regionIDs.has(layer.feature.id))
                 selectedLayers.push(layer);
@@ -90,6 +90,18 @@ class MapView {
                 const style = selected ?
                     _.extend(baseStyle, MapConstants.SELECTED_STYLE) :
                     baseStyle;
+
+                if (selected && this.map) {
+                    const icon = L.divIcon({
+                        className: 'tooltip',
+                        iconSize: null,
+                        html: `<div class="name">${region.name}</div>
+                            <div class="value">${region.valueName} (${region.year}): ${region.valueFormatted}</div>`
+                    });
+                    const latlng = layer.getLatLng();
+                    L.marker(latlng, {icon}).addTo(this.map);
+
+                }
 
                 layer.setStyle(style);
 
