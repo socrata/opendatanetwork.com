@@ -77,6 +77,8 @@ class MapView {
     }
 
     updateFeatures(model, scale) {
+        const markers = [];
+
         this.features.eachLayer(layer => {
             const id = layer.feature.id;
 
@@ -99,14 +101,18 @@ class MapView {
                             <div class="value">${region.valueName} (${region.year}): ${region.valueFormatted}</div>`
                     });
                     const latlng = layer.getLatLng();
-                    L.marker(latlng, {icon}).addTo(this.map);
-
+                    const marker = L.marker(latlng, {icon});
+                    markers.push(marker);
+                    marker.addTo(this.map);
                 }
 
                 layer.setStyle(style);
 
                 layer.on({
-                    mouseover: () => this.tooltip.showRegion(region),
+                    mouseover: () => {
+                        markers.forEach(marker => this.map.removeLayer(marker));
+                        this.tooltip.showRegion(region);
+                    },
                     mouseout: () => this.tooltip.hide()
                 });
             }
