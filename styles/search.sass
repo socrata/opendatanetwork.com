@@ -25,6 +25,11 @@ $region-color-1: #ee3b3b
 $region-color-2: #3bdbee
 $region-color-3: #ff9900
 $region-color-4: #109618
+$region-color-5: #0099c6
+$region-color-6: #dd4477
+$region-color-7: #66aa00
+$region-color-8: #b82e2e
+$region-color-9: #316395
 
 @import app
 @import search-bar
@@ -290,6 +295,9 @@ section.results
 .charts-column h2
   font-weight: normal
 
+.charts-column p
+    font-size: 14px;
+
 .charts-column label
   color: $darker-gray-text-color
   display: block
@@ -316,6 +324,7 @@ section.results
       padding: 0px
       text-align: center
       position: relative
+
     .color-0
       div
         background-color: $region-color-0
@@ -331,33 +340,58 @@ section.results
     .color-4
       div
         background-color: $region-color-4
+    .color-5
+      div
+        background-color: $region-color-5
+    .color-6
+      div
+        background-color: $region-color-6
+    .color-7
+      div
+        background-color: $region-color-7
+    .color-8
+      div
+        background-color: $region-color-8
+    .color-9
+      div
+        background-color: $region-color-9
+
   table.vertical
-    tr:nth-child(2)
+
+    tr.sub-header-row
+
       td
         border: none
         color: $table-sub-header-text-gray
         font-size: 15px
+        padding-top: 0
+
     th
       font-size: 15px
-      padding: 10px 10px 0
+      padding: 10px
       position: relative
       text-align: right
+      vertical-align: baseline
+
       div
         bottom: 0
         right: 0
         position: absolute
         top: 0
         width: 5px
+
     td
       font-size: 22px
       padding: 10px
       position: relative
+      
       div
         top: 0
         width: 5px
         right: 0
         position: absolute
         bottom: 0
+        
     td.category-header
       background-color: $table-header-cell-gray
       border: 1px solid $table-border-gray
@@ -365,9 +399,17 @@ section.results
       font-size: 13px
       font-weight: normal
       padding: 10px
+
     td.empty
       background-color: transparent
       border: none
+
+    .sub-header
+        font-size: 18px
+        text-align: center
+        vertical-align: baseline
+
+
   table.horizontal
     th
       color: $black-text-color
