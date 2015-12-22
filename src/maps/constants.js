@@ -72,7 +72,8 @@ const MapConstants = {
     TOOLTIP_PADDING: 16,
 
     POPUP_OPTIONS: {
-        closeButton: false
+        closeButton: false,
+        closeOnClick: false
     },
 
     TOPOJSON_DIRECTORY: '/geo/',

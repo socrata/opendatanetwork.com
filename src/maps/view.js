@@ -15,6 +15,8 @@ class MapView {
             this.display(variable, year);
         });
         this.zoomControl = new L.Control.Zoom(MapConstants.ZOOM_CONTROL_OPTIONS);
+
+        this._popups = [];
     }
 
     show(selector) {
@@ -77,8 +79,6 @@ class MapView {
     }
 
     updateFeatures(model, scale) {
-        const markers = [];
-
         this.features.eachLayer(layer => {
             const id = layer.feature.id;
 
@@ -92,34 +92,33 @@ class MapView {
                     baseStyle;
 
                 if (selected && this.map) {
-                    const latlng = MapView.center(layer);
+                    if (!(id in this._popups)) {
+                        const popup = L.popup(MapConstants.POPUP_OPTIONS)
+                            .setLatLng(MapView.center(layer));
+                        this._popups[id] = popup;
+                    }
+
                     const content = `<div class="name">${region.name}</div>\
                         <div class="value">${region.valueName} (${region.year}):\
                         ${region.valueFormatted}</div>`;
-                    const popup = L.popup(MapConstants.POPUP_OPTIONS)
-                        .setLatLng(latlng)
-                        .setContent(content);
-                    const marker = L.marker(latlng);
-                    marker.bindPopup(popup);
-                    markers.push(marker);
-                    marker.addTo(this.map);
-
-                    if (id === this.regions[0].id) {
-                        marker.openPopup();
-                    }
+                    this._popups[id].setContent(content).addTo(this.map);
                 }
 
                 layer.setStyle(style);
 
                 layer.on({
                     mouseover: () => {
-                        markers.forEach(marker => marker.closePopup());
+                        this.closePopups();
                         this.tooltip.showRegion(region);
                     },
                     mouseout: () => this.tooltip.hide()
                 });
             }
         });
+    }
+
+    closePopups() {
+        _.values(this._popups).forEach(popup => this.map.closePopup(popup));
     }
 
     static center(layer) {
