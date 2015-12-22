@@ -44,7 +44,10 @@ const MapConstants = {
 
     // http://leafletjs.com/reference.html#path-options
     BASE_STYLE: {
-        stroke: false,
+        stroke: true,
+        color: '#2c3e50',
+        opacity: 1,
+        weight: 2,
         fill: false
     },
 
