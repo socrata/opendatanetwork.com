@@ -17,13 +17,11 @@ const LegendControl = L.Control.extend({
         const range = scale.range.slice();
         range.reverse();
         const height = range.length * dimension;
-        const width = 200;
-        const xOffset = width / 2;
+        const xOffset = dimension;
 
         const legendContainer = this.container
             .append('div')
-            .attr('class', 'legend-container')
-            .style('width', width);
+            .attr('class', 'legend-container');
 
         const values = _.filter(scale.values, value => !(isNaN(value)));
         const [min, max] = d3.extent(values);
@@ -32,13 +30,10 @@ const LegendControl = L.Control.extend({
         const upperQuartile = d3.quantile(values, 0.75);
 
         const tickValues = [max, upperQuartile, median, lowerQuartile, min];
-        const tickNames = ['maximum', 'upper quartile', 'median', 'lower quartile', 'minimum'];
-        const tickData = _.zip(tickValues, tickNames);
-        const tickStep = height / (tickData.length - 1);
+        const tickStep = height / (tickValues.length - 1);
 
         const legend = legendContainer
             .append('svg')
-            .attr('width', width)
             .attr('height', height + 15)
             .attr('class', 'legend');
 
@@ -48,7 +43,7 @@ const LegendControl = L.Control.extend({
 
         const ticks = tickGroup
             .selectAll('g.tick')
-            .data(tickData)
+            .data(tickValues)
             .enter()
             .append('g')
             .attr('class', 'tick')
@@ -62,29 +57,15 @@ const LegendControl = L.Control.extend({
             .attr('x1', dimension).attr('y1', 0)
             .attr('x2', dimension * 2).attr('y2', 0);
 
-        ticks
-            .append('line')
-            .attr('class', 'tick-line')
-            .attr('x1', -dimension).attr('y1', 0)
-            .attr('x2', 0).attr('y2', 0);
-
         const baseline = 'middle';
         const padding = 2;
 
         ticks
             .append('text')
             .attr('class', 'tick-value')
-            .text(tick => variable.format(tick[0]))
+            .text(tick => variable.format(tick))
             .attr('alignment-baseline', baseline)
             .attr('transform', `translate(${dimension * 2 + padding}, 0)`);
-
-        ticks
-            .append('text')
-            .attr('class', 'tick-label')
-            .text(tick => tick[1])
-            .attr('text-anchor', 'end')
-            .attr('alignment-baseline', baseline)
-            .attr('transform', `translate(${-(dimension + padding)}, 0)`);
 
         const colors = legend
             .selectAll('rect')
@@ -104,6 +85,8 @@ const LegendControl = L.Control.extend({
             .attr('class', 'legend-box')
             .attr('x', xOffset).attr('y', dimension)
             .attr('width', dimension).attr('height', height);
+
+        legend.attr('width', legend.node().getBBox().width + dimension * 2);
     }
 });
 
