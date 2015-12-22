@@ -85,22 +85,13 @@ class MapView {
             if (model.regionById.has(id)) {
                 const region = model.regionById.get(id);
                 const selected = this.regionIDs.has(region.id);
-                const baseStyle = {
-                    fill: true,
-                    fillColor: scale.scale(region.value)
-                };
+                const color = scale.scale(region.value);
+                const baseStyle = _.extend({}, MapConstants.REFERENCE_STYLE, {color});
                 const style = selected ?
                     _.extend(baseStyle, MapConstants.SELECTED_STYLE) :
                     baseStyle;
 
                 if (selected && this.map) {
-                    const icon = L.divIcon({
-                        className: 'tooltip',
-                        iconSize: null,
-                        html: `<div class="name">${region.name}</div>
-                            <div class="value">${region.valueName} (${region.year}): ${region.valueFormatted}</div>`
-                    });
-
                     const latlng = MapView.center(layer);
                     const content = `<div class="name">${region.name}</div>\
                         <div class="value">${region.valueName} (${region.year}):\
@@ -122,7 +113,7 @@ class MapView {
 
                 layer.on({
                     mouseover: () => {
-                        //markers.forEach(marker => this.map.removeLayer(marker));
+                        markers.forEach(marker => marker.closePopup());
                         this.tooltip.showRegion(region);
                     },
                     mouseout: () => this.tooltip.hide()

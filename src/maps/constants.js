@@ -44,18 +44,20 @@ const MapConstants = {
 
     // http://leafletjs.com/reference.html#path-options
     BASE_STYLE: {
-        color: '#34495e',
+        stroke: false,
+        fill: false
+    },
+
+    REFERENCE_STYLE: {
+        fill: true,
+        fillOpacity: 0.2,
+        stroke: true,
         weight: 1,
-        opacity: 1,
-        fill: false,
-        fillOpacity: 1
+        opacity: 1
     },
 
     SELECTED_STYLE: {
-        stroke: true,
-        color: '#8e44ad',
-        weight: 3,
-        opacity: 1
+        weight: 2
     },
 
     // http://leafletjs.com/reference.html#popup
