@@ -5,7 +5,7 @@ const LegendControl = L.Control.extend({
     },
 
     onAdd: function(map) {
-        const container = L.DomUtil.create('div', 'legend-container');
+        const container = L.DomUtil.create('div', 'legend-control');
         this.container = d3.select(container);
         return container;
     },
@@ -17,7 +17,6 @@ const LegendControl = L.Control.extend({
         const range = scale.range.slice();
         range.reverse();
         const height = range.length * dimension;
-        const xOffset = dimension;
 
         const legendContainer = this.container
             .append('div')
@@ -48,7 +47,7 @@ const LegendControl = L.Control.extend({
             .append('g')
             .attr('class', 'tick')
             .attr('transform', (__, index) => {
-                return `translate(${xOffset}, ${dimension + index * tickStep})`;
+                return `translate(${dimension}, ${dimension + index * tickStep})`;
             });
 
         ticks
@@ -73,7 +72,7 @@ const LegendControl = L.Control.extend({
             .enter()
             .append('rect')
             .attr('class', 'legend-element')
-            .attr('x', xOffset)
+            .attr('x', dimension)
             .attr('y', (__, index) => (index + 1) * dimension)
             .attr('width', dimension)
             .attr('height', dimension)
@@ -83,7 +82,7 @@ const LegendControl = L.Control.extend({
         legend
             .append('rect')
             .attr('class', 'legend-box')
-            .attr('x', xOffset).attr('y', dimension)
+            .attr('x', dimension).attr('y', dimension)
             .attr('width', dimension).attr('height', height);
 
         legend.attr('width', legend.node().getBBox().width + dimension * 2);
