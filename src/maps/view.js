@@ -100,17 +100,29 @@ class MapView {
                         html: `<div class="name">${region.name}</div>
                             <div class="value">${region.valueName} (${region.year}): ${region.valueFormatted}</div>`
                     });
+
                     const latlng = MapView.center(layer);
-                    const marker = L.marker(latlng, {icon});
+                    const content = `<div class="name">${region.name}</div>\
+                        <div class="value">${region.valueName} (${region.year}):\
+                        ${region.valueFormatted}</div>`;
+                    const popup = L.popup()
+                        .setLatLng(latlng)
+                        .setContent(content);
+                    const marker = L.marker(latlng);
+                    marker.bindPopup(popup);
                     markers.push(marker);
                     marker.addTo(this.map);
+
+                    if (id === this.regions[0].id) {
+                        marker.openPopup();
+                    }
                 }
 
                 layer.setStyle(style);
 
                 layer.on({
                     mouseover: () => {
-                        markers.forEach(marker => this.map.removeLayer(marker));
+                        //markers.forEach(marker => this.map.removeLayer(marker));
                         this.tooltip.showRegion(region);
                     },
                     mouseout: () => this.tooltip.hide()
