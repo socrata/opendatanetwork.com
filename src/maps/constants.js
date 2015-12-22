@@ -35,7 +35,8 @@ const MapConstants = {
     // http://leafletjs.com/reference.html#map-fitboundsoptions
     AUTO_ZOOM_OPTIONS: {
         animate: false,
-        maxZoom: 10.0
+        maxZoom: 10.0,
+        paddingTopLeft: [50, 0]
     },
     AUTO_ZOOM_OUT: 1, // amount to zoom out with only one selected region
 
