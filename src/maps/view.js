@@ -105,7 +105,7 @@ class MapView {
                     const content = `<div class="name">${region.name}</div>\
                         <div class="value">${region.valueName} (${region.year}):\
                         ${region.valueFormatted}</div>`;
-                    const popup = L.popup()
+                    const popup = L.popup(MapConstants.POPUP_OPTIONS)
                         .setLatLng(latlng)
                         .setContent(content);
                     const marker = L.marker(latlng);
