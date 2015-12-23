@@ -290,6 +290,8 @@ function _renderSearchPage(req, res, params) {
                                                 '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
                                                 '/lib/third-party/leaflet/leaflet.min.js',
                                                 '/lib/third-party/leaflet/leaflet-omnivore.min.js',
+                                                '/lib/third-party/mapbox-gl.min.js',
+                                                '/lib/third-party/leaflet/mapbox-gl.min.js',
                                                 '/lib/third-party/browser-polyfill.min.js',
                                                 '/lib/third-party/colorbrewer.min.js',
                                                 '/lib/third-party/d3.min.js',

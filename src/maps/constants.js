@@ -5,10 +5,10 @@ const MapConstants = {
 
     CSS_ID: 'leaflet-map',
 
-    // Same base layer as Data Lens
-    BASE_LAYER_URL: 'https://a.tiles.mapbox.com/v3/socrata-apps.ibp0l899/{z}/{x}/{y}.png',
-    BASE_LAYER: {
-        opacity: 0.5 // Change to 0.15 to make the maps look like Data Lens
+    MAPBOX_BASE: true,
+    MAPBOX_BASE_OPTIONS: {
+        accessToken: 'pk.eyJ1IjoibGFuZWFhc2VuIiwiYSI6ImYxZjExYmYzOTMxYzgyZTc2NDY0NDBmNDNmZmEwYWM3In0.uy5ta6EsSEZggkVQHo2ygw',
+        style: 'mapbox://styles/laneaasen/ciii71hjj00161mmbdbck3c11'
     },
 
     // See http://bl.ocks.org/mbostock/5577023 for a visual index of Color Brewer colors

@@ -29,8 +29,11 @@ class MapView {
         this.map = map;
         map.setView(MapConstants.INITIAL_CENTER, MapConstants.INITIAL_ZOOM);
 
-        const baseLayer = L.tileLayer(MapConstants.BASE_LAYER_URL, MapConstants.BASE_LAYER);
-        map.addLayer(baseLayer);
+        if (MapConstants.MAPBOX_BASE) {
+            L.mapboxGL(MapConstants.MAPBOX_BASE_OPTIONS).addTo(map);
+        } else {
+            L.tileLayer(MapConstants.BASE_LAYER_URL, MapConstants.BASE_LAYER).addTo(map);
+        }
 
         map.addControl(this.legend);
         map.addControl(this.variableControl);
