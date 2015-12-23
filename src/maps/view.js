@@ -83,10 +83,9 @@ class MapView {
 
     updateFeatures(model, scale) {
         this.features.eachLayer(layer => {
-            const id = layer.feature.id;
+            const region = model.regionById.get(layer.feature.id);
 
-            if (model.regionById.has(id)) {
-                const region = model.regionById.get(id);
+            if (region && !isNaN(region.value)) {
                 const selected = this.regionIDs.has(region.id);
                 const color = scale.scale(region.value);
                 const baseStyle = _.extend({}, MapConstants.REFERENCE_STYLE, {color});
@@ -95,16 +94,16 @@ class MapView {
                     baseStyle;
 
                 if (selected && this.map) {
-                    if (!(id in this._popups)) {
+                    if (!(region.id in this._popups)) {
                         const popup = L.popup(MapConstants.POPUP_OPTIONS)
                             .setLatLng(MapView.center(layer));
-                        this._popups[id] = popup;
+                        this._popups[region.id] = popup;
                     }
 
                     const content = `<div class="name">${region.name}</div>\
                         <div class="value">${region.valueName} (${region.year}):\
                         ${region.valueFormatted}</div>`;
-                    this._popups[id].setContent(content).addTo(this.map);
+                    this._popups[region.id].setContent(content).addTo(this.map);
                 }
 
                 layer.setStyle(style);
@@ -116,11 +115,6 @@ class MapView {
                     },
                     mouseout: () => this.tooltip.hide()
                 });
-
-                if (isNaN(region.value)) {
-                    console.log('Nan');
-                }
-
             } else {
                 layer.setStyle(MapConstants.NO_DATA_STYLE);
             }
