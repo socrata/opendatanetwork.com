@@ -116,6 +116,13 @@ class MapView {
                     },
                     mouseout: () => this.tooltip.hide()
                 });
+
+                if (isNaN(region.value)) {
+                    console.log('Nan');
+                }
+
+            } else {
+                layer.setStyle(MapConstants.NO_DATA_STYLE);
             }
         });
     }

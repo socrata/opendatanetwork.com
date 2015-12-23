@@ -64,6 +64,11 @@ const MapConstants = {
         weight: 2
     },
 
+    NO_DATA_STYLE: {
+        fill: false,
+        stroke: false
+    },
+
     // http://leafletjs.com/reference.html#popup
     TOOLTIP_OPTIONS: {
         offset: L.point(0, -20),
