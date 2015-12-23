@@ -12,7 +12,7 @@ const MapConstants = {
     },
 
     // See http://bl.ocks.org/mbostock/5577023 for a visual index of Color Brewer colors
-    COLOR_SCALE: colorbrewer.Blues[9],
+    COLOR_SCALE: colorbrewer.Blues[9].slice(2),
     SCALE: Scale.quantile,
 
     // http://leafletjs.com/reference.html#map-options
@@ -61,7 +61,7 @@ const MapConstants = {
     },
 
     SELECTED_STYLE: {
-        weight: 2
+        weight: 3
     },
 
     NO_DATA_STYLE: {

@@ -87,11 +87,12 @@ class MapView {
 
             if (region && !isNaN(region.value)) {
                 const selected = this.regionIDs.has(region.id);
-                const color = scale.scale(region.value);
-                const baseStyle = _.extend({}, MapConstants.REFERENCE_STYLE, {color});
+                const fillColor = scale.scale(region.value);
+                const baseStyle = _.extend({}, MapConstants.REFERENCE_STYLE, {fillColor});
                 const style = selected ?
                     _.extend(baseStyle, MapConstants.SELECTED_STYLE) :
                     baseStyle;
+                layer.setStyle(style);
 
                 if (selected && this.map) {
                     if (!(region.id in this._popups)) {
@@ -105,8 +106,6 @@ class MapView {
                         ${region.valueFormatted}</div>`;
                     this._popups[region.id].setContent(content).addTo(this.map);
                 }
-
-                layer.setStyle(style);
 
                 layer.on({
                     mouseover: () => {
