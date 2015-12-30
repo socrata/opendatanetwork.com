@@ -1923,17 +1923,13 @@ class SearchPageController {
             parts.push('page=' + this.params.page);
 
         if (this.params.categories.length > 0)
-            params.categories.forEach(function(cat) {
-                parts.push('categories=' + encodeURIComponent(cat));
-            })
+            parts.push('categories=' + encodeURIComponent(this.params.categories.join(',')));
 
         if (this.params.domains.length > 0)
             parts.push('domains=' + encodeURIComponent(this.params.domains.join(',')));
 
         if (this.params.tags.length > 0)
-            params.tags.forEach(function(tag) {
-                parts.push('tags=' + encodeURIComponent(tag));
-            })
+            parts.push('tags=' + encodeURIComponent(this.params.tags.join(',')));
 
         if (this.params.debug)
             parts.push('debug=');

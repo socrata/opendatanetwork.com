@@ -319,17 +319,13 @@ function getSearchQueryString() {
         parts.push('page=' + params.page);
 
     if (params.categories.length > 0)
-        params.categories.forEach(function(cat) {
-            parts.push('categories=' + encodeURIComponent(cat));
-        })
+        parts.push('categories=' + encodeURIComponent(params.categories.join(',')));
 
     if (params.domains.length > 0)
         parts.push('domains=' + encodeURIComponent(params.domains.join(',')));
 
     if (params.tags.length > 0)
-        params.tags.forEach(function(tag) {
-            parts.push('tags=' + encodeURIComponent(tag));
-        })
+        parts.push('tags=' + encodeURIComponent(params.tags.join(',')));
 
     if (params.debug)
         parts.push('debug=');
