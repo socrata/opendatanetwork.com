@@ -354,13 +354,17 @@ function getSearchQueryString() {
         parts.push('page=' + params.page);
 
     if (params.categories.length > 0)
-        parts.push('categories=' + encodeURIComponent(params.categories.join(',')));
+        params.categories.forEach(function(cat) {
+            parts.push('categories=' + encodeURIComponent(cat));
+        })
 
     if (params.domains.length > 0)
         parts.push('domains=' + encodeURIComponent(params.domains.join(',')));
 
     if (params.tags.length > 0)
-        parts.push('tags=' + encodeURIComponent(params.tags.join(',')));
+        params.tags.forEach(function(tag) {
+            parts.push('tags=' + encodeURIComponent(tag));
+        })
 
     if (params.debug)
         parts.push('debug=');
