@@ -100,6 +100,7 @@ ApiController.prototype.getDomains = function(count, successHandler, errorHandle
 };
 
 ApiController.prototype.getSearchDatasetsUrl = function(requestParams, completionHandler) {
+
     const querySynonyms = SYNONYMS.get(requestParams.q);
     const vectorSynonyms = SYNONYMS.get(requestParams.vector.replace(/_/g, ' '));
     const synonyms = _.unique(_.flatten([querySynonyms, vectorSynonyms]));
@@ -127,13 +128,17 @@ ApiController.prototype.getSearchDatasetsUrl = function(requestParams, completio
     const categories = requestParams.categories || [];
     const domains = requestParams.domains || [];
     const tags = requestParams.tags || [];
-    
-    const allParams = _.extend({}, requestParams, {
-        q_internal: query,
-    });
-    const params = _.omit(allParams, value => value === '' || value === []);
 
+    const allParams = _.extend({}, {
+        q_internal : query,
+        categories : categories,
+        domains : domains,
+        tags : tags,
+    });
+
+    const params = _.omit(allParams, value => value === '' || value === []);
     const url = `${Constants.CATALOG_URL}?${querystring.stringify(params)}`;
+
     completionHandler(url);
 };
 

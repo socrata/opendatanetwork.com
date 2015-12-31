@@ -331,9 +331,9 @@ RenderController.prototype.renderSitemap = function(req, res) {
 RenderController.prototype.getSearchParameters = function(req, completionHandler) {
 
     var query = req.query;
-    var categories = getNormalizedArrayFromDelimitedString(query.categories);
+    var categories = getNormalizedArrayFromQueryParameter(query.categories);
     var domains = getNormalizedArrayFromDelimitedString(query.domains);
-    var tags = getNormalizedArrayFromDelimitedString(query.tags);
+    var tags = getNormalizedArrayFromQueryParameter(query.tags);
     var page = isNaN(query.page) ? 1 : parseInt(query.page);
 
     var params = {
@@ -401,7 +401,7 @@ function getSearchPageTitle(params) {
         case 'cost_of_living': rg.push('Cost of Living'); break;
         default: rg.push('Population'); break;
     }
-
+    
     var categories = params.categories.map(function(category) { return category.capitalize(); });
     rg = rg.concat(categories);
 
@@ -455,6 +455,17 @@ function getRegionFromResultsById(results, regionId) {
     }
 
     return null;
+}
+
+function getNormalizedArrayFromQueryParameter(o) {
+
+    if (Array.isArray(o))
+        return o;
+
+    if ((o != null) && (o.length > 0))
+        return [o];
+
+    return [];
 }
 
 function getNormalizedArrayFromDelimitedString(s) {
