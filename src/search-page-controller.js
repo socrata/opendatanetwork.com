@@ -1926,7 +1926,7 @@ class SearchPageController {
             this.params.categories.forEach(category => parts.push('categories=' + encodeURIComponent(category)));
 
         if (this.params.domains.length > 0)
-            parts.push('domains=' + encodeURIComponent(this.params.domains.join(',')));
+            this.params.domains.forEach(domain => parts.push('domains=' + encodeURIComponent(domain)));
 
         if (this.params.tags.length > 0)
             this.params.tags.forEach(tag => parts.push('tags=' + encodeURIComponent(tag)));

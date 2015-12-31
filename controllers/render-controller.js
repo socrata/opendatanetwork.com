@@ -332,7 +332,7 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
 
     var query = req.query;
     var categories = getNormalizedArrayFromQueryParameter(query.categories);
-    var domains = getNormalizedArrayFromDelimitedString(query.domains);
+    var domains = getNormalizedArrayFromQueryParameter(query.domains);
     var tags = getNormalizedArrayFromQueryParameter(query.tags);
     var page = isNaN(query.page) ? 1 : parseInt(query.page);
 
@@ -467,23 +467,6 @@ function getNormalizedArrayFromQueryParameter(o) {
 
     return [];
 }
-
-function getNormalizedArrayFromDelimitedString(s) {
-
-    if (s == null)
-        return [];
-
-    var parts = s.split(',');
-
-    if ((parts.length == 1) && (parts[0] == ''))
-        parts = [];
-
-    for (var i in parts) {
-        parts[i] = parts[i].toLowerCase();
-    }
-
-    return parts;
-};
 
 function htmlEncode(s) {
 
