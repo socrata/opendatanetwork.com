@@ -95,13 +95,27 @@
 
 <% } else { %>
 
-<% if (searchResults.results.length > 0) { %>
-    <div class="search-results-compact-column">
-        <ul class="datasets">
-<% include _search-results-compact %>
-        </ul>
+    <div class="controls-column">
+        <div class="controls">
+            <h1>Compare this Data</h1>
+            <div class="add-region">
+                <i class="fa fa-plus"></i><input class="add-region-input" type="text" placeholder="Add Location">
+                <ul class="add-region-results" style="display: none;"></ul>
+            </div>
+            <ul id="similar-regions" style="display:none"></ul>
+            <h2 id="places-in-region-header-0" class="places-in-region-header" style="display:none"></h2>
+            <ul id="places-in-region-list-0" class="places-in-region-list" style="display:none"></ul>
+            <h2 id="places-in-region-header-1" class="places-in-region-header" style="display:none"></h2>
+            <ul id="places-in-region-list-1" class="places-in-region-list" style="display:none"></ul>
+        </div>
+        <div class="footer">
+            <ul class="footer-links">
+                <li><a class="blue-link" href="http://www.socrata.com/company-info/">About Socrata</a></li>
+                <li><a class="blue-link" href="http://www.opendatanetwork.com/join-open-data-network">Join the Network</a></li>
+            </ul>
+            <a href="http://www.socrata.com/company-info/"><img src="/images/v3-powered-by-socrata.png"></a>
+        </div>
     </div>
-<% } %>
 
     <div class="charts-column">
 
@@ -206,27 +220,13 @@
 
     </div>
 
-    <div class="controls-column">
-        <div class="controls">
-            <h1>Compare this Data</h1>
-            <div class="add-region">
-                <i class="fa fa-plus"></i><input class="add-region-input" type="text" placeholder="Add Location">
-                <ul class="add-region-results" style="display: none;"></ul>
-            </div>
-            <ul id="similar-regions" style="display:none"></ul>
-            <h2 id="places-in-region-header-0" class="places-in-region-header" style="display:none"></h2>
-            <ul id="places-in-region-list-0" class="places-in-region-list" style="display:none"></ul>
-            <h2 id="places-in-region-header-1" class="places-in-region-header" style="display:none"></h2>
-            <ul id="places-in-region-list-1" class="places-in-region-list" style="display:none"></ul>
-        </div>
-        <div class="footer">
-            <ul class="footer-links">
-                <li><a class="blue-link" href="http://www.socrata.com/company-info/">About Socrata</a></li>
-                <li><a class="blue-link" href="http://www.opendatanetwork.com/join-open-data-network">Join the Network</a></li>
-            </ul>
-            <a href="http://www.socrata.com/company-info/"><img src="/images/v3-powered-by-socrata.png"></a>
-        </div>
+<% if (searchResults.results.length > 0) { %>
+    <div class="search-results-compact-column">
+        <ul class="datasets">
+<% include _search-results-compact %>
+        </ul>
     </div>
+<% } %>
 
 <% } %>
 
