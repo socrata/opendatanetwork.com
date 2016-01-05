@@ -317,17 +317,6 @@ function _renderSearchPage(req, res, params) {
     });
 };
 
-RenderController.prototype.renderSitemap = function(req, res) {
-
-    apiController.getRegions(
-        function(regions) {
-
-            res.contentType("text/xml");
-            res.render('sitemap.ejs', { regions : regions });
-        },
-        function() { renderErrorPage(req, res); });
-}
-
 RenderController.prototype.getSearchParameters = function(req, completionHandler) {
 
     var query = req.query;

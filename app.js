@@ -32,8 +32,9 @@ app.use(favicon(__dirname + '/images/favicon.ico'));
 app.use('/maintenance.html', express.static(__dirname + '/views/static/maintenance.html'));
 app.use('/google0679b96456cb5b3a.html', express.static(__dirname + '/views/static/google0679b96456cb5b3a.html'));
 app.use('/googlefd1b89f5a265e3ee.html', express.static(__dirname + '/views/static/googlefd1b89f5a265e3ee.html'));
-app.use('/robots.txt', express.static(__dirname + '/views/static/robots.txt'));
 app.use('/error.html', express.static(__dirname + '/views/static/error.html'));
+app.use('/robots.txt', express.static(__dirname + '/views/static/robots.txt'));
+app.use('/sitemap.xml', express.static(__dirname + '/views/static/sitemap.xml'));
 
 // Set up 301 redirects for old routes
 //
@@ -63,7 +64,6 @@ app.get('/region/:regionIds/:regionNames', renderController.renderSearchPage);
 app.get('/region/:regionIds/:regionNames/search-results', renderController.renderSearchResults);
 app.get('/region/:regionIds/:regionNames/:vector', renderController.renderSearchWithVectorPage);
 app.get('/region/:regionIds/:regionNames/:vector/search-results', renderController.renderSearchResults);
-app.get('/sitemap', renderController.renderSitemap);
 
 // Start listening
 //
