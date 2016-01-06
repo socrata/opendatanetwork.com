@@ -37,9 +37,12 @@ class MapView {
 
         map.whenReady(() => {
             const url = layerID => `https://api.mapbox.com/v4/${layerID}/{z}/{x}/{y}.png?access_token=${MapConstants.MAPBOX_TOKEN}`;
+
             const base = L.tileLayer(url(MapConstants.BASE_LAYER_ID)).addTo(map);
             const features = this.features.addTo(map);
-            const labels = L.tileLayer(url(MapConstants.LABEL_LAYER_ID)).addTo(map);
+            const pane = map.createPane('labels');
+            const labels = L.tileLayer(url(MapConstants.LABEL_LAYER_ID), {pane}).addTo(map);
+            console.log(map);
 
             this.zoomToSelected(map);
         });
