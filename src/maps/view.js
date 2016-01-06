@@ -29,12 +29,6 @@ class MapView {
         this.map = map;
         map.setView(MapConstants.INITIAL_CENTER, MapConstants.INITIAL_ZOOM);
 
-        if (MapConstants.MAPBOX_BASE) {
-            L.mapboxGL(MapConstants.MAPBOX_BASE_OPTIONS).addTo(map);
-        } else {
-            L.tileLayer(MapConstants.BASE_LAYER_URL, MapConstants.BASE_LAYER).addTo(map);
-        }
-
         map.addControl(this.legend);
         map.addControl(this.variableControl);
         map.addControl(this.tooltip);
@@ -42,7 +36,11 @@ class MapView {
             map.addControl(this.zoomControl);
 
         map.whenReady(() => {
-            map.addLayer(this.features);
+            const url = layerID => `https://api.mapbox.com/v4/${layerID}/{z}/{x}/{y}.png?access_token=${MapConstants.MAPBOX_TOKEN}`;
+            const base = L.tileLayer(url(MapConstants.BASE_LAYER_ID)).addTo(map);
+            const features = this.features.addTo(map);
+            const labels = L.tileLayer(url(MapConstants.LABEL_LAYER_ID)).addTo(map);
+
             this.zoomToSelected(map);
         });
     }

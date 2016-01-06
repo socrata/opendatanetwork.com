@@ -9,6 +9,7 @@ node_modules
 
 *.geojson
 geo/*/
+*.tm2
 
 # grunt build process
 lib/*.es6.js

@@ -5,11 +5,9 @@ const MapConstants = {
 
     CSS_ID: 'leaflet-map',
 
-    MAPBOX_BASE: true,
-    MAPBOX_BASE_OPTIONS: {
-        accessToken: 'pk.eyJ1IjoibGFuZWFhc2VuIiwiYSI6ImYxZjExYmYzOTMxYzgyZTc2NDY0NDBmNDNmZmEwYWM3In0.uy5ta6EsSEZggkVQHo2ygw',
-        style: 'mapbox://styles/laneaasen/ciii71hjj00161mmbdbck3c11'
-    },
+    MAPBOX_TOKEN: 'pk.eyJ1IjoibGFuZWFhc2VuIiwiYSI6ImYxZjExYmYzOTMxYzgyZTc2NDY0NDBmNDNmZmEwYWM3In0.uy5ta6EsSEZggkVQHo2ygw',
+    LABEL_LAYER_ID: 'socrata-apps.cb421623',
+    BASE_LAYER_ID: 'socrata-apps.af2cc4ed',
 
     // See http://bl.ocks.org/mbostock/5577023 for a visual index of Color Brewer colors
     COLOR_SCALE: colorbrewer.Blues[9].slice(2),
