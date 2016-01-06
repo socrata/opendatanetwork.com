@@ -42,7 +42,6 @@ class MapView {
             const features = this.features.addTo(map);
             const pane = map.createPane('labels');
             const labels = L.tileLayer(url(MapConstants.LABEL_LAYER_ID), {pane}).addTo(map);
-            console.log(map);
 
             this.zoomToSelected(map);
         });
