@@ -137,7 +137,7 @@ ApiController.prototype.getSearchDatasetsUrl = function(requestParams, completio
         tags : tags,
     });
 
-    const params = _.omit(allParams, value => value === '' || _.isEmpty(value));
+    const params = _.omit(allParams, value => _.isEmpty(value));
     const url = `${Constants.CATALOG_URL}?${querystring.stringify(params)}`;
 
     completionHandler(url);
