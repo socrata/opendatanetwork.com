@@ -106,6 +106,7 @@ ApiController.prototype.getSearchDatasetsUrl = function(requestParams, completio
     const synonyms = _.unique(_.flatten([querySynonyms, vectorSynonyms]));
 
     const regionNames = requestParams.regions.map(region => {
+
         const name = region.name;
         const type = region.type;
 
@@ -136,7 +137,7 @@ ApiController.prototype.getSearchDatasetsUrl = function(requestParams, completio
         tags : tags,
     });
 
-    const params = _.omit(allParams, value => value === '' || value === []);
+    const params = _.omit(allParams, value => value === '' || _.isEmpty(value));
     const url = `${Constants.CATALOG_URL}?${querystring.stringify(params)}`;
 
     completionHandler(url);
