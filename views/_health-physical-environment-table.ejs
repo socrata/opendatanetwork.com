@@ -1,0 +1,13 @@
+<table class="vertical hidden">
+<tr>
+    <th class="sub-header">Physical Environment</th>
+<% for (var i = 0; i < tableData.healthData.length; i++) { %>
+    <th class="color-<%= i %>"><%= params.regions[i].name %><div></div></th>
+<% } %>
+</tr>
+<%- drawHealthTableRowVertical(tableData.healthData, 'Air Pollution - Particulate Matter', 'air_pollution_particulate_matter_value', '0.0') %>
+<%- drawHealthTableRowVertical(tableData.healthData, 'Drinking Water Violations', 'drinking_water_violations_value', '0.0%') %>
+<%- drawHealthTableRowVertical(tableData.healthData, 'Severe Housing Problems', 'severe_housing_problems_value', '0.0%') %>
+<%- drawHealthTableRowVertical(tableData.healthData, 'Driving Alone to Work', 'driving_alone_to_work_value', '0.0%') %>
+<%- drawHealthTableRowVertical(tableData.healthData, 'Long Commute - Driving Alone', 'long_commute_driving_alone_value', '0.0%') %>
+</table>

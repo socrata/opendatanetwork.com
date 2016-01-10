@@ -1,0 +1,17 @@
+<table class="vertical hidden">
+<tr>
+    <th class="sub-header">Health Behaviors</th>
+<% for (var i = 0; i < tableData.healthData.length; i++) { %>
+    <th class="color-<%= i %>"><%= params.regions[i].name %><div></div></th>
+<% } %>
+</tr>
+<%- drawHealthTableRowVertical(tableData.healthData, 'Adult Smoking', 'adult_smoking_value', '0.0%') %>
+<%- drawHealthTableRowVertical(tableData.healthData, 'Adult Obesity', 'adult_obesity_value', '0.0%') %>
+<%- drawHealthTableRowVertical(tableData.healthData, 'Food Environment Index', 'food_environment_index_value', '0.0') %>
+<%- drawHealthTableRowVertical(tableData.healthData, 'Physical Inactivity', 'physical_inactivity_value', '0.0%') %>
+<%- drawHealthTableRowVertical(tableData.healthData, 'Access to Exercise', 'access_to_exercise_opportunities_value', '0.0%') %>
+<%- drawHealthTableRowVertical(tableData.healthData, 'Excessive Drinking', 'excessive_drinking_value', '0.0%') %>
+<%- drawHealthTableRowVertical(tableData.healthData, 'Alcohol Impaired Driving Deaths', 'alcohol_impaired_driving_deaths_value', '0.0%') %>
+<%- drawHealthTableRowVertical(tableData.healthData, 'Sexually Transmitted Infections', 'sexually_transmitted_infections_value', '0,0') %>
+<%- drawHealthTableRowVertical(tableData.healthData, 'Teen Births', 'teen_births_value', '0,0') %>
+</table>

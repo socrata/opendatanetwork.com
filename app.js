@@ -1,12 +1,14 @@
-var RenderController = require('./controllers/render-controller');
+'use strict';
 
-var cookieParser = require('cookie-parser');
-var express = require('express');
-var favicon = require('serve-favicon');
-var helmet = require('helmet');
+const cookieParser = require('cookie-parser');
+const express = require('express');
+const favicon = require('serve-favicon');
+const helmet = require('helmet');
+const numeral = require('numeral');
+const RenderController = require('./controllers/render-controller');
 
-var renderController = new RenderController();
-var app = express();
+const renderController = new RenderController();
+const app = express();
 
 // Cookie parser
 //
@@ -71,3 +73,36 @@ var port = Number(process.env.PORT || 3000);
 
 app.listen(port);
 console.log('app is listening on ' + port);
+
+// Template local functions
+//
+app.locals.drawHealthTableRowVertical = (healthData, header, key, format) => {
+
+    var s = '<tr><td class="category-header">' + header + '</td>';
+
+    for (var i = 0; i < healthData.length; i++) {
+
+        const regionData = healthData[i][0];
+        s += app.locals.drawHealthTableCellVertical(i, regionData, key, format);
+    }
+
+    s += '</tr>';
+
+    return s;
+};
+
+app.locals.drawHealthTableCellVertical = (i, data, key, format) => {
+
+    var s = '<td class="color-' + i + '">';
+    
+    if (data[key] != undefined)
+        s += numeral(data[key].replace(',','')).format(format);
+    else
+        s += '';
+
+    s += '<div></div></td>';
+
+    return s;
+};
+
+app.locals.numeral = numeral;

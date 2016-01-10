@@ -1,22 +1,24 @@
+'use strict';
 
-var ApiController = require('./api-controller');
-var CategoryController = require('./category-controller');
-var LocationsController = require('./locations-controller');
-var TagController = require('./tag-controller');
-var Sources = require('./sources');
+const ApiController = require('./api-controller');
+const CategoryController = require('./category-controller');
+const LocationsController = require('./locations-controller');
+const TagController = require('./tag-controller');
+const Sources = require('./sources');
 
-var _ = require('lodash');
-var htmlencode = require('htmlencode');
-var path = require('path');
-var moment = require('moment');
+const _ = require('lodash');
+const htmlencode = require('htmlencode');
+const moment = require('moment');
+const numeral = require('numeral');
+const path = require('path');
 
-var apiController = new ApiController();
-var categoryController = new CategoryController();
-var locationsController = new LocationsController();
-var sources = Sources.getSources();
-var tagController = new TagController();
+const apiController = new ApiController();
+const categoryController = new CategoryController();
+const locationsController = new LocationsController();
+const sources = Sources.getSources();
+const tagController = new TagController();
 
-var defaultSearchResultCount = 10;
+const defaultSearchResultCount = 10;
 
 module.exports = RenderController;
 
@@ -25,6 +27,102 @@ function RenderController() {
 
 // Public methods
 //
+RenderController.prototype.getTableData = (params, successHandler, errorHandler) => {
+
+    const tableData = {};
+
+    switch (params.vector) {
+
+        case 'cost_of_living':
+
+            waitForPromises(
+                params.regions.map(region => apiController.getCostOfLivingData(region.id)),
+                data => {
+                    tableData.costOfLivingData = data;
+                    successHandler(tableData);
+                },
+                errorHandler);
+            break;
+
+        case 'earnings':
+
+            waitForPromises(
+                params.regions.map(region => apiController.getEarningsData(region.id)),
+                data => {
+                    tableData.earningsData = data;
+                    successHandler(tableData);
+                },
+                errorHandler);
+            break;
+
+        case 'education':
+
+            waitForPromises(
+                params.regions.map(region => apiController.getEducationData(region.id)),
+                data => {
+                    tableData.educationData = data;
+                    successHandler(tableData);
+                },
+                errorHandler);
+            break;
+
+        case 'gdp':
+
+            waitForPromises(
+                params.regions.map(region => apiController.getGdpData(region.id)),
+                data => {
+                    tableData.gdpData = data;
+                    successHandler(tableData);
+                },
+                errorHandler);
+            break;
+
+        case 'health':
+
+            waitForPromises(
+                params.regions.map(region => apiController.getHealthData(region.id)),
+                data => {
+                    tableData.healthData = data;
+                    successHandler(tableData);
+                },
+                errorHandler);
+            break;
+
+        case 'occupations':
+
+            waitForPromises(
+                params.regions.map(region => apiController.getOccupationsData(region.id)),
+                data => {
+                    tableData.occupationsData = data;
+                    successHandler(tableData);
+                },
+                errorHandler);
+            break;
+
+        case 'population':
+
+            waitForPromises(
+                params.regions.map(region => apiController.getPopulationData(region.id)),
+                data => {
+                    tableData.populationData = data;
+                    successHandler(tableData);
+                },
+                errorHandler);
+            break;
+
+        default:
+
+            waitForPromises(
+                params.regions.map(region => apiController.getPopulationData(region.id)),
+                data => {
+                    tableData.populationData = data;
+                    successHandler(tableData);
+                },
+                errorHandler);
+            break;
+    }
+};
+
 // Categories json
 //
 RenderController.prototype.renderCategoriesJson = function(req, res) {
@@ -179,7 +277,10 @@ RenderController.prototype.renderSearchPage = function(req, res) {
 
     RenderController.prototype.getSearchParameters(req, function(params) {
 
-        _renderSearchPage(req, res, params);
+        RenderController.prototype.getTableData(
+            params,
+            (tableData) => { _renderSearchPage(req, res, params, tableData); },
+            () => { renderErrorPage(req, res); });
     });
 };
 
@@ -206,7 +307,10 @@ RenderController.prototype.renderSearchWithVectorPage = function(req, res) {
                 return;
             }
 
-            _renderSearchPage(req, res, params);
+            RenderController.prototype.getTableData(
+                params,
+                (tableData) => { _renderSearchPage(req, res, params, tableData); },
+                () => { renderErrorPage(req, res); });
         });
     }
     else {
@@ -244,7 +348,7 @@ RenderController.prototype.renderSearchResults = function(req, res) {
 
 // Private functions
 //
-function _renderSearchPage(req, res, params) {
+function _renderSearchPage(req, res, params, tableData) {
 
     apiController.getSearchDatasetsUrl(params, function(searchDatasetsUrl) {
 
@@ -303,6 +407,7 @@ function _renderSearchPage(req, res, params) {
                                             searchPath : req.path,
                                             searchResults : results,
                                             sources : sources.forRegions(params.regions),
+                                            tableData : tableData || {},
                                             title : getSearchPageTitle(params)
                                         });
                                 },
@@ -375,6 +480,19 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
         if (completionHandler) completionHandler(params);
     });
 };
+
+// Private functions
+//
+function waitForPromises(promises, successHandler, errorHandler) {
+
+    Promise.all(promises)
+        .then(data => successHandler(data))
+        .catch(error => {
+
+            console.error(error);
+            errorHandler();
+        });
+}
 
 function getSearchPageTitle(params) {
 
