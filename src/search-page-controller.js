@@ -130,14 +130,6 @@ class SearchPageController {
             $('.add-region input[type="text"]').focus();
         });
 
-        // Similar regions
-        //
-        this.drawSimilarRegions(region => {
-
-            this.setAutoSuggestedRegion(region, false);
-            this.navigate();
-        });
-
         // Places in region
         //
         this.drawPlacesInRegion();
@@ -236,10 +228,10 @@ class SearchPageController {
 
         $('#map-summary').text(
             MapSummary.getCostOfLivingSummaryString(
-                this.params.regions, 
-                this.tableData.costOfLivingData, 
-                variable, 
-                year, 
+                this.params.regions,
+                this.tableData.costOfLivingData,
+                variable,
+                year,
                 value => (year == value.year)));
     }
 
@@ -304,12 +296,12 @@ class SearchPageController {
 
         const width = $(window).width();
 
-        if ((this.params.regions.length >= 3) || (width >= 1600)) 
+        if ((this.params.regions.length >= 3) || (width >= 1600))
             this.drawCostOfLivingTableHorizontal();    // horizontal colored lines
         else
             this.drawCostOfLivingTableVertical();      // vertical colored lines
     }
-    
+
     drawCostOfLivingTableVertical() {
 
         if (this.ensureVisibleWithOrientation('#cost-of-living-table-container table', 'vertical'))
@@ -359,12 +351,12 @@ class SearchPageController {
 
             s += '</tr>';
         }
-        
+
         s += '</table>';
 
         $('#cost-of-living-table-container').html(s);
     }
-    
+
     drawCostOfLivingTableHorizontal() {
 
         if (this.ensureVisibleWithOrientation('#cost-of-living-table-container table', 'horizontal'))
@@ -403,7 +395,7 @@ class SearchPageController {
 
             s += '</tr>';
         }
-        
+
         s += '</table>';
 
         $('#cost-of-living-table-container').html(s);
@@ -458,10 +450,10 @@ class SearchPageController {
 
         $('#map-summary').text(
             MapSummary.getSummaryString(
-                this.params.regions, 
-                this.tableData.earningsData, 
-                variable, 
-                year, 
+                this.params.regions,
+                this.tableData.earningsData,
+                variable,
+                year,
                 value => (year == value.year)));
     }
 
@@ -554,7 +546,7 @@ class SearchPageController {
 
         const width = $(window).width();
 
-        if ((this.params.regions.length >= 3) || (width >= 1600)) 
+        if ((this.params.regions.length >= 3) || (width >= 1600))
             this.drawEarningsTableHorizontal();    // horizontal colored lines
         else
             this.drawEarningsTableVertical();      // vertical colored lines
@@ -651,10 +643,10 @@ class SearchPageController {
 
         $('#map-summary').text(
             MapSummary.getSummaryString(
-                this.params.regions, 
-                this.tableData.healthData, 
-                variable, 
-                year, 
+                this.params.regions,
+                this.tableData.healthData,
+                variable,
+                year,
                 value => (year == value.year)));
     }
 
@@ -710,7 +702,7 @@ class SearchPageController {
         s += this.drawHealthTableRowVertical('Premature Death', 'premature_death_value', '0,0');
 
         s += '</table>';
-        
+
         // Quality of life table
         //
         s += '<table class="vertical">';
@@ -727,12 +719,12 @@ class SearchPageController {
         s += this.drawHealthTableRowVertical('Poor Physical Health Days', 'poor_physical_health_days_value', '0.0');
         s += this.drawHealthTableRowVertical('Poor Mental Health Days', 'poor_mental_health_days_value', '0.0');
         s += this.drawHealthTableRowVertical('Low Birth Weight', 'low_birthweight_value', '0.0');
-        
+
         s += '</table>';
 
         $('#health-outcomes-table-container').html(s);
     }
-    
+
     drawHealthOutcomesTableHorizontal() {
 
         var s = '<table class="horizontal">';
@@ -798,12 +790,12 @@ class SearchPageController {
         s += this.drawHealthTableRowVertical('Alcohol Impaired Driving Deaths', 'alcohol_impaired_driving_deaths_value', '0.0%');
         s += this.drawHealthTableRowVertical('Sexually Transmitted Infections', 'sexually_transmitted_infections_value', '0,0');
         s += this.drawHealthTableRowVertical('Teen Births', 'teen_births_value', '0,0');
-        
+
         s += '</table>';
 
         $('#health-factors-table-container').html(s);
     }
-    
+
     drawHealthFactorsTableHorizontal() {
 
         var s = '<table class="horizontal">';
@@ -843,7 +835,7 @@ class SearchPageController {
             s += this.drawHealthTableCellHorizontal(regionData, 'teen_births_value', '0,0');
             s += '</tr>';
         }
-        
+
         s += '</table>';
 
         $('#health-factors-table-container').html(s);
@@ -1074,7 +1066,7 @@ class SearchPageController {
     drawHealthDataTableCellVertical(i, data, key, format) {
 
         var s = '<td class="color-' + i + '">';
-        
+
         if (data[key] != undefined)
             s += numeral(data[key].replace(',','')).format(format);
         else
@@ -1111,10 +1103,10 @@ class SearchPageController {
 
         $('#map-summary').text(
             MapSummary.getSummaryString(
-                this.params.regions, 
-                this.tableData.educationData, 
-                variable, 
-                year, 
+                this.params.regions,
+                this.tableData.educationData,
+                variable,
+                year,
                 value => (year == value.year)));
     }
 
@@ -1122,7 +1114,7 @@ class SearchPageController {
 
         const width = $(window).width();
 
-        if ((this.params.regions.length >= 3) || (width >= 1600)) 
+        if ((this.params.regions.length >= 3) || (width >= 1600))
             this.drawEducationTableHorizontal();    // horizontal colored lines
         else
             this.drawEducationTableVertical();      // vertical colored lines
@@ -1177,7 +1169,7 @@ class SearchPageController {
         s += '<tr><td class="category-header">At Least High School Diploma</td>';
 
         for (var i = 0; i < this.tableData.educationData.length; i++) {
-            
+
             const regionData = this.tableData.educationData[i][0];
             const totalRanks = parseInt(regionData.total_ranks);
 
@@ -1251,10 +1243,10 @@ class SearchPageController {
 
         $('#map-summary').text(
             MapSummary.getSummaryString(
-                this.params.regions, 
-                this.tableData.gdpData, 
-                variable, 
-                year, 
+                this.params.regions,
+                this.tableData.gdpData,
+                variable,
+                year,
                 value => (year == value.year)));
     }
 
@@ -1379,10 +1371,10 @@ class SearchPageController {
 
         $('#map-summary').text(
             MapSummary.getOccupationsSummaryString(
-                this.params.regions, 
-                this.tableData.occupationsData, 
-                variable, 
-                year, 
+                this.params.regions,
+                this.tableData.occupationsData,
+                variable,
+                year,
                 value => (year == value.year) && (variable.name == value.occupation)));
     }
 
@@ -1399,10 +1391,10 @@ class SearchPageController {
 
         $('#map-summary').text(
             MapSummary.getSummaryString(
-                this.params.regions, 
-                this.tableData.populationData, 
-                variable, 
-                year, 
+                this.params.regions,
+                this.tableData.populationData,
+                variable,
+                year,
                 value => (year == value.year)));
     }
 
@@ -1724,48 +1716,6 @@ class SearchPageController {
         }
 
         return false;
-    }
-
-    // Similar regions
-    //
-    drawSimilarRegions(onClickRegion) {
-
-        if (this.params.regions.length == 0)
-            return;
-
-        const region = this.params.regions[0];
-        const controller = new ApiController();
-
-        controller.getSupportedVectors(region.id)
-            .then(data => controller.getSimilarRegions(region.id, data.available_vectors))
-            .then(data => this.drawSimilarRegionsList(data, onClickRegion))
-            .catch(error => console.error(error));
-    }
-
-    drawSimilarRegionsList(data, onClickRegion) {
-        const mostSimilar = data.most_similar;
-        const regionPromises = mostSimilar.map(region => RegionLookup.byID(region.id));
-
-        Promise.all(regionPromises).then(regions => {
-            const selection = d3.select('#similar-regions');
-            const selectedRegionsIDs = this.params.regions.map(region => region.id);
-            const unselectedRegions = regions.filter(region => {
-                return ! _.contains(selectedRegionsIDs, region.id);
-            });
-
-            const links = selection
-                .selectAll('li')
-                .data(unselectedRegions.slice(0, Constants.PEER_REGIONS))
-                .enter()
-                .append('li')
-                .append('a')
-                .on('click', region => onClickRegion({ id : region.id, name : region.name }))
-                .text(region => region.name)
-                .append('i')
-                .attr('class', 'fa fa-plus');
-
-            selection.style('display', 'block');
-        }, error => { throw error; });
     }
 
     // Draw charts
