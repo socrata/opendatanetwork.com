@@ -51,7 +51,7 @@ class Peers {
                     }).map(peer => {
                         const uidString = uids.concat(peer.id).join('-');
                         const nameString = names.concat(peer.name).map(name => {
-                            return name.replace(/ /g, '_');
+                            return name.replace(/ /g, '_').replace(/,/g, '');
                         }).join('-');
 
                         const url =`/region/${uidString}/${nameString}/${vector}`;
