@@ -39,7 +39,7 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 
     <label class="refine-by-label">Refine by:</label>
 
-<% if (params.q.length > 0) { %> 
+<% if (params.q.length > 0) { %>
       <% if (searchResults.results.length > 0) { %>
         <strong><%= searchResults.resultSetSizeString %></strong> results for <strong><%= params.q %></strong>
       <% } else { %>
@@ -48,7 +48,7 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else { %>
     <% if (searchResults.results.length > 0) { %>
       <% if (params.regions.length > 0) { %>
-        <strong><%= searchResults.resultSetSizeString %></strong> results for 
+        <strong><%= searchResults.resultSetSizeString %></strong> results for
         <strong><%= getTabTitle(params.vector.length > 0 ? params.vector : 'population') %></strong>
       <% } else { %>
         <strong><%= searchResults.resultSetSizeString %></strong> results
@@ -105,7 +105,13 @@ var _tableData = <%- JSON.stringify(tableData) %>;
                 <i class="fa fa-plus"></i><input class="add-region-input" type="text" placeholder="Add Location">
                 <ul class="add-region-results" style="display: none;"></ul>
             </div>
-            <ul id="similar-regions" style="display:none"></ul>
+            <% if (peers.length > 0) { %>
+                <ul id="similar-regions">
+                <% peers.forEach(function(region) { %>
+                    <li><a href=<%= region.url %>><%= region.name %> <i class="fa fa-plus"></i></a></li>
+                <% }); %>
+                </ul>
+            <% } %>
             <h2 id="places-in-region-header-0" class="places-in-region-header" style="display:none"></h2>
             <ul id="places-in-region-list-0" class="places-in-region-list" style="display:none"></ul>
             <h2 id="places-in-region-header-1" class="places-in-region-header" style="display:none"></h2>

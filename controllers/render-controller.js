@@ -5,6 +5,7 @@ const CategoryController = require('./category-controller');
 const LocationsController = require('./locations-controller');
 const TagController = require('./tag-controller');
 const Sources = require('./sources');
+const Peers = require('./peers');
 
 const _ = require('lodash');
 const htmlencode = require('htmlencode');
@@ -349,6 +350,7 @@ RenderController.prototype.renderSearchResults = function(req, res) {
 // Private functions
 //
 function _renderSearchPage(req, res, params, tableData) {
+    console.log(params)
 
     apiController.getSearchDatasetsUrl(params, function(searchDatasetsUrl) {
 
@@ -375,41 +377,45 @@ function _renderSearchPage(req, res, params, tableData) {
                             apiController.searchDatasets(
                                 params,
                                 function(results) {
+                                    Peers.fromParams(params).then(peers => {
 
-                                    res.render(
-                                        'search.ejs',
-                                        {
-                                            categoryResults : categoryResults,
-                                            css : [
-                                                '/styles/third-party/leaflet.min.css',
-                                                '/styles/search.css',
-                                                '/styles/maps.css',
-                                                '/styles/main.css'
-                                            ],
-                                            currentCategory : currentCategory,
-                                            currentTag : currentTag,
-                                            domainResults : domainResults,
-                                            params : params,
-                                            scripts : [
-                                                '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
-                                                '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
-                                                '/lib/third-party/leaflet/leaflet.min.js',
-                                                '/lib/third-party/leaflet/leaflet-omnivore.min.js',
-                                                '/lib/third-party/browser-polyfill.min.js',
-                                                '/lib/third-party/colorbrewer.min.js',
-                                                '/lib/third-party/d3.min.js',
-                                                '/lib/third-party/d3.promise.min.js',
-                                                '/lib/third-party/leaflet-omnivore.min.js',
-                                                '/lib/third-party/lodash.min.js',
-                                                '/lib/search.min.js'
-                                            ],
-                                            searchDatasetsUrl : searchDatasetsUrl,
-                                            searchPath : req.path,
-                                            searchResults : results,
-                                            sources : sources.forRegions(params.regions),
-                                            tableData : tableData || {},
-                                            title : getSearchPageTitle(params)
-                                        });
+                                        res.render(
+                                            'search.ejs',
+                                            {
+                                                peers,
+                                                categoryResults : categoryResults,
+                                                css : [
+                                                    '/styles/third-party/leaflet.min.css',
+                                                    '/styles/search.css',
+                                                    '/styles/maps.css',
+                                                    '/styles/main.css'
+                                                ],
+                                                currentCategory : currentCategory,
+                                                currentTag : currentTag,
+                                                domainResults : domainResults,
+                                                params : params,
+                                                scripts : [
+                                                    '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
+                                                    '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
+                                                    '/lib/third-party/leaflet/leaflet.min.js',
+                                                    '/lib/third-party/leaflet/leaflet-omnivore.min.js',
+                                                    '/lib/third-party/browser-polyfill.min.js',
+                                                    '/lib/third-party/colorbrewer.min.js',
+                                                    '/lib/third-party/d3.min.js',
+                                                    '/lib/third-party/d3.promise.min.js',
+                                                    '/lib/third-party/leaflet-omnivore.min.js',
+                                                    '/lib/third-party/lodash.min.js',
+                                                    '/lib/search.min.js'
+                                                ],
+                                                searchDatasetsUrl : searchDatasetsUrl,
+                                                searchPath : req.path,
+                                                searchResults : results,
+                                                sources : sources.forRegions(params.regions),
+                                                tableData : tableData || {},
+                                                title : getSearchPageTitle(params)
+                                            });
+
+                                    });
                                 },
                                 function() {
 
@@ -509,7 +515,7 @@ function getSearchPageTitle(params) {
         case 'cost_of_living': rg.push('Cost of Living'); break;
         default: rg.push('Population'); break;
     }
-    
+
     var categories = params.categories.map(function(category) { return category.capitalize(); });
     rg = rg.concat(categories);
 
