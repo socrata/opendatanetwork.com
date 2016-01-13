@@ -43,13 +43,18 @@ class Peers {
                 const uid = regions[0].id;
                 Peers.get(uid).then(peers => {
                     const uids = regions.map(region => region.id);
+                    const names = regions.map(region => region.name);
                     const vector = params.vector;
 
                     resolve(peers.filter(peer => {
                         return uids.indexOf(peer.id) < 0;
                     }).map(peer => {
                         const uidString = uids.concat(peer.id).join('-');
-                        const url =`/region/${uidString}/${vector}`;
+                        const nameString = names.concat(peer.name).map(name => {
+                            return name.replace(/ /g, '_');
+                        }).join('-');
+
+                        const url =`/region/${uidString}/${nameString}/${vector}`;
                         return _.extend({}, peer, {url});
                     }).slice(0, 5));
                 }, error => { throw error; });

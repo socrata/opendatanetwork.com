@@ -350,8 +350,6 @@ RenderController.prototype.renderSearchResults = function(req, res) {
 // Private functions
 //
 function _renderSearchPage(req, res, params, tableData) {
-    console.log(params)
-
     apiController.getSearchDatasetsUrl(params, function(searchDatasetsUrl) {
 
         apiController.getCategories(5, function(categoryResults) {
