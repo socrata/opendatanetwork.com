@@ -115,8 +115,8 @@ class SearchPageController {
 
             RegionLookup.byID(option.id)
                 .then(region => {
-                    this.setAutoSuggestedRegion({ id : region.id, name : region.name }, false);
-                    this.navigate();
+                    self.setAutoSuggestedRegion({ id : region.id, name : region.name }, false);
+                    self.navigate();
                 }, error => { throw error; });
         }
 
