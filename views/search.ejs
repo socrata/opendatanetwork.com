@@ -133,6 +133,7 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% if ((params.vector == '') || (params.vector == 'population')) { %>
 
             <div id="map"></div>
+            <p id="map-summary"></p>
             <h1>Population</h1>
             <figure id="population-chart"></figure>
             <h1>Population Change</h1>
@@ -144,6 +145,7 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'earnings') { %>
 
             <div id="map"></div>
+            <p id="map-summary"></p>
             <h1>Earnings</h1>
             <div id="earnings-table-container">
 <% include _earnings-table %>
@@ -156,6 +158,7 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'education') { %>
 
             <div id="map"></div>
+            <p id="map-summary"></p>
             <h1>Education</h1>
             <div id="education-table-container">
 <% include _education-table %>
@@ -167,6 +170,7 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'occupations') { %>
 
             <div id="map"></div>
+            <p id="map-summary"></p>
             <h1>Occupations</h1>
             <div id="occupations-table-container">
 <% include _occupations-table %>
@@ -178,6 +182,7 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'gdp') { %>
 
             <div id="map"></div>
+            <p id="map-summary"></p>
             <h1>GDP</h1>
             <figure id="per-capita-gdp-chart"></figure>
             <figure id="per-capita-gdp-change-chart"></figure>
@@ -188,6 +193,7 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'health') { %>
 
             <div id="map"></div>
+            <p id="map-summary"></p>
             <h1>Health</h1>
             <h2>RWJF County Health Rankings</h2>
             <p>
@@ -219,6 +225,7 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'cost_of_living') { %>
 
             <div id="map"></div>
+            <p id="map-summary"></p>
             <h1>Cost of Living</h1>
             <div id="cost-of-living-table-container">
 <% include _cost-of-living-table %>

@@ -20,7 +20,7 @@
     var bachelorsRank = parseInt(regionData.percent_bachelors_degree_or_higher_rank);
     var bachelorsPercentile = parseInt(((totalRanks - bachelorsRank) / totalRanks) * 100); 
 %>
-    <td><%= regionData.percent_bachelors_degree_or_higher %>%</td>
+    <td><%= numeral(regionData.percent_bachelors_degree_or_higher).format('0.0') %>%</td>
     <td class="color-<%= i %>"><%= numeral(bachelorsPercentile).format('0o') %><div></div></td>
 <% } %>
 </tr>
@@ -34,7 +34,7 @@
     var highSchoolRank = parseInt(regionData.percent_high_school_graduate_or_higher_rank);
     var highSchoolPercentile = parseInt(((totalRanks - highSchoolRank) / totalRanks) * 100);
 %>
-    <td><%= regionData.percent_high_school_graduate_or_higher %>%</td>
+    <td><%= numeral(regionData.percent_high_school_graduate_or_higher).format('0.0') %>%</td>
     <td class="color-<%= i %>"><%= numeral(highSchoolPercentile).format('0o') %><div></div></td>
 <% } %>
 </tr>

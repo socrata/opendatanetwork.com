@@ -115,8 +115,8 @@ class SearchPageController {
 
             RegionLookup.byID(option.id)
                 .then(region => {
-                    self.setAutoSuggestedRegion({ id : region.id, name : region.name }, false);
-                    self.navigate();
+                    this.setAutoSuggestedRegion({ id : region.id, name : region.name }, false);
+                    this.navigate();
                 }, error => { throw error; });
         }
 
@@ -172,12 +172,12 @@ class SearchPageController {
 
     // Public methods
     //
-    drawMap(source) {
+    drawMap(source, onDisplay) {
 
         const selector = '#map';
         const regions = this.params.regions;
 
-        MapView.create(source, regions)
+        MapView.create(source, regions, onDisplay)
             .then(view => view.show(selector), error => { throw error; });
     }
 
@@ -227,9 +227,20 @@ class SearchPageController {
     //
     drawCostOfLivingData() {
 
-        this.drawMap(MapSources.rpp);
+        this.drawMap(MapSources.rpp, (variable, year) => this.drawCostOfLivingMapSummary(variable, year));
         this.drawCostOfLivingChart();
         this.drawCostOfLivingTable();
+    }
+
+    drawCostOfLivingMapSummary(variable, year) {
+
+        $('#map-summary').text(
+            MapSummary.getCostOfLivingSummaryString(
+                this.params.regions, 
+                this.tableData.costOfLivingData, 
+                variable, 
+                year, 
+                value => (year == value.year)));
     }
 
     drawCostOfLivingChart() {
@@ -438,9 +449,20 @@ class SearchPageController {
     //
     drawEarningsData() {
 
-        this.drawMap(MapSources.earnings);
+        this.drawMap(MapSources.earnings, (variable, year) => this.drawEarningsMapSummary(variable, year));
         this.drawEarningsChart();
         this.drawEarningsTable();
+    }
+
+    drawEarningsMapSummary(variable, year) {
+
+        $('#map-summary').text(
+            MapSummary.getSummaryString(
+                this.params.regions, 
+                this.tableData.earningsData, 
+                variable, 
+                year, 
+                value => (year == value.year)));
     }
 
     drawEarningsChart() {
@@ -507,7 +529,16 @@ class SearchPageController {
 
         earnings.push(graduateDegreeEarnings);
 
-        this.drawSteppedAreaChart('earnings-chart', earnings, {
+        // Draw chart
+        //
+        const dataTable = google.visualization.arrayToDataTable(earnings);
+        const formatter = new google.visualization.NumberFormat( { pattern : '$###,###' } );
+
+        for (var i = 0; i < this.params.regions.length; i++) {
+            formatter.format(dataTable, i + 1);
+        }
+
+        this.drawSteppedAreaChart('earnings-chart', dataTable, {
 
             areaOpacity : 0,
             connectSteps: true,
@@ -612,8 +643,19 @@ class SearchPageController {
     //
     drawHealthData() {
 
-        this.drawMap(MapSources.health);
+        this.drawMap(MapSources.health, (variable, year) => this.drawHealthMapSummary(variable, year));
         this.drawHealthTables();
+    }
+
+    drawHealthMapSummary(variable, year) {
+
+        $('#map-summary').text(
+            MapSummary.getSummaryString(
+                this.params.regions, 
+                this.tableData.healthData, 
+                variable, 
+                year, 
+                value => (year == value.year)));
     }
 
     drawHealthTables() {
@@ -1061,8 +1103,19 @@ class SearchPageController {
     //
     drawEducationData() {
 
-        this.drawMap(MapSources.education);
+        this.drawMap(MapSources.education, (variable, year) => this.drawEducationMapSummary(variable, year));
         this.drawEducationTable();
+    }
+
+    drawEducationMapSummary(variable, year) {
+
+        $('#map-summary').text(
+            MapSummary.getSummaryString(
+                this.params.regions, 
+                this.tableData.educationData, 
+                variable, 
+                year, 
+                value => (year == value.year)));
     }
 
     drawEducationTable() {
@@ -1113,7 +1166,7 @@ class SearchPageController {
             const bachelorsRank = parseInt(regionData.percent_bachelors_degree_or_higher_rank);
             const bachelorsPercentile = parseInt(((totalRanks - bachelorsRank) / totalRanks) * 100);
 
-            s += '<td>' + regionData.percent_bachelors_degree_or_higher + '%</td>';
+            s += '<td>' + numeral(regionData.percent_bachelors_degree_or_higher).format('0.0') + '%</td>';
             s += '<td class="color-' + i + '">' + numeral(bachelorsPercentile).format('0o') + '<div></div></td>';
         }
 
@@ -1131,7 +1184,7 @@ class SearchPageController {
             const highSchoolRank = parseInt(regionData.percent_high_school_graduate_or_higher_rank);
             const highSchoolPercentile = parseInt(((totalRanks - highSchoolRank) / totalRanks) * 100);
 
-            s += '<td>' + regionData.percent_high_school_graduate_or_higher + '%</td>';
+            s += '<td>' + numeral(regionData.percent_high_school_graduate_or_higher).format('0.0') + '%</td>';
             s += '<td class="color-' + i + '">' + numeral(highSchoolPercentile).format('0o') + '<div></div></td>';
         }
 
@@ -1167,13 +1220,13 @@ class SearchPageController {
             const bachelorsRank = parseInt(regionData.percent_bachelors_degree_or_higher_rank);
             const bachelorsPercentile = parseInt(((totalRanks - bachelorsRank) / totalRanks) * 100);
 
-            s += '<td>' + regionData.percent_bachelors_degree_or_higher + '%<div></div></td>';
+            s += '<td>' + numeral(regionData.percent_bachelors_degree_or_higher).format('0.0') + '%<div></div></td>';
             s += '<td>' + numeral(bachelorsPercentile).format('0o') + '<div></div></td>';
 
             const highSchoolRank = parseInt(regionData.percent_high_school_graduate_or_higher_rank);
             const highSchoolPercentile = parseInt(((totalRanks - highSchoolRank) / totalRanks) * 100);
 
-            s += '<td>' + regionData.percent_high_school_graduate_or_higher + '%<div></div></td>';
+            s += '<td>' + numeral(regionData.percent_high_school_graduate_or_higher).format('0.0') + '%<div></div></td>';
             s += '<td>' + numeral(highSchoolPercentile).format('0o') + '<div></div></td>';
             s += '</tr>'
         }
@@ -1187,11 +1240,22 @@ class SearchPageController {
     //
     drawGdpData() {
 
-        this.drawMap(MapSources.gdp);
+        this.drawMap(MapSources.gdp, (variable, year) => this.drawGdpMapSummary(variable, year));
         this.drawGdpChart();
         this.drawGdpChangeChart();
 
         // no need to draw GDP table, because it so long it will never switch to a horizontal orientation
+    }
+
+    drawGdpMapSummary(variable, year) {
+
+        $('#map-summary').text(
+            MapSummary.getSummaryString(
+                this.params.regions, 
+                this.tableData.gdpData, 
+                variable, 
+                year, 
+                value => (year == value.year)));
     }
 
     drawGdpChart() {
@@ -1232,6 +1296,12 @@ class SearchPageController {
         // Draw chart
         //
         const dataTable = google.visualization.arrayToDataTable(chartData);
+        const formatter = new google.visualization.NumberFormat( { pattern : '$###,###' } );
+
+        for (var i = 0; i < this.params.regions.length; i++) {
+            formatter.format(dataTable, i + 1);
+        }
+
         this.drawLineChart('per-capita-gdp-chart', dataTable, {
 
             curveType : 'function',
@@ -1239,6 +1309,7 @@ class SearchPageController {
             pointShape : 'square',
             pointSize : 8,
             title : 'Per Capita Real GDP over Time',
+            vAxis : { format : '$###,###' },
         });
     }
 
@@ -1280,6 +1351,12 @@ class SearchPageController {
         // Draw chart
         //
         const dataTable = google.visualization.arrayToDataTable(chartData);
+        const formatter = new google.visualization.NumberFormat( { pattern : '#.##%' } );
+
+        for (var i = 0; i < this.params.regions.length; i++) {
+            formatter.format(dataTable, i + 1);
+        }
+
         this.drawLineChart('per-capita-gdp-change-chart', dataTable, {
 
             curveType : 'function',
@@ -1295,16 +1372,38 @@ class SearchPageController {
     //
     drawOccupationsData() {
 
-        this.drawMap(MapSources.occupations);
+        this.drawMap(MapSources.occupations, (variable, year) => this.drawOccupationsMapSummary(variable, year));
+    }
+
+    drawOccupationsMapSummary(variable, year) {
+
+        $('#map-summary').text(
+            MapSummary.getOccupationsSummaryString(
+                this.params.regions, 
+                this.tableData.occupationsData, 
+                variable, 
+                year, 
+                value => (year == value.year) && (variable.name == value.occupation)));
     }
 
     // Population
     //
     drawPopulationData() {
 
-        this.drawMap(MapSources.population);
+        this.drawMap(MapSources.population, (variable, year) => this.drawPopulationMapSummary(variable, year));
         this.drawPopulationChart();
         this.drawPopulationChangeChart();
+    }
+
+    drawPopulationMapSummary(variable, year) {
+
+        $('#map-summary').text(
+            MapSummary.getSummaryString(
+                this.params.regions, 
+                this.tableData.populationData, 
+                variable, 
+                year, 
+                value => (year == value.year)));
     }
 
     drawPopulationChart() {
@@ -1342,7 +1441,15 @@ class SearchPageController {
             chartData.push(o[key]);
         }
 
+        // Draw chart
+        //
         const dataTable = google.visualization.arrayToDataTable(chartData);
+        const formatter = new google.visualization.NumberFormat( { pattern : '###,###' } );
+
+        for (var i = 0; i < this.params.regions.length; i++) {
+            formatter.format(dataTable, i + 1);
+        }
+
         this.drawLineChart('population-chart', dataTable, {
 
             curveType : 'function',
@@ -1388,6 +1495,8 @@ class SearchPageController {
             chartData.push(o[key]);
         }
 
+        // Draw chart
+        //
         const dataTable = google.visualization.arrayToDataTable(chartData);
         const formatter = new google.visualization.NumberFormat( { pattern : '#.##%' } );
 
@@ -1670,13 +1779,10 @@ class SearchPageController {
         chart.draw(dataTable, options);
     }
 
-    drawSteppedAreaChart(chartId, data, options) {
+    drawSteppedAreaChart(chartId, dataTable, options) {
 
-        const dataTable = google.visualization.arrayToDataTable(data);
         const chart = new google.visualization.SteppedAreaChart(document.getElementById(chartId));
-
         this.applyStandardOptions(options);
-
         chart.draw(dataTable, options);
     }
 
