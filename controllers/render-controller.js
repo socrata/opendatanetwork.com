@@ -350,6 +350,9 @@ RenderController.prototype.renderSearchResults = function(req, res) {
 // Private functions
 //
 function _renderSearchPage(req, res, params, tableData) {
+    const peersPromise = Peers.fromParams(params);
+
+
     apiController.getSearchDatasetsUrl(params, function(searchDatasetsUrl) {
 
         apiController.getCategories(5, function(categoryResults) {
@@ -375,7 +378,7 @@ function _renderSearchPage(req, res, params, tableData) {
                             apiController.searchDatasets(
                                 params,
                                 function(results) {
-                                    Peers.fromParams(params).then(peers => {
+                                    peersPromise.then(peers => {
 
                                         res.render(
                                             'search.ejs',

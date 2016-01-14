@@ -1,6 +1,6 @@
 'use strict';
 
-const request = require('request');
+const request = require('request-promise');
 const _ = require('lodash');
 const NodeCache = require('node-cache');
 
@@ -17,16 +17,11 @@ class Peers {
             peerCache.get(key, (error, value) => {
                 if (value === undefined) {
                     const url = `https://odn-peers.herokuapp.com/peers/${uid}?n=${n}`;
-                    request.get(url, (error, response, body) => {
-                        if (error || response.statusCode != 200) {
-                            console.log(`error ${response.statusCode} for ${url}`);
-                            resolve([]);
-                        } else {
-                            const peers = JSON.parse(body).peers;
-                            peerCache.set(key, peers);
-                            resolve(JSON.parse(body).peers);
-                        }
-                    });
+                    request(url).then(body => {
+                        const peers = JSON.parse(body).peers;
+                        peerCache.set(key, peers);
+                        resolve(JSON.parse(body).peers);
+                    }).catch(error => { throw error; });
                 } else {
                     resolve(value);
                 }
