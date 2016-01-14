@@ -8,7 +8,7 @@ class MapSummary {
             const datum = _.filter(data[index], filter)[0]; // should be only one
 
             return "The {0} in {1} for {2} was {3}.".format(
-                variable.name,
+                variable.name.toLowerCase(),
                 year,
                 region.name,
                 this.formatValue(variable.column, datum[variable.column]));
@@ -23,8 +23,8 @@ class MapSummary {
 
             const datum = _.filter(data[index], filter)[0]; // should be only one
 
-            return "The Cost of Living Index for {0} in {1} for {2} was {3}.".format(
-                variable.name,
+            return "The cost of living index for {0} in {1} for {2} was {3}.".format(
+                variable.name.toLowerCase(),
                 year,
                 region.name,
                 this.formatValue(variable.column, datum[variable.column]));
@@ -39,8 +39,8 @@ class MapSummary {
 
             const datum = _.filter(data[index], filter)[0]; // should be only one
 
-            return "The Percent Working in {0} in {1} for {2} was {3}.".format(
-                variable.name,
+            return "The percent working in {0} in {1} for {2} was {3}.".format(
+                variable.name.toLowerCase(),
                 year,
                 region.name,
                 this.formatValue(variable.column, datum[variable.column]));
