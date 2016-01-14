@@ -1,28 +1,36 @@
 'use strict';
 
-var CacheController = require('./cache-controller');
+const CacheController = require('./cache-controller');
 const Constants = require('./constants');
 const Synonyms = require('./synonyms');
 
-var moment = require('moment');
-var numeral = require('numeral');
-var request = require('request');
-var _ = require('lodash');
-var querystring = require('querystring');
+const _ = require('lodash');
+const moment = require('moment');
+const numeral = require('numeral');
+const querystring = require('querystring');
+const request = require('request');
+const rp = require('request-promise');
 
-var baseCatalogUrl = 'http://api.us.socrata.com/api/catalog/v1';
-var cacheController = new CacheController();
-var categoriesUrl = baseCatalogUrl + '/categories';
-var datasetSummaryUrl = 'https://{0}/api/views/{1}.json';
-var defaultSearchResultCount = 10;
-var domainsUrl = baseCatalogUrl + '/domains';
-var maxDescriptionLength = 300;
-var rosterUrl = 'https://odn.data.socrata.com/resource/bdeb-mf9k/?$where={0}';
-var searchUrl = baseCatalogUrl;
-var tagsUrl = baseCatalogUrl + '/tags';
-var userAgent = 'www.opendatanetwork.com';
-var athenaUrl = 'https://socrata-athena.herokuapp.com/schema/v1/applied/';
-var regionsUrl = 'https://odn.data.socrata.com/resource/eyae-8jfy?$order=child_population desc';
+const baseCatalogUrl = 'https://api.us.socrata.com/api/catalog/v1';
+const cacheController = new CacheController();
+const categoriesUrl = baseCatalogUrl + '/categories';
+const costOfLivingUrl = 'https://odn.data.socrata.com/resource/hpnf-gnfu.json?id={0}';
+const datasetSummaryUrl = 'https://{0}/api/views/{1}.json';
+const defaultSearchResultCount = 10;
+const domainsUrl = baseCatalogUrl + '/domains';
+const earningsUrl = 'https://odn.data.socrata.com/resource/wmwh-4vak.json?id={0}';
+const educationUrl = 'https://odn.data.socrata.com/resource/uf4m-5u8r.json?id={0}';
+const gdpUrl = 'https://odn.data.socrata.com/resource/ks2j-vhr8.json?id={0}';
+const healthUrl = 'https://odn.data.socrata.com/resource/7ayp-utp2.json?id={0}';
+const maxDescriptionLength = 300;
+const occupationsUrl = 'https://odn.data.socrata.com/resource/qfcm-fw3i.json?$order=occupation&id={0}';
+const populationUrl = 'https://odn.data.socrata.com/resource/e3rd-zzmr.json?id={0}';
+const rosterUrl = 'https://odn.data.socrata.com/resource/bdeb-mf9k/?$where={0}';
+const searchUrl = baseCatalogUrl;
+const tagsUrl = baseCatalogUrl + '/tags';
+const userAgent = 'www.opendatanetwork.com';
+const athenaUrl = 'https://socrata-athena.herokuapp.com/schema/v1/applied/';
+const regionsUrl = 'https://odn.data.socrata.com/resource/eyae-8jfy?$order=child_population desc';
 
 const SYNONYMS = Synonyms.fromFile(Constants.SYNONYMS_FILE);
 
@@ -33,16 +41,51 @@ function ApiController() {
 
 // Public methods
 //
+ApiController.prototype.getCostOfLivingData = (regionId) => {
+
+    return getRequestPromise(costOfLivingUrl.format(regionId));
+};
+
+ApiController.prototype.getEarningsData = (regionId) => {
+
+    return getRequestPromise(earningsUrl.format(regionId));
+};
+
+ApiController.prototype.getEducationData = (regionId) => {
+
+    return getRequestPromise(educationUrl.format(regionId));
+};
+
+ApiController.prototype.getGdpData = (regionId) => {
+
+    return getRequestPromise(gdpUrl.format(regionId));
+};
+
+ApiController.prototype.getHealthData = (regionId) => {
+
+    return getRequestPromise(healthUrl.format(regionId));
+};
+
+ApiController.prototype.getOccupationsData = (regionId) => {
+
+    return getRequestPromise(occupationsUrl.format(regionId));
+};
+
+ApiController.prototype.getPopulationData = (regionId) => {
+
+    return getRequestPromise(populationUrl.format(regionId));
+};
+
 ApiController.prototype.getRegions = function(successHandler, errorHandler) {
 
     getFromApi(regionsUrl, successHandler, errorHandler);
-}
+};
 
 ApiController.prototype.getDatasetSummary = function(domain, id, successHandler, errorHandler) {
 
-    var url = datasetSummaryUrl.format(domain, id);
+    const url = datasetSummaryUrl.format(domain, id);
     getFromApi(url, successHandler, errorHandler);
-}
+};
 
 ApiController.prototype.searchDatasets = function(params, successHandler, errorHandler) {
 
@@ -60,7 +103,7 @@ ApiController.prototype.searchDatasets = function(params, successHandler, errorH
             },
             errorHandler);
     });
-}
+};
 
 ApiController.prototype.getAutoSuggestedRegions = function(regionIds, successHandler, errorHandler) {
 
@@ -68,7 +111,7 @@ ApiController.prototype.getAutoSuggestedRegions = function(regionIds, successHan
     const url = rosterUrl.format(pairs.join(' OR '));
 
     getFromApi(url, successHandler, errorHandler);
-}
+};
 
 ApiController.prototype.getCategories = function(count, successHandler, errorHandler) {
 
@@ -100,11 +143,13 @@ ApiController.prototype.getDomains = function(count, successHandler, errorHandle
 };
 
 ApiController.prototype.getSearchDatasetsUrl = function(requestParams, completionHandler) {
+
     const querySynonyms = SYNONYMS.get(requestParams.q);
     const vectorSynonyms = SYNONYMS.get(requestParams.vector.replace(/_/g, ' '));
     const synonyms = _.unique(_.flatten([querySynonyms, vectorSynonyms]));
 
     const regionNames = requestParams.regions.map(region => {
+
         const name = region.name;
         const type = region.type;
 
@@ -127,13 +172,17 @@ ApiController.prototype.getSearchDatasetsUrl = function(requestParams, completio
     const categories = requestParams.categories || [];
     const domains = requestParams.domains || [];
     const tags = requestParams.tags || [];
-    
-    const allParams = _.extend({}, requestParams, {
-        q_internal: query,
-    });
-    const params = _.omit(allParams, value => value === '' || value === []);
 
+    const allParams = _.extend({}, {
+        q_internal : query,
+        categories : categories,
+        domains : domains,
+        tags : tags,
+    });
+
+    const params = _.omit(allParams, value => _.isEmpty(value));
     const url = `${Constants.CATALOG_URL}?${querystring.stringify(params)}`;
+
     completionHandler(url);
 };
 
@@ -259,6 +308,15 @@ function getFromCacheOrApi(url, successHandler, errorHandler) {
             url,
             function(results) { cacheController.set(url, results, successHandler); },
             errorHandler);
+    });
+}
+
+function getRequestPromise(url) {
+
+    return rp({
+        uri: url,
+        headers: { 'User-Agent': userAgent },
+        json: true
     });
 }
 

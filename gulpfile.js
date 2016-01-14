@@ -34,6 +34,11 @@ var mapScripts = [
     'src/data/map-sources.js'
 ];
 
+var mapSummaryScripts = [
+    'src/map-summary-formatters.js', 
+    'src/map-summary.js'
+];
+
 var autosuggestScripts = [
     'src/autosuggest/base64.js',
     'src/autosuggest/autosuggest-source.js',
@@ -69,6 +74,7 @@ gulp.task('home', js(homeScripts, 'home.min.js'));
 var searchScripts = baseScripts
     .concat(autosuggestScripts)
     .concat(mapScripts)
+    .concat(mapSummaryScripts)
     .concat(['src/search-page-controller.js', 'src/search.js']);
 
 gulp.task('search', js(searchScripts, 'search.min.js'));

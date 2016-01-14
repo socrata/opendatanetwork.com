@@ -1,17 +1,13 @@
 
 class SearchPageController {
 
-    constructor(params) {
+    constructor(params, tableData) {
 
         this.params = params;
+        this.tableData = tableData;
         this.fetching = false;
         this.fetchedAll = false;
         this.mostSimilar = [];
-        this.educationData = [];
-        this.earningsData = [];
-        this.costOfLivingData = [];
-        this.healthData = [];
-        this.occupationsData = [];
 
         const self = this;
 
@@ -134,38 +130,46 @@ class SearchPageController {
             $('.add-region input[type="text"]').focus();
         });
 
-        // Similar regions
-        //
-        this.drawSimilarRegions(region => {
-
-            self.setAutoSuggestedRegion(region, false);
-            self.navigate();
-        });
-
         // Places in region
         //
         this.drawPlacesInRegion();
 
-        // Resize / redraw
+        // Chart column
+        //
+        if (this.params.regions.length > 0) {
+
+            switch (this.params.vector) {
+
+                case 'cost_of_living': this.drawCostOfLivingData(); break;
+                case 'earnings': this.drawEarningsData(); break;
+                case 'education': this.drawEducationData(); break;
+                case 'gdp': this.drawGdpData(); break;
+                case 'health': this.drawHealthData(); break;
+                case 'occupations': this.drawOccupationsData(); break;
+                case 'population': this.drawPopulationData(); break;
+                default: this.drawPopulationData(); break;
+            }
+        }
+
+        // Resize / redraw event handlers
         //
         $(window).resize(() => {
 
-            if ($('#education-table-container').length) self.drawEducationTable();
-            if ($('#earnings-table-container').length) self.drawEarningsTable();
-            if ($('#cost-of-living-table-container').length) self.drawCostOfLivingTable();
-            if ($('#health-outcomes-table-container').length) self.drawHealthTables();
-            if ($('#occupations-table-container').length) self.drawOccupationsTable();
+            if ($('#education-table-container').length) this.drawEducationTable();
+            if ($('#earnings-table-container').length) this.drawEarningsTable();
+            if ($('#cost-of-living-table-container').length) this.drawCostOfLivingTable();
+            if ($('#health-outcomes-table-container').length) this.drawHealthTables();
         });
     }
 
     // Public methods
     //
-    drawMap(source) {
+    drawMap(source, onDisplay) {
 
         const selector = '#map';
         const regions = this.params.regions;
 
-        MapView.create(source, regions)
+        MapView.create(source, regions, onDisplay)
             .then(view => view.show(selector), error => { throw error; });
     }
 
@@ -215,22 +219,20 @@ class SearchPageController {
     //
     drawCostOfLivingData() {
 
-        this.drawMap(MapSources.rpp);
+        this.drawMap(MapSources.rpp, (variable, year) => this.drawCostOfLivingMapSummary(variable, year));
+        this.drawCostOfLivingChart();
+        this.drawCostOfLivingTable();
+    }
 
-        google.setOnLoadCallback(() => {
+    drawCostOfLivingMapSummary(variable, year) {
 
-            const controller = new ApiController();
-            const promises = this.params.regions.map(region => controller.getCostOfLivingData(region.id));
-
-            Promise.all(promises)
-                .then(data => {
-
-                    this.costOfLivingData = data;
-                    this.drawCostOfLivingChart();
-                    this.drawCostOfLivingTable();
-                })
-                .catch(error => console.error(error));
-        });
+        $('#map-summary').text(
+            MapSummary.getCostOfLivingSummaryString(
+                this.params.regions,
+                this.tableData.costOfLivingData,
+                variable,
+                year,
+                value => (year == value.year)));
     }
 
     drawCostOfLivingChart() {
@@ -259,9 +261,9 @@ class SearchPageController {
         //
         const o = {};
 
-        for (var i = 0; i < this.costOfLivingData.length; i++) {
+        for (var i = 0; i < this.tableData.costOfLivingData.length; i++) {
 
-            const regionValues = this.costOfLivingData[i];
+            const regionValues = this.tableData.costOfLivingData[i];
 
             for (var j = 0; j < regionValues.length; j++) {
 
@@ -294,13 +296,16 @@ class SearchPageController {
 
         const width = $(window).width();
 
-        if ((this.params.regions.length >= 3) || (width >= 1600)) 
+        if ((this.params.regions.length >= 3) || (width >= 1600))
             this.drawCostOfLivingTableHorizontal();    // horizontal colored lines
         else
             this.drawCostOfLivingTableVertical();      // vertical colored lines
     }
-    
+
     drawCostOfLivingTableVertical() {
+
+        if (this.ensureVisibleWithOrientation('#cost-of-living-table-container table', 'vertical'))
+            return;
 
         var s = '<table class="vertical">';
 
@@ -309,7 +314,7 @@ class SearchPageController {
         s += '<tr>';
         s += '<th class="empty"></th>';
 
-        for (var i = 0; i < this.costOfLivingData.length; i++) {
+        for (var i = 0; i < this.tableData.costOfLivingData.length; i++) {
             s += '<th colspan="2" class="color-' + i + '">' + this.params.regions[i].name + '<div></div></th>';
         }
 
@@ -319,9 +324,11 @@ class SearchPageController {
         //
         s += '<tr class="sub-header-row"><td class="empty"></td>';
 
-        for (var i = 0; i < this.costOfLivingData.length; i++) {
+        for (var i = 0; i < this.tableData.costOfLivingData.length; i++) {
             s += '<td>Value</td><td class="color-' + i + '">Percentile<div></div></td>';
         }
+
+        s += '</tr>';
 
         // Component types
         //
@@ -334,7 +341,7 @@ class SearchPageController {
 
             for (var j = 0; j < this.params.regions.length; j++) {
 
-                const o = this.getLatestCostOfLiving(this.costOfLivingData[j], this.params.regions[j].id, components[i]);
+                const o = this.getLatestCostOfLiving(this.tableData.costOfLivingData[j], this.params.regions[j].id, components[i]);
                 const value = (o != null) ? parseFloat(o.index) : 'NA';
                 const percentile = (o != null) ? this.getPercentile(o.rank, o.total_ranks) : 'NA';
 
@@ -344,13 +351,16 @@ class SearchPageController {
 
             s += '</tr>';
         }
-        
+
         s += '</table>';
 
         $('#cost-of-living-table-container').html(s);
     }
-    
+
     drawCostOfLivingTableHorizontal() {
+
+        if (this.ensureVisibleWithOrientation('#cost-of-living-table-container table', 'horizontal'))
+            return;
 
         var s = '<table class="horizontal">';
 
@@ -375,7 +385,7 @@ class SearchPageController {
 
             for (var j = 0; j < components.length; j++) {
 
-                const o = this.getLatestCostOfLiving(this.costOfLivingData[i], this.params.regions[i].id, components[j]);
+                const o = this.getLatestCostOfLiving(this.tableData.costOfLivingData[i], this.params.regions[i].id, components[j]);
                 const value = (o != null) ? parseFloat(o.index) : 'NA';
                 const percentile = (o != null) ? this.getPercentile(o.rank, o.total_ranks) : 'NA';
 
@@ -385,7 +395,7 @@ class SearchPageController {
 
             s += '</tr>';
         }
-        
+
         s += '</table>';
 
         $('#cost-of-living-table-container').html(s);
@@ -431,22 +441,20 @@ class SearchPageController {
     //
     drawEarningsData() {
 
-        this.drawMap(MapSources.earnings);
+        this.drawMap(MapSources.earnings, (variable, year) => this.drawEarningsMapSummary(variable, year));
+        this.drawEarningsChart();
+        this.drawEarningsTable();
+    }
 
-        google.setOnLoadCallback(() => {
+    drawEarningsMapSummary(variable, year) {
 
-            const controller = new ApiController();
-            const promises = this.params.regions.map(region => controller.getEarningsData(region.id));
-
-            Promise.all(promises)
-                .then(data => {
-
-                    this.earningsData = data;
-                    this.drawEarningsChart();
-                    this.drawEarningsTable();
-                })
-                .catch(error => console.error(error));
-        });
+        $('#map-summary').text(
+            MapSummary.getSummaryString(
+                this.params.regions,
+                this.tableData.earningsData,
+                variable,
+                year,
+                value => (year == value.year)));
     }
 
     drawEarningsChart() {
@@ -468,7 +476,7 @@ class SearchPageController {
         const someHighSchoolEarnings = ['Some High School'];
 
         for (var i = 0; i < this.params.regions.length; i++) {
-            someHighSchoolEarnings.push(parseInt(this.earningsData[i][0].median_earnings_less_than_high_school));
+            someHighSchoolEarnings.push(parseInt(this.tableData.earningsData[i][0].median_earnings_less_than_high_school));
         }
 
         earnings.push(someHighSchoolEarnings);
@@ -478,7 +486,7 @@ class SearchPageController {
         const highSchoolEarnings = ['High School'];
 
         for (var i = 0; i < this.params.regions.length; i++) {
-            highSchoolEarnings.push(parseInt(this.earningsData[i][0].median_earnings_high_school));
+            highSchoolEarnings.push(parseInt(this.tableData.earningsData[i][0].median_earnings_high_school));
         }
 
         earnings.push(highSchoolEarnings);
@@ -488,7 +496,7 @@ class SearchPageController {
         const someCollegeEarnings = ['Some College'];
 
         for (var i = 0; i < this.params.regions.length; i++) {
-            someCollegeEarnings.push(parseInt(this.earningsData[i][0].median_earnings_some_college_or_associates));
+            someCollegeEarnings.push(parseInt(this.tableData.earningsData[i][0].median_earnings_some_college_or_associates));
         }
 
         earnings.push(someCollegeEarnings);
@@ -498,7 +506,7 @@ class SearchPageController {
         const bachelorsEarnings = ['Bachelor\'s'];
 
         for (var i = 0; i < this.params.regions.length; i++) {
-            bachelorsEarnings.push(parseInt(this.earningsData[i][0].median_earnings_bachelor_degree));
+            bachelorsEarnings.push(parseInt(this.tableData.earningsData[i][0].median_earnings_bachelor_degree));
         }
 
         earnings.push(bachelorsEarnings);
@@ -508,12 +516,21 @@ class SearchPageController {
         const graduateDegreeEarnings = ['Graduate Degree'];
 
         for (var i = 0; i < this.params.regions.length; i++) {
-            graduateDegreeEarnings.push(parseInt(this.earningsData[i][0].median_earnings_graduate_or_professional_degree));
+            graduateDegreeEarnings.push(parseInt(this.tableData.earningsData[i][0].median_earnings_graduate_or_professional_degree));
         }
 
         earnings.push(graduateDegreeEarnings);
 
-        this.drawSteppedAreaChart('earnings-chart', earnings, {
+        // Draw chart
+        //
+        const dataTable = google.visualization.arrayToDataTable(earnings);
+        const formatter = new google.visualization.NumberFormat( { pattern : '$###,###' } );
+
+        for (var i = 0; i < this.params.regions.length; i++) {
+            formatter.format(dataTable, i + 1);
+        }
+
+        this.drawSteppedAreaChart('earnings-chart', dataTable, {
 
             areaOpacity : 0,
             connectSteps: true,
@@ -529,13 +546,16 @@ class SearchPageController {
 
         const width = $(window).width();
 
-        if ((this.params.regions.length >= 3) || (width >= 1600)) 
+        if ((this.params.regions.length >= 3) || (width >= 1600))
             this.drawEarningsTableHorizontal();    // horizontal colored lines
         else
             this.drawEarningsTableVertical();      // vertical colored lines
     }
 
     drawEarningsTableVertical() {
+
+        if (this.ensureVisibleWithOrientation('#earnings-table-container table', 'vertical'))
+            return;
 
         var s = '<table class="vertical">';
 
@@ -544,7 +564,7 @@ class SearchPageController {
         s += '<tr>';
         s += '<th class="empty"></th>';
 
-        for (var i = 0; i < this.earningsData.length; i++) {
+        for (var i = 0; i < this.tableData.earningsData.length; i++) {
             s += '<th class="color-' + i + '">' + this.params.regions[i].name + '<div></div></th>';
         }
 
@@ -554,8 +574,8 @@ class SearchPageController {
         //
         s += '<tr><td class="category-header">Median Earnings<br>(All Workers)</td>';
 
-        for (var i = 0; i < this.earningsData.length; i++) {
-            s += '<td class="color-' + i + '">' + numeral(this.earningsData[i][0].median_earnings).format('$0,0')  + '<div></div></td>';
+        for (var i = 0; i < this.tableData.earningsData.length; i++) {
+            s += '<td class="color-' + i + '">' + numeral(this.tableData.earningsData[i][0].median_earnings).format('$0,0')  + '<div></div></td>';
         }
         s += '</tr>';
 
@@ -563,8 +583,8 @@ class SearchPageController {
         //
         s += '<tr><td class="category-header">Median Female Earnings<br>(Full Time)</td>';
 
-        for (var i = 0; i < this.earningsData.length; i++) {
-            s += '<td class="color-' + i + '">' + numeral(this.earningsData[i][0].female_full_time_median_earnings).format('$0,0')  + '<div></div></td>';
+        for (var i = 0; i < this.tableData.earningsData.length; i++) {
+            s += '<td class="color-' + i + '">' + numeral(this.tableData.earningsData[i][0].female_full_time_median_earnings).format('$0,0')  + '<div></div></td>';
         }
         s += '</tr>';
 
@@ -572,8 +592,8 @@ class SearchPageController {
         //
         s += '<tr><td class="category-header">Median Male Earnings<br>(Full Time)</td>';
 
-        for (var i = 0; i < this.earningsData.length; i++) {
-            s += '<td class="color-' + i + '">' + numeral(this.earningsData[i][0].male_full_time_median_earnings).format('$0,0')  + '<div></div></td>';
+        for (var i = 0; i < this.tableData.earningsData.length; i++) {
+            s += '<td class="color-' + i + '">' + numeral(this.tableData.earningsData[i][0].male_full_time_median_earnings).format('$0,0')  + '<div></div></td>';
         }
         s += '</tr>';
 
@@ -584,6 +604,9 @@ class SearchPageController {
 
     drawEarningsTableHorizontal() {
 
+        if (this.ensureVisibleWithOrientation('#earnings-table-container table', 'horizontal'))
+            return;
+
         var s = '<table class="horizontal">';
 
         s += '<tr>';
@@ -593,13 +616,13 @@ class SearchPageController {
         s += '<td class="category-header">Median Male Earnings<br>(Full Time)</td>';
         s += '</tr>';
 
-        for (var i = 0; i < this.earningsData.length; i++) {
+        for (var i = 0; i < this.tableData.earningsData.length; i++) {
 
             s += '<tr class="color-' + i + '">'
             s += '<td>' + this.params.regions[i].name + '<div></div></td>';
-            s += '<td>' + numeral(this.earningsData[i][0].median_earnings).format('$0,0') + '<div></div></td>';
-            s += '<td>' + numeral(this.earningsData[i][0].female_full_time_median_earnings).format('$0,0') + '<div></div></td>';
-            s += '<td>' + numeral(this.earningsData[i][0].male_full_time_median_earnings).format('$0,0') + '<div></div></td>';
+            s += '<td>' + numeral(this.tableData.earningsData[i][0].median_earnings).format('$0,0') + '<div></div></td>';
+            s += '<td>' + numeral(this.tableData.earningsData[i][0].female_full_time_median_earnings).format('$0,0') + '<div></div></td>';
+            s += '<td>' + numeral(this.tableData.earningsData[i][0].male_full_time_median_earnings).format('$0,0') + '<div></div></td>';
             s += '</tr>';
         }
 
@@ -612,43 +635,53 @@ class SearchPageController {
     //
     drawHealthData() {
 
-        this.drawMap(MapSources.health);
+        this.drawMap(MapSources.health, (variable, year) => this.drawHealthMapSummary(variable, year));
+        this.drawHealthTables();
+    }
 
-        google.setOnLoadCallback(() => {
+    drawHealthMapSummary(variable, year) {
 
-            const controller = new ApiController();
-            const promises = this.params.regions.map(region => controller.getHealthRwjfChrData(region.id));
-
-            Promise.all(promises)
-                .then(data => {
-
-                    this.healthData = data;
-                    this.drawHealthTables();
-                })
-                .catch(error => console.error(error));
-        });
+        $('#map-summary').text(
+            MapSummary.getSummaryString(
+                this.params.regions,
+                this.tableData.healthData,
+                variable,
+                year,
+                value => (year == value.year)));
     }
 
     drawHealthTables() {
 
         const width = $(window).width();
 
-        if ((this.params.regions.length >= 8) || (width >= 1600)) {
+        if ((this.params.regions.length >= 8) || (width >= 1600))
+            this.drawHealthTablesHorizontal();  // horizontal colored lines
+        else
+            this.drawHealthTablesVertical();    // vertical colored lines
+    }
 
-            this.drawHealthOutcomesTableHorizontal();   // horizontal colored lines
-            this.drawHealthFactorsTableHorizontal();
-            this.drawHealthClinicalCareTableHorizontal();
-            this.drawHealthSocialEconomicFactorsTableHorizontal();
-            this.drawHealthPhysicalEnvironmentTableHorizontal();
-        } 
-        else {
+    drawHealthTablesVertical() {
 
-            this.drawHealthOutcomesTableVertical();     // vertical colored lines
-            this.drawHealthFactorsTableVertical();
-            this.drawHealthClinicalCareTableVertical();
-            this.drawHealthSocialEconomicFactorsTableVertical();
-            this.drawHealthPhysicalEnvironmentTableVertical();
-        }
+        if (this.ensureVisibleWithOrientation('#health-outcomes-table-container table', 'vertical'))
+            return;
+
+        this.drawHealthOutcomesTableVertical();
+        this.drawHealthFactorsTableVertical();
+        this.drawHealthClinicalCareTableVertical();
+        this.drawHealthSocialEconomicFactorsTableVertical();
+        this.drawHealthPhysicalEnvironmentTableVertical();
+    }
+
+    drawHealthTablesHorizontal() {
+
+        if (this.ensureVisibleWithOrientation('#health-outcomes-table-container table', 'horizontal'))
+            return;
+
+        this.drawHealthOutcomesTableHorizontal();
+        this.drawHealthFactorsTableHorizontal();
+        this.drawHealthClinicalCareTableHorizontal();
+        this.drawHealthSocialEconomicFactorsTableHorizontal();
+        this.drawHealthPhysicalEnvironmentTableHorizontal();
     }
 
     drawHealthOutcomesTableVertical() {
@@ -660,38 +693,38 @@ class SearchPageController {
         s += '<tr>';
         s += '<th class="sub-header">Life Length</th>';
 
-        for (var i = 0; i < this.healthData.length; i++) {
+        for (var i = 0; i < this.tableData.healthData.length; i++) {
             s += '<th class="color-' + i + '">' + this.params.regions[i].name + '<div></div></th>';
         }
 
         s += '</tr>';
 
-        s += this.drawHealthOutcomesTableRowVertical('Premature Death', 'premature_death_value', '0,0');
+        s += this.drawHealthTableRowVertical('Premature Death', 'premature_death_value', '0,0');
 
         s += '</table>';
-        
+
         // Quality of life table
         //
         s += '<table class="vertical">';
         s += '<tr>';
         s += '<th class="sub-header">Quality of Life</th>';
 
-        for (var i = 0; i < this.healthData.length; i++) {
+        for (var i = 0; i < this.tableData.healthData.length; i++) {
             s += '<th class="color-' + i + '">' + this.params.regions[i].name + '<div></div></th>';
         }
 
         s += '</tr>';
 
-        s += this.drawHealthOutcomesTableRowVertical('Poor or Fair Health', 'poor_or_fair_health_value', '0.0%');
-        s += this.drawHealthOutcomesTableRowVertical('Poor Physical Health Days', 'poor_physical_health_days_value', '0.0');
-        s += this.drawHealthOutcomesTableRowVertical('Poor Mental Health Days', 'poor_mental_health_days_value', '0.0');
-        s += this.drawHealthOutcomesTableRowVertical('Low Birth Weight', 'low_birthweight_value', '0.0');
-        
+        s += this.drawHealthTableRowVertical('Poor or Fair Health', 'poor_or_fair_health_value', '0.0%');
+        s += this.drawHealthTableRowVertical('Poor Physical Health Days', 'poor_physical_health_days_value', '0.0');
+        s += this.drawHealthTableRowVertical('Poor Mental Health Days', 'poor_mental_health_days_value', '0.0');
+        s += this.drawHealthTableRowVertical('Low Birth Weight', 'low_birthweight_value', '0.0');
+
         s += '</table>';
 
         $('#health-outcomes-table-container').html(s);
     }
-    
+
     drawHealthOutcomesTableHorizontal() {
 
         var s = '<table class="horizontal">';
@@ -713,18 +746,18 @@ class SearchPageController {
         s += '<td class="category-header">Low Birth Weight</td>';
         s += '</tr>';
 
-        for (var i = 0; i < this.healthData.length; i++) {
+        for (var i = 0; i < this.tableData.healthData.length; i++) {
 
-            const regionData = this.healthData[i][0];
+            const regionData = this.tableData.healthData[i][0];
 
             s += '<tr class="color-' + i + '">';
             s += '<td>' + this.params.regions[i].name + '<div></div></td>';
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'premature_death_value', '0,0');
+            s += this.drawHealthTableCellHorizontal(regionData, 'premature_death_value', '0,0');
             s += '<td class="empty"></td>';
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'poor_or_fair_health_value', '0.0%');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'poor_physical_health_days_value', '0.0');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'poor_mental_health_days_value', '0.0');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'low_birthweight_value', '0.0');
+            s += this.drawHealthTableCellHorizontal(regionData, 'poor_or_fair_health_value', '0.0%');
+            s += this.drawHealthTableCellHorizontal(regionData, 'poor_physical_health_days_value', '0.0');
+            s += this.drawHealthTableCellHorizontal(regionData, 'poor_mental_health_days_value', '0.0');
+            s += this.drawHealthTableCellHorizontal(regionData, 'low_birthweight_value', '0.0');
             s += '</tr>';
         }
 
@@ -742,27 +775,27 @@ class SearchPageController {
         s += '<tr>';
         s += '<th class="sub-header">Health Behaviors</th>';
 
-        for (var i = 0; i < this.healthData.length; i++) {
+        for (var i = 0; i < this.tableData.healthData.length; i++) {
             s += '<th class="color-' + i + '">' + this.params.regions[i].name + '<div></div></th>';
         }
 
         s += '</tr>'
 
-        s += this.drawHealthOutcomesTableRowVertical('Adult Smoking', 'adult_smoking_value', '0.0%');
-        s += this.drawHealthOutcomesTableRowVertical('Adult Obesity', 'adult_obesity_value', '0.0%');
-        s += this.drawHealthOutcomesTableRowVertical('Food Environment Index', 'food_environment_index_value', '0.0');
-        s += this.drawHealthOutcomesTableRowVertical('Physical Inactivity', 'physical_inactivity_value', '0.0%');
-        s += this.drawHealthOutcomesTableRowVertical('Access to Exercise', 'access_to_exercise_opportunities_value', '0.0%');
-        s += this.drawHealthOutcomesTableRowVertical('Excessive Drinking', 'excessive_drinking_value', '0.0%');
-        s += this.drawHealthOutcomesTableRowVertical('Alcohol Impaired Driving Deaths', 'alcohol_impaired_driving_deaths_value', '0.0%');
-        s += this.drawHealthOutcomesTableRowVertical('Sexually Transmitted Infections', 'sexually_transmitted_infections_value', '0,0');
-        s += this.drawHealthOutcomesTableRowVertical('Teen Births', 'teen_births_value', '0,0');
-        
+        s += this.drawHealthTableRowVertical('Adult Smoking', 'adult_smoking_value', '0.0%');
+        s += this.drawHealthTableRowVertical('Adult Obesity', 'adult_obesity_value', '0.0%');
+        s += this.drawHealthTableRowVertical('Food Environment Index', 'food_environment_index_value', '0.0');
+        s += this.drawHealthTableRowVertical('Physical Inactivity', 'physical_inactivity_value', '0.0%');
+        s += this.drawHealthTableRowVertical('Access to Exercise', 'access_to_exercise_opportunities_value', '0.0%');
+        s += this.drawHealthTableRowVertical('Excessive Drinking', 'excessive_drinking_value', '0.0%');
+        s += this.drawHealthTableRowVertical('Alcohol Impaired Driving Deaths', 'alcohol_impaired_driving_deaths_value', '0.0%');
+        s += this.drawHealthTableRowVertical('Sexually Transmitted Infections', 'sexually_transmitted_infections_value', '0,0');
+        s += this.drawHealthTableRowVertical('Teen Births', 'teen_births_value', '0,0');
+
         s += '</table>';
 
         $('#health-factors-table-container').html(s);
     }
-    
+
     drawHealthFactorsTableHorizontal() {
 
         var s = '<table class="horizontal">';
@@ -787,22 +820,22 @@ class SearchPageController {
 
         for (var i = 0; i < this.params.regions.length; i++) {
 
-            const regionData = this.healthData[i][0];
+            const regionData = this.tableData.healthData[i][0];
 
             s += '<tr class="color-' + i + '">';
             s += '<td>' + this.params.regions[i].name + '<div></div></td>';
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'adult_smoking_value', '0.0%');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'adult_obesity_value', '0.0%');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'food_environment_index_value', '0.0');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'physical_inactivity_value', '0.0%');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'access_to_exercise_opportunities_value', '0.0%');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'excessive_drinking_value', '0.0%');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'alcohol_impaired_driving_deaths_value', '0.0%');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'sexually_transmitted_infections_value', '0,0');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'teen_births_value', '0,0');
+            s += this.drawHealthTableCellHorizontal(regionData, 'adult_smoking_value', '0.0%');
+            s += this.drawHealthTableCellHorizontal(regionData, 'adult_obesity_value', '0.0%');
+            s += this.drawHealthTableCellHorizontal(regionData, 'food_environment_index_value', '0.0');
+            s += this.drawHealthTableCellHorizontal(regionData, 'physical_inactivity_value', '0.0%');
+            s += this.drawHealthTableCellHorizontal(regionData, 'access_to_exercise_opportunities_value', '0.0%');
+            s += this.drawHealthTableCellHorizontal(regionData, 'excessive_drinking_value', '0.0%');
+            s += this.drawHealthTableCellHorizontal(regionData, 'alcohol_impaired_driving_deaths_value', '0.0%');
+            s += this.drawHealthTableCellHorizontal(regionData, 'sexually_transmitted_infections_value', '0,0');
+            s += this.drawHealthTableCellHorizontal(regionData, 'teen_births_value', '0,0');
             s += '</tr>';
         }
-        
+
         s += '</table>';
 
         $('#health-factors-table-container').html(s);
@@ -817,19 +850,19 @@ class SearchPageController {
         s += '<tr>';
         s += '<th class="sub-header">Clinical Care</th>';
 
-        for (var i = 0; i < this.healthData.length; i++) {
+        for (var i = 0; i < this.tableData.healthData.length; i++) {
             s += '<th class="color-' + i + '">' + this.params.regions[i].name + '<div></div></th>';
         }
 
         s += '</tr>'
 
-        s += this.drawHealthOutcomesTableRowVertical('Uninsured', 'uninsured_value', '0.0%');
-        s += this.drawHealthOutcomesTableRowVertical('Primary Care Physicians', 'primary_care_physicians_value', '0,0');
-        s += this.drawHealthOutcomesTableRowVertical('Dentists', 'dentists_value', '0,0');
-        s += this.drawHealthOutcomesTableRowVertical('Mental Health Providers', 'mental_health_providers_value', '0,0');
-        s += this.drawHealthOutcomesTableRowVertical('Preventable Hospital Stays', 'preventable_hospital_stays_value', '0,0');
-        s += this.drawHealthOutcomesTableRowVertical('Diabetic Monitoring', 'diabetic_screening_value', '0.0%');
-        s += this.drawHealthOutcomesTableRowVertical('Mammography Screening', 'mammography_screening_value', '0.0%');
+        s += this.drawHealthTableRowVertical('Uninsured', 'uninsured_value', '0.0%');
+        s += this.drawHealthTableRowVertical('Primary Care Physicians', 'primary_care_physicians_value', '0,0');
+        s += this.drawHealthTableRowVertical('Dentists', 'dentists_value', '0,0');
+        s += this.drawHealthTableRowVertical('Mental Health Providers', 'mental_health_providers_value', '0,0');
+        s += this.drawHealthTableRowVertical('Preventable Hospital Stays', 'preventable_hospital_stays_value', '0,0');
+        s += this.drawHealthTableRowVertical('Diabetic Monitoring', 'diabetic_screening_value', '0.0%');
+        s += this.drawHealthTableRowVertical('Mammography Screening', 'mammography_screening_value', '0.0%');
 
         s += '</table>';
 
@@ -858,17 +891,17 @@ class SearchPageController {
 
         for (var i = 0; i < this.params.regions.length; i++) {
 
-            const regionData = this.healthData[i][0];
+            const regionData = this.tableData.healthData[i][0];
 
             s += '<tr class="color-' + i + '">';
             s += '<td>' + this.params.regions[i].name + '<div></div></td>';
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'uninsured_value', '0.0%');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'primary_care_physicians_value', '0,0');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'dentists_value', '0,0');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'mental_health_providers_value', '0,0');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'preventable_hospital_stays_value', '0,0');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'diabetic_screening_value', '0.0%');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'mammography_screening_value', '0.0%');
+            s += this.drawHealthTableCellHorizontal(regionData, 'uninsured_value', '0.0%');
+            s += this.drawHealthTableCellHorizontal(regionData, 'primary_care_physicians_value', '0,0');
+            s += this.drawHealthTableCellHorizontal(regionData, 'dentists_value', '0,0');
+            s += this.drawHealthTableCellHorizontal(regionData, 'mental_health_providers_value', '0,0');
+            s += this.drawHealthTableCellHorizontal(regionData, 'preventable_hospital_stays_value', '0,0');
+            s += this.drawHealthTableCellHorizontal(regionData, 'diabetic_screening_value', '0.0%');
+            s += this.drawHealthTableCellHorizontal(regionData, 'mammography_screening_value', '0.0%');
             s += '</tr>';
         }
 
@@ -886,21 +919,21 @@ class SearchPageController {
         s += '<tr>';
         s += '<th class="sub-header">Social &amp; Economic Factors</th>';
 
-        for (var i = 0; i < this.healthData.length; i++) {
+        for (var i = 0; i < this.tableData.healthData.length; i++) {
             s += '<th class="color-' + i + '">' + this.params.regions[i].name + '<div></div></th>';
         }
 
         s += '</tr>'
 
-        s += this.drawHealthOutcomesTableRowVertical('High School Graduation', 'high_school_graduation_value', '0.0%');
-        s += this.drawHealthOutcomesTableRowVertical('Some College', 'some_college_value', '0.0%');
-        s += this.drawHealthOutcomesTableRowVertical('Unemployment', 'unemployment_value', '0.0%');
-        s += this.drawHealthOutcomesTableRowVertical('Children in Poverty', 'children_in_poverty_value', '0.0%');
-        s += this.drawHealthOutcomesTableRowVertical('Income Inequality', 'income_inequality_value', '0.0');
-        s += this.drawHealthOutcomesTableRowVertical('Children in Single-Parent Households', 'children_in_single_parent_households_value', '0.0%');
-        s += this.drawHealthOutcomesTableRowVertical('Social Associations', 'social_associations_value', '0.0');
-        s += this.drawHealthOutcomesTableRowVertical('Violent Crime', 'violent_crime_value', '0.0');
-        s += this.drawHealthOutcomesTableRowVertical('Injury Deaths', 'injury_deaths_value', '0.0');
+        s += this.drawHealthTableRowVertical('High School Graduation', 'high_school_graduation_value', '0.0%');
+        s += this.drawHealthTableRowVertical('Some College', 'some_college_value', '0.0%');
+        s += this.drawHealthTableRowVertical('Unemployment', 'unemployment_value', '0.0%');
+        s += this.drawHealthTableRowVertical('Children in Poverty', 'children_in_poverty_value', '0.0%');
+        s += this.drawHealthTableRowVertical('Income Inequality', 'income_inequality_value', '0.0');
+        s += this.drawHealthTableRowVertical('Children in Single-Parent Households', 'children_in_single_parent_households_value', '0.0%');
+        s += this.drawHealthTableRowVertical('Social Associations', 'social_associations_value', '0.0');
+        s += this.drawHealthTableRowVertical('Violent Crime', 'violent_crime_value', '0.0');
+        s += this.drawHealthTableRowVertical('Injury Deaths', 'injury_deaths_value', '0.0');
 
         s += '</table>';
 
@@ -931,19 +964,19 @@ class SearchPageController {
 
         for (var i = 0; i < this.params.regions.length; i++) {
 
-            const regionData = this.healthData[i][0];
+            const regionData = this.tableData.healthData[i][0];
 
             s += '<tr class="color-' + i + '">';
             s += '<td>' + this.params.regions[i].name + '<div></div></td>';
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'high_school_graduation_value', '0.0%');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'some_college_value', '0.0%');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'unemployment_value', '0.0%');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'children_in_poverty_value', '0.0%');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'income_inequality_value', '0.0');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'children_in_single_parent_households_value', '0.0%');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'social_associations_value', '0.0');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'violent_crime_value', '0.0');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'injury_deaths_value', '0.0');
+            s += this.drawHealthTableCellHorizontal(regionData, 'high_school_graduation_value', '0.0%');
+            s += this.drawHealthTableCellHorizontal(regionData, 'some_college_value', '0.0%');
+            s += this.drawHealthTableCellHorizontal(regionData, 'unemployment_value', '0.0%');
+            s += this.drawHealthTableCellHorizontal(regionData, 'children_in_poverty_value', '0.0%');
+            s += this.drawHealthTableCellHorizontal(regionData, 'income_inequality_value', '0.0');
+            s += this.drawHealthTableCellHorizontal(regionData, 'children_in_single_parent_households_value', '0.0%');
+            s += this.drawHealthTableCellHorizontal(regionData, 'social_associations_value', '0.0');
+            s += this.drawHealthTableCellHorizontal(regionData, 'violent_crime_value', '0.0');
+            s += this.drawHealthTableCellHorizontal(regionData, 'injury_deaths_value', '0.0');
             s += '</tr>';
         }
 
@@ -961,17 +994,17 @@ class SearchPageController {
         s += '<tr>';
         s += '<th class="sub-header">Physical Environment</th>';
 
-        for (var i = 0; i < this.healthData.length; i++) {
+        for (var i = 0; i < this.tableData.healthData.length; i++) {
             s += '<th class="color-' + i + '">' + this.params.regions[i].name + '<div></div></th>';
         }
 
         s += '</tr>'
 
-        s += this.drawHealthOutcomesTableRowVertical('Air Pollution - Particulate Matter', 'air_pollution_particulate_matter_value', '0.0');
-        s += this.drawHealthOutcomesTableRowVertical('Drinking Water Violations', 'drinking_water_violations_value', '0.0%');
-        s += this.drawHealthOutcomesTableRowVertical('Severe Housing Problems', 'severe_housing_problems_value', '0.0%');
-        s += this.drawHealthOutcomesTableRowVertical('Driving Alone to Work', 'driving_alone_to_work_value', '0.0%');
-        s += this.drawHealthOutcomesTableRowVertical('Long Commute - Driving Alone', 'long_commute_driving_alone_value', '0.0%');
+        s += this.drawHealthTableRowVertical('Air Pollution - Particulate Matter', 'air_pollution_particulate_matter_value', '0.0');
+        s += this.drawHealthTableRowVertical('Drinking Water Violations', 'drinking_water_violations_value', '0.0%');
+        s += this.drawHealthTableRowVertical('Severe Housing Problems', 'severe_housing_problems_value', '0.0%');
+        s += this.drawHealthTableRowVertical('Driving Alone to Work', 'driving_alone_to_work_value', '0.0%');
+        s += this.drawHealthTableRowVertical('Long Commute - Driving Alone', 'long_commute_driving_alone_value', '0.0%');
 
         s += '</table>';
 
@@ -998,15 +1031,15 @@ class SearchPageController {
 
         for (var i = 0; i < this.params.regions.length; i++) {
 
-            const regionData = this.healthData[i][0];
+            const regionData = this.tableData.healthData[i][0];
 
             s += '<tr class="color-' + i + '">';
             s += '<td>' + this.params.regions[i].name + '<div></div></td>';
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'air_pollution_particulate_matter_value', '0.0');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'drinking_water_violations_value', '0.0%');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'severe_housing_problems_value', '0.0%');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'driving_alone_to_work_value', '0.0%');
-            s += this.drawHealthDataTableCellHorizontal(regionData, 'long_commute_driving_alone_value', '0.0%');
+            s += this.drawHealthTableCellHorizontal(regionData, 'air_pollution_particulate_matter_value', '0.0');
+            s += this.drawHealthTableCellHorizontal(regionData, 'drinking_water_violations_value', '0.0%');
+            s += this.drawHealthTableCellHorizontal(regionData, 'severe_housing_problems_value', '0.0%');
+            s += this.drawHealthTableCellHorizontal(regionData, 'driving_alone_to_work_value', '0.0%');
+            s += this.drawHealthTableCellHorizontal(regionData, 'long_commute_driving_alone_value', '0.0%');
             s += '</tr>';
         }
 
@@ -1015,13 +1048,13 @@ class SearchPageController {
         $('#health-physical-environment-table-container').html(s);
     }
 
-    drawHealthOutcomesTableRowVertical(header, key, format) {
+    drawHealthTableRowVertical(header, key, format) {
 
         var s = '<tr><td class="category-header">' + header + '</td>';
 
-        for (var i = 0; i < this.healthData.length; i++) {
+        for (var i = 0; i < this.tableData.healthData.length; i++) {
 
-            const regionData = this.healthData[i][0];
+            const regionData = this.tableData.healthData[i][0];
             s += this.drawHealthDataTableCellVertical(i, regionData, key, format);
         }
 
@@ -1033,7 +1066,7 @@ class SearchPageController {
     drawHealthDataTableCellVertical(i, data, key, format) {
 
         var s = '<td class="color-' + i + '">';
-        
+
         if (data[key] != undefined)
             s += numeral(data[key].replace(',','')).format(format);
         else
@@ -1044,7 +1077,7 @@ class SearchPageController {
         return s;
     }
 
-    drawHealthDataTableCellHorizontal(data, key, format) {
+    drawHealthTableCellHorizontal(data, key, format) {
 
         var s = '<td>';
 
@@ -1058,39 +1091,39 @@ class SearchPageController {
         return s;
     }
 
-
     // Education
     //
     drawEducationData() {
 
-        this.drawMap(MapSources.education);
+        this.drawMap(MapSources.education, (variable, year) => this.drawEducationMapSummary(variable, year));
+        this.drawEducationTable();
+    }
 
-        google.setOnLoadCallback(() => {
+    drawEducationMapSummary(variable, year) {
 
-            const controller = new ApiController();
-            const promises = this.params.regions.map(region => controller.getEducationData(region.id));
-
-            Promise.all(promises)
-                .then(data => {
-
-                    this.educationData = data;
-                    this.drawEducationTable();
-                })
-                .catch(error => console.error(error));
-        });
+        $('#map-summary').text(
+            MapSummary.getSummaryString(
+                this.params.regions,
+                this.tableData.educationData,
+                variable,
+                year,
+                value => (year == value.year)));
     }
 
     drawEducationTable() {
-        
+
         const width = $(window).width();
 
-        if ((this.params.regions.length >= 3) || (width >= 1600)) 
+        if ((this.params.regions.length >= 3) || (width >= 1600))
             this.drawEducationTableHorizontal();    // horizontal colored lines
         else
             this.drawEducationTableVertical();      // vertical colored lines
     }
 
     drawEducationTableVertical() {
+
+        if (this.ensureVisibleWithOrientation('#education-table-container table', 'vertical'))
+            return;
 
         var s = '<table class="vertical">';
 
@@ -1099,7 +1132,7 @@ class SearchPageController {
         s += '<tr>';
         s += '<th class="empty"></th>';
 
-        for (var i = 0; i < this.educationData.length; i++) {
+        for (var i = 0; i < this.tableData.educationData.length; i++) {
             s += '<th colspan="2" class="color-' + i + '">' + this.params.regions[i].name + '<div></div></th>';
         }
 
@@ -1109,7 +1142,7 @@ class SearchPageController {
         //
         s += '<tr class="sub-header-row"><td class="empty"></td>';
 
-        for (var i = 0; i < this.educationData.length; i++) {
+        for (var i = 0; i < this.tableData.educationData.length; i++) {
             s += '<td>Percent</td><td class="color-' + i + '">Percentile<div></div></td>';
         }
 
@@ -1117,15 +1150,15 @@ class SearchPageController {
         //
         s += '<tr><td class="category-header">At Least Bachelor\'s Degree</td>';
 
-        for (var i = 0; i < this.educationData.length; i++) {
+        for (var i = 0; i < this.tableData.educationData.length; i++) {
 
-            const regionData = this.educationData[i][0];
+            const regionData = this.tableData.educationData[i][0];
             const totalRanks = parseInt(regionData.total_ranks);
 
             const bachelorsRank = parseInt(regionData.percent_bachelors_degree_or_higher_rank);
             const bachelorsPercentile = parseInt(((totalRanks - bachelorsRank) / totalRanks) * 100);
 
-            s += '<td>' + regionData.percent_bachelors_degree_or_higher + '%</td>';
+            s += '<td>' + numeral(regionData.percent_bachelors_degree_or_higher).format('0.0') + '%</td>';
             s += '<td class="color-' + i + '">' + numeral(bachelorsPercentile).format('0o') + '<div></div></td>';
         }
 
@@ -1135,15 +1168,15 @@ class SearchPageController {
         //
         s += '<tr><td class="category-header">At Least High School Diploma</td>';
 
-        for (var i = 0; i < this.educationData.length; i++) {
-            
-            const regionData = this.educationData[i][0];
+        for (var i = 0; i < this.tableData.educationData.length; i++) {
+
+            const regionData = this.tableData.educationData[i][0];
             const totalRanks = parseInt(regionData.total_ranks);
 
             const highSchoolRank = parseInt(regionData.percent_high_school_graduate_or_higher_rank);
             const highSchoolPercentile = parseInt(((totalRanks - highSchoolRank) / totalRanks) * 100);
 
-            s += '<td>' + regionData.percent_high_school_graduate_or_higher + '%</td>';
+            s += '<td>' + numeral(regionData.percent_high_school_graduate_or_higher).format('0.0') + '%</td>';
             s += '<td class="color-' + i + '">' + numeral(highSchoolPercentile).format('0o') + '<div></div></td>';
         }
 
@@ -1155,6 +1188,9 @@ class SearchPageController {
 
     drawEducationTableHorizontal() {
 
+        if (this.ensureVisibleWithOrientation('#education-table-container table', 'horizontal'))
+            return;
+
         var s = '<table class="horizontal">';
 
         s += '<tr>';
@@ -1165,9 +1201,9 @@ class SearchPageController {
         s += '<td class="category-header">At Least High School Diploma<br>(Percentile)</td>';
         s += '</tr>';
 
-        for (var i = 0; i < this.educationData.length; i++) {
+        for (var i = 0; i < this.tableData.educationData.length; i++) {
 
-            const regionData = this.educationData[i][0];
+            const regionData = this.tableData.educationData[i][0];
 
             s += '<tr class="color-' + i + '">'
             s += '<td>' + this.params.regions[i].name + '<div></div></td>';
@@ -1176,13 +1212,13 @@ class SearchPageController {
             const bachelorsRank = parseInt(regionData.percent_bachelors_degree_or_higher_rank);
             const bachelorsPercentile = parseInt(((totalRanks - bachelorsRank) / totalRanks) * 100);
 
-            s += '<td>' + regionData.percent_bachelors_degree_or_higher + '%<div></div></td>';
+            s += '<td>' + numeral(regionData.percent_bachelors_degree_or_higher).format('0.0') + '%<div></div></td>';
             s += '<td>' + numeral(bachelorsPercentile).format('0o') + '<div></div></td>';
 
             const highSchoolRank = parseInt(regionData.percent_high_school_graduate_or_higher_rank);
             const highSchoolPercentile = parseInt(((totalRanks - highSchoolRank) / totalRanks) * 100);
 
-            s += '<td>' + regionData.percent_high_school_graduate_or_higher + '%<div></div></td>';
+            s += '<td>' + numeral(regionData.percent_high_school_graduate_or_higher).format('0.0') + '%<div></div></td>';
             s += '<td>' + numeral(highSchoolPercentile).format('0o') + '<div></div></td>';
             s += '</tr>'
         }
@@ -1196,24 +1232,25 @@ class SearchPageController {
     //
     drawGdpData() {
 
-        this.drawMap(MapSources.gdp);
+        this.drawMap(MapSources.gdp, (variable, year) => this.drawGdpMapSummary(variable, year));
+        this.drawGdpChart();
+        this.drawGdpChangeChart();
 
-        google.setOnLoadCallback(() => {
-
-            const controller = new ApiController();
-            const promises = this.params.regions.map(region => controller.getGdpData(region.id));
-
-            Promise.all(promises)
-                .then(data => {
-
-                    this.drawGdpChart(data);
-                    this.drawGdpChangeChart(data);
-                })
-               .catch(error => console.error(error));
-        });
+        // no need to draw GDP table, because it so long it will never switch to a horizontal orientation
     }
 
-    drawGdpChart(data) {
+    drawGdpMapSummary(variable, year) {
+
+        $('#map-summary').text(
+            MapSummary.getSummaryString(
+                this.params.regions,
+                this.tableData.gdpData,
+                variable,
+                year,
+                value => (year == value.year)));
+    }
+
+    drawGdpChart() {
 
         const chartData = [];
 
@@ -1231,9 +1268,9 @@ class SearchPageController {
         //
         const o = {};
 
-        for (var i = 0; i < data.length; i++) {
+        for (var i = 0; i < this.tableData.gdpData.length; i++) {
 
-            const regionValues = data[i];
+            const regionValues = this.tableData.gdpData[i];
 
             for (var j = 0; j < regionValues.length; j++) {
 
@@ -1251,6 +1288,12 @@ class SearchPageController {
         // Draw chart
         //
         const dataTable = google.visualization.arrayToDataTable(chartData);
+        const formatter = new google.visualization.NumberFormat( { pattern : '$###,###' } );
+
+        for (var i = 0; i < this.params.regions.length; i++) {
+            formatter.format(dataTable, i + 1);
+        }
+
         this.drawLineChart('per-capita-gdp-chart', dataTable, {
 
             curveType : 'function',
@@ -1258,10 +1301,11 @@ class SearchPageController {
             pointShape : 'square',
             pointSize : 8,
             title : 'Per Capita Real GDP over Time',
+            vAxis : { format : '$###,###' },
         });
     }
 
-    drawGdpChangeChart(data) {
+    drawGdpChangeChart() {
 
         const chartData = [];
 
@@ -1279,9 +1323,9 @@ class SearchPageController {
         //
         const o = {};
 
-        for (var i = 0; i < data.length; i++) {
+        for (var i = 0; i < this.tableData.gdpData.length; i++) {
 
-            const regionValues = data[i];
+            const regionValues = this.tableData.gdpData[i];
 
             for (var j = 0; j < regionValues.length; j++) {
 
@@ -1299,6 +1343,12 @@ class SearchPageController {
         // Draw chart
         //
         const dataTable = google.visualization.arrayToDataTable(chartData);
+        const formatter = new google.visualization.NumberFormat( { pattern : '#.##%' } );
+
+        for (var i = 0; i < this.params.regions.length; i++) {
+            formatter.format(dataTable, i + 1);
+        }
+
         this.drawLineChart('per-capita-gdp-change-chart', dataTable, {
 
             curveType : 'function',
@@ -1314,90 +1364,41 @@ class SearchPageController {
     //
     drawOccupationsData() {
 
-        this.drawMap(MapSources.occupations);
-
-        google.setOnLoadCallback(() => {
-
-            const controller = new ApiController();
-            const promises = this.params.regions.map(region => controller.getOccupationsData(region.id));
-
-            Promise.all(promises)
-                .then(data => {
-
-                    this.occupationsData = data;
-                    this.drawOccupationsTable();
-                })
-                .catch(error => console.error(error));
-        });
+        this.drawMap(MapSources.occupations, (variable, year) => this.drawOccupationsMapSummary(variable, year));
     }
 
-    drawOccupationsTable() {
+    drawOccupationsMapSummary(variable, year) {
 
-        var s = '<table class="vertical">';
-        s += '<tr>'
-        s += '<th class="empty"></th>';
-
-        for (var i = 0; i < this.params.regions.length; i++) {
-            s += '<th colspan="2" class="color-' + i + '">' + this.params.regions[i].name + '<div></div></th>';
-        }
-
-        s += '</tr>'
-
-        // Sub header
-        //
-        s += '<tr class="sub-header-row"><td class="empty"></td>';
-
-        for (var i = 0; i < this.params.regions.length; i++) {
-            s += '<td>Percent</td><td class="color-' + i + '">Percentile<div></div></td>';
-        }
-        
-        s += '</tr>';
-
-        for (var i = 0; i < this.occupationsData[0].length; i++) {
-
-            s += '<tr><td class="category-header">' + this.occupationsData[0][i].occupation + '</td>';
-
-            for (var j = 0; j < this.params.regions.length; j++) {
-
-                const regionData = this.occupationsData[j];
-                const totalRanks = parseInt(regionData[i].total_ranks);
-                const rank = parseInt(regionData[i].percent_employed_rank);
-                const percentile = parseInt(((totalRanks - rank) / totalRanks) * 100);
-
-                s += '<td>' + numeral(regionData[i].percent_employed).format('0.0') + '%</td>';
-                s += '<td class="color-' + j + '">' + numeral(percentile).format('0o') + '<div></div></td>';
-            }
-
-            s += '</tr>';
-        }
-        
-        s += '</table>'
-
-        $('#occupations-table-container').html(s);
+        $('#map-summary').text(
+            MapSummary.getOccupationsSummaryString(
+                this.params.regions,
+                this.tableData.occupationsData,
+                variable,
+                year,
+                value => (year == value.year) && (variable.name == value.occupation)));
     }
 
     // Population
     //
     drawPopulationData() {
 
-        this.drawMap(MapSources.population);
-
-        google.setOnLoadCallback(() => {
-
-            const controller = new ApiController();
-            const promises = this.params.regions.map(region => controller.getPopulationData(region.id));
-
-            Promise.all(promises)
-                .then(data => {
-
-                    this.drawPopulationChart(data);
-                    this.drawPopulationChangeChart(data);
-                })
-                .catch(error => console.error(error));
-        });
+        this.drawMap(MapSources.population, (variable, year) => this.drawPopulationMapSummary(variable, year));
+        this.drawPopulationChart();
+        this.drawPopulationChangeChart();
     }
 
-    drawPopulationChart(data) {
+    drawPopulationMapSummary(variable, year) {
+
+        $('#map-summary').text(
+            MapSummary.getSummaryString(
+                this.params.regions,
+                this.tableData.populationData,
+                variable,
+                year,
+                value => (year == value.year)));
+    }
+
+    drawPopulationChart() {
 
         const chartData = [];
 
@@ -1415,9 +1416,9 @@ class SearchPageController {
         //
         const o = {};
 
-        for (var i = 0; i < data.length; i++) {
+        for (var i = 0; i < this.tableData.populationData.length; i++) {
 
-            const regionValues = data[i];
+            const regionValues = this.tableData.populationData[i];
 
             for (var j = 0; j < regionValues.length; j++) {
 
@@ -1432,7 +1433,15 @@ class SearchPageController {
             chartData.push(o[key]);
         }
 
+        // Draw chart
+        //
         const dataTable = google.visualization.arrayToDataTable(chartData);
+        const formatter = new google.visualization.NumberFormat( { pattern : '###,###' } );
+
+        for (var i = 0; i < this.params.regions.length; i++) {
+            formatter.format(dataTable, i + 1);
+        }
+
         this.drawLineChart('population-chart', dataTable, {
 
             curveType : 'function',
@@ -1443,7 +1452,7 @@ class SearchPageController {
         });
     }
 
-    drawPopulationChangeChart(data) {
+    drawPopulationChangeChart() {
 
         const chartData = [];
 
@@ -1461,9 +1470,9 @@ class SearchPageController {
         //
         const o = {};
 
-        for (var i = 0; i < data.length; i++) {
+        for (var i = 0; i < this.tableData.populationData.length; i++) {
 
-            const regionValues = data[i];
+            const regionValues = this.tableData.populationData[i];
 
             for (var j = 0; j < regionValues.length; j++) {
 
@@ -1478,6 +1487,8 @@ class SearchPageController {
             chartData.push(o[key]);
         }
 
+        // Draw chart
+        //
         const dataTable = google.visualization.arrayToDataTable(chartData);
         const formatter = new google.visualization.NumberFormat( { pattern : '#.##%' } );
 
@@ -1494,6 +1505,16 @@ class SearchPageController {
             title : 'Population Change',
             vAxis : { format : '#.#%' },
         });
+    }
+
+    ensureVisibleWithOrientation(selector, orientation) {
+
+        var o = $(selector);
+
+        if (!o.is(':visible'))
+            o.show();
+
+        return o.hasClass(orientation);
     }
 
     // Places in region
@@ -1697,48 +1718,6 @@ class SearchPageController {
         return false;
     }
 
-    // Similar regions
-    //
-    drawSimilarRegions(onClickRegion) {
-
-        if (this.params.regions.length == 0)
-            return;
-
-        const region = this.params.regions[0];
-        const controller = new ApiController();
-
-        controller.getSupportedVectors(region.id)
-            .then(data => controller.getSimilarRegions(region.id, data.available_vectors))
-            .then(data => this.drawSimilarRegionsList(data, onClickRegion))
-            .catch(error => console.error(error));
-    }
-
-    drawSimilarRegionsList(data, onClickRegion) {
-        const mostSimilar = data.most_similar;
-        const regionPromises = mostSimilar.map(region => RegionLookup.byID(region.id));
-
-        Promise.all(regionPromises).then(regions => {
-            const selection = d3.select('#similar-regions');
-            const selectedRegionsIDs = this.params.regions.map(region => region.id);
-            const unselectedRegions = regions.filter(region => {
-                return ! _.contains(selectedRegionsIDs, region.id);
-            });
-
-            const links = selection
-                .selectAll('li')
-                .data(unselectedRegions.slice(0, Constants.PEER_REGIONS))
-                .enter()
-                .append('li')
-                .append('a')
-                .on('click', region => onClickRegion({ id : region.id, name : region.name }))
-                .text(region => region.name)
-                .append('i')
-                .attr('class', 'fa fa-plus');
-
-            selection.style('display', 'block');
-        }, error => { throw error; });
-    }
-
     // Draw charts
     //
     drawLineChart(chartId, dataTable, options) {
@@ -1750,13 +1729,10 @@ class SearchPageController {
         chart.draw(dataTable, options);
     }
 
-    drawSteppedAreaChart(chartId, data, options) {
+    drawSteppedAreaChart(chartId, dataTable, options) {
 
-        const dataTable = google.visualization.arrayToDataTable(data);
         const chart = new google.visualization.SteppedAreaChart(document.getElementById(chartId));
-
         this.applyStandardOptions(options);
-
         chart.draw(dataTable, options);
     }
 
@@ -1923,13 +1899,13 @@ class SearchPageController {
             parts.push('page=' + this.params.page);
 
         if (this.params.categories.length > 0)
-            parts.push('categories=' + encodeURIComponent(this.params.categories.join(',')));
+            this.params.categories.forEach(category => parts.push('categories=' + encodeURIComponent(category)));
 
         if (this.params.domains.length > 0)
-            parts.push('domains=' + encodeURIComponent(this.params.domains.join(',')));
+            this.params.domains.forEach(domain => parts.push('domains=' + encodeURIComponent(domain)));
 
         if (this.params.tags.length > 0)
-            parts.push('tags=' + encodeURIComponent(this.params.tags.join(',')));
+            this.params.tags.forEach(tag => parts.push('tags=' + encodeURIComponent(tag)));
 
         if (this.params.debug)
             parts.push('debug=');

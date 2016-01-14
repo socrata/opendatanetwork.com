@@ -1,22 +1,25 @@
+'use strict';
 
-var ApiController = require('./api-controller');
-var CategoryController = require('./category-controller');
-var LocationsController = require('./locations-controller');
-var TagController = require('./tag-controller');
-var Sources = require('./sources');
+const ApiController = require('./api-controller');
+const CategoryController = require('./category-controller');
+const LocationsController = require('./locations-controller');
+const TagController = require('./tag-controller');
+const Sources = require('./sources');
+const Peers = require('./peers');
 
-var _ = require('lodash');
-var htmlencode = require('htmlencode');
-var path = require('path');
-var moment = require('moment');
+const _ = require('lodash');
+const htmlencode = require('htmlencode');
+const moment = require('moment');
+const numeral = require('numeral');
+const path = require('path');
 
-var apiController = new ApiController();
-var categoryController = new CategoryController();
-var locationsController = new LocationsController();
-var sources = Sources.getSources();
-var tagController = new TagController();
+const apiController = new ApiController();
+const categoryController = new CategoryController();
+const locationsController = new LocationsController();
+const sources = Sources.getSources();
+const tagController = new TagController();
 
-var defaultSearchResultCount = 10;
+const defaultSearchResultCount = 10;
 
 module.exports = RenderController;
 
@@ -25,6 +28,102 @@ function RenderController() {
 
 // Public methods
 //
+RenderController.prototype.getTableData = (params, successHandler, errorHandler) => {
+
+    const tableData = {};
+
+    switch (params.vector) {
+
+        case 'cost_of_living':
+
+            waitForPromises(
+                params.regions.map(region => apiController.getCostOfLivingData(region.id)),
+                data => {
+                    tableData.costOfLivingData = data;
+                    successHandler(tableData);
+                },
+                errorHandler);
+            break;
+
+        case 'earnings':
+
+            waitForPromises(
+                params.regions.map(region => apiController.getEarningsData(region.id)),
+                data => {
+                    tableData.earningsData = data;
+                    successHandler(tableData);
+                },
+                errorHandler);
+            break;
+
+        case 'education':
+
+            waitForPromises(
+                params.regions.map(region => apiController.getEducationData(region.id)),
+                data => {
+                    tableData.educationData = data;
+                    successHandler(tableData);
+                },
+                errorHandler);
+            break;
+
+        case 'gdp':
+
+            waitForPromises(
+                params.regions.map(region => apiController.getGdpData(region.id)),
+                data => {
+                    tableData.gdpData = data;
+                    successHandler(tableData);
+                },
+                errorHandler);
+            break;
+
+        case 'health':
+
+            waitForPromises(
+                params.regions.map(region => apiController.getHealthData(region.id)),
+                data => {
+                    tableData.healthData = data;
+                    successHandler(tableData);
+                },
+                errorHandler);
+            break;
+
+        case 'occupations':
+
+            waitForPromises(
+                params.regions.map(region => apiController.getOccupationsData(region.id)),
+                data => {
+                    tableData.occupationsData = data;
+                    successHandler(tableData);
+                },
+                errorHandler);
+            break;
+
+        case 'population':
+
+            waitForPromises(
+                params.regions.map(region => apiController.getPopulationData(region.id)),
+                data => {
+                    tableData.populationData = data;
+                    successHandler(tableData);
+                },
+                errorHandler);
+            break;
+
+        default:
+
+            waitForPromises(
+                params.regions.map(region => apiController.getPopulationData(region.id)),
+                data => {
+                    tableData.populationData = data;
+                    successHandler(tableData);
+                },
+                errorHandler);
+            break;
+    }
+};
+
 // Categories json
 //
 RenderController.prototype.renderCategoriesJson = function(req, res) {
@@ -46,66 +145,67 @@ RenderController.prototype.renderDatasetPage = function(req, res) {
         req.params.domain,
         req.params.id,
         function(dataset) {
-          apiController.getStandardSchemas(
-              req.params.domain,
-              req.params.id,
-              function(schemas) {
-                  // Hilarious bug fix. When nothing matches, it returns "[]" instead of an actual empty array
-                  if(schemas.applied_schemas == "[]") {
-                    schemas.applied_schemas = [];
-                  }
+            apiController.getStandardSchemas(
+                req.params.domain,
+                req.params.id,
+                function(schemas) {
 
-                  var mapped_schemas = _.map(schemas.applied_schemas, function(sch, idx) {
-                    var uid = sch.url.match(/(\w{4}-\w{4})$/)[1]
-                    var query = _.collect(sch.query, function(v,k) { return k + "=" + v; }).join("&");
-                    return {
-                      name: sch.name,
-                      description: sch.description,
-                      uid: uid,
-                      query: 'https://' + req.params.domain + '/resource/' + uid +
-                        '.json?' + query,
-                      standard: sch.standardIds[0],
-                      required_columns: sch.columns,
-                      opt_columns: sch.optColumns,
-                      direct_map: (query.length == 0)
+                    // Hilarious bug fix. When nothing matches, it returns "[]" instead of an actual empty array
+                    if (schemas.applied_schemas == "[]") {
+                        schemas.applied_schemas = [];
                     }
-                  });
 
-                  RenderController.prototype.getSearchParameters(req, function(params) {
+                    var mapped_schemas = _.map(schemas.applied_schemas, function(sch, idx) {
 
-                      res.render(
-                          'dataset.ejs',
-                          {
-                              css : [
-                                  '/styles/dataset.css'
-                              ],
-                              dataset: {
-                                  descriptionHtml : htmlEncode(dataset.description).replace('\n', '<br>'),
-                                  domain : req.params.domain,
-                                  id : req.params.id,
-                                  name : dataset.name,
-                                  tags : dataset.tags || [],
-                                  columns : dataset.columns,
-                                  updatedAtString : moment(new Date(dataset.viewLastModified * 1000)).format('D MMM YYYY')
-                              },
-                              schemas: mapped_schemas,
-                              params : params,
-                              scripts : [
-                                  '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
-                                  '/lib/third-party/colorbrewer.min.js',
-                                  '/lib/third-party/d3.min.js',
-                                  '/lib/third-party/d3.promise.min.js',
-                                  '/lib/third-party/lodash.min.js',
-                                  '/lib/search.min.js',
-                              ],
-                              searchPath : '/search',
-                              title : 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.'
-                          }
-                      ); // render
+                        var uid = sch.url.match(/(\w{4}-\w{4})$/)[1]
+                        var query = _.collect(sch.query, function(v,k) { return k + "=" + v; }).join("&");
+
+                        return {
+                            name : sch.name,
+                            description : sch.description,
+                            uid : uid,
+                            query : 'https://' + req.params.domain + '/resource/' + uid + '.json?' + query,
+                            standard : sch.standardIds[0],
+                            required_columns : sch.columns,
+                            opt_columns : sch.optColumns,
+                            direct_map : (query.length == 0)
+                        }
+                    });
+
+                    RenderController.prototype.getSearchParameters(req, function(params) {
+
+                        res.render(
+                            'dataset.ejs',
+                            {
+                                css : [
+                                    '/styles/dataset.css'
+                                ],
+                                dataset : {
+                                    descriptionHtml : htmlEncode(dataset.description).replace('\n', '<br>'),
+                                    domain : req.params.domain,
+                                    id : req.params.id,
+                                    name : dataset.name,
+                                    tags : dataset.tags || [],
+                                    columns : dataset.columns,
+                                    updatedAtString : moment(new Date(dataset.viewLastModified * 1000)).format('D MMM YYYY')
+                                },
+                                schemas : mapped_schemas,
+                                params : params,
+                                scripts : [
+                                    '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
+                                    '/lib/third-party/colorbrewer.min.js',
+                                    '/lib/third-party/d3.min.js',
+                                    '/lib/third-party/d3.promise.min.js',
+                                    '/lib/third-party/lodash.min.js',
+                                    '/lib/search.min.js',
+                                ],
+                                searchPath : '/search',
+                                title : 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.'
+                            }); // render
                   },
                   function() { renderErrorPage(req, res); }); // getSearchParameters
             }); // getStandardSchemas
-      }); // getdatasetsummary
+      }); // getDatasetSummary
 };
 
 // Home
@@ -178,7 +278,10 @@ RenderController.prototype.renderSearchPage = function(req, res) {
 
     RenderController.prototype.getSearchParameters(req, function(params) {
 
-        _renderSearchPage(req, res, params);
+        RenderController.prototype.getTableData(
+            params,
+            (tableData) => { _renderSearchPage(req, res, params, tableData); },
+            () => { renderErrorPage(req, res); });
     });
 };
 
@@ -205,7 +308,10 @@ RenderController.prototype.renderSearchWithVectorPage = function(req, res) {
                 return;
             }
 
-            _renderSearchPage(req, res, params);
+            RenderController.prototype.getTableData(
+                params,
+                (tableData) => { _renderSearchPage(req, res, params, tableData); },
+                () => { renderErrorPage(req, res); });
         });
     }
     else {
@@ -243,8 +349,7 @@ RenderController.prototype.renderSearchResults = function(req, res) {
 
 // Private functions
 //
-function _renderSearchPage(req, res, params) {
-
+function _renderSearchPage(req, res, params, tableData) {
     apiController.getSearchDatasetsUrl(params, function(searchDatasetsUrl) {
 
         apiController.getCategories(5, function(categoryResults) {
@@ -270,40 +375,45 @@ function _renderSearchPage(req, res, params) {
                             apiController.searchDatasets(
                                 params,
                                 function(results) {
+                                    Peers.fromParams(params).then(peers => {
 
-                                    res.render(
-                                        'search.ejs',
-                                        {
-                                            categoryResults : categoryResults,
-                                            css : [
-                                                '/styles/third-party/leaflet.min.css',
-                                                '/styles/search.css',
-                                                '/styles/maps.css',
-                                                '/styles/main.css'
-                                            ],
-                                            currentCategory : currentCategory,
-                                            currentTag : currentTag,
-                                            domainResults : domainResults,
-                                            params : params,
-                                            scripts : [
-                                                '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
-                                                '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
-                                                '/lib/third-party/leaflet/leaflet.min.js',
-                                                '/lib/third-party/leaflet/leaflet-omnivore.min.js',
-                                                '/lib/third-party/browser-polyfill.min.js',
-                                                '/lib/third-party/colorbrewer.min.js',
-                                                '/lib/third-party/d3.min.js',
-                                                '/lib/third-party/d3.promise.min.js',
-                                                '/lib/third-party/leaflet-omnivore.min.js',
-                                                '/lib/third-party/lodash.min.js',
-                                                '/lib/search.min.js'
-                                            ],
-                                            searchDatasetsUrl : searchDatasetsUrl,
-                                            searchPath : req.path,
-                                            searchResults : results,
-                                            sources : sources.forRegions(params.regions),
-                                            title : getSearchPageTitle(params)
-                                        });
+                                        res.render(
+                                            'search.ejs',
+                                            {
+                                                peers,
+                                                categoryResults : categoryResults,
+                                                css : [
+                                                    '/styles/third-party/leaflet.min.css',
+                                                    '/styles/search.css',
+                                                    '/styles/maps.css',
+                                                    '/styles/main.css'
+                                                ],
+                                                currentCategory : currentCategory,
+                                                currentTag : currentTag,
+                                                domainResults : domainResults,
+                                                params : params,
+                                                scripts : [
+                                                    '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
+                                                    '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
+                                                    '/lib/third-party/leaflet/leaflet.min.js',
+                                                    '/lib/third-party/leaflet/leaflet-omnivore.min.js',
+                                                    '/lib/third-party/browser-polyfill.min.js',
+                                                    '/lib/third-party/colorbrewer.min.js',
+                                                    '/lib/third-party/d3.min.js',
+                                                    '/lib/third-party/d3.promise.min.js',
+                                                    '/lib/third-party/leaflet-omnivore.min.js',
+                                                    '/lib/third-party/lodash.min.js',
+                                                    '/lib/search.min.js'
+                                                ],
+                                                searchDatasetsUrl : searchDatasetsUrl,
+                                                searchPath : req.path,
+                                                searchResults : results,
+                                                sources : sources.forRegions(params.regions),
+                                                tableData : tableData || {},
+                                                title : getSearchPageTitle(params)
+                                            });
+
+                                    });
                                 },
                                 function() {
 
@@ -317,23 +427,12 @@ function _renderSearchPage(req, res, params) {
     });
 };
 
-RenderController.prototype.renderSitemap = function(req, res) {
-
-    apiController.getRegions(
-        function(regions) {
-
-            res.contentType("text/xml");
-            res.render('sitemap.ejs', { regions : regions });
-        },
-        function() { renderErrorPage(req, res); });
-}
-
 RenderController.prototype.getSearchParameters = function(req, completionHandler) {
 
     var query = req.query;
-    var categories = getNormalizedArrayFromDelimitedString(query.categories);
-    var domains = getNormalizedArrayFromDelimitedString(query.domains);
-    var tags = getNormalizedArrayFromDelimitedString(query.tags);
+    var categories = getNormalizedArrayFromQueryParameter(query.categories);
+    var domains = getNormalizedArrayFromQueryParameter(query.domains);
+    var tags = getNormalizedArrayFromQueryParameter(query.tags);
     var page = isNaN(query.page) ? 1 : parseInt(query.page);
 
     var params = {
@@ -385,6 +484,19 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
         if (completionHandler) completionHandler(params);
     });
 };
+
+// Private functions
+//
+function waitForPromises(promises, successHandler, errorHandler) {
+
+    Promise.all(promises)
+        .then(data => successHandler(data))
+        .catch(error => {
+
+            console.error(error);
+            errorHandler();
+        });
+}
 
 function getSearchPageTitle(params) {
 
@@ -457,22 +569,16 @@ function getRegionFromResultsById(results, regionId) {
     return null;
 }
 
-function getNormalizedArrayFromDelimitedString(s) {
+function getNormalizedArrayFromQueryParameter(o) {
 
-    if (s == null)
-        return [];
+    if (Array.isArray(o))
+        return o;
 
-    var parts = s.split(',');
+    if ((o != null) && (o.length > 0))
+        return [o];
 
-    if ((parts.length == 1) && (parts[0] == ''))
-        parts = [];
-
-    for (var i in parts) {
-        parts[i] = parts[i].toLowerCase();
-    }
-
-    return parts;
-};
+    return [];
+}
 
 function htmlEncode(s) {
 

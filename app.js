@@ -1,12 +1,14 @@
-var RenderController = require('./controllers/render-controller');
+'use strict';
 
-var cookieParser = require('cookie-parser');
-var express = require('express');
-var favicon = require('serve-favicon');
-var helmet = require('helmet');
+const cookieParser = require('cookie-parser');
+const express = require('express');
+const favicon = require('serve-favicon');
+const helmet = require('helmet');
+const numeral = require('numeral');
+const RenderController = require('./controllers/render-controller');
 
-var renderController = new RenderController();
-var app = express();
+const renderController = new RenderController();
+const app = express();
 
 // Cookie parser
 //
@@ -31,8 +33,10 @@ app.use(favicon(__dirname + '/images/favicon.ico'));
 //
 app.use('/maintenance.html', express.static(__dirname + '/views/static/maintenance.html'));
 app.use('/google0679b96456cb5b3a.html', express.static(__dirname + '/views/static/google0679b96456cb5b3a.html'));
-app.use('/robots.txt', express.static(__dirname + '/views/static/robots.txt'));
+app.use('/googlefd1b89f5a265e3ee.html', express.static(__dirname + '/views/static/googlefd1b89f5a265e3ee.html'));
 app.use('/error.html', express.static(__dirname + '/views/static/error.html'));
+app.use('/robots.txt', express.static(__dirname + '/views/static/robots.txt'));
+app.use('/sitemap.xml', express.static(__dirname + '/views/static/sitemap.xml'));
 
 // Set up 301 redirects for old routes
 //
@@ -62,7 +66,6 @@ app.get('/region/:regionIds/:regionNames', renderController.renderSearchPage);
 app.get('/region/:regionIds/:regionNames/search-results', renderController.renderSearchResults);
 app.get('/region/:regionIds/:regionNames/:vector', renderController.renderSearchWithVectorPage);
 app.get('/region/:regionIds/:regionNames/:vector/search-results', renderController.renderSearchResults);
-app.get('/sitemap', renderController.renderSitemap);
 
 // Start listening
 //
@@ -70,3 +73,36 @@ var port = Number(process.env.PORT || 3000);
 
 app.listen(port);
 console.log('app is listening on ' + port);
+
+// Template local functions
+//
+app.locals.drawHealthTableRowVertical = (healthData, header, key, format) => {
+
+    var s = '<tr><td class="category-header">' + header + '</td>';
+
+    for (var i = 0; i < healthData.length; i++) {
+
+        const regionData = healthData[i][0];
+        s += app.locals.drawHealthTableCellVertical(i, regionData, key, format);
+    }
+
+    s += '</tr>';
+
+    return s;
+};
+
+app.locals.drawHealthTableCellVertical = (i, data, key, format) => {
+
+    var s = '<td class="color-' + i + '">';
+    
+    if (data[key] != undefined)
+        s += numeral(data[key].replace(',','')).format(format);
+    else
+        s += '';
+
+    s += '<div></div></td>';
+
+    return s;
+};
+
+app.locals.numeral = numeral;

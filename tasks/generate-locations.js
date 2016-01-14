@@ -6,7 +6,7 @@ $(document).ready(function() {
     //
     const controller = new ApiController();
     
-    controller.getMostPopulousStates()
+    controller.getMostPopulousStates(100) // there's 51 with district of columbia
         .then(states => {
 
             const rg = states.map(result => { return { name : result.child_name, id : result.child_id, msas : [], cities : [], counties : [] }; });
@@ -27,7 +27,7 @@ function getMsaPromise(state) {
 
     const controller = new ApiController();
 
-    return controller.getMetrosInState(state.id, 3)
+    return controller.getMetrosInState(state.id, 10)
         .then(results => {
             state.msas = results.map(result => { 
                 return { 
@@ -43,7 +43,7 @@ function getCityPromise(state) {
 
     const controller = new ApiController();
 
-    return controller.getCitiesInState(state.id, 3)
+    return controller.getCitiesInState(state.id, 10)
         .then(results => {
             state.cities = results.map(result => { 
                 return { 
@@ -59,7 +59,7 @@ function getCountyPromise(state) {
 
     const controller = new ApiController();
 
-    return controller.getCountiesInState(state.id, 3)
+    return controller.getCountiesInState(state.id, 10)
         .then(results => {
             state.counties = results.map(result => { 
                 return { 

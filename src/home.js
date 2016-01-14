@@ -27,14 +27,26 @@ $(document).ready(function() {
 
         $('#menu-communities').slideToggle(100);
         $('#menu-item-communities').addClass('selected');
-
-        searchMenu.hideOptionsMenu();
     });
 
     $('#menu-item-communities').mouseleave(function() {
 
         $('#menu-communities').hide(100);
         $('#menu-item-communities').removeClass('selected');
+    });
+
+    // Locations by state
+    //
+    $('.more-subregions-link').click(function() {
+
+       $(this).parent().removeClass('state-collapsed');
+       $(this).hide();
+    });
+
+    $('.more-regions-link').click(function() {
+
+       $('.states-list').removeClass('states-list-collapsed');
+       $(this).hide();
     });
 });
 

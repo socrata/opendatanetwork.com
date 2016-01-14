@@ -1,0 +1,31 @@
+<table class="vertical">
+<tr>
+    <th class="empty"></th>
+<% for (var i = 0; i < params.regions.length; i++) { %>
+    <th colspan="2" class="color-<%= i %>"><%= params.regions[i].name %><div></div></th>
+<% } %>
+</tr>
+<tr class="sub-header-row">
+    <td class="empty"></td>
+<% for (var i = 0; i < params.regions.length; i++) { %>
+    <td>Percent</td>
+    <td class="color-<%= i %>">Percentile<div></div></td>
+<% } %>
+</tr>
+<% for (var i = 0; i < tableData.occupationsData[0].length; i++) { %>
+<tr>
+    <td class="category-header"><%= tableData.occupationsData[0][i].occupation %></td>
+<%
+for (var j = 0; j < params.regions.length; j++) {
+
+    var regionData = tableData.occupationsData[j];
+    var totalRanks = parseInt(regionData[i].total_ranks);
+    var rank = parseInt(regionData[i].percent_employed_rank);
+    var percentile = parseInt(((totalRanks - rank) / totalRanks) * 100);
+%>
+    <td><%= numeral(regionData[i].percent_employed).format('0.0') %>%</td>
+    <td class="color-<%= j %>"><%= numeral(percentile).format('0o') %><div></div></td>
+<% } %>
+</tr>
+<% } %>
+</table>

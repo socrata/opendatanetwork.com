@@ -1,6 +1,6 @@
 
 class MapView {
-    constructor(source, regionType, regions, features) {
+    constructor(source, regionType, regions, features, onDisplay) {
         this.source = source;
 
         this.regionType = regionType;
@@ -9,10 +9,13 @@ class MapView {
 
         this.features = features;
 
+        this.onDisplay = onDisplay;
+
         this.legend = new LegendControl();
         this.tooltip = new TooltipControl();
         this.variableControl = new VariableControl(source.variables, (variable, year) => {
             this.display(variable, year);
+            if (this.onDisplay) this.onDisplay(variable, year);
         });
         this.zoomControl = new L.Control.Zoom(MapConstants.ZOOM_CONTROL_OPTIONS);
 
@@ -134,7 +137,7 @@ class MapView {
         }
     }
 
-    static create(source, regions) {
+    static create(source, regions, onDisplay) {
         if (regions.length < 1) throw 'regions cannot be empty';
 
         const regionType = MapConstants.REGIONS[regions[0].type];
@@ -145,7 +148,7 @@ class MapView {
         return new Promise((resolve, reject) => {
             function success(topojson) {
                 const features = MapView._features(topojson, regionType.type == 'choropleth');
-                resolve(new MapView(source, regionType, regionsOfType, features));
+                resolve(new MapView(source, regionType, regionsOfType, features, onDisplay));
             }
 
             TopoModel.get(regionType).then(success, reject);
