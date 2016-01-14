@@ -1,8 +1,15 @@
 
-#tooltip
-    color: $background-color
-    background-color: $primary-color
+#tooltip, .tooltip, .leaflet-popup-content-wrapper
+    color: $primary-color
+    background-color: $background-color
     margin: 0
+    white-space: nowrap
+    box-shadow: none
+    border: 1px solid $primary-color
+    border-radius: 0
+
+    .leaflet-popup-content
+        margin: 0
 
     .name
         padding: 0.5em
@@ -16,4 +23,9 @@
 
         .value-name::after
             content: ': '
+
+.leaflet-popup-tip
+    background-color: $background-color
+    box-shadow: none
+    border: 1px solid $primary-color
 

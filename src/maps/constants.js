@@ -5,14 +5,13 @@ const MapConstants = {
 
     CSS_ID: 'leaflet-map',
 
-    // Same base layer as Data Lens
-    BASE_LAYER_URL: 'https://a.tiles.mapbox.com/v3/socrata-apps.ibp0l899/{z}/{x}/{y}.png',
-    BASE_LAYER: {
-        opacity: 0.5 // Change to 0.15 to make the maps look like Data Lens
-    },
+    MAPBOX_TOKEN: 'pk.eyJ1IjoibGFuZWFhc2VuIiwiYSI6ImYxZjExYmYzOTMxYzgyZTc2NDY0NDBmNDNmZmEwYWM3In0.uy5ta6EsSEZggkVQHo2ygw',
+    LABEL_LAYER_ID: 'socrata-apps.cb421623',
+    BASE_LAYER_ID: 'socrata-apps.af2cc4ed',
 
     // See http://bl.ocks.org/mbostock/5577023 for a visual index of Color Brewer colors
-    COLOR_SCALE: colorbrewer.RdYlBu[9],
+    COLOR_SCALE: colorbrewer.Blues[9].slice(2),
+    STOPLIGHT_COLOR_SCALE: colorbrewer.RdYlGn[7],
     SCALE: Scale.quantile,
 
     // http://leafletjs.com/reference.html#map-options
@@ -35,7 +34,8 @@ const MapConstants = {
     // http://leafletjs.com/reference.html#map-fitboundsoptions
     AUTO_ZOOM_OPTIONS: {
         animate: false,
-        maxZoom: 10.0
+        maxZoom: 10.0,
+        paddingTopLeft: [50, 0]
     },
     AUTO_ZOOM_OUT: 1, // amount to zoom out with only one selected region
 
@@ -44,18 +44,28 @@ const MapConstants = {
 
     // http://leafletjs.com/reference.html#path-options
     BASE_STYLE: {
-        color: '#34495e',
-        weight: 1,
+        stroke: true,
+        color: '#2c3e50',
         opacity: 1,
-        fill: false,
-        fillOpacity: 1
+        weight: 2,
+        fill: false
+    },
+
+    REFERENCE_STYLE: {
+        fill: true,
+        fillOpacity: 0.35,
+        stroke: true,
+        weight: 1,
+        opacity: 1
     },
 
     SELECTED_STYLE: {
-        stroke: true,
-        color: '#8e44ad',
-        weight: 3,
-        opacity: 1
+        weight: 3
+    },
+
+    NO_DATA_STYLE: {
+        fill: false,
+        stroke: false
     },
 
     // http://leafletjs.com/reference.html#popup
@@ -65,6 +75,11 @@ const MapConstants = {
         closeOnClick: false
     },
     TOOLTIP_PADDING: 16,
+
+    POPUP_OPTIONS: {
+        closeButton: false,
+        closeOnClick: false
+    },
 
     TOPOJSON_DIRECTORY: '/geo/',
     TOPOJSON_SUFFIX: '.topo.json',

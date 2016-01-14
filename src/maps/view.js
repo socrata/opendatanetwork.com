@@ -18,6 +18,8 @@ class MapView {
             if (this.onDisplay) this.onDisplay(variable, year);
         });
         this.zoomControl = new L.Control.Zoom(MapConstants.ZOOM_CONTROL_OPTIONS);
+
+        this._popups = [];
     }
 
     show(selector) {
@@ -27,10 +29,8 @@ class MapView {
             .attr('id', MapConstants.CSS_ID);
 
         const map = L.map(MapConstants.CSS_ID, MapConstants.MAP_OPTIONS);
+        this.map = map;
         map.setView(MapConstants.INITIAL_CENTER, MapConstants.INITIAL_ZOOM);
-
-        const baseLayer = L.tileLayer(MapConstants.BASE_LAYER_URL, MapConstants.BASE_LAYER);
-        map.addLayer(baseLayer);
 
         map.addControl(this.legend);
         map.addControl(this.variableControl);
@@ -39,14 +39,19 @@ class MapView {
             map.addControl(this.zoomControl);
 
         map.whenReady(() => {
-            map.addLayer(this.features);
+            const url = layerID => `https://api.mapbox.com/v4/${layerID}/{z}/{x}/{y}.png?access_token=${MapConstants.MAPBOX_TOKEN}`;
+
+            const base = L.tileLayer(url(MapConstants.BASE_LAYER_ID)).addTo(map);
+            const features = this.features.addTo(map);
+            const pane = map.createPane('labels');
+            const labels = L.tileLayer(url(MapConstants.LABEL_LAYER_ID), {pane}).addTo(map);
+
             this.zoomToSelected(map);
         });
     }
 
     zoomToSelected(map) {
         const selectedLayers = [];
-
         this.features.eachLayer(layer => {
             if (this.regionIDs.has(layer.feature.id))
                 selectedLayers.push(layer);
@@ -69,7 +74,10 @@ class MapView {
     }
 
     update(model) {
-        const scale = model.scale(MapConstants.SCALE, MapConstants.COLOR_SCALE);
+        const colorScale = model.variable.stoplight ?
+            MapConstants.STOPLIGHT_COLOR_SCALE :
+            MapConstants.COLOR_SCALE;
+        const scale = model.scale(MapConstants.SCALE, colorScale);
 
         this.updateLegend(model, scale);
         this.updateFeatures(model, scale);
@@ -81,27 +89,55 @@ class MapView {
 
     updateFeatures(model, scale) {
         this.features.eachLayer(layer => {
-            const id = layer.feature.id;
+            const region = model.regionById.get(layer.feature.id);
 
-            if (model.regionById.has(id)) {
-                const region = model.regionById.get(id);
+            if (region && !isNaN(region.value)) {
                 const selected = this.regionIDs.has(region.id);
-                const baseStyle = {
-                    fill: true,
-                    fillColor: scale.scale(region.value)
-                };
+                const fillColor = scale.scale(region.value);
+                const baseStyle = _.extend({}, MapConstants.REFERENCE_STYLE, {fillColor});
                 const style = selected ?
                     _.extend(baseStyle, MapConstants.SELECTED_STYLE) :
                     baseStyle;
-
                 layer.setStyle(style);
 
+                if (selected && this.map) {
+                    if (!(region.id in this._popups)) {
+                        const popup = L.popup(MapConstants.POPUP_OPTIONS)
+                            .setLatLng(MapView.center(layer));
+                        this._popups[region.id] = popup;
+                    }
+
+                    const content = `<div class="name">${region.name}</div>\
+                        <div class="value">${region.valueName} (${region.year}):\
+                        ${region.valueFormatted}</div>`;
+                    this._popups[region.id].setContent(content).addTo(this.map);
+                }
+
                 layer.on({
-                    mouseover: () => this.tooltip.showRegion(region),
+                    mouseover: () => {
+                        this.closePopups();
+                        this.tooltip.showRegion(region);
+                    },
                     mouseout: () => this.tooltip.hide()
                 });
+            } else {
+                layer.setStyle(MapConstants.NO_DATA_STYLE);
             }
         });
+    }
+
+    closePopups() {
+        _.values(this._popups).forEach(popup => this.map.closePopup(popup));
+    }
+
+    static center(layer) {
+        if (layer.getLatLng) {
+            return layer.getLatLng();
+        } else {
+            const latlngs = layer.getLatLngs();
+            const bounds = L.latLngBounds(_.flatten(latlngs));
+            return bounds.getCenter();
+        }
     }
 
     static create(source, regions, onDisplay) {
