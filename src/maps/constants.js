@@ -11,6 +11,7 @@ const MapConstants = {
 
     // See http://bl.ocks.org/mbostock/5577023 for a visual index of Color Brewer colors
     COLOR_SCALE: colorbrewer.Blues[9].slice(2),
+    STOPLIGHT_COLOR_SCALE: colorbrewer.RdYlGn[7],
     SCALE: Scale.quantile,
 
     // http://leafletjs.com/reference.html#map-options

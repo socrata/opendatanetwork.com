@@ -74,7 +74,10 @@ class MapView {
     }
 
     update(model) {
-        const scale = model.scale(MapConstants.SCALE, MapConstants.COLOR_SCALE);
+        const colorScale = model.variable.stoplight ?
+            MapConstants.STOPLIGHT_COLOR_SCALE :
+            MapConstants.COLOR_SCALE;
+        const scale = model.scale(MapConstants.SCALE, colorScale);
 
         this.updateLegend(model, scale);
         this.updateFeatures(model, scale);
