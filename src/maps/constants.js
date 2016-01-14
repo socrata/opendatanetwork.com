@@ -53,7 +53,7 @@ const MapConstants = {
 
     REFERENCE_STYLE: {
         fill: true,
-        fillOpacity: 0.5,
+        fillOpacity: 0.35,
         stroke: true,
         weight: 1,
         opacity: 1
