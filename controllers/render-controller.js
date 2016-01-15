@@ -363,7 +363,6 @@ function _renderSearchPage(req, res, params, tableData) {
             } else {
                 regionPromise(params.regions[0]).then(result => {
                     if (!result) {
-                        console.log('asd');
                         resolve([]);
                     } else {
                         resolve(result);
@@ -459,16 +458,15 @@ function _renderSearchPage(req, res, params, tableData) {
                                             ]
                                         };
 
-                                        if (data && data.length == 2 && data[0].length > 0 && data[1].length == 2) {
-                                            _.extend(templateParams, {
-                                                hasPeers: true,
-                                                peers: processRegions(data[0]),
-                                                hasSiblings: true,
-                                                parentRegion: processRegions([data[1][0]])[0],
-                                                siblings: processRegions(data[1][1])
-                                            });
-                                        } else {
-                                            _.extend(templateParams, {hasSiblings: false, hasPeers: false});
+                                        if (data && data.length == 2) {
+                                            if (data[0].length > 0) {
+                                                templateParams.peers = processRegions(data[0]);
+                                            }
+
+                                            if (data[1].length == 2 && data[1][1].length > 0) {
+                                                templateParams.parentRegion = processRegions([data[1][0]])[0];
+                                                templateParams.siblings = processRegions(data[1][1]);
+                                            }
                                         }
 
                                         res.render('search.ejs', templateParams);

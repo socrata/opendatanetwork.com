@@ -105,7 +105,7 @@ var _tableData = <%- JSON.stringify(tableData) %>;
                 <i class="fa fa-plus"></i><input class="add-region-input" type="text" placeholder="Add Location">
                 <ul class="add-region-results" style="display: none;"></ul>
             </div>
-            <% if (hasPeers && peers.length > 0) { %>
+            <% if (typeof peers != 'undefined' && peers.length > 0) { %>
                 <ul id="similar-regions">
                 <% peers.forEach(function(region) { %>
                     <li><a href=<%= region.addURL %>><%= region.name %> <i class="fa fa-plus"></i></a></li>
@@ -113,7 +113,7 @@ var _tableData = <%- JSON.stringify(tableData) %>;
                 </ul>
             <% } %>
 
-            <% if (hasSiblings && siblings.length > 0) { %>
+            <% if (typeof siblings != 'undefined' && siblings.length > 0) { %>
                 <%
                 const TYPE_NAMES = {
                     nation: 'Nations',
@@ -128,7 +128,7 @@ var _tableData = <%- JSON.stringify(tableData) %>;
                 %>
 
                 <h2 class="places-in-region-header">
-                    <%= TYPE_NAMES[params.regions[0].type] %> in
+                    Other <%= TYPE_NAMES[params.regions[0].type] %> in
                     <a href="<%= parentRegion.navigateURL %>"><%= parentRegion.name %></a>
                 </h2>
 
