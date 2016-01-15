@@ -3,6 +3,7 @@
 const ApiController = require('./api-controller');
 const CategoryController = require('./category-controller');
 const LocationsController = require('./locations-controller');
+const MetricsController = require('./metrics-controller');
 const TagController = require('./tag-controller');
 const Sources = require('./sources');
 const Relatives = require('./relatives');
@@ -17,6 +18,7 @@ const path = require('path');
 const apiController = new ApiController();
 const categoryController = new CategoryController();
 const locationsController = new LocationsController();
+const metricsController = new MetricsController();
 const sources = Sources.getSources();
 const tagController = new TagController();
 
@@ -437,6 +439,7 @@ function _renderSearchPage(req, res, params, tableData) {
                                             sources : sources.forRegions(params.regions),
                                             tableData : tableData || {},
                                             title : getSearchPageTitle(params),
+                                            metricSummary : metricsController.getMetricSummary(params, tableData),
                                             css : [
                                                 '/styles/third-party/leaflet.min.css',
                                                 '/styles/search.css',
@@ -498,6 +501,7 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
         categories : categories,
         domains : domains,
         limit : defaultSearchResultCount,
+        metric : req.params.metric || '',
         offset : (page - 1) * defaultSearchResultCount,
         only : 'datasets',
         page : page,
@@ -506,6 +510,7 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
         resetRegions : false,
         tags : tags,
         vector : req.params.vector || '',
+        year : req.params.year || '',
     };
 
     // Debug

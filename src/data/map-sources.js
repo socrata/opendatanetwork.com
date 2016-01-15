@@ -74,7 +74,7 @@ const MapSources = {
         domain: DOMAIN,
         fxf: 'qfcm-fw3i',
         hasPopulation: true,
-        variables: ['Management', 'Business and Finance', 'Computers and Math', 'Engineering', 'Social Sciences', 'Social Services', 'Legal', 'Education', 'Media', 'Healthcare', 'Health Technicians', 'Health Support', 'Fire Fighting', 'Law Enforcement', 'Food Service', 'Janitorial', 'Personal Care', 'Sales', 'Office and Administration', 'Farming, Fishing, Foresty', 'Construction and Extraction', 'Repair', 'Production', 'Transportation', 'Material Moving']
+        variables: ['Business and Finance', 'Computers and Math', 'Construction and Extraction', 'Education', 'Engineering', 'Farming, Fishing, Foresty', 'Fire Fighting', 'Food Service', 'Healthcare', 'Health Support', 'Health Technicians', 'Janitorial', 'Law Enforcement', 'Legal', 'Management', 'Material Moving', 'Media', 'Office and Administration', 'Personal Care', 'Production', 'Repair', 'Sales', 'Social Sciences', 'Social Services', 'Transportation']
             .map(occupation => {
                 return {
                     name: occupation,
