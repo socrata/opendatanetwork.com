@@ -9,28 +9,21 @@ const parentCache = new NodeCache({stdTTL: 0});
 
 const URL = 'https://odn.data.socrata.com/resource/iv2c-wasz.json';
 
+const cache = new NodeCache({sdtTTL: 0});
+
+
 
 class Siblings {
     static getParents(region) {
         return new Promise((resolve, reject) => {
-            parentCache.get(region.id, (error, value) => {
-                if (value === undefined) {
-                    const url = buildURL(URL, {
-                        child_id: region.id,
-                        '$order': 'parent_population DESC'
-                    });
-
-                    request(url).then(body => {
-                        const parents = parseParents(body);
-                        parentCache.set(region.id, parents);
-                        resolve(parents);
-                    }, error => {
-                        reject(error);
-                    });
-                } else {
-                    resolve(value);
-                }
+            const url = buildURL(URL, {
+                child_id: region.id,
+                '$order': 'parent_population DESC'
             });
+
+            getJSON(url).then(json => {
+                resolve(json.map(parseParent));
+            }, error => { reject(error); });
         });
     }
 
@@ -47,25 +40,17 @@ class Siblings {
                         '$limit': n
                     });
 
-                    request(url)
-                        .then(body => resolve([parents[0], parseChildren(body)]))
-                        .catch(error => {
-                            console.log('error');
-                            reject(error);
-                        });
+                    getJSON(url).then(json => {
+                        resolve([parents[0], json.map(parseChildren)]);
+                    }, error => { reject(error); });
                 }
-            }).catch(error => {
-                console.log('error getting parents');
-                console.log(error.stack);
-                reject(error);
-            });
+            }, error => { reject(error); });
         });
     }
 
     static fromParams(params) {
         return new Promise((resolve, reject) => {
             if (params.regions.length === 0) {
-                console.log('no regions');
                 resolve([]);
             } else {
                 Siblings.getSiblings(params.regions[0], 5)
@@ -81,13 +66,26 @@ class Siblings {
     }
 }
 
+function getJSON(url) {
+    console.log(url);
+    return new Promise((resolve, reject) => {
+        cache.get(url, (error, value) => {
+            if (value === undefined) {
+                request(url).then(body => {
+                    const json = JSON.parse(body);
+                    cache.set(url, json);
+                    resolve(json);
+                }, error => { reject(error); });
+            } else {
+                resolve(value);
+            }
+        });
+    });
+}
+
 function buildURL(path, params) {
     const pairs = _.map(_.keys(params), key => `${key}=${params[key]}`);
     return `${path}${path[path.length - 1] == '?' ? '' : '?'}${pairs.join('&')}`;
-}
-
-function parseParents(body) {
-    return JSON.parse(body).map(parseParent);
 }
 
 function parseParent(json) {
@@ -96,10 +94,6 @@ function parseParent(json) {
         name: json.parent_name,
         type: json.parent_type
     };
-}
-
-function parseChildren(body) {
-    return JSON.parse(body).map(parseChild);
 }
 
 function parseChild(json) {
