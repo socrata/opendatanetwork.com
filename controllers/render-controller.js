@@ -6,6 +6,7 @@ const LocationsController = require('./locations-controller');
 const TagController = require('./tag-controller');
 const Sources = require('./sources');
 const Peers = require('./peers');
+const Siblings = require('./siblings');
 
 const _ = require('lodash');
 const htmlencode = require('htmlencode');
@@ -347,10 +348,14 @@ RenderController.prototype.renderSearchResults = function(req, res) {
     });
 };
 
+
+
 // Private functions
 //
 function _renderSearchPage(req, res, params, tableData) {
     const peersPromise = Peers.fromParams(params);
+    const siblingsPromise = Siblings.fromParams(params);
+    const allPromise = Promise.all([peersPromise, siblingsPromise]);
 
 
     apiController.getSearchDatasetsUrl(params, function(searchDatasetsUrl) {
@@ -378,12 +383,13 @@ function _renderSearchPage(req, res, params, tableData) {
                             apiController.searchDatasets(
                                 params,
                                 function(results) {
-                                    peersPromise.then(peers => {
-
+                                    allPromise.then(data => {
                                         res.render(
                                             'search.ejs',
                                             {
-                                                peers,
+                                                peers: data[0],
+                                                parentRegion: data[1][0],
+                                                siblings: data[1][1],
                                                 categoryResults : categoryResults,
                                                 css : [
                                                     '/styles/third-party/leaflet.min.css',

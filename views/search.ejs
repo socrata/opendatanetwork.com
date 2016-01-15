@@ -112,6 +112,31 @@ var _tableData = <%- JSON.stringify(tableData) %>;
                 <% }); %>
                 </ul>
             <% } %>
+
+            <% if (siblings && siblings.length > 0) { %>
+                <%
+                const TYPE_NAMES = {
+                    nation: 'Nations',
+                    region: 'Regions',
+                    division: 'Divisions',
+                    state: 'States',
+                    county: 'Counties',
+                    place: 'Places',
+                    msa: 'Metro Areas',
+                    zip_code: 'ZIP Codes'
+                };
+                %>
+
+                <h2 class="places-in-region-header">
+                    <%= TYPE_NAMES[params.regions[0].type] %> in <%= parentRegion.name %>
+                </h2>
+
+                <ul class="places-in-region-list">
+                    <% siblings.forEach(function(region) { %>
+                        <li><a href="/region/<%= region.id %>/<%= region.name.replace(' ', '_').replace(',', '') %>"><%= region.name %></a></li>
+                    <% }); %>
+                </ul>
+            <% } %>
             <h2 id="places-in-region-header-0" class="places-in-region-header" style="display:none"></h2>
             <ul id="places-in-region-list-0" class="places-in-region-list" style="display:none"></ul>
             <h2 id="places-in-region-header-1" class="places-in-region-header" style="display:none"></h2>
