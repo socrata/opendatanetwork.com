@@ -5,7 +5,6 @@ const CategoryController = require('./category-controller');
 const LocationsController = require('./locations-controller');
 const TagController = require('./tag-controller');
 const Sources = require('./sources');
-const Peers = require('./peers');
 const Siblings = require('./siblings');
 const Constants = require('./constants');
 
@@ -378,6 +377,24 @@ function _renderSearchPage(req, res, params, tableData) {
     const siblingsPromise = forRegion(Siblings.siblings);
     const allPromise = Promise.all([peersPromise, siblingsPromise]);
 
+    const uids = params.regions.map(region => region.id);
+    const names = params.regions.map(region => region.name);
+
+    function processRegions(regions) {
+        return regions.filter(region => {
+            return !_.contains(uids, region.id);
+        }).slice(0, Constants.N_RELATIVES).map(region => {
+            const encode = name => name.replace(/,/g, '').replace(/ /g, '_');
+            const navigateURL = `/region/${region.id}/${encode(region.name)}`;
+
+            const uidString = uids.concat(region.id).join('-');
+            const nameString = names.concat(region.name).map(encode).join('-');
+            const addURL = `/region/${uidString}/${nameString}/${params.vector}`;
+
+            return _.extend({}, region, {addURL, navigateURL});
+        });
+    }
+
     apiController.getSearchDatasetsUrl(params, function(searchDatasetsUrl) {
 
         apiController.getCategories(5, function(categoryResults) {
@@ -411,9 +428,9 @@ function _renderSearchPage(req, res, params, tableData) {
                                             domainResults,
                                             params,
                                             searchDatasetsUrl,
-                                            peers: data[0],
+                                            peers: processRegions(data[0]),
                                             parentRegion: data[1][0],
-                                            siblings: data[1][1],
+                                            siblings: processRegions(data[1][1]),
                                             searchPath : req.path,
                                             searchResults : results,
                                             sources : sources.forRegions(params.regions),

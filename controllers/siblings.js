@@ -41,7 +41,7 @@ class Siblings {
                         parent_id: parents[0].id,
                         child_type: region.type,
                         '$order': 'child_population DESC',
-                        '$limit': Constants.N_RELATIVES
+                        '$limit': Constants.N_RELATIVES * 2
                     });
 
                     getJSON(url).then(json => {

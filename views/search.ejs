@@ -108,7 +108,7 @@ var _tableData = <%- JSON.stringify(tableData) %>;
             <% if (peers.length > 0) { %>
                 <ul id="similar-regions">
                 <% peers.forEach(function(region) { %>
-                    <li><a href=<%= region.url %>><%= region.name %> <i class="fa fa-plus"></i></a></li>
+                    <li><a href=<%= region.addURL %>><%= region.name %> <i class="fa fa-plus"></i></a></li>
                 <% }); %>
                 </ul>
             <% } %>
@@ -133,7 +133,7 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 
                 <ul class="places-in-region-list">
                     <% siblings.forEach(function(region) { %>
-                        <li><a href="/region/<%= region.id %>/<%= region.name.replace(' ', '_').replace(',', '') %>"><%= region.name %></a></li>
+                        <li><a href="<%= region.navigateURL %>"><%= region.name %></a></li>
                     <% }); %>
                 </ul>
             <% } %>
