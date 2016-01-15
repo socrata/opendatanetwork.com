@@ -20,7 +20,7 @@ class Peers {
                     request(url).then(body => {
                         const peers = JSON.parse(body).peers;
                         peerCache.set(key, peers);
-                        resolve(JSON.parse(body).peers);
+                        resolve(peers);
                     }).catch(error => { throw error; });
                 } else {
                     resolve(value);

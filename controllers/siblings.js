@@ -5,6 +5,7 @@ const _ = require('lodash');
 const NodeCache = require('node-cache');
 
 const siblingCache = new NodeCache({stdTTL: 0});
+const parentCache = new NodeCache({stdTTL: 0});
 
 const URL = 'https://odn.data.socrata.com/resource/iv2c-wasz.json';
 
@@ -12,17 +13,24 @@ const URL = 'https://odn.data.socrata.com/resource/iv2c-wasz.json';
 class Siblings {
     static getParents(region) {
         return new Promise((resolve, reject) => {
-            const url = buildURL(URL, {
-                child_id: region.id,
-                '$order': 'parent_population DESC'
-            });
+            parentCache.get(region.id, (error, value) => {
+                if (value === undefined) {
+                    const url = buildURL(URL, {
+                        child_id: region.id,
+                        '$order': 'parent_population DESC'
+                    });
 
-            request(url)
-                .then(body => resolve(parseParents(body)))
-                .catch(error => {
-                    console.log('error');
-                    reject(error);
-                });
+                    request(url).then(body => {
+                        const parents = parseParents(body);
+                        parentCache.set(region.id, parents);
+                        resolve(parents);
+                    }, error => {
+                        reject(error);
+                    });
+                } else {
+                    resolve(value);
+                }
+            });
         });
     }
 
@@ -30,7 +38,6 @@ class Siblings {
         return new Promise((resolve, reject) => {
             Siblings.getParents(region).then(parents => {
                 if (parents.length === 0) {
-                    console.log('no parents for ${region.name}');
                     resolve([]);
                 } else {
                     const url = buildURL(URL, {
