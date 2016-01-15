@@ -5,19 +5,22 @@ const _ = require('lodash');
 const NodeCache = require('node-cache');
 const Constants = require('./constants');
 
-const siblingCache = new NodeCache({stdTTL: 0});
-const parentCache = new NodeCache({stdTTL: 0});
-
-const URL = 'https://odn.data.socrata.com/resource/iv2c-wasz.json';
-
-const cache = new NodeCache({sdtTTL: 0});
-
-
-
 class Siblings {
-    static getParents(region) {
+    static peers(region) {
         return new Promise((resolve, reject) => {
-            const url = buildURL(URL, {
+            const url = buildURL(`${Constants.PEERS_URL}/${region.id}`, {
+                n: Constants.N_PEERS * 2
+            });
+
+            getJSON(url).then(json => {
+                resolve(json.peers);
+            }, error => { reject(error); });
+        });
+    }
+
+    static parents(region) {
+        return new Promise((resolve, reject) => {
+            const url = buildURL(Constants.RELATIVES_URL, {
                 child_id: region.id,
                 '$order': 'parent_population DESC'
             });
@@ -28,17 +31,17 @@ class Siblings {
         });
     }
 
-    static getSiblings(region, n) {
+    static siblings(region) {
         return new Promise((resolve, reject) => {
-            Siblings.getParents(region).then(parents => {
+            Siblings.parents(region).then(parents => {
                 if (parents.length === 0) {
                     resolve([]);
                 } else {
-                    const url = buildURL(URL, {
+                    const url = buildURL(Constants.RELATIVES_URL, {
                         parent_id: parents[0].id,
                         child_type: region.type,
                         '$order': 'child_population DESC',
-                        '$limit': n
+                        '$limit': Constants.N_RELATIVES
                     });
 
                     getJSON(url).then(json => {
@@ -48,27 +51,9 @@ class Siblings {
             }, error => { reject(error); });
         });
     }
-
-    static fromParams(params) {
-        return new Promise((resolve, reject) => {
-            if (params.regions.length === 0) {
-                resolve([]);
-            } else {
-                Siblings.getSiblings(params.regions[0], 5)
-                    .then(siblings => {
-                        resolve(siblings);
-                    })
-                    .catch(error => {
-                        console.log('error getting siblings');
-                        console.log(error);
-                        console.log(error.stack);
-                        resolve([]);
-                    });
-            }
-        });
-    }
 }
 
+const cache = new NodeCache({sdtTTL: 0});
 
 function getJSON(url, timeoutMS) {
     timeoutMS = timeoutMS || Constants.TIMEOUT_MS;

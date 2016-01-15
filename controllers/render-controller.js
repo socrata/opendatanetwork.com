@@ -357,8 +357,25 @@ RenderController.prototype.renderSearchResults = function(req, res) {
 
 
 function _renderSearchPage(req, res, params, tableData) {
-    const peersPromise = Peers.fromParams(params);
-    const siblingsPromise = Siblings.fromParams(params);
+    function forRegion(regionPromise) {
+        return new Promise(resolve => {
+            if (params.regions.length === 0) {
+                resolve([]);
+            } else {
+                regionPromise(params.regions[0]).then(result => {
+                    resolve(result);
+                }, error => {
+                    console.warn('error rendering search page');
+                    console.warn(error);
+                    console.warn(error.stack);
+                    resolve([]);
+                });
+            }
+        });
+    }
+
+    const peersPromise = forRegion(Siblings.peers);
+    const siblingsPromise = forRegion(Siblings.siblings);
     const allPromise = Promise.all([peersPromise, siblingsPromise]);
 
     apiController.getSearchDatasetsUrl(params, function(searchDatasetsUrl) {
