@@ -5,7 +5,7 @@ const _ = require('lodash');
 const NodeCache = require('node-cache');
 const Constants = require('./constants');
 
-class Siblings {
+class Relatives {
     static peers(region) {
         return new Promise((resolve, reject) => {
             const url = buildURL(`${Constants.PEERS_URL}/${region.id}`, {
@@ -33,7 +33,7 @@ class Siblings {
 
     static siblings(region) {
         return new Promise((resolve, reject) => {
-            Siblings.parents(region).then(parents => {
+            Relatives.parents(region).then(parents => {
                 if (parents.length === 0) {
                     resolve([]);
                 } else {
@@ -77,10 +77,10 @@ function getJSON(url, timeoutMS) {
         Promise.race([timeoutPromise, jsonPromise]).then(result => {
             if (!result) {
                 console.warn(`request to ${url} timed out after ${timeoutMS}ms`);
+                resolve([]);
+            } else {
+                resolve(result);
             }
-
-            result = result || [];
-            resolve(result);
         }, error => { reject(error); });
     });
 }
@@ -112,4 +112,4 @@ function parseChild(json) {
     };
 }
 
-module.exports = Siblings;
+module.exports = Relatives;

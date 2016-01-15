@@ -5,7 +5,7 @@ const CategoryController = require('./category-controller');
 const LocationsController = require('./locations-controller');
 const TagController = require('./tag-controller');
 const Sources = require('./sources');
-const Siblings = require('./siblings');
+const Relatives = require('./relatives');
 const Constants = require('./constants');
 
 const _ = require('lodash');
@@ -373,8 +373,8 @@ function _renderSearchPage(req, res, params, tableData) {
         });
     }
 
-    const peersPromise = forRegion(Siblings.peers);
-    const siblingsPromise = forRegion(Siblings.siblings);
+    const peersPromise = forRegion(Relatives.peers);
+    const siblingsPromise = forRegion(Relatives.siblings);
     const allPromise = Promise.all([peersPromise, siblingsPromise]);
 
     const uids = params.regions.map(region => region.id);
