@@ -23,11 +23,21 @@ class MapSummary {
 
             const datum = _.filter(data[index], filter)[0]; // should be only one
 
-            return "The cost of living index for {0} in {1} for {2} was {3}.".format(
-                variable.name.toLowerCase(),
-                year,
-                region.name,
-                this.formatValue(variable.column, datum[variable.column]));
+            if (variable.name.toLowerCase() == 'all') {
+
+                return "The cost of living index in {0} for {1} was {2}.".format(
+                    year,
+                    region.name,
+                    this.formatValue(variable.column, datum[variable.column]));
+            }
+            else {
+
+                return "The cost of living index for {0} in {1} for {2} was {3}.".format(
+                    variable.name.toLowerCase(),
+                    year,
+                    region.name,
+                    this.formatValue(variable.column, datum[variable.column]));
+            }
         })
 
         return rg.join(' ');

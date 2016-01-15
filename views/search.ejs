@@ -100,7 +100,7 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 
     <div class="controls-column">
         <div class="controls">
-            <h1>Compare this Data</h1>
+            <h2>Compare this Data</h2>
             <div class="add-region">
                 <i class="fa fa-plus"></i><input class="add-region-input" type="text" placeholder="Add Location">
                 <ul class="add-region-results" style="display: none;"></ul>
@@ -112,9 +112,9 @@ var _tableData = <%- JSON.stringify(tableData) %>;
                 <% }); %>
                 </ul>
             <% } %>
-            <h2 id="places-in-region-header-0" class="places-in-region-header" style="display:none"></h2>
+            <h3 id="places-in-region-header-0" class="places-in-region-header" style="display:none"></h3>
             <ul id="places-in-region-list-0" class="places-in-region-list" style="display:none"></ul>
-            <h2 id="places-in-region-header-1" class="places-in-region-header" style="display:none"></h2>
+            <h3 id="places-in-region-header-1" class="places-in-region-header" style="display:none"></h3>
             <ul id="places-in-region-list-1" class="places-in-region-list" style="display:none"></ul>
         </div>
         <div class="footer">
@@ -139,8 +139,8 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% if ((params.vector == '') || (params.vector == 'population')) { %>
 
             <div id="map"></div>
-            <p id="map-summary"></p>
             <h1>Population</h1>
+            <p id="map-summary"><%= metricSummary %></p>
             <figure id="population-chart"></figure>
             <h1>Population Change</h1>
             <figure id="population-change-chart"></figure>
@@ -151,8 +151,8 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'earnings') { %>
 
             <div id="map"></div>
-            <p id="map-summary"></p>
             <h1>Earnings</h1>
+            <p id="map-summary"><%= metricSummary %></p>
             <div id="earnings-table-container">
 <% include _earnings-table %>
             </div>
@@ -164,8 +164,8 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'education') { %>
 
             <div id="map"></div>
-            <p id="map-summary"></p>
             <h1>Education</h1>
+            <p id="map-summary"><%= metricSummary %></p>
             <div id="education-table-container">
 <% include _education-table %>
             </div>
@@ -176,8 +176,8 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'occupations') { %>
 
             <div id="map"></div>
-            <p id="map-summary"></p>
             <h1>Occupations</h1>
+            <p id="map-summary"><%= metricSummary %></p>
             <div id="occupations-table-container">
 <% include _occupations-table %>
             </div>
@@ -188,8 +188,8 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'gdp') { %>
 
             <div id="map"></div>
-            <p id="map-summary"></p>
             <h1>GDP</h1>
+            <p id="map-summary"><%= metricSummary %></p>
             <figure id="per-capita-gdp-chart"></figure>
             <figure id="per-capita-gdp-change-chart"></figure>
             <label>
@@ -199,8 +199,8 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'health') { %>
 
             <div id="map"></div>
-            <p id="map-summary"></p>
             <h1>Health</h1>
+            <p id="map-summary"><%= metricSummary %></p>
             <h2>RWJF County Health Rankings</h2>
             <p>
                 The Robert Wood Johnson Foundation produces health rankings for states and counties.
@@ -231,8 +231,8 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'cost_of_living') { %>
 
             <div id="map"></div>
-            <p id="map-summary"></p>
             <h1>Cost of Living</h1>
+            <p id="map-summary"><%= metricSummary %></p>
             <div id="cost-of-living-table-container">
 <% include _cost-of-living-table %>
             </div>
@@ -265,23 +265,6 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } %>
 
 </section>
-
-<div class="hidden">
-    <div id="dataset-lightbox">
-        <div class="title-container">
-            <h1></h1>
-            <a class="publisher" target="_blank"></a> | Last Updated <span class="last-updated"></span>
-        </div>
-        <div class="button-container">
-            <a class="blue-button button" target="_blank">View API</a>
-            <a class="orange-button button" target="_blank">View Data</a>
-        </div>
-        <div class="description-container">
-            <p class="description"></p>
-            <p class="tags">Tags: <span></span></p>
-        </div>
-    </div>
-</div>
 
 <% include _google-analytics %>
 <% include _usersnap %>

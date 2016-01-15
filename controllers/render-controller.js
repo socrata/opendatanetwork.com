@@ -3,6 +3,7 @@
 const ApiController = require('./api-controller');
 const CategoryController = require('./category-controller');
 const LocationsController = require('./locations-controller');
+const MetricsController = require('./metrics-controller');
 const TagController = require('./tag-controller');
 const Sources = require('./sources');
 const Peers = require('./peers');
@@ -16,6 +17,7 @@ const path = require('path');
 const apiController = new ApiController();
 const categoryController = new CategoryController();
 const locationsController = new LocationsController();
+const metricsController = new MetricsController();
 const sources = Sources.getSources();
 const tagController = new TagController();
 
@@ -350,6 +352,7 @@ RenderController.prototype.renderSearchResults = function(req, res) {
 // Private functions
 //
 function _renderSearchPage(req, res, params, tableData) {
+
     apiController.getSearchDatasetsUrl(params, function(searchDatasetsUrl) {
 
         apiController.getCategories(5, function(categoryResults) {
@@ -375,12 +378,12 @@ function _renderSearchPage(req, res, params, tableData) {
                             apiController.searchDatasets(
                                 params,
                                 function(results) {
+
                                     Peers.fromParams(params).then(peers => {
 
                                         res.render(
                                             'search.ejs',
                                             {
-                                                peers,
                                                 categoryResults : categoryResults,
                                                 css : [
                                                     '/styles/third-party/leaflet.min.css',
@@ -391,7 +394,9 @@ function _renderSearchPage(req, res, params, tableData) {
                                                 currentCategory : currentCategory,
                                                 currentTag : currentTag,
                                                 domainResults : domainResults,
+                                                metricSummary : metricsController.getMetricSummary(params, tableData),
                                                 params : params,
+                                                peers,
                                                 scripts : [
                                                     '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
                                                     '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
@@ -412,7 +417,6 @@ function _renderSearchPage(req, res, params, tableData) {
                                                 tableData : tableData || {},
                                                 title : getSearchPageTitle(params)
                                             });
-
                                     });
                                 },
                                 function() {
@@ -440,6 +444,7 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
         categories : categories,
         domains : domains,
         limit : defaultSearchResultCount,
+        metric : req.params.metric || '',
         offset : (page - 1) * defaultSearchResultCount,
         only : 'datasets',
         page : page,
@@ -448,6 +453,7 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
         resetRegions : false,
         tags : tags,
         vector : req.params.vector || '',
+        year : req.params.year || '',
     };
 
     // Debug
