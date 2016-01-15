@@ -12,9 +12,7 @@ class Relatives {
                 n: Constants.N_PEERS * 2
             });
 
-            getJSON(url).then(json => {
-                resolve(json.peers);
-            }, error => { reject(error); });
+            getJSON(url).then(json => resolve(json.peers), reject);
         });
     }
 
@@ -25,9 +23,7 @@ class Relatives {
                 '$order': 'parent_population DESC'
             });
 
-            getJSON(url).then(json => {
-                resolve(json.map(parseParent));
-            }, error => { reject(error); });
+            getJSON(url).then(json => resolve(json.map(parseParent)), reject);
         });
     }
 
@@ -46,9 +42,9 @@ class Relatives {
 
                     getJSON(url).then(json => {
                         resolve([parents[0], json.map(parseChild)]);
-                    }, error => { reject(error); });
+                    }, reject);
                 }
-            }, error => { reject(error); });
+            }, reject);
         });
     }
 }
@@ -66,7 +62,7 @@ function getJSON(url, timeoutMS) {
                     const json = JSON.parse(body);
                     cache.set(url, json);
                     resolve(json);
-                }, error => { reject(error); });
+                }, reject);
             } else {
                 resolve(value);
             }
@@ -81,7 +77,7 @@ function getJSON(url, timeoutMS) {
             } else {
                 resolve(result);
             }
-        }, error => { reject(error); });
+        }, reject);
     });
 }
 
