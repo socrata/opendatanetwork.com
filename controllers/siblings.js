@@ -3,6 +3,7 @@
 const request = require('request-promise');
 const _ = require('lodash');
 const NodeCache = require('node-cache');
+const Constants = require('./constants');
 
 const siblingCache = new NodeCache({stdTTL: 0});
 const parentCache = new NodeCache({stdTTL: 0});
@@ -41,7 +42,7 @@ class Siblings {
                     });
 
                     getJSON(url).then(json => {
-                        resolve([parents[0], json.map(parseChildren)]);
+                        resolve([parents[0], json.map(parseChild)]);
                     }, error => { reject(error); });
                 }
             }, error => { reject(error); });
@@ -54,7 +55,9 @@ class Siblings {
                 resolve([]);
             } else {
                 Siblings.getSiblings(params.regions[0], 5)
-                    .then(siblings => resolve(siblings))
+                    .then(siblings => {
+                        resolve(siblings);
+                    })
                     .catch(error => {
                         console.log('error getting siblings');
                         console.log(error);
@@ -66,9 +69,12 @@ class Siblings {
     }
 }
 
-function getJSON(url) {
-    console.log(url);
-    return new Promise((resolve, reject) => {
+
+function getJSON(url, timeoutMS) {
+    timeoutMS = timeoutMS || Constants.TIMEOUT_MS;
+    const timeoutPromise = timeout(timeoutMS);
+
+    const jsonPromise = new Promise((resolve, reject) => {
         cache.get(url, (error, value) => {
             if (value === undefined) {
                 request(url).then(body => {
@@ -80,6 +86,23 @@ function getJSON(url) {
                 resolve(value);
             }
         });
+    });
+
+    return new Promise((resolve, reject) => {
+        Promise.race([timeoutPromise, jsonPromise]).then(result => {
+            if (!result) {
+                console.warn(`request to ${url} timed out after ${timeoutMS}ms`);
+            }
+
+            result = result || [];
+            resolve(result);
+        }, error => { reject(error); });
+    });
+}
+
+function timeout(milliseconds) {
+    return new Promise(resolve => {
+        setTimeout(resolve, milliseconds);
     });
 }
 

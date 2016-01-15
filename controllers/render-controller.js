@@ -354,19 +354,12 @@ RenderController.prototype.renderSearchResults = function(req, res) {
 // Private functions
 //
 
-function timeout(milliseconds) {
-    return new Promise(resolve => {
-        setTimeout(resolve, milliseconds);
-    });
-}
 
 
 function _renderSearchPage(req, res, params, tableData) {
     const peersPromise = Peers.fromParams(params);
     const siblingsPromise = Siblings.fromParams(params);
-    const dataPromise = Promise.all([peersPromise, siblingsPromise]);
-    const timeoutPromise = timeout(Constants.TIMEOUT_MS);
-    const allPromise = Promise.race([dataPromise, timeoutPromise]);
+    const allPromise = Promise.all([peersPromise, siblingsPromise]);
 
     apiController.getSearchDatasetsUrl(params, function(searchDatasetsUrl) {
 
@@ -394,24 +387,16 @@ function _renderSearchPage(req, res, params, tableData) {
                                 params,
                                 function(results) {
                                     allPromise.then(data => {
-                                        if (!data) {
-                                            console.log(`timeout getting data for ${req.path}`);
-                                        }
-
-                                        const peers = data ? data[0] : [];
-                                        const parentRegion = data ? data[1][0] : [];
-                                        const siblings = data ? data[1][1] : [];
-
                                         const templateParams = {
-                                            peers,
-                                            parentRegion,
-                                            siblings,
                                             categoryResults,
                                             currentCategory,
                                             currentTag,
                                             domainResults,
                                             params,
                                             searchDatasetsUrl,
+                                            peers: data[0],
+                                            parentRegion: data[1][0],
+                                            siblings: data[1][1],
                                             searchPath : req.path,
                                             searchResults : results,
                                             sources : sources.forRegions(params.regions),
@@ -439,6 +424,9 @@ function _renderSearchPage(req, res, params, tableData) {
                                         };
 
                                         res.render('search.ejs', templateParams);
+                                    }, error => {
+                                        console.log('error');
+                                        renderErrorPage(req, res);
                                     });
                                 },
                                 function() {
