@@ -6,7 +6,8 @@ const LocationsController = require('./locations-controller');
 const MetricsController = require('./metrics-controller');
 const TagController = require('./tag-controller');
 const Sources = require('./sources');
-const Peers = require('./peers');
+const Relatives = require('./relatives');
+const Constants = require('./constants');
 
 const _ = require('lodash');
 const htmlencode = require('htmlencode');
@@ -349,9 +350,56 @@ RenderController.prototype.renderSearchResults = function(req, res) {
     });
 };
 
+
+
 // Private functions
 //
+
+
+
 function _renderSearchPage(req, res, params, tableData) {
+    function forRegion(regionPromise) {
+        return new Promise(resolve => {
+            if (params.regions.length === 0) {
+                resolve([]);
+            } else {
+                regionPromise(params.regions[0]).then(result => {
+                    if (!result) {
+                        resolve([]);
+                    } else {
+                        resolve(result);
+                    }
+                }, error => {
+                    console.warn('error rendering search page');
+                    console.warn(error);
+                    console.warn(error.stack);
+                    resolve([]);
+                });
+            }
+        });
+    }
+
+    const peersPromise = forRegion(Relatives.peers);
+    const siblingsPromise = forRegion(Relatives.siblings);
+    const allPromise = Promise.all([peersPromise, siblingsPromise]);
+
+    const uids = params.regions.map(region => region.id);
+    const names = params.regions.map(region => region.name);
+
+    function processRegions(regions) {
+        return regions.filter(region => {
+            return !_.contains(uids, region.id);
+        }).slice(0, Constants.N_RELATIVES).map(region => {
+            const encode = name => name.replace(/,/g, '').replace(/ /g, '_');
+            const navigateURL = `/region/${region.id}/${encode(region.name)}`;
+
+            const uidString = uids.concat(region.id).join('-');
+            const nameString = names.concat(region.name).map(encode).join('-');
+            const addURL = `/region/${uidString}/${nameString}/${params.vector}`;
+
+            return _.extend({}, region, {addURL, navigateURL});
+        });
+    }
 
     apiController.getSearchDatasetsUrl(params, function(searchDatasetsUrl) {
 
@@ -378,49 +426,59 @@ function _renderSearchPage(req, res, params, tableData) {
                             apiController.searchDatasets(
                                 params,
                                 function(results) {
+                                    allPromise.then(data => {
+                                        const templateParams = {
+                                            categoryResults,
+                                            currentCategory,
+                                            currentTag,
+                                            domainResults,
+                                            params,
+                                            mapSummary : metricsController.getMapSummary(params, tableData),
+                                            mapSummaryLinks : metricsController.getMapSummaryLinks(params),
+                                            searchDatasetsUrl,
+                                            searchPath : req.path,
+                                            searchResults : results,
+                                            sources : sources.forRegions(params.regions),
+                                            tableData : tableData || {},
+                                            title : getSearchPageTitle(params),
+                                            css : [
+                                                '/styles/third-party/leaflet.min.css',
+                                                '/styles/search.css',
+                                                '/styles/maps.css',
+                                                '/styles/main.css'
+                                            ],
+                                            scripts : [
+                                                '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
+                                                '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
+                                                '/lib/third-party/leaflet/leaflet.min.js',
+                                                '/lib/third-party/leaflet/leaflet-omnivore.min.js',
+                                                '/lib/third-party/browser-polyfill.min.js',
+                                                '/lib/third-party/colorbrewer.min.js',
+                                                '/lib/third-party/d3.min.js',
+                                                '/lib/third-party/d3.promise.min.js',
+                                                '/lib/third-party/leaflet-omnivore.min.js',
+                                                '/lib/third-party/lodash.min.js',
+                                                '/lib/search.min.js'
+                                            ]
+                                        };
 
-                                    Peers.fromParams(params).then(peers => {
+                                        if (data && data.length == 2) {
+                                            if (data[0].length > 0) {
+                                                templateParams.peers = processRegions(data[0]);
+                                            }
 
-                                        res.render(
-                                            'search.ejs',
-                                            {
-                                                categoryResults : categoryResults,
-                                                css : [
-                                                    '/styles/third-party/leaflet.min.css',
-                                                    '/styles/search.css',
-                                                    '/styles/maps.css',
-                                                    '/styles/main.css'
-                                                ],
-                                                currentCategory : currentCategory,
-                                                currentTag : currentTag,
-                                                domainResults : domainResults,
-                                                metricSummary : metricsController.getMetricSummary(params, tableData),
-                                                params : params,
-                                                peers,
-                                                scripts : [
-                                                    '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
-                                                    '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
-                                                    '/lib/third-party/leaflet/leaflet.min.js',
-                                                    '/lib/third-party/leaflet/leaflet-omnivore.min.js',
-                                                    '/lib/third-party/browser-polyfill.min.js',
-                                                    '/lib/third-party/colorbrewer.min.js',
-                                                    '/lib/third-party/d3.min.js',
-                                                    '/lib/third-party/d3.promise.min.js',
-                                                    '/lib/third-party/leaflet-omnivore.min.js',
-                                                    '/lib/third-party/lodash.min.js',
-                                                    '/lib/search.min.js'
-                                                ],
-                                                searchDatasetsUrl : searchDatasetsUrl,
-                                                searchPath : req.path,
-                                                searchResults : results,
-                                                sources : sources.forRegions(params.regions),
-                                                tableData : tableData || {},
-                                                title : getSearchPageTitle(params)
-                                            });
+                                            if (data[1].length == 2 && data[1][1].length > 0) {
+                                                templateParams.parentRegion = processRegions([data[1][0]])[0];
+                                                templateParams.siblings = processRegions(data[1][1]);
+                                            }
+                                        }
+
+                                        res.render('search.ejs', templateParams);
+                                    }, error => {
+                                        renderErrorPage(req, res);
                                     });
                                 },
                                 function() {
-
                                     renderErrorPage(req, res);
                                 });
                         });

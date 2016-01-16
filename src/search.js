@@ -11,17 +11,17 @@ $(document).ready(function() {
 
     // Selected category (yellow box)
     //
-    $('.fa-close').click(function() {
+    $('.fa-close').click(() => {
         $('.current-category').fadeOut();
     });
 
     // Tooltip
     //
-    $('.info-icon').mouseenter(function() {
+    $('.info-icon').mouseenter(() => {
         $('.info-tooltip').fadeIn();
     });
 
-    $('.info-icon').mouseleave(function() {
+    $('.info-icon').mouseleave(() => {
         $('.info-tooltip').fadeOut();
     });
 });

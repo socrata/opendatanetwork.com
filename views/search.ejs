@@ -105,14 +105,40 @@ var _tableData = <%- JSON.stringify(tableData) %>;
                 <i class="fa fa-plus"></i><input class="add-region-input" type="text" placeholder="Add Location">
                 <ul class="add-region-results" style="display: none;"></ul>
             </div>
-            <% if (peers.length > 0) { %>
+            <% if (typeof peers != 'undefined' && peers.length > 0) { %>
                 <ul id="similar-regions">
                 <% peers.forEach(function(region) { %>
-                    <li><a href=<%= region.url %>><%= region.name %> <i class="fa fa-plus"></i></a></li>
+                    <li><a href=<%= region.addURL %>><%= region.name %> <i class="fa fa-plus"></i></a></li>
                 <% }); %>
                 </ul>
             <% } %>
-            <h3 id="places-in-region-header-0" class="places-in-region-header" style="display:none"></h3>
+
+            <% if (typeof siblings != 'undefined' && siblings.length > 0) { %>
+                <%
+                const TYPE_NAMES = {
+                    nation: 'Nations',
+                    region: 'Regions',
+                    division: 'Divisions',
+                    state: 'States',
+                    county: 'Counties',
+                    place: 'Places',
+                    msa: 'Metro Areas',
+                    zip_code: 'ZIP Codes'
+                };
+                %>
+
+                <h2 class="places-in-region-header">
+                    Other <%= TYPE_NAMES[params.regions[0].type] %> in
+                    <a href="<%= parentRegion.navigateURL %>"><%= parentRegion.name %></a>
+                </h2>
+
+                <ul class="places-in-region-list">
+                    <% siblings.forEach(function(region) { %>
+                        <li><a href="<%= region.navigateURL %>"><%= region.name %></a></li>
+                    <% }); %>
+                </ul>
+            <% } %>
+            <h2 id="places-in-region-header-0" class="places-in-region-header" style="display:none"></h2>
             <ul id="places-in-region-list-0" class="places-in-region-list" style="display:none"></ul>
             <h3 id="places-in-region-header-1" class="places-in-region-header" style="display:none"></h3>
             <ul id="places-in-region-list-1" class="places-in-region-list" style="display:none"></ul>
@@ -139,8 +165,8 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% if ((params.vector == '') || (params.vector == 'population')) { %>
 
             <div id="map"></div>
+<% include _map-summary %>
             <h1>Population</h1>
-            <p id="map-summary"><%= metricSummary %></p>
             <figure id="population-chart"></figure>
             <h1>Population Change</h1>
             <figure id="population-change-chart"></figure>
@@ -151,8 +177,8 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'earnings') { %>
 
             <div id="map"></div>
+<% include _map-summary %>
             <h1>Earnings</h1>
-            <p id="map-summary"><%= metricSummary %></p>
             <div id="earnings-table-container">
 <% include _earnings-table %>
             </div>
@@ -164,8 +190,8 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'education') { %>
 
             <div id="map"></div>
+<% include _map-summary %>
             <h1>Education</h1>
-            <p id="map-summary"><%= metricSummary %></p>
             <div id="education-table-container">
 <% include _education-table %>
             </div>
@@ -176,8 +202,8 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'occupations') { %>
 
             <div id="map"></div>
+<% include _map-summary %>
             <h1>Occupations</h1>
-            <p id="map-summary"><%= metricSummary %></p>
             <div id="occupations-table-container">
 <% include _occupations-table %>
             </div>
@@ -188,8 +214,8 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'gdp') { %>
 
             <div id="map"></div>
+<% include _map-summary %>
             <h1>GDP</h1>
-            <p id="map-summary"><%= metricSummary %></p>
             <figure id="per-capita-gdp-chart"></figure>
             <figure id="per-capita-gdp-change-chart"></figure>
             <label>
@@ -199,8 +225,8 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'health') { %>
 
             <div id="map"></div>
+<% include _map-summary %>
             <h1>Health</h1>
-            <p id="map-summary"><%= metricSummary %></p>
             <h2>RWJF County Health Rankings</h2>
             <p>
                 The Robert Wood Johnson Foundation produces health rankings for states and counties.
@@ -231,8 +257,8 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'cost_of_living') { %>
 
             <div id="map"></div>
+<% include _map-summary %>
             <h1>Cost of Living</h1>
-            <p id="map-summary"><%= metricSummary %></p>
             <div id="cost-of-living-table-container">
 <% include _cost-of-living-table %>
             </div>
@@ -251,7 +277,6 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } %>
 
         </div>
-
     </div>
 
 <% if (searchResults.results.length > 0) { %>

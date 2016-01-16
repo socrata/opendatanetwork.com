@@ -130,10 +130,6 @@ class SearchPageController {
             $('.add-region input[type="text"]').focus();
         });
 
-        // Places in region
-        //
-        this.drawPlacesInRegion();
-
         // Chart column
         //
         if (this.params.regions.length > 0) {
@@ -150,6 +146,14 @@ class SearchPageController {
                 default: this.drawPopulationData(); break;
             }
         }
+
+        // Map summary
+        //
+        $('.map-summary-more').click(() => {
+
+            $('.map-summary-links').slideToggle(100);
+            $('.map-summary-more').text($('.map-summary-more').text() == 'More Information' ? 'Hide Information' : 'More Information');
+        })
 
         // Resize / redraw event handlers
         //
@@ -219,7 +223,7 @@ class SearchPageController {
     //
     drawCostOfLivingData() {
 
-        this.drawMap(MapSources.rpp, (variable, year) => this.drawCostOfLivingMapSummary(variable, year));
+        this.drawMap(MapSources.rpp);
         this.drawCostOfLivingChart();
         this.drawCostOfLivingTable();
     }
@@ -441,7 +445,7 @@ class SearchPageController {
     //
     drawEarningsData() {
 
-        this.drawMap(MapSources.earnings, (variable, year) => this.drawEarningsMapSummary(variable, year));
+        this.drawMap(MapSources.earnings);
         this.drawEarningsChart();
         this.drawEarningsTable();
     }
@@ -635,7 +639,7 @@ class SearchPageController {
     //
     drawHealthData() {
 
-        this.drawMap(MapSources.health, (variable, year) => this.drawHealthMapSummary(variable, year));
+        this.drawMap(MapSources.health);
         this.drawHealthTables();
     }
 
@@ -1095,7 +1099,7 @@ class SearchPageController {
     //
     drawEducationData() {
 
-        this.drawMap(MapSources.education, (variable, year) => this.drawEducationMapSummary(variable, year));
+        this.drawMap(MapSources.education);
         this.drawEducationTable();
     }
 
@@ -1232,7 +1236,7 @@ class SearchPageController {
     //
     drawGdpData() {
 
-        this.drawMap(MapSources.gdp, (variable, year) => this.drawGdpMapSummary(variable, year));
+        this.drawMap(MapSources.gdp);
         this.drawGdpChart();
         this.drawGdpChangeChart();
 
@@ -1364,7 +1368,7 @@ class SearchPageController {
     //
     drawOccupationsData() {
 
-        this.drawMap(MapSources.occupations, (variable, year) => this.drawOccupationsMapSummary(variable, year));
+        this.drawMap(MapSources.occupations);
     }
 
     drawOccupationsMapSummary(variable, year) {
@@ -1382,7 +1386,7 @@ class SearchPageController {
     //
     drawPopulationData() {
 
-        this.drawMap(MapSources.population, (variable, year) => this.drawPopulationMapSummary(variable, year));
+        this.drawMap(MapSources.population);
         this.drawPopulationChart();
         this.drawPopulationChangeChart();
     }
@@ -1515,207 +1519,6 @@ class SearchPageController {
             o.show();
 
         return o.hasClass(orientation);
-    }
-
-    // Places in region
-    //
-    drawPlacesInRegion() {
-
-        if (this.params.regions.length == 0)
-            return;
-
-        const region = this.params.regions[0];
-
-        switch (region.type) {
-
-            case 'nation': this.drawChildPlacesInRegion(region, 'Regions in {0}'.format(region.name)); break;
-            case 'region': this.drawChildPlacesInRegion(region, 'Divisions in {0}'.format(region.name)); break;
-            case 'division': this.drawChildPlacesInRegion(region, 'States in {0}'.format(region.name)); break;
-            case 'state': this.drawCitiesAndCountiesInState(region); break;
-            case 'county': this.drawOtherCountiesInState(region); break;
-            case 'msa': this.drawOtherMetrosInState(region); break;
-            case 'place': this.drawOtherCitiesInState(region); break;
-        }
-    }
-
-    drawChildPlacesInRegion(region, label) {
-
-        const controller = new ApiController();
-
-        controller.getChildRegions(region.id)
-            .then(response => {
-
-                this.drawPlacesInRegionHeader('#places-in-region-header-0', label);
-                this.drawPlacesInRegionList('#places-in-region-list-0', response);
-            })
-            .catch(error => console.error(error));
-    }
-
-    drawCitiesAndCountiesInState(region) {
-
-        const controller = new ApiController();
-        const citiesPromise = controller.getCitiesInState(region.id);
-        const countiesPromise = controller.getCountiesInState(region.id);
-
-        return Promise.all([citiesPromise, countiesPromise])
-            .then(values => {
-
-                if (values.length == 0)
-                    return;
-
-                if (values[0].length > 0) {
-
-                    this.drawPlacesInRegionHeader('#places-in-region-header-0', 'Places in {0}'.format(region.name));
-                    this.drawPlacesInRegionList('#places-in-region-list-0', values[0]);
-                }
-
-                if (values[1].length > 0) {
-
-                    this.drawPlacesInRegionHeader('#places-in-region-header-1', 'Counties in {0}'.format(region.name));
-                    this.drawPlacesInRegionList('#places-in-region-list-1', values[1]);
-                }
-            })
-            .catch(error => console.error(error));
-    }
-
-    drawOtherCitiesInState(region) {
-
-        const controller = new ApiController();
-
-        controller.getParentState(region)
-            .then(response => {
-
-                if (response.length == 0)
-                    return;
-
-                const state = response[0];
-
-                controller.getCitiesInState(state.parent_id)
-                    .then(response => {
-
-                        if (response.length == 0)
-                            return;
-
-                        this.drawPlacesInRegionHeader('#places-in-region-header-0', 'Places in {0}'.format(state.parent_name));
-                        this.drawPlacesInRegionList('#places-in-region-list-0', response);
-                    })
-                    .catch(error => console.error(error));
-            });
-    }
-
-    drawOtherCountiesInState(region) {
-
-        const controller = new ApiController();
-
-        controller.getParentState(region)
-            .then(response => {
-
-                if (response.length == 0)
-                    return;
-
-                const state = response[0];
-
-                controller.getCountiesInState(state.parent_id)
-                    .then(response => {
-
-                        if (response.length == 0)
-                            return;
-
-                        this.drawPlacesInRegionHeader('#places-in-region-header-0', 'Counties in {0}'.format(state.parent_name));
-                        this.drawPlacesInRegionList('#places-in-region-list-0', response);
-                    })
-                    .catch(error => console.error(error));
-            });
-    }
-
-    drawOtherMetrosInState(region) {
-
-        const controller = new ApiController();
-
-        controller.getParentState(region)
-            .then(response => {
-
-                if (response.length == 0)
-                    return;
-
-                const state = response[0];
-
-                controller.getMetrosInState(state.parent_id)
-                    .then(response => {
-
-                        if (response.length == 0)
-                            return;
-
-                        this.drawPlacesInRegionHeader('#places-in-region-header-0', 'Metropolitan Areas in {0}'.format(state.parent_name));
-                        this.drawPlacesInRegionList('#places-in-region-list-0', response);
-                    })
-                    .catch(error => console.error(error));
-            });
-    }
-
-    removeCurrentRegions(regions, maxCount = 5) {
-
-        var count = 0;
-        var rg = [];
-
-        for (var i = 0; i < regions.length; i++) {
-
-            if (this.isRegionIdContainedInCurrentRegions(regions[i].child_id))
-                continue;
-
-            rg.push(regions[i]);
-
-            if (count == (maxCount - 1))
-                break;
-
-            count++;
-        }
-
-        return rg;
-    }
-
-    drawPlacesInRegionHeader(headerId, label) {
-
-        $(headerId).text(label).slideToggle(100);
-    }
-
-    drawPlacesInRegionList(listId, data, maxCount = 5) {
-
-        if (data.length == 0)
-            return;
-
-        var count = 0;
-        var s = '';
-
-        for (var i = 0; i < data.length; i++) {
-
-            if (this.isRegionIdContainedInCurrentRegions(data[i].child_id))
-                continue;
-
-            s += '<li><a href="';
-            s += this.getSearchPageForRegionsAndVectorUrl([data[i].child_id], [data[i].child_name]) + '">';
-            s += data[i].child_name;
-            s += '</a></li>';
-
-            if (count == (maxCount - 1))
-                break;
-
-            count++;
-        }
-
-        $(listId).html(s);
-        $(listId).slideToggle(100);
-    }
-
-    isRegionIdContainedInCurrentRegions(regionId) {
-
-        for (var j = 0; j < this.params.regions.length; j++) {
-
-            if (regionId == this.params.regions[j].id)
-                return true;
-        }
-
-        return false;
     }
 
     // Draw charts
