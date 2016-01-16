@@ -47,7 +47,7 @@ class Request {
     }
 
     static buildURL(path, params) {
-        const validParams = _.omit(params, _.isEmpty);
+        const validParams = _.omit(params, param => param == []);
         const paramString = querystring.stringify(validParams);
         return `${path}${path[path.length - 1] == '?' ? '' : '?'}${paramString}`;
     }
