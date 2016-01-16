@@ -410,13 +410,9 @@ function _renderSearchPage(req, res, params, tableData) {
                          datasetsPromise];
     const allPromise = Promise.all(allPromises);
 
-    console.log('start');
-    console.time('request');
     const searchDatasetsURL = API.searchDatasetsURL(params);
 
     allPromise.then(data => {
-        console.log('done');
-        console.timeEnd('request');
         const templateParams = {
             params,
             searchDatasetsURL,

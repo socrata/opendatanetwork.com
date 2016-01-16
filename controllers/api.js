@@ -18,8 +18,8 @@ const SYNONYMS = Synonyms.fromFile(Constants.SYNONYMS_FILE);
 class API {
     static datasets(requestParams) {
         return new Promise((resolve, reject) => {
-            const url = API.searchDatasetsURL(requestParams);
-            console.log(url);
+            const limit = requestParams.regions.length > 0 ? 20 : 100;
+            const url = API.searchDatasetsURL(requestParams, limit);
             return Request.getJSON(url).then(results => {
                 annotateData(results);
                 annotateParams(results, requestParams);
@@ -29,7 +29,7 @@ class API {
         });
     }
 
-    static searchDatasetsURL(requestParams) {
+    static searchDatasetsURL(requestParams, limit) {
         const querySynonyms = SYNONYMS.get(requestParams.q);
         const vectorSynonyms = SYNONYMS.get(requestParams.vector.replace(/_/g, ' '));
         const synonyms = _.unique(_.flatten([querySynonyms, vectorSynonyms]));
