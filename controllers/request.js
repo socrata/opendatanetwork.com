@@ -3,6 +3,7 @@
 const _ = require('lodash');
 const NodeCache = require('node-cache');
 const request = require('request-promise');
+const querystring = require('querystring');
 
 const Constants = require('./constants');
 
@@ -46,8 +47,9 @@ class Request {
     }
 
     static buildURL(path, params) {
-        const pairs = _.map(_.keys(params), key => `${key}=${params[key]}`);
-        return `${path}${path[path.length - 1] == '?' ? '' : '?'}${pairs.join('&')}`;
+        const validParams = _.omit(params, _.isEmpty);
+        const paramString = querystring.stringify(validParams);
+        return `${path}${path[path.length - 1] == '?' ? '' : '?'}${paramString}`;
     }
 }
 

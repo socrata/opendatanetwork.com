@@ -1,5 +1,6 @@
 'use strict';
 
+const API = require('./api');
 const ApiController = require('./api-controller');
 const CategoryController = require('./category-controller');
 const LocationsController = require('./locations-controller');
@@ -403,88 +404,89 @@ function _renderSearchPage(req, res, params, tableData) {
     }
 
     console.time('request');
-    apiController.getSearchDatasetsUrl(params, function(searchDatasetsUrl) {
-        apiController.getCategories(5, function(categoryResults) {
-            categoryController.attachCategoryMetadata(categoryResults, function(categoryResults) {
-                // Get the current category
-                //
-                var currentCategory = categoryController.getCurrentCategory(params, categoryResults);
+    const searchDatasetsURL = API.searchDatasetsURL(params);
 
-                // Get all tags
-                //
-                apiController.getTagsAll(function(allTagResults) {
-                    tagController.attachTagMetadata(allTagResults, function(tagResults) {
 
-                        // Get the current tag
-                        //
-                        var currentTag = tagController.getCurrentTag(params, allTagResults);
+    apiController.getCategories(5, function(categoryResults) {
+        categoryController.attachCategoryMetadata(categoryResults, function(categoryResults) {
+            // Get the current category
+            //
+            var currentCategory = categoryController.getCurrentCategory(params, categoryResults);
 
-                        apiController.getDomains(5, function(domainResults) {
-                            apiController.searchDatasets(
-                                params,
-                                function(results) {
-                                    allPromise.then(data => {
-                                        console.timeEnd('request');
-                                        const templateParams = {
-                                            categoryResults,
-                                            currentCategory,
-                                            currentTag,
-                                            domainResults,
-                                            params,
-                                            mapSummary : metricsController.getMapSummary(params, tableData),
-                                            mapSummaryLinks : metricsController.getMapSummaryLinks(params),
-                                            searchDatasetsUrl,
-                                            searchPath : req.path,
-                                            searchResults : results,
-                                            sources : sources.forRegions(params.regions),
-                                            tableData : tableData || {},
-                                            title : getSearchPageTitle(params),
-                                            css : [
-                                                '/styles/third-party/leaflet.min.css',
-                                                '/styles/search.css',
-                                                '/styles/maps.css',
-                                                '/styles/main.css'
-                                            ],
-                                            scripts : [
-                                                '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
-                                                '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
-                                                '/lib/third-party/leaflet/leaflet.min.js',
-                                                '/lib/third-party/leaflet/leaflet-omnivore.min.js',
-                                                '/lib/third-party/browser-polyfill.min.js',
-                                                '/lib/third-party/colorbrewer.min.js',
-                                                '/lib/third-party/d3.min.js',
-                                                '/lib/third-party/d3.promise.min.js',
-                                                '/lib/third-party/leaflet-omnivore.min.js',
-                                                '/lib/third-party/lodash.min.js',
-                                                '/lib/search.min.js'
-                                            ]
-                                        };
+            // Get all tags
+            //
+            apiController.getTagsAll(function(allTagResults) {
+                tagController.attachTagMetadata(allTagResults, function(tagResults) {
 
-                                        if (data && data.length == 3) {
-                                            if (data[0].length > 0) {
-                                                templateParams.peers = processRegions(data[0]);
-                                            }
+                    // Get the current tag
+                    //
+                    var currentTag = tagController.getCurrentTag(params, allTagResults);
 
-                                            if (data[1].length == 2 && data[1][1].length > 0) {
-                                                templateParams.parentRegion = processRegions([data[1][0]])[0];
-                                                templateParams.siblings = processRegions(data[1][1]);
-                                            }
+                    apiController.getDomains(5, function(domainResults) {
+                        apiController.searchDatasets(
+                            params,
+                            function(results) {
+                                allPromise.then(data => {
+                                    console.timeEnd('request');
+                                    const templateParams = {
+                                        categoryResults,
+                                        currentCategory,
+                                        currentTag,
+                                        domainResults,
+                                        params,
+                                        mapSummary : metricsController.getMapSummary(params, tableData),
+                                        mapSummaryLinks : metricsController.getMapSummaryLinks(params),
+                                        searchDatasetsURL,
+                                        searchPath : req.path,
+                                        searchResults : results,
+                                        sources : sources.forRegions(params.regions),
+                                        tableData : tableData || {},
+                                        title : getSearchPageTitle(params),
+                                        css : [
+                                            '/styles/third-party/leaflet.min.css',
+                                            '/styles/search.css',
+                                            '/styles/maps.css',
+                                            '/styles/main.css'
+                                        ],
+                                        scripts : [
+                                            '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
+                                            '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
+                                            '/lib/third-party/leaflet/leaflet.min.js',
+                                            '/lib/third-party/leaflet/leaflet-omnivore.min.js',
+                                            '/lib/third-party/browser-polyfill.min.js',
+                                            '/lib/third-party/colorbrewer.min.js',
+                                            '/lib/third-party/d3.min.js',
+                                            '/lib/third-party/d3.promise.min.js',
+                                            '/lib/third-party/leaflet-omnivore.min.js',
+                                            '/lib/third-party/lodash.min.js',
+                                            '/lib/search.min.js'
+                                        ]
+                                    };
 
-                                            if (data[2].length > 0) {
-                                                templateParams.allChildren =
-                                                    data[2].map(children => processRegions(children));
-                                            }
+                                    if (data && data.length == 3) {
+                                        if (data[0].length > 0) {
+                                            templateParams.peers = processRegions(data[0]);
                                         }
 
-                                        res.render('search.ejs', templateParams);
-                                    }, error => {
-                                        renderErrorPage(req, res);
-                                    });
-                                },
-                                function() {
+                                        if (data[1].length == 2 && data[1][1].length > 0) {
+                                            templateParams.parentRegion = processRegions([data[1][0]])[0];
+                                            templateParams.siblings = processRegions(data[1][1]);
+                                        }
+
+                                        if (data[2].length > 0) {
+                                            templateParams.allChildren =
+                                                data[2].map(children => processRegions(children));
+                                        }
+                                    }
+
+                                    res.render('search.ejs', templateParams);
+                                }, error => {
                                     renderErrorPage(req, res);
                                 });
-                        });
+                            },
+                            function() {
+                                renderErrorPage(req, res);
+                            });
                     });
                 });
             });

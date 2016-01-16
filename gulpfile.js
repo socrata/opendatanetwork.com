@@ -35,7 +35,7 @@ var mapScripts = [
 ];
 
 var mapSummaryScripts = [
-    'src/map-summary-formatters.js', 
+    'src/map-summary-formatters.js',
     'src/map-summary.js'
 ];
 
@@ -101,7 +101,8 @@ gulp.task('watch', ['build'], function() {
 gulp.task('start', function() {
     return nodemon({
         script: 'app.js',
-        watch: ['lib/', 'styles/compressed/', 'controllers/', 'data/']
+        watch: ['lib/', 'styles/compressed/', 'controllers/', 'data/'],
+        harmony_destructuring: true
     });
 });
 

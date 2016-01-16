@@ -189,11 +189,11 @@ ApiController.prototype.getSearchDatasetsUrl = function(requestParams, completio
 ApiController.prototype.getTags = function(count, successHandler, errorHandler) {
 
     getFromCacheOrApi(
-        tagsUrl, 
-        function(results) { 
+        tagsUrl,
+        function(results) {
 
             truncateResults(count, results);
-            if (successHandler) successHandler(results); 
+            if (successHandler) successHandler(results);
         },
         errorHandler);
 };
