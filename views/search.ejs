@@ -165,8 +165,8 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% if ((params.vector == '') || (params.vector == 'population')) { %>
 
             <div id="map"></div>
+<% include _map-summary %>
             <h1>Population</h1>
-            <p id="map-summary"><%= metricSummary %></p>
             <figure id="population-chart"></figure>
             <h1>Population Change</h1>
             <figure id="population-change-chart"></figure>
@@ -177,8 +177,8 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'earnings') { %>
 
             <div id="map"></div>
+<% include _map-summary %>
             <h1>Earnings</h1>
-            <p id="map-summary"><%= metricSummary %></p>
             <div id="earnings-table-container">
 <% include _earnings-table %>
             </div>
@@ -190,8 +190,8 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'education') { %>
 
             <div id="map"></div>
+<% include _map-summary %>
             <h1>Education</h1>
-            <p id="map-summary"><%= metricSummary %></p>
             <div id="education-table-container">
 <% include _education-table %>
             </div>
@@ -202,8 +202,8 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'occupations') { %>
 
             <div id="map"></div>
+<% include _map-summary %>
             <h1>Occupations</h1>
-            <p id="map-summary"><%= metricSummary %></p>
             <div id="occupations-table-container">
 <% include _occupations-table %>
             </div>
@@ -214,8 +214,8 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'gdp') { %>
 
             <div id="map"></div>
+<% include _map-summary %>
             <h1>GDP</h1>
-            <p id="map-summary"><%= metricSummary %></p>
             <figure id="per-capita-gdp-chart"></figure>
             <figure id="per-capita-gdp-change-chart"></figure>
             <label>
@@ -225,8 +225,8 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'health') { %>
 
             <div id="map"></div>
+<% include _map-summary %>
             <h1>Health</h1>
-            <p id="map-summary"><%= metricSummary %></p>
             <h2>RWJF County Health Rankings</h2>
             <p>
                 The Robert Wood Johnson Foundation produces health rankings for states and counties.
@@ -257,8 +257,8 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } else if (params.vector == 'cost_of_living') { %>
 
             <div id="map"></div>
+<% include _map-summary %>
             <h1>Cost of Living</h1>
-            <p id="map-summary"><%= metricSummary %></p>
             <div id="cost-of-living-table-container">
 <% include _cost-of-living-table %>
             </div>
@@ -277,7 +277,6 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 <% } %>
 
         </div>
-
     </div>
 
 <% if (searchResults.results.length > 0) { %>

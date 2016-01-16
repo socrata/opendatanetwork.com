@@ -147,6 +147,14 @@ class SearchPageController {
             }
         }
 
+        // Map summary
+        //
+        $('.map-summary-more').click(() => {
+
+            $('.map-summary-links').slideToggle(100);
+            $('.map-summary-more').text($('.map-summary-more').text() == 'More Information' ? 'Hide Information' : 'More Information');
+        })
+
         // Resize / redraw event handlers
         //
         $(window).resize(() => {
@@ -215,7 +223,7 @@ class SearchPageController {
     //
     drawCostOfLivingData() {
 
-        this.drawMap(MapSources.rpp, (variable, year) => this.drawCostOfLivingMapSummary(variable, year));
+        this.drawMap(MapSources.rpp);
         this.drawCostOfLivingChart();
         this.drawCostOfLivingTable();
     }
@@ -437,7 +445,7 @@ class SearchPageController {
     //
     drawEarningsData() {
 
-        this.drawMap(MapSources.earnings, (variable, year) => this.drawEarningsMapSummary(variable, year));
+        this.drawMap(MapSources.earnings);
         this.drawEarningsChart();
         this.drawEarningsTable();
     }
@@ -631,7 +639,7 @@ class SearchPageController {
     //
     drawHealthData() {
 
-        this.drawMap(MapSources.health, (variable, year) => this.drawHealthMapSummary(variable, year));
+        this.drawMap(MapSources.health);
         this.drawHealthTables();
     }
 
@@ -1091,7 +1099,7 @@ class SearchPageController {
     //
     drawEducationData() {
 
-        this.drawMap(MapSources.education, (variable, year) => this.drawEducationMapSummary(variable, year));
+        this.drawMap(MapSources.education);
         this.drawEducationTable();
     }
 
@@ -1228,7 +1236,7 @@ class SearchPageController {
     //
     drawGdpData() {
 
-        this.drawMap(MapSources.gdp, (variable, year) => this.drawGdpMapSummary(variable, year));
+        this.drawMap(MapSources.gdp);
         this.drawGdpChart();
         this.drawGdpChangeChart();
 
@@ -1360,7 +1368,7 @@ class SearchPageController {
     //
     drawOccupationsData() {
 
-        this.drawMap(MapSources.occupations, (variable, year) => this.drawOccupationsMapSummary(variable, year));
+        this.drawMap(MapSources.occupations);
     }
 
     drawOccupationsMapSummary(variable, year) {
@@ -1378,7 +1386,7 @@ class SearchPageController {
     //
     drawPopulationData() {
 
-        this.drawMap(MapSources.population, (variable, year) => this.drawPopulationMapSummary(variable, year));
+        this.drawMap(MapSources.population);
         this.drawPopulationChart();
         this.drawPopulationChangeChart();
     }
