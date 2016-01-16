@@ -170,7 +170,7 @@ class SearchPageController {
         const regions = this.params.regions;
 
         MapView.create(source, regions, onDisplay)
-            .then(view => view.show(selector), error => { throw error; });
+            .then(view => view.show(selector), error => console.warn(error));
     }
 
     attachCategoriesClickHandlers() {
