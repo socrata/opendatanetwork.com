@@ -402,12 +402,10 @@ function _renderSearchPage(req, res, params, tableData) {
         });
     }
 
+    console.time('request');
     apiController.getSearchDatasetsUrl(params, function(searchDatasetsUrl) {
-
         apiController.getCategories(5, function(categoryResults) {
-
             categoryController.attachCategoryMetadata(categoryResults, function(categoryResults) {
-
                 // Get the current category
                 //
                 var currentCategory = categoryController.getCurrentCategory(params, categoryResults);
@@ -415,7 +413,6 @@ function _renderSearchPage(req, res, params, tableData) {
                 // Get all tags
                 //
                 apiController.getTagsAll(function(allTagResults) {
-
                     tagController.attachTagMetadata(allTagResults, function(tagResults) {
 
                         // Get the current tag
@@ -423,11 +420,11 @@ function _renderSearchPage(req, res, params, tableData) {
                         var currentTag = tagController.getCurrentTag(params, allTagResults);
 
                         apiController.getDomains(5, function(domainResults) {
-
                             apiController.searchDatasets(
                                 params,
                                 function(results) {
                                     allPromise.then(data => {
+                                        console.timeEnd('request');
                                         const templateParams = {
                                             categoryResults,
                                             currentCategory,
