@@ -9,7 +9,7 @@ const Constants = {
     RELATIVES_URL: 'https://odn.data.socrata.com/resource/iv2c-wasz.json',
     N_RELATIVES: 5,
 
-    TIMEOUT_MS: 500
+    TIMEOUT_MS: 2000
 };
 
 module.exports = Constants;
