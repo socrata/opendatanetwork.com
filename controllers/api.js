@@ -5,6 +5,9 @@ const _ = require('lodash');
 const Synonyms = require('./synonyms');
 const Request = require('./request');
 const Constants = require('./constants');
+const CategoryController = require('./category-controller');
+
+const categoryController = new CategoryController();
 
 const SYNONYMS = Synonyms.fromFile(Constants.SYNONYMS_FILE);
 
@@ -40,6 +43,17 @@ class API {
 
         const params = {categories, domains, tags, q_internal: query};
         return Request.buildURL(Constants.CATALOG_URL, params);
+    }
+
+    static categories(n) {
+        return new Promise((resolve, reject) => {
+            Request.getJSON(`${Constants.CATALOG_URL}/categories`).then(response => {
+                response.results = response.results.slice(0, n);
+                categoryController.attachCategoryMetadata(response, response => {
+                    resolve(response.results);
+                });
+            }, reject);
+        });
     }
 }
 

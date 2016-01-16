@@ -13,7 +13,6 @@ function CategoryController() {
 // Public methods
 //
 CategoryController.prototype.attachCategoryMetadata = function(categories, completionHandler) {
-
     this.getCategoryMetadata(function(metadata) {
 
         attachMetadata(categories, metadata);
@@ -45,7 +44,7 @@ CategoryController.prototype.getCategoryMetadata = function(completionHandler) {
         }
 
         if (completionHandler) completionHandler(o);
-    });  
+    });
 };
 
 CategoryController.prototype.getCurrentCategory = function(params, categoryResults) {

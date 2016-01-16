@@ -118,7 +118,6 @@ ApiController.prototype.getCategories = function(count, successHandler, errorHan
     getFromCacheOrApi(
         categoriesUrl,
         function(results) {
-
             truncateResults(count, results);
             if (successHandler) successHandler(results);
         },

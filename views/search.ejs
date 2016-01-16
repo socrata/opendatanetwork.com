@@ -30,9 +30,11 @@ var _tableData = <%- JSON.stringify(tableData) %>;
     <a class="refine-link">
         <span>Categories<i class="fa fa-caret-down"></i></span>
         <ul id="refine-menu-categories" style="display:none">
-          <% categoryResults.results.forEach(function(result) { %>
-            <li><i class="fa <%= result.metadata.icon %>"></i><%= result.category %></li>
-          <% }); %>
+        <% if (typeof categories != 'undefined' && categories.length > 0) { %>
+            <% categories.forEach(function(category) { %>
+                <li><i class="fa <%= category.metadata.icon %>"></i><%= category.category %></li>
+           <% }); %>
+       <% } %>
             <li id="refine-menu-categories-view-more" class="refine-view-more">View More...</li>
         </ul>
     </a>
