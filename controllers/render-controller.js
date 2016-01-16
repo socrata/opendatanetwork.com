@@ -402,7 +402,9 @@ function _renderSearchPage(req, res, params, tableData) {
     const siblingsPromise = forRegion(Relatives.siblings);
     const childrenPromise = forRegion(Relatives.children);
     const categoriesPromise = API.categories(5);
-    const allPromises = [peersPromise, siblingsPromise, childrenPromise, categoriesPromise];
+    const tagsPromise = API.tags();
+    const allPromises = [peersPromise, siblingsPromise, childrenPromise,
+                         categoriesPromise, tagsPromise];
     const allPromise = Promise.all(allPromises);
 
     console.log('start');
@@ -410,92 +412,90 @@ function _renderSearchPage(req, res, params, tableData) {
     const searchDatasetsURL = API.searchDatasetsURL(params);
 
 
-    // Get all tags
+    // Get the current tag
     //
-    apiController.getTagsAll(function(allTagResults) {
-        tagController.attachTagMetadata(allTagResults, function(tagResults) {
+    console.log('tags')
+    console.timeEnd('request');
 
-            // Get the current tag
-            //
-            var currentTag = tagController.getCurrentTag(params, allTagResults);
-            console.log('tags')
+    apiController.getDomains(5, function(domainResults) {
+        console.log('domains');
+        console.timeEnd('request');
+        apiController.searchDatasets(
+            params,
+            function(results) {
+                console.log('datasets');
                 console.timeEnd('request');
+                allPromise.then(data => {
+                    console.log('done');
+                    console.timeEnd('request');
+                    const templateParams = {
+                        domainResults,
+                        params,
+                        mapSummary : metricsController.getMapSummary(params, tableData),
+                        mapSummaryLinks : metricsController.getMapSummaryLinks(params),
+                        searchDatasetsURL,
+                        searchPath : req.path,
+                        searchResults : results,
+                        sources : sources.forRegions(params.regions),
+                        tableData : tableData || {},
+                        title : getSearchPageTitle(params),
+                        css : [
+                            '/styles/third-party/leaflet.min.css',
+                            '/styles/search.css',
+                            '/styles/maps.css',
+                            '/styles/main.css'
+                        ],
+                        scripts : [
+                            '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
+                            '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
+                            '/lib/third-party/leaflet/leaflet.min.js',
+                            '/lib/third-party/leaflet/leaflet-omnivore.min.js',
+                            '/lib/third-party/browser-polyfill.min.js',
+                            '/lib/third-party/colorbrewer.min.js',
+                            '/lib/third-party/d3.min.js',
+                            '/lib/third-party/d3.promise.min.js',
+                            '/lib/third-party/leaflet-omnivore.min.js',
+                            '/lib/third-party/lodash.min.js',
+                            '/lib/search.min.js'
+                        ]
+                    };
 
-            apiController.getDomains(5, function(domainResults) {
-                console.log('domains');
-                console.timeEnd('request');
-                apiController.searchDatasets(
-                    params,
-                    function(results) {
-                        console.log('datasets');
-                        console.timeEnd('request');
-                        allPromise.then(data => {
-                            console.timeEnd('request');
-                            const templateParams = {
-                                currentTag,
-                                domainResults,
-                                params,
-                                mapSummary : metricsController.getMapSummary(params, tableData),
-                                mapSummaryLinks : metricsController.getMapSummaryLinks(params),
-                                searchDatasetsURL,
-                                searchPath : req.path,
-                                searchResults : results,
-                                sources : sources.forRegions(params.regions),
-                                tableData : tableData || {},
-                                title : getSearchPageTitle(params),
-                                css : [
-                                    '/styles/third-party/leaflet.min.css',
-                                    '/styles/search.css',
-                                    '/styles/maps.css',
-                                    '/styles/main.css'
-                                ],
-                                scripts : [
-                                    '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
-                                    '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
-                                    '/lib/third-party/leaflet/leaflet.min.js',
-                                    '/lib/third-party/leaflet/leaflet-omnivore.min.js',
-                                    '/lib/third-party/browser-polyfill.min.js',
-                                    '/lib/third-party/colorbrewer.min.js',
-                                    '/lib/third-party/d3.min.js',
-                                    '/lib/third-party/d3.promise.min.js',
-                                    '/lib/third-party/leaflet-omnivore.min.js',
-                                    '/lib/third-party/lodash.min.js',
-                                    '/lib/search.min.js'
-                                ]
-                            };
+                    if (data && data.length == allPromises.length) {
+                        if (data[0].length > 0) {
+                            templateParams.peers = processRegions(data[0]);
+                        }
 
-                            if (data && data.length == allPromises.length) {
-                                if (data[0].length > 0) {
-                                    templateParams.peers = processRegions(data[0]);
-                                }
+                        if (data[1].length == 2 && data[1][1].length > 0) {
+                            templateParams.parentRegion = processRegions([data[1][0]])[0];
+                            templateParams.siblings = processRegions(data[1][1]);
+                        }
 
-                                if (data[1].length == 2 && data[1][1].length > 0) {
-                                    templateParams.parentRegion = processRegions([data[1][0]])[0];
-                                    templateParams.siblings = processRegions(data[1][1]);
-                                }
+                        if (data[2].length > 0) {
+                            templateParams.allChildren =
+                                data[2].map(children => processRegions(children));
+                        }
 
-                                if (data[2].length > 0) {
-                                    templateParams.allChildren =
-                                        data[2].map(children => processRegions(children));
-                                }
+                        if (data[3].length > 0) {
+                            templateParams.categories = data[3];
+                            templateParams.currentCategory =
+                                categoryController.getCurrentCategory(params, data[3]);
+                        }
 
-                                if (data[3].length > 0) {
-                                    templateParams.categories = data[3];
-                                    templateParams.currentCategory =
-                                        categoryController.getCurrentCategory(params, data[3]);
-                                }
-                            }
+                        if (data[4].results.length > 0) {
+                            templateParams.currentTag =
+                                tagController.getCurrentTag(params, data[4]);
 
-                            res.render('search.ejs', templateParams);
-                        }, error => {
-                            renderErrorPage(req, res);
-                        });
-                    },
-                    function() {
-                        renderErrorPage(req, res);
-                    });
+                        }
+                    }
+
+                    res.render('search.ejs', templateParams);
+                }, error => {
+                    renderErrorPage(req, res);
+                });
+            },
+            function() {
+                renderErrorPage(req, res);
             });
-        });
     });
 };
 

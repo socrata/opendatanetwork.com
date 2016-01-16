@@ -6,8 +6,10 @@ const Synonyms = require('./synonyms');
 const Request = require('./request');
 const Constants = require('./constants');
 const CategoryController = require('./category-controller');
+const TagController = require('./tag-controller');
 
 const categoryController = new CategoryController();
+const tagController = new TagController();
 
 const SYNONYMS = Synonyms.fromFile(Constants.SYNONYMS_FILE);
 
@@ -52,6 +54,14 @@ class API {
                 categoryController.attachCategoryMetadata(response, response => {
                     resolve(response.results);
                 });
+            }, error => resolve([]));
+        });
+    }
+
+    static tags(n) {
+        return new Promise((resolve, reject) => {
+            Request.getJSON(`${Constants.CATALOG_URL}/tags`).then(response => {
+                tagController.attachTagMetadata(response, resolve);
             }, reject);
         });
     }
