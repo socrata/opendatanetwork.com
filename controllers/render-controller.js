@@ -381,7 +381,8 @@ function _renderSearchPage(req, res, params, tableData) {
 
     const peersPromise = forRegion(Relatives.peers);
     const siblingsPromise = forRegion(Relatives.siblings);
-    const allPromise = Promise.all([peersPromise, siblingsPromise]);
+    const childrenPromise = forRegion(Relatives.children);
+    const allPromise = Promise.all([peersPromise, siblingsPromise, childrenPromise]);
 
     const uids = params.regions.map(region => region.id);
     const names = params.regions.map(region => region.name);
@@ -462,7 +463,7 @@ function _renderSearchPage(req, res, params, tableData) {
                                             ]
                                         };
 
-                                        if (data && data.length == 2) {
+                                        if (data && data.length == 3) {
                                             if (data[0].length > 0) {
                                                 templateParams.peers = processRegions(data[0]);
                                             }
@@ -470,6 +471,11 @@ function _renderSearchPage(req, res, params, tableData) {
                                             if (data[1].length == 2 && data[1][1].length > 0) {
                                                 templateParams.parentRegion = processRegions([data[1][0]])[0];
                                                 templateParams.siblings = processRegions(data[1][1]);
+                                            }
+
+                                            if (data[2].length > 0) {
+                                                templateParams.allChildren =
+                                                    data[2].map(children => processRegions(children));
                                             }
                                         }
 

@@ -27,6 +27,39 @@ class Relatives {
         });
     }
 
+    static _children(region, childType) {
+        return new Promise((resolve, reject) => {
+            const params = {
+                parent_id: region.id,
+                '$order': 'child_population DESC',
+                '$limit': Constants.N_RELATIVES
+            };
+
+            if (childType) params.child_type = childType;
+
+            const url = buildURL(Constants.RELATIVES_URL, params);
+            getJSON(url).then(json => resolve(json.map(parseChild)), reject);
+        });
+    }
+
+    static children(region) {
+        return new Promise((resolve, reject) => {
+            if (_.contains(['msa', 'place', 'county'], region.type)) {
+                resolve([]);
+            } else if (region.type === 'state') {
+                const places = Relatives._children(region, 'place');
+                const counties = Relatives._children(region, 'county');
+                const metros = Relatives._children(region, 'msa');
+
+                Promise.all([places, counties, metros])
+                    .then(children => resolve(children), reject);
+            } else {
+                Relatives._children(region)
+                    .then(children => resolve([children]), reject);
+            }
+        });
+    }
+
     static siblings(region) {
         return new Promise((resolve, reject) => {
             Relatives.parents(region).then(parents => {

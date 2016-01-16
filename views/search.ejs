@@ -113,22 +113,22 @@ var _tableData = <%- JSON.stringify(tableData) %>;
                 </ul>
             <% } %>
 
-            <% if (typeof siblings != 'undefined' && siblings.length > 0) { %>
-                <%
-                const TYPE_NAMES = {
-                    nation: 'Nations',
-                    region: 'Regions',
-                    division: 'Divisions',
-                    state: 'States',
-                    county: 'Counties',
-                    place: 'Places',
-                    msa: 'Metro Areas',
-                    zip_code: 'ZIP Codes'
-                };
-                %>
+            <%
+            const PLURALS = {
+                nation: 'Nations',
+                region: 'Regions',
+                division: 'Divisions',
+                state: 'States',
+                county: 'Counties',
+                place: 'Places',
+                msa: 'Metro Areas',
+                zip_code: 'ZIP Codes'
+            };
+            %>
 
+            <% if (typeof siblings != 'undefined' && siblings.length > 0) { %>
                 <h2 class="places-in-region-header">
-                    Other <%= TYPE_NAMES[params.regions[0].type] %> in
+                    Other <%= PLURALS[params.regions[0].type] %> in
                     <a href="<%= parentRegion.navigateURL %>"><%= parentRegion.name %></a>
                 </h2>
 
@@ -138,6 +138,23 @@ var _tableData = <%- JSON.stringify(tableData) %>;
                     <% }); %>
                 </ul>
             <% } %>
+
+            <% if (typeof allChildren != 'undefined' && allChildren.length > 0) { %>
+                <% allChildren.forEach(function(children) { %>
+                    <% if (children.length > 0) { %>
+                        <h2 class="places-in-region-header">
+                            <%= PLURALS[children[0].type] %> in <%= params.regions[0].name %>
+                        </h2>
+
+                        <ul class="places-in-region-list">
+                            <% children.forEach(function(child) { %>
+                                <li><a href="<%= child.navigateURL %>"><%= child.name %></a></li>
+                            <% }); %>
+                        </ul>
+                    <% } %>
+                <% }); %>
+            <% } %>
+
             <h2 id="places-in-region-header-0" class="places-in-region-header" style="display:none"></h2>
             <ul id="places-in-region-list-0" class="places-in-region-list" style="display:none"></ul>
             <h3 id="places-in-region-header-1" class="places-in-region-header" style="display:none"></h3>
