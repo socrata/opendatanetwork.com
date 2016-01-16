@@ -17,7 +17,6 @@ const LegendControl = L.Control.extend({
         const range = scale.range.slice();
         range.reverse();
         const height = range.length * dimension;
-        const labelPadding = 100;
 
         const legendContainer = this.container
             .append('div')
@@ -33,10 +32,34 @@ const LegendControl = L.Control.extend({
         const tickValues = [max, upperQuartile, median, lowerQuartile, min];
         const tickStep = height / (tickValues.length - 1);
 
+        const padding = 2;
+        const baseline = 'middle';
+
         const legend = legendContainer
             .append('svg')
             .attr('height', height + 15)
             .attr('class', 'legend');
+
+        const labelGroup = legend
+            .append('g')
+            .attr('class', 'labels');
+
+        const labels = labelGroup
+            .selectAll('text')
+            .data(tickLabels)
+            .enter()
+            .append('text')
+            .attr('class', 'tick-label')
+            .text(label => label)
+            .attr('text-anchor', 'end')
+            .attr('alignment-baseline', baseline);
+
+        const labelPadding = labelGroup.node().getBBox().width + dimension + padding;
+
+        labels
+            .attr('transform', (__, index) => {
+                return `translate(${labelPadding - padding}, ${dimension + index * tickStep})`;
+            });
 
         const tickGroup = legend
             .append('g')
@@ -58,32 +81,12 @@ const LegendControl = L.Control.extend({
             .attr('x1', -dimension).attr('y1', 0)
             .attr('x2', dimension * 2).attr('y2', 0);
 
-        const baseline = 'middle';
-        const padding = 2;
-
         ticks
             .append('text')
             .attr('class', 'tick-value')
             .text(value => variable.format(value))
             .attr('alignment-baseline', baseline)
             .attr('transform', `translate(${dimension * 2 + padding}, 0)`);
-
-        const labelGroup = legend
-            .append('g')
-            .attr('class', 'labels');
-
-        const labels = labelGroup
-            .selectAll('text')
-            .data(tickLabels)
-            .enter()
-            .append('text')
-            .attr('class', 'tick-label')
-            .text(label => label)
-            .attr('text-anchor', 'end')
-            .attr('alignment-baseline', baseline)
-            .attr('transform', (__, index) => {
-                return `translate(${labelPadding - padding}, ${dimension + index * tickStep})`;
-            });
 
         const colors = legend
             .selectAll('rect')
@@ -104,7 +107,7 @@ const LegendControl = L.Control.extend({
             .attr('x', labelPadding + dimension).attr('y', dimension)
             .attr('width', dimension).attr('height', height);
 
-        legend.attr('width', legend.node().getBBox().width + dimension * 2 + labelPadding);
+        legend.attr('width', legend.node().getBBox().width + dimension * 2);
     }
 });
 
