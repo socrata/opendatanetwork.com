@@ -31,8 +31,7 @@ class Request {
         return new Promise((resolve, reject) => {
             Promise.race([timeoutPromise, jsonPromise]).then(result => {
                 if (!result) {
-                    console.warn(`request to ${url} timed out after ${timeoutMS}ms`);
-                    resolve([]);
+                    reject(`request to ${url} timed out after ${timeoutMS}ms`);
                 } else {
                     resolve(result);
                 }

@@ -18,14 +18,16 @@ const SYNONYMS = Synonyms.fromFile(Constants.SYNONYMS_FILE);
 class API {
     static datasets(requestParams) {
         return new Promise((resolve, reject) => {
-            const limit = requestParams.regions.length > 0 ? 20 : 100;
+            const hasRegions = requestParams.regions.length > 0;
+            const limit = hasRegions ? 20 : 100;
             const url = API.searchDatasetsURL(requestParams, limit);
-            return Request.getJSON(url).then(results => {
+            const timeout = hasRegions ? Constants.TIMEOUT_MS : Constants.TIMEOUT_MS * 10;
+            return Request.getJSON(url, timeout).then(results => {
                 annotateData(results);
                 annotateParams(results, requestParams);
 
                 resolve(results);
-            }, reject);
+            }, error => resolve({results: []}));
         });
     }
 
@@ -63,33 +65,41 @@ class API {
         return Request.buildURL(Constants.CATALOG_URL, params);
     }
 
+    static catalog(path, n, defaultResponse) {
+        defaultResponse = defaultResponse || {results: []};
+
+        return new Promise((resolve, reject) => {
+            Request.getJSON(`${Constants.CATALOG_URL}/${path}`).then(response => {
+                if (response) {
+                    if (n) response.results = response.results.slice(0, n);
+                    resolve(response);
+                } else {
+                    resolve(defaultResponse);
+                }
+            }, error => resolve(defaultResponse));
+        });
+    }
+
     static categories(n) {
         return new Promise((resolve, reject) => {
-            Request.getJSON(`${Constants.CATALOG_URL}/categories`).then(response => {
-                if (n) response.results = response.results.slice(0, n);
+            API.catalog('categories', n).then(response => {
                 categoryController.attachCategoryMetadata(response, response => {
                     resolve(response.results);
                 });
-            }, error => resolve([]));
+            });
         });
     }
 
     static tags(n) {
         return new Promise((resolve, reject) => {
-            Request.getJSON(`${Constants.CATALOG_URL}/tags`).then(response => {
-                if (n) response.results = response.results.slice(0, n);
+            API.catalog('tags', n).then(response => {
                 tagController.attachTagMetadata(response, resolve);
-            }, error => { return {results: []}; });
+            });
         });
     }
 
     static domains(n) {
-        return new Promise((resolve, reject) => {
-            Request.getJSON(`${Constants.CATALOG_URL}/domains`).then(response => {
-                if (n) response.results = response.results.slice(0, n);
-                resolve(response);
-            }, error => { return {results: []}; });
-        });
+        return API.catalog('domains', n);
     }
 }
 

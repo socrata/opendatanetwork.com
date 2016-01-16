@@ -371,9 +371,6 @@ function _renderSearchPage(req, res, params, tableData) {
                         resolve(result);
                     }
                 }, error => {
-                    console.warn('error rendering search page');
-                    console.warn(error);
-                    console.warn(error.stack);
                     resolve([]);
                 });
             }
@@ -475,6 +472,7 @@ function _renderSearchPage(req, res, params, tableData) {
 
         res.render('search.ejs', templateParams);
     }, error => {
+        console.log(error);
         renderErrorPage(req, res);
     });
 };
