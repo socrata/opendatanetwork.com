@@ -130,8 +130,8 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 
             <% if (typeof siblings != 'undefined' && siblings && siblings.length > 0) { %>
                 <h2 class="places-in-region-header">
-                    Other <%= PLURALS[params.regions[0].type] %> in
-                    <a href="<%= parentRegion.navigateURL %>"><%= parentRegion.name %></a>
+                    <%= PLURALS[params.regions[0].type] %> in
+                    <a class="parent-link" href="<%= parentRegion.navigateURL %>"><%= parentRegion.name %></a>
                 </h2>
 
                 <ul class="places-in-region-list">
