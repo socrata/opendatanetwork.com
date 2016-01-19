@@ -68,6 +68,8 @@ const MapConstants = {
         stroke: false
     },
 
+    LEGEND_OPACITY: 0.5,
+
     // http://leafletjs.com/reference.html#popup
     TOOLTIP_OPTIONS: {
         offset: L.point(0, -20),

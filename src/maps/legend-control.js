@@ -78,8 +78,14 @@ const LegendControl = L.Control.extend({
         ticks
             .append('line')
             .attr('class', 'tick-line')
-            .attr('x1', -dimension).attr('y1', 0)
+            .attr('x1', dimension).attr('y1', 0)
             .attr('x2', dimension * 2).attr('y2', 0);
+
+        ticks
+            .append('line')
+            .attr('class', 'tick-line')
+            .attr('x1', -dimension).attr('y1', 0)
+            .attr('x2', 0).attr('y2', 0);
 
         ticks
             .append('text')
@@ -98,8 +104,8 @@ const LegendControl = L.Control.extend({
             .attr('y', (__, index) => (index + 1) * dimension)
             .attr('width', dimension)
             .attr('height', dimension)
-            .style('stroke', 'none')
-            .style('fill', color => color);
+            .style('fill', color => color)
+            .style('fill-opacity', MapConstants.LEGEND_OPACITY);
 
         legend
             .append('rect')
