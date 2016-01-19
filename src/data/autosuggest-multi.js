@@ -33,7 +33,7 @@ function multiComplete(inputSelector, resultSelector) {
             column: 'all',
             encoded: ['id', 'type', 'population'],
             select: option => {
-                navigate(`/region/${option.id}/${option.text.replace(/ /g, '_').replace(/,/g, '')}`);
+                navigate(`/region/${option.id}/${option.text.replace(/ /g, '_').replace(/\//g, '_').replace(/,/g, '')}`);
             },
             sort: option => -parseFloat(option.population)
         },

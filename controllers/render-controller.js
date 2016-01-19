@@ -320,6 +320,7 @@ RenderController.prototype.renderSearchWithVectorPage = function(req, res) {
     }
     else {
 
+        console.log('Unknown req.params.vector: {0} url: {1}'.format(req.params.vector, req.url));
         renderErrorPage(req, res);
     }
 };

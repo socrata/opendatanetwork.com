@@ -1636,7 +1636,7 @@ class SearchPageController {
 
             if (regionNames && (regionNames.length > 0)) {
 
-                const parts = regionNames.map(regionName => regionName.replace(/ /g, '_').replace(/,/g, ''))
+                const parts = regionNames.map(regionName => regionName.replace(/ /g, '_').replace(/\//g, '_').replace(/,/g, ''))
                 url += '/' + parts.join('-');
             }
             else
