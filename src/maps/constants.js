@@ -60,7 +60,9 @@ const MapConstants = {
     },
 
     SELECTED_STYLE: {
-        weight: 3
+        weight: 6,
+        dashArray: '4, 8',
+        lineCap: 'round'
     },
 
     NO_DATA_STYLE: {
