@@ -18,7 +18,7 @@ $(document).ready(function() {
     // Search button
     //
     $('#search-button').click(() => {
-        $('#form').submit();
+        window.location.href = '/search?q=' + encodeURIComponent($('#q').val());
     });
 
     // Communities menu
