@@ -1,7 +1,10 @@
 <% include _header %>
 <% include _search-bar %>
 
-<script>var _params = <%- JSON.stringify(params) %>;</script>
+<script>
+var _params = <%- JSON.stringify(params) %>;
+var _tableData = [];
+</script>
 
 <section class="main-section">
     <div class="dataset-wrapper">
