@@ -1,5 +1,6 @@
 'use strict';
 
+const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const express = require('express');
 const favicon = require('serve-favicon');
@@ -9,6 +10,8 @@ const RenderController = require('./controllers/render-controller');
 
 const renderController = new RenderController();
 const app = express();
+
+app.use(compression());
 
 // Cookie parser
 //
