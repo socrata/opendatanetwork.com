@@ -153,7 +153,7 @@ class SearchPageController {
         $('.map-summary-more').click(() => {
 
             $('.map-summary-links').slideToggle(100);
-            $('.map-summary-more').text($('.map-summary-more').text() == 'More Information' ? 'Hide Information' : 'More Information');
+            $('.map-summary-more').text($('.map-summary-more').text() == 'More Information' ? 'Less Information' : 'More Information');
         })
 
         // Resize / redraw event handlers
@@ -180,6 +180,23 @@ class SearchPageController {
             .then(view => view.show(selector), error => console.warn(error));
     }
 
+    drawMapSummaryLinks(source, variable, year) {
+
+        const variables = _.filter(source.variables, item => item.name != variable.name);
+        const list = $('.map-summary-links').empty();
+
+        $.each(variables, i => {
+
+            const item = variables[i];
+            const li = $('<li/>').appendTo(list);
+
+            $('<a/>')
+                .attr('href', this.getSearchPageUrl(false, item.metric, year))
+                .text(item.name)
+                .appendTo(li);
+        });
+    }
+    
     attachCategoriesClickHandlers() {
 
         const self = this;
@@ -240,6 +257,8 @@ class SearchPageController {
                 variable,
                 year,
                 value => (year == value.year)));
+
+        this.drawMapSummaryLinks(MapSources.rpp, variable,year);
     }
 
     drawCostOfLivingChart() {
@@ -462,6 +481,8 @@ class SearchPageController {
                 variable,
                 year,
                 value => (year == value.year)));
+
+        this.drawMapSummaryLinks(MapSources.earnings, variable, year);
     }
 
     drawEarningsChart() {
@@ -655,6 +676,8 @@ class SearchPageController {
                 variable,
                 year,
                 value => (year == value.year)));
+
+        this.drawMapSummaryLinks(MapSources.health, variable, year);
     }
 
     drawHealthTables() {
@@ -1115,6 +1138,8 @@ class SearchPageController {
                 variable,
                 year,
                 value => (year == value.year)));
+
+        this.drawMapSummaryLinks(MapSources.education, variable, year);
     }
 
     drawEducationTable() {
@@ -1255,6 +1280,8 @@ class SearchPageController {
                 variable,
                 year,
                 value => (year == value.year)));
+
+        this.drawMapSummaryLinks(MapSources.gdp, variable, year);
     }
 
     drawGdpChart() {
@@ -1383,6 +1410,8 @@ class SearchPageController {
                 variable,
                 year,
                 value => (year == value.year) && (variable.name == value.occupation)));
+
+        this.drawMapSummaryLinks(MapSources.occupations, variable, year);
     }
 
     // Population
@@ -1403,8 +1432,10 @@ class SearchPageController {
                 variable,
                 year,
                 value => (year == value.year)));
-    }
 
+        this.drawMapSummaryLinks(MapSources.population, variable, year);
+    }
+    
     drawPopulationChart() {
 
         const chartData = [];
@@ -1629,7 +1660,7 @@ class SearchPageController {
         });
     }
 
-    getSearchPageForRegionsAndVectorUrl(regionIds, regionNames, vector, searchResults, queryString) {
+    getSearchPageForRegionVectorMetricYearUrl(regionIds, regionNames, vector, metric, year, isSearchResults, queryString) {
 
         var url = '';
 
@@ -1644,17 +1675,22 @@ class SearchPageController {
             }
             else
                 url += '/-';
+
+            if (isSearchResults) {
+
+                url += '/search-results';
+            } 
+            else {
+
+                if (vector) url += '/' + vector;
+                if (metric) url += '/' + metric;
+                if (year) url += '/' + year;
+            }
         }
         else {
 
             url += '/search';
         }
-
-        if (vector)
-            url += '/' + vector;
-
-        if (searchResults)
-            url += '/search-results';
 
         if (queryString)
             url += queryString;
@@ -1662,7 +1698,7 @@ class SearchPageController {
         return url;
     }
 
-    getSearchPageUrl(searchResults) {
+    getSearchPageUrl(isSearchResults, metric, year) {
 
         if ((this.params.regions.length > 0) || this.params.autoSuggestedRegion) {
 
@@ -1681,11 +1717,25 @@ class SearchPageController {
                 regionNames.push(this.params.autoSuggestedRegion.name);
             }
 
-            return this.getSearchPageForRegionsAndVectorUrl(regionIds, regionNames, this.params.vector, searchResults, this.getSearchQueryString());
+            return this.getSearchPageForRegionVectorMetricYearUrl(
+                regionIds, 
+                regionNames, 
+                this.params.vector || 'population',
+                metric,
+                year, 
+                isSearchResults, 
+                this.getSearchQueryString());
         }
         else {
 
-            return this.getSearchPageForRegionsAndVectorUrl(null, null, this.params.vector, searchResults, this.getSearchQueryString());
+            return this.getSearchPageForRegionVectorMetricYearUrl(
+                null, 
+                null, 
+                this.params.vector || 'population',
+                metric,
+                year, 
+                isSearchResults, 
+                this.getSearchQueryString());
         }
     }
 

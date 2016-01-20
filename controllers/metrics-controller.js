@@ -40,10 +40,10 @@ const formatterGroups = {
         'per_capita_gdp_change' : { format : '0.0', suffix : '%', name : 'Annual Change in GDP', column : 'per_capita_gdp_percent_change', years : _.range(2002, 2014), index : 1 },
     },
     'health' : {
-        'adult_smoking_percent' : { format : '0.0%', suffix : '', name : 'Adult Smoking Rate', column : 'adult_smoking_value', years : [2015], index : 0 },
-        'adult_obesity_percent' : { format : '0.0%', suffix : '', name : 'Adult Obesity Rate', column : 'adult_obesity_value', years : [2015], index : 1 },
-        'physical_inactivity_percent' : { format : '0.0%', suffix : '', name : 'Physical Inactivity Rate', column : 'physical_inactivity_value', years : [2015], index : 2 },
-        'excessive_drinking_percent' : { format : '0.0%', suffix : '', name : 'Excessive Drinking Rate', column : 'excessive_drinking_value', years : [2015], index : 3 },
+        'adult_smoking_rate' : { format : '0.0%', suffix : '', name : 'Adult Smoking Rate', column : 'adult_smoking_value', years : [2015], index : 0 },
+        'adult_obesity_rate' : { format : '0.0%', suffix : '', name : 'Adult Obesity Rate', column : 'adult_obesity_value', years : [2015], index : 1 },
+        'physical_inactivity_rate' : { format : '0.0%', suffix : '', name : 'Physical Inactivity Rate', column : 'physical_inactivity_value', years : [2015], index : 2 },
+        'excessive_drinking_rate' : { format : '0.0%', suffix : '', name : 'Excessive Drinking Rate', column : 'excessive_drinking_value', years : [2015], index : 3 },
     },
     'cost_of_living' : {
         'all' : { format : '0,0.0', suffix : '', name : 'Cost Of Living Index', column : 'index', years : _.range(2008, 2014), index : 0 },
