@@ -3,7 +3,7 @@ $(document).ready(function() {
 
     // Search page controller
     //
-    new SearchPageController(_params, _tableData);
+    new SearchPageController(_params, _tableData, _mapVariables);
 
     // Main search box
     //

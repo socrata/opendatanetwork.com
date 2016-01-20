@@ -12,71 +12,71 @@ const defaultVector = 'population';
 const formatterGroups = {
 
     'population' : {
-        'population_value' : { format : '0,0', suffix : '', display : 'Population', dataKey : 'population' },
-        'population_change' : { format : '0.00', suffix : '%', display : 'Population Change', dataKey : 'population_percent_change' },
+        'population_value' : { format : '0,0', suffix : '', name : 'Population', column : 'population', years : _.range(2009, 2014), index : 0 },
+        'population_change' : { format : '0.00', suffix : '%', name : 'Population Change', column : 'population_percent_change', years : _.range(2010, 2014), index : 1 },
     },
     'education' : {
-        'percent_high_school_graduate_or_higher' : { format : '0.0', suffix : '%', display : 'High School Graduation Rate', dataKey : 'percent_high_school_graduate_or_higher' },
-        'percent_bachelors_degree_or_higher' : { format : '0.0', suffix : '%', display : 'College Graduation Rate', dataKey : 'percent_bachelors_degree_or_higher' },
+        'percent_high_school_graduate_or_higher' : { format : '0.0', suffix : '%', name : 'High School Graduation Rate', column : 'percent_high_school_graduate_or_higher', years : [2013], index : 0 },
+        'percent_bachelors_degree_or_higher' : { format : '0.0', suffix : '%', name : 'College Graduation Rate', column : 'percent_bachelors_degree_or_higher', years : [2013], index : 1 },
     },
     'earnings' : {
-        'median_earnings' : { format : '$0,0', suffix : '', display : 'Median Earnings', dataKey : 'median_earnings' },
-        'female_median_earnings' : { format : '$0,0', suffix : '', display : 'Median Female Earnings', dataKey : 'female_median_earnings' },
-        'male_median_earnings' : { format : '$0,0', suffix : '', display : 'Median Male Earnings', dataKey : 'male_median_earnings' },
-        'female_full_time_median_earnings' : { format : '$0,0', suffix : '', display : 'Median Female Earnings (Full Time)', dataKey : 'female_full_time_median_earnings' },
-        'male_full_time_median_earnings' : { format : '$0,0', suffix : '', display : 'Median Male Earnings (Full Time)', dataKey : 'male_full_time_median_earnings' },
-        'percent_with_earnings_1_to_9999' : { format : '0.0', suffix : '%', display : 'Percent Earning Less Than $10,000', dataKey : 'percent_with_earnings_1_to_9999' },
-        'percent_with_earnings_10000_to_14999' : { format : '0.0', suffix : '%', display : 'Percent Earning $10,000 to $14,999', dataKey : 'percent_with_earnings_10000_to_14999' },
-        'percent_with_earnings_15000_to_24999' : { format : '0.0', suffix : '%', display : 'Percent Earning $15,000 to $24,999', dataKey : 'percent_with_earnings_15000_to_24999' },
-        'percent_with_earnings_25000_to_34999' : { format : '0.0', suffix : '%', display : 'Percent Earning $25,000 to $34,999', dataKey : 'percent_with_earnings_25000_to_34999' },
-        'percent_with_earnings_35000_to_49999' : { format : '0.0', suffix : '%', display : 'Percent Earning $35,000 to $49,999', dataKey : 'percent_with_earnings_35000_to_49999' },
-        'percent_with_earnings_50000_to_64999' : { format : '0.0', suffix : '%', display : 'Percent Earning $50,000 to $64,999', dataKey : 'percent_with_earnings_50000_to_64999' },
-        'percent_with_earnings_65000_to_74999' : { format : '0.0', suffix : '%', display : 'Percent Earning $65,000 to $74,999', dataKey : 'percent_with_earnings_65000_to_74999' },
-        'percent_with_earnings_75000_to_99999' : { format : '0.0', suffix : '%', display : 'Percent Earning $75,000 to $99,999', dataKey : 'percent_with_earnings_75000_to_99999' },
-        'percent_with_earnings_over_100000' : { format : '0.0', suffix : '%', display : 'Percent Earning Over $100,000', dataKey : 'percent_with_earnings_over_100000' },
+        'median_earnings' : { format : '$0,0', suffix : '', name : 'Median Earnings', column : 'median_earnings', years : [2013], index : 0 },
+        'female_median_earnings' : { format : '$0,0', suffix : '', name : 'Median Female Earnings', column : 'female_median_earnings', years : [2013], index : 1 },
+        'male_median_earnings' : { format : '$0,0', suffix : '', name : 'Median Male Earnings', column : 'male_median_earnings', years : [2013], index : 2 },
+        'female_full_time_median_earnings' : { format : '$0,0', suffix : '', name : 'Median Female Earnings (Full Time)', column : 'female_full_time_median_earnings', years : [2013], index : 3 },
+        'male_full_time_median_earnings' : { format : '$0,0', suffix : '', name : 'Median Male Earnings (Full Time)', column : 'male_full_time_median_earnings', years : [2013], index : 4 },
+        'percent_with_earnings_1_to_9999' : { format : '0.0', suffix : '%', name : 'Percent Earning Less Than $10,000', column : 'percent_with_earnings_1_to_9999', years : [2013], index : 5 },
+        'percent_with_earnings_10000_to_14999' : { format : '0.0', suffix : '%', name : 'Percent Earning $10,000 to $14,999', column : 'percent_with_earnings_10000_to_14999', years : [2013], index : 6 },
+        'percent_with_earnings_15000_to_24999' : { format : '0.0', suffix : '%', name : 'Percent Earning $15,000 to $24,999', column : 'percent_with_earnings_15000_to_24999', years : [2013], index : 7 },
+        'percent_with_earnings_25000_to_34999' : { format : '0.0', suffix : '%', name : 'Percent Earning $25,000 to $34,999', column : 'percent_with_earnings_25000_to_34999', years : [2013], index : 8 },
+        'percent_with_earnings_35000_to_49999' : { format : '0.0', suffix : '%', name : 'Percent Earning $35,000 to $49,999', column : 'percent_with_earnings_35000_to_49999', years : [2013], index : 9 },
+        'percent_with_earnings_50000_to_64999' : { format : '0.0', suffix : '%', name : 'Percent Earning $50,000 to $64,999', column : 'percent_with_earnings_50000_to_64999', years : [2013], index : 10 },
+        'percent_with_earnings_65000_to_74999' : { format : '0.0', suffix : '%', name : 'Percent Earning $65,000 to $74,999', column : 'percent_with_earnings_65000_to_74999', years : [2013], index : 11 },
+        'percent_with_earnings_75000_to_99999' : { format : '0.0', suffix : '%', name : 'Percent Earning $75,000 to $99,999', column : 'percent_with_earnings_75000_to_99999', years : [2013], index : 12 },
+        'percent_with_earnings_over_100000' : { format : '0.0', suffix : '%', name : 'Percent Earning Over $100,000', column : 'percent_with_earnings_over_100000', years : [2013], index : 13 },
     },
     'gdp' : {
-        'per_capita_gdp' : { format : '$0,0', suffix : '', display : 'GDP per Capita', dataKey : 'per_capita_gdp' },
-        'per_capita_gdp_change' : { format : '0.0', suffix : '%', display : 'Annual Change in GDP', dataKey : 'per_capita_gdp_percent_change' },
+        'per_capita_gdp' : { format : '$0,0', suffix : '', name : 'GDP per Capita', column : 'per_capita_gdp', years : _.range(2002, 2014), index : 0 },
+        'per_capita_gdp_change' : { format : '0.0', suffix : '%', name : 'Annual Change in GDP', column : 'per_capita_gdp_percent_change', years : _.range(2002, 2014), index : 1 },
     },
     'health' : {
-        'adult_smoking_percent' : { format : '0.0%', suffix : '', display : 'Adult Smoking Rate', dataKey : 'adult_smoking_value' },
-        'adult_obesity_percent' : { format : '0.0%', suffix : '', display : 'Adult Obesity Rate', dataKey : 'adult_obesity_value' },
-        'physical_inactivity_percent' : { format : '0.0%', suffix : '', display : 'Physical Inactivity Rate', dataKey : 'physical_inactivity_value' },
-        'excessive_drinking_percent' : { format : '0.0%', suffix : '', display : 'Excessive Drinking Rate', dataKey : 'excessive_drinking_value' },
+        'adult_smoking_percent' : { format : '0.0%', suffix : '', name : 'Adult Smoking Rate', column : 'adult_smoking_value', years : [2015], index : 0 },
+        'adult_obesity_percent' : { format : '0.0%', suffix : '', name : 'Adult Obesity Rate', column : 'adult_obesity_value', years : [2015], index : 1 },
+        'physical_inactivity_percent' : { format : '0.0%', suffix : '', name : 'Physical Inactivity Rate', column : 'physical_inactivity_value', years : [2015], index : 2 },
+        'excessive_drinking_percent' : { format : '0.0%', suffix : '', name : 'Excessive Drinking Rate', column : 'excessive_drinking_value', years : [2015], index : 3 },
     },
     'cost_of_living' : {
-        'all' : { format : '0,0.0', suffix : '', display : 'Cost Of Living Index', dataKey : 'index' },
-        'goods' : { format : '0,0.0', suffix : '', display : 'Cost Of Living Index for Goods', dataKey : 'index' },
-        'rents' : { format : '0,0.0', suffix : '', display : 'Cost Of Living Index for Rents', dataKey : 'index' },
-        'other' : { format : '0,0.0', suffix : '', display : 'Cost Of Living Index for Other', dataKey : 'index' },
+        'all' : { format : '0,0.0', suffix : '', name : 'Cost Of Living Index', column : 'index', years : _.range(2008, 2014), index : 0 },
+        'goods' : { format : '0,0.0', suffix : '', name : 'Cost Of Living Index for Goods', column : 'index', years : _.range(2008, 2014), index : 1 },
+        'rents' : { format : '0,0.0', suffix : '', name : 'Cost Of Living Index for Rents', column : 'index', years : _.range(2008, 2014), index : 2 },
+        'other' : { format : '0,0.0', suffix : '', name : 'Cost Of Living Index for Other', column : 'index', years : _.range(2008, 2014), index : 3 },
     },
     'occupations' : {
-        'business_and_finance' : { format : '0.0', suffix : '%', display : 'Percent Working in Business and Finance', dataKey : 'percent_employed', criterion : 'Business and Finance' },
-        'computers_and_math' : { format : '0.0', suffix : '%', display : 'Percent Working in Computers and Math', dataKey : 'percent_employed', criterion : 'Computers and Math' },
-        'construction_and_extraction' : { format : '0.0', suffix : '%',display : 'Percent Working in Construction and Extraction', dataKey : 'percent_employed', criterion : 'Construction and Extraction' },
-        'education' : { format : '0.0', suffix : '%', display : 'Percent Working in Eduction', dataKey : 'percent_employed', criterion : 'Education' },
-        'engineering' : { format : '0.0', suffix : '%', display : 'Percent Working in Engineering',  dataKey : 'percent_employed', criterion : 'Engineering' },
-        'farming_fishing_foresty' : { format : '0.0', suffix : '%', display : 'Percent Working in Farming, Fishing and Forestry', dataKey : 'percent_employed', criterion : 'Farming, Fishing, Foresty' },
-        'fire_fighting' : { format : '0.0', suffix : '%', display : 'Percent Working in Fire Fighting', dataKey : 'percent_employed', criterion : 'Fire Fighting' },
-        'food_service' : { format : '0.0', suffix : '%', display : 'Percent Working in Food Service', dataKey : 'percent_employed', criterion : 'Food Service' },
-        'healthcare' : { format : '0.0', suffix : '%', display : 'Percent Working in Healthcare', dataKey : 'percent_employed', criterion : 'Healthcare' },
-        'health_support' : { format : '0.0', suffix : '%', display : 'Percent Working in Health Support', dataKey : 'percent_employed', criterion : 'Health Support' },
-        'health_technicians' : { format : '0.0', suffix : '%', display : 'Percent Working in Health Technicians', dataKey : 'percent_employed', criterion : 'Health Technicians' },
-        'janitorial' : { format : '0.0', suffix : '%', display : 'Percent Working in Janitorial', dataKey : 'percent_employed', criterion : 'Janitorial' },
-        'law_enforcement' : { format : '0.0', suffix : '%', display : 'Percent Working in Law Enforcement', dataKey : 'percent_employed', criterion: 'Law Enforcement' },
-        'legal' : { format : '0.0', suffix : '%', display : 'Percent Working in Legal', dataKey : 'percent_employed', criterion : 'Legal' },
-        'management' : { format : '0.0', suffix : '%', display : 'Percent Working in Management', dataKey : 'percent_employed', criterion : 'Management' },
-        'material_moving' : { format : '0.0', suffix : '%', display : 'Percent Working in Material Moving', dataKey : 'percent_employed', criterion : 'Material Moving' },
-        'media' : { format : '0.0', suffix : '%', display : 'Percent Working in Media', dataKey : 'percent_employed', criterion : 'Media' },
-        'office_and_administration' : { format : '0.0', suffix : '%', display : 'Percent Working in Office and Administration', dataKey : 'percent_employed', criterion : 'Office and Administration' },
-        'personal_care' : { format : '0.0', suffix : '%', display : 'Percent Working in Personal Care', dataKey : 'percent_employed', criterion : 'Personal Care' },
-        'production' : { format : '0.0', suffix : '%', display : 'Percent Working in Production', dataKey : 'percent_employed', criterion : 'Production' },
-        'repair' : { format : '0.0', suffix : '%', display : 'Percent Working in Repair', dataKey : 'percent_employed', criterion : 'Repair' },
-        'sales' : { format : '0.0', suffix : '%', display : 'Percent Working in Sales', dataKey : 'percent_employed', criterion : 'Sales' },
-        'social_sciences' : { format : '0.0', suffix : '%', display : 'Percent Working in Social Sciences', dataKey : 'percent_employed', criterion : 'Social Sciences' },
-        'social_services' : { format : '0.0', suffix : '%', display : 'Percent Working in Social Services', dataKey : 'percent_employed', criterion : 'Social Services' },
-        'transportation' : { format : '0.0', suffix : '%', display : 'Percent Working in Transportation', dataKey : 'percent_employed', criterion : 'Transportation' }
+        'business_and_finance' : { format : '0.0', suffix : '%', name : 'Percent Working in Business and Finance', column : 'percent_employed', criterion : 'Business and Finance', years : [2013], index : 0 },
+        'computers_and_math' : { format : '0.0', suffix : '%', name : 'Percent Working in Computers and Math', column : 'percent_employed', criterion : 'Computers and Math', years : [2013], index : 1 },
+        'construction_and_extraction' : { format : '0.0', suffix : '%',name : 'Percent Working in Construction and Extraction', column : 'percent_employed', criterion : 'Construction and Extraction', years : [2013], index : 2 },
+        'education' : { format : '0.0', suffix : '%', name : 'Percent Working in Eduction', column : 'percent_employed', criterion : 'Education', years : [2013], index : 3 },
+        'engineering' : { format : '0.0', suffix : '%', name : 'Percent Working in Engineering',  column : 'percent_employed', criterion : 'Engineering', years : [2013], index : 4 },
+        'farming_fishing_foresty' : { format : '0.0', suffix : '%', name : 'Percent Working in Farming, Fishing and Forestry', column : 'percent_employed', criterion : 'Farming, Fishing, Foresty', years : [2013], index : 5 },
+        'fire_fighting' : { format : '0.0', suffix : '%', name : 'Percent Working in Fire Fighting', column : 'percent_employed', criterion : 'Fire Fighting', years : [2013], index : 6 },
+        'food_service' : { format : '0.0', suffix : '%', name : 'Percent Working in Food Service', column : 'percent_employed', criterion : 'Food Service', years : [2013], index : 7 },
+        'healthcare' : { format : '0.0', suffix : '%', name : 'Percent Working in Healthcare', column : 'percent_employed', criterion : 'Healthcare', years : [2013], index : 8 },
+        'health_support' : { format : '0.0', suffix : '%', name : 'Percent Working in Health Support', column : 'percent_employed', criterion : 'Health Support', years : [2013], index : 9 },
+        'health_technicians' : { format : '0.0', suffix : '%', name : 'Percent Working in Health Technicians', column : 'percent_employed', criterion : 'Health Technicians', years : [2013], index : 10 },
+        'janitorial' : { format : '0.0', suffix : '%', name : 'Percent Working in Janitorial', column : 'percent_employed', criterion : 'Janitorial', years : [2013], index : 11 },
+        'law_enforcement' : { format : '0.0', suffix : '%', name : 'Percent Working in Law Enforcement', column : 'percent_employed', criterion: 'Law Enforcement', years : [2013], index : 12 },
+        'legal' : { format : '0.0', suffix : '%', name : 'Percent Working in Legal', column : 'percent_employed', criterion : 'Legal', years : [2013], index : 13 },
+        'management' : { format : '0.0', suffix : '%', name : 'Percent Working in Management', column : 'percent_employed', criterion : 'Management', years : [2013], index : 14 },
+        'material_moving' : { format : '0.0', suffix : '%', name : 'Percent Working in Material Moving', column : 'percent_employed', criterion : 'Material Moving', years : [2013], index : 15 },
+        'media' : { format : '0.0', suffix : '%', name : 'Percent Working in Media', column : 'percent_employed', criterion : 'Media', years : [2013], index : 16 },
+        'office_and_administration' : { format : '0.0', suffix : '%', name : 'Percent Working in Office and Administration', column : 'percent_employed', criterion : 'Office and Administration', years : [2013], index : 17 },
+        'personal_care' : { format : '0.0', suffix : '%', name : 'Percent Working in Personal Care', column : 'percent_employed', criterion : 'Personal Care', years : [2013], index : 18 },
+        'production' : { format : '0.0', suffix : '%', name : 'Percent Working in Production', column : 'percent_employed', criterion : 'Production', years : [2013], index : 19 },
+        'repair' : { format : '0.0', suffix : '%', name : 'Percent Working in Repair', column : 'percent_employed', criterion : 'Repair', years : [2013], index : 20 },
+        'sales' : { format : '0.0', suffix : '%', name : 'Percent Working in Sales', column : 'percent_employed', criterion : 'Sales', years : [2013], index : 21 },
+        'social_sciences' : { format : '0.0', suffix : '%', name : 'Percent Working in Social Sciences', column : 'percent_employed', criterion : 'Social Sciences', years : [2013], index : 22 },
+        'social_services' : { format : '0.0', suffix : '%', name : 'Percent Working in Social Services', column : 'percent_employed', criterion : 'Social Services', years : [2013], index : 23 },
+        'transportation' : { format : '0.0', suffix : '%', name : 'Percent Working in Transportation', column : 'percent_employed', criterion : 'Transportation', years : [2013], index : 24 }
     }
 };
 
@@ -87,6 +87,24 @@ function MetricsController() {
 
 // Public methods
 //
+MetricsController.prototype.getMapVariables = (params) => {
+
+    const formatter = getFormatterOrDefault(params);
+    const year = parseInt(params.year);
+
+    var yearSelectedIndex = formatter.years.length - 1;
+    
+    if (!isNaN(year)) {
+        var i = formatter.years.indexOf(year)
+        if (i > -1) yearSelectedIndex = i;
+    }
+
+    return {
+        variableSelectedIndex : formatter.index,
+        yearSelectedIndex : yearSelectedIndex,
+    };
+}
+
 MetricsController.prototype.getMapSummaryLinks = (params) => {
 
     const vector = params.vector || defaultVector;
@@ -95,7 +113,7 @@ MetricsController.prototype.getMapSummaryLinks = (params) => {
     const filteredMetrics = _.filter(_.keys(formatterGroup), key => key != metric);
     
     const rg = filteredMetrics.map(metric => {
-        return { url : getUrl(params, metric), text : formatterGroup[metric].display }
+        return { url : getUrl(params, metric), text : formatterGroup[metric].name }
     });
 
     return rg;
@@ -215,6 +233,27 @@ function getFormatterGroup(vector) {
     return formatterGroup;
 }
 
+function getFormatterOrDefault(params) {
+
+    var vector = params.vector;
+    var formatterGroup = getFormatterGroup(vector)
+    
+    if (formatterGroup == null) {
+        vector = defaultVector;
+        formatterGroup = getFormatterGroup(vector);
+    }
+
+    var metric = params.metric;
+    var formatter = formatterGroup[metric];
+    
+    if (formatter == undefined) {
+        metric = getDefaultMetric(vector);
+        formatter = formatterGroup[metric];
+    }
+
+    return formatter;
+}
+
 function getOccupationsSummary(params, data) {
 
     const occupationsMetric = params.metric || 'management';
@@ -266,21 +305,21 @@ function getSummary(vector, metric, year, regions, data, filter, format) {
         }
 
         const datum = filteredData[0];
-        const value = datum[formatter.dataKey];
+        const value = datum[formatter.column];
 
         if (value == undefined) {
             console.log(
-                'The formatter.dataKey is not found in the data. formatter.dataKey: {0} \ndata: {1}'.format(
-                    formatter.dataKey,
+                'The formatter.column is not found in the data. formatter.column: {0} \ndata: {1}'.format(
+                    formatter.column,
                     JSON.stringify(data[index])));
             return '';
         }
 
         return format.format(
-            formatter.display.toLowerCase(),
+            formatter.name.toLowerCase(),
             year,
             region.name,
-            numeral(datum[formatter.dataKey]).format(formatter.format) + formatter.suffix);
+            numeral(datum[formatter.column]).format(formatter.format) + formatter.suffix);
     });
 
     return rg.join(' ');

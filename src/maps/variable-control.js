@@ -1,7 +1,8 @@
 
 const VariableControl = L.Control.extend({
-    initialize: function(variables, callback) {
+    initialize: function(variables, selectedIndices, callback) {
         this.variables = variables;
+        this.selectedIndices = selectedIndices;
         this.callback = callback;
     },
 
@@ -13,8 +14,8 @@ const VariableControl = L.Control.extend({
         const container = L.DomUtil.create('div', 'variable-container');
         this.container = d3.select(container);
 
-        let currentVariable = this.variables[0];
-        let currentYear = currentVariable.years[currentVariable.years.length - 1];
+        let currentVariable = this.variables[this.selectedIndices.variableSelectedIndex];
+        let currentYear = currentVariable.years[this.selectedIndices.yearSelectedIndex];
 
         const update = () => {
             this.callback(currentVariable, currentYear);

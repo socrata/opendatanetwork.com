@@ -356,10 +356,8 @@ RenderController.prototype.renderSearchResults = function(req, res) {
 
 // Private functions
 //
-
-
-
 function _renderSearchPage(req, res, params, tableData) {
+
     function forRegion(regionPromise) {
         return new Promise(resolve => {
             if (params.regions.length === 0) {
@@ -416,6 +414,7 @@ function _renderSearchPage(req, res, params, tableData) {
             searchDatasetsURL,
             mapSummary : metricsController.getMapSummary(params, tableData),
             mapSummaryLinks : metricsController.getMapSummaryLinks(params),
+            mapVariables : metricsController.getMapVariables(params),
             searchPath : req.path,
             sources : sources.forRegions(params.regions),
             tableData : tableData || {},

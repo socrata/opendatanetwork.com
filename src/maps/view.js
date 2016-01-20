@@ -13,7 +13,7 @@ class MapView {
 
         this.legend = new LegendControl();
         this.tooltip = new TooltipControl();
-        this.variableControl = new VariableControl(source.variables, (variable, year) => {
+        this.variableControl = new VariableControl(source.variables, source.selectedIndices, (variable, year) => {
             this.display(variable, year);
             if (this.onDisplay) this.onDisplay(variable, year);
         });

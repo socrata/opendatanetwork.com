@@ -1,10 +1,11 @@
 
 class SearchPageController {
 
-    constructor(params, tableData) {
+    constructor(params, tableData, mapVariables) {
 
         this.params = params;
         this.tableData = tableData;
+        this.mapVariables = mapVariables;
         this.fetching = false;
         this.fetchedAll = false;
         this.mostSimilar = [];
@@ -173,6 +174,8 @@ class SearchPageController {
         const selector = '#map';
         const regions = this.params.regions;
 
+        _.extend(source, { selectedIndices : this.mapVariables });
+
         MapView.create(source, regions, onDisplay)
             .then(view => view.show(selector), error => console.warn(error));
     }
@@ -223,14 +226,14 @@ class SearchPageController {
     //
     drawCostOfLivingData() {
 
-        this.drawMap(MapSources.rpp);
+        this.drawMap(MapSources.rpp, (variable, year) => this.drawCostOfLivingMapSummary(variable, year));
         this.drawCostOfLivingChart();
         this.drawCostOfLivingTable();
     }
 
     drawCostOfLivingMapSummary(variable, year) {
 
-        $('#map-summary').text(
+        $('.map-summary').text(
             MapSummary.getCostOfLivingSummaryString(
                 this.params.regions,
                 this.tableData.costOfLivingData,
@@ -445,14 +448,14 @@ class SearchPageController {
     //
     drawEarningsData() {
 
-        this.drawMap(MapSources.earnings);
+        this.drawMap(MapSources.earnings, (variable, year) => this.drawEarningsMapSummary(variable, year));
         this.drawEarningsChart();
         this.drawEarningsTable();
     }
 
     drawEarningsMapSummary(variable, year) {
 
-        $('#map-summary').text(
+        $('.map-summary').text(
             MapSummary.getSummaryString(
                 this.params.regions,
                 this.tableData.earningsData,
@@ -639,13 +642,13 @@ class SearchPageController {
     //
     drawHealthData() {
 
-        this.drawMap(MapSources.health);
+        this.drawMap(MapSources.health, (variable, year) => this.drawHealthMapSummary(variable, year));
         this.drawHealthTables();
     }
 
     drawHealthMapSummary(variable, year) {
 
-        $('#map-summary').text(
+        $('.map-summary').text(
             MapSummary.getSummaryString(
                 this.params.regions,
                 this.tableData.healthData,
@@ -1099,13 +1102,13 @@ class SearchPageController {
     //
     drawEducationData() {
 
-        this.drawMap(MapSources.education);
+        this.drawMap(MapSources.education, (variable, year) => this.drawEducationMapSummary(variable, year));
         this.drawEducationTable();
     }
 
     drawEducationMapSummary(variable, year) {
 
-        $('#map-summary').text(
+        $('.map-summary').text(
             MapSummary.getSummaryString(
                 this.params.regions,
                 this.tableData.educationData,
@@ -1236,7 +1239,7 @@ class SearchPageController {
     //
     drawGdpData() {
 
-        this.drawMap(MapSources.gdp);
+        this.drawMap(MapSources.gdp, (variable, year) => this.drawGdpMapSummary(variable, year));
         this.drawGdpChart();
         this.drawGdpChangeChart();
 
@@ -1245,7 +1248,7 @@ class SearchPageController {
 
     drawGdpMapSummary(variable, year) {
 
-        $('#map-summary').text(
+        $('.map-summary').text(
             MapSummary.getSummaryString(
                 this.params.regions,
                 this.tableData.gdpData,
@@ -1368,12 +1371,12 @@ class SearchPageController {
     //
     drawOccupationsData() {
 
-        this.drawMap(MapSources.occupations);
+        this.drawMap(MapSources.occupations, (variable, year) => this.drawOccupationsMapSummary(variable, year));
     }
 
     drawOccupationsMapSummary(variable, year) {
 
-        $('#map-summary').text(
+        $('.map-summary').text(
             MapSummary.getOccupationsSummaryString(
                 this.params.regions,
                 this.tableData.occupationsData,
@@ -1386,14 +1389,14 @@ class SearchPageController {
     //
     drawPopulationData() {
 
-        this.drawMap(MapSources.population);
+        this.drawMap(MapSources.population, (variable, year) => this.drawPopulationMapSummary(variable, year));
         this.drawPopulationChart();
         this.drawPopulationChangeChart();
     }
 
     drawPopulationMapSummary(variable, year) {
 
-        $('#map-summary').text(
+        $('.map-summary').text(
             MapSummary.getSummaryString(
                 this.params.regions,
                 this.tableData.populationData,
