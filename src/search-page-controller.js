@@ -196,7 +196,7 @@ class SearchPageController {
                 .appendTo(li);
         });
     }
-    
+
     attachCategoriesClickHandlers() {
 
         const self = this;
@@ -666,13 +666,11 @@ class SearchPageController {
     // Health
     //
     drawHealthData() {
-
         this.drawMap(MapSources.health, (variable, year) => this.onDrawHealthMap(variable, year));
         this.drawHealthTables();
     }
 
     onDrawHealthMap(variable, year) {
-
         this.updateAddressBarUrl(variable.metric, year);
 
         $('.map-summary').text(
@@ -1449,7 +1447,7 @@ class SearchPageController {
 
         this.drawMapSummaryLinks(MapSources.population, variable, year);
     }
-    
+
     drawPopulationChart() {
 
         const chartData = [];
@@ -1698,7 +1696,7 @@ class SearchPageController {
         if (isSearchResults) {
 
             url += '/search-results';
-        } 
+        }
         else {
 
             if (vector) url += '/' + vector;
@@ -1732,23 +1730,23 @@ class SearchPageController {
             }
 
             return this.getSearchPageForRegionVectorMetricYearUrl(
-                regionIds, 
-                regionNames, 
+                regionIds,
+                regionNames,
                 this.params.vector || 'population',
                 metric,
-                year, 
-                isSearchResults, 
+                year,
+                isSearchResults,
                 this.getSearchQueryString(isSearchResults));
         }
         else {
 
             return this.getSearchPageForRegionVectorMetricYearUrl(
-                null, 
-                null, 
+                null,
+                null,
                 this.params.vector || 'population',
                 metric,
-                year, 
-                isSearchResults, 
+                year,
+                isSearchResults,
                 this.getSearchQueryString(isSearchResults));
         }
     }

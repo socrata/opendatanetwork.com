@@ -17,7 +17,7 @@ class ApiController {
         this.populationUrl = 'https://odn.data.socrata.com/resource/e3rd-zzmr.json?id={0}';
         this.healthDataUrls = {
             rwjf_county_health_rankings_2015: "https://odn.data.socrata.com/resource/7ayp-utp2.json?id={0}",
-            cdc_brfss_prevalence_2011_2013: "https://odn.data.socrata.com/resource/n4rt-3rmd.json?id={0}"
+            cdc_brfss_prevalence_overall_health: "https://odn.data.socrata.com/resource/n4rt-3rmd.json?break_out_category=Overall&topic=Overall%20Health&response={0}&_geoid={1}"
         };
     }
 
@@ -100,4 +100,10 @@ class ApiController {
 
         return d3.promise.json(this.healthDataUrls.rwjf_county_health_rankings_2015.format(regionId));
     }
+
+    getHealthCdcBrfssPrevalenceOverallHealthData(regionId, response) {
+
+        return d3.promise.json(this.healthDataUrls.cdc_brfss_prevalence_overall_health.format(response,regionId));
+    }
+
 }
