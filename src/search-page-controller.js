@@ -1689,21 +1689,21 @@ class SearchPageController {
             }
             else
                 url += '/-';
-
-            if (isSearchResults) {
-
-                url += '/search-results';
-            } 
-            else {
-
-                if (vector) url += '/' + vector;
-                if (metric) url += '/' + metric;
-                if (year) url += '/' + year;
-            }
         }
         else {
 
             url += '/search';
+        }
+
+        if (isSearchResults) {
+
+            url += '/search-results';
+        } 
+        else {
+
+            if (vector) url += '/' + vector;
+            if (metric) url += '/' + metric;
+            if (year) url += '/' + year;
         }
 
         if (queryString)
@@ -1738,7 +1738,7 @@ class SearchPageController {
                 metric,
                 year, 
                 isSearchResults, 
-                this.getSearchQueryString());
+                this.getSearchQueryString(isSearchResults));
         }
         else {
 
@@ -1749,7 +1749,7 @@ class SearchPageController {
                 metric,
                 year, 
                 isSearchResults, 
-                this.getSearchQueryString());
+                this.getSearchQueryString(isSearchResults));
         }
     }
 
@@ -1758,14 +1758,14 @@ class SearchPageController {
         return this.getSearchPageUrl(true);
     }
 
-    getSearchQueryString() {
+    getSearchQueryString(isSearchResults) {
 
         const parts = [];
 
         if (this.params.q.length > 0)
             parts.push('q=' + encodeURIComponent(this.params.q));
 
-        if (this.params.page > 1)
+        if ((this.params.page > 1) && isSearchResults)
             parts.push('page=' + this.params.page);
 
         if (this.params.categories.length > 0)
