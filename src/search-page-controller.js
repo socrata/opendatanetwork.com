@@ -243,12 +243,14 @@ class SearchPageController {
     //
     drawCostOfLivingData() {
 
-        this.drawMap(MapSources.rpp, (variable, year) => this.drawCostOfLivingMapSummary(variable, year));
+        this.drawMap(MapSources.rpp, (variable, year) => this.onDrawCostOfLivingMap(variable, year));
         this.drawCostOfLivingChart();
         this.drawCostOfLivingTable();
     }
 
-    drawCostOfLivingMapSummary(variable, year) {
+    onDrawCostOfLivingMap(variable, year) {
+
+        this.updateAddressBarUrl(variable.metric, year);
 
         $('.map-summary').text(
             MapSummary.getCostOfLivingSummaryString(
@@ -467,12 +469,14 @@ class SearchPageController {
     //
     drawEarningsData() {
 
-        this.drawMap(MapSources.earnings, (variable, year) => this.drawEarningsMapSummary(variable, year));
+        this.drawMap(MapSources.earnings, (variable, year) => this.onDrawEarningsMap(variable, year));
         this.drawEarningsChart();
         this.drawEarningsTable();
     }
 
-    drawEarningsMapSummary(variable, year) {
+    onDrawEarningsMap(variable, year) {
+
+        this.updateAddressBarUrl(variable.metric, year);
 
         $('.map-summary').text(
             MapSummary.getSummaryString(
@@ -663,11 +667,13 @@ class SearchPageController {
     //
     drawHealthData() {
 
-        this.drawMap(MapSources.health, (variable, year) => this.drawHealthMapSummary(variable, year));
+        this.drawMap(MapSources.health, (variable, year) => this.onDrawHealthMap(variable, year));
         this.drawHealthTables();
     }
 
-    drawHealthMapSummary(variable, year) {
+    onDrawHealthMap(variable, year) {
+
+        this.updateAddressBarUrl(variable.metric, year);
 
         $('.map-summary').text(
             MapSummary.getSummaryString(
@@ -1125,11 +1131,13 @@ class SearchPageController {
     //
     drawEducationData() {
 
-        this.drawMap(MapSources.education, (variable, year) => this.drawEducationMapSummary(variable, year));
+        this.drawMap(MapSources.education, (variable, year) => this.onDrawEducationMap(variable, year));
         this.drawEducationTable();
     }
 
-    drawEducationMapSummary(variable, year) {
+    onDrawEducationMap(variable, year) {
+
+        this.updateAddressBarUrl(variable.metric, year);
 
         $('.map-summary').text(
             MapSummary.getSummaryString(
@@ -1264,14 +1272,16 @@ class SearchPageController {
     //
     drawGdpData() {
 
-        this.drawMap(MapSources.gdp, (variable, year) => this.drawGdpMapSummary(variable, year));
+        this.drawMap(MapSources.gdp, (variable, year) => this.onDrawGdpMap(variable, year));
         this.drawGdpChart();
         this.drawGdpChangeChart();
 
         // no need to draw GDP table, because it so long it will never switch to a horizontal orientation
     }
 
-    drawGdpMapSummary(variable, year) {
+    onDrawGdpMap(variable, year) {
+
+        this.updateAddressBarUrl(variable.metric, year);
 
         $('.map-summary').text(
             MapSummary.getSummaryString(
@@ -1398,10 +1408,12 @@ class SearchPageController {
     //
     drawOccupationsData() {
 
-        this.drawMap(MapSources.occupations, (variable, year) => this.drawOccupationsMapSummary(variable, year));
+        this.drawMap(MapSources.occupations, (variable, year) => this.onDrawOccupationsMap(variable, year));
     }
 
-    drawOccupationsMapSummary(variable, year) {
+    onDrawOccupationsMap(variable, year) {
+
+        this.updateAddressBarUrl(variable.metric, year);
 
         $('.map-summary').text(
             MapSummary.getOccupationsSummaryString(
@@ -1418,12 +1430,14 @@ class SearchPageController {
     //
     drawPopulationData() {
 
-        this.drawMap(MapSources.population, (variable, year) => this.drawPopulationMapSummary(variable, year));
+        this.drawMap(MapSources.population, (variable, year) => this.onDrawPopulationMap(variable, year));
         this.drawPopulationChart();
         this.drawPopulationChangeChart();
     }
 
-    drawPopulationMapSummary(variable, year) {
+    onDrawPopulationMap(variable, year) {
+
+        this.updateAddressBarUrl(variable.metric, year);
 
         $('.map-summary').text(
             MapSummary.getSummaryString(
@@ -1836,5 +1850,11 @@ class SearchPageController {
         this.params.q = '';
         this.params.regions = [];
         this.params.vector = '';
+    }
+
+    updateAddressBarUrl(metric, year) {
+
+        const url = this.getSearchPageUrl(false, metric, year)
+        history.replaceState(null, null, url);
     }
 }
