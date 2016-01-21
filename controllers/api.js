@@ -101,6 +101,19 @@ class API {
     static domains(n) {
         return API.catalog('domains', n);
     }
+
+    static datasetSummary(domain, fxf) {
+        return Request.getJSON(Constants.DATASET_SUMMARY_URL.format(domain, fxf));
+    }
+
+    static standardSchemas(fxf) {
+        return new Promise((resolve, reject) => {
+            Request.getJSON(Constants.ATHENA_URL.format(fxf)).then(json => {
+                if (json.applied_schemas === '[]') json.applied_schemas = [];
+                resolve(json.applied_schemas);
+            });
+        });
+    }
 }
 
 function annotateData(data) {

@@ -144,72 +144,62 @@ RenderController.prototype.renderCategoriesJson = function(req, res) {
 // Dataset
 //
 RenderController.prototype.renderDatasetPage = function(req, res) {
+    const domain = req.params.domain;
+    const id = req.params.id;
 
-    apiController.getDatasetSummary(
-        req.params.domain,
-        req.params.id,
-        function(dataset) {
-            apiController.getStandardSchemas(
-                req.params.domain,
-                req.params.id,
-                function(schemas) {
+    const datasetPromise = API.datasetSummary(domain, id);
+    const schemasPromise = API.standardSchemas(id);
+    const allPromise = Promise.all([datasetPromise, schemasPromise]);
 
-                    // Hilarious bug fix. When nothing matches, it returns "[]" instead of an actual empty array
-                    if (schemas.applied_schemas == "[]") {
-                        schemas.applied_schemas = [];
-                    }
+    allPromise.then(data => {
+        const dataset = data[0];
+        const schemas = data[1].map(schema => {
+            const uid = schema.url.match(/(\w{4}-\w{4})$/)[1];
+            const query = Request.buildURL(`https://${domain}/resource/${id}.json?`, schema.query);
 
-                    var mapped_schemas = _.map(schemas.applied_schemas, function(sch, idx) {
+            return _.extend(schema, {
+                uid,
+                query,
+                standard: schema.standardIds[0],
+                required_columns: schema.columns,
+                opt_columns: schema.optColumns,
+                direct_map: schema.query.length === 0
+            });
+        });
 
-                        var uid = sch.url.match(/(\w{4}-\w{4})$/)[1]
-                        var query = _.collect(sch.query, function(v,k) { return k + "=" + v; }).join("&");
+        RenderController.prototype.getSearchParameters(req, function(params) {
+            const templateParams = {
+                params,
+                schemas,
+                searchPath : '/search',
+                title : 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.',
+                dataset : {
+                    domain,
+                    id,
+                    descriptionHtml : htmlEncode(dataset.description).replace('\n', '<br>'),
+                    name : dataset.name,
+                    tags : dataset.tags || [],
+                    columns : dataset.columns,
+                    updatedAtString : moment(new Date(dataset.viewLastModified * 1000)).format('D MMM YYYY')
+                },
+                css : [
+                    '/styles/dataset.css'
+                ],
+                scripts : [
+                    '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
+                    '/lib/third-party/colorbrewer.min.js',
+                    '/lib/third-party/d3.min.js',
+                    '/lib/third-party/d3.promise.min.js',
+                    '/lib/third-party/lodash.min.js',
+                    '/lib/search.min.js',
+                ]
+            };
 
-                        return {
-                            name : sch.name,
-                            description : sch.description,
-                            uid : uid,
-                            query : 'https://' + req.params.domain + '/resource/' + uid + '.json?' + query,
-                            standard : sch.standardIds[0],
-                            required_columns : sch.columns,
-                            opt_columns : sch.optColumns,
-                            direct_map : (query.length == 0)
-                        }
-                    });
-
-                    RenderController.prototype.getSearchParameters(req, function(params) {
-
-                        res.render(
-                            'dataset.ejs',
-                            {
-                                css : [
-                                    '/styles/dataset.css'
-                                ],
-                                dataset : {
-                                    descriptionHtml : htmlEncode(dataset.description).replace('\n', '<br>'),
-                                    domain : req.params.domain,
-                                    id : req.params.id,
-                                    name : dataset.name,
-                                    tags : dataset.tags || [],
-                                    columns : dataset.columns,
-                                    updatedAtString : moment(new Date(dataset.viewLastModified * 1000)).format('D MMM YYYY')
-                                },
-                                schemas : mapped_schemas,
-                                params : params,
-                                scripts : [
-                                    '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
-                                    '/lib/third-party/colorbrewer.min.js',
-                                    '/lib/third-party/d3.min.js',
-                                    '/lib/third-party/d3.promise.min.js',
-                                    '/lib/third-party/lodash.min.js',
-                                    '/lib/search.min.js',
-                                ],
-                                searchPath : '/search',
-                                title : 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.'
-                            }); // render
-                  },
-                  function() { renderErrorPage(req, res); }); // getSearchParameters
-            }); // getStandardSchemas
-      }); // getDatasetSummary
+            res.render('dataset.ejs', templateParams);
+        });
+    }, error => {
+        renderErrorPage(req, res, 404, 'Dataset not found');
+    });
 };
 
 // Home
@@ -637,10 +627,12 @@ function htmlEncode(s) {
     return s ? htmlencode.htmlEncode(s) : '';
 }
 
-function renderErrorPage(req, res) {
+function renderErrorPage(req, res, statusCode, message) {
+    statusCode = statusCode || 503;
+    message = message || 'Internal server error';
 
-    res.status(503);
-    res.sendFile(path.resolve(__dirname + '/../views/static/error.html'));
+    res.status(statusCode);
+    res.render('error.ejs', {statusCode, message});
 };
 
 // Extensions
