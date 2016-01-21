@@ -172,7 +172,7 @@ RenderController.prototype.renderDatasetPage = function(req, res) {
                 params,
                 schemas,
                 searchPath : '/search',
-                title : 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.',
+                title : dataset.name,
                 dataset : {
                     domain,
                     id,
