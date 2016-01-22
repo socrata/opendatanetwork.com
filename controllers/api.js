@@ -132,6 +132,10 @@ class API {
         const promises = regions.map(region => API.variable(vector, region.id));
         return Promise.all(promises);
     }
+
+    static locations() {
+        return Request.getJSONLocal('data/locations.json');
+    }
 }
 
 function annotateData(data) {

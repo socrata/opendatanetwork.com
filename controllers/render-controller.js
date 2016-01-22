@@ -3,7 +3,6 @@
 const API = require('./api');
 const ApiController = require('./api-controller');
 const CategoryController = require('./category-controller');
-const LocationsController = require('./locations-controller');
 const MetricsController = require('./metrics-controller');
 const TagController = require('./tag-controller');
 const Sources = require('./sources');
@@ -19,7 +18,6 @@ const path = require('path');
 
 const apiController = new ApiController();
 const categoryController = new CategoryController();
-const locationsController = new LocationsController();
 const metricsController = new MetricsController();
 const sources = Sources.getSources();
 const tagController = new TagController();
@@ -100,50 +98,48 @@ RenderController.prototype.renderDatasetPage = function(req, res) {
     });
 };
 
-// Home
-//
+
 RenderController.prototype.renderHomePage = function(req, res) {
+    const categoriesPromise = API.categories();
+    const locationsPromise = API.locations();
+    const allPromise = Promise.all([categoriesPromise, locationsPromise]);
 
-    apiController.getCategoriesAll(function(allCategoryResults) {
+    allPromise.then(data => {
+        const categories = data[0];
+        const locations = data[1];
 
-        categoryController.attachCategoryMetadata(allCategoryResults, function(allCategoryResults) {
+        RenderController.prototype.getSearchParameters(req, params => {
+            const templateParams = {
+                categories,
+                locations,
+                params,
+                searchPath : '/search',
+                title : 'Open Data Network',
+                css : [
+                    '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css',
+                    '/styles/home.css',
+                    '/styles/main.css'
+                ],
+                scripts : [
+                    '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js',
+                    {
+                        'url' : '//fast.wistia.net/static/popover-v1.js',
+                        'charset' : 'ISO-8859-1'
+                    },
+                    '/lib/third-party/browser-polyfill.min.js',
+                    '/lib/third-party/d3.min.js',
+                    '/lib/third-party/d3.promise.min.js',
+                    '/lib/third-party/lodash.min.js',
+                    '/lib/home.min.js'
+                ]
+            };
 
-            locationsController.getLocations(function(locations) {
-
-                RenderController.prototype.getSearchParameters(req, function(params) {
-
-                    // Render page
-                    //
-                    res.render(
-                        'home.ejs',
-                        {
-                            allCategoryResults : allCategoryResults,
-                            css : [
-                                '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css',
-                                '/styles/home.css',
-                                '/styles/main.css'
-                            ],
-                            locations : locations,
-                            params : params,
-                            scripts : [
-                                '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js',
-                                {
-                                    'url' : '//fast.wistia.net/static/popover-v1.js',
-                                    'charset' : 'ISO-8859-1'
-                                },
-                                '/lib/third-party/browser-polyfill.min.js',
-                                '/lib/third-party/d3.min.js',
-                                '/lib/third-party/d3.promise.min.js',
-                                '/lib/third-party/lodash.min.js',
-                                '/lib/home.min.js'
-                            ],
-                            searchPath : '/search',
-                            title : 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.'
-                        });
-                    });
-             });
+            res.render('home.ejs', templateParams);
         });
-    }, function() { renderErrorPage(req, res); });
+    }, error => {
+        console.log(error);
+        renderErrorPage(req, res);
+    });
 };
 
 // Join
