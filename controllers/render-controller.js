@@ -9,6 +9,7 @@ const TagController = require('./tag-controller');
 const Sources = require('./sources');
 const Relatives = require('./relatives');
 const Constants = require('./constants');
+const Request = require('./request');
 
 const _ = require('lodash');
 const htmlencode = require('htmlencode');
@@ -283,7 +284,7 @@ RenderController.prototype.renderSearchPage = function(req, res) {
 //
 RenderController.prototype.renderSearchWithVectorPage = function(req, res) {
 
-    if ((req.params.vector == '') ||
+    if ((req.params.vector === '') ||
         (req.params.vector == 'population') ||
         (req.params.vector == 'earnings') ||
         (req.params.vector == 'education') ||
@@ -323,7 +324,7 @@ RenderController.prototype.renderSearchResults = function(req, res) {
 
         apiController.searchDatasets(params, function(searchResults) {
 
-            if (searchResults.results.length == 0) {
+            if (searchResults.results.length === 0) {
 
                 res.status(204);
                 res.end();
@@ -331,7 +332,7 @@ RenderController.prototype.renderSearchResults = function(req, res) {
             }
 
             res.render(
-                (params.regions.length == 0) ? '_search-results-regular.ejs' : '_search-results-compact.ejs',
+                (params.regions.length === 0) ? '_search-results-regular.ejs' : '_search-results-compact.ejs',
                 {
                     css : [],
                     scripts : [],
@@ -465,7 +466,7 @@ function _renderSearchPage(req, res, params, tableData) {
         console.log(error);
         renderErrorPage(req, res);
     });
-};
+}
 
 RenderController.prototype.getSearchParameters = function(req, completionHandler) {
 
@@ -494,11 +495,11 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
 
     // Debug
     //
-    if (query.debug != null) params.debug = 1;
+    if (query.debug !== null) params.debug = 1;
 
     // Region ids are in the URL path segment, not a query parameter
     //
-    if ((req.params.regionIds == null) || (req.params.regionIds.length == 0)) {
+    if ((req.params.regionIds === null) || (req.params.regionIds.length === 0)) {
 
         if (completionHandler) completionHandler(params);
         return;
@@ -516,7 +517,7 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
 
                 var region = getRegionFromResultsById(results, regionIds[i]);
 
-                if (region != null)
+                if (region !== null)
                     orderedRegions.push(region);
             }
 
@@ -542,7 +543,7 @@ function waitForPromises(promises, successHandler, errorHandler) {
 
 function getSearchPageTitle(params) {
 
-    var rg = []
+    var rg = [];
 
     switch (params.vector) {
 
@@ -575,7 +576,7 @@ function getSearchPageTitle(params) {
     s += ' on the Open Data Network';
 
     return s;
-};
+}
 
 function englishJoin(list) {
 
@@ -616,7 +617,7 @@ function getNormalizedArrayFromQueryParameter(o) {
     if (Array.isArray(o))
         return o;
 
-    if ((o != null) && (o.length > 0))
+    if ((o !== null) && (o.length > 0))
         return [o];
 
     return [];
@@ -633,20 +634,20 @@ function renderErrorPage(req, res, statusCode, message) {
 
     res.status(statusCode);
     res.render('error.ejs', {statusCode, message});
-};
+}
 
 // Extensions
 //
 String.prototype.capitalize = function() {
 
     return this.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
-}
+};
 
 String.prototype.split2 = function(s) {
 
     var rg = this.split(s);
 
-    if ((rg.length == 1) && (rg[0] == ''))
+    if ((rg.length == 1) && (rg[0] === ''))
         return [];
 
     return rg;
