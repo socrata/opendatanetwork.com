@@ -34,13 +34,8 @@ function RenderController() {
 // Categories json
 //
 RenderController.prototype.renderCategoriesJson = function(req, res) {
-
-    apiController.getCategoriesAll(function(allCategoryResults) {
-
-        categoryController.attachCategoryMetadata(allCategoryResults, function(allCategoryResults) {
-
-            res.send(JSON.stringify(allCategoryResults));
-        });
+    API.categories().then(categories => {
+        res.send(JSON.stringify(categories));
     });
 };
 
