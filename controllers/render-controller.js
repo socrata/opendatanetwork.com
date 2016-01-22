@@ -33,101 +33,12 @@ function RenderController() {
 
 // Public methods
 //
-RenderController.prototype.getTableData = (params, successHandler, errorHandler) => {
 
-    const tableData = {};
-
-    switch (params.vector) {
-
-        case 'cost_of_living':
-
-            waitForPromises(
-                params.regions.map(region => apiController.getCostOfLivingData(region.id)),
-                data => {
-                    tableData.costOfLivingData = data;
-                    successHandler(tableData);
-                },
-                errorHandler);
-            break;
-
-        case 'earnings':
-
-            waitForPromises(
-                params.regions.map(region => apiController.getEarningsData(region.id)),
-                data => {
-                    tableData.earningsData = data;
-                    successHandler(tableData);
-                },
-                errorHandler);
-            break;
-
-        case 'education':
-
-            waitForPromises(
-                params.regions.map(region => apiController.getEducationData(region.id)),
-                data => {
-                    tableData.educationData = data;
-                    successHandler(tableData);
-                },
-                errorHandler);
-            break;
-
-        case 'gdp':
-
-            waitForPromises(
-                params.regions.map(region => apiController.getGdpData(region.id)),
-                data => {
-                    tableData.gdpData = data;
-                    successHandler(tableData);
-                },
-                errorHandler);
-            break;
-
-        case 'health':
-
-            waitForPromises(
-                params.regions.map(region => apiController.getHealthData(region.id)),
-                data => {
-                    tableData.healthData = data;
-                    successHandler(tableData);
-                },
-                errorHandler);
-            break;
-
-        case 'occupations':
-
-            waitForPromises(
-                params.regions.map(region => apiController.getOccupationsData(region.id)),
-                data => {
-                    tableData.occupationsData = data;
-                    successHandler(tableData);
-                },
-                errorHandler);
-            break;
-
-        case 'population':
-
-            waitForPromises(
-                params.regions.map(region => apiController.getPopulationData(region.id)),
-                data => {
-                    tableData.populationData = data;
-                    successHandler(tableData);
-                },
-                errorHandler);
-            break;
-
-        default:
-
-            waitForPromises(
-                params.regions.map(region => apiController.getPopulationData(region.id)),
-                data => {
-                    tableData.populationData = data;
-                    successHandler(tableData);
-                },
-                errorHandler);
-            break;
-    }
-};
+function getTableData(params) {
+    const vector = (params.vector in Constants.VECTOR_FXFS) ? params.vector : 'population';
+    const promises = params.regions.map(region => API.variable(vector, region.id));
+    return Promise.all(promises);
+}
 
 // Categories json
 //
@@ -270,13 +181,12 @@ RenderController.prototype.renderJoinOpenDataNetworkComplete = function(req, res
 // Search
 //
 RenderController.prototype.renderSearchPage = function(req, res) {
-
     RenderController.prototype.getSearchParameters(req, function(params) {
-
-        RenderController.prototype.getTableData(
-            params,
-            (tableData) => { _renderSearchPage(req, res, params, tableData); },
-            () => { renderErrorPage(req, res); });
+        getTableData(params).then(tableData => {
+            _renderSearchPage(req, res, params, tableData);
+        }, error => {
+            renderErrorPage(req, res, 503, error);
+        });
     });
 };
 
@@ -298,15 +208,15 @@ RenderController.prototype.renderSearchWithVectorPage = function(req, res) {
             // If the vector is unsupported, just redirect to the root
             //
             if (!_.includes(sources.forRegions(params.regions), req.params.vector)) {
-
                 res.redirect(301, '/');
                 return;
             }
 
-            RenderController.prototype.getTableData(
-                params,
-                (tableData) => { _renderSearchPage(req, res, params, tableData); },
-                () => { renderErrorPage(req, res); });
+            getTableData(params).then(tableData => {
+                _renderSearchPage(req, res, params, tableData);
+            }, error => {
+                renderErrorPage(req, res, 503, error);
+            });
         });
     }
     else {
@@ -321,7 +231,6 @@ RenderController.prototype.renderSearchWithVectorPage = function(req, res) {
 RenderController.prototype.renderSearchResults = function(req, res) {
 
     RenderController.prototype.getSearchParameters(req, function(params) {
-
         apiController.searchDatasets(params, function(searchResults) {
 
             if (searchResults.results.length === 0) {
@@ -477,7 +386,6 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
     var page = isNaN(query.page) ? 1 : parseInt(query.page);
 
     var params = {
-
         categories : categories,
         domains : domains,
         limit : defaultSearchResultCount,
@@ -490,16 +398,12 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
         resetRegions : false,
         tags : tags,
         vector : req.params.vector || '',
-        year : req.params.year || '',
+        year : req.params.year || ''
     };
-
-    // Debug
-    //
-    if (query.debug !== null) params.debug = 1;
 
     // Region ids are in the URL path segment, not a query parameter
     //
-    if ((req.params.regionIds === null) || (req.params.regionIds.length === 0)) {
+    if (!(req.params.regionIds) || (req.params.regionIds.length === 0)) {
 
         if (completionHandler) completionHandler(params);
         return;
@@ -617,7 +521,7 @@ function getNormalizedArrayFromQueryParameter(o) {
     if (Array.isArray(o))
         return o;
 
-    if ((o !== null) && (o.length > 0))
+    if (o && o.length > 0)
         return [o];
 
     return [];

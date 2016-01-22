@@ -93,7 +93,7 @@ MetricsController.prototype.getMapVariables = (params) => {
     const year = parseInt(params.year);
 
     var yearSelectedIndex = formatter.years.length - 1;
-    
+
     if (!isNaN(year)) {
         var i = formatter.years.indexOf(year)
         if (i > -1) yearSelectedIndex = i;
@@ -108,10 +108,10 @@ MetricsController.prototype.getMapVariables = (params) => {
 MetricsController.prototype.getMapSummaryLinks = (params) => {
 
     const vector = params.vector || defaultVector;
-    const formatterGroup = getFormatterGroup(vector);    
+    const formatterGroup = getFormatterGroup(vector);
     const metric = params.metric || getDefaultMetric(vector);
     const filteredMetrics = _.filter(_.keys(formatterGroup), key => key != metric);
-    
+
     const rg = filteredMetrics.map(metric => {
         return { url : getUrl(params, metric), text : formatterGroup[metric].name }
     });
@@ -120,7 +120,6 @@ MetricsController.prototype.getMapSummaryLinks = (params) => {
 }
 
 MetricsController.prototype.getMapSummary = (params, data) => {
-
     switch (params.vector) {
 
         case 'cost_of_living':
@@ -133,17 +132,17 @@ MetricsController.prototype.getMapSummary = (params, data) => {
                 costOfLivingMetric,
                 costOfLivingYear,
                 params.regions,
-                data.costOfLivingData,
+                data,
                 value => (value.year == costOfLivingYear) && (value.component.toLowerCase() == costOfLivingMetric));
 
         case 'earnings':
 
             return getSummary(
                 params.vector,
-                params.metric || 'median_earnings', 
-                params.year || defaultYear, 
+                params.metric || 'median_earnings',
+                params.year || defaultYear,
                 params.regions,
-                data.earningsData);
+                data);
 
         case 'education':
 
@@ -152,7 +151,7 @@ MetricsController.prototype.getMapSummary = (params, data) => {
                 params.metric || 'percent_high_school_graduate_or_higher',
                 params.year || defaultYear,
                 params.regions,
-                data.educationData);
+                data);
 
         case 'gdp':
 
@@ -161,7 +160,7 @@ MetricsController.prototype.getMapSummary = (params, data) => {
                 params.metric || 'per_capita_gdp',
                 params.year || defaultYear,
                 params.regions,
-                data.gdpData);
+                data);
 
         case 'health':
 
@@ -170,7 +169,7 @@ MetricsController.prototype.getMapSummary = (params, data) => {
                 params.metric || 'adult_smoking_value',
                 params.year || defaultHealthYear,
                 params.regions,
-                data.healthData);
+                data);
 
         case 'occupations':
 
@@ -183,7 +182,7 @@ MetricsController.prototype.getMapSummary = (params, data) => {
                 params.metric || 'population_value',
                 params.year || defaultYear,
                 params.regions,
-                data.populationData);
+                data);
 
         default:
 
@@ -192,7 +191,7 @@ MetricsController.prototype.getMapSummary = (params, data) => {
                 params.metric || 'population_value',
                 params.year || defaultYear,
                 params.regions,
-                data.populationData);
+                data);
     }
 };
 
@@ -217,7 +216,7 @@ function getFormatter(vector, metric) {
         console.log('The formatter is undefined. metric: {0}'.format(metric));
         return null;
     }
-    
+
     return formatter;
 }
 
@@ -237,7 +236,7 @@ function getFormatterOrDefault(params) {
 
     var vector = params.vector;
     var formatterGroup = getFormatterGroup(vector)
-    
+
     if (formatterGroup == null) {
         vector = defaultVector;
         formatterGroup = getFormatterGroup(vector);
@@ -245,7 +244,7 @@ function getFormatterOrDefault(params) {
 
     var metric = params.metric;
     var formatter = formatterGroup[metric];
-    
+
     if (formatter == undefined) {
         metric = getDefaultMetric(vector);
         formatter = formatterGroup[metric];
@@ -259,7 +258,7 @@ function getOccupationsSummary(params, data) {
     const occupationsMetric = params.metric || 'management';
     const occupationsYear = params.year || defaultYear;
     const formatter = getFormatter('occupations', occupationsMetric);
-    
+
     if (formatter == null)
         return '';
 
@@ -278,7 +277,7 @@ function getSummary(vector, metric, year, regions, data, filter, format) {
     format = format || 'The {0} in {1} for {2} was {3}.';
 
     const formatter = getFormatter(vector, metric);
-    
+
     if (formatter == null)
         return '';
 
@@ -289,8 +288,8 @@ function getSummary(vector, metric, year, regions, data, filter, format) {
         if (filteredData.length == 0) {
             console.log(
                 'Filter produced no results. metricKey: {0} year: {1} filter: {2} \ndata: {2}'.format(
-                    metric, 
-                    year, 
+                    metric,
+                    year,
                     filter.toString(),
                     JSON.stringify(data[index])));
             return '';
@@ -299,8 +298,8 @@ function getSummary(vector, metric, year, regions, data, filter, format) {
         if (filteredData.length > 1) {
             console.log(
                 'Filter produced more than one result. metricKey: {0} year: {1} \ndata: {2}'.format(
-                    metric, 
-                    year, 
+                    metric,
+                    year,
                     JSON.stringify(data[index])));
         }
 

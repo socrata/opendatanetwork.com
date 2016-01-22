@@ -114,6 +114,18 @@ class API {
             });
         });
     }
+
+    static variable(vector, uid) {
+        return new Promise((resolve, reject) => {
+            if (!(vector in Constants.VECTOR_FXFS)) {
+                reject(`invalid vector: ${vector}`);
+            } else {
+                const baseURL = Constants.datasetURL(Constants.VECTOR_FXFS[vector]);
+                const url = Request.buildURL(baseURL, {id: uid});
+                Request.getJSON(url).then(resolve, reject);
+            }
+        });
+    }
 }
 
 function annotateData(data) {

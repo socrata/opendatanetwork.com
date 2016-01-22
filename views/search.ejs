@@ -5,7 +5,6 @@
 var _params = <%- JSON.stringify(params) %>;
 var _mapVariables = <%- JSON.stringify(mapVariables) %>;
 var _tableData = <%- JSON.stringify(tableData) %>;
-<% if (params.debug) { %>console.log(decodeURIComponent('<%- searchDatasetsURL %>'));<% } %>
 </script>
 
 <section class="refine">
@@ -409,9 +408,6 @@ function getSearchQueryString() {
 
     if (params.tags.length > 0)
         params.tags.forEach(tag => parts.push('tags=' + encodeURIComponent(tag)));
-
-    if (params.debug)
-        parts.push('debug=');
 
     return (parts.length > 0) ? '?' + parts.join('&') : '';
 };

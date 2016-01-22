@@ -255,7 +255,7 @@ class SearchPageController {
         $('.map-summary').text(
             MapSummary.getCostOfLivingSummaryString(
                 this.params.regions,
-                this.tableData.costOfLivingData,
+                this.tableData,
                 variable,
                 year,
                 value => (year == value.year)));
@@ -289,9 +289,9 @@ class SearchPageController {
         //
         const o = {};
 
-        for (var i = 0; i < this.tableData.costOfLivingData.length; i++) {
+        for (var i = 0; i < this.tableData.length; i++) {
 
-            const regionValues = this.tableData.costOfLivingData[i];
+            const regionValues = this.tableData[i];
 
             for (var j = 0; j < regionValues.length; j++) {
 
@@ -342,7 +342,7 @@ class SearchPageController {
         s += '<tr>';
         s += '<th class="empty"></th>';
 
-        for (var i = 0; i < this.tableData.costOfLivingData.length; i++) {
+        for (var i = 0; i < this.tableData.length; i++) {
             s += '<th colspan="2" class="color-' + i + '">' + this.params.regions[i].name + '<div></div></th>';
         }
 
@@ -352,7 +352,7 @@ class SearchPageController {
         //
         s += '<tr class="sub-header-row"><td class="empty"></td>';
 
-        for (var i = 0; i < this.tableData.costOfLivingData.length; i++) {
+        for (var i = 0; i < this.tableData.length; i++) {
             s += '<td>Value</td><td class="color-' + i + '">Percentile<div></div></td>';
         }
 
@@ -369,7 +369,7 @@ class SearchPageController {
 
             for (var j = 0; j < this.params.regions.length; j++) {
 
-                const o = this.getLatestCostOfLiving(this.tableData.costOfLivingData[j], this.params.regions[j].id, components[i]);
+                const o = this.getLatestCostOfLiving(this.tableData[j], this.params.regions[j].id, components[i]);
                 const value = (o != null) ? parseFloat(o.index) : 'NA';
                 const percentile = (o != null) ? this.getPercentile(o.rank, o.total_ranks) : 'NA';
 
@@ -413,7 +413,7 @@ class SearchPageController {
 
             for (var j = 0; j < components.length; j++) {
 
-                const o = this.getLatestCostOfLiving(this.tableData.costOfLivingData[i], this.params.regions[i].id, components[j]);
+                const o = this.getLatestCostOfLiving(this.tableData[i], this.params.regions[i].id, components[j]);
                 const value = (o != null) ? parseFloat(o.index) : 'NA';
                 const percentile = (o != null) ? this.getPercentile(o.rank, o.total_ranks) : 'NA';
 
@@ -481,7 +481,7 @@ class SearchPageController {
         $('.map-summary').text(
             MapSummary.getSummaryString(
                 this.params.regions,
-                this.tableData.earningsData,
+                this.tableData,
                 variable,
                 year,
                 value => (year == value.year)));
@@ -508,7 +508,7 @@ class SearchPageController {
         const someHighSchoolEarnings = ['Some High School'];
 
         for (var i = 0; i < this.params.regions.length; i++) {
-            someHighSchoolEarnings.push(parseInt(this.tableData.earningsData[i][0].median_earnings_less_than_high_school));
+            someHighSchoolEarnings.push(parseInt(this.tableData[i][0].median_earnings_less_than_high_school));
         }
 
         earnings.push(someHighSchoolEarnings);
@@ -518,7 +518,7 @@ class SearchPageController {
         const highSchoolEarnings = ['High School'];
 
         for (var i = 0; i < this.params.regions.length; i++) {
-            highSchoolEarnings.push(parseInt(this.tableData.earningsData[i][0].median_earnings_high_school));
+            highSchoolEarnings.push(parseInt(this.tableData[i][0].median_earnings_high_school));
         }
 
         earnings.push(highSchoolEarnings);
@@ -528,7 +528,7 @@ class SearchPageController {
         const someCollegeEarnings = ['Some College'];
 
         for (var i = 0; i < this.params.regions.length; i++) {
-            someCollegeEarnings.push(parseInt(this.tableData.earningsData[i][0].median_earnings_some_college_or_associates));
+            someCollegeEarnings.push(parseInt(this.tableData[i][0].median_earnings_some_college_or_associates));
         }
 
         earnings.push(someCollegeEarnings);
@@ -538,7 +538,7 @@ class SearchPageController {
         const bachelorsEarnings = ['Bachelor\'s'];
 
         for (var i = 0; i < this.params.regions.length; i++) {
-            bachelorsEarnings.push(parseInt(this.tableData.earningsData[i][0].median_earnings_bachelor_degree));
+            bachelorsEarnings.push(parseInt(this.tableData[i][0].median_earnings_bachelor_degree));
         }
 
         earnings.push(bachelorsEarnings);
@@ -548,7 +548,7 @@ class SearchPageController {
         const graduateDegreeEarnings = ['Graduate Degree'];
 
         for (var i = 0; i < this.params.regions.length; i++) {
-            graduateDegreeEarnings.push(parseInt(this.tableData.earningsData[i][0].median_earnings_graduate_or_professional_degree));
+            graduateDegreeEarnings.push(parseInt(this.tableData[i][0].median_earnings_graduate_or_professional_degree));
         }
 
         earnings.push(graduateDegreeEarnings);
@@ -596,7 +596,7 @@ class SearchPageController {
         s += '<tr>';
         s += '<th class="empty"></th>';
 
-        for (var i = 0; i < this.tableData.earningsData.length; i++) {
+        for (var i = 0; i < this.tableData.length; i++) {
             s += '<th class="color-' + i + '">' + this.params.regions[i].name + '<div></div></th>';
         }
 
@@ -606,8 +606,8 @@ class SearchPageController {
         //
         s += '<tr><td class="category-header">Median Earnings<br>(All Workers)</td>';
 
-        for (var i = 0; i < this.tableData.earningsData.length; i++) {
-            s += '<td class="color-' + i + '">' + numeral(this.tableData.earningsData[i][0].median_earnings).format('$0,0')  + '<div></div></td>';
+        for (var i = 0; i < this.tableData.length; i++) {
+            s += '<td class="color-' + i + '">' + numeral(this.tableData[i][0].median_earnings).format('$0,0')  + '<div></div></td>';
         }
         s += '</tr>';
 
@@ -615,8 +615,8 @@ class SearchPageController {
         //
         s += '<tr><td class="category-header">Median Female Earnings<br>(Full Time)</td>';
 
-        for (var i = 0; i < this.tableData.earningsData.length; i++) {
-            s += '<td class="color-' + i + '">' + numeral(this.tableData.earningsData[i][0].female_full_time_median_earnings).format('$0,0')  + '<div></div></td>';
+        for (var i = 0; i < this.tableData.length; i++) {
+            s += '<td class="color-' + i + '">' + numeral(this.tableData[i][0].female_full_time_median_earnings).format('$0,0')  + '<div></div></td>';
         }
         s += '</tr>';
 
@@ -624,8 +624,8 @@ class SearchPageController {
         //
         s += '<tr><td class="category-header">Median Male Earnings<br>(Full Time)</td>';
 
-        for (var i = 0; i < this.tableData.earningsData.length; i++) {
-            s += '<td class="color-' + i + '">' + numeral(this.tableData.earningsData[i][0].male_full_time_median_earnings).format('$0,0')  + '<div></div></td>';
+        for (var i = 0; i < this.tableData.length; i++) {
+            s += '<td class="color-' + i + '">' + numeral(this.tableData[i][0].male_full_time_median_earnings).format('$0,0')  + '<div></div></td>';
         }
         s += '</tr>';
 
@@ -648,13 +648,13 @@ class SearchPageController {
         s += '<td class="category-header">Median Male Earnings<br>(Full Time)</td>';
         s += '</tr>';
 
-        for (var i = 0; i < this.tableData.earningsData.length; i++) {
+        for (var i = 0; i < this.tableData.length; i++) {
 
             s += '<tr class="color-' + i + '">'
             s += '<td>' + this.params.regions[i].name + '<div></div></td>';
-            s += '<td>' + numeral(this.tableData.earningsData[i][0].median_earnings).format('$0,0') + '<div></div></td>';
-            s += '<td>' + numeral(this.tableData.earningsData[i][0].female_full_time_median_earnings).format('$0,0') + '<div></div></td>';
-            s += '<td>' + numeral(this.tableData.earningsData[i][0].male_full_time_median_earnings).format('$0,0') + '<div></div></td>';
+            s += '<td>' + numeral(this.tableData[i][0].median_earnings).format('$0,0') + '<div></div></td>';
+            s += '<td>' + numeral(this.tableData[i][0].female_full_time_median_earnings).format('$0,0') + '<div></div></td>';
+            s += '<td>' + numeral(this.tableData[i][0].male_full_time_median_earnings).format('$0,0') + '<div></div></td>';
             s += '</tr>';
         }
 
@@ -676,7 +676,7 @@ class SearchPageController {
         $('.map-summary').text(
             MapSummary.getSummaryString(
                 this.params.regions,
-                this.tableData.healthData,
+                this.tableData,
                 variable,
                 year,
                 value => (year == value.year)));
@@ -727,7 +727,7 @@ class SearchPageController {
         s += '<tr>';
         s += '<th class="sub-header">Life Length</th>';
 
-        for (var i = 0; i < this.tableData.healthData.length; i++) {
+        for (var i = 0; i < this.tableData.length; i++) {
             s += '<th class="color-' + i + '">' + this.params.regions[i].name + '<div></div></th>';
         }
 
@@ -743,7 +743,7 @@ class SearchPageController {
         s += '<tr>';
         s += '<th class="sub-header">Quality of Life</th>';
 
-        for (var i = 0; i < this.tableData.healthData.length; i++) {
+        for (var i = 0; i < this.tableData.length; i++) {
             s += '<th class="color-' + i + '">' + this.params.regions[i].name + '<div></div></th>';
         }
 
@@ -780,9 +780,9 @@ class SearchPageController {
         s += '<td class="category-header">Low Birth Weight</td>';
         s += '</tr>';
 
-        for (var i = 0; i < this.tableData.healthData.length; i++) {
+        for (var i = 0; i < this.tableData.length; i++) {
 
-            const regionData = this.tableData.healthData[i][0];
+            const regionData = this.tableData[i][0];
 
             s += '<tr class="color-' + i + '">';
             s += '<td>' + this.params.regions[i].name + '<div></div></td>';
@@ -809,7 +809,7 @@ class SearchPageController {
         s += '<tr>';
         s += '<th class="sub-header">Health Behaviors</th>';
 
-        for (var i = 0; i < this.tableData.healthData.length; i++) {
+        for (var i = 0; i < this.tableData.length; i++) {
             s += '<th class="color-' + i + '">' + this.params.regions[i].name + '<div></div></th>';
         }
 
@@ -854,7 +854,7 @@ class SearchPageController {
 
         for (var i = 0; i < this.params.regions.length; i++) {
 
-            const regionData = this.tableData.healthData[i][0];
+            const regionData = this.tableData[i][0];
 
             s += '<tr class="color-' + i + '">';
             s += '<td>' + this.params.regions[i].name + '<div></div></td>';
@@ -884,7 +884,7 @@ class SearchPageController {
         s += '<tr>';
         s += '<th class="sub-header">Clinical Care</th>';
 
-        for (var i = 0; i < this.tableData.healthData.length; i++) {
+        for (var i = 0; i < this.tableData.length; i++) {
             s += '<th class="color-' + i + '">' + this.params.regions[i].name + '<div></div></th>';
         }
 
@@ -925,7 +925,7 @@ class SearchPageController {
 
         for (var i = 0; i < this.params.regions.length; i++) {
 
-            const regionData = this.tableData.healthData[i][0];
+            const regionData = this.tableData[i][0];
 
             s += '<tr class="color-' + i + '">';
             s += '<td>' + this.params.regions[i].name + '<div></div></td>';
@@ -953,7 +953,7 @@ class SearchPageController {
         s += '<tr>';
         s += '<th class="sub-header">Social &amp; Economic Factors</th>';
 
-        for (var i = 0; i < this.tableData.healthData.length; i++) {
+        for (var i = 0; i < this.tableData.length; i++) {
             s += '<th class="color-' + i + '">' + this.params.regions[i].name + '<div></div></th>';
         }
 
@@ -998,7 +998,7 @@ class SearchPageController {
 
         for (var i = 0; i < this.params.regions.length; i++) {
 
-            const regionData = this.tableData.healthData[i][0];
+            const regionData = this.tableData[i][0];
 
             s += '<tr class="color-' + i + '">';
             s += '<td>' + this.params.regions[i].name + '<div></div></td>';
@@ -1028,7 +1028,7 @@ class SearchPageController {
         s += '<tr>';
         s += '<th class="sub-header">Physical Environment</th>';
 
-        for (var i = 0; i < this.tableData.healthData.length; i++) {
+        for (var i = 0; i < this.tableData.length; i++) {
             s += '<th class="color-' + i + '">' + this.params.regions[i].name + '<div></div></th>';
         }
 
@@ -1065,7 +1065,7 @@ class SearchPageController {
 
         for (var i = 0; i < this.params.regions.length; i++) {
 
-            const regionData = this.tableData.healthData[i][0];
+            const regionData = this.tableData[i][0];
 
             s += '<tr class="color-' + i + '">';
             s += '<td>' + this.params.regions[i].name + '<div></div></td>';
@@ -1086,9 +1086,9 @@ class SearchPageController {
 
         var s = '<tr><td class="category-header">' + header + '</td>';
 
-        for (var i = 0; i < this.tableData.healthData.length; i++) {
+        for (var i = 0; i < this.tableData.length; i++) {
 
-            const regionData = this.tableData.healthData[i][0];
+            const regionData = this.tableData[i][0];
             s += this.drawHealthDataTableCellVertical(i, regionData, key, format);
         }
 
@@ -1140,7 +1140,7 @@ class SearchPageController {
         $('.map-summary').text(
             MapSummary.getSummaryString(
                 this.params.regions,
-                this.tableData.educationData,
+                this.tableData,
                 variable,
                 year,
                 value => (year == value.year)));
@@ -1170,7 +1170,7 @@ class SearchPageController {
         s += '<tr>';
         s += '<th class="empty"></th>';
 
-        for (var i = 0; i < this.tableData.educationData.length; i++) {
+        for (var i = 0; i < this.tableData.length; i++) {
             s += '<th colspan="2" class="color-' + i + '">' + this.params.regions[i].name + '<div></div></th>';
         }
 
@@ -1180,7 +1180,7 @@ class SearchPageController {
         //
         s += '<tr class="sub-header-row"><td class="empty"></td>';
 
-        for (var i = 0; i < this.tableData.educationData.length; i++) {
+        for (var i = 0; i < this.tableData.length; i++) {
             s += '<td>Percent</td><td class="color-' + i + '">Percentile<div></div></td>';
         }
 
@@ -1188,9 +1188,9 @@ class SearchPageController {
         //
         s += '<tr><td class="category-header">At Least Bachelor\'s Degree</td>';
 
-        for (var i = 0; i < this.tableData.educationData.length; i++) {
+        for (var i = 0; i < this.tableData.length; i++) {
 
-            const regionData = this.tableData.educationData[i][0];
+            const regionData = this.tableData[i][0];
             const totalRanks = parseInt(regionData.total_ranks);
 
             const bachelorsRank = parseInt(regionData.percent_bachelors_degree_or_higher_rank);
@@ -1206,9 +1206,9 @@ class SearchPageController {
         //
         s += '<tr><td class="category-header">At Least High School Diploma</td>';
 
-        for (var i = 0; i < this.tableData.educationData.length; i++) {
+        for (var i = 0; i < this.tableData.length; i++) {
 
-            const regionData = this.tableData.educationData[i][0];
+            const regionData = this.tableData[i][0];
             const totalRanks = parseInt(regionData.total_ranks);
 
             const highSchoolRank = parseInt(regionData.percent_high_school_graduate_or_higher_rank);
@@ -1239,9 +1239,9 @@ class SearchPageController {
         s += '<td class="category-header">At Least High School Diploma<br>(Percentile)</td>';
         s += '</tr>';
 
-        for (var i = 0; i < this.tableData.educationData.length; i++) {
+        for (var i = 0; i < this.tableData.length; i++) {
 
-            const regionData = this.tableData.educationData[i][0];
+            const regionData = this.tableData[i][0];
 
             s += '<tr class="color-' + i + '">'
             s += '<td>' + this.params.regions[i].name + '<div></div></td>';
@@ -1284,7 +1284,7 @@ class SearchPageController {
         $('.map-summary').text(
             MapSummary.getSummaryString(
                 this.params.regions,
-                this.tableData.gdpData,
+                this.tableData,
                 variable,
                 year,
                 value => (year == value.year)));
@@ -1310,9 +1310,9 @@ class SearchPageController {
         //
         const o = {};
 
-        for (var i = 0; i < this.tableData.gdpData.length; i++) {
+        for (var i = 0; i < this.tableData.length; i++) {
 
-            const regionValues = this.tableData.gdpData[i];
+            const regionValues = this.tableData[i];
 
             for (var j = 0; j < regionValues.length; j++) {
 
@@ -1365,9 +1365,9 @@ class SearchPageController {
         //
         const o = {};
 
-        for (var i = 0; i < this.tableData.gdpData.length; i++) {
+        for (var i = 0; i < this.tableData.length; i++) {
 
-            const regionValues = this.tableData.gdpData[i];
+            const regionValues = this.tableData[i];
 
             for (var j = 0; j < regionValues.length; j++) {
 
@@ -1416,7 +1416,7 @@ class SearchPageController {
         $('.map-summary').text(
             MapSummary.getOccupationsSummaryString(
                 this.params.regions,
-                this.tableData.occupationsData,
+                this.tableData,
                 variable,
                 year,
                 value => (year == value.year) && (variable.name == value.occupation)));
@@ -1440,7 +1440,7 @@ class SearchPageController {
         $('.map-summary').text(
             MapSummary.getSummaryString(
                 this.params.regions,
-                this.tableData.populationData,
+                this.tableData,
                 variable,
                 year,
                 value => (year == value.year)));
@@ -1466,9 +1466,9 @@ class SearchPageController {
         //
         const o = {};
 
-        for (var i = 0; i < this.tableData.populationData.length; i++) {
+        for (var i = 0; i < this.tableData.length; i++) {
 
-            const regionValues = this.tableData.populationData[i];
+            const regionValues = this.tableData[i];
 
             for (var j = 0; j < regionValues.length; j++) {
 
@@ -1520,9 +1520,9 @@ class SearchPageController {
         //
         const o = {};
 
-        for (var i = 0; i < this.tableData.populationData.length; i++) {
+        for (var i = 0; i < this.tableData.length; i++) {
 
-            const regionValues = this.tableData.populationData[i];
+            const regionValues = this.tableData[i];
 
             for (var j = 0; j < regionValues.length; j++) {
 
@@ -1774,9 +1774,6 @@ class SearchPageController {
 
         if (this.params.tags.length > 0)
             this.params.tags.forEach(tag => parts.push('tags=' + encodeURIComponent(tag)));
-
-        if (this.params.debug)
-            parts.push('debug=');
 
         return (parts.length > 0) ? '?' + parts.join('&') : '';
     }
