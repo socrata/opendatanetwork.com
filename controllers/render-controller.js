@@ -29,16 +29,16 @@ module.exports = RenderController;
 function RenderController() {
 }
 
-// Categories json
-//
+
+
 RenderController.prototype.renderCategoriesJson = function(req, res) {
     API.categories().then(categories => {
         res.send(JSON.stringify(categories));
     });
 };
 
-// Dataset
-//
+
+
 RenderController.prototype.renderDatasetPage = function(req, res) {
     const domain = req.params.domain;
     const id = req.params.id;
@@ -142,26 +142,18 @@ RenderController.prototype.renderHomePage = function(req, res) {
     });
 };
 
-// Join
-//
 RenderController.prototype.renderJoinOpenDataNetwork = function(req, res) {
-
     res.locals.css = 'join.css';
     res.locals.title = 'Join the Open Data Network.';
     res.render('join.ejs');
 };
 
-// Join complete
-//
 RenderController.prototype.renderJoinOpenDataNetworkComplete = function(req, res) {
-
     res.locals.css = 'join-complete.css';
     res.locals.title = 'Thanks for joining the Open Data Network.';
     res.render('join-complete.ejs');
 };
 
-// Search
-//
 RenderController.prototype.renderSearchPage = function(req, res) {
     RenderController.prototype.getSearchParameters(req, function(params) {
         API.tableData(params.vector, params.regions).then(tableData => {
@@ -172,74 +164,30 @@ RenderController.prototype.renderSearchPage = function(req, res) {
     });
 };
 
-// Search with vector
-//
 RenderController.prototype.renderSearchWithVectorPage = function(req, res) {
+    const vector = req.params.vector;
 
-    if ((req.params.vector === '') ||
-        (req.params.vector == 'population') ||
-        (req.params.vector == 'earnings') ||
-        (req.params.vector == 'education') ||
-        (req.params.vector == 'occupations') ||
-        (req.params.vector == 'gdp') ||
-        (req.params.vector == 'health') ||
-        (req.params.vector == 'cost_of_living')) {
+    if (vector === '' || vector in Constants.VECTOR_FXFS) {
+        RenderController.prototype.getSearchParameters(req, params => {
+            const regions = params.regions;
 
-        RenderController.prototype.getSearchParameters(req, function(params) {
-
-            // If the vector is unsupported, just redirect to the root
-            //
-            if (!_.includes(sources.forRegions(params.regions), req.params.vector)) {
-                res.redirect(301, '/');
-                return;
-            }
-
-            API.tableData(params.vector, params.regions).then(tableData => {
-                _renderSearchPage(req, res, params, tableData);
-            }, error => {
-                renderErrorPage(req, res, 503, error);
-            });
-        });
-    }
-    else {
-
-        console.log('Unknown req.params.vector: {0} url: {1}'.format(req.params.vector, req.url));
-        renderErrorPage(req, res);
-    }
-};
-
-// Search results
-//
-RenderController.prototype.renderSearchResults = function(req, res) {
-
-    RenderController.prototype.getSearchParameters(req, function(params) {
-        apiController.searchDatasets(params, function(searchResults) {
-
-            if (searchResults.results.length === 0) {
-
-                res.status(204);
-                res.end();
-                return;
-            }
-
-            res.render(
-                (params.regions.length === 0) ? '_search-results-regular.ejs' : '_search-results-compact.ejs',
-                {
-                    css : [],
-                    scripts : [],
-                    params : params,
-                    searchResults : searchResults,
+            if (!_.includes(sources.forRegions(regions), vector)) {
+                renderErrorPage(req, res, 404,
+                                `"${vector}" data not available for ${regions[0].name}`);
+            } else {
+                API.tableData(vector, regions).then(tableData => {
+                    _renderSearchPage(req, res, params, tableData);
+                }, error => {
+                    renderErrorPage(req, res);
                 });
+            }
         });
-    });
+    } else {
+        renderErrorPage(req, res, 404, `Vector "${vector}" not found`);
+    }
 };
 
-
-
-// Private functions
-//
 function _renderSearchPage(req, res, params, tableData) {
-
     function forRegion(regionPromise) {
         return new Promise(resolve => {
             if (params.regions.length === 0) {
@@ -359,6 +307,30 @@ function _renderSearchPage(req, res, params, tableData) {
     });
 }
 
+RenderController.prototype.renderSearchResults = function(req, res) {
+
+    RenderController.prototype.getSearchParameters(req, function(params) {
+        apiController.searchDatasets(params, function(searchResults) {
+
+            if (searchResults.results.length === 0) {
+
+                res.status(204);
+                res.end();
+                return;
+            }
+
+            res.render(
+                (params.regions.length === 0) ? '_search-results-regular.ejs' : '_search-results-compact.ejs',
+                {
+                    css : [],
+                    scripts : [],
+                    params : params,
+                    searchResults : searchResults,
+                });
+        });
+    });
+};
+
 RenderController.prototype.getSearchParameters = function(req, completionHandler) {
 
     var query = req.query;
@@ -414,8 +386,8 @@ RenderController.prototype.getSearchParameters = function(req, completionHandler
     });
 };
 
-// Private functions
-//
+
+
 function waitForPromises(promises, successHandler, errorHandler) {
 
     Promise.all(promises)
@@ -522,8 +494,8 @@ function renderErrorPage(req, res, statusCode, message) {
     res.render('error.ejs', {statusCode, message});
 }
 
-// Extensions
-//
+
+
 String.prototype.capitalize = function() {
 
     return this.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
