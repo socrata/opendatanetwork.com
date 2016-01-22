@@ -126,6 +126,12 @@ class API {
             }
         });
     }
+
+    static tableData(vector, regions) {
+        vector = vector in Constants.VECTOR_FXFS ? vector : 'population';
+        const promises = regions.map(region => API.variable(vector, region.id));
+        return Promise.all(promises);
+    }
 }
 
 function annotateData(data) {

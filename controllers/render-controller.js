@@ -31,15 +31,6 @@ module.exports = RenderController;
 function RenderController() {
 }
 
-// Public methods
-//
-
-function getTableData(params) {
-    const vector = (params.vector in Constants.VECTOR_FXFS) ? params.vector : 'population';
-    const promises = params.regions.map(region => API.variable(vector, region.id));
-    return Promise.all(promises);
-}
-
 // Categories json
 //
 RenderController.prototype.renderCategoriesJson = function(req, res) {
@@ -182,7 +173,7 @@ RenderController.prototype.renderJoinOpenDataNetworkComplete = function(req, res
 //
 RenderController.prototype.renderSearchPage = function(req, res) {
     RenderController.prototype.getSearchParameters(req, function(params) {
-        getTableData(params).then(tableData => {
+        API.tableData(params.vector, params.regions).then(tableData => {
             _renderSearchPage(req, res, params, tableData);
         }, error => {
             renderErrorPage(req, res, 503, error);
@@ -212,7 +203,7 @@ RenderController.prototype.renderSearchWithVectorPage = function(req, res) {
                 return;
             }
 
-            getTableData(params).then(tableData => {
+            API.tableData(params.vector, params.regions).then(tableData => {
                 _renderSearchPage(req, res, params, tableData);
             }, error => {
                 renderErrorPage(req, res, 503, error);
