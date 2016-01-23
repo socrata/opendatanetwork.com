@@ -167,7 +167,7 @@ MetricsController.prototype.getMapSummary = (params, data) => {
 
             return getSummary(
                 params.vector,
-                params.metric || 'adult_smoking_value',
+                params.metric || 'adult_smoking_rate',
                 params.year || defaultHealthYear,
                 params.regions,
                 data.healthData);
