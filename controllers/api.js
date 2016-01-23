@@ -16,6 +16,12 @@ const tagController = new TagController();
 const SYNONYMS = Synonyms.fromFile(Constants.SYNONYMS_FILE);
 
 class API {
+    static regions(ids) {
+        const params = {'$where': `id in(${ids.map(id => `'${id}'`).join(',')})`};
+        const url = Request.buildURL(Constants.ROSTER_URL, params);
+        return Request.getJSON(url);
+    }
+
     static datasets(requestParams) {
         return new Promise((resolve, reject) => {
             const hasRegions = requestParams.regions.length > 0;

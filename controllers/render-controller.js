@@ -37,7 +37,8 @@ class RenderController {
 
         const datasetPromise = API.datasetSummary(domain, id);
         const schemasPromise = API.standardSchemas(id);
-        const allPromise = Promise.all([datasetPromise, schemasPromise]);
+        const paramsPromise = RenderController._parameters(req);
+        const allPromise = Promise.all([datasetPromise, schemasPromise, paramsPromise]);
 
         allPromise.then(data => {
             const dataset = data[0];
@@ -54,37 +55,36 @@ class RenderController {
                     direct_map: schema.query.length === 0
                 });
             });
+            const params = data[2];
 
-            RenderController._parameters(req, function(params) {
-                const templateParams = {
-                    params,
-                    schemas,
-                    searchPath : '/search',
-                    title : dataset.name,
-                    dataset : {
-                        domain,
-                        id,
-                        descriptionHtml : htmlEncode(dataset.description).replace('\n', '<br>'),
-                        name : dataset.name,
-                        tags : dataset.tags || [],
-                        columns : dataset.columns,
-                        updatedAtString : moment(new Date(dataset.viewLastModified * 1000)).format('D MMM YYYY')
-                    },
-                    css : [
-                        '/styles/dataset.css'
-                    ],
-                    scripts : [
-                        '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
-                        '/lib/third-party/colorbrewer.min.js',
-                        '/lib/third-party/d3.min.js',
-                        '/lib/third-party/d3.promise.min.js',
-                        '/lib/third-party/lodash.min.js',
-                        '/lib/search.min.js',
-                    ]
-                };
+            const templateParams = {
+                params,
+                schemas,
+                searchPath : '/search',
+                title : dataset.name,
+                dataset : {
+                    domain,
+                    id,
+                    descriptionHtml : htmlEncode(dataset.description).replace('\n', '<br>'),
+                    name : dataset.name,
+                    tags : dataset.tags || [],
+                    columns : dataset.columns,
+                    updatedAtString : moment(new Date(dataset.viewLastModified * 1000)).format('D MMM YYYY')
+                },
+                css : [
+                    '/styles/dataset.css'
+                ],
+                scripts : [
+                    '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
+                    '/lib/third-party/colorbrewer.min.js',
+                    '/lib/third-party/d3.min.js',
+                    '/lib/third-party/d3.promise.min.js',
+                    '/lib/third-party/lodash.min.js',
+                    '/lib/search.min.js',
+                ]
+            };
 
-                res.render('dataset.ejs', templateParams);
-            });
+            res.render('dataset.ejs', templateParams);
         }, error => {
             renderErrorPage(req, res, 404, 'Dataset not found');
         });
@@ -93,40 +93,40 @@ class RenderController {
     static home(req, res) {
         const categoriesPromise = API.categories();
         const locationsPromise = API.locations();
-        const allPromise = Promise.all([categoriesPromise, locationsPromise]);
+        const paramsPromise = RenderController._parameters(req);
+        const allPromise = Promise.all([categoriesPromise, locationsPromise, paramsPromise]);
 
         allPromise.then(data => {
             const categories = data[0];
             const locations = data[1];
+            const params = data[2];
 
-            RenderController._parameters(req, params => {
-                const templateParams = {
-                    categories,
-                    locations,
-                    params,
-                    searchPath : '/search',
-                    title : 'Open Data Network',
-                    css : [
-                        '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css',
-                        '/styles/home.css',
-                        '/styles/main.css'
-                    ],
-                    scripts : [
-                        '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js',
-                        {
-                            'url' : '//fast.wistia.net/static/popover-v1.js',
-                            'charset' : 'ISO-8859-1'
-                        },
-                        '/lib/third-party/browser-polyfill.min.js',
-                        '/lib/third-party/d3.min.js',
-                        '/lib/third-party/d3.promise.min.js',
-                        '/lib/third-party/lodash.min.js',
-                        '/lib/home.min.js'
-                    ]
-                };
+            const templateParams = {
+                categories,
+                locations,
+                params,
+                searchPath : '/search',
+                title : 'Open Data Network',
+                css : [
+                    '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css',
+                    '/styles/home.css',
+                    '/styles/main.css'
+                ],
+                scripts : [
+                    '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js',
+                    {
+                        'url' : '//fast.wistia.net/static/popover-v1.js',
+                        'charset' : 'ISO-8859-1'
+                    },
+                    '/lib/third-party/browser-polyfill.min.js',
+                    '/lib/third-party/d3.min.js',
+                    '/lib/third-party/d3.promise.min.js',
+                    '/lib/third-party/lodash.min.js',
+                    '/lib/home.min.js'
+                ]
+            };
 
-                res.render('home.ejs', templateParams);
-            });
+            res.render('home.ejs', templateParams);
         }, error => {
             console.log(error);
             renderErrorPage(req, res);
@@ -322,56 +322,43 @@ class RenderController {
     }
 
     static _parameters(req, completionHandler) {
-        var query = req.query;
-        var categories = getNormalizedArrayFromQueryParameter(query.categories);
-        var domains = getNormalizedArrayFromQueryParameter(query.domains);
-        var tags = getNormalizedArrayFromQueryParameter(query.tags);
-        var page = isNaN(query.page) ? 1 : parseInt(query.page);
+        return new Promise((resolve, reject) => {
+            var query = req.query;
+            var categories = getNormalizedArrayFromQueryParameter(query.categories);
+            var domains = getNormalizedArrayFromQueryParameter(query.domains);
+            var tags = getNormalizedArrayFromQueryParameter(query.tags);
+            var page = isNaN(query.page) ? 1 : parseInt(query.page);
 
-        var params = {
-            categories : categories,
-            domains : domains,
-            limit : defaultSearchResultCount,
-            metric : req.params.metric || '',
-            offset : (page - 1) * defaultSearchResultCount,
-            only : 'datasets',
-            page : page,
-            q : query.q || '',
-            regions : [],
-            resetRegions : false,
-            tags : tags,
-            vector : req.params.vector || '',
-            year : req.params.year || ''
-        };
+            var params = {
+                categories : categories,
+                domains : domains,
+                limit : defaultSearchResultCount,
+                metric : req.params.metric || '',
+                offset : (page - 1) * defaultSearchResultCount,
+                only : 'datasets',
+                page : page,
+                q : query.q || '',
+                regions : [],
+                resetRegions : false,
+                tags : tags,
+                vector : req.params.vector || '',
+                year : req.params.year || ''
+            };
 
-        // Region ids are in the URL path segment, not a query parameter
-        //
-        if (!(req.params.regionIds) || (req.params.regionIds.length === 0)) {
+            if (req.params.regionIds && req.params.regionIds != '') {
+                const regionIds = req.params.regionIds.split('-');
 
-            if (completionHandler) completionHandler(params);
-            return;
-        }
+                API.regions(regionIds).then(regions => {
+                    const regionsById = _.object(regions.map(region => [region.id, region]));
+                    params.regions = params.regions
+                        .filter(region => region in regionsById)
+                        .map(region => regionsById[region]);
 
-        var regionIds = req.params.regionIds.split2('-');
-
-        apiController.getAutoSuggestedRegions(regionIds, function(results) {
-
-            if (results.length > 0) {
-
-                var orderedRegions = [];
-
-                for (var i in regionIds) {
-
-                    var region = getRegionFromResultsById(results, regionIds[i]);
-
-                    if (region !== null)
-                        orderedRegions.push(region);
-                }
-
-                params.regions = orderedRegions;
+                    resolve(params);
+                });
+            } else {
+                resolve(params);
             }
-
-            if (completionHandler) completionHandler(params);
         });
     }
 }
@@ -491,14 +478,5 @@ String.prototype.capitalize = function() {
     return this.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
 };
 
-String.prototype.split2 = function(s) {
-
-    var rg = this.split(s);
-
-    if ((rg.length == 1) && (rg[0] === ''))
-        return [];
-
-    return rg;
-};
 
 module.exports = RenderController;
