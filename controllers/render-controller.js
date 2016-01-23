@@ -317,26 +317,23 @@ class RenderController {
 
     static _parameters(req, completionHandler) {
         return new Promise((resolve, reject) => {
-            var query = req.query;
-            var categories = getNormalizedArrayFromQueryParameter(query.categories);
-            var domains = getNormalizedArrayFromQueryParameter(query.domains);
-            var tags = getNormalizedArrayFromQueryParameter(query.tags);
-            var page = isNaN(query.page) ? 1 : parseInt(query.page);
+            const query = req.query;
+            const page = isNaN(query.page) ? 1 : parseInt(query.page);
 
-            var params = {
-                categories : categories,
-                domains : domains,
-                limit : defaultSearchResultCount,
-                metric : req.params.metric || '',
-                offset : (page - 1) * defaultSearchResultCount,
-                only : 'datasets',
-                page : page,
-                q : query.q || '',
-                regions : [],
-                resetRegions : false,
-                tags : tags,
-                vector : req.params.vector || '',
-                year : req.params.year || ''
+            const params = {
+                categories: asArray(query.categories),
+                domains: asArray(query.domains),
+                tags: asArray(query.tags),
+                limit: defaultSearchResultCount,
+                metric: req.params.metric || '',
+                offset: (page - 1) * defaultSearchResultCount,
+                only: 'datasets',
+                page: page,
+                q: query.q || '',
+                regions: [],
+                resetRegions: false,
+                vector: req.params.vector || '',
+                year: req.params.year || ''
             };
 
             if (req.params.regionIds && req.params.regionIds != '') {
@@ -357,6 +354,12 @@ class RenderController {
     }
 }
 
+
+function asArray(parameter) {
+    if (Array.isArray(parameter)) return parameter;
+    if (parameter && parameter.length > 0) return [parameter];
+    return [];
+}
 
 
 function waitForPromises(promises, successHandler, errorHandler) {
@@ -422,24 +425,6 @@ function englishJoin(list) {
     return s;
 }
 
-function getRegionFromResultsById(results, regionId) {
-
-    for (var i in results) {
-
-        var result = results[i];
-
-        if (regionId == result.id) {
-
-            return {
-                id : result.id,
-                name : result.name,
-                type : result.type
-            };
-        }
-    }
-
-    return null;
-}
 
 function getNormalizedArrayFromQueryParameter(o) {
 
