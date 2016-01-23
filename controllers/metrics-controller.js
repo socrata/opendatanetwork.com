@@ -235,17 +235,21 @@ function getFormatterGroup(vector) {
 
 function getFormatterOrDefault(params) {
 
-    var vector = params.vector;
+    var vector = params.vector || defaultVector; // if the vector is missing, assign to the default vector
     var formatterGroup = getFormatterGroup(vector)
-    
+
+    // If the formatterGroup is not found for the vector, look it up by the defaultVector.
+    //
     if (formatterGroup == null) {
         vector = defaultVector;
         formatterGroup = getFormatterGroup(vector);
     }
 
-    var metric = params.metric;
+    // If the formatter is not found for the metric, look it up by the default metric.
+    //
+    var metric = params.metric || getDefaultMetric(vector);
     var formatter = formatterGroup[metric];
-    
+
     if (formatter == undefined) {
         metric = getDefaultMetric(vector);
         formatter = formatterGroup[metric];
