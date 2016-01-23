@@ -230,7 +230,7 @@ class RenderController {
                 mapVariables : metricsController.getMapVariables(params),
                 searchPath : req.path,
                 sources : sources.forRegions(params.regions),
-                title : getSearchPageTitle(params),
+                title : searchPageTitle(params),
                 css : [
                     '/styles/third-party/leaflet.min.css',
                     '/styles/search.css',
@@ -354,92 +354,34 @@ class RenderController {
     }
 }
 
-
 function asArray(parameter) {
     if (Array.isArray(parameter)) return parameter;
     if (parameter && parameter.length > 0) return [parameter];
     return [];
 }
 
+function searchPageTitle(params) {
+    const vector = capitalize(params.vector.replace(/_/g, ' '));
+    const categories = params.categories.map(capitalize);
+    const tags = params.tags.map(capitalize);
+    const dataTypes = _.flatten([[vector], categories, tags]);
+    const dataDescription = wordJoin(dataTypes);
 
-function waitForPromises(promises, successHandler, errorHandler) {
+    const locationDescription = params.regions.length > 0 ?
+        `for ${wordJoin(params.regions.map(region => region.name))}` : '';
 
-    Promise.all(promises)
-        .then(data => successHandler(data))
-        .catch(error => {
-
-            console.error(error);
-            errorHandler();
-        });
+    return `${dataDescription} Data ${locationDescription} on the Open Data Network`;
 }
 
-function getSearchPageTitle(params) {
-
-    var rg = [];
-
-    switch (params.vector) {
-
-        case 'population': rg.push('Population'); break;
-        case 'earnings': rg.push('Earnings'); break;
-        case 'education': rg.push('Education'); break;
-        case 'occupations': rg.push('Occupations'); break;
-        case 'gdp': rg.push('Economic'); break;
-        case 'health': rg.push('Health'); break;
-        case 'cost_of_living': rg.push('Cost of Living'); break;
-        default: rg.push('Population'); break;
-    }
-
-    var categories = params.categories.map(function(category) { return category.capitalize(); });
-    rg = rg.concat(categories);
-
-    var tags = params.tags.map(function(standard) { return standard.toUpperCase(); });
-    rg = rg.concat(tags);
-
-    var s = englishJoin(rg);
-    s += ' Data';
-
-    if (params.regions.length > 0) {
-
-        s += ' for ';
-        var regionNames = params.regions.map(function(region) { return region.name; });
-        s += englishJoin(regionNames);
-    }
-
-    s += ' on the Open Data Network';
-
-    return s;
+function capitalize(string) {
+    return string.replace(/(?:^|\s)\S/g, start => start.toUpperCase());
 }
 
-function englishJoin(list) {
-
-    var s = '';
-
-    for (var i = 0; i < list.length; i++) {
-
-        if (i > 0)
-            s += (i == list.length - 1) ? ' and ' : ', ';
-
-        s += list[i];
-    }
-
-    return s;
-}
-
-
-function getNormalizedArrayFromQueryParameter(o) {
-
-    if (Array.isArray(o))
-        return o;
-
-    if (o && o.length > 0)
-        return [o];
-
-    return [];
-}
-
-function htmlEncode(s) {
-
-    return s ? htmlencode.htmlEncode(s) : '';
+function wordJoin(list, separator) {
+    if (list.length == 0) return '';
+    if (list.length == 1) return list[0];
+    separator = separator || 'and';
+    return `${list.slice(0, list.length - 1).join(', ')} ${separator} ${list[list.length - 1]}`;
 }
 
 function renderErrorPage(req, res, statusCode, message) {
@@ -449,13 +391,5 @@ function renderErrorPage(req, res, statusCode, message) {
     res.status(statusCode);
     res.render('error.ejs', {statusCode, message});
 }
-
-
-
-String.prototype.capitalize = function() {
-
-    return this.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
-};
-
 
 module.exports = RenderController;
