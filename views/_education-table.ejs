@@ -1,20 +1,20 @@
 <table class="vertical hidden">
 <tr>
     <th class="empty"></th>
-<% for (var i = 0; i < tableData.educationData.length; i++) { %>
+<% for (var i = 0; i < tableData.length; i++) { %>
     <th colspan="2" class="color-<%= i %>"><%= params.regions[i].name %><div></div></th>
 <% } %>
 </tr>
 <tr class="sub-header-row">
     <td class="empty"></td>
-<% for (var i = 0; i < tableData.educationData.length; i++) { %>
+<% for (var i = 0; i < tableData.length; i++) { %>
     <td>Percent</td><td class="color-<%= i %>">Percentile<div></div></td>
 <% } %>
 <tr>
     <td class="category-header">At Least Bachelor's Degree</td>
-<% for (var i = 0; i < tableData.educationData.length; i++) { 
+<% for (var i = 0; i < tableData.length; i++) { 
 
-    var regionData = tableData.educationData[i][0];
+    var regionData = tableData[i][0];
     var totalRanks = parseInt(regionData.total_ranks);
 
     var bachelorsRank = parseInt(regionData.percent_bachelors_degree_or_higher_rank);
@@ -26,9 +26,9 @@
 </tr>
 <tr>
     <td class="category-header">At Least High School Diploma</td>
-<% for (var i = 0; i < tableData.educationData.length; i++) { 
+<% for (var i = 0; i < tableData.length; i++) { 
 
-    var regionData = tableData.educationData[i][0];
+    var regionData = tableData[i][0];
     var totalRanks = parseInt(regionData.total_ranks);
 
     var highSchoolRank = parseInt(regionData.percent_high_school_graduate_or_higher_rank);

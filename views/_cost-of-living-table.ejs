@@ -1,13 +1,13 @@
 <table class="vertical hidden">
 <tr>
     <th class="empty"></th>
-<% for (var i = 0; i < tableData.costOfLivingData.length; i++) { %>
+<% for (var i = 0; i < tableData.length; i++) { %>
     <th colspan="2" class="color-<%= i %>"><%= params.regions[i].name %><div></div></th>
 <% } %>
 </tr>
 <tr class="sub-header-row">
     <td class="empty"></td>
-<% for (var i = 0; i < tableData.costOfLivingData.length; i++) { %>
+<% for (var i = 0; i < tableData.length; i++) { %>
     <td>Value</td>
     <td class="color-<%= i %>">Percentile<div></div></td>
 <% } %>
@@ -21,7 +21,7 @@
 <%
     for (var j = 0; j < params.regions.length; j++) {
 
-        var o = getLatestCostOfLiving(tableData.costOfLivingData[j], params.regions[j].id, components[i]);
+        var o = getLatestCostOfLiving(tableData[j], params.regions[j].id, components[i]);
         var value = (o != null) ? parseFloat(o.index) : 'NA';
         var percentile = (o != null) ? getPercentile(o.rank, o.total_ranks) : 'NA'; 
 %>

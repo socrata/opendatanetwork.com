@@ -173,7 +173,7 @@ MetricsController.prototype.getMapSummary = (params, data) => {
 
         case 'occupations':
 
-            return getOccupationsSummary(params, data.occupationsData);
+            return getOccupationsSummary(params, data);
 
         case 'population':
 

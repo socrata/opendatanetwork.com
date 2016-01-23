@@ -1,15 +1,15 @@
 <table class="vertical hidden">
 <tr>
     <th class="sub-header">Clinical Care</th>
-<% for (var i = 0; i < tableData.healthData.length; i++) { %>
+<% for (var i = 0; i < tableData.length; i++) { %>
     <th class="color-<%= i %>"><%= params.regions[i].name %><div></div></th>
 <% } %>
 </tr>
-<%- drawHealthTableRowVertical(tableData.healthData, 'Uninsured', 'uninsured_value', '0.0%') %>
-<%- drawHealthTableRowVertical(tableData.healthData, 'Primary Care Physicians', 'primary_care_physicians_value', '0,0') %>
-<%- drawHealthTableRowVertical(tableData.healthData, 'Dentists', 'dentists_value', '0,0') %>
-<%- drawHealthTableRowVertical(tableData.healthData, 'Mental Health Providers', 'mental_health_providers_value', '0,0') %>
-<%- drawHealthTableRowVertical(tableData.healthData, 'Preventable Hospital Stays', 'preventable_hospital_stays_value', '0,0') %>
-<%- drawHealthTableRowVertical(tableData.healthData, 'Diabetic Monitoring', 'diabetic_screening_value', '0.0%') %>
-<%- drawHealthTableRowVertical(tableData.healthData, 'Mammography Screening', 'mammography_screening_value', '0.0%') %>
+<%- drawHealthTableRowVertical(tableData, 'Uninsured', 'uninsured_value', '0.0%') %>
+<%- drawHealthTableRowVertical(tableData, 'Primary Care Physicians', 'primary_care_physicians_value', '0,0') %>
+<%- drawHealthTableRowVertical(tableData, 'Dentists', 'dentists_value', '0,0') %>
+<%- drawHealthTableRowVertical(tableData, 'Mental Health Providers', 'mental_health_providers_value', '0,0') %>
+<%- drawHealthTableRowVertical(tableData, 'Preventable Hospital Stays', 'preventable_hospital_stays_value', '0,0') %>
+<%- drawHealthTableRowVertical(tableData, 'Diabetic Monitoring', 'diabetic_screening_value', '0.0%') %>
+<%- drawHealthTableRowVertical(tableData, 'Mammography Screening', 'mammography_screening_value', '0.0%') %>
 </table>

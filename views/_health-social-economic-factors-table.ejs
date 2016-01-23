@@ -1,17 +1,17 @@
 <table class="vertical hidden">
 <tr>
     <th class="sub-header">Social &amp; Economic Factors</th>
-<% for (var i = 0; i < tableData.healthData.length; i++) { %>
+<% for (var i = 0; i < tableData.length; i++) { %>
     <th class="color-<%= i %>"><%= params.regions[i].name %><div></div></th>
 <% } %>
 </tr>
-<%- drawHealthTableRowVertical(tableData.healthData, 'High School Graduation', 'high_school_graduation_value', '0.0%') %>
-<%- drawHealthTableRowVertical(tableData.healthData, 'Some College', 'some_college_value', '0.0%') %>
-<%- drawHealthTableRowVertical(tableData.healthData, 'Unemployment', 'unemployment_value', '0.0%') %>
-<%- drawHealthTableRowVertical(tableData.healthData, 'Children in Poverty', 'children_in_poverty_value', '0.0%') %>
-<%- drawHealthTableRowVertical(tableData.healthData, 'Income Inequality', 'income_inequality_value', '0.0') %>
-<%- drawHealthTableRowVertical(tableData.healthData, 'Children in Single-Parent Households', 'children_in_single_parent_households_value', '0.0%') %>
-<%- drawHealthTableRowVertical(tableData.healthData, 'Social Associations', 'social_associations_value', '0.0') %>
-<%- drawHealthTableRowVertical(tableData.healthData, 'Violent Crime', 'violent_crime_value', '0.0') %>
-<%- drawHealthTableRowVertical(tableData.healthData, 'Injury Deaths', 'injury_deaths_value', '0.0') %>
+<%- drawHealthTableRowVertical(tableData, 'High School Graduation', 'high_school_graduation_value', '0.0%') %>
+<%- drawHealthTableRowVertical(tableData, 'Some College', 'some_college_value', '0.0%') %>
+<%- drawHealthTableRowVertical(tableData, 'Unemployment', 'unemployment_value', '0.0%') %>
+<%- drawHealthTableRowVertical(tableData, 'Children in Poverty', 'children_in_poverty_value', '0.0%') %>
+<%- drawHealthTableRowVertical(tableData, 'Income Inequality', 'income_inequality_value', '0.0') %>
+<%- drawHealthTableRowVertical(tableData, 'Children in Single-Parent Households', 'children_in_single_parent_households_value', '0.0%') %>
+<%- drawHealthTableRowVertical(tableData, 'Social Associations', 'social_associations_value', '0.0') %>
+<%- drawHealthTableRowVertical(tableData, 'Violent Crime', 'violent_crime_value', '0.0') %>
+<%- drawHealthTableRowVertical(tableData, 'Injury Deaths', 'injury_deaths_value', '0.0') %>
 </table>

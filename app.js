@@ -8,7 +8,6 @@ const helmet = require('helmet');
 const numeral = require('numeral');
 const RenderController = require('./controllers/render-controller');
 
-const renderController = new RenderController();
 const app = express();
 
 app.use(compression());
@@ -53,25 +52,25 @@ app.get('/open-data-census', function(req, res) { res.redirect(301, '/'); });
 app.get('/popular', function(req, res) { res.redirect(301, '/'); });
 app.get('/join', function(req, res) { res.redirect(301, '/join-open-data-network'); });
 app.get('/join/complete', function(req, res) { res.redirect(301, '/join-open-data-network/complete'); });
-app.get('/v4', function(req, res) { res.redirect(301, '/') });
+app.get('/v4', function(req, res) { res.redirect(301, '/'); });
 
 // Set up routes
 //
-app.get('/', renderController.renderHomePage);
-app.get('/categories.json', renderController.renderCategoriesJson);
-app.get('/join-open-data-network/complete', renderController.renderJoinOpenDataNetworkComplete);
-app.get('/join-open-data-network', renderController.renderJoinOpenDataNetwork);
-app.get('/search', renderController.renderSearchPage);
-app.get('/search/search-results', renderController.renderSearchResults);
-app.get('/search/:vector', renderController.renderSearchPage);
-app.get('/dataset/:domain/:id', renderController.renderDatasetPage);
-app.get('/region/:regionIds', renderController.renderSearchPage);
-app.get('/region/:regionIds/:regionNames', renderController.renderSearchPage);
-app.get('/region/:regionIds/:regionNames/search-results', renderController.renderSearchResults);
-app.get('/region/:regionIds/:regionNames/:vector/search-results', renderController.renderSearchResults);
-app.get('/region/:regionIds/:regionNames/:vector/:metric/:year', renderController.renderSearchWithVectorPage);
-app.get('/region/:regionIds/:regionNames/:vector/:metric', renderController.renderSearchWithVectorPage);
-app.get('/region/:regionIds/:regionNames/:vector', renderController.renderSearchWithVectorPage);
+app.get('/', RenderController.home);
+app.get('/categories.json', RenderController.categories);
+app.get('/join-open-data-network', RenderController.join);
+app.get('/join-open-data-network/complete', RenderController.joinComplete);
+app.get('/search', RenderController.search);
+app.get('/search/:vector', RenderController.search);
+app.get('/search/search-results', RenderController.searchResults);
+app.get('/dataset/:domain/:id', RenderController.dataset);
+app.get('/region/:regionIds', RenderController.search);
+app.get('/region/:regionIds/:regionNames', RenderController.search);
+app.get('/region/:regionIds/:regionNames/search-results', RenderController.searchResults);
+app.get('/region/:regionIds/:regionNames/:vector/search-results', RenderController.searchResults);
+app.get('/region/:regionIds/:regionNames/:vector/:metric/:year', RenderController.searchWithVector);
+app.get('/region/:regionIds/:regionNames/:vector/:metric', RenderController.searchWithVector);
+app.get('/region/:regionIds/:regionNames/:vector', RenderController.searchWithVector);
 
 // Start listening
 //
@@ -110,5 +109,9 @@ app.locals.drawHealthTableCellVertical = (i, data, key, format) => {
 
     return s;
 };
+
+app.use((error, req, res, next) => {
+    console.error(error.stack);
+});
 
 app.locals.numeral = numeral;

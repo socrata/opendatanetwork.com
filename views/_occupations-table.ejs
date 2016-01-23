@@ -12,13 +12,13 @@
     <td class="color-<%= i %>">Percentile<div></div></td>
 <% } %>
 </tr>
-<% for (var i = 0; i < tableData.occupationsData[0].length; i++) { %>
+<% for (var i = 0; i < tableData[0].length; i++) { %>
 <tr>
-    <td class="category-header"><%= tableData.occupationsData[0][i].occupation %></td>
+    <td class="category-header"><%= tableData[0][i].occupation %></td>
 <%
 for (var j = 0; j < params.regions.length; j++) {
 
-    var regionData = tableData.occupationsData[j];
+    var regionData = tableData[j];
     var totalRanks = parseInt(regionData[i].total_ranks);
     var rank = parseInt(regionData[i].percent_employed_rank);
     var percentile = parseInt(((totalRanks - rank) / totalRanks) * 100);
