@@ -146,12 +146,8 @@ class RenderController {
     }
 
     static search(req, res) {
-        RenderController._parameters(req, function(params) {
-            API.tableData(params.vector, params.regions).then(tableData => {
-                RenderController._search(req, res, params, tableData);
-            }, error => {
-                renderErrorPage(req, res, 503, error);
-            });
+        RenderController._parameters(req).then(params => {
+            RenderController._search(req, res, params);
         });
     }
 
@@ -159,18 +155,14 @@ class RenderController {
         const vector = req.params.vector;
 
         if (vector === '' || vector in Constants.VECTOR_FXFS) {
-            RenderController._parameters(req, params => {
+            RenderController._parameters(req).then(params => {
                 const regions = params.regions;
 
                 if (!_.includes(sources.forRegions(regions), vector)) {
                     renderErrorPage(req, res, 404,
                                     `"${vector}" data not available for ${regions[0].name}`);
                 } else {
-                    API.tableData(vector, regions).then(tableData => {
-                        RenderController._search(req, res, params, tableData);
-                    }, error => {
-                        renderErrorPage(req, res);
-                    });
+                    RenderController._search(req, res, params);
                 }
             });
         } else {
@@ -178,7 +170,7 @@ class RenderController {
         }
     }
 
-    static _search(req, res, params, tableData) {
+    static _search(req, res, params) {
         function forRegion(regionPromise) {
             return new Promise(resolve => {
                 if (params.regions.length === 0) {
@@ -222,9 +214,10 @@ class RenderController {
         const tagsPromise = API.tags();
         const domainsPromise = API.domains(5);
         const datasetsPromise = API.datasets(params);
+        const tableDataPromise = API.tableData(params.vector, params.regions);
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
                              categoriesPromise, tagsPromise, domainsPromise,
-                             datasetsPromise];
+                             datasetsPromise, tableDataPromise];
         const allPromise = Promise.all(allPromises);
 
         const searchDatasetsURL = API.searchDatasetsURL(params);
@@ -233,12 +226,10 @@ class RenderController {
             const templateParams = {
                 params,
                 searchDatasetsURL,
-                mapSummary : metricsController.getMapSummary(params, tableData),
                 mapSummaryLinks : metricsController.getMapSummaryLinks(params),
                 mapVariables : metricsController.getMapVariables(params),
                 searchPath : req.path,
                 sources : sources.forRegions(params.regions),
-                tableData : tableData || {},
                 title : getSearchPageTitle(params),
                 css : [
                     '/styles/third-party/leaflet.min.css',
@@ -289,6 +280,9 @@ class RenderController {
 
                 templateParams.domainResults = data[5];
                 templateParams.searchResults = data[6];
+
+                templateParams.mapSummary = metricsController.getMapSummary(params, data[7]);
+                templateParams.tableData = data[7] || {};
             }
 
             res.render('search.ejs', templateParams);
@@ -350,9 +344,9 @@ class RenderController {
 
                 API.regions(regionIds).then(regions => {
                     const regionsById = _.object(regions.map(region => [region.id, region]));
-                    params.regions = params.regions
-                        .filter(region => region in regionsById)
-                        .map(region => regionsById[region]);
+                    params.regions = regionIds
+                        .filter(id => id in regionsById)
+                        .map(id => regionsById[id]);
 
                     resolve(params);
                 });
