@@ -37,7 +37,7 @@ class RenderController {
 
         const datasetPromise = API.datasetSummary(domain, id);
         const schemasPromise = API.standardSchemas(id);
-        const paramsPromise = RenderController._parameters(req);
+        const paramsPromise = RenderController._parameters(req, res);
         const allPromise = Promise.all([datasetPromise, schemasPromise, paramsPromise]);
 
         allPromise.then(data => {
@@ -91,7 +91,7 @@ class RenderController {
     static home(req, res) {
         const categoriesPromise = API.categories();
         const locationsPromise = API.locations();
-        const paramsPromise = RenderController._parameters(req);
+        const paramsPromise = RenderController._parameters(req, res);
         const allPromise = Promise.all([categoriesPromise, locationsPromise, paramsPromise]);
 
         allPromise.then(data => {
@@ -141,7 +141,7 @@ class RenderController {
     }
 
     static search(req, res) {
-        RenderController._parameters(req).then(params => {
+        RenderController._parameters(req, res).then(params => {
             RenderController._search(req, res, params);
         });
     }
@@ -150,7 +150,7 @@ class RenderController {
         const vector = req.params.vector;
 
         if (vector === '' || vector in Constants.VECTOR_FXFS) {
-            RenderController._parameters(req).then(params => {
+            RenderController._parameters(req, res).then(params => {
                 const regions = params.regions;
 
                 if (!_.includes(sources.forRegions(regions), vector)) {
@@ -284,7 +284,7 @@ class RenderController {
     }
 
     static searchResults(req, res) {
-        RenderController._parameters(req).then(params => {
+        RenderController._parameters(req, res).then(params => {
             API.datasets(params).then(searchResults => {
                 if (searchResults.length === 0) {
                     res.status(204);
@@ -314,12 +314,11 @@ class RenderController {
 
         return (error) => {
             res.status(statusCode);
-            const trace = 'asd';
-            res.render('error.ejs', {statusCode, title, trace});
+            res.render('error.ejs', {statusCode, title});
         };
     }
 
-    static _parameters(req, completionHandler) {
+    static _parameters(req, res) {
         return new Promise((resolve, reject) => {
             const query = req.query;
             const page = isNaN(query.page) ? 1 : parseInt(query.page);
@@ -349,7 +348,11 @@ class RenderController {
                         .filter(id => id in regionsById)
                         .map(id => regionsById[id]);
 
-                    resolve(params);
+                    if (params.regions.length === 0) {
+                        RenderController.error(res, 404, `Region${regionIds.length > 1 ? 's' : ''} not found: ${regionIds.join(', ')}`)();
+                    } else {
+                        resolve(params);
+                    }
                 });
             } else {
                 resolve(params);
