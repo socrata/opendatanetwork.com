@@ -3,6 +3,7 @@
 const _ = require('lodash');
 const ApiController = require('./api-controller');
 const numeral = require('numeral');
+const Navigate = require('./navigate');
 
 const apiController = new ApiController();
 const defaultYear = '2013';
@@ -325,20 +326,7 @@ function getSummary(vector, metric, year, regions, data, filter, format) {
 }
 
 function getUrl(params, metric) {
-
-    var url = '/region';
-
-    // Region ids
-    //
-    const regionIds = params.regions.map(region => region.id);
-    url += '/' + regionIds.join('-');
-
-    // Region names
-    //
-    const regionNames = params.regions.map(region => region.name.replace(/ /g, '_').replace(/,/g, ''));
-    url += '/' + regionNames.join('-');
-    url += '/' + (params.vector || defaultVector);
-    url += '/' + metric;
-
-    return url;
+    const navigate = new Navigate(_.extend({vector: defaultVector}, params));
+    return `${navigate.current()}/${metric}`;
 }
+

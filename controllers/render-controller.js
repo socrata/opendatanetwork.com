@@ -9,6 +9,7 @@ const Sources = require('./sources');
 const Relatives = require('./relatives');
 const Constants = require('./constants');
 const Request = require('./request');
+const Navigate = require('./navigate');
 
 const _ = require('lodash');
 const htmlencode = require('htmlencode');
@@ -190,13 +191,8 @@ class RenderController {
             return regions.filter(region => {
                 return !_.contains(uids, region.id);
             }).slice(0, Constants.N_RELATIVES).map(region => {
-                const encode = name => name.replace(/,/g, '').replace(/ /g, '_');
-                const navigateURL = `/region/${region.id}/${encode(region.name)}`;
-
-                const uidString = uids.concat(region.id).join('-');
-                const nameString = names.concat(region.name).map(encode).join('-');
-                const addURL = `/region/${uidString}/${nameString}/${params.vector}`;
-
+                const navigateURL = Navigate.region(region);
+                const addURL = (new Navigate(params)).add(region);
                 return _.extend({}, region, {addURL, navigateURL});
             });
         }
