@@ -36,7 +36,7 @@ const formatterGroups = {
         'percent_with_earnings_over_100000' : { format : '0.0', suffix : '%', name : 'Percent Earning Over $100,000', column : 'percent_with_earnings_over_100000', years : [2013], index : 13 },
     },
     'gdp' : {
-        'per_capita_gdp' : { format : '$0,0', suffix : '', name : 'GDP per Capita', column : 'per_capita_gdp', years : _.range(2002, 2014), index : 0 },
+        'per_capita_gdp' : { format : '$0,0', suffix : '', name : 'GDP per Capita', column : 'per_capita_gdp', years : _.range(2001, 2014), index : 0 },
         'per_capita_gdp_change' : { format : '0.0', suffix : '%', name : 'Annual Change in GDP', column : 'per_capita_gdp_percent_change', years : _.range(2002, 2014), index : 1 },
     },
     'health' : {
