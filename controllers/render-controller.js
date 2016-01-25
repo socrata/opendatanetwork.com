@@ -65,7 +65,7 @@ class RenderController {
                 dataset : {
                     domain,
                     id,
-                    descriptionHtml : htmlEncode(dataset.description).replace('\n', '<br>'),
+                    descriptionHtml : htmlencode(dataset.description).replace('\n', '<br>'),
                     name : dataset.name,
                     tags : dataset.tags || [],
                     columns : dataset.columns,
@@ -85,9 +85,7 @@ class RenderController {
             };
 
             res.render('dataset.ejs', templateParams);
-        }, error => {
-            renderErrorPage(req, res, 404, 'Dataset not found');
-        });
+        }, RenderController.error(res, 404, 'Dataset not found'));
     }
 
     static home(req, res) {
@@ -127,10 +125,7 @@ class RenderController {
             };
 
             res.render('home.ejs', templateParams);
-        }, error => {
-            console.log(error);
-            renderErrorPage(req, res);
-        });
+        }, RenderController.error(res));
     }
 
     static join(req, res) {
@@ -159,14 +154,13 @@ class RenderController {
                 const regions = params.regions;
 
                 if (!_.includes(sources.forRegions(regions), vector)) {
-                    renderErrorPage(req, res, 404,
-                                    `"${vector}" data not available for ${regions[0].name}`);
+                    RenderController.error(res, 404, `"${vector}" data not available for ${regions[0].name}`)();
                 } else {
                     RenderController._search(req, res, params);
                 }
             });
         } else {
-            renderErrorPage(req, res, 404, `Vector "${vector}" not found`);
+            RenderController.error(res, 404, `Vector "${vector}" not found`)();
         }
     }
 
@@ -286,33 +280,43 @@ class RenderController {
             }
 
             res.render('search.ejs', templateParams);
-        }, error => {
-            console.log(error);
-            renderErrorPage(req, res);
-        });
+        }, RenderController.error(res));
     }
 
     static searchResults(req, res) {
-        RenderController._parameters(req, function(params) {
-            apiController.searchDatasets(params, function(searchResults) {
-
-                if (searchResults.results.length === 0) {
-
+        RenderController._parameters(req).then(params => {
+            API.datasets(params).then(searchResults => {
+                if (searchResults.length === 0) {
                     res.status(204);
                     res.end();
                     return;
-                }
+                } else {
+                    const templateParams = {
+                        params,
+                        searchResults,
+                        css: [],
+                        scripts: []
+                    };
 
-                res.render(
-                    (params.regions.length === 0) ? '_search-results-regular.ejs' : '_search-results-compact.ejs',
-                    {
-                        css : [],
-                        scripts : [],
-                        params : params,
-                        searchResults : searchResults,
-                    });
-            });
-        });
+                    const template = params.regions.length === 0 ?
+                        '_search-results-regular.ejs' :
+                        '_search-results-compact.ejs';
+
+                    res.render(template, templateParams);
+                }
+            }, RenderController.error(res));
+        }, RenderController.error(res));
+    }
+
+    static error(res, statusCode, title) {
+        statusCode = statusCode || 503;
+        title = title || 'Internal server error';
+
+        return (error) => {
+            res.status(statusCode);
+            const trace = 'asd';
+            res.render('error.ejs', {statusCode, title, trace});
+        };
     }
 
     static _parameters(req, completionHandler) {
@@ -336,7 +340,7 @@ class RenderController {
                 year: req.params.year || ''
             };
 
-            if (req.params.regionIds && req.params.regionIds != '') {
+            if (req.params.regionIds && req.params.regionIds !== '') {
                 const regionIds = req.params.regionIds.split('-');
 
                 API.regions(regionIds).then(regions => {
@@ -378,8 +382,8 @@ function capitalize(string) {
 }
 
 function wordJoin(list, separator) {
-    if (list.length == 0) return '';
-    if (list.length == 1) return list[0];
+    if (list.length === 0) return '';
+    if (list.length === 1) return list[0];
     separator = separator || 'and';
     return `${list.slice(0, list.length - 1).join(', ')} ${separator} ${list[list.length - 1]}`;
 }
