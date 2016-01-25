@@ -8,8 +8,12 @@ const fs = require('fs');
 
 const Constants = require('./constants');
 
-const cache = new NodeCache({stdTTL: 0});
-const localCache = new NodeCache({stdTTL: 0});
+const cacheOptions = {
+    stdTTL: Constants.CACHE_TTL_SECONDS,
+    checkperiod: Constants.CACHE_CHECK_SECONDS
+};
+const cache = new NodeCache(cacheOptions);
+const localCache = new NodeCache(cacheOptions);
 
 class Request {
     static getJSON(url, timeoutMS) {

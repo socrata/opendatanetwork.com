@@ -29,7 +29,9 @@ const Constants = {
         'cost_of_living': 'hpnf-gnfu'
     },
 
-    TIMEOUT_MS: 1000
+    TIMEOUT_MS: 1000,
+    CACHE_TTL_SECONDS: 60 * 60 * 12, // 12 hours
+    CACHE_CHECK_SECONDS: 60 * 60
 };
 
 module.exports = Constants;
