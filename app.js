@@ -54,8 +54,6 @@ app.get('/join', function(req, res) { res.redirect(301, '/join-open-data-network
 app.get('/join/complete', function(req, res) { res.redirect(301, '/join-open-data-network/complete'); });
 app.get('/v4', function(req, res) { res.redirect(301, '/'); });
 
-// Set up routes
-//
 app.get('/', RenderController.home);
 app.get('/categories.json', RenderController.categories);
 app.get('/join-open-data-network', RenderController.join);
@@ -71,6 +69,10 @@ app.get('/region/:regionIds/:regionNames/:vector/search-results', RenderControll
 app.get('/region/:regionIds/:regionNames/:vector/:metric/:year', RenderController.searchWithVector);
 app.get('/region/:regionIds/:regionNames/:vector/:metric', RenderController.searchWithVector);
 app.get('/region/:regionIds/:regionNames/:vector', RenderController.searchWithVector);
+
+app.use((error, req, res, next) => {
+    RenderController.error(req, res)(error);
+});
 
 // Start listening
 //
@@ -109,9 +111,5 @@ app.locals.drawHealthTableCellVertical = (i, data, key, format) => {
 
     return s;
 };
-
-app.use((error, req, res, next) => {
-    console.error(error.stack);
-});
 
 app.locals.numeral = numeral;

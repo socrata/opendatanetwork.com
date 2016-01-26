@@ -42,51 +42,55 @@ class RenderController {
         const allPromise = Promise.all([datasetPromise, schemasPromise, paramsPromise]);
 
         allPromise.then(data => {
-            const dataset = data[0];
-            const schemas = data[1].map(schema => {
-                const uid = schema.url.match(/(\w{4}-\w{4})$/)[1];
-                const query = Request.buildURL(`https://${domain}/resource/${id}.json?`, schema.query);
+            try {
+                const dataset = data[0];
+                const schemas = data[1].map(schema => {
+                    const uid = schema.url.match(/(\w{4}-\w{4})$/)[1];
+                    const query = Request.buildURL(`https://${domain}/resource/${id}.json?`, schema.query);
 
-                return _.extend(schema, {
-                    uid,
-                    query,
-                    standard: schema.standardIds[0],
-                    required_columns: schema.columns,
-                    opt_columns: schema.optColumns,
-                    direct_map: schema.query.length === 0
+                    return _.extend(schema, {
+                        uid,
+                        query,
+                        standard: schema.standardIds[0],
+                        required_columns: schema.columns,
+                        opt_columns: schema.optColumns,
+                        direct_map: schema.query.length === 0
+                    });
                 });
-            });
-            const params = data[2];
+                const params = data[2];
 
-            const templateParams = {
-                params,
-                schemas,
-                searchPath : '/search',
-                title : dataset.name,
-                dataset : {
-                    domain,
-                    id,
-                    descriptionHtml : htmlencode(dataset.description).replace('\n', '<br>'),
-                    name : dataset.name,
-                    tags : dataset.tags || [],
-                    columns : dataset.columns,
-                    updatedAtString : moment(new Date(dataset.viewLastModified * 1000)).format('D MMM YYYY')
-                },
-                css : [
-                    '/styles/dataset.css'
-                ],
-                scripts : [
-                    '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
-                    '/lib/third-party/colorbrewer.min.js',
-                    '/lib/third-party/d3.min.js',
-                    '/lib/third-party/d3.promise.min.js',
-                    '/lib/third-party/lodash.min.js',
-                    '/lib/search.min.js',
-                ]
-            };
+                const templateParams = {
+                    params,
+                    schemas,
+                    searchPath : '/search',
+                    title : dataset.name,
+                    dataset : {
+                        domain,
+                        id,
+                        descriptionHtml : htmlencode(dataset.description).replace('\n', '<br>'),
+                        name : dataset.name,
+                        tags : dataset.tags || [],
+                        columns : dataset.columns,
+                        updatedAtString : moment(new Date(dataset.viewLastModified * 1000)).format('D MMM YYYY')
+                    },
+                    css : [
+                        '/styles/dataset.css'
+                    ],
+                    scripts : [
+                        '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
+                        '/lib/third-party/colorbrewer.min.js',
+                        '/lib/third-party/d3.min.js',
+                        '/lib/third-party/d3.promise.min.js',
+                        '/lib/third-party/lodash.min.js',
+                        '/lib/search.min.js',
+                    ]
+                };
 
-            res.render('dataset.ejs', templateParams);
-        }, RenderController.error(res, 404, 'Dataset not found'));
+                res.render('dataset.ejs', templateParams);
+            } catch (error) {
+                RenderController.error(req, res)(error);
+            }
+        }, RenderController.error(req, res, 404, 'Dataset not found'));
     }
 
     static home(req, res) {
@@ -96,37 +100,41 @@ class RenderController {
         const allPromise = Promise.all([categoriesPromise, locationsPromise, paramsPromise]);
 
         allPromise.then(data => {
-            const categories = data[0];
-            const locations = data[1];
-            const params = data[2];
+            try {
+                const categories = data[0];
+                const locations = data[1];
+                const params = data[2];
 
-            const templateParams = {
-                categories,
-                locations,
-                params,
-                searchPath : '/search',
-                title : 'Open Data Network',
-                css : [
-                    '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css',
-                    '/styles/home.css',
-                    '/styles/main.css'
-                ],
-                scripts : [
-                    '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js',
-                    {
-                        'url' : '//fast.wistia.net/static/popover-v1.js',
-                        'charset' : 'ISO-8859-1'
-                    },
-                    '/lib/third-party/browser-polyfill.min.js',
-                    '/lib/third-party/d3.min.js',
-                    '/lib/third-party/d3.promise.min.js',
-                    '/lib/third-party/lodash.min.js',
-                    '/lib/home.min.js'
-                ]
-            };
+                const templateParams = {
+                    categories,
+                    locations,
+                    params,
+                    searchPath : '/search',
+                    title : 'Open Data Network',
+                    css : [
+                        '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css',
+                        '/styles/home.css',
+                        '/styles/main.css'
+                    ],
+                    scripts : [
+                        '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js',
+                        {
+                            'url' : '//fast.wistia.net/static/popover-v1.js',
+                            'charset' : 'ISO-8859-1'
+                        },
+                        '/lib/third-party/browser-polyfill.min.js',
+                        '/lib/third-party/d3.min.js',
+                        '/lib/third-party/d3.promise.min.js',
+                        '/lib/third-party/lodash.min.js',
+                        '/lib/home.min.js'
+                    ]
+                };
 
-            res.render('home.ejs', templateParams);
-        }, RenderController.error(res));
+                res.render('home.ejs', templateParams);
+            } catch (error) {
+                RenderController.error(req, res)(error);
+            }
+        }, RenderController.error(req, res));
     }
 
     static join(req, res) {
@@ -143,7 +151,11 @@ class RenderController {
 
     static search(req, res) {
         RenderController._parameters(req, res).then(params => {
-            RenderController._search(req, res, params);
+            try {
+                RenderController._search(req, res, params);
+            } catch (error) {
+                RenderController.error(req, res)(error);
+            }
         });
     }
 
@@ -155,13 +167,17 @@ class RenderController {
                 const regions = params.regions;
 
                 if (!_.includes(sources.forRegions(regions), vector)) {
-                    RenderController.error(res, 404, `"${vector}" data not available for ${regions[0].name}`)();
+                    RenderController.error(req, res, 404, `"${vector}" data not available for ${regions[0].name}`)();
                 } else {
-                    RenderController._search(req, res, params);
+                    try {
+                        RenderController._search(req, res, params);
+                    } catch (error) {
+                        RenderController.error(req, res)(error);
+                    }
                 }
             });
         } else {
-            RenderController.error(res, 404, `Vector "${vector}" not found`)();
+            RenderController.error(req, res, 404, `Vector "${vector}" not found`)();
         }
     }
 
@@ -213,70 +229,74 @@ class RenderController {
         const searchDatasetsURL = API.searchDatasetsURL(params);
 
         allPromise.then(data => {
-            const templateParams = {
-                params,
-                searchDatasetsURL,
-                mapSummaryLinks : metricsController.getMapSummaryLinks(params),
-                mapVariables : metricsController.getMapVariables(params),
-                searchPath : req.path,
-                sources : sources.forRegions(params.regions),
-                title : searchPageTitle(params),
-                css : [
-                    '/styles/third-party/leaflet.min.css',
-                    '/styles/search.css',
-                    '/styles/maps.css',
-                    '/styles/main.css'
-                ],
-                scripts : [
-                    '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
-                    '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
-                    '/lib/third-party/leaflet/leaflet.min.js',
-                    '/lib/third-party/leaflet/leaflet-omnivore.min.js',
-                    '/lib/third-party/browser-polyfill.min.js',
-                    '/lib/third-party/colorbrewer.min.js',
-                    '/lib/third-party/d3.min.js',
-                    '/lib/third-party/d3.promise.min.js',
-                    '/lib/third-party/leaflet-omnivore.min.js',
-                    '/lib/third-party/lodash.min.js',
-                    '/lib/search.min.js'
-                ]
-            };
+            try {
+                const templateParams = {
+                    params,
+                    searchDatasetsURL,
+                    mapSummaryLinks : metricsController.getMapSummaryLinks(params),
+                    mapVariables : metricsController.getMapVariables(params),
+                    searchPath : req.path,
+                    sources : sources.forRegions(params.regions),
+                    title : searchPageTitle(params),
+                    css : [
+                        '/styles/third-party/leaflet.min.css',
+                        '/styles/search.css',
+                        '/styles/maps.css',
+                        '/styles/main.css'
+                    ],
+                    scripts : [
+                        '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
+                        '//www.google.com/jsapi?autoload={\'modules\':[{\'name\':\'visualization\',\'version\':\'1\',\'packages\':[\'corechart\']}]}',
+                        '/lib/third-party/leaflet/leaflet.min.js',
+                        '/lib/third-party/leaflet/leaflet-omnivore.min.js',
+                        '/lib/third-party/browser-polyfill.min.js',
+                        '/lib/third-party/colorbrewer.min.js',
+                        '/lib/third-party/d3.min.js',
+                        '/lib/third-party/d3.promise.min.js',
+                        '/lib/third-party/leaflet-omnivore.min.js',
+                        '/lib/third-party/lodash.min.js',
+                        '/lib/search.min.js'
+                    ]
+                };
 
-            if (data && data.length == allPromises.length) {
-                if (data[0].length > 0) {
-                    templateParams.peers = processRegions(data[0]);
+                if (data && data.length == allPromises.length) {
+                    if (data[0].length > 0) {
+                        templateParams.peers = processRegions(data[0]);
+                    }
+
+                    if (data[1].length == 2 && data[1][1].length > 0) {
+                        templateParams.parentRegion = processRegions([data[1][0]])[0];
+                        templateParams.siblings = processRegions(data[1][1]);
+                    }
+
+                    if (data[2].length > 0) {
+                        templateParams.allChildren =
+                            data[2].map(children => processRegions(children));
+                    }
+
+                    if (data[3].length > 0) {
+                        templateParams.categories = data[3];
+                        templateParams.currentCategory =
+                            categoryController.getCurrentCategory(params, data[3]);
+                    }
+
+                    if (data[4].results.length > 0) {
+                        templateParams.currentTag =
+                            tagController.getCurrentTag(params, data[4]);
+                    }
+
+                    templateParams.domainResults = data[5];
+                    templateParams.searchResults = data[6];
+
+                    templateParams.mapSummary = metricsController.getMapSummary(params, data[7]);
+                    templateParams.tableData = data[7] || {};
                 }
 
-                if (data[1].length == 2 && data[1][1].length > 0) {
-                    templateParams.parentRegion = processRegions([data[1][0]])[0];
-                    templateParams.siblings = processRegions(data[1][1]);
-                }
-
-                if (data[2].length > 0) {
-                    templateParams.allChildren =
-                        data[2].map(children => processRegions(children));
-                }
-
-                if (data[3].length > 0) {
-                    templateParams.categories = data[3];
-                    templateParams.currentCategory =
-                        categoryController.getCurrentCategory(params, data[3]);
-                }
-
-                if (data[4].results.length > 0) {
-                    templateParams.currentTag =
-                        tagController.getCurrentTag(params, data[4]);
-                }
-
-                templateParams.domainResults = data[5];
-                templateParams.searchResults = data[6];
-
-                templateParams.mapSummary = metricsController.getMapSummary(params, data[7]);
-                templateParams.tableData = data[7] || {};
+                res.render('search.ejs', templateParams);
+            } catch (error) {
+                RenderController.error(req, res)(error);
             }
-
-            res.render('search.ejs', templateParams);
-        }, RenderController.error(res));
+        }, RenderController.error(req, res));
     }
 
     static searchResults(req, res) {
@@ -287,28 +307,35 @@ class RenderController {
                     res.end();
                     return;
                 } else {
-                    const templateParams = {
-                        params,
-                        searchResults,
-                        css: [],
-                        scripts: []
-                    };
+                    try {
+                        const templateParams = {
+                            params,
+                            searchResults,
+                            css: [],
+                            scripts: []
+                        };
 
-                    const template = params.regions.length === 0 ?
-                        '_search-results-regular.ejs' :
-                        '_search-results-compact.ejs';
+                        const template = params.regions.length === 0 ?
+                            '_search-results-regular.ejs' :
+                            '_search-results-compact.ejs';
 
-                    res.render(template, templateParams);
+                        res.render(template, templateParams);
+                    } catch (error) {
+                        RenderController.error(req, res)(error);
+                    }
                 }
-            }, RenderController.error(res));
-        }, RenderController.error(res));
+            }, RenderController.error(req, res));
+        }, RenderController.error(req, res));
     }
 
-    static error(res, statusCode, title) {
-        statusCode = statusCode || 503;
+    static error(req, res, statusCode, title) {
+        statusCode = statusCode || 500;
         title = title || 'Internal server error';
 
         return (error) => {
+            const type = statusCode < 500 ? 'client' : 'server';
+            const stack = error && error.stack ? `\n${error.stack}` : '';
+            console.error(`at=error status=${statusCode} type=${type} path="${req.path}" ${stack}`);
             res.status(statusCode);
             res.render('error.ejs', {statusCode, title});
         };
@@ -345,7 +372,7 @@ class RenderController {
                         .map(id => regionsById[id]);
 
                     if (params.regions.length === 0) {
-                        RenderController.error(res, 404, `Region${regionIds.length > 1 ? 's' : ''} not found: ${regionIds.join(', ')}`)();
+                        RenderController.error(req, res, 404, `Region${regionIds.length > 1 ? 's' : ''} not found: ${regionIds.join(', ')}`)();
                     } else {
                         resolve(params);
                     }
@@ -385,14 +412,6 @@ function wordJoin(list, separator) {
     if (list.length === 1) return list[0];
     separator = separator || 'and';
     return `${list.slice(0, list.length - 1).join(', ')} ${separator} ${list[list.length - 1]}`;
-}
-
-function renderErrorPage(req, res, statusCode, message) {
-    statusCode = statusCode || 503;
-    message = message || 'Internal server error';
-
-    res.status(statusCode);
-    res.render('error.ejs', {statusCode, message});
 }
 
 module.exports = RenderController;
