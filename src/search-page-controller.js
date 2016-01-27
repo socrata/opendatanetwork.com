@@ -1431,6 +1431,8 @@ class SearchPageController {
         this.drawMap(MapSources.population, (variable, year) => this.onDrawPopulationMap(variable, year));
         this.drawPopulationChart();
         this.drawPopulationChangeChart();
+
+        const tab = new Tab(demographics).render(this.params.regions);
     }
 
     onDrawPopulationMap(variable, year) {

@@ -305,7 +305,6 @@ class RenderController {
                 if (searchResults.length === 0) {
                     res.status(204);
                     res.end();
-                    return;
                 } else {
                     try {
                         const templateParams = {
@@ -398,9 +397,9 @@ function searchPageTitle(params) {
     const dataDescription = wordJoin(dataTypes);
 
     const locationDescription = params.regions.length > 0 ?
-        `for ${wordJoin(params.regions.map(region => region.name))}` : '';
+        ` for ${wordJoin(params.regions.map(region => region.name))}` : '';
 
-    return `${dataDescription} Data ${locationDescription} on the Open Data Network`;
+    return `${dataDescription} Data${locationDescription} on the Open Data Network`;
 }
 
 function capitalize(string) {

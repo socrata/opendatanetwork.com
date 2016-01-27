@@ -48,6 +48,13 @@ var autosuggestScripts = [
     'src/data/autosuggest-sources.js'
 ];
 
+var searchScripts = [
+    'src/data/data-sources.js',
+    'src/charts.js',
+    'src/search-page-controller.js',
+    'src/search.js'
+];
+
 
 function js(src, dest) {
     return function() {
@@ -75,7 +82,7 @@ var searchScripts = baseScripts
     .concat(autosuggestScripts)
     .concat(mapScripts)
     .concat(mapSummaryScripts)
-    .concat(['src/search-page-controller.js', 'src/search.js']);
+    .concat(searchScripts);
 
 gulp.task('search', js(searchScripts, 'search.min.js'));
 
