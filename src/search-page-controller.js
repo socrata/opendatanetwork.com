@@ -1427,11 +1427,7 @@ class SearchPageController {
     // Population
     //
     drawPopulationData() {
-
         this.drawMap(MapSources.population, (variable, year) => this.onDrawPopulationMap(variable, year));
-        this.drawPopulationChart();
-        this.drawPopulationChangeChart();
-
         const tab = new Tab(demographics).render(d3.select('div.charts'), this.params.regions);
     }
 
@@ -1448,116 +1444,6 @@ class SearchPageController {
                 value => (year == value.year)));
 
         this.drawMapSummaryLinks(MapSources.population, variable, year);
-    }
-
-    drawPopulationChart() {
-
-        const chartData = [];
-
-        // Header
-        //
-        const header = ['Year'];
-
-        for (var i = 0; i < this.params.regions.length; i++) {
-            header[i + 1] = this.params.regions[i].name;
-        }
-
-        chartData.push(header);
-
-        // Data
-        //
-        const o = {};
-
-        for (var i = 0; i < this.tableData.length; i++) {
-
-            const regionValues = this.tableData[i];
-
-            for (var j = 0; j < regionValues.length; j++) {
-
-                if (o[regionValues[j].year] == undefined)
-                    o[regionValues[j].year] = [regionValues[j].year];
-
-                o[regionValues[j].year].push(parseInt(regionValues[j].population));
-            }
-        }
-
-        for (var key in o) {
-            chartData.push(o[key]);
-        }
-
-        // Draw chart
-        //
-        const dataTable = google.visualization.arrayToDataTable(chartData);
-        const formatter = new google.visualization.NumberFormat( { pattern : '###,###' } );
-
-        for (var i = 0; i < this.params.regions.length; i++) {
-            formatter.format(dataTable, i + 1);
-        }
-
-        this.drawLineChart('population-chart', dataTable, {
-
-            curveType : 'function',
-            legend : { position : 'bottom' },
-            pointShape : 'square',
-            pointSize : 8,
-            title : 'Population',
-        });
-    }
-
-    drawPopulationChangeChart() {
-
-        const chartData = [];
-
-        // Header
-        //
-        const header = ['Year'];
-
-        for (var i = 0; i < this.params.regions.length; i++) {
-            header[i + 1] = this.params.regions[i].name;
-        }
-
-        chartData.push(header);
-
-        // Data
-        //
-        const o = {};
-
-        for (var i = 0; i < this.tableData.length; i++) {
-
-            const regionValues = this.tableData[i];
-
-            for (var j = 0; j < regionValues.length; j++) {
-
-                if (o[regionValues[j].year] == undefined)
-                    o[regionValues[j].year] = [regionValues[j].year];
-
-                o[regionValues[j].year].push(parseFloat(regionValues[j].population_percent_change) / 100);
-            }
-        }
-
-        for (var key in o) {
-            chartData.push(o[key]);
-        }
-
-        // Draw chart
-        //
-        console.log(chartData);
-        const dataTable = google.visualization.arrayToDataTable(chartData);
-        const formatter = new google.visualization.NumberFormat( { pattern : '#.##%' } );
-
-        for (var i = 0; i < this.params.regions.length; i++) {
-            formatter.format(dataTable, i + 1);
-        }
-
-        this.drawLineChart('population-change-chart', dataTable, {
-
-            curveType : 'function',
-            legend : { position : 'bottom' },
-            pointShape : 'square',
-            pointSize : 8,
-            title : 'Population Change',
-            vAxis : { format : '#.#%' },
-        });
     }
 
     ensureVisibleWithOrientation(selector, orientation) {
