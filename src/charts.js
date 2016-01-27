@@ -54,10 +54,12 @@ class Chart {
         if (!chart.chart) throw Error('chart missing chart');
         this.chart = chart.chart;
         this.options = chart.options || {};
+        this.transform = chart.transform;
     }
 
     render(selection, regions) {
         this.getData(regions).then(data => {
+            if (this.transform) data = this.transform(data);
             const dataTable = this.dataTable(data, regions);
 
             const container = selection.append('div')
