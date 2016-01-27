@@ -13,6 +13,15 @@ const attributions = {
     }
 };
 
+const lineOptions = {
+    curveType: 'function',
+    lineWidth: 4,
+    legend : { position : 'top' },
+    pointShape : 'circle',
+    pointSize : 6,
+    colors: ['#2ecc71', '#3498db', '#9b59b6', '#f1c40f', '#e67e22', '#e74c3c', '#34495e', '#1abc9c']
+}
+
 const demographics = {
     name: 'Demographics',
     description: 'Information about population, race, age, and sex.',
@@ -30,18 +39,22 @@ const demographics = {
                         {
                             column: 'year',
                             label: 'Year',
-                            type: 'number'
+                            type: 'string'
                         },
                         {
                             column: 'population',
                             label: 'Population',
-                            type: 'number'
+                            type: 'number',
+                            formatter: google.visualization.NumberFormat,
+                            formatterOptions: { pattern: '###,###' }
                         }
                     ],
                     chart: google.visualization.LineChart,
-                    options: {
-                        title: 'Population over Time'
-                    }
+                    options: _.extend({}, lineOptions, {
+                        title : 'Population over Time',
+                        height: 300,
+                        vAxis: { format: 'short' }
+                    })
                 }
             ]
         }

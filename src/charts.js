@@ -91,7 +91,21 @@ class Chart {
             return [x].concat(regions.map(region => byID[region.id][this.y.column]));
         });
 
-        return google.visualization.arrayToDataTable([columns].concat(rows));
+        let table = google.visualization.arrayToDataTable([columns].concat(rows));
+
+        if (this.x.formatter) {
+            const formatter = new this.x.formatter(this.x.formatterOptions || {});
+            formatter.format(table, 0);
+        }
+
+        if (this.y.formatter) {
+            const formatter = new this.y.formatter(this.y.formatterOptions || {});
+            _.range(1, columns.length).forEach(index => {
+                formatter.format(table, index);
+            });
+        }
+
+        return table;
     }
 }
 
