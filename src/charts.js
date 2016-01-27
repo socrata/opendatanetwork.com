@@ -45,6 +45,7 @@ class Chart {
 
     render(regions) {
         this.getData(regions).then(data => {
+            data = this.parseData(data, regions);
             console.log(data);
         }, error => {
             console.error(error);
@@ -60,6 +61,15 @@ class Chart {
         };
         const url = `${this.group.path}?${$.param(params)}`;
         return d3.promise.json(url);
+    }
+
+    parseData(data, regions) {
+        const grouped = _.groupBy(data, row => row[this.group.id_column]);
+        return regions
+            .filter(region => region.id in grouped)
+            .map(region => {
+                return {region: region, data: grouped[region.id]};
+            });
     }
 }
 
