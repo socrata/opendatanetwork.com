@@ -37,7 +37,11 @@ const demographics = {
                             label: 'Population',
                             type: 'number'
                         }
-                    ]
+                    ],
+                    chart: google.visualization.LineChart,
+                    options: {
+                        title: 'Population over Time'
+                    }
                 }
             ]
         }

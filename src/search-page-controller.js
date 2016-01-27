@@ -1541,6 +1541,7 @@ class SearchPageController {
 
         // Draw chart
         //
+        console.log(chartData);
         const dataTable = google.visualization.arrayToDataTable(chartData);
         const formatter = new google.visualization.NumberFormat( { pattern : '#.##%' } );
 
@@ -1572,10 +1573,11 @@ class SearchPageController {
     // Draw charts
     //
     drawLineChart(chartId, dataTable, options) {
-
         const chart = new google.visualization.LineChart(document.getElementById(chartId));
 
         this.applyStandardOptions(options);
+
+        console.log(options);
 
         chart.draw(dataTable, options);
     }
