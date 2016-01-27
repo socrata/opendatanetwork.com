@@ -8,8 +8,8 @@ class Tab {
         this.groups = tab.groups.map(group => new ChartGroup(group));
     }
 
-    render(regions) {
-        this.groups.forEach(group => group.render(regions));
+    render(selection, regions) {
+        this.groups.forEach(group => group.render(selection, regions));
     }
 }
 
@@ -24,13 +24,20 @@ class ChartGroup {
         if (!group.fxf) throw Error('group missing fxf');
         this.fxf = group.fxf;
         this.path = `https://${this.domain}/resource/${this.fxf}.json`;
-        this.id_column = group.id_column || 'id';
+        this.idColumn = group.idColumn || 'id';
         if (!group.charts) throw Error('group missing charts');
         this.charts = group.charts.map(chart => new Chart(this, chart));
     }
 
-    render(regions) {
-        this.charts.forEach(chart => chart.render(regions));
+    render(selection, regions) {
+        const div = selection.append('div')
+            .attr('class', 'chart-group');
+
+        div.append('h2')
+            .attr('class', 'chart-group-heading')
+            .text(this.name);
+
+        this.charts.forEach(chart => chart.render(selection, regions));
     }
 }
 
@@ -43,17 +50,16 @@ class Chart {
         this.data = chart.data;
     }
 
-    render(regions) {
+    render(selection, regions) {
         this.getData(regions).then(data => {
-            data = this.parseData(data, regions);
-            console.log(data);
+            const dataTable = this.dataTable(data);
         }, error => {
             console.error(error);
         });
     }
 
     getData(regions) {
-        const columns = [this.group.id_column].concat(this.data.map(variable => variable.column));
+        const columns = [this.group.idColumn].concat(this.data.map(variable => variable.column));
         const params = {
             '$select': columns.join(','),
             '$where': `id in (${regions.map(region => `'${region.id}'`)})`,
@@ -63,13 +69,12 @@ class Chart {
         return d3.promise.json(url);
     }
 
-    parseData(data, regions) {
-        const grouped = _.groupBy(data, row => row[this.group.id_column]);
-        return regions
-            .filter(region => region.id in grouped)
-            .map(region => {
-                return {region: region, data: grouped[region.id]};
-            });
+    dataTable(data) {
+        const id = {column: this.group.idColumn, label: 'ID', type: 'string'};
+        const columns = this.data.concat([id]);
+        const rows = data.map(row => columns.map(column => row[column.column]));
+
+        return google.visualization.arrayToDataTable([columns].concat(rows));
     }
 }
 

@@ -22,30 +22,25 @@ const demographics = {
             attribution: attributions.acs,
             domain: ODN_DOMAIN,
             fxf: 'e3rd-zzmr',
-            id_column: 'id',
+            idColumn: 'id',
             charts: [
                 {
                     name: 'Population over Time',
                     data: [
                         {
                             column: 'year',
-                            name: 'Year',
-                            format: format.integer
+                            label: 'Year',
+                            type: 'number'
                         },
                         {
                             column: 'population',
-                            name: 'Population',
-                            format: format.integer
+                            label: 'Population',
+                            type: 'number'
                         }
                     ]
                 }
             ]
         }
     ]
-};
-
-
-const pop = {
-    name: 'Population'
 };
 

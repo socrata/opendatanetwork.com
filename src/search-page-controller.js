@@ -1432,7 +1432,7 @@ class SearchPageController {
         this.drawPopulationChart();
         this.drawPopulationChangeChart();
 
-        const tab = new Tab(demographics).render(this.params.regions);
+        const tab = new Tab(demographics).render(d3.select('div.charts'), this.params.regions);
     }
 
     onDrawPopulationMap(variable, year) {
