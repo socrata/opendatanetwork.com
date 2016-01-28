@@ -1130,7 +1130,7 @@ class SearchPageController {
     drawEducationData() {
 
         this.drawMap(MapSources.education, (variable, year) => this.onDrawEducationMap(variable, year));
-        this.drawEducationTable();
+        const tab = new Tab(education).render(d3.select('div.charts'), this.params.regions);
     }
 
     onDrawEducationMap(variable, year) {

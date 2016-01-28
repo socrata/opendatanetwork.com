@@ -32,7 +32,6 @@ const demographics = {
             attribution: attributions.acs,
             domain: ODN_DOMAIN,
             fxf: 'e3rd-zzmr',
-            idColumn: 'id',
             charts: [
                 {
                     name: 'Population over Time',
@@ -75,16 +74,70 @@ const demographics = {
                     transform: rows => {
                         return rows
                             .filter(row => row.year !== '2009')
-                            .map(row => {
-                                row.population_percent_change = parseFloat(row.population_percent_change) / 100;
-                                return row;
-                            });
+                            .map(row => _.extend(row, { population_percent_change: parseFloat(row.population_percent_change) / 100 }));
                     },
                     chart: google.visualization.LineChart,
                     options: _.extend({}, lineOptions, {
                         title: 'Population Change over Time',
                         vAxis: { format: 'percent' }
                     })
+                }
+            ]
+        }
+    ]
+};
+
+const education =  {
+    name: 'Education',
+    description: 'Educational data.',
+    groups: [
+        {
+            name: 'Education',
+            attribution: attributions.acs,
+            domain: ODN_DOMAIN,
+            fxf: 'uf4m-5u8r',
+            charts: [
+                {
+                    name: 'Graduation Rates',
+                    data: [
+                        {
+                            column: 'percent_high_school_graduate_or_higher',
+                            label: 'High School',
+                            type: 'number'
+                        },
+                        {
+                            column: 'percent_bachelors_degree_or_higher',
+                            label: 'College',
+                            type: 'number'
+                        }
+                    ],
+                    transpose: [
+                        {
+                            column: 'variable',
+                            label: 'Graduation Rate',
+                            type: 'string'
+                        },
+                        {
+                            column: 'value',
+                            label: 'Value',
+                            type: 'number',
+                            formatter: google.visualization.NumberFormat,
+                            formatterOptions: { pattern: '#.##%' }
+                        }
+                    ],
+                    transform: rows => {
+                        const names = {
+                            'percent_high_school_graduate_or_higher': 'High School',
+                            'percent_bachelors_degree_or_higher': 'College'
+                        };
+
+                        return rows.map(row => {
+                            row.value = parseFloat(row.value) / 100;
+                            row.variable = names[row.variable];
+                            return row;
+                        });
+                    },
+                    chart: google.visualization.Table
                 }
             ]
         }

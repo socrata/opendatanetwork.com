@@ -55,10 +55,13 @@ class Chart {
         this.chart = chart.chart;
         this.options = chart.options || {};
         this.transform = chart.transform;
+        this.transpose = chart.transpose;
+        if (chart.transpose && chart.transpose.length !== 2) throw Error('tranpose requires two variables');
     }
 
     render(selection, regions) {
         this.getData(regions).then(data => {
+            if (this.transpose) data = this._transpose(data);
             if (this.transform) data = this.transform(data);
             const dataTable = this.dataTable(data, regions);
 
@@ -70,6 +73,21 @@ class Chart {
         }, error => {
             console.error(error);
         });
+    }
+
+    _transpose(rows) {
+        this.x = this.transpose[0];
+        this.y = this.transpose[1];
+
+        return _.flatten(rows.map(row => {
+            return this.data.map(variable => {
+                return {
+                    id: row[this.group.idColumn],
+                    [this.x.column]: variable.column,
+                    [this.y.column]: row[variable.column]
+                };
+            });
+        }));
     }
 
     getData(regions) {
