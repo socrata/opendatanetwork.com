@@ -316,3 +316,32 @@ const gdp = {
     ]
 };
 
+const costOfLiving = {
+    name: 'Cost of Living',
+    groups: [
+        {
+            name: 'Cost of Living Indexes (100 is the U.S. Average)',
+            attribution: attributions.bea,
+            domain: ODN_DOMAIN,
+            fxf: 'hpnf-gnfu',
+            charts: [
+                {
+                    name: 'All Factors',
+                    data: [
+                        {
+                            column: 'year',
+                            label: 'Year',
+                            type: 'string'
+                        },
+                        {
+                            column: 'index',
+                            label: 'Index'
+                        }
+                    ],
+                    chart: google.visualization.LineChart
+                }
+            ]
+        }
+    ]
+};
+

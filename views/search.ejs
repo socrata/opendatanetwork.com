@@ -172,7 +172,6 @@ var _tableData = <%- JSON.stringify(tableData) %>;
     </div>
 
     <div class="charts-column">
-
         <ul class="chart-tabs">
           <% sources.forEach(function(source) { %>
             <li<%- getSelectedVector(source) %>><a href="<%= getSearchPageUrl(source) %>"><%= getTabTitle(source) %></a></li>
@@ -180,107 +179,8 @@ var _tableData = <%- JSON.stringify(tableData) %>;
         </ul>
 
         <div class="charts">
-
-<% if ((params.vector == '') || (params.vector == 'population')) { %>
-
             <div id="map"></div>
-<% include _map-summary %>
-
-<% } else if (params.vector == 'earnings') { %>
-
-            <div id="map"></div>
-<% include _map-summary %>
-
-<% } else if (params.vector == 'education') { %>
-
-            <div id="map"></div>
-<% include _map-summary %>
-
-<% } else if (params.vector == 'occupations') { %>
-
-            <div id="map"></div>
-<% include _map-summary %>
-
-<% } else if (params.vector == 'gdp') { %>
-
-            <div id="map"></div>
-<% include _map-summary %>
-
-<% } else if (params.vector == 'health') { %>
-
-            <div id="map"></div>
-<% include _map-summary %>
-            <h1>Health</h1>
-            <div id='cdc-brfss'>
-                <h2>CDC Behavioral Risk Factor Surveillance System (BRFSS) Data: Overall Health</h2>
-                <p>The Behavioral Risk Factor Surveillance System (BRFSS) is the nation's premier system of health-related telephone surveys that collect state data about U.S. residents regarding their health-related risk behaviors, chronic health conditions, and use of preventive services. Established in 1984 with 15 states, BRFSS now collects data in all 50 states as well as the District of Columbia and three U.S. territories. BRFSS completes more than 400,000 adult interviews each year, making it the largest continuously conducted health survey system in the world.</p>
-
-                <p style='text-align: center;'>
-                    Question: 'How is your general health?' | Answer:
-                    <select id='cdc-brfss-overall-health-chart-selector'>
-                        <option selected value='Excellent'>Excellent</option>
-                        <option value='Very good'>Very good</option>
-                        <option value='Good'>Good</option>
-                        <option value='Fair'>Fair</option>
-                        <option value='Poor'>Poor</option>
-                    </select>
-                </p>
-
-                <figure id="cdc-brfss-overall-health-chart"></figure>
-                <label>
-                    Data from CDC's Behavioral Risk Factor Surveillance System. <a href='https://chronicdata.cdc.gov/Behavioral-Risk-Factors/Behavioral-Risk-Factor-Surveillance-System-BRFSS-P/dttw-5yxu'>Data Source</a> | <a href='https://odn.data.socrata.com/view/hwr6-8gx2'>ODN Dataset</a> | <a href='https://dev.socrata.com/foundry/#/odn.data.socrata.com/n4rt-3rmd'>API</a> - <span class='info-icon' title='Note: ODN datasets and APIs are subject to change and may differ in format from the original source data.'></span>
-                    <br>
-                    Note: ODN datasets and APIs may differ in format from the original data in order to provide a user-friendly experience on this site.
-                </label>
-            </div>
-
-            <h2>RWJF County Health Rankings</h2>
-            <p>
-                The Robert Wood Johnson Foundation produces health rankings for states and counties. They explore many aspects of health including quality of life, health behaviors,                access to clinical care, socioeconomic factors, and environmental factors.
-            </p>
-            <h1>Health Outcomes</h1>
-            <div id="health-outcomes-table-container">
-<% include _health-outcomes-table %>
-            </div>
-            <h1>Health Factors</h1>
-            <div id="health-factors-table-container">
-<% include _health-factors-table %>
-            </div>
-            <div id="health-clinical-care-table-container">
-<% include _health-clinical-care-table %>
-            </div>
-            <div id="health-social-economic-factors-table-container">
-<% include _health-social-economic-factors-table %>
-            </div>
-            <div id="health-physical-environment-table-container">
-<% include _health-physical-environment-table %>
-            </div>
-            <label>
-                Data from RWJF County Health Rankings. <a href='http://www.countyhealthrankings.org/'>Data Source</a> | <a href='https://odn.data.socrata.com/view/f24f-8rxv'>ODN Dataset</a> | <a href='https://dev.socrata.com/foundry/#/odn.data.socrata.com/6a3g-pbaa'>API</a> - <span class='info-icon'><div class='info-tooltip'><strong>Note</strong> - ODN datasets and APIs are subject to change and may differ in format from the original source data in order to provide a user-friendly experience on this site.</div></span>
-            </label>
-
-<% } else if (params.vector == 'cost_of_living') { %>
-
-            <div id="map"></div>
-<% include _map-summary %>
-            <h1>Cost of Living</h1>
-            <div id="cost-of-living-table-container">
-<% include _cost-of-living-table %>
-            </div>
-            <h1>All</h1>
-            <figure id="cost-of-living-all-chart"></figure>
-            <h1>Goods</h1>
-            <figure id="cost-of-living-goods-chart"></figure>
-            <h1>Rents</h1>
-            <figure id="cost-of-living-rents-chart"></figure>
-            <h1>Other</h1>
-            <figure id="cost-of-living-other-chart"></figure>
-            <label>
-                Data from U.S. Bureau of Economic Analysis. <a href='http://www.bea.gov/regional/'>Data Source</a> | <a href='https://odn.data.socrata.com/view/r8tp-bmpy'>ODN Dataset</a> | <a href='https://dev.socrata.com/foundry/#/odn.data.socrata.com/hpnf-gnfu'>API</a> - <span class='info-icon'><div class='info-tooltip'><strong>Note</strong> - ODN datasets and APIs are subject to change and may differ in format from the original source data in order to provide a user-friendly experience on this site.</div></span>
-            </label>
-
-<% } %>
-
+            <% include _map-summary %>
         </div>
     </div>
 
