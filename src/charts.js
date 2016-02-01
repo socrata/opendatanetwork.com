@@ -55,6 +55,7 @@ class Chart {
         this.transform = chart.transform;
         if (chart.transpose && chart.transpose.length !== 2) throw Error('transpose requires two variables');
         if (chart.transpose) this.transpose = Chart._columns(chart.transpose);
+        this.params = chart.params || {};
     }
 
     static _columns(columns) {
@@ -99,11 +100,11 @@ class Chart {
 
     getData(regions) {
         const columns = [this.group.idColumn].concat(this.data.map(variable => variable.column));
-        const params = {
+        const params = _.extend({
             '$select': columns.join(','),
             '$where': `id in (${regions.map(region => `'${region.id}'`)})`,
             '$order': columns.map(column => `${column} ASC`).join(',')
-        };
+        }, this.params);
         const url = `${this.group.path}?${$.param(params)}`;
         return d3.promise.json(url);
     }

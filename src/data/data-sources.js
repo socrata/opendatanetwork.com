@@ -324,9 +324,10 @@ const costOfLiving = {
             attribution: attributions.bea,
             domain: ODN_DOMAIN,
             fxf: 'hpnf-gnfu',
-            charts: [
-                {
-                    name: 'All Factors',
+            charts: ['All', 'Rents', 'Goods', 'Other'].map(component => {
+                return {
+                    name: `Category: ${component}`,
+                    params: {component},
                     data: [
                         {
                             column: 'year',
@@ -339,8 +340,8 @@ const costOfLiving = {
                         }
                     ],
                     chart: google.visualization.LineChart
-                }
-            ]
+                };
+            })
         }
     ]
 };
