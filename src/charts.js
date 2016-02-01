@@ -51,10 +51,10 @@ class Chart {
         this.y = chart.data[1];
         if (!chart.chart) throw Error('chart missing chart');
         this.chart = chart.chart;
-        this.options = chart.options || {};
+        this.options = _.extend({}, Constants.DEFAULT_CHART_OPTIONS, chart.options || {}, { title: this.name });
         this.transform = chart.transform;
-        this.transpose = Chart._columns(chart.transpose);
-        if (chart.transpose && chart.transpose.length !== 2) throw Error('tranpose requires two variables');
+        if (chart.transpose && chart.transpose.length !== 2) throw Error('transpose requires two variables');
+        if (chart.transpose) this.transpose = Chart._columns(chart.transpose);
     }
 
     static _columns(columns) {

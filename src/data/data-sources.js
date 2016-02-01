@@ -13,16 +13,6 @@ const attributions = {
     }
 };
 
-const lineOptions = {
-    curveType: 'function',
-    lineWidth: 4,
-    legend : { position : 'top' },
-    pointShape : 'circle',
-    pointSize : 6,
-    height: 300,
-    colors: ['#2ecc71', '#3498db', '#9b59b6', '#f1c40f', '#e67e22', '#e74c3c', '#34495e', '#1abc9c']
-}
-
 const demographics = {
     name: 'Demographics',
     description: 'Information about population, race, age, and sex.',
@@ -49,10 +39,9 @@ const demographics = {
                         }
                     ],
                     chart: google.visualization.LineChart,
-                    options: _.extend({}, lineOptions, {
-                        title : 'Population over Time',
+                    options: {
                         vAxis: { format: 'short' }
-                    })
+                    }
                 },
                 {
                     name: 'Population Change over Time',
@@ -76,10 +65,9 @@ const demographics = {
                             .map(row => _.extend(row, { population_percent_change: parseFloat(row.population_percent_change) / 100 }));
                     },
                     chart: google.visualization.LineChart,
-                    options: _.extend({}, lineOptions, {
-                        title: 'Population Change over Time',
-                        vAxis: { format: 'percent' }
-                    })
+                    options: {
+                        vAxis: { format: '#.##%' }
+                    }
                 }
             ]
         }
@@ -127,7 +115,10 @@ const education =  {
                             return row;
                         });
                     },
-                    chart: google.visualization.Table
+                    chart: google.visualization.ColumnChart,
+                    options: {
+                        vAxis: { format: 'percent' }
+                    }
                 }
             ]
         }
@@ -215,7 +206,9 @@ const earnings = {
                         },
                         {
                             column: 'value',
-                            label: 'Value'
+                            label: 'Value',
+                            formatter: google.visualization.NumberFormat,
+                            formatterOptions: { pattern: '###,###', prefix: '$' }
                         }
                     ],
                     chart: google.visualization.ColumnChart,
