@@ -1230,8 +1230,8 @@ class SearchPageController {
     // Occupations
     //
     drawOccupationsData() {
-
         this.drawMap(MapSources.occupations, (variable, year) => this.onDrawOccupationsMap(variable, year));
+        new Tab(occupations).render(d3.select('div.charts'), this.params.regions);
     }
 
     onDrawOccupationsMap(variable, year) {
@@ -1253,7 +1253,7 @@ class SearchPageController {
     //
     drawPopulationData() {
         this.drawMap(MapSources.population, (variable, year) => this.onDrawPopulationMap(variable, year));
-        const tab = new Tab(demographics).render(d3.select('div.charts'), this.params.regions);
+        new Tab(demographics).render(d3.select('div.charts'), this.params.regions);
     }
 
     onDrawPopulationMap(variable, year) {

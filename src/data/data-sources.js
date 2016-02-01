@@ -106,7 +106,7 @@ const education =  {
                             column: 'value',
                             label: 'Value',
                             formatter: google.visualization.NumberFormat,
-                            formatterOptions: { pattern: '#.##%' }
+                            formatterOptions: { pattern: '#.#%' }
                         }
                     ],
                     transform: rows => {
@@ -214,6 +214,47 @@ const earnings = {
                     chart: google.visualization.ColumnChart,
                     options: {
                         vAxis: { format: 'currency' }
+                    }
+                }
+            ]
+        }
+    ]
+};
+
+const occupations = {
+    name: 'Occupations',
+    description: 'Occupations data.',
+    groups: [
+        {
+            name: 'Percent Employed in Each Occupation',
+            attribution: attributions.acs,
+            domain: ODN_DOMAIN,
+            fxf: 'qfcm-fw3i',
+            charts: [
+                {
+                    data: [
+                        {
+                            column: 'occupation',
+                            label: 'Occupation',
+                            type: 'string'
+                        },
+                        {
+                            column: 'percent_employed',
+                            label: 'Percent Employed',
+                            type: 'number',
+                            formatter: google.visualization.NumberFormat,
+                            formatterOptions: { pattern: '#.#%' }
+                        }
+                    ],
+                    transform: rows => {
+                        return rows.map(row => {
+                            row.percent_employed = parseFloat(row.percent_employed) / 100;
+                            return row;
+                        });
+                    },
+                    chart: google.visualization.Table,
+                    options: {
+                        height: 800
                     }
                 }
             ]
