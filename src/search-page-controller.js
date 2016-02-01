@@ -1094,12 +1094,9 @@ class SearchPageController {
     // GDP data
     //
     drawGdpData() {
-
         this.drawMap(MapSources.gdp, (variable, year) => this.onDrawGdpMap(variable, year));
-        this.drawGdpChart();
-        this.drawGdpChangeChart();
+        new Tab(gdp).render(d3.select('div.charts'), this.params.regions);
 
-        // no need to draw GDP table, because it so long it will never switch to a horizontal orientation
     }
 
     onDrawGdpMap(variable, year) {
@@ -1115,116 +1112,6 @@ class SearchPageController {
                 value => (year == value.year)));
 
         this.drawMapSummaryLinks(MapSources.gdp, variable, year);
-    }
-
-    drawGdpChart() {
-
-        const chartData = [];
-
-        // Header
-        //
-        const header = ['Year'];
-
-        for (var i = 0; i < this.params.regions.length; i++) {
-            header[i + 1] = this.params.regions[i].name;
-        }
-
-        chartData.push(header);
-
-        // Format the data
-        //
-        const o = {};
-
-        for (var i = 0; i < this.tableData.length; i++) {
-
-            const regionValues = this.tableData[i];
-
-            for (var j = 0; j < regionValues.length; j++) {
-
-                if (o[regionValues[j].year] == undefined)
-                    o[regionValues[j].year] = [regionValues[j].year];
-
-                o[regionValues[j].year].push(parseFloat(regionValues[j].per_capita_gdp));
-            }
-        }
-
-        for (var key in o) {
-            chartData.push(o[key]);
-        }
-
-        // Draw chart
-        //
-        const dataTable = google.visualization.arrayToDataTable(chartData);
-        const formatter = new google.visualization.NumberFormat( { pattern : '$###,###' } );
-
-        for (var i = 0; i < this.params.regions.length; i++) {
-            formatter.format(dataTable, i + 1);
-        }
-
-        this.drawLineChart('per-capita-gdp-chart', dataTable, {
-
-            curveType : 'function',
-            legend : { position : 'bottom' },
-            pointShape : 'square',
-            pointSize : 8,
-            title : 'Per Capita Real GDP over Time',
-            vAxis : { format : '$###,###' },
-        });
-    }
-
-    drawGdpChangeChart() {
-
-        const chartData = [];
-
-        // Header
-        //
-        const header = ['Year'];
-
-        for (var i = 0; i < this.params.regions.length; i++) {
-            header[i + 1] = this.params.regions[i].name;
-        }
-
-        chartData.push(header);
-
-        // Format the data
-        //
-        const o = {};
-
-        for (var i = 0; i < this.tableData.length; i++) {
-
-            const regionValues = this.tableData[i];
-
-            for (var j = 0; j < regionValues.length; j++) {
-
-                if (o[regionValues[j].year] == undefined)
-                    o[regionValues[j].year] = [regionValues[j].year];
-
-                o[regionValues[j].year].push(parseFloat(regionValues[j].per_capita_gdp_percent_change) / 100);
-            }
-        }
-
-        for (var key in o) {
-            chartData.push(o[key]);
-        }
-
-        // Draw chart
-        //
-        const dataTable = google.visualization.arrayToDataTable(chartData);
-        const formatter = new google.visualization.NumberFormat( { pattern : '#.##%' } );
-
-        for (var i = 0; i < this.params.regions.length; i++) {
-            formatter.format(dataTable, i + 1);
-        }
-
-        this.drawLineChart('per-capita-gdp-change-chart', dataTable, {
-
-            curveType : 'function',
-            legend : { position : 'bottom' },
-            pointShape : 'square',
-            pointSize : 8,
-            title : 'Annual Change in Per Capita GDP over Time',
-            vAxis : { format : '#.#%' },
-        });
     }
 
     // Occupations

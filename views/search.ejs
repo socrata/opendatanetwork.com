@@ -205,12 +205,6 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 
             <div id="map"></div>
 <% include _map-summary %>
-            <h1>GDP</h1>
-            <figure id="per-capita-gdp-chart"></figure>
-            <figure id="per-capita-gdp-change-chart"></figure>
-            <label>
-                Data from U.S. Bureau of Economic Analysis. <a href='http://www.bea.gov/regional/'>Data Source</a> | <a href='https://odn.data.socrata.com/view/h7vs-8d3q'>ODN Dataset</a> | <a href='https://dev.socrata.com/foundry/#/odn.data.socrata.com/ks2j-vhr8'>API</a> - <span class='info-icon'><div class='info-tooltip'><strong>Note</strong> - ODN datasets and APIs are subject to change and may differ in format from the original source data in order to provide a user-friendly experience on this site.</div></span>
-            </label>
 
 <% } else if (params.vector == 'health') { %>
 

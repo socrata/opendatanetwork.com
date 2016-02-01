@@ -10,8 +10,17 @@ const ODN_DOMAIN = 'odn.data.socrata.com';
 const attributions = {
     acs: {
         name: 'American Community Survey'
+    },
+    bea: {
+        name: 'Bureau of Economic Analysis'
     }
 };
+
+function _toPercent(column) {
+    return rows => {
+        return rows.map(row => _.extend(row, { [column]: parseFloat(row[column]) / 100 }));
+    }
+}
 
 const demographics = {
     name: 'Demographics',
@@ -109,12 +118,7 @@ const education =  {
                             formatterOptions: { pattern: '#.#%' }
                         }
                     ],
-                    transform: rows => {
-                        return rows.map(row => {
-                            row.value = parseFloat(row.value) / 100;
-                            return row;
-                        });
-                    },
+                    transform: _toPercent('value'),
                     chart: google.visualization.ColumnChart,
                     options: {
                         vAxis: { format: 'percent' }
@@ -241,20 +245,70 @@ const occupations = {
                         {
                             column: 'percent_employed',
                             label: 'Percent Employed',
-                            type: 'number',
                             formatter: google.visualization.NumberFormat,
                             formatterOptions: { pattern: '#.#%' }
                         }
                     ],
-                    transform: rows => {
-                        return rows.map(row => {
-                            row.percent_employed = parseFloat(row.percent_employed) / 100;
-                            return row;
-                        });
-                    },
+                    transform: _toPercent('percent_employed'),
                     chart: google.visualization.Table,
                     options: {
                         height: 800
+                    }
+                }
+            ]
+        }
+    ]
+};
+
+const gdp = {
+    name: 'Gross Domestic Product',
+    description: 'Gross Domestic Product (GDP) data.',
+    groups : [
+        {
+            name: 'Gross Domestic Product (GDP)',
+            attribution: attributions.bea,
+            domain: ODN_DOMAIN,
+            fxf: 'ks2j-vhr8',
+            charts: [
+                {
+                    name: 'GDP per Capita over Time',
+                    data: [
+                        {
+                            column: 'year',
+                            label: 'Year',
+                            type: 'string'
+                        },
+                        {
+                            column: 'per_capita_gdp',
+                            label: 'Per Capita GDP',
+                            formatter: google.visualization.NumberFormat,
+                            formatterOptions: { pattern: '$###,###' }
+                        }
+                    ],
+                    chart: google.visualization.LineChart,
+                    options: {
+                        vAxis: { format: '$###,###' }
+                    }
+                },
+                {
+                    name: 'Annual Change in Per Capita GDP',
+                    data: [
+                        {
+                            column: 'year',
+                            label: 'Year',
+                            type: 'string'
+                        },
+                        {
+                            column: 'per_capita_gdp_percent_change',
+                            label: 'Annual Change in Per Capita GDP over Time',
+                            formatter: google.visualization.NumberFormat,
+                            formatterOptions: { pattern: '##.#%' }
+                        }
+                    ],
+                    transform: _toPercent('per_capita_gdp_percent_change'),
+                    chart: google.visualization.LineChart,
+                    options: {
+                        vAxis: { format: '##.#%' }
                     }
                 }
             ]
