@@ -470,7 +470,6 @@ class SearchPageController {
     drawEarningsData() {
 
         this.drawMap(MapSources.earnings, (variable, year) => this.onDrawEarningsMap(variable, year));
-        this.drawEarningsChart();
         const tab = new Tab(earnings).render(d3.select('div.charts'), this.params.regions);
     }
 
@@ -487,91 +486,6 @@ class SearchPageController {
                 value => (year == value.year)));
 
         this.drawMapSummaryLinks(MapSources.earnings, variable, year);
-    }
-
-    drawEarningsChart() {
-
-        const earnings = [];
-
-        // Header
-        //
-        const header = ['Education Level'];
-
-        for (var i = 0; i < this.params.regions.length; i++) {
-            header.push(this.params.regions[i].name);
-        }
-
-        earnings.push(header);
-
-        // Less than high school
-        //
-        const someHighSchoolEarnings = ['Some High School'];
-
-        for (var i = 0; i < this.params.regions.length; i++) {
-            someHighSchoolEarnings.push(parseInt(this.tableData[i][0].median_earnings_less_than_high_school));
-        }
-
-        earnings.push(someHighSchoolEarnings);
-
-        // High school
-        //
-        const highSchoolEarnings = ['High School'];
-
-        for (var i = 0; i < this.params.regions.length; i++) {
-            highSchoolEarnings.push(parseInt(this.tableData[i][0].median_earnings_high_school));
-        }
-
-        earnings.push(highSchoolEarnings);
-
-        // Some college
-        //
-        const someCollegeEarnings = ['Some College'];
-
-        for (var i = 0; i < this.params.regions.length; i++) {
-            someCollegeEarnings.push(parseInt(this.tableData[i][0].median_earnings_some_college_or_associates));
-        }
-
-        earnings.push(someCollegeEarnings);
-
-        // Bachelor's
-        //
-        const bachelorsEarnings = ['Bachelor\'s'];
-
-        for (var i = 0; i < this.params.regions.length; i++) {
-            bachelorsEarnings.push(parseInt(this.tableData[i][0].median_earnings_bachelor_degree));
-        }
-
-        earnings.push(bachelorsEarnings);
-
-        // Graduate degree
-        //
-        const graduateDegreeEarnings = ['Graduate Degree'];
-
-        for (var i = 0; i < this.params.regions.length; i++) {
-            graduateDegreeEarnings.push(parseInt(this.tableData[i][0].median_earnings_graduate_or_professional_degree));
-        }
-
-        earnings.push(graduateDegreeEarnings);
-
-        // Draw chart
-        //
-        const dataTable = google.visualization.arrayToDataTable(earnings);
-        const formatter = new google.visualization.NumberFormat( { pattern : '$###,###' } );
-
-        for (var i = 0; i < this.params.regions.length; i++) {
-            formatter.format(dataTable, i + 1);
-        }
-
-        this.drawSteppedAreaChart('earnings-chart', dataTable, {
-
-            areaOpacity : 0,
-            connectSteps: true,
-            curveType : 'function',
-            focusTarget : 'category',
-            legend : { position : 'bottom' },
-            title : 'Earnings by Education Level',
-            vAxis : { format : 'currency' },
-        });
     }
 
     // Health

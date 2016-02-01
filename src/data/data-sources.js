@@ -44,7 +44,6 @@ const demographics = {
                         {
                             column: 'population',
                             label: 'Population',
-                            type: 'number',
                             formatter: google.visualization.NumberFormat,
                             formatterOptions: { pattern: '###,###' }
                         }
@@ -103,12 +102,10 @@ const education =  {
                         {
                             column: 'percent_high_school_graduate_or_higher',
                             label: 'High School',
-                            type: 'number'
                         },
                         {
                             column: 'percent_bachelors_degree_or_higher',
                             label: 'College',
-                            type: 'number'
                         }
                     ],
                     transpose: [
@@ -120,7 +117,6 @@ const education =  {
                         {
                             column: 'value',
                             label: 'Value',
-                            type: 'number',
                             formatter: google.visualization.NumberFormat,
                             formatterOptions: { pattern: '#.##%' }
                         }
@@ -143,28 +139,25 @@ const earnings = {
     description: 'Earnings and income data.',
     groups: [
         {
-            name: 'Median Earnings of Full-Time and Part-Time Workers',
+            name: 'Earnings',
             attribution: attributions.acs,
             domain: ODN_DOMAIN,
             fxf: 'wmwh-4vak',
             charts: [
                 {
-                    name: 'Median Earnings of Full-time and Part-time Workers',
+                    name: 'Median Earnings by Gender (Full-Time and Part-Time Workers)',
                     data: [
                         {
                             column: 'median_earnings',
-                            label: 'Median Earnings',
-                            type: 'number'
+                            label: 'All',
                         },
                         {
                             column: 'male_median_earnings',
-                            label: 'Median Male Earnings',
-                            type: 'number'
+                            label: 'Male',
                         },
                         {
                             column: 'female_median_earnings',
-                            label: 'Median Female Earnings',
-                            type: 'number'
+                            label: 'Female',
                         }
                     ],
                     transpose: [
@@ -176,12 +169,59 @@ const earnings = {
                         {
                             column: 'value',
                             label: 'Value',
-                            type: 'number',
                             formatter: google.visualization.NumberFormat,
                             formatterOptions: { pattern: '###,###', prefix: '$' }
                         }
                     ],
-                    chart: google.visualization.Table
+                    chart: google.visualization.ColumnChart,
+                    options: {
+                        vAxis: {
+                            format: 'currency',
+                            viewWindow: {
+                                min: 0
+                            }
+                        }
+                    }
+                },
+                {
+                    name: 'Median Earnings by Education Level (Full-Time and Part-Time Workers)',
+                    data: [
+                        {
+                            column: 'median_earnings_less_than_high_school',
+                            label: 'Less than High School'
+                        },
+                        {
+                            column: 'median_earnings_high_school',
+                            label: 'High School'
+                        },
+                        {
+                            column: 'median_earnings_some_college_or_associates',
+                            label: 'Some College or Associates'
+                        },
+                        {
+                            column: 'median_earnings_bachelor_degree',
+                            label: 'Bachelor\'s Degree'
+                        },
+                        {
+                            column: 'median_earnings_graduate_or_professional_degree',
+                            label: 'Graduate or Professional Degree'
+                        }
+                    ],
+                    transpose: [
+                        {
+                            column: 'variable',
+                            label: 'Level of Education',
+                            type: 'string'
+                        },
+                        {
+                            column: 'value',
+                            label: 'Value'
+                        }
+                    ],
+                    chart: google.visualization.ColumnChart,
+                    options: {
+                        vAxis: { format: 'currency' }
+                    }
                 }
             ]
         }

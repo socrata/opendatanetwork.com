@@ -44,18 +44,26 @@ class ChartGroup {
 class Chart {
     constructor(group, chart) {
         this.group = group;
-        if (!chart.name) throw Error('chart missing name');
-        this.name = chart.name;
+        this.name = chart.name || '';
         if (!chart.data) throw Error('chart missing data');
-        this.data = chart.data;
+        this.data = Chart._columns(chart.data);
         this.x = chart.data[0];
         this.y = chart.data[1];
         if (!chart.chart) throw Error('chart missing chart');
         this.chart = chart.chart;
         this.options = chart.options || {};
         this.transform = chart.transform;
-        this.transpose = chart.transpose;
+        this.transpose = Chart._columns(chart.transpose);
         if (chart.transpose && chart.transpose.length !== 2) throw Error('tranpose requires two variables');
+    }
+
+    static _columns(columns) {
+        return columns.map(column => {
+            column.type = column.type || 'number';
+            column.label = column.label || '';
+            column.column = column.column || '';
+            return column;
+        });
     }
 
     render(selection, regions) {
