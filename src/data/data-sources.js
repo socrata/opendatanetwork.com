@@ -126,17 +126,61 @@ const education =  {
                         }
                     ],
                     transform: rows => {
-                        const names = {
-                            'percent_high_school_graduate_or_higher': 'High School',
-                            'percent_bachelors_degree_or_higher': 'College'
-                        };
-
                         return rows.map(row => {
                             row.value = parseFloat(row.value) / 100;
-                            row.variable = names[row.variable];
                             return row;
                         });
                     },
+                    chart: google.visualization.Table
+                }
+            ]
+        }
+    ]
+};
+
+const earnings = {
+    name: 'Earnings',
+    description: 'Earnings and income data.',
+    groups: [
+        {
+            name: 'Median Earnings of Full-Time and Part-Time Workers',
+            attribution: attributions.acs,
+            domain: ODN_DOMAIN,
+            fxf: 'wmwh-4vak',
+            charts: [
+                {
+                    name: 'Median Earnings of Full-time and Part-time Workers',
+                    data: [
+                        {
+                            column: 'median_earnings',
+                            label: 'Median Earnings',
+                            type: 'number'
+                        },
+                        {
+                            column: 'male_median_earnings',
+                            label: 'Median Male Earnings',
+                            type: 'number'
+                        },
+                        {
+                            column: 'female_median_earnings',
+                            label: 'Median Female Earnings',
+                            type: 'number'
+                        }
+                    ],
+                    transpose: [
+                        {
+                            column: 'variable',
+                            label: '',
+                            type: 'string'
+                        },
+                        {
+                            column: 'value',
+                            label: 'Value',
+                            type: 'number',
+                            formatter: google.visualization.NumberFormat,
+                            formatterOptions: { pattern: '###,###', prefix: '$' }
+                        }
+                    ],
                     chart: google.visualization.Table
                 }
             ]

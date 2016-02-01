@@ -471,7 +471,7 @@ class SearchPageController {
 
         this.drawMap(MapSources.earnings, (variable, year) => this.onDrawEarningsMap(variable, year));
         this.drawEarningsChart();
-        this.drawEarningsTable();
+        const tab = new Tab(earnings).render(d3.select('div.charts'), this.params.regions);
     }
 
     onDrawEarningsMap(variable, year) {
@@ -572,95 +572,6 @@ class SearchPageController {
             title : 'Earnings by Education Level',
             vAxis : { format : 'currency' },
         });
-    }
-
-    drawEarningsTable() {
-
-        const width = $(window).width();
-
-        if ((this.params.regions.length >= 3) || (width >= 1600))
-            this.drawEarningsTableHorizontal();    // horizontal colored lines
-        else
-            this.drawEarningsTableVertical();      // vertical colored lines
-    }
-
-    drawEarningsTableVertical() {
-
-        if (this.ensureVisibleWithOrientation('#earnings-table-container table', 'vertical'))
-            return;
-
-        var s = '<table class="vertical">';
-
-        // Header
-        //
-        s += '<tr>';
-        s += '<th class="empty"></th>';
-
-        for (var i = 0; i < this.tableData.length; i++) {
-            s += '<th class="color-' + i + '">' + this.params.regions[i].name + '<div></div></th>';
-        }
-
-        s += '</tr>'
-
-        // Median (all)
-        //
-        s += '<tr><td class="category-header">Median Earnings<br>(All Workers)</td>';
-
-        for (var i = 0; i < this.tableData.length; i++) {
-            s += '<td class="color-' + i + '">' + numeral(this.tableData[i][0].median_earnings).format('$0,0')  + '<div></div></td>';
-        }
-        s += '</tr>';
-
-        // Median (female)
-        //
-        s += '<tr><td class="category-header">Median Female Earnings<br>(Full Time)</td>';
-
-        for (var i = 0; i < this.tableData.length; i++) {
-            s += '<td class="color-' + i + '">' + numeral(this.tableData[i][0].female_full_time_median_earnings).format('$0,0')  + '<div></div></td>';
-        }
-        s += '</tr>';
-
-        // Median (male)
-        //
-        s += '<tr><td class="category-header">Median Male Earnings<br>(Full Time)</td>';
-
-        for (var i = 0; i < this.tableData.length; i++) {
-            s += '<td class="color-' + i + '">' + numeral(this.tableData[i][0].male_full_time_median_earnings).format('$0,0')  + '<div></div></td>';
-        }
-        s += '</tr>';
-
-        s += '</table>';
-
-        $('#earnings-table-container').html(s);
-    }
-
-    drawEarningsTableHorizontal() {
-
-        if (this.ensureVisibleWithOrientation('#earnings-table-container table', 'horizontal'))
-            return;
-
-        var s = '<table class="horizontal">';
-
-        s += '<tr>';
-        s += '<td class="empty"></td>';
-        s += '<td class="category-header">Median Earnings<br>(All Workers)</td>';
-        s += '<td class="category-header">Median Female Earnings<br>(Full Time)</td>';
-        s += '<td class="category-header">Median Male Earnings<br>(Full Time)</td>';
-        s += '</tr>';
-
-        for (var i = 0; i < this.tableData.length; i++) {
-
-            s += '<tr class="color-' + i + '">'
-            s += '<td>' + this.params.regions[i].name + '<div></div></td>';
-            s += '<td>' + numeral(this.tableData[i][0].median_earnings).format('$0,0') + '<div></div></td>';
-            s += '<td>' + numeral(this.tableData[i][0].female_full_time_median_earnings).format('$0,0') + '<div></div></td>';
-            s += '<td>' + numeral(this.tableData[i][0].male_full_time_median_earnings).format('$0,0') + '<div></div></td>';
-            s += '</tr>';
-        }
-
-        s += '</table>';
-
-        $('#earnings-table-container').html(s);
     }
 
     // Health

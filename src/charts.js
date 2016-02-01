@@ -47,7 +47,6 @@ class Chart {
         if (!chart.name) throw Error('chart missing name');
         this.name = chart.name;
         if (!chart.data) throw Error('chart missing data');
-        if (chart.data.length !== 2) throw Error('chart requires 2 variables');
         this.data = chart.data;
         this.x = chart.data[0];
         this.y = chart.data[1];
@@ -83,7 +82,7 @@ class Chart {
             return this.data.map(variable => {
                 return {
                     id: row[this.group.idColumn],
-                    [this.x.column]: variable.column,
+                    [this.x.column]: variable.label,
                     [this.y.column]: row[variable.column]
                 };
             });
