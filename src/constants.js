@@ -13,7 +13,13 @@ const Constants = {
     PEER_REGIONS: 5,
     PEER_REGIONS_MAX: 10,
 
-    DEFAULT_CHART_OPTIONS: {
+    CHART_TYPES: {
+        'line': google.visualization.LineChart,
+        'bar': google.visualization.BarChart,
+        'column': google.visualization.ColumnChart,
+        'table': google.visualization.Table
+    },
+    CHART_OPTIONS: {
         curveType: 'function',
         lineWidth: 4,
         legend : { position : 'top' },

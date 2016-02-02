@@ -1,13 +1,16 @@
+'use strict';
+
+if (typeof require !== 'undefined') var _ = require('lodash');
 
 /**
  * Data Sources.
  *
- * [Tab] -> [Chart Group] -> [Chart]
+ * [Tab] -> [Chart]
  */
 
 const ODN_DOMAIN = 'odn.data.socrata.com';
 
-const attributions = {
+const ATTRIBUTIONS = {
     acs: {
         name: 'American Community Survey'
     },
@@ -16,19 +19,24 @@ const attributions = {
     }
 };
 
+const ALL_REGIONS = ['nation', 'region', 'division', 'state', 'county',
+                     'msa', 'place', 'zip_code'];
+
 function _toPercent(column) {
     return rows => {
         return rows.map(row => _.extend(row, { [column]: parseFloat(row[column]) / 100 }));
     };
 }
 
-const SOURCES = {
-    population: {
+const SOURCES = [
+    {
         tabName: 'Population',
+        vector: 'population',
         name: 'Population',
-        attribution: attributions.acs,
+        attribution: ATTRIBUTIONS.acs,
         domain: ODN_DOMAIN,
         fxf: 'e3rd-zzmr',
+        regions: ALL_REGIONS,
         charts: [
             {
                 name: 'Population over Time',
@@ -44,7 +52,7 @@ const SOURCES = {
                         format: { pattern: '###,###' }
                     }
                 ],
-                chart: google.visualization.LineChart,
+                chart: 'line',
                 options: {
                     vAxis: { format: 'short' }
                 }
@@ -69,20 +77,21 @@ const SOURCES = {
                         .filter(row => row.year !== '2009')
                         .map(row => _.extend(row, { population_percent_change: parseFloat(row.population_percent_change) / 100 }));
                 },
-                chart: google.visualization.LineChart,
+                chart: 'line',
                 options: {
                     vAxis: { format: '#.##%' }
                 }
             }
         ]
     },
-
-    education: {
+    {
         tabName: 'Education',
+        vector: 'education',
         name: 'Education',
-        attribution: attributions.acs,
+        attribution: ATTRIBUTIONS.acs,
         domain: ODN_DOMAIN,
         fxf: 'uf4m-5u8r',
+        regions: ALL_REGIONS,
         charts: [
             {
                 name: 'Graduation Rates',
@@ -109,20 +118,21 @@ const SOURCES = {
                     }
                 ],
                 transform: _toPercent('value'),
-                chart: google.visualization.ColumnChart,
+                chart: 'column',
                 options: {
                     vAxis: { format: 'percent' }
                 }
             }
         ]
     },
-
-    earnings: {
+    {
         tabName: 'Earnings',
+        vector: 'earnings',
         name: 'Earnings',
-        attribution: attributions.acs,
+        attribution: ATTRIBUTIONS.acs,
         domain: ODN_DOMAIN,
         fxf: 'wmwh-4vak',
+        regions: ALL_REGIONS,
         charts: [
             {
                 name: 'Median Earnings by Gender (Full-Time and Part-Time Workers)',
@@ -152,7 +162,7 @@ const SOURCES = {
                         format: { pattern: '###,###', prefix: '$' }
                     }
                 ],
-                chart: google.visualization.ColumnChart,
+                chart: 'column',
                 options: {
                     vAxis: {
                         format: 'currency',
@@ -198,20 +208,21 @@ const SOURCES = {
                         format: { pattern: '###,###', prefix: '$' }
                     }
                 ],
-                chart: google.visualization.ColumnChart,
+                chart: 'column',
                 options: {
                     vAxis: { format: 'currency' }
                 }
             }
         ]
     },
-
-    occupations: {
+    {
         tabName: 'Occupations',
+        vector: 'occupations',
         name: 'Percent Employed in Each Occupation',
-        attribution: attributions.acs,
+        attribution: ATTRIBUTIONS.acs,
         domain: ODN_DOMAIN,
         fxf: 'qfcm-fw3i',
+        regions: ALL_REGIONS,
         charts: [
             {
                 data: [
@@ -227,20 +238,22 @@ const SOURCES = {
                     }
                 ],
                 transform: _toPercent('percent_employed'),
-                chart: google.visualization.Table,
+                chart: 'table',
                 options: {
                     height: 800
                 }
             }
         ]
     },
-
-    gdp: {
+    {
         tabName: 'GDP',
+        vector: 'gdp',
         name: 'Gross Domestic Product (GDP)',
-        attribution: attributions.bea,
+        attribution: ATTRIBUTIONS.bea,
         domain: ODN_DOMAIN,
         fxf: 'ks2j-vhr8',
+        regions: ['state', 'msa'],
+        include: region => _.contains(region.name, 'Metro'),
         charts: [
             {
                 name: 'GDP per Capita over Time',
@@ -256,7 +269,7 @@ const SOURCES = {
                         format: { pattern: '$###,###' }
                     }
                 ],
-                chart: google.visualization.LineChart,
+                chart: 'line',
                 options: {
                     vAxis: { format: '$###,###' }
                 }
@@ -276,20 +289,22 @@ const SOURCES = {
                     }
                 ],
                 transform: _toPercent('per_capita_gdp_percent_change'),
-                chart: google.visualization.LineChart,
+                chart: 'line',
                 options: {
                     vAxis: { format: '##.#%' }
                 }
             }
         ]
     },
-
-    cost_of_living: {
+    {
         tabName: 'Cost of Living',
+        vector: 'cost_of_living',
         name: 'Cost of Living Indexes (100 is the U.S. Average)',
-        attribution: attributions.bea,
+        attribution: ATTRIBUTIONS.bea,
         domain: ODN_DOMAIN,
         fxf: 'hpnf-gnfu',
+        regions: ['state', 'msa'],
+        include: region => _.contains(region.name, 'Metro'),
         charts: ['All', 'Rents', 'Goods', 'Other'].map(component => {
             return {
                 name: `Category: ${component}`,
@@ -305,9 +320,36 @@ const SOURCES = {
                         label: 'Index'
                     }
                 ],
-                chart: google.visualization.LineChart
+                chart: 'line'
             };
         })
     }
-};
+];
+
+const SOURCES_BY_VECTOR = _.indexBy(SOURCES, source => source.vector);
+
+class Sources {
+    static get(vector) {
+        return SOURCES_BY_VECTOR[vector];
+    }
+
+    static supportsVector(vector, regions) {
+        if (!(vector in SOURCES_BY_VECTOR)) return false;
+        return Sources.supports(SOURCES_BY_VECTOR[vector], regions);
+    }
+
+    static supports(source, regions) {
+        for (const region of regions) {
+            if (!_.contains(source.regions, region.type)) return false;
+        }
+        return true;
+    }
+
+    static forRegions(regions) {
+        return SOURCES.filter(source => Sources.supports(source, regions));
+    }
+}
+
+
+if (typeof module !== 'undefined') module.exports = Sources;
 

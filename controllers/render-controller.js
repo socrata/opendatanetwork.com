@@ -5,11 +5,12 @@ const ApiController = require('./api-controller');
 const CategoryController = require('./category-controller');
 const MetricsController = require('./metrics-controller');
 const TagController = require('./tag-controller');
-const Sources = require('./sources');
 const Relatives = require('./relatives');
 const Constants = require('./constants');
 const Request = require('./request');
 const Navigate = require('./navigate');
+
+const Sources = require('../src/data/data-sources');
 
 const _ = require('lodash');
 const htmlencode = require('htmlencode').htmlEncode;
@@ -20,7 +21,6 @@ const path = require('path');
 const apiController = new ApiController();
 const categoryController = new CategoryController();
 const metricsController = new MetricsController();
-const sources = Sources.getSources();
 const tagController = new TagController();
 
 const defaultSearchResultCount = 10;
@@ -163,7 +163,7 @@ class RenderController {
             RenderController._parameters(req, res).then(params => {
                 const regions = params.regions;
 
-                if (!_.includes(sources.forRegions(regions), vector)) {
+                if (!Sources.supportsVector(vector, regions)) {
                     RenderController.error(req, res, 404, `"${vector}" data not available for ${regions[0].name}`)();
                 } else {
                     try {
@@ -199,6 +199,7 @@ class RenderController {
 
         const uids = params.regions.map(region => region.id);
         const names = params.regions.map(region => region.name);
+        console.log(uids);
 
         function processRegions(regions) {
             return regions.filter(region => {
@@ -227,13 +228,19 @@ class RenderController {
 
         allPromise.then(data => {
             try {
+                const sources = Sources.forRegions(params.regions);
+                const source = params.vector === '' ?
+                    Sources.get('population') :
+                    Sources.get(params.vector);
+
                 const templateParams = {
                     params,
                     searchDatasetsURL,
+                    sources,
+                    source,
                     mapSummaryLinks : metricsController.getMapSummaryLinks(params),
                     mapVariables : metricsController.getMapVariables(params),
                     searchPath : req.path,
-                    sources : sources.forRegions(params.regions),
                     title : searchPageTitle(params),
                     css : [
                         '/styles/third-party/leaflet.min.css',
@@ -254,6 +261,8 @@ class RenderController {
                         '/lib/search.min.js'
                     ]
                 };
+
+                console.log(templateParams.sources);
 
                 if (data && data.length == allPromises.length) {
                     if (data[0].length > 0) {

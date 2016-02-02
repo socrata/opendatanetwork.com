@@ -45,13 +45,13 @@ var _tableData = <%- JSON.stringify(tableData) %>;
       <% if (searchResults.results.length > 0) { %>
         <strong><%= searchResults.resultSetSizeString %></strong> results for <strong><%= params.q %></strong>
       <% } else { %>
-        <strong><%= getTabTitle(params.vector.length > 0 ? params.vector : 'population') %></strong>
+        <strong><%= source.tabName %></strong>
       <% } %>
 <% } else { %>
     <% if (searchResults.results.length > 0) { %>
       <% if (params.regions.length > 0) { %>
         <strong><%= searchResults.resultSetSizeString %></strong> results for
-        <strong><%= getTabTitle(params.vector.length > 0 ? params.vector : 'population') %></strong>
+        <strong><%= source.tabName %></strong>
       <% } else { %>
         <strong><%= searchResults.resultSetSizeString %></strong> results
       <% } %>
@@ -173,9 +173,13 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 
     <div class="charts-column">
         <ul class="chart-tabs">
-          <% sources.forEach(function(source) { %>
-            <li<%- getSelectedVector(source) %>><a href="<%= getSearchPageUrl(source) %>"><%= getTabTitle(source) %></a></li>
-          <% }); %>
+            <% sources.forEach(function(source) { %>
+                <li class="<%= source.vector === params.vector || (source.vector === 'population' && params.vector === '') %>">
+                    <a href="<%= getSearchPageUrl(source) %>">
+                        <%= source.tabName %>
+                    </a>
+                </li>
+            <% }); %>
         </ul>
 
         <div class="charts">
@@ -203,22 +207,9 @@ var _tableData = <%- JSON.stringify(tableData) %>;
 </html>
 
 <%
-function getTabTitle(source) {
 
-    switch (source) {
-
-        case 'population': return 'Population';
-        case 'earnings': return 'Earnings';
-        case 'education': return 'Education';
-        case 'occupations': return 'Occupations';
-        case 'gdp': return 'GDP';
-        case 'cost_of_living': return 'Cost of Living';
-        case 'health': return 'Health';
-        default: return '';
-    }
-}
-
-function getSearchPageUrl(vector) {
+function getSearchPageUrl(source) {
+    const vector = source.vector;
 
     var url;
 

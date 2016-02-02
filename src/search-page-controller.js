@@ -144,8 +144,8 @@ class SearchPageController {
                 console.warn(`no map source found for vector: ${vector}`);
             }
 
-            if (vector in SOURCES) {
-                const source = SOURCES[vector];
+            if (vector in SOURCES_BY_VECTOR) {
+                const source = SOURCES_BY_VECTOR[vector];
                 new Tab(source).render(d3.select('div.charts'), regions);
             } else {
                 console.warn(`no source found for vector: ${vector}`);
