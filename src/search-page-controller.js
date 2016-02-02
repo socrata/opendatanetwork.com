@@ -122,7 +122,7 @@ class SearchPageController {
         // Chart column
         //
         const regions = this.params.regions;
-        const vector = this.params.vector;
+        const vector = this.params.vector || 'population';
 
         if (regions.length > 0) {
             if (vector in MAP_SOURCES) {
