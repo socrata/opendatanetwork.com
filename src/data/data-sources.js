@@ -43,8 +43,7 @@ const SOURCES = {
                             {
                                 column: 'population',
                                 label: 'Population',
-                                formatter: google.visualization.NumberFormat,
-                                formatterOptions: { pattern: '###,###' }
+                                format: { pattern: '###,###' }
                             }
                         ],
                         chart: google.visualization.LineChart,
@@ -64,8 +63,7 @@ const SOURCES = {
                                 column: 'population_percent_change',
                                 label: 'Population Change',
                                 type: 'number',
-                                formatter: google.visualization.NumberFormat,
-                                formatterOptions: { pattern: '#.##%' }
+                                format: { pattern: '#.##%' }
                             }
                         ],
                         transform: rows => {
@@ -114,8 +112,7 @@ const SOURCES = {
                             {
                                 column: 'value',
                                 label: 'Value',
-                                formatter: google.visualization.NumberFormat,
-                                formatterOptions: { pattern: '#.#%' }
+                                format: { pattern: '#.#%' }
                             }
                         ],
                         transform: _toPercent('value'),
@@ -164,8 +161,7 @@ const SOURCES = {
                             {
                                 column: 'value',
                                 label: 'Value',
-                                formatter: google.visualization.NumberFormat,
-                                formatterOptions: { pattern: '###,###', prefix: '$' }
+                                format: { pattern: '###,###', prefix: '$' }
                             }
                         ],
                         chart: google.visualization.ColumnChart,
@@ -211,8 +207,7 @@ const SOURCES = {
                             {
                                 column: 'value',
                                 label: 'Value',
-                                formatter: google.visualization.NumberFormat,
-                                formatterOptions: { pattern: '###,###', prefix: '$' }
+                                format: { pattern: '###,###', prefix: '$' }
                             }
                         ],
                         chart: google.visualization.ColumnChart,
@@ -245,8 +240,7 @@ const SOURCES = {
                             {
                                 column: 'percent_employed',
                                 label: 'Percent Employed',
-                                formatter: google.visualization.NumberFormat,
-                                formatterOptions: { pattern: '#.#%' }
+                                format: { pattern: '#.#%' }
                             }
                         ],
                         transform: _toPercent('percent_employed'),
@@ -281,8 +275,7 @@ const SOURCES = {
                             {
                                 column: 'per_capita_gdp',
                                 label: 'Per Capita GDP',
-                                formatter: google.visualization.NumberFormat,
-                                formatterOptions: { pattern: '$###,###' }
+                                format: { pattern: '$###,###' }
                             }
                         ],
                         chart: google.visualization.LineChart,
@@ -301,8 +294,7 @@ const SOURCES = {
                             {
                                 column: 'per_capita_gdp_percent_change',
                                 label: 'Annual Change in Per Capita GDP over Time',
-                                formatter: google.visualization.NumberFormat,
-                                formatterOptions: { pattern: '##.#%' }
+                                format: { pattern: '##.#%' }
                             }
                         ],
                         transform: _toPercent('per_capita_gdp_percent_change'),

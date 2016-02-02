@@ -121,15 +121,15 @@ class Chart {
 
         let table = google.visualization.arrayToDataTable([columns].concat(rows));
 
-        if (this.x.formatter) {
-            const formatter = new this.x.formatter(this.x.formatterOptions || {});
-            formatter.format(table, 0);
+        if (this.x.format) {
+            const format = new google.visualization.NumberFormat(this.x.format);
+            format.format(table, 0);
         }
 
-        if (this.y.formatter) {
-            const formatter = new this.y.formatter(this.y.formatterOptions || {});
+        if (this.y.format) {
+            const format = new google.visualization.NumberFormat(this.y.format);
             _.range(1, columns.length).forEach(index => {
-                formatter.format(table, index);
+                format.format(table, index);
             });
         }
 
