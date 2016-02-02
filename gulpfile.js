@@ -14,12 +14,7 @@ var baseScripts = [
     'src/app.js',
     'src/api-controller.js',
     'src/constants.js',
-    'src/region-lookup.js',
-    'src/autocomplete.js',
-    'src/multi-complete.js',
-    'src/source-complete.js',
-    'src/data/sources.js',
-    'src/sources.js',
+    'src/region-lookup.js'
 ];
 
 var mapScripts = [
@@ -74,19 +69,21 @@ function js(src, dest) {
 var homeScripts = baseScripts
     .concat(autosuggestScripts)
     .concat(['src/home.js']);
-
 gulp.task('home', js(homeScripts, 'home.min.js'));
-
 
 var searchScripts = baseScripts
     .concat(autosuggestScripts)
     .concat(mapScripts)
     .concat(mapSummaryScripts)
     .concat(searchScripts);
-
 gulp.task('search', js(searchScripts, 'search.min.js'));
 
-gulp.task('js', ['home', 'search']);
+var datasetScripts = baseScripts
+    .concat(autosuggestScripts)
+    .concat(['src/dataset.js']);
+gulp.task('dataset', js(datasetScripts, 'dataset.min.js'));
+
+gulp.task('js', ['home', 'search', 'dataset']);
 
 
 gulp.task('css', function() {

@@ -12,7 +12,7 @@ const Request = require('./request');
 const Navigate = require('./navigate');
 
 const _ = require('lodash');
-const htmlencode = require('htmlencode');
+const htmlencode = require('htmlencode').htmlEncode;
 const moment = require('moment');
 const numeral = require('numeral');
 const path = require('path');
@@ -77,12 +77,9 @@ class RenderController {
                         '/styles/dataset.css'
                     ],
                     scripts : [
-                        '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
-                        '/lib/third-party/colorbrewer.min.js',
-                        '/lib/third-party/d3.min.js',
-                        '/lib/third-party/d3.promise.min.js',
                         '/lib/third-party/lodash.min.js',
-                        '/lib/search.min.js',
+                        '/lib/third-party/d3.min.js',
+                        '/lib/dataset.min.js'
                     ]
                 };
 
