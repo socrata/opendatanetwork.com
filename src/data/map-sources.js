@@ -113,8 +113,8 @@ const MAP_SOURCES = {
         ]
     },
 
-    rpp: {
-        name: 'rpp',
+    cost_of_living: {
+        name: 'cost of living',
         domain: DOMAIN,
         fxf: 'hpnf-gnfu',
         variables: ['All', 'Goods', 'Rents', 'Other'].map(

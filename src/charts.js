@@ -1,40 +1,36 @@
 
 class Tab {
     constructor(tab) {
-        if (!tab.name) throw Error('tab missing name');
-        this.name = tab.name;
+        if (!tab.tabName) throw Error('tab missing tab');
+        this.tabName = tab.tabName;
+
         this.description = tab.description || '';
-        if (!tab.groups) throw Error('tab missing groups');
-        this.groups = tab.groups.map(group => new ChartGroup(group));
-    }
 
-    render(selection, regions) {
-        this.groups.forEach(group => group.render(selection, regions));
-    }
-}
+        this.name = tab.name || this.tabName;
 
-class ChartGroup {
-    constructor(group) {
-        if (!group.name) throw Error('group missing name');
-        this.name = group.name;
-        if (!group.attribution) throw Error('group missing attribution');
-        this.attribution = group.attribution;
-        if (!group.domain) throw Error('group missing domain');
-        this.domain = group.domain;
-        if (!group.fxf) throw Error('group missing fxf');
-        this.fxf = group.fxf;
+        if (!tab.attribution) throw Error('tab missing attribution');
+        this.attribution = tab.attribution;
+
+        if (!tab.domain) throw Error('tab missing domain');
+        this.domain = tab.domain;
+
+        if (!tab.fxf) throw Error('tab missing fxf');
+        this.fxf = tab.fxf;
+
         this.path = `https://${this.domain}/resource/${this.fxf}.json`;
-        this.idColumn = group.idColumn || 'id';
-        if (!group.charts) throw Error('group missing charts');
-        this.charts = group.charts.map(chart => new Chart(this, chart));
+
+        this.idColumn = tab.idColumn || 'id';
+
+        if (!tab.charts) throw Error('tab missing charts');
+        this.charts = tab.charts.map(chart => new Chart(this, chart));
     }
 
     render(selection, regions) {
         const container = selection.append('div')
-            .attr('class', 'chart-group');
+            .attr('class', 'chart-tab');
 
         container.append('h2')
-            .attr('class', 'chart-group-heading')
+            .attr('class', 'chart-tab-heading')
             .text(this.name);
 
         this.charts.forEach(chart => chart.render(container, regions));
@@ -42,8 +38,8 @@ class ChartGroup {
 }
 
 class Chart {
-    constructor(group, chart) {
-        this.group = group;
+    constructor(tab, chart) {
+        this.tab = tab;
         this.name = chart.name || '';
         if (!chart.data) throw Error('chart missing data');
         this.data = Chart._columns(chart.data);
@@ -90,7 +86,7 @@ class Chart {
         return _.flatten(rows.map(row => {
             return this.data.map(variable => {
                 return {
-                    id: row[this.group.idColumn],
+                    id: row[this.tab.idColumn],
                     [this.x.column]: variable.label,
                     [this.y.column]: row[variable.column]
                 };
@@ -99,13 +95,13 @@ class Chart {
     }
 
     getData(regions) {
-        const columns = [this.group.idColumn].concat(this.data.map(variable => variable.column));
+        const columns = [this.tab.idColumn].concat(this.data.map(variable => variable.column));
         const params = _.extend({
             '$select': columns.join(','),
             '$where': `id in (${regions.map(region => `'${region.id}'`)})`,
             '$order': columns.map(column => `${column} ASC`).join(',')
         }, this.params);
-        const url = `${this.group.path}?${$.param(params)}`;
+        const url = `${this.tab.path}?${$.param(params)}`;
         return d3.promise.json(url);
     }
 
@@ -115,7 +111,7 @@ class Chart {
 
         const byX = _.groupBy(data, row => row[this.x.column]);
         const rows = _.pairs(byX).map(([x, rows]) => {
-            const byID = _.indexBy(rows, row => row[this.group.idColumn]);
+            const byID = _.indexBy(rows, row => row[this.tab.idColumn]);
             return [x].concat(regions.map(region => byID[region.id][this.y.column]));
         });
 

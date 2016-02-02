@@ -127,7 +127,6 @@ class SearchPageController {
         if (regions.length > 0) {
             if (vector in MAP_SOURCES) {
                 const mapSource = MAP_SOURCES[vector];
-                console.log(mapSource);
                 mapSource.selectedIndices = this.mapVariables;
 
                 const onDisplay = (variable, year) => {
@@ -141,11 +140,15 @@ class SearchPageController {
 
                 MapView.create(mapSource, regions, onDisplay)
                     .then(view => view.show('#map'), error => console.warn(error));
+            } else {
+                console.warn(`no map source found for vector: ${vector}`);
             }
 
             if (vector in SOURCES) {
                 const source = SOURCES[vector];
                 new Tab(source).render(d3.select('div.charts'), regions);
+            } else {
+                console.warn(`no source found for vector: ${vector}`);
             }
         }
 
