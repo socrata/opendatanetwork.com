@@ -33,19 +33,13 @@ class SearchPageController {
         this.attachCategoriesClickHandlers();
 
         $('#refine-menu-categories-view-more').click(function() {
+            d3.promise.json('/categories.json').then(data => {
+                const rg = data.results.map(result => '<li><i class="fa ' + result.metadata.icon + '"></i>' + result.category + '</li>');
+                const s = rg.join('');
 
-            const controller = new ApiController();
-
-            controller.getCategories()
-                .then(data => {
-
-                    const rg = data.results.map(result => '<li><i class="fa ' + result.metadata.icon + '"></i>' + result.category + '</li>');
-                    const s = rg.join('');
-
-                    $('#refine-menu-categories').html(s);
-                    self.attachCategoriesClickHandlers();
-                })
-                .catch(error => console.error(error));
+                $('#refine-menu-categories').html(s);
+                self.attachCategoriesClickHandlers();
+            }, console.error);
         });
 
         // Domains
@@ -53,19 +47,13 @@ class SearchPageController {
         this.attachDomainsClickHandlers();
 
         $('#refine-menu-domains-view-more').click(function() {
+            d3.promise.json('https://api.us.socrata.com/api/catalog/v1/domains').then(data => {
+                const rg = data.results.map(result => '<li>' + result.domain + '</li>');
+                const s = rg.join('');
 
-            const controller = new ApiController();
-
-            controller.getDomains()
-                .then(data => {
-
-                    const rg = data.results.map(result => '<li>' + result.domain + '</li>');
-                    const s = rg.join('');
-
-                    $('#refine-menu-domains').html(s);
-                    self.attachDomainsClickHandlers();
-                })
-                .catch(error => console.error(error));
+                $('#refine-menu-domains').html(s);
+                self.attachDomainsClickHandlers();
+            }, console.error);
         });
 
         // Standards
