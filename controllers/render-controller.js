@@ -159,11 +159,12 @@ class RenderController {
     static searchWithVector(req, res) {
         const vector = req.params.vector;
 
-        if (vector === '' || vector in Constants.VECTOR_FXFS) {
+        if (vector === '' || Sources.has(vector)) {
             RenderController._parameters(req, res).then(params => {
                 const regions = params.regions;
 
                 if (!Sources.supportsVector(vector, regions)) {
+                    // TODO make this work if data available for one region but not both
                     RenderController.error(req, res, 404, `"${vector}" data not available for ${regions[0].name}`)();
                 } else {
                     try {
@@ -199,7 +200,6 @@ class RenderController {
 
         const uids = params.regions.map(region => region.id);
         const names = params.regions.map(region => region.name);
-        console.log(uids);
 
         function processRegions(regions) {
             return regions.filter(region => {
@@ -261,8 +261,6 @@ class RenderController {
                         '/lib/search.min.js'
                     ]
                 };
-
-                console.log(templateParams.sources);
 
                 if (data && data.length == allPromises.length) {
                     if (data[0].length > 0) {

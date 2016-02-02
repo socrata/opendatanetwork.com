@@ -323,14 +323,73 @@ const SOURCES = [
                 chart: 'line'
             };
         })
+    },
+    {
+        tabName: 'Consumption',
+        vector: 'consumption',
+        name: 'BEA Personal Consumption Expenditures',
+        attribution: ATTRIBUTIONS.bea,
+        domain: ODN_DOMAIN,
+        fxf: 'va5j-wsjq',
+        regions: ['state', 'nation'],
+        charts: [
+            {
+                name: 'Personal Consumption Expenditures over Time',
+                data: [
+                    {
+                        column: 'year',
+                        label: 'Year',
+                        type: 'string'
+                    },
+                    {
+                        column: 'personal_consumption_expenditures',
+                        label: 'Personal Consumption Expenditures (Millions of USD)',
+                        format: { pattern: '$###,###M' }
+                    }
+                ],
+                chart: 'line'
+            },
+            {
+                name: 'Change in Personal Consumption Expenditures over Time',
+                data: [
+                    {
+                        column: 'year',
+                        label: 'Year',
+                        type: 'string'
+                    },
+                    {
+                        column: 'expenditures_percent_change',
+                        label: 'Annual Change',
+                        format: { pattern: '#.##%' }
+                    }
+                ],
+                transform: rows => {
+                    return rows
+                        .filter(row => row.year !== '1997')
+                        .map(row => _.extend(row, { expenditures_percent_change: parseFloat(row.expenditures_percent_change) / 100 }));
+                },
+                chart: 'line',
+                options: {
+                    vAxis: { format: '#.##%' }
+                }
+            }
+        ]
     }
 ];
 
 const SOURCES_BY_VECTOR = _.indexBy(SOURCES, source => source.vector);
 
 class Sources {
+    static has(vector) {
+        return vector in SOURCES_BY_VECTOR;
+    }
+
     static get(vector) {
         return SOURCES_BY_VECTOR[vector];
+    }
+
+    static defaultVector() {
+        return SOURCES[0];
     }
 
     static supportsVector(vector, regions) {

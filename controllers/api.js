@@ -9,6 +9,7 @@ const Request = require('./request');
 const Constants = require('./constants');
 const CategoryController = require('./category-controller');
 const TagController = require('./tag-controller');
+const Sources = require('../src/data/data-sources.js');
 
 const categoryController = new CategoryController();
 const tagController = new TagController();
@@ -121,21 +122,19 @@ class API {
         });
     }
 
-    static variable(vector, uid) {
+    static variable(source, uid) {
         return new Promise((resolve, reject) => {
-            if (!(vector in Constants.VECTOR_FXFS)) {
-                reject(`invalid vector: ${vector}`);
-            } else {
-                const baseURL = Constants.datasetURL(Constants.VECTOR_FXFS[vector]);
-                const url = Request.buildURL(baseURL, {id: uid});
-                Request.getJSON(url).then(resolve, reject);
-            }
+            const baseURL = `https://${source.domain}/resource/${source.fxf}.json`;
+            const id = source.idColumn || 'id';
+            const url = Request.buildURL(baseURL, {[id]: uid});
+            Request.getJSON(url).then(resolve, reject);
         });
     }
 
     static tableData(vector, regions) {
-        vector = vector in Constants.VECTOR_FXFS ? vector : 'population';
-        const promises = regions.map(region => API.variable(vector, region.id));
+        const source = vector === '' ? Sources.defaultVector() : Sources.get(vector);
+        if (!(source)) throw new Error(`invalid vector: ${vector}`);
+        const promises = regions.map(region => API.variable(source, region.id));
         return Promise.all(promises);
     }
 
