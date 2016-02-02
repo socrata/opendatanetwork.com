@@ -12,7 +12,7 @@ function variableGenerator(years=[2013], value=parseFloat) {
 }
 
 
-const MapSources = {
+const MAP_SOURCES = {
     population: {
         name: 'population',
         domain: DOMAIN,

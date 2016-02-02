@@ -133,41 +133,38 @@ class SearchPageController {
 
         // Chart column
         //
-        if (this.params.regions.length > 0) {
+        const regions = this.params.regions;
+        const vector = this.params.vector;
 
-            switch (this.params.vector) {
+        if (regions.length > 0) {
+            if (vector in MAP_SOURCES) {
+                const mapSource = MAP_SOURCES[vector];
+                console.log(mapSource);
+                mapSource.selectedIndices = this.mapVariables;
 
-                case 'cost_of_living': this.drawCostOfLivingData(); break;
-                case 'earnings': this.drawEarningsData(); break;
-                case 'education': this.drawEducationData(); break;
-                case 'gdp': this.drawGdpData(); break;
-                case 'health': this.drawHealthData(); break;
-                case 'occupations': this.drawOccupationsData(); break;
-                case 'population': this.drawPopulationData(); break;
-                default: this.drawPopulationData(); break;
+                const onDisplay = (variable, year) => {
+                    this.updateAddressBarUrl(variable.metric, year);
+
+                    const summary = MapSummary.getSummaryString(regions, this.tableData, variable, year, value => (year == value.year));
+                    $('.map-summary').text(summary);
+
+                    this.drawMapSummaryLinks(mapSource, variable, year);
+                };
+
+                MapView.create(mapSource, regions, onDisplay)
+                    .then(view => view.show('#map'), error => console.warn(error));
+            }
+
+            if (vector in SOURCES) {
+                const source = SOURCES[vector];
+                new Tab(source).render(d3.select('div.charts'), regions);
             }
         }
 
-        // Map summary
-        //
         $('.map-summary-more').click(() => {
-
             $('.map-summary-links').slideToggle(100);
             $('.map-summary-more').text($('.map-summary-more').text() == 'More Information' ? 'Less Information' : 'More Information');
-        })
-    }
-
-    // Public methods
-    //
-    drawMap(source, onDisplay) {
-
-        const selector = '#map';
-        const regions = this.params.regions;
-
-        _.extend(source, { selectedIndices : this.mapVariables });
-
-        MapView.create(source, regions, onDisplay)
-            .then(view => view.show(selector), error => console.warn(error));
+        });
     }
 
     drawMapSummaryLinks(source, variable, year) {
@@ -225,191 +222,7 @@ class SearchPageController {
     }
 
     decrementPage() {
-
         this.params.page--;
-    }
-
-    // Cost of living
-    //
-    drawCostOfLivingData() {
-        this.drawMap(MapSources.rpp, (variable, year) => this.onDrawCostOfLivingMap(variable, year));
-        new Tab(costOfLiving).render(d3.select('div.charts'), this.params.regions);
-    }
-
-    onDrawCostOfLivingMap(variable, year) {
-
-        this.updateAddressBarUrl(variable.metric, year);
-
-        $('.map-summary').text(
-            MapSummary.getCostOfLivingSummaryString(
-                this.params.regions,
-                this.tableData,
-                variable,
-                year,
-                value => (year == value.year)));
-
-        this.drawMapSummaryLinks(MapSources.rpp, variable,year);
-    }
-
-    // Earnings
-    //
-    drawEarningsData() {
-        this.drawMap(MapSources.earnings, (variable, year) => this.onDrawEarningsMap(variable, year));
-        new Tab(earnings).render(d3.select('div.charts'), this.params.regions);
-    }
-
-    onDrawEarningsMap(variable, year) {
-
-        this.updateAddressBarUrl(variable.metric, year);
-
-        $('.map-summary').text(
-            MapSummary.getSummaryString(
-                this.params.regions,
-                this.tableData,
-                variable,
-                year,
-                value => (year == value.year)));
-
-        this.drawMapSummaryLinks(MapSources.earnings, variable, year);
-    }
-
-    // Health
-    //
-    drawHealthData() {
-        this.drawMap(MapSources.health, (variable, year) => this.onDrawHealthMap(variable, year));
-    }
-
-    onDrawHealthMap(variable, year) {
-        this.updateAddressBarUrl(variable.metric, year);
-
-        $('.map-summary').text(
-            MapSummary.getSummaryString(
-                this.params.regions,
-                this.tableData,
-                variable,
-                year,
-                value => (year == value.year)));
-
-        this.drawMapSummaryLinks(MapSources.health, variable, year);
-    }
-
-    // Education
-    //
-    drawEducationData() {
-
-        this.drawMap(MapSources.education, (variable, year) => this.onDrawEducationMap(variable, year));
-        const tab = new Tab(education).render(d3.select('div.charts'), this.params.regions);
-    }
-
-    onDrawEducationMap(variable, year) {
-
-        this.updateAddressBarUrl(variable.metric, year);
-
-        $('.map-summary').text(
-            MapSummary.getSummaryString(
-                this.params.regions,
-                this.tableData,
-                variable,
-                year,
-                value => (year == value.year)));
-
-        this.drawMapSummaryLinks(MapSources.education, variable, year);
-    }
-
-    // GDP data
-    //
-    drawGdpData() {
-        this.drawMap(MapSources.gdp, (variable, year) => this.onDrawGdpMap(variable, year));
-        new Tab(gdp).render(d3.select('div.charts'), this.params.regions);
-
-    }
-
-    onDrawGdpMap(variable, year) {
-
-        this.updateAddressBarUrl(variable.metric, year);
-
-        $('.map-summary').text(
-            MapSummary.getSummaryString(
-                this.params.regions,
-                this.tableData,
-                variable,
-                year,
-                value => (year == value.year)));
-
-        this.drawMapSummaryLinks(MapSources.gdp, variable, year);
-    }
-
-    // Occupations
-    //
-    drawOccupationsData() {
-        this.drawMap(MapSources.occupations, (variable, year) => this.onDrawOccupationsMap(variable, year));
-        new Tab(occupations).render(d3.select('div.charts'), this.params.regions);
-    }
-
-    onDrawOccupationsMap(variable, year) {
-
-        this.updateAddressBarUrl(variable.metric, year);
-
-        $('.map-summary').text(
-            MapSummary.getOccupationsSummaryString(
-                this.params.regions,
-                this.tableData,
-                variable,
-                year,
-                value => (year == value.year) && (variable.name == value.occupation)));
-
-        this.drawMapSummaryLinks(MapSources.occupations, variable, year);
-    }
-
-    // Population
-    //
-    drawPopulationData() {
-        this.drawMap(MapSources.population, (variable, year) => this.onDrawPopulationMap(variable, year));
-        new Tab(demographics).render(d3.select('div.charts'), this.params.regions);
-    }
-
-    onDrawPopulationMap(variable, year) {
-
-        this.updateAddressBarUrl(variable.metric, year);
-
-        $('.map-summary').text(
-            MapSummary.getSummaryString(
-                this.params.regions,
-                this.tableData,
-                variable,
-                year,
-                value => (year == value.year)));
-
-        this.drawMapSummaryLinks(MapSources.population, variable, year);
-    }
-
-    ensureVisibleWithOrientation(selector, orientation) {
-
-        var o = $(selector);
-
-        if (!o.is(':visible'))
-            o.show();
-
-        return o.hasClass(orientation);
-    }
-
-    // Draw charts
-    //
-    drawLineChart(chartId, dataTable, options) {
-        const chart = new google.visualization.LineChart(document.getElementById(chartId));
-
-        this.applyStandardOptions(options);
-
-        console.log(options);
-
-        chart.draw(dataTable, options);
-    }
-
-    drawSteppedAreaChart(chartId, dataTable, options) {
-
-        const chart = new google.visualization.SteppedAreaChart(document.getElementById(chartId));
-        this.applyStandardOptions(options);
-        chart.draw(dataTable, options);
     }
 
     applyStandardOptions(options) {
@@ -466,7 +279,7 @@ class SearchPageController {
 
                 if (place.id == region.id)
                     places.push(place);
-            })
+            });
         });
 
         return places;
@@ -509,7 +322,7 @@ class SearchPageController {
 
             if (regionNames && (regionNames.length > 0)) {
 
-                const parts = regionNames.map(regionName => regionName.replace(/ /g, '_').replace(/\//g, '_').replace(/,/g, ''))
+                const parts = regionNames.map(regionName => regionName.replace(/ /g, '_').replace(/\//g, '_').replace(/,/g, ''));
                 url += '/' + parts.join('-');
             }
             else
@@ -544,7 +357,7 @@ class SearchPageController {
             var regionIds = [];
             var regionNames = [];
 
-            if (this.params.resetRegions == false) {
+            if (this.params.resetRegions === false) {
 
                 regionIds = this.params.regions.map(region => region.id);
                 regionNames = this.params.regions.map(region => region.name);
@@ -620,7 +433,7 @@ class SearchPageController {
         this.params.regions.splice(regionIndex, 1); // remove at index i
         this.params.page = 1;
 
-        if (this.params.regions.length == 0) // when the last region is removed so should the vector be removed.
+        if (this.params.regions.length === 0) // when the last region is removed so should the vector be removed.
             this.params.vector = '';
     }
 
@@ -676,7 +489,7 @@ class SearchPageController {
 
     updateAddressBarUrl(metric, year) {
 
-        const url = this.getSearchPageUrl(false, metric, year)
+        const url = this.getSearchPageUrl(false, metric, year);
         history.replaceState(null, null, url);
     }
 }
