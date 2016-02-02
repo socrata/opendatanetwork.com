@@ -225,66 +225,6 @@ class SearchPageController {
         this.params.page--;
     }
 
-    applyStandardOptions(options) {
-
-        options.series = {
-            0: { color: '#2980b9' },
-            1: { color: '#ee3b3b' },
-            2: { color: '#3bdbee' },
-            3: { color: '#ff9900' },
-            4: { color: '#109618' },
-            5: { color: '#0099c6' },
-            6: { color: '#dd4477' },
-            7: { color: '#66aa00' },
-            8: { color: '#b82e2e' },
-            9: { color: '#316395' },
-        };
-
-        options.legend = {
-            position: 'top',
-            maxLines: 4,
-            textStyle: {
-                color: '#222',
-                fontSize: 14
-            }
-        };
-    }
-
-    drawMarkersForPlaces(map, places) {
-
-        places.forEach(place => {
-
-            const feature = {
-                "type": "Feature",
-                "properties": {
-                    "name": place.name
-                },
-                "geometry": {
-                    "coordinates": place.location.coordinates,
-                    "type": "Point",
-                }
-            };
-
-            L.geoJson(feature).addTo(map);
-        });
-    }
-
-    getPlacesForRegion(data) {
-
-        const places = [];
-
-        data.forEach(place => {
-
-            this.params.regions.forEach(region => {
-
-                if (place.id == region.id)
-                    places.push(place);
-            });
-        });
-
-        return places;
-    }
-
     // Paging
     //
     fetchNextPage() {
