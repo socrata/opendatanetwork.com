@@ -1,12 +1,13 @@
 'use strict';
 
-const _ = require('lodash');
+if (typeof require !== 'undefined') {
+    var _ = require('lodash');
 
-const Navigate = require('./navigate');
-const Request = require('./request');
+    var Navigate = require('../../controllers/navigate');
+    var Requests = require('../../controllers/request');
 
-const MAP_SOURCES = require('../src/data/map-sources.js');
-
+    var MAP_SOURCES = require('../data/map-sources');
+}
 
 class MapSource {
     constructor(mapSource) {
@@ -33,8 +34,14 @@ class MapSource {
             '$where': `${this.id} in (${regions.map(region => `'${region.id}'`)})`,
             [this.year]: year
         });
-        const url = Request.buildURL(path, params);
-        return Request.getJSON(url);
+
+        if (typeof Requests === 'undefined') {
+            const url = `${path}?${$.param(params)}`;
+            return d3.promise.json(url);
+        } else {
+            const url = Requests.buildURL(path, params);
+            return Requests.getJSON(url);
+        }
     }
 
     summarize(variable, year, regions) {
@@ -79,5 +86,5 @@ class MapDescription {
     }
 }
 
-module.exports = MapDescription;
+if (typeof module !== 'undefined') module.exports = MapDescription;
 

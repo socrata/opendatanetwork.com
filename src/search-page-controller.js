@@ -129,16 +129,7 @@ class SearchPageController {
                 const mapSource = MAP_SOURCES[vector];
                 mapSource.selectedIndices = this.mapVariables;
 
-                const onDisplay = (variable, year) => {
-                    this.updateAddressBarUrl(variable.metric, year);
-
-                    const summary = MapSummary.getSummaryString(regions, this.tableData, variable, year, value => (year == value.year));
-                    $('.map-summary').text(summary);
-
-                    this.drawMapSummaryLinks(mapSource, variable, year);
-                };
-
-                MapView.create(mapSource, regions, onDisplay)
+                MapView.create(mapSource, regions)
                     .then(view => view.show('#map'), error => console.warn(error));
             } else {
                 console.warn(`no map source found for vector: ${vector}`);

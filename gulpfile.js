@@ -24,14 +24,10 @@ var mapScripts = [
     'src/maps/legend-control.js',
     'src/maps/tooltip-control.js',
     'src/maps/variable-control.js',
+    'src/maps/description.js',
     'src/maps/view.js',
     'src/maps/format.js',
     'src/data/map-sources.js'
-];
-
-var mapSummaryScripts = [
-    'src/map-summary-formatters.js',
-    'src/map-summary.js'
 ];
 
 var autosuggestScripts = [
@@ -75,7 +71,6 @@ gulp.task('home', js(homeScripts, 'home.min.js'));
 var searchScripts = baseScripts
     .concat(autosuggestScripts)
     .concat(mapScripts)
-    .concat(mapSummaryScripts)
     .concat(searchScripts);
 gulp.task('search', js(searchScripts, 'search.min.js'));
 

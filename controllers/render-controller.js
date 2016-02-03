@@ -9,8 +9,8 @@ const Relatives = require('./relatives');
 const Constants = require('./constants');
 const Request = require('./request');
 const Navigate = require('./navigate');
-const MapDescription = require('./map-description');
 
+const MapDescription = require('../src/maps/description');
 const Sources = require('../src/data/data-sources');
 
 const _ = require('lodash');

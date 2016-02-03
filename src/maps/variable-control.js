@@ -1,9 +1,10 @@
 
 const VariableControl = L.Control.extend({
-    initialize: function(variables, selectedIndices, callback) {
-        this.variables = variables;
-        this.selectedIndices = selectedIndices;
-        this.callback = callback;
+    initialize: function(source, onUpdate) {
+        this.source = source;
+        this.variables = source.variables;
+        this.selectedIndices = source.selectedIndices;
+        this.onUpdate = onUpdate;
     },
 
     options: {
@@ -18,7 +19,8 @@ const VariableControl = L.Control.extend({
         let currentYear = currentVariable.years[this.selectedIndices.yearSelectedIndex];
 
         const update = () => {
-            this.callback(currentVariable, currentYear);
+
+            this.onUpdate(currentVariable, currentYear);
         };
 
         update();
