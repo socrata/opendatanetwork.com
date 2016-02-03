@@ -220,7 +220,7 @@ class RenderController {
         const domainsPromise = API.domains(5);
         const datasetsPromise = API.datasets(params);
         const tableDataPromise = API.tableData(params.vector, params.regions);
-        const summaryPromise = MapDescription.summarize(params);
+        const summaryPromise = MapDescription.summarizeFromParams(params);
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
                              categoriesPromise, tagsPromise, domainsPromise,
                              datasetsPromise, tableDataPromise, summaryPromise];

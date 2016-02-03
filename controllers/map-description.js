@@ -40,7 +40,14 @@ class MapSource {
     summarize(variable, year, regions) {
         return new Promise((resolve, reject) => {
             this.getData(variable, year, regions).then(data => {
-                console.log(data);
+                const summary = regions.map(region => {
+                    const row = _.find(data, row => row[this.id] === region.id);
+
+                    const value = variable.format(row[variable.column]);
+                    return `The ${variable.name.toLowerCase()} of ${region.name} in ${year} was ${value}.`;
+                }).join(' ');
+
+                resolve(summary);
             });
         });
     }
@@ -56,7 +63,7 @@ class MapSource {
 }
 
 class MapDescription {
-    static summarize(params) {
+    static summarizeFromParams(params) {
         return new Promise((resolve, reject) => {
             if (params.vector && params.vector in MAP_SOURCES) {
                 const source = new MapSource(MAP_SOURCES[params.vector]);
@@ -64,7 +71,7 @@ class MapDescription {
                 const year = source.getYear(variable, parseFloat(params.year));
                 const regions = params.regions;
 
-                source.getData(variable, year, regions).then(resolve, reject);
+                source.summarize(variable, year, regions).then(resolve, reject);
             } else {
                 resolve('');
             }
