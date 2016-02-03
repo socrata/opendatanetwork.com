@@ -9,6 +9,7 @@ const Relatives = require('./relatives');
 const Constants = require('./constants');
 const Request = require('./request');
 const Navigate = require('./navigate');
+const MapDescription = require('./map-description');
 
 const Sources = require('../src/data/data-sources');
 
@@ -219,9 +220,10 @@ class RenderController {
         const domainsPromise = API.domains(5);
         const datasetsPromise = API.datasets(params);
         const tableDataPromise = API.tableData(params.vector, params.regions);
+        const summaryPromise = MapDescription.summarize(params);
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
                              categoriesPromise, tagsPromise, domainsPromise,
-                             datasetsPromise, tableDataPromise];
+                             datasetsPromise, tableDataPromise, summaryPromise];
         const allPromise = Promise.all(allPromises);
 
         const searchDatasetsURL = API.searchDatasetsURL(params);
@@ -293,6 +295,8 @@ class RenderController {
 
                     templateParams.mapSummary = metricsController.getMapSummary(params, data[7]);
                     templateParams.tableData = data[7] || {};
+
+                    console.log(data[8]);
                 }
 
                 res.render('search.ejs', templateParams);

@@ -1,15 +1,40 @@
+'use strict';
+
+if (typeof require !== 'undefined') {
+    var d3 = require('d3');
+    var _ = require('lodash');
+}
 
 const DOMAIN = 'odn.data.socrata.com';
 
 
-function variableGenerator(years=[2013], value=parseFloat) {
+function variableGenerator(years, value) {
+    years = years || 2013;
+    value = value || parseFloat;
+
     return variableTuples => {
         return variableTuples.map(variable => {
-            const [name, column, format, stoplight, metric] = variable;
-            return {name, column, format, years, value, stoplight, metric};
+            return {
+                years,
+                value,
+                name: variable[0],
+                column: variable[1],
+                format: variable[2],
+                stoplight: variable[3],
+                metric: variable[4]
+            };
         });
     };
 }
+
+
+const format = {
+    integer: d3.format(',.0f'),
+    percent: n => `${d3.format('.2f')(n)}%`,
+    ratio: d3.format('.1%'),
+    dollar: d3.format('$,.0f'),
+    millionDollar: n => `${d3.format('$,.0f')(n)}M`
+};
 
 
 const MAP_SOURCES = {
@@ -76,17 +101,16 @@ const MAP_SOURCES = {
         domain: DOMAIN,
         fxf: 'qfcm-fw3i',
         hasPopulation: true,
-        variables: ['Business and Finance', 'Computers and Math', 'Construction and Extraction', 'Education', 'Engineering', 'Farming, Fishing, Foresty', 'Fire Fighting', 'Food Service', 'Healthcare', 'Health Support', 'Health Technicians', 'Janitorial', 'Law Enforcement', 'Legal', 'Management', 'Material Moving', 'Media', 'Office and Administration', 'Personal Care', 'Production', 'Repair', 'Sales', 'Social Sciences', 'Social Services', 'Transportation']
-            .map(occupation => {
-                return {
-                    name: occupation,
-                    column: 'percent_employed',
-                    params: {occupation},
-                    years: [2013],
-                    format: format.percent,
-                    metric : `${occupation.toLowerCase().replace(/\s/g, '_').replace(/,/g, '')}`
-                };
-            })
+        variables: ['Business and Finance', 'Computers and Math', 'Construction and Extraction', 'Education', 'Engineering', 'Farming, Fishing, Foresty', 'Fire Fighting', 'Food Service', 'Healthcare', 'Health Support', 'Health Technicians', 'Janitorial', 'Law Enforcement', 'Legal', 'Management', 'Material Moving', 'Media', 'Office and Administration', 'Personal Care', 'Production', 'Repair', 'Sales', 'Social Sciences', 'Social Services', 'Transportation'].map(occupation => {
+            return {
+                name: occupation,
+                column: 'percent_employed',
+                params: {occupation},
+                years: [2013],
+                format: format.percent,
+                metric : `${occupation.toLowerCase().replace(/\s/g, '_').replace(/,/g, '')}`
+            };
+        })
     },
 
     gdp: {
@@ -117,19 +141,18 @@ const MAP_SOURCES = {
         name: 'cost of living',
         domain: DOMAIN,
         fxf: 'hpnf-gnfu',
-        variables: ['All', 'Goods', 'Rents', 'Other'].map(
-            component => {
-                return {
-                    name: component,
-                    column: 'index',
-                    reverse: true,
-                    params: {component},
-                    years: _.range(2008, 2014),
-                    format: d3.format('.1f'),
-                    stoplight: true,
-                    metric: component.toLowerCase()
-                };
-            })
+        variables: ['All', 'Goods', 'Rents', 'Other'].map(component => {
+            return {
+                name: component,
+                column: 'index',
+                reverse: true,
+                params: {component},
+                years: _.range(2008, 2014),
+                format: d3.format('.1f'),
+                stoplight: true,
+                metric: component.toLowerCase()
+            };
+        })
     },
 
     health: {
@@ -137,18 +160,42 @@ const MAP_SOURCES = {
         domain: DOMAIN,
         fxf: '7ayp-utp2',
         variables: ['Adult Smoking', 'Adult Obesity',
-                    'Physical Inactivity', 'Excessive Drinking'].map(
-            name => {
-                return {
-                    name: `${name} Rate`,
-                    column: `${name.toLowerCase().replace(/\s/g, '_')}_value`,
-                    years: [2015],
-                    reverse: true,
-                    format: format.ratio,
-                    stoplight: true,
-                    metric: `${name.toLowerCase().replace(/\s/g, '_')}_rate`
-                };
-            })
+                    'Physical Inactivity', 'Excessive Drinking'].map(name => {
+            return {
+                name: `${name} Rate`,
+                column: `${name.toLowerCase().replace(/\s/g, '_')}_value`,
+                years: [2015],
+                reverse: true,
+                format: format.ratio,
+                stoplight: true,
+                metric: `${name.toLowerCase().replace(/\s/g, '_')}_rate`
+            };
+        })
+    },
+
+    consumption: {
+        name: 'consumption',
+        domain: DOMAIN,
+        fxf: 'va5j-wsjq',
+        variables: [
+            {
+                name: 'Expenditure (Millions of USD)',
+                column: 'personal_consumption_expenditures',
+                years: _.range(1997, 2015),
+                format: format.millionDollar,
+                metric: 'personal_consumption_expenditure'
+            },
+            {
+                name: 'Annual Expenditure Change',
+                column: 'expenditures_percent_change',
+                years: _.range(1998, 2015),
+                format: format.percent,
+                metric: 'expenditures_percent_change'
+            }
+        ]
     }
 };
+
+
+if (typeof module !== 'undefined') module.exports = MAP_SOURCES;
 

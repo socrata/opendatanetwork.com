@@ -4,11 +4,15 @@ const _ = require('lodash');
 const ApiController = require('./api-controller');
 const numeral = require('numeral');
 const Navigate = require('./navigate');
+const Request = require('./request');
 
 const apiController = new ApiController();
 const defaultYear = '2013';
 const defaultHealthYear = '2015';
 const defaultVector = 'population';
+
+
+
 
 const formatterGroups = {
 
