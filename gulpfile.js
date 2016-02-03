@@ -44,6 +44,7 @@ var autosuggestScripts = [
 ];
 
 var searchScripts = [
+    'src/chart-constants.js',
     'src/data/data-sources.js',
     'src/charts.js',
     'src/search-page-controller.js',
