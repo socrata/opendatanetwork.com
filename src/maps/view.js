@@ -70,6 +70,8 @@ class MapView {
         new MapSource(this.source).summarize(variable, year, this.regions).then(summary => {
             d3.select('p.map-summary').text(summary);
         });
+
+        this.zoomToSelected(this.map);
     }
 
     update(model) {
