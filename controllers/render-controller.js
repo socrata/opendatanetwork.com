@@ -226,6 +226,7 @@ class RenderController {
         const searchDatasetsURL = API.searchDatasetsURL(params);
 
         allPromise.then(data => {
+            console.log('got data');
             try {
                 const sources = Sources.forRegions(params.regions);
                 const source = params.vector === '' ?

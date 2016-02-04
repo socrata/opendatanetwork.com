@@ -9,7 +9,7 @@ const DOMAIN = 'odn.data.socrata.com';
 
 
 function variableGenerator(years, value) {
-    years = years || 2013;
+    years = years || [2013];
     value = value || parseFloat;
 
     return variableTuples => {

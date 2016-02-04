@@ -14,7 +14,7 @@ class MapSource {
         this.source = mapSource;
         this.variables = mapSource.variables;
         this.id = mapSource.idColumn || 'id';
-        this.year = mapSource.yearolumn || 'year';
+        this.year = mapSource.yearColumn || 'year';
     }
 
     otherVariables(currentVariable) {
@@ -55,7 +55,7 @@ class MapSource {
                 }).join(' ');
 
                 resolve(summary);
-            });
+            }, reject);
         });
     }
 
@@ -65,7 +65,8 @@ class MapSource {
     }
 
     getYear(variable, year) {
-        return _.contains(variable.years, year) ? year : _.max(variable.years);
+        if (year && year !== '' && _.contains(variable.years, parseFloat(year))) return parseFloat(year);
+        return _.max(variable.years);
     }
 }
 
@@ -75,7 +76,7 @@ class MapDescription {
             if (params.vector && params.vector in MAP_SOURCES) {
                 const source = new MapSource(MAP_SOURCES[params.vector]);
                 const variable = source.getVariable(params.metric);
-                const year = source.getYear(variable, parseFloat(params.year));
+                const year = source.getYear(variable, params.year);
                 const regions = params.regions;
 
                 source.summarize(variable, year, regions).then(resolve, reject);
