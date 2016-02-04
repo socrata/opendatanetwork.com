@@ -1,15 +1,9 @@
 
 class SearchPageController {
-
-    constructor(params, tableData, mapVariables) {
-
+    constructor(params) {
         this.params = params;
-        this.tableData = tableData;
-        this.mapVariables = mapVariables;
         this.fetching = false;
         this.fetchedAll = false;
-        this.mostSimilar = [];
-
         const self = this;
 
         // Refine menus
@@ -127,10 +121,10 @@ class SearchPageController {
         if (regions.length > 0) {
             if (vector in MAP_SOURCES) {
                 const mapSource = MAP_SOURCES[vector];
-                mapSource.selectedIndices = this.mapVariables;
+                MapView.create(mapSource, regions, this.params).then(view => {
+                    view.show('#map');
+                }, error => console.warn(error));
 
-                MapView.create(mapSource, regions)
-                    .then(view => view.show('#map'), error => console.warn(error));
             } else {
                 console.warn(`no map source found for vector: ${vector}`);
             }

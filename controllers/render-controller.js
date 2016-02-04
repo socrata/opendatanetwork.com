@@ -293,10 +293,9 @@ class RenderController {
                     templateParams.domainResults = data[5];
                     templateParams.searchResults = data[6];
 
-                    templateParams.mapSummary = metricsController.getMapSummary(params, data[7]);
                     templateParams.tableData = data[7] || {};
 
-                    console.log(data[8]);
+                    templateParams.mapSummary = data[8];
                 }
 
                 res.render('search.ejs', templateParams);
