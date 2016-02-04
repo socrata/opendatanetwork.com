@@ -1,4 +1,29 @@
 
+class Navigate {
+    static url(params) {
+        const ids = params.regions
+            .map(region => region.id)
+            .join('-');
+        const names = params.regions
+            .map(region => region.name)
+            .map(Navigate.escapeName)
+            .join('-');
+
+        let navigate = [];
+        if (params.vector && params.vector !== '') {
+            navigate.push(params.vector);
+            if (params.metric) navigate.push(params.metric);
+            if (params.year) navigate.push(params.year);
+        }
+
+        return `/region/${ids}/${names}/${navigate.join('/')}`;
+    }
+
+    static escapeName(name) {
+        return name.replace(/,/g, '').replace(/[ \/]/g, '_');
+    }
+}
+
 const VariableControl = L.Control.extend({
     initialize: function(source, params, onUpdate) {
         this.source = source;
@@ -19,7 +44,12 @@ const VariableControl = L.Control.extend({
     },
 
     update: function() {
-
+        const url = Navigate.url(_.extend(this.params, {
+            vector: this.source.name,
+            year: this.year,
+            metric: this.variable.column
+        }));
+        history.replaceState(null, null, url);
 
         this.onUpdate(this.variable, this.year);
     },
@@ -41,6 +71,7 @@ const VariableControl = L.Control.extend({
             .attr('class', 'variable-select')
             .on('change', () => {
                 this.variable = optionDatum(variableSelect);
+                if (!_.contains(this.variable.years, this.year)) this.year = _.max(this.variable.years);
                 updateYearOptions();
                 this.update();
             });
