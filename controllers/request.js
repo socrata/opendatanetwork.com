@@ -7,7 +7,7 @@ const querystring = require('querystring');
 
 const Constants = require('./constants');
 
-const cache = new NodeCache({sdtTTL: 0});
+const cache = new NodeCache({stdTTL: 60 * 60});
 
 class Request {
     static getJSON(url, timeoutMS) {
