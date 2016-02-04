@@ -3,7 +3,6 @@
 const API = require('./api');
 const ApiController = require('./api-controller');
 const CategoryController = require('./category-controller');
-const MetricsController = require('./metrics-controller');
 const TagController = require('./tag-controller');
 const Relatives = require('./relatives');
 const Constants = require('./constants');
@@ -21,7 +20,6 @@ const path = require('path');
 
 const apiController = new ApiController();
 const categoryController = new CategoryController();
-const metricsController = new MetricsController();
 const tagController = new TagController();
 
 const defaultSearchResultCount = 10;
@@ -240,8 +238,6 @@ class RenderController {
                     searchDatasetsURL,
                     sources,
                     source,
-                    mapSummaryLinks : metricsController.getMapSummaryLinks(params),
-                    mapVariables : metricsController.getMapVariables(params),
                     searchPath : req.path,
                     title : searchPageTitle(params),
                     css : [

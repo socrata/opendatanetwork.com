@@ -3,6 +3,7 @@ const VariableControl = L.Control.extend({
     initialize: function(source, params, onUpdate) {
         this.source = source;
         this.variables = source.variables;
+        this.params = params;
         this.onUpdate = onUpdate;
 
         this.variable = _.find(this.variables, variable => variable.column === params.metric);
@@ -18,6 +19,8 @@ const VariableControl = L.Control.extend({
     },
 
     update: function() {
+
+
         this.onUpdate(this.variable, this.year);
     },
 
