@@ -31,7 +31,7 @@ const VariableControl = L.Control.extend({
         this.params = params;
         this.onUpdate = onUpdate;
 
-        this.variable = _.find(this.variables, variable => variable.column === params.metric);
+        this.variable = _.find(this.variables, variable => Navigate.escapeName(variable.name).toLowerCase() === params.metric);
         this.variable = this.variable || this.variables[0];
 
         params.year = parseInt(params.year);
@@ -45,9 +45,9 @@ const VariableControl = L.Control.extend({
 
     update: function() {
         const url = Navigate.url(_.extend(this.params, {
-            vector: this.source.name,
+            vector: Navigate.escapeName(this.source.name),
             year: this.year,
-            metric: this.variable.column
+            metric: Navigate.escapeName(this.variable.name).toLowerCase()
         }));
         history.replaceState(null, null, url);
 

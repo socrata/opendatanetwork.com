@@ -138,7 +138,7 @@ const MAP_SOURCES = {
     },
 
     cost_of_living: {
-        name: 'cost of living',
+        name: 'cost_of_living',
         domain: DOMAIN,
         fxf: 'hpnf-gnfu',
         variables: ['All', 'Goods', 'Rents', 'Other'].map(component => {
