@@ -122,22 +122,6 @@ class API {
         });
     }
 
-    static variable(source, uid) {
-        return new Promise((resolve, reject) => {
-            const baseURL = `https://${source.domain}/resource/${source.fxf}.json`;
-            const id = source.idColumn || 'id';
-            const url = Request.buildURL(baseURL, {[id]: uid});
-            Request.getJSON(url).then(resolve, reject);
-        });
-    }
-
-    static tableData(vector, regions) {
-        const source = vector === '' ? Sources.defaultVector() : Sources.get(vector);
-        if (!(source)) throw new Error(`invalid vector: ${vector}`);
-        const promises = regions.map(region => API.variable(source, region.id));
-        return Promise.all(promises);
-    }
-
     static locations() {
         return Request.getJSONLocal('data/locations.json');
     }

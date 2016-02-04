@@ -217,11 +217,10 @@ class RenderController {
         const tagsPromise = API.tags();
         const domainsPromise = API.domains(5);
         const datasetsPromise = API.datasets(params);
-        const tableDataPromise = API.tableData(params.vector, params.regions);
         const summaryPromise = MapDescription.summarizeFromParams(params);
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
                              categoriesPromise, tagsPromise, domainsPromise,
-                             datasetsPromise, tableDataPromise, summaryPromise];
+                             datasetsPromise, summaryPromise];
         const allPromise = Promise.all(allPromises);
 
         const searchDatasetsURL = API.searchDatasetsURL(params);
@@ -288,9 +287,6 @@ class RenderController {
 
                     templateParams.domainResults = data[5];
                     templateParams.searchResults = data[6];
-
-                    templateParams.tableData = data[7] || {};
-
                     templateParams.mapSummary = data[8];
                 }
 
