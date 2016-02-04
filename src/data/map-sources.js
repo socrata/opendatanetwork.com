@@ -20,8 +20,7 @@ function variableGenerator(years, value) {
                 name: variable[0],
                 column: variable[1],
                 format: variable[2],
-                stoplight: variable[3],
-                metric: variable[4]
+                stoplight: variable[3]
             };
         });
     };
@@ -48,16 +47,14 @@ const MAP_SOURCES = {
                 name: 'Population',
                 column: 'population',
                 years: [2009, 2010, 2011, 2012, 2013],
-                format: format.integer,
-                metric: 'population_value',
+                format: format.integer
             },
             {
                 name: 'Population Change',
                 column: 'population_percent_change',
                 years: [2010, 2011, 2012, 2013],
                 format: format.percent,
-                stoplight: true,
-                metric: 'population_change',
+                stoplight: true
             }
         ]
     },
@@ -68,20 +65,20 @@ const MAP_SOURCES = {
         fxf: 'wmwh-4vak',
         hasPopulation: true,
         variables: variableGenerator()([
-            ['Median Earnings', 'median_earnings', format.dollar, true, 'median_earnings'],
-            ['Median Female Earnings', 'female_median_earnings', format.dollar, true, 'female_median_earnings'],
-            ['Median Male Earnings', 'male_median_earnings', format.dollar, true, 'male_median_earnings'],
-            ['Median Female Earnings (Full Time)', 'female_full_time_median_earnings', format.dollar, true, 'female_full_time_median_earnings'],
-            ['Median Male Earnings (Full Time)', 'male_full_time_median_earnings', format.dollar, true, 'male_full_time_median_earnings'],
-            ['Percent Earning less than $10,000', 'percent_with_earnings_1_to_9999', format.percent, false, 'percent_with_earnings_1_to_9999'],
-            ['Percent Earning $10,000 to $14,999', 'percent_with_earnings_10000_to_14999', format.percent, false, 'percent_with_earnings_10000_to_14999'],
-            ['Percent Earning $15,000 to $24,999', 'percent_with_earnings_15000_to_24999', format.percent, false, 'percent_with_earnings_15000_to_24999'],
-            ['Percent Earning $25,000 to $34,999', 'percent_with_earnings_25000_to_34999', format.percent, false, 'percent_with_earnings_25000_to_34999'],
-            ['Percent Earning $35,000 to $49,999', 'percent_with_earnings_35000_to_49999', format.percent, false, 'percent_with_earnings_35000_to_49999'],
-            ['Percent Earning $50,000 to $64,999', 'percent_with_earnings_50000_to_64999', format.percent, false, 'percent_with_earnings_50000_to_64999'],
-            ['Percent Earning $65,000 to $74,999', 'percent_with_earnings_65000_to_74999', format.percent, false, 'percent_with_earnings_65000_to_74999'],
-            ['Percent Earning $75,000 to $99,999', 'percent_with_earnings_75000_to_99999', format.percent, false, 'percent_with_earnings_75000_to_99999'],
-            ['Percent Earning over $100,000', 'percent_with_earnings_over_100000', format.percent, false, 'percent_with_earnings_over_100000']
+            ['Median Earnings', 'median_earnings', format.dollar, true],
+            ['Median Female Earnings', 'female_median_earnings', format.dollar, true],
+            ['Median Male Earnings', 'male_median_earnings', format.dollar, true],
+            ['Median Female Earnings (Full Time)', 'female_full_time_median_earnings', format.dollar, true],
+            ['Median Male Earnings (Full Time)', 'male_full_time_median_earnings', format.dollar, true],
+            ['Percent Earning less than $10,000', 'percent_with_earnings_1_to_9999', format.percent, false],
+            ['Percent Earning $10,000 to $14,999', 'percent_with_earnings_10000_to_14999', format.percent, false],
+            ['Percent Earning $15,000 to $24,999', 'percent_with_earnings_15000_to_24999', format.percent, false],
+            ['Percent Earning $25,000 to $34,999', 'percent_with_earnings_25000_to_34999', format.percent, false],
+            ['Percent Earning $35,000 to $49,999', 'percent_with_earnings_35000_to_49999', format.percent, false],
+            ['Percent Earning $50,000 to $64,999', 'percent_with_earnings_50000_to_64999', format.percent, false],
+            ['Percent Earning $65,000 to $74,999', 'percent_with_earnings_65000_to_74999', format.percent, false],
+            ['Percent Earning $75,000 to $99,999', 'percent_with_earnings_75000_to_99999', format.percent, false],
+            ['Percent Earning over $100,000', 'percent_with_earnings_over_100000', format.percent, false]
         ])
     },
 
@@ -91,8 +88,8 @@ const MAP_SOURCES = {
         fxf: 'uf4m-5u8r',
         hasPopulation: true,
         variables: variableGenerator()([
-            ['High School Graduation Rate', 'percent_high_school_graduate_or_higher', format.percent, true, 'percent_high_school_graduate_or_higher'],
-            ['College Graduation Rate', 'percent_bachelors_degree_or_higher', format.percent, true, 'percent_bachelors_degree_or_higher']
+            ['High School Graduation Rate', 'percent_high_school_graduate_or_higher', format.percent, true],
+            ['College Graduation Rate', 'percent_bachelors_degree_or_higher', format.percent, true]
         ])
     },
 
@@ -107,8 +104,7 @@ const MAP_SOURCES = {
                 column: 'percent_employed',
                 params: {occupation},
                 years: [2013],
-                format: format.percent,
-                metric : `${occupation.toLowerCase().replace(/\s/g, '_').replace(/,/g, '')}`
+                format: format.percent
             };
         })
     },
@@ -123,16 +119,14 @@ const MAP_SOURCES = {
                 column: 'per_capita_gdp',
                 years: _.range(2001, 2014),
                 format: format.dollar,
-                stoplight: true,
-                metric: 'per_capita_gdp'
+                stoplight: true
             },
             {
                 name: 'Annual Change in GDP',
                 column: 'per_capita_gdp_percent_change',
                 years: _.range(2002, 2014),
                 format: format.percent,
-                stoplight: true,
-                metric: 'per_capita_gdp_change'
+                stoplight: true
             }
         ]
     },
@@ -149,8 +143,7 @@ const MAP_SOURCES = {
                 params: {component},
                 years: _.range(2008, 2014),
                 format: d3.format('.1f'),
-                stoplight: true,
-                metric: component.toLowerCase()
+                stoplight: true
             };
         })
     },
@@ -167,8 +160,7 @@ const MAP_SOURCES = {
                 years: [2015],
                 reverse: true,
                 format: format.ratio,
-                stoplight: true,
-                metric: `${name.toLowerCase().replace(/\s/g, '_')}_rate`
+                stoplight: true
             };
         })
     },
@@ -182,15 +174,13 @@ const MAP_SOURCES = {
                 name: 'Expenditure (Millions of USD)',
                 column: 'personal_consumption_expenditures',
                 years: _.range(1997, 2015),
-                format: format.millionDollar,
-                metric: 'personal_consumption_expenditure'
+                format: format.millionDollar
             },
             {
                 name: 'Annual Expenditure Change',
                 column: 'expenditures_percent_change',
                 years: _.range(1998, 2015),
-                format: format.percent,
-                metric: 'expenditures_percent_change'
+                format: format.percent
             }
         ]
     },
@@ -226,7 +216,6 @@ const MAP_SOURCES = {
             };
         })
     }
-
 };
 
 
