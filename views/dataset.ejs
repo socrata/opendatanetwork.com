@@ -13,7 +13,7 @@ var _params = <%- JSON.stringify(params) %>;
               <a class="publisher" href="http://<%= dataset.domain %>"><%= dataset.domain %></a> | Last Updated <span class="last-updated"><%= dataset.updatedAtString %></span>
           </div>
           <div class="button-container">
-              <a class="blue-button button" href="http://dev.socrata.com/foundry/#/<%= dataset.domain %>/<%= dataset.id %>">View API</a>
+              <a class="blue-button button" href="http://dev.socrata.com/foundry/<%= dataset.domain %>/<%= dataset.id %>">View API</a>
               <a class="orange-button button" href="https://<%= dataset.domain %>/d/<%= dataset.id %>">View Data</a>
           </div>
   <% if ((dataset.descriptionHtml.length > 0) || (dataset.tags.length > 0)) { %>
