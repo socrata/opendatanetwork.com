@@ -28,11 +28,11 @@ The build process is automated using `gulp` and configured with `gulpfile.js`.
 
 The Open Data Network web site source files are located in Github.
 
-[https://github.com/socrata/opendatanetwork.com]()
+[https://github.com/socrata/opendatanetwork.com](https://github.com/socrata/opendatanetwork.com)
 
 All the JSON files which hold the data to be displayed in the slider, the tiles list, the decision tree on the /explore page and the list of data portals is stored in /data folder.
 
-[https://github.com/socrata/opendatanetwork.com/tree/master/data]()
+[https://github.com/socrata/opendatanetwork.com/tree/master/data](https://github.com/socrata/opendatanetwork.com/tree/master/data)
 
 ##JSON Data Files##
 
@@ -45,13 +45,13 @@ Holds icon, description and showcase items for each category.
 
 The Open Data Network website is hosted on Heroku and is located here:
 
-[https://dashboard.heroku.com/apps/opendatanetwork/resources]()
+[https://dashboard.heroku.com/apps/opendatanetwork/resources](https://dashboard.heroku.com/apps/opendatanetwork/resources)
 
 Paul Paradise can grant access to the dashboard.
 
 Currently the site is hosted under the preview.opendatanetwork.com sub-domain.
 
-[http://preview.opendatanetwork.com]()
+[http://preview.opendatanetwork.com](http://preview.opendatanetwork.com)
 
 
 
@@ -65,7 +65,7 @@ The sources will be pushed into your dyno and the site will be running the laste
 
 More details about deploying with git to Heroku, including setting up the remote, can be found here:
 
-[https://devcenter.heroku.com/articles/git]()
+[https://devcenter.heroku.com/articles/git](https://devcenter.heroku.com/articles/git)
 
 
 ###Robots.txt###
