@@ -53,7 +53,6 @@ class MapView {
             if (this.regionIDs.has(layer.feature.id))
                 selectedLayers.push(layer);
         });
-        console.log(selectedLayers);
 
         const group = new L.featureGroup(selectedLayers);
         map.fitBounds(group.getBounds(), MapConstants.AUTO_ZOOM_OPTIONS);

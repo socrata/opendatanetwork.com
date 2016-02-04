@@ -193,6 +193,21 @@ const MAP_SOURCES = {
                 metric: 'expenditures_percent_change'
             }
         ]
+    },
+
+    job_proximity: {
+        name: 'job_proximity',
+        domain: DOMAIN,
+        fxf: '5pnb-mvzq',
+        variables: [['Median', 'median'], ['Mean', 'mean'], ['Standard Deviation', 'stdev']].map(tuple => {
+            return {
+                name: `Jobs Proximity Index ${tuple[0]}`,
+                column: 'value',
+                params: {variable: `jobs-prox-idx-${tuple[1]}`},
+                years: [2015],
+                format: format.integer
+            };
+        })
     }
 };
 

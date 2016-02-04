@@ -40,6 +40,7 @@ class MapSource {
             return d3.promise.json(url);
         } else {
             const url = Requests.buildURL(path, params);
+            console.log(url);
             return Requests.getJSON(url);
         }
     }

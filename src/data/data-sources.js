@@ -12,10 +12,13 @@ const ODN_DOMAIN = 'odn.data.socrata.com';
 
 const ATTRIBUTIONS = {
     acs: {
-        name: 'American Community Survey'
+        name: 'U.S. Census American Community Survey'
     },
     bea: {
-        name: 'Bureau of Economic Analysis'
+        name: 'U.S. Bureau of Economic Analysis'
+    },
+    hud: {
+        name: 'U.S. Department of Housing and Urban Development'
     }
 };
 
@@ -371,6 +374,45 @@ const SOURCES = [
                 chart: 'line',
                 options: {
                     vAxis: { format: '#.##%' }
+                }
+            }
+        ]
+    },
+    {
+        tabName: 'Job Proximity',
+        vector: 'job_proximity',
+        name: 'Jobs Proximity Index',
+        attribution: ATTRIBUTIONS.hud,
+        domain: ODN_DOMAIN,
+        fxf: '5pnb-mvzq',
+        regions: ['county'],
+        charts: [
+            {
+                name: 'Median Jobs Promiximity Index',
+                params: { variable: 'jobs-prox-idx-median' },
+                data: [
+                    {
+                        column: 'variable',
+                        label: 'Job Proximity Index',
+                        type: 'string'
+                    },
+                    {
+                        column: 'value',
+                        label: 'Value'
+                    }
+                ],
+                transform: rows => {
+                    const names = {
+                        'jobs-prox-idx-median': 'Median Jobs Proximity Index'
+                    };
+
+                    return rows.map(row => {
+                        return _.extend(row, {variable: names[row.variable]});
+                    });
+                },
+                chart: 'column',
+                options: {
+                    vAxis: { viewWindow: { min: 0 } }
                 }
             }
         ]
