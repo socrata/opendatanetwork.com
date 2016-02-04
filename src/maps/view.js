@@ -42,6 +42,8 @@ class MapView {
             const features = this.features.addTo(map);
             const pane = map.createPane('labels');
             const labels = L.tileLayer(url(MapConstants.LABEL_LAYER_ID), {pane}).addTo(map);
+
+            this.zoomToSelected(this.map);
         });
     }
 
@@ -51,6 +53,7 @@ class MapView {
             if (this.regionIDs.has(layer.feature.id))
                 selectedLayers.push(layer);
         });
+        console.log(selectedLayers);
 
         const group = new L.featureGroup(selectedLayers);
         map.fitBounds(group.getBounds(), MapConstants.AUTO_ZOOM_OPTIONS);
@@ -68,8 +71,6 @@ class MapView {
         new MapSource(this.source).summarize(variable, year, this.regions).then(summary => {
             d3.select('p.map-summary').text(summary);
         });
-
-        this.zoomToSelected(this.map);
     }
 
     update(model) {
