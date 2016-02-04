@@ -31,6 +31,12 @@ function _toPercent(column) {
     };
 }
 
+function _rename(column, names) {
+    return rows => {
+        return rows.map(row => _.extend(row, {[column]: names[row[column]]}));
+    };
+}
+
 const SOURCES = [
     {
         tabName: 'Population',
@@ -401,19 +407,38 @@ const SOURCES = [
                         label: 'Value'
                     }
                 ],
-                transform: rows => {
-                    const names = {
-                        'jobs-prox-idx-median': 'Median Jobs Proximity Index'
-                    };
-
-                    return rows.map(row => {
-                        return _.extend(row, {variable: names[row.variable]});
-                    });
-                },
+                transform: _rename('variable', {'jobs-prox-idx-median': 'Median Jobs Proximity Index'}),
                 chart: 'column',
-                options: {
-                    vAxis: { viewWindow: { min: 0 } }
-                }
+                options: {vAxis: {viewWindow: {min: 0}}}
+            }
+        ]
+    },
+    {
+        tabName: 'Environment',
+        vector: 'environmental_health',
+        name: 'Environmental Health Hazard Index',
+        attribution: ATTRIBUTIONS.hud,
+        domain: ODN_DOMAIN,
+        fxf: 'nax7-t6ga',
+        regions: ['county'],
+        charts: [
+            {
+                name: 'Median Environmental Health Hazard Index',
+                params: {variable: 'env-health-idx-median'},
+                data: [
+                    {
+                        column: 'variable',
+                        label: 'Environmental Health Hazard Index',
+                        type: 'string'
+                    },
+                    {
+                        column: 'value',
+                        label: 'Value'
+                    }
+                ],
+                transform: _rename('variable', {'env-health-idx-median': 'Median Environmental Health Hazard Index'}),
+                chart: 'column',
+                options: {vAxis: {viewWindow: {min: 0}}}
             }
         ]
     }
