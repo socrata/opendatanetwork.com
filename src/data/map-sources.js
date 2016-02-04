@@ -191,7 +191,7 @@ const MAP_SOURCES = {
         fxf: '5pnb-mvzq',
         variables: [['Median', 'median', true], ['Mean', 'mean', true], ['Standard Deviation', 'stdev', false]].map(tuple => {
             return {
-                name: `Jobs Proximity Index ${tuple[0]}`,
+                name: `${tuple[0]} Jobs Proximity Index`,
                 column: 'value',
                 params: {variable: `jobs-prox-idx-${tuple[1]}`},
                 years: [2015],
@@ -207,7 +207,7 @@ const MAP_SOURCES = {
         fxf: 'nax7-t6ga',
         variables: [['Median', 'median', true], ['Mean', 'mean', true], ['Standard Deviation', 'stdev', false]].map(tuple => {
             return {
-                name: `Environmental Health Hazard Index ${tuple[0]}`,
+                name: `${tuple[0]} Environmental Health Hazard Index`,
                 column: 'value',
                 params: {variable: `env-health-idx-${tuple[1]}`},
                 years: [2015],

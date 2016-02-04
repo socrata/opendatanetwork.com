@@ -49,7 +49,6 @@ class MapModel {
 
             const params = _.extend({}, baseParams, sortParams, variable.params);
             const url = `https://${source.domain}/resource/${source.fxf}.json?${$.param(params)}`;
-            console.log(url);
 
             function success(results) {
                 const regions = results.map(region => {

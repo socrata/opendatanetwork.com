@@ -184,6 +184,13 @@ var _params = <%- JSON.stringify(params) %>;
             <div id="map"></div>
             <% include _map-summary %>
         </div>
+
+        <label class="attribution">
+            <p>Data from the <%= source.attribution.name %></p>
+            <a href="<%= source.attribution.url %>">Data Source</a> |
+            <a href="<%= `https://${source.domain}/dataset/${source.fxf}` %>">Dataset</a> |
+            <a href="<%= `https://dev.socrata.com/foundry/${source.domain}/${source.fxf}` %>">API</a>
+        </div>
     </div>
 
 <% if (searchResults.results.length > 0) { %>

@@ -12,13 +12,16 @@ const ODN_DOMAIN = 'odn.data.socrata.com';
 
 const ATTRIBUTIONS = {
     acs: {
-        name: 'U.S. Census American Community Survey'
+        name: 'U.S. Census American Community Survey',
+        url: 'https://www.census.gov/programs-surveys/acs/'
     },
     bea: {
-        name: 'U.S. Bureau of Economic Analysis'
+        name: 'U.S. Bureau of Economic Analysis',
+        url: 'http://www.bea.gov/'
     },
     hud: {
-        name: 'U.S. Department of Housing and Urban Development'
+        name: 'U.S. Department of Housing and Urban Development',
+        url: 'http://www.hud.gov/'
     }
 };
 
