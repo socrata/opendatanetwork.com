@@ -179,6 +179,55 @@ class RenderController {
     }
 
     static _search(req, res, params) {
+        if (params.regions.length > 0) {
+            RenderController._regions(req, res, params);
+        } else {
+            const categoriesPromise = API.categories(5);
+            const tagsPromise = API.tags();
+            const domainsPromise = API.domains(5);
+            const datasetsPromise = API.datasets(params);
+            const allPromises = [categoriesPromise, tagsPromise,
+                                 domainsPromise, datasetsPromise];
+            const allPromise = Promise.all(allPromises);
+
+            allPromise.then(data => {
+                try {
+                    const templateParams = {
+                        params,
+                        searchDatasetsURL: API.searchDatasetsURL(params),
+                        searchPath: req.path,
+                        title: searchPageTitle(params),
+                        css: [
+                            '/styles/search.css',
+                            '/styles/main.css'
+                        ],
+                        scripts: [
+                            '/lib/third-party/lodash.min.js',
+                            '/lib/search.min.js'
+                        ]
+                    };
+
+                    if (data && data.length == allPromises.length) {
+                        templateParams.categories = data[0];
+                        templateParams.currentCategory =
+                            categoryController.getCurrentCategory(params, data[0]);
+
+                        templateParams.currentTag =
+                            tagController.getCurrentTag(params, data[1]);
+
+                        templateParams.domainResults = data[2];
+                        templateParams.searchResults = data[3];
+                    }
+
+                    res.render('search.ejs', templateParams);
+                } catch (error) {
+                    RenderController.error(req, res)(error);
+                }
+            }, RenderController.error(req, res));
+        }
+    }
+
+    static _regions(req, res, params) {
         function forRegion(regionPromise) {
             return new Promise(resolve => {
                 if (params.regions.length === 0) {
@@ -237,15 +286,15 @@ class RenderController {
                     searchDatasetsURL,
                     sources,
                     source,
-                    searchPath : req.path,
-                    title : searchPageTitle(params),
-                    css : [
+                    searchPath: req.path,
+                    title: searchPageTitle(params),
+                    css: [
                         '/styles/third-party/leaflet.min.css',
                         '/styles/search.css',
                         '/styles/maps.css',
                         '/styles/main.css'
                     ],
-                    scripts : [
+                    scripts: [
                         '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
                         '//www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart", "table"]}]}',
                         '/lib/third-party/leaflet/leaflet.min.js',
