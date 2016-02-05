@@ -7,29 +7,25 @@ if (typeof require !== 'undefined') var _ = require('lodash');
  *
  * [Tab] -> [Chart]
  *
- * {
- *
- *
+ * const exampleSource = {
+ *     tabName: 'Example', // Tab names should be kept short.
+ *     vector: 'example', // Name that goes in the url. Lowercase, underscores, same as map source.
+ *     name: 'Example Data', // Shown in chart header.
+ *     attribution: { // See ATTRIBUTIONS.
+ *         name: 'Example Data Provider',
+ *         url: 'http://example.com' // Home page.
+ *     },
+ *     domain: 'odn.data.socrata.com',
+ *     fxf: '1234-abcd', // Make sure to use a NBE fxf!
+ *     regions: ['state', 'county'], // See ALL_REGIONS.
+ *     charts: [
+ *         {
+ *             name: 'Example Chart' // Name passed to chart as 'title' attribute.
+ *         }
+ *     ]
+ * };
  *
  */
-
-const exampleSource = {
-    tabName: 'Example', // Tab names should be kept short.
-    vector: 'example', // Name that goes in the url. Lowercase, underscores, same as map source.
-    name: 'Example Data', // Shown in chart header.
-    attribution: { // See ATTRIBUTIONS.
-        name: 'Example Data Provider',
-        url: 'http://example.com' // Home page.
-    },
-    domain: 'odn.data.socrata.com',
-    fxf: '1234-abcd', // Make sure to use a NBE fxf!
-    regions: ['state', 'county'], // See ALL_REGIONS.
-    charts: [
-        {
-            name: 'Example Chart' // Name passed to chart as 'title' attribute.
-        }
-    ]
-};
 
 const ODN_DOMAIN = 'odn.data.socrata.com';
 
@@ -89,7 +85,10 @@ const SOURCES = [
                 ],
                 chart: 'line',
                 options: {
-                    vAxis: { format: 'short' }
+                    vAxis: {
+                        format: 'short',
+                        viewWindow: {min: 0}
+                    }
                 }
             },
             {
@@ -155,7 +154,13 @@ const SOURCES = [
                 transform: _toPercent('value'),
                 chart: 'column',
                 options: {
-                    vAxis: { format: 'percent' }
+                    vAxis: {
+                        format: 'percent',
+                        viewWindow: {
+                            min: 0,
+                            max: 1
+                        }
+                    }
                 }
             }
         ]
