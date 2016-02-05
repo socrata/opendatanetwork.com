@@ -41,9 +41,9 @@ var _params = <%- JSON.stringify(params) %>;
 
 <% if (params.q.length > 0) { %>
       <% if (searchResults.results.length > 0) { %>
-        <strong><%= searchResults.resultSetSizeString %></strong> results for <strong><%= params.q %></strong>
+        <strong><%= searchResults.resultSetSizeString %></strong> results for <strong>"<%= params.q %>"</strong>
       <% } else { %>
-        <strong><%= source.tabName %></strong>
+        <strong>No results for "<%= params.q %>"</strong>
       <% } %>
 <% } else { %>
     <% if (searchResults.results.length > 0) { %>
@@ -76,7 +76,6 @@ var _params = <%- JSON.stringify(params) %>;
 <section class="results">
 
 <% if (params.regions.length == 0) { %>
-
     <div class="search-results-regular-column">
 
       <% if (typeof currentCategory != 'undefined' && currentCategory && currentCategory.metadata && currentCategory.metadata.description) { %>
