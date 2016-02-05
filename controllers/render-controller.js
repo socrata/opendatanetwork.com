@@ -287,7 +287,7 @@ class RenderController {
 
                     templateParams.domainResults = data[5];
                     templateParams.searchResults = data[6];
-                    templateParams.mapSummary = data[8] || '';
+                    templateParams.mapSummary = data[7] || '';
                     templateParams.mapVariables = MapDescription.variablesFromParams(params);
                 }
 
