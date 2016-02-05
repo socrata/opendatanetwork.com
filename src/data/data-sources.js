@@ -439,11 +439,12 @@ const SOURCES = [
         tabName: 'Job Proximity',
         vector: 'job_proximity',
         name: 'Jobs Proximity Index',
+        sourceURL: 'http://egis.hud.opendata.arcgis.com/datasets/636ecbfb0ee5480ea5b68e65991e4815_0',
         description: `
             The jobs proximity index quantifies access to employment oppurtunities in a region.
             Values are percentile ranked and range from 0 to 100,
             with higher values corresponding to better access to jobs.
-            Data is available for U.S. counties and is current as of .`,
+            Data is available for U.S. counties and is current as of 6/15/2015.`,
         attribution: ATTRIBUTIONS.hud,
         domain: ODN_DOMAIN,
         fxf: '5pnb-mvzq',
