@@ -1,5 +1,6 @@
 
 const Constants = {
+    ROSTER_URL: 'https://odn.data.socrata.com/resource/czuf-rtrf.json',
     CATALOG_URL: 'http://api.us.socrata.com/api/catalog/v1',
     SYNONYMS_FILE: 'data/synonyms.json',
 
@@ -12,7 +13,9 @@ const Constants = {
     DATASET_SUMMARY_URL: 'https://{0}/api/views/{1}.json',
     ATHENA_URL: 'https://socrata-athena.herokuapp.com/schema/v1/applied/{0}',
 
-    TIMEOUT_MS: 1000
+    TIMEOUT_MS: 1000,
+    CACHE_TTL_SECONDS: 60 * 60 * 12, // 12 hours
+    CACHE_CHECK_SECONDS: 60 * 60
 };
 
 module.exports = Constants;

@@ -1,5 +1,13 @@
+
 <div class="map-summary-container">
     <a class="map-summary-more">More Information</a>
     <p class="map-summary"><%= mapSummary %></p>
-    <ul class="map-summary-links hidden"><% mapSummaryLinks.forEach(link => { %><li><a href="<%= link.url %>"><%= link.text %></a></li><% }) %></ul>
+    <ul class="map-summary-links hidden">
+        <% mapVariables.forEach(variable => { %>
+            <a href="<%= variable.url %>">
+                <%= variable.name %>
+            </a>
+        <% }); %>
+    </ul>
 </div>
+

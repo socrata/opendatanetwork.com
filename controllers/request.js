@@ -4,10 +4,16 @@ const _ = require('lodash');
 const NodeCache = require('node-cache');
 const request = require('request-promise');
 const querystring = require('querystring');
+const fs = require('fs');
 
 const Constants = require('./constants');
 
-const cache = new NodeCache({sdtTTL: 0});
+const cacheOptions = {
+    stdTTL: Constants.CACHE_TTL_SECONDS,
+    checkperiod: Constants.CACHE_CHECK_SECONDS
+};
+const cache = new NodeCache(cacheOptions);
+const localCache = new NodeCache(cacheOptions);
 
 class Request {
     static getJSON(url, timeoutMS) {
@@ -36,6 +42,26 @@ class Request {
                     resolve(result);
                 }
             }, reject);
+        });
+    }
+
+    static getJSONLocal(path) {
+        return new Promise((resolve, reject) => {
+            localCache.get(path, (error, value) => {
+                if (value === undefined) {
+                    fs.readFile(`${__dirname}/../${path}`, (fileError, body) => {
+                        if (fileError) {
+                            reject(error);
+                        } else {
+                            const json = JSON.parse(body);
+                            cache.set(path, json);
+                            resolve(json);
+                        }
+                    });
+                } else {
+                    resolve(value);
+                }
+            });
         });
     }
 

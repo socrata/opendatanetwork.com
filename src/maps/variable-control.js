@@ -1,27 +1,64 @@
 
+class Navigate {
+    static url(params) {
+        const ids = params.regions
+            .map(region => region.id)
+            .join('-');
+        const names = params.regions
+            .map(region => region.name)
+            .map(Navigate.escapeName)
+            .join('-');
+
+        let navigate = [];
+        if (params.vector && params.vector !== '') {
+            navigate.push(params.vector);
+            if (params.metric) navigate.push(params.metric);
+            if (params.year) navigate.push(params.year);
+        }
+
+        return `/region/${ids}/${names}/${navigate.join('/')}${window.location.search}`;
+    }
+
+    static escapeName(name) {
+        return name.replace(/,/g, '').replace(/[ \/]/g, '_');
+    }
+}
+
 const VariableControl = L.Control.extend({
-    initialize: function(variables, selectedIndices, callback) {
-        this.variables = variables;
-        this.selectedIndices = selectedIndices;
-        this.callback = callback;
+    initialize: function(source, params, onUpdate) {
+        this.source = source;
+        this.variables = source.variables;
+        this.params = params;
+        this.onUpdate = onUpdate;
+
+        this.variable = _.find(this.variables, variable => Navigate.escapeName(variable.name).toLowerCase() === params.metric);
+        this.variable = this.variable || this.variables[0];
+
+        params.year = parseInt(params.year);
+        this.year = _.contains(this.variable.years, params.year) ?
+            params.year : _.max(this.variable.years);
     },
 
     options: {
         position: 'topleft'
     },
 
+    update: function() {
+        const url = Navigate.url(_.extend(this.params, {
+            vector: Navigate.escapeName(this.source.name),
+            year: this.year,
+            metric: Navigate.escapeName(this.variable.name).toLowerCase()
+        }));
+        history.replaceState(null, null, url);
+
+        this.onUpdate(this.variable, this.year);
+    },
+
     onAdd: function(map) {
         const container = L.DomUtil.create('div', 'variable-container');
         this.container = d3.select(container);
 
-        let currentVariable = this.variables[this.selectedIndices.variableSelectedIndex];
-        let currentYear = currentVariable.years[this.selectedIndices.yearSelectedIndex];
-
-        const update = () => {
-            this.callback(currentVariable, currentYear);
-        };
-
-        update();
+        this.update();
 
         function optionDatum(select) {
             const value = select.property('value');
@@ -33,9 +70,10 @@ const VariableControl = L.Control.extend({
             .append('select')
             .attr('class', 'variable-select')
             .on('change', () => {
-                currentVariable = optionDatum(variableSelect);
+                this.variable = optionDatum(variableSelect);
+                if (!_.contains(this.variable.years, this.year)) this.year = _.max(this.variable.years);
                 updateYearOptions();
-                update();
+                this.update();
             });
 
         const variableOptions = variableSelect
@@ -43,7 +81,7 @@ const VariableControl = L.Control.extend({
             .data(this.variables)
             .enter()
             .append('option')
-            .property('selected', variable => variable === currentVariable)
+            .property('selected', variable => variable === this.variable)
             .attr('value', variable => variable.name)
             .text(variable => variable.name);
 
@@ -51,25 +89,22 @@ const VariableControl = L.Control.extend({
             .append('select')
             .attr('class', 'year-select')
             .on('change', () => {
-                currentYear = optionDatum(yearSelect);
-                update();
+                this.year = optionDatum(yearSelect);
+                this.update();
             });
 
-        function updateYearOptions() {
+        const updateYearOptions = () => {
             yearSelect.selectAll('option').remove();
-
-            if (! _.contains(currentVariable.years, currentYear))
-                currentYear = currentVariable.years[currentVariable.years.length - 1];
 
             yearSelect
                 .selectAll('option')
-                .data(currentVariable.years)
+                .data(this.variable.years)
                 .enter()
                 .append('option')
-                .property('selected', year => year === currentYear)
+                .property('selected', year => year === this.year)
                 .attr('value', year => year)
                 .text(year => year);
-        }
+        };
 
         updateYearOptions();
 
