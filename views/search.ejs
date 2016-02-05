@@ -172,7 +172,7 @@ var _params = <%- JSON.stringify(params) %>;
     <div class="charts-column">
         <ul class="chart-tabs">
             <% sources.forEach(function(source) { %>
-                <li class="<%= source.vector === params.vector || (source.vector === 'population' && params.vector === '') %>">
+                <li class="<%= source.vector === params.vector || (source.vector === 'population' && params.vector === '') ? 'selected' : '' %>">
                     <a href="<%= getSearchPageUrl(source) %>">
                         <%= source.tabName %>
                     </a>
