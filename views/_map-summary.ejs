@@ -4,9 +4,7 @@
     <p class="map-summary"><%= mapSummary %></p>
     <ul class="map-summary-links hidden">
         <% mapVariables.forEach(variable => { %>
-            <a href="<%= variable.url %>">
-                <%= variable.name %>
-            </a>
+            <li><a href="<%= variable.url %>"><%= variable.name %></a></li>
         <% }); %>
     </ul>
 </div>
