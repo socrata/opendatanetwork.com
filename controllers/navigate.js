@@ -15,7 +15,7 @@ class Navigate {
     }
 
     static region(region) {
-        return `/region/${region.id}/${region.name}`;
+        return `/region/${region.id}/${Navigate.escapeName(region.name)}`;
     }
 
     static regions(regions) {
