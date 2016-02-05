@@ -168,7 +168,7 @@ const SOURCES = [
     {
         tabName: 'Earnings',
         vector: 'earnings',
-        name: 'Earnings',
+        name: 'Earnings (Full-Time and Part-Time Workers)',
         attribution: ATTRIBUTIONS.acs,
         domain: ODN_DOMAIN,
         fxf: 'wmwh-4vak',
@@ -179,7 +179,7 @@ const SOURCES = [
                 data: [
                     {
                         column: 'median_earnings',
-                        label: 'All',
+                        label: 'All Workers',
                     },
                     {
                         column: 'male_median_earnings',
@@ -202,14 +202,9 @@ const SOURCES = [
                         format: { pattern: '###,###', prefix: '$' }
                     }
                 ],
-                chart: 'column',
+                chart: 'table',
                 options: {
-                    vAxis: {
-                        format: 'currency',
-                        viewWindow: {
-                            min: 0
-                        }
-                    }
+                    height: 150
                 }
             },
             {
@@ -248,9 +243,11 @@ const SOURCES = [
                         format: { pattern: '###,###', prefix: '$' }
                     }
                 ],
-                chart: 'column',
+                chart: 'stepped-area',
                 options: {
-                    vAxis: { format: 'currency' }
+                    vAxis: {format: 'currency'},
+                    areaOpacity: 0,
+                    lineWidth: 2
                 }
             }
         ]
