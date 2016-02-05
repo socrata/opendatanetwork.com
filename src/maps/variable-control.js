@@ -16,7 +16,7 @@ class Navigate {
             if (params.year) navigate.push(params.year);
         }
 
-        return `/region/${ids}/${names}/${navigate.join('/')}`;
+        return `/region/${ids}/${names}/${navigate.join('/')}${window.location.search}`;
     }
 
     static escapeName(name) {
@@ -104,7 +104,7 @@ const VariableControl = L.Control.extend({
                 .property('selected', year => year === this.year)
                 .attr('value', year => year)
                 .text(year => year);
-        }
+        };
 
         updateYearOptions();
 

@@ -385,10 +385,4 @@ class SearchPageController {
         this.params.regions = [];
         this.params.vector = '';
     }
-
-    updateAddressBarUrl(metric, year) {
-
-        const url = this.getSearchPageUrl(false, metric, year);
-        history.replaceState(null, null, url);
-    }
 }
