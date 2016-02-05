@@ -33,7 +33,12 @@ class Tab {
             .attr('class', 'chart-tab-heading')
             .text(this.name);
 
-        this.charts.forEach(chart => chart.render(container, regions));
+        this.charts.forEach(chart => {
+            const chartContainer = container.append('div')
+                .attr('class', 'chart');
+
+            chart.render(chartContainer, regions);
+        });
     }
 }
 
