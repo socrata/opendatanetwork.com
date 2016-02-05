@@ -181,7 +181,12 @@ var _params = <%- JSON.stringify(params) %>;
         </ul>
 
         <div class="charts">
+            <% if ('description' in source) { %>
+                <p><%= source.description %></p>
+            <% } %>
+
             <div id="map"></div>
+
             <% include _map-summary %>
         </div>
 

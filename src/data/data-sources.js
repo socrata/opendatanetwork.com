@@ -261,6 +261,13 @@ const SOURCES = [
         tabName: 'GDP',
         vector: 'gdp',
         name: 'Gross Domestic Product (GDP)',
+        sourceURL: 'http://www.bea.gov/regional/index.htm',
+        description: `
+            Gross Domestic Product (GDP) is a measure of the value of all goods and services
+            produced in a region minus the value of the goods and services used up in production.
+            Real GDP is adjusted for changes in the value of money (inflation and deflation)
+            so that values can be compared between years.
+            Data is available for U.S. states and metropolitan areas.`,
         attribution: ATTRIBUTIONS.bea,
         domain: ODN_DOMAIN,
         fxf: 'ks2j-vhr8',
@@ -312,6 +319,13 @@ const SOURCES = [
         tabName: 'Cost of Living',
         vector: 'cost_of_living',
         name: 'Cost of Living Indexes (100 is the U.S. Average)',
+        sourceURL: 'http://www.bea.gov/newsreleases/regional/rpp/rpp_newsrelease.htm',
+        description: `
+            The cost of living index measures the difference in the price levels of goods
+            and services across regions.
+            The average cost of living index in the U.S. is 100,
+            with higher values corresponding to costlier goods and services.
+            Data is available for U.S. states and metropolitan areas.`,
         attribution: ATTRIBUTIONS.bea,
         domain: ODN_DOMAIN,
         fxf: 'hpnf-gnfu',
@@ -339,14 +353,19 @@ const SOURCES = [
     {
         tabName: 'Consumption',
         vector: 'consumption',
-        name: 'BEA Personal Consumption Expenditures',
+        name: 'Personal Consumption Expenditures',
+        sourceURL: 'http://blog.bea.gov/2015/12/03/bureau-of-economic-analysis-releases-two-new-data-sets-to-deepen-understanding-of-u-s-economy/',
+        description: `
+            Personal consumption expenditure is a measure of goods and services
+            purchased by or on behalf of households.
+            Data is available for U.S. states and for the nation as a whole.`,
         attribution: ATTRIBUTIONS.bea,
         domain: ODN_DOMAIN,
         fxf: 'va5j-wsjq',
         regions: ['state', 'nation'],
         charts: [
             {
-                name: 'Personal Consumption Expenditures over Time',
+                name: 'Personal Consumption Expenditures over Time (Millions of USD)',
                 data: [
                     {
                         column: 'year',
@@ -359,7 +378,8 @@ const SOURCES = [
                         format: { pattern: '$###,###M' }
                     }
                 ],
-                chart: 'line'
+                chart: 'line',
+                options: {vAxis: {format: '$###,###M'}}
             },
             {
                 name: 'Change in Personal Consumption Expenditures over Time',
@@ -391,6 +411,11 @@ const SOURCES = [
         tabName: 'Job Proximity',
         vector: 'job_proximity',
         name: 'Jobs Proximity Index',
+        description: `
+            The jobs proximity index quantifies access to employment oppurtunities in a region.
+            Values are percentile ranked and range from 0 to 100,
+            with higher values corresponding to better access to jobs.
+            Data is available for U.S. counties and is current as of .`,
         attribution: ATTRIBUTIONS.hud,
         domain: ODN_DOMAIN,
         fxf: '5pnb-mvzq',
@@ -420,6 +445,13 @@ const SOURCES = [
         tabName: 'Environment',
         vector: 'environmental_health',
         name: 'Environmental Health Hazard Index',
+        sourceURL: 'http://egis.hud.opendata.arcgis.com/datasets/53a856bef6f24356abee30653399e94a_0',
+        description: `
+            The environmental health hazard exposure index summarizes potential exposure to harmful toxins
+            including carcinogenic, respiratory, and neurological hazards.
+            Values are percentile ranked and range from 0 to 100,
+            with higher values corresponding to less exposure to harmful toxins.
+            Data is available for U.S. counties and is current as of 6/15/2015.`,
         attribution: ATTRIBUTIONS.hud,
         domain: ODN_DOMAIN,
         fxf: 'nax7-t6ga',

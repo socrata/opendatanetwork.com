@@ -171,13 +171,13 @@ const MAP_SOURCES = {
         fxf: 'va5j-wsjq',
         variables: [
             {
-                name: 'Expenditure (Millions of USD)',
+                name: 'Personal Consumption Expenditure',
                 column: 'personal_consumption_expenditures',
                 years: _.range(1997, 2015),
                 format: format.millionDollar
             },
             {
-                name: 'Annual Expenditure Change',
+                name: 'Annual Change in PCE',
                 column: 'expenditures_percent_change',
                 years: _.range(1998, 2015),
                 format: format.percent
@@ -189,14 +189,14 @@ const MAP_SOURCES = {
         name: 'job_proximity',
         domain: DOMAIN,
         fxf: '5pnb-mvzq',
-        variables: [['Median', 'median', true], ['Mean', 'mean', true], ['Standard Deviation', 'stdev', false]].map(tuple => {
+        variables: [['Median', 'median', true], ['Mean', 'mean', true]].map(tuple => {
             return {
                 name: `${tuple[0]} Jobs Proximity Index`,
                 column: 'value',
                 params: {variable: `jobs-prox-idx-${tuple[1]}`},
                 years: [2015],
                 format: format.integer,
-                stoplight: tuple[2]
+                stoplight: true
             };
         })
     },
@@ -205,14 +205,14 @@ const MAP_SOURCES = {
         name: 'environmental_health',
         domain: DOMAIN,
         fxf: 'nax7-t6ga',
-        variables: [['Median', 'median', true], ['Mean', 'mean', true], ['Standard Deviation', 'stdev', false]].map(tuple => {
+        variables: [['Median', 'median', true], ['Mean', 'mean', true]].map(tuple => {
             return {
                 name: `${tuple[0]} Environmental Health Hazard Index`,
                 column: 'value',
                 params: {variable: `env-health-idx-${tuple[1]}`},
                 years: [2015],
                 format: format.integer,
-                stoplight: tuple[2]
+                stoplight: true
             };
         })
     }
