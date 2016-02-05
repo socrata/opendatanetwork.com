@@ -17,13 +17,23 @@ class MapSource {
         this.year = mapSource.yearColumn || 'year';
     }
 
-    otherVariables(currentVariable) {
-        return this.variables.filter(variable => variable.name !== currentVariable.name);
+    summarize(variable, year, regions) {
+        return new Promise((resolve, reject) => {
+            this.getData(variable, year, regions).then(data => {
+                const summary = regions.map(region => {
+                    const row = _.find(data, row => row[this.id] === region.id);
+
+                    const value = variable.format(row[variable.column]);
+                    return `The ${variable.name.toLowerCase()} of ${region.name} in ${year} was ${value}.`;
+                }).join(' ');
+
+                resolve(summary);
+            }, reject);
+        });
     }
 
-    variables() {
-
-
+    otherVariables(currentVariable) {
+        return this.variables.filter(variable => variable.name !== currentVariable.name);
     }
 
     getData(variable, year, regions) {
@@ -42,21 +52,6 @@ class MapSource {
             const url = Requests.buildURL(path, params);
             return Requests.getJSON(url);
         }
-    }
-
-    summarize(variable, year, regions) {
-        return new Promise((resolve, reject) => {
-            this.getData(variable, year, regions).then(data => {
-                const summary = regions.map(region => {
-                    const row = _.find(data, row => row[this.id] === region.id);
-
-                    const value = variable.format(row[variable.column]);
-                    return `The ${variable.name.toLowerCase()} of ${region.name} in ${year} was ${value}.`;
-                }).join(' ');
-
-                resolve(summary);
-            }, reject);
-        });
     }
 
     getVariable(column) {
@@ -84,6 +79,23 @@ class MapDescription {
                 resolve('');
             }
         });
+    }
+
+    static variablesFromParams(params) {
+        if (params.vector && params.vector in MAP_SOURCES) {
+            const source = new MapSource(MAP_SOURCES[params.vector]);
+            const currentVariable = source.getVariable(params.metric);
+            const variables = source.otherVariables(currentVariable);
+
+            return variables.map(variable => {
+                const metric = Navigate.escapeName(variable.name).toLowerCase();
+                const newParams = _.extend({}, params, {metric, year: undefined});
+                const url = Navigate.url(newParams);
+                return _.extend(variable, {url});
+            });
+        } else {
+            return [];
+        }
     }
 }
 

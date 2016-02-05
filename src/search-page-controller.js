@@ -143,23 +143,6 @@ class SearchPageController {
         });
     }
 
-    drawMapSummaryLinks(source, variable, year) {
-
-        const variables = _.filter(source.variables, item => item.name != variable.name);
-        const list = $('.map-summary-links').empty();
-
-        $.each(variables, i => {
-
-            const item = variables[i];
-            const li = $('<li/>').appendTo(list);
-
-            $('<a/>')
-                .attr('href', this.getSearchPageUrl(false, item.metric, year))
-                .text(item.name)
-                .appendTo(li);
-        });
-    }
-
     attachCategoriesClickHandlers() {
 
         const self = this;

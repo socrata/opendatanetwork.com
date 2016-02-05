@@ -32,6 +32,25 @@ class Navigate {
     static escapeName(name) {
         return name.replace(/,/g, '').replace(/[ \/]/g, '_');
     }
+
+    static url(params) {
+        const ids = params.regions
+            .map(region => region.id)
+            .join('-');
+        const names = params.regions
+            .map(region => region.name)
+            .map(Navigate.escapeName)
+            .join('-');
+
+        let navigate = [];
+        if (params.vector && params.vector !== '') {
+            navigate.push(params.vector);
+            if (params.metric) navigate.push(params.metric);
+            if (params.year) navigate.push(params.year);
+        }
+
+        return `/region/${ids}/${names}/${navigate.join('/')}`;
+    }
 }
 
 module.exports = Navigate;
