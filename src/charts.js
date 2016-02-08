@@ -65,6 +65,7 @@ class Chart {
             column.type = column.type || 'number';
             column.label = column.label || '';
             column.column = column.column || '';
+            column.column = column.column.replace(/ /g, '_');
             return column;
         });
     }

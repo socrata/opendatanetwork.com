@@ -148,23 +148,6 @@ const MAP_SOURCES = {
         })
     },
 
-    health: {
-        name: 'health',
-        domain: DOMAIN,
-        fxf: '7ayp-utp2',
-        variables: ['Adult Smoking', 'Adult Obesity',
-                    'Physical Inactivity', 'Excessive Drinking'].map(name => {
-            return {
-                name: `${name} Rate`,
-                column: `${name.toLowerCase().replace(/\s/g, '_')}_value`,
-                years: [2015],
-                reverse: true,
-                format: format.ratio,
-                stoplight: true
-            };
-        })
-    },
-
     consumption: {
         name: 'consumption',
         domain: DOMAIN,
@@ -212,6 +195,24 @@ const MAP_SOURCES = {
                 params: {variable: `env-health-idx-${tuple[1]}`},
                 years: [2015],
                 format: format.integer,
+                stoplight: true
+            };
+        })
+    },
+
+    rwjf_health: {
+        name: 'rwjf_health',
+        domain: DOMAIN,
+        fxf: '7ayp-utp2',
+        variables: ['Adult Obesity', 'Adult Smoking',
+                    'Physical Inactivity', 'Excessive Drinking',
+                    'Access to Exercise Opportunities'].map((name, index) => {
+            return {
+                name: `${name} Rate`,
+                column: `${name.toLowerCase().replace(/\s/g, '_')}_value`,
+                years: [2015],
+                reverse: index != 4,
+                format: format.ratio,
                 stoplight: true
             };
         })

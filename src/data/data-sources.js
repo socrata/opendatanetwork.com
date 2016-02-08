@@ -41,6 +41,10 @@ const ATTRIBUTIONS = {
     hud: {
         name: 'U.S. Department of Housing and Urban Development',
         url: 'http://www.hud.gov/'
+    },
+    rwjf: {
+        name: 'Robert Wood Johnson Foundation',
+        url: 'http://www.rwjf.org/'
     }
 };
 
@@ -500,6 +504,60 @@ const SOURCES = [
                 transform: _rename('variable', {'env-health-idx-median': 'Median Environmental Health Hazard Index'}),
                 chart: 'column',
                 options: {vAxis: {viewWindow: {min: 0}}}
+            }
+        ]
+    },
+    {
+        tabName: 'Health',
+        vector: 'rwjf_health',
+        name: 'County Health Rankings',
+        sourceURL: 'http://www.countyhealthrankings.org/rankings/data',
+        description: `
+            The Robert Wood Johnson Foundation produces health rankings for states and counties.
+            They explore many aspects of health including quality of life, health behaviors,
+            access to clinical care, socioeconomic factors, and environmental factors.`,
+        attribution: ATTRIBUTIONS.rwjf,
+        domain: ODN_DOMAIN,
+        fxf: '7ayp-utp2',
+        regions: ['county', 'state'],
+        charts: [
+            {
+                name: 'Health Behaviors',
+                data: [
+                    {
+                        column: 'Adult obesity Value',
+                        label: 'Adult Obesity Rate'
+                    },
+                    {
+                        column: 'Adult smoking Value',
+                        label: 'Adult Smoking Rate'
+                    },
+                    {
+                        column: 'Physical inactivity Value',
+                        label: 'Physical Inactivity Rate'
+                    },
+                    {
+                        column: 'Access to exercise opportunities Value',
+                        label: 'Access to Exercise Opportunities Rate'
+                    },
+                    {
+                        column: 'Excessive drinking Value',
+                        label: 'Excessive Drinking Rate'
+                    }
+                ],
+                transpose: [
+                    {
+                        column: 'variable',
+                        label: 'Health Behavior',
+                        type: 'string'
+                    },
+                    {
+                        column: 'value',
+                        label: 'Value',
+                        format: { pattern: '#.##%' }
+                    }
+                ],
+                chart: 'table'
             }
         ]
     }
