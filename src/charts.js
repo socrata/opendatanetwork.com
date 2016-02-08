@@ -26,18 +26,8 @@ class Tab {
     }
 
     render(selection, regions) {
-        const container = selection.append('div')
-            .attr('class', 'chart-tab');
-
-        container.append('h2')
-            .attr('class', 'chart-tab-heading')
-            .text(this.name);
-
         this.charts.forEach(chart => {
-            const chartContainer = container.append('div')
-                .attr('class', 'chart');
-
-            chart.render(chartContainer, regions);
+            chart.render(regions);
         });
     }
 }
@@ -45,7 +35,8 @@ class Tab {
 class Chart {
     constructor(tab, chart) {
         this.tab = tab;
-        this.name = chart.name || '';
+        if (!chart.data) throw Error('chart missing name');
+        this.name = chart.name;
         if (!chart.data) throw Error('chart missing data');
         this.data = Chart._columns(chart.data);
         this.x = chart.data[0];
@@ -53,11 +44,12 @@ class Chart {
         if (!chart.chart) throw Error('chart missing chart');
         if (!(chart.chart in ChartConstants.CHART_TYPES)) throw Error(`invalid chart type: ${chart.chart}`);
         this.chart = ChartConstants.CHART_TYPES[chart.chart];
-        this.options = _.extend({}, ChartConstants.CHART_OPTIONS, chart.options || {}, { title: this.name });
+        this.options = _.extend({}, ChartConstants.CHART_OPTIONS, chart.options || {});
         this.transform = chart.transform;
         if (chart.transpose && chart.transpose.length !== 2) throw Error('transpose requires two variables');
         if (chart.transpose) this.transpose = Chart._columns(chart.transpose);
         this.params = chart.params || {};
+        this.description = chart.description || '';
     }
 
     static _columns(columns) {
@@ -70,14 +62,15 @@ class Chart {
         });
     }
 
-    render(selection, regions) {
+    render(regions) {
         this.getData(regions).then(data => {
             if (this.transpose) data = this._transpose(data);
             if (this.transform) data = this.transform(data);
             const dataTable = this.dataTable(data, regions);
 
-            const container = selection.append('div')
-                .attr('class', 'chart-container');
+            const container = d3
+                .select(`div.chart#${this.name.toLowerCase().replace(/\W/g, '')}`)
+                .select('.chart-container');
 
             const chart = new this.chart(container[0][0]);
             chart.draw(dataTable, this.options);

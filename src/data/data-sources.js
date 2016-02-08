@@ -259,13 +259,14 @@ const SOURCES = [
     {
         tabName: 'Occupations',
         vector: 'occupations',
-        name: 'Percent Employed in Each Occupation',
+        name: 'Occupations',
         attribution: ATTRIBUTIONS.acs,
         domain: ODN_DOMAIN,
         fxf: 'qfcm-fw3i',
         regions: ALL_REGIONS,
         charts: [
             {
+                name: 'Percent Employed in Each Occupation',
                 data: [
                     {
                         column: 'occupation',
@@ -528,7 +529,7 @@ const SOURCES = [
                     every day or most days and has smoked at least 100 cigarettes in their lifetime.
 
                     Adult Obesity is the percentage of the adult population (age 20 and older) that
-                    reports a body mass index (BMI) greater than or equal to 30 kg/m2.
+                    reports a body mass index (BMI) greater than or equal to 30 kg/m^2.
 
                     Physical Inactivity is the percentage of adults aged 20 and over reporting no
                     leisure-time physical activity. Examples of physical activities provided

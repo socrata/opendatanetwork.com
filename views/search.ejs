@@ -185,8 +185,19 @@ var _params = <%- JSON.stringify(params) %>;
             <% } %>
 
             <div id="map"></div>
-
             <% include _map-summary %>
+
+            <% source.charts.forEach(chart => { %>
+                <div class='chart' id=<%= chart.name.toLowerCase().replace(/\W/g, '') %>>
+                    <h3 class='chart-title'><%= chart.name %></h3>
+
+                    <% if ('description' in chart) { %>
+                        <p class='chart-description'><%= chart.description %></p>
+                    <% } %>
+
+                    <div class='chart-container'></div>
+                </div>
+            <% }); %>
         </div>
 
         <label class="attribution">
