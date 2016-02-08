@@ -510,7 +510,7 @@ const SOURCES = [
     {
         tabName: 'Health',
         vector: 'rwjf_health',
-        name: 'County Health Rankings',
+        name: 'Health Behaviors',
         sourceURL: 'http://www.countyhealthrankings.org/rankings/data',
         description: `
             The Robert Wood Johnson Foundation produces health rankings for states and counties.
@@ -523,6 +523,25 @@ const SOURCES = [
         charts: [
             {
                 name: 'Health Behaviors',
+                description: `
+                    Adult Smoking is the percentage of the adult population that currently smokes
+                    every day or most days and has smoked at least 100 cigarettes in their lifetime.
+
+                    Adult Obesity is the percentage of the adult population (age 20 and older) that
+                    reports a body mass index (BMI) greater than or equal to 30 kg/m2.
+
+                    Physical Inactivity is the percentage of adults aged 20 and over reporting no
+                    leisure-time physical activity. Examples of physical activities provided
+                    include running, calisthenics, golf, gardening, or walking for exercise.
+
+                    Access to Exercise Opportunities measures the percentage of individuals
+                    in a county who live reasonably close to a location for physical activity.
+                    Locations for physical activity are defined as parks or recreational facilities.
+                    Individuals who:
+                      - reside in a census block within half a mile from a park or
+                      - reside in an urban census tract within one mile of a recreational facility or
+                      - reside in a rural census tract within three miles of a recreational facility
+                    are considered to have adequate access for opportunities for physical activity.`,
                 data: [
                     {
                         column: 'Adult obesity Value',
