@@ -181,7 +181,7 @@ var _params = <%- JSON.stringify(params) %>;
 
         <div class="charts">
             <% if ('description' in source) { %>
-                <p><%= source.description %></p>
+                <p><%- source.description %></p>
             <% } %>
 
             <div id="map"></div>
@@ -192,7 +192,7 @@ var _params = <%- JSON.stringify(params) %>;
                     <h3 class='chart-title'><%= chart.name %></h3>
 
                     <% if ('description' in chart) { %>
-                        <p class='chart-description'><%= chart.description %></p>
+                        <p class='chart-description'><%- chart.description %></p>
                     <% } %>
 
                     <div class='chart-container'></div>
