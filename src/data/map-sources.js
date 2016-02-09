@@ -239,7 +239,7 @@ const MAP_SOURCES = {
             return {
                 name: `${tuple[0]} Rate`,
                 column: 'data_value',
-                years: [2013],
+                years: [2011, 2012, 2013],
                 params: {
                     'break_out': 'Overall',
                     'response': 'Yes',
