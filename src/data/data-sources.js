@@ -45,6 +45,10 @@ const ATTRIBUTIONS = {
     rwjf: {
         name: 'Robert Wood Johnson Foundation',
         url: 'http://www.rwjf.org/'
+    },
+    cdc: {
+        name: 'Centers for Disease Control and Prevention',
+        url: 'http://www.cdc.gov/'
     }
 };
 
@@ -518,7 +522,7 @@ const SOURCES = [
         ]
     },
     {
-        tabName: 'Health',
+        tabName: 'RWJF Health',
         vector: 'rwjf_health',
         name: 'Health Behaviors',
         sourceURL: 'http://www.countyhealthrankings.org/rankings/data',
@@ -593,7 +597,17 @@ const SOURCES = [
         tabName: 'CDC Health',
         vector: 'brfss_health',
         name: 'Health',
-        attribution: ATTRIBUTIONS.rwjf,
+        sourceURL: 'http://www.cdc.gov/brfss/',
+        description: `
+            The CDC's Behavioral Risk Factor Surveillance System (BRFSS) is the nation's
+            premier system of health-related telephone surveys that collect state data
+            about U.S. residents regarding their health-related risk behaviors,
+            chronic health conditions, and use of preventive services.
+            Established in 1984 with 15 states, BRFSS now collects data in
+            all 50 states as well as the District of Columbia and three U.S. territories.
+            BRFSS completes more than 400,000 adult interviews each year,
+            making it the largest continuously conducted health survey system in the world.`,
+        attribution: ATTRIBUTIONS.cdc,
         domain: ODN_DOMAIN,
         fxf: 'n4rt-3rmd',
         regions: ['state'],
