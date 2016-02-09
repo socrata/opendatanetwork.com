@@ -22,8 +22,8 @@ class MapSource {
             this.getData(variable, year, regions).then(data => {
                 const summary = regions.map(region => {
                     const row = _.find(data, row => row[this.id] === region.id);
-
                     const value = variable.format(row[variable.column]);
+
                     return `The ${variable.name.toLowerCase()} of ${region.name} in ${year} was ${value}.`;
                 }).join(' ');
 
@@ -43,7 +43,7 @@ class MapSource {
             '$select': columns.join(','),
             '$where': `${this.id} in (${regions.map(region => `'${region.id}'`)})`,
             [this.year]: year
-        });
+        }, variable.params || {});
 
         if (typeof Requests === 'undefined') {
             const url = `${path}?${$.param(params)}`;

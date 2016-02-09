@@ -221,17 +221,33 @@ const MAP_SOURCES = {
     brfss_health: {
         name: 'brfss_health',
         domain: DOMAIN,
-        fxf: '7ayp-utp2',
-        variables: ['Adult Obesity', 'Adult Smoking',
-                    'Physical Inactivity', 'Excessive Drinking',
-                    'Access to Exercise Opportunities'].map((name, index) => {
+        fxf: 'n4rt-3rmd',
+        idColumn: '_geoid',
+        typeColumn: '_type',
+        nameColumn: 'Locationdesc',
+        variables:
+           [['Asthma', 'Adults who have been told they currently have asthma'],
+            ['Arthritis', 'Adults who have been told they have arthritis'],
+            ['Heart Attack', 'Ever told you had a heart attack (myocardial infarction)?'],
+            ['Heart Disease', 'Ever told you had angina or coronary heart disease?'],
+            ['Skin Cancer', 'Ever told you had skin cancer?'],
+            ['Other Cancer', 'Ever told you had any other types of cancer?'],
+            ['COPD', 'Ever told you have COPD?'],
+            ['Kidney Disease', 'Ever told you have kidney disease?'],
+            ['Depression', 'Ever told you that you have a form of depression?'],
+            ['Diabetes', 'Have you ever been told by a doctor that you have diabetes?']].map(tuple => {
             return {
-                name: `${name} Rate`,
-                column: `${name.toLowerCase().replace(/\s/g, '_')}_value`,
-                years: [2015],
-                reverse: index != 4,
-                format: format.ratio,
-                stoplight: true
+                name: `${tuple[0]} Rate`,
+                column: 'data_value',
+                years: [2013],
+                params: {
+                    'break_out': 'Overall',
+                    'response': 'Yes',
+                    'question': tuple[1]
+                },
+                format: format.percent,
+                stoplight: true,
+                reverse: true
             };
         })
     }
