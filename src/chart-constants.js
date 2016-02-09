@@ -9,10 +9,10 @@ const ChartConstants = {
     },
     CHART_OPTIONS: {
         curveType: 'function',
-        lineWidth: 4,
+        lineWidth: 2,
         legend : { position : 'top' },
-        pointShape : 'circle',
-        pointSize : 6,
+        pointShape : 'square',
+        pointSize : 8,
         height: 300
     }
 };

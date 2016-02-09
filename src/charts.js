@@ -44,7 +44,7 @@ class Chart {
         if (!chart.chart) throw Error('chart missing chart');
         if (!(chart.chart in ChartConstants.CHART_TYPES)) throw Error(`invalid chart type: ${chart.chart}`);
         this.chart = ChartConstants.CHART_TYPES[chart.chart];
-        this.options = _.extend({}, ChartConstants.CHART_OPTIONS, chart.options || {});
+        this.options = _.extend({}, ChartConstants.CHART_OPTIONS, chart.options || {}, {title: chart.name});
         this.transform = chart.transform;
         if (chart.transpose && chart.transpose.length !== 2) throw Error('transpose requires two variables');
         if (chart.transpose) this.transpose = Chart._columns(chart.transpose);

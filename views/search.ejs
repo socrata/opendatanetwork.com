@@ -189,7 +189,7 @@ var _params = <%- JSON.stringify(params) %>;
 
             <% source.charts.forEach(chart => { %>
                 <div class='chart' id=<%= chart.name.toLowerCase().replace(/\W/g, '') %>>
-                    <h3 class='chart-title'><%= chart.name %></h3>
+                    <h1 class='chart-title'><%= chart.name %></h1>
 
                     <% if ('description' in chart) { %>
                         <p class='chart-description'><%- chart.description %></p>

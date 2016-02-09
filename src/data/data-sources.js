@@ -87,7 +87,7 @@ const SOURCES = [
         regions: ALL_REGIONS,
         charts: [
             {
-                name: 'Population over Time',
+                name: 'Population',
                 data: [
                     {
                         column: 'year',
@@ -100,16 +100,10 @@ const SOURCES = [
                         format: { pattern: '###,###' }
                     }
                 ],
-                chart: 'line',
-                options: {
-                    vAxis: {
-                        format: 'short',
-                        viewWindow: {min: 0}
-                    }
-                }
+                chart: 'line'
             },
             {
-                name: 'Population Change over Time',
+                name: 'Population Change',
                 data: [
                     {
                         column: 'year',
@@ -169,8 +163,9 @@ const SOURCES = [
                     }
                 ],
                 transform: _toPercent('value'),
-                chart: 'column',
+                chart: 'table',
                 options: {
+                    height: 100,
                     vAxis: {
                         format: 'percent',
                         viewWindow: {
@@ -185,14 +180,16 @@ const SOURCES = [
     {
         tabName: 'Earnings',
         vector: 'earnings',
-        name: 'Earnings (Full-Time and Part-Time Workers)',
+        name: 'Earnings',
         attribution: ATTRIBUTIONS.acs,
         domain: ODN_DOMAIN,
         fxf: 'wmwh-4vak',
         regions: ALL_REGIONS,
         charts: [
             {
-                name: 'Median Earnings by Gender (Full-Time and Part-Time Workers)',
+                name: 'Earnings and Gender',
+                description: `
+                    Median earnings of full-time and part-time workers broken down by gender.`,
                 data: [
                     {
                         column: 'median_earnings',
@@ -225,7 +222,10 @@ const SOURCES = [
                 }
             },
             {
-                name: 'Median Earnings by Education Level (Full-Time and Part-Time Workers)',
+                name: 'Earnings and Education',
+                description: `
+                    Median earnings of full-time and part-time workers broken down
+                    by level of education.`,
                 data: [
                     {
                         column: 'median_earnings_less_than_high_school',
@@ -279,7 +279,9 @@ const SOURCES = [
         regions: ALL_REGIONS,
         charts: [
             {
-                name: 'Percent Employed in Each Occupation',
+                name: 'Occupations',
+                description: `
+                    Percentage of workers employed in each occupation.`,
                 data: [
                     {
                         column: 'occupation',
@@ -318,7 +320,9 @@ const SOURCES = [
         include: region => _.contains(region.name, 'Metro'),
         charts: [
             {
-                name: 'GDP per Capita over Time',
+                name: 'GDP',
+                description: `
+                    Real (inflation adjusted) GDP per Capita over time.`,
                 data: [
                     {
                         column: 'year',
@@ -337,7 +341,9 @@ const SOURCES = [
                 }
             },
             {
-                name: 'Annual Change in Per Capita GDP',
+                name: 'Change in GDP',
+                description: `
+                    Annual change in real GDP.`,
                 data: [
                     {
                         column: 'year',
@@ -374,9 +380,26 @@ const SOURCES = [
         fxf: 'hpnf-gnfu',
         regions: ['state', 'msa'],
         include: region => _.contains(region.name, 'Metro'),
-        charts: ['All', 'Rents', 'Goods', 'Other'].map(component => {
+        charts: [
+            {
+                name: 'Cost of Living',
+                data: [
+                    {
+                        column: 'component',
+                        label: 'Component',
+                        type: 'string'
+                    },
+                    {
+                        column: 'index',
+                        label: 'Index'
+                    }
+                ],
+                chart: 'table',
+                options: {height: 200}
+            }
+            ].concat(['All', 'Rents', 'Goods', 'Other'].map(component => {
             return {
-                name: `Category: ${component}`,
+                name: `${component}`,
                 params: {component},
                 data: [
                     {
@@ -391,7 +414,7 @@ const SOURCES = [
                 ],
                 chart: 'line'
             };
-        })
+        }))
     },
     {
         tabName: 'Consumption',
