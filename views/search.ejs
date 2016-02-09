@@ -201,12 +201,19 @@ var _params = <%- JSON.stringify(params) %>;
         </div>
 
         <label class="attribution">
-            <p>Data from the <a href="<%= source.attribution.url %>"><%= source.attribution.name %></a></p>
+            Data from the <a href="<%= source.attribution.url %>"><%= source.attribution.name %></a>.
             <% if ('sourceURL' in source) { %>
-                <a href="<%= source.sourceURL %>">Source Dataset</a> |
+                <a href="<%= source.sourceURL %>">Data Source</a> |
             <% } %>
             <a href="<%= `https://${source.domain}/dataset/${source.fxf}` %>">ODN Dataset</a> |
-            <a href="<%= `https://dev.socrata.com/foundry/${source.domain}/${source.fxf}` %>">API</a>
+            <a href="<%= `https://dev.socrata.com/foundry/${source.domain}/${source.fxf}` %>">API</a> -
+            <span class='info-icon'>
+                <div class='info-tooltip'>
+                    <strong>Note</strong> -
+                    ODN datasets and APIs are subject to change and may differ in format from the original
+                    source data in order to provide a user-friendly experience on this site.
+                </div>
+            </span>
         </div>
     </div>
 
