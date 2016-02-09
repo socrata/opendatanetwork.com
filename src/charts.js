@@ -98,7 +98,7 @@ class Chart {
         const columns = [this.tab.idColumn].concat(this.data.map(variable => variable.column));
         const params = _.extend({
             '$select': columns.join(','),
-            '$where': `id in (${regions.map(region => `'${region.id}'`)})`,
+            '$where': `${this.tab.idColumn} in (${regions.map(region => `'${region.id}'`)})`,
             '$order': columns.map(column => `${column} ASC`).join(',')
         }, this.params);
         const url = `${this.tab.path}?${$.param(params)}`;

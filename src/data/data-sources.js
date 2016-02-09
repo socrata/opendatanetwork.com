@@ -59,7 +59,16 @@ function _toPercent(column) {
 
 function _rename(column, names) {
     return rows => {
-        return rows.map(row => _.extend(row, {[column]: names[row[column]]}));
+        return rows.map(row => {
+            const name = names[row[column]] || row[column];
+            return _.extend(row, {[column]: name})
+        });
+    };
+}
+
+function _order(column, orders) {
+    return rows => {
+        return _.sortBy(rows, row => orders.indexOf(row[column]));
     };
 }
 
@@ -577,6 +586,139 @@ const SOURCES = [
                     }
                 ],
                 chart: 'table'
+            }
+        ]
+    },
+    {
+        tabName: 'CDC Health',
+        vector: 'brfss_health',
+        name: 'Health',
+        attribution: ATTRIBUTIONS.rwjf,
+        domain: ODN_DOMAIN,
+        fxf: 'n4rt-3rmd',
+        regions: ['state'],
+        idColumn: '_geoid',
+        charts: [
+            {
+                name: 'Chronic Health Indicators',
+                params: {
+                    'break_out': 'Overall',
+                    'year': '2013',
+                    'response': 'Yes',
+                    'classid': 'CLASS03'
+                },
+                data: [
+                    {
+                        column: 'question',
+                        label: 'Question',
+                        type: 'string'
+                    },
+                    {
+                        column: 'data_value',
+                        label: 'Value',
+                        format: { pattern: '#.#%' }
+                    }
+                ],
+                transform: _toPercent('data_value'),
+                chart: 'table',
+                options: {
+                    height: 500
+                }
+            },
+            {
+                name: 'Disability Status',
+                params: {
+                    'break_out': 'Overall',
+                    'year': '2013',
+                    'response': 'Yes',
+                    'classid': 'CLASS05',
+                    'topicid': 'Topic19'
+                },
+                data: [
+                    {
+                        column: 'question',
+                        label: 'Question',
+                        type: 'string'
+                    },
+                    {
+                        column: 'data_value',
+                        label: 'Value',
+                        format: { pattern: '#.#%' }
+                    }
+                ],
+                transform: _toPercent('data_value'),
+                chart: 'table'
+            },
+            {
+                name: 'Time of Last Checkup',
+                params: {
+                    'break_out': 'Overall',
+                    'year': '2013',
+                    'classid': 'CLASS07',
+                    'topicid': 'Topic36'
+                },
+                data: [
+                    {
+                        column: 'response',
+                        label: 'Response',
+                        type: 'string'
+                    },
+                    {
+                        column: 'data_value',
+                        label: 'Value',
+                        format: { pattern: '#.#%' }
+                    }
+                ],
+                transform: rows => {
+                    const orders = [
+                        'Never',
+                        '5 or more years ago',
+                        'Within the past 5 years',
+                        'Within the past 2 years',
+                        'Within the past year'
+                    ];
+
+                    const percent = _toPercent('data_value');
+                    const order = _order('response', orders);
+
+                    return order(percent(rows));
+                },
+                chart: 'column',
+                options: {
+                    vAxis: { format: '#.##%', viewWindow: { min: 0 } },
+                }
+            },
+            {
+                name: 'Health Status',
+                params: {
+                    'break_out': 'Overall',
+                    'year': '2013',
+                    'classid': 'CLASS08',
+                    'topicid': 'Topic41'
+                },
+                data: [
+                    {
+                        column: 'response',
+                        label: 'Response',
+                        type: 'string'
+                    },
+                    {
+                        column: 'data_value',
+                        label: 'Value',
+                        format: { pattern: '#.#%' }
+                    }
+                ],
+                transform: rows => {
+                    const orders = ['Poor', 'Fair', 'Good', 'Very good', 'Excellent'];
+                    const percent = _toPercent('data_value');
+                    const order = _order('response', orders);
+
+                    return order(percent(rows));
+                },
+                chart: 'column',
+                options: {
+                    vAxis: { format: '#.##%', viewWindow: { min: 0 } },
+                }
             }
         ]
     }
