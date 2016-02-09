@@ -287,7 +287,7 @@ class RenderController {
                     sources,
                     source,
                     searchPath: req.path,
-                    title: searchPageTitle(params),
+                    title: searchPageTitle(params, source),
                     css: [
                         '/styles/third-party/leaflet.min.css',
                         '/styles/search.css',
@@ -437,11 +437,10 @@ function asArray(parameter) {
     return [];
 }
 
-function searchPageTitle(params) {
-    const vector = capitalize(params.vector.replace(/_/g, ' '));
+function searchPageTitle(params, source) {
     const categories = params.categories.map(capitalize);
     const tags = params.tags.map(capitalize);
-    const dataTypes = _.flatten([[vector], categories, tags]);
+    const dataTypes = _.flatten((source ? [source.tabName] : []).concat(categories, tags));
     const dataDescription = wordJoin(dataTypes);
 
     const locationDescription = params.regions.length > 0 ?

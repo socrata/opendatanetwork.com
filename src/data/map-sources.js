@@ -216,6 +216,24 @@ const MAP_SOURCES = {
                 stoplight: true
             };
         })
+    },
+
+    brfss_health: {
+        name: 'brfss_health',
+        domain: DOMAIN,
+        fxf: '7ayp-utp2',
+        variables: ['Adult Obesity', 'Adult Smoking',
+                    'Physical Inactivity', 'Excessive Drinking',
+                    'Access to Exercise Opportunities'].map((name, index) => {
+            return {
+                name: `${name} Rate`,
+                column: `${name.toLowerCase().replace(/\s/g, '_')}_value`,
+                years: [2015],
+                reverse: index != 4,
+                format: format.ratio,
+                stoplight: true
+            };
+        })
     }
 };
 
