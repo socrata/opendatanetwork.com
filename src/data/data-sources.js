@@ -554,7 +554,12 @@ const SOURCES = [
                     Individuals who reside in a census block within half a mile from a park,
                     reside in an urban census tract within one mile of a recreational facility, or
                     reside in a rural census tract within three miles of a recreational facility
-                    are considered to have adequate access for opportunities for physical activity.`,
+                    are considered to have adequate access for opportunities for physical activity.
+                    <br /><br />
+                    Excessive Drinking is the percentage of adults that report either binge drinking,
+                    defined as consuming more than 4 (women) or 5 (men) alcoholic beverages on a
+                    single occasion in the past 30 days, or heavy drinking, defined as drinking
+                    more than one (women) or 2 (men) drinks per day on average.`,
                 data: [
                     {
                         column: 'Adult obesity Value',
