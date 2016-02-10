@@ -61,7 +61,8 @@ function _toPercent(column) {
     };
 }
 
-function _toDataTable(groupBy, column, format, filter) {
+function _toDataTable(groupBy, column, format, filter, id) {
+    id = id || 'id';
 
     return (rows, regions) => {
 
@@ -78,7 +79,7 @@ function _toDataTable(groupBy, column, format, filter) {
             var row = [key];
 
             regions.forEach(region => {
-                const regionData = _.find(data[key], item => (item.id == region.id));
+                const regionData = _.find(data[key], item => (item[id] == region.id));
                 row.push(regionData._value);
             });
 
@@ -707,6 +708,7 @@ const SOURCES = [
                     }
                 ],
                 transform: _toPercent('data_value'),
+                tableTransform: _toDataTable('question', 'data_value', '0.0%', null, '_geoid'),
                 chart: 'table',
                 options: {
                     height: 500
@@ -734,6 +736,7 @@ const SOURCES = [
                     }
                 ],
                 transform: _toPercent('data_value'),
+                tableTransform: _toDataTable('question', 'data_value', '0.0%', null, '_geoid'),
                 chart: 'table'
             },
             {
