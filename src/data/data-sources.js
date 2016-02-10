@@ -524,10 +524,20 @@ const SOURCES = [
         name: 'Jobs Proximity Index',
         sourceURL: 'http://egis.hud.opendata.arcgis.com/datasets/636ecbfb0ee5480ea5b68e65991e4815_0',
         description: `
-            The jobs proximity index quantifies access to employment oppurtunities in a region.
+            The jobs proximity index quantifies access to employment opportunities in a region.
             Values are percentile ranked and range from 0 to 100,
             with higher values corresponding to better access to jobs.
-            Data is available for U.S. counties and is current as of 6/15/2015.`,
+            Data is computed for U.S. counties by applying summary statistics across all
+            census tracts present in a county and is current as of 2015.
+            <br /><br />
+            The underlying index quantifies the accessibility of a given residential neighborhood
+            as a function of its distance to all job locations within a census tract,
+            with distance to larger employment centers weighted more heavily.
+            Specifically, a gravity model is used, where the accessibility (Ai)
+            of a given residential block-group is a summary description of the
+            distance to all job locations, with the distance from any single job
+            location positively weighted by the size of employment (job opportunities)
+            at that location and inversely weighted by the labor supply (competition) to that location.`,
         attribution: ATTRIBUTIONS.hud,
         domain: ODN_DOMAIN,
         fxf: '5pnb-mvzq',
