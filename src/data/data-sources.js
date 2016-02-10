@@ -61,6 +61,42 @@ function _toPercent(column) {
     };
 }
 
+function _toDataTable(groupBy, column, format, filter) {
+
+    return (rows, regions) => {
+
+        if (filter)
+            rows = _.filter(rows, filter);
+
+        const rg = rows.map(row => _.extend(row, { _value: numeral(row[column]).format(format) }));
+        const data = _.groupBy(rg, groupBy);
+
+        var dataTable = [];
+
+        for (var key in data) {
+
+            var row = [key];
+
+            regions.forEach(region => {
+                const regionData = _.find(data[key], item => (item.id == region.id));
+                row.push(regionData._value);
+            });
+
+            dataTable.push(row);
+        }
+
+        return dataTable;
+    };
+}
+
+function _toCurrencyString(column) {
+
+    return rows => {
+        rows = _.groupBy(rows, 'variable');
+        return rows.map(row => _.extend(row, { [column]: numeral(row[column]).format('$0,0') }));
+    };
+}
+
 function _rename(column, names) {
     return rows => {
         return rows.map(row => {
@@ -163,6 +199,7 @@ const SOURCES = [
                     }
                 ],
                 transform: _toPercent('value'),
+                tableTransform: _toDataTable('variable', 'value', '0.0%'),
                 chart: 'table',
                 options: {
                     height: 100,
@@ -216,6 +253,7 @@ const SOURCES = [
                         format: { pattern: '###,###', prefix: '$' }
                     }
                 ],
+                tableTransform: _toDataTable('variable', 'value', '$0,0'),
                 chart: 'table',
                 options: {
                     height: 150
@@ -295,6 +333,7 @@ const SOURCES = [
                     }
                 ],
                 transform: _toPercent('percent_employed'),
+                tableTransform: _toDataTable('occupation', 'percent_employed', '0.0%'),
                 chart: 'table',
                 options: {
                     height: 800
@@ -392,8 +431,13 @@ const SOURCES = [
                     {
                         column: 'index',
                         label: 'Index'
+                    },
+                    {
+                        column: 'year',
+                        label: 'Year'
                     }
                 ],
+                tableTransform: _toDataTable('component', 'index', '0.0', item => (item.year == '2013')),
                 chart: 'table',
                 options: {height: 200}
             }
@@ -617,6 +661,7 @@ const SOURCES = [
                         format: { pattern: '#.##%' }
                     }
                 ],
+                tableTransform: _toDataTable('variable', 'value', '0.0%'),
                 chart: 'table'
             }
         ]

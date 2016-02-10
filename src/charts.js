@@ -44,7 +44,9 @@ class Chart {
         if (!chart.chart) throw Error('chart missing chart');
         if (!(chart.chart in ChartConstants.CHART_TYPES)) throw Error(`invalid chart type: ${chart.chart}`);
         this.chart = ChartConstants.CHART_TYPES[chart.chart];
+        this.chartType = chart.chart;
         this.options = _.extend({}, ChartConstants.CHART_OPTIONS, chart.options || {}, {title: chart.name});
+        this.tableTransform = chart.tableTransform;
         this.transform = chart.transform;
         if (chart.transpose && chart.transpose.length !== 2) throw Error('transpose requires two variables');
         if (chart.transpose) this.transpose = Chart._columns(chart.transpose);
@@ -66,16 +68,50 @@ class Chart {
         this.getData(regions).then(data => {
             if (this.transpose) data = this._transpose(data);
             if (this.transform) data = this.transform(data);
-            const dataTable = this.dataTable(data, regions);
 
             const container = d3
                 .select(`div.chart#${this.name.toLowerCase().replace(/\W/g, '')}`)
                 .select('.chart-container');
 
-            const chart = new this.chart(container[0][0]);
-            chart.draw(dataTable, this.options);
+            if (this.chartType == 'table') {
+                const dataTable = this.tableTransform(data, regions);
+                this.renderTable(container, regions, dataTable);
+            } 
+            else {
+                const dataTable = this.dataTable(data, regions);
+                const chart = new this.chart(container[0][0]);
+                chart.draw(dataTable, this.options);
+            }
         }, error => {
             console.error(error);
+        });
+    }
+
+    renderTable(container, regions, dataTable) {
+
+        const table = container.append('table').attr('class', 'vertical');
+        const tr = table.append('tr');
+        tr.append('th').attr('class', 'empty');
+
+        regions.forEach((region, index) => {
+
+            tr.append('th')
+                .attr('class', 'color-' + index)
+                .text(region.name)
+                .append('div');
+        });
+
+        dataTable.forEach(row => {
+
+            const tr = table.append('tr');
+
+            row.forEach((item, index) => {
+
+                if (index == 0)
+                    tr.append('td').attr('class', 'category-header').text(item);
+                else
+                    tr.append('td').attr('class', 'color-' + (index - 1)).text(item).append('div');
+            });
         });
     }
 
