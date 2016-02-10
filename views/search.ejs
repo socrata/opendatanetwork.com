@@ -180,10 +180,6 @@ var _params = <%- JSON.stringify(params) %>;
         </ul>
 
         <div class="charts">
-            <% if ('description' in source) { %>
-                <p><%- source.description %></p>
-            <% } %>
-
             <div id="map"></div>
             <% include _map-summary %>
 
@@ -200,20 +196,26 @@ var _params = <%- JSON.stringify(params) %>;
             <% }); %>
         </div>
 
-        <label class="attribution">
-            Data from the <a href="<%= source.attribution.url %>"><%= source.attribution.name %></a>.
-            <% if ('sourceURL' in source) { %>
-                <a href="<%= source.sourceURL %>">Data Source</a> |
+        <div class="dataset-description">
+            <% if ('description' in source) { %>
+                <p><%- source.description %></p>
             <% } %>
-            <a href="<%= `https://${source.domain}/dataset/${source.fxf}` %>">ODN Dataset</a> |
-            <a href="<%= `https://dev.socrata.com/foundry/${source.domain}/${source.fxf}` %>">API</a> -
-            <span class='info-icon'>
-                <div class='info-tooltip'>
-                    <strong>Note</strong> -
-                    ODN datasets and APIs are subject to change and may differ in format from the original
-                    source data in order to provide a user-friendly experience on this site.
-                </div>
-            </span>
+
+            <label class="attribution">
+                Data from the <a href="<%= source.attribution.url %>"><%= source.attribution.name %></a>.
+                <% if ('sourceURL' in source) { %>
+                    <a href="<%= source.sourceURL %>">Data Source</a> |
+                <% } %>
+                <a href="<%= `https://${source.domain}/dataset/${source.fxf}` %>">ODN Dataset</a> |
+                <a href="<%= `https://dev.socrata.com/foundry/${source.domain}/${source.fxf}` %>">API</a> -
+                <span class='info-icon'>
+                    <div class='info-tooltip'>
+                        <strong>Note</strong> -
+                        ODN datasets and APIs are subject to change and may differ in format from the original
+                        source data in order to provide a user-friendly experience on this site.
+                    </div>
+                </span>
+            </div>
         </div>
     </div>
 
