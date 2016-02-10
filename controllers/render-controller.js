@@ -118,7 +118,6 @@ class RenderController {
                             'url' : '//fast.wistia.net/static/popover-v1.js',
                             'charset' : 'ISO-8859-1'
                         },
-                        '/lib/third-party/browser-polyfill.min.js',
                         '/lib/third-party/d3.min.js',
                         '/lib/third-party/d3.promise.min.js',
                         '/lib/third-party/lodash.min.js',
@@ -202,6 +201,14 @@ class RenderController {
                             '/styles/main.css'
                         ],
                         scripts: [
+                            '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
+                            '//www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart", "table"]}]}',
+                            '/lib/third-party/leaflet/leaflet.min.js',
+                            '/lib/third-party/leaflet/leaflet-omnivore.min.js',
+                            '/lib/third-party/colorbrewer.min.js',
+                            '/lib/third-party/d3.min.js',
+                            '/lib/third-party/d3.promise.min.js',
+                            '/lib/third-party/leaflet-omnivore.min.js',
                             '/lib/third-party/lodash.min.js',
                             '/lib/search.min.js'
                         ]
