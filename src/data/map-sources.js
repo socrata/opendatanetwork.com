@@ -200,8 +200,8 @@ const MAP_SOURCES = {
         })
     },
 
-    rwjf_health: {
-        name: 'rwjf_health',
+    health: {
+        name: 'health',
         domain: DOMAIN,
         fxf: '7ayp-utp2',
         variables: ['Adult Obesity', 'Adult Smoking',
@@ -218,8 +218,8 @@ const MAP_SOURCES = {
         })
     },
 
-    brfss_health: {
-        name: 'brfss_health',
+    health_indicators: {
+        name: 'health_indicators',
         domain: DOMAIN,
         fxf: 'n4rt-3rmd',
         idColumn: '_geoid',

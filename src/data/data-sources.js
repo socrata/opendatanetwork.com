@@ -590,8 +590,8 @@ const SOURCES = [
         ]
     },
     {
-        tabName: 'RWJF Health',
-        vector: 'rwjf_health',
+        tabName: 'Health Behaviors',
+        vector: 'health',
         name: 'Health Behaviors',
         sourceURL: 'http://www.countyhealthrankings.org/rankings/data',
         description: `
@@ -668,8 +668,8 @@ const SOURCES = [
         ]
     },
     {
-        tabName: 'CDC Health',
-        vector: 'brfss_health',
+        tabName: 'Health Indicators',
+        vector: 'health_indicators',
         name: 'Health',
         sourceURL: 'http://www.cdc.gov/brfss/',
         description: `
