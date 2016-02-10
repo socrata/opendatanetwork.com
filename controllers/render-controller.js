@@ -162,8 +162,7 @@ class RenderController {
                 const regions = params.regions;
 
                 if (!Sources.supportsVector(vector, regions)) {
-                    // TODO make this work if data available for one region but not both
-                    RenderController.error(req, res, 404, `"${vector}" data not available for ${regions[0].name}`)();
+                    RenderController.error(req, res, 404, `"${vector}" data not available for ${regions.map(region => region.name).join(' and ')}`)();
                 } else {
                     try {
                         RenderController._search(req, res, params);
