@@ -573,7 +573,8 @@ const SOURCES = [
             including carcinogenic, respiratory, and neurological hazards.
             Values are percentile ranked and range from 0 to 100,
             with higher values corresponding to less exposure to harmful toxins.
-            Data is available for U.S. counties and is current as of 6/15/2015.`,
+            Data is computed for U.S. counties by applying summary statistics across
+            all census tracts present in a county and is current as of 2015.`,
         attribution: ATTRIBUTIONS.hud,
         domain: ODN_DOMAIN,
         fxf: 'nax7-t6ga',
