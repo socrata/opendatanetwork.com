@@ -346,7 +346,12 @@ class RenderController {
                     templateParams.mapVariables = MapDescription.variablesFromParams(params);
                 }
 
-                res.render('search.ejs', templateParams);
+                if (templateParams.mapSummary === '') {
+                    params.vector = 'population';
+                    RenderController._regions(req, res, params);
+                } else {
+                    res.render('search.ejs', templateParams);
+                }
             } catch (error) {
                 RenderController.error(req, res)(error);
             }

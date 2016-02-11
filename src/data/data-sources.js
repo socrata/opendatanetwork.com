@@ -847,7 +847,8 @@ class Sources {
 
     static supports(source, regions) {
         for (const region of regions) {
-            if (!_.contains(source.regions, region.type)) return false;
+            if (!_.contains(source.regions, region.type) ||
+               (source.include && !source.include(region))) return false;
         }
         return true;
     }
