@@ -9,6 +9,7 @@ const Request = require('./request');
 const Constants = require('./constants');
 const CategoryController = require('./category-controller');
 const TagController = require('./tag-controller');
+const Sources = require('../src/data/data-sources.js');
 
 const categoryController = new CategoryController();
 const tagController = new TagController();
@@ -16,6 +17,12 @@ const tagController = new TagController();
 const SYNONYMS = Synonyms.fromFile(Constants.SYNONYMS_FILE);
 
 class API {
+    static regions(ids) {
+        const params = {'$where': `id in(${ids.map(id => `'${id}'`).join(',')})`};
+        const url = Request.buildURL(Constants.ROSTER_URL, params);
+        return Request.getJSON(url);
+    }
+
     static datasets(requestParams) {
         return new Promise((resolve, reject) => {
             const hasRegions = requestParams.regions.length > 0;
@@ -113,6 +120,10 @@ class API {
                 resolve(json.applied_schemas);
             });
         });
+    }
+
+    static locations() {
+        return Request.getJSONLocal('data/locations.json');
     }
 }
 

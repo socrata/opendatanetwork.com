@@ -40,7 +40,7 @@ class MapModel {
             const baseColumns = [idColumn, typeColumn, nameColumn, yearColumn];
             const columns = baseColumns.concat([variable.column]);
             const baseParams = {
-                'type': region.id,
+                [typeColumn]: region.id,
                 '$select': columns.join(),
                 '$limit': MapConstants.LIMIT,
                 [yearColumn]: year
@@ -55,9 +55,9 @@ class MapModel {
                     const value = valueFunction(region[variable.column]);
 
                     return {
-                        id: region.id,
-                        type: region.type,
-                        name: region.name,
+                        id: region[idColumn],
+                        type: region[typeColumn],
+                        name: region[nameColumn],
                         value: value,
                         valueName: variable.name,
                         valueFormatted: variable.format(value),

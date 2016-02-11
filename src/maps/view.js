@@ -1,6 +1,6 @@
 
 class MapView {
-    constructor(source, regionType, regions, features, onDisplay) {
+    constructor(source, regionType, regions, features, params) {
         this.source = source;
 
         this.regionType = regionType;
@@ -9,13 +9,10 @@ class MapView {
 
         this.features = features;
 
-        this.onDisplay = onDisplay;
-
         this.legend = new LegendControl();
         this.tooltip = new TooltipControl();
-        this.variableControl = new VariableControl(source.variables, source.selectedIndices, (variable, year) => {
+        this.variableControl = new VariableControl(source, params, (variable, year) => {
             this.display(variable, year);
-            if (this.onDisplay) this.onDisplay(variable, year);
         });
         this.zoomControl = new L.Control.Zoom(MapConstants.ZOOM_CONTROL_OPTIONS);
 
@@ -46,7 +43,7 @@ class MapView {
             const pane = map.createPane('labels');
             const labels = L.tileLayer(url(MapConstants.LABEL_LAYER_ID), {pane}).addTo(map);
 
-            this.zoomToSelected(map);
+            this.zoomToSelected(this.map);
         });
     }
 
@@ -68,9 +65,11 @@ class MapView {
     display(variable, year) {
         MapModel.create(this.source, this.regionType, variable, year)
             .then(model => this.update(model))
-            .catch(error => {
-                throw error;
-            });
+            .catch(error => { throw error; });
+
+        new MapSource(this.source).summarize(variable, year, this.regions).then(summary => {
+            d3.select('p.map-summary').text(summary);
+        });
     }
 
     update(model) {
@@ -140,7 +139,7 @@ class MapView {
         }
     }
 
-    static create(source, regions, onDisplay) {
+    static create(source, regions, params) {
         if (regions.length < 1) throw 'regions cannot be empty';
 
         return new Promise((resolve, reject) => {
@@ -155,7 +154,7 @@ class MapView {
 
                 TopoModel.get(regionType).then(topojson => {
                     const features = MapView._features(topojson, regionType.type == 'choropleth');
-                    resolve(new MapView(source, regionType, regionsOfType, features, onDisplay));
+                    resolve(new MapView(source, regionType, regionsOfType, features, params));
                 }, reject);
             }
         });

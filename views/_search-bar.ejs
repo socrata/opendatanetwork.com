@@ -13,9 +13,6 @@
             <% if (params.tags.length > 0) { %>
             <input type="hidden" name="tags" value="<%= params.tags.join(',') %>">
             <% } %>
-            <% if (params.debug) { %>
-            <input type="hidden" name="debug">
-            <% } %>
             <ul class="region-list" style="display:none"></ul>
         </span>
     </form>

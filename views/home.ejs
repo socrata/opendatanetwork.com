@@ -26,7 +26,7 @@
     <div class="container">
         <h4>Data Categories</h4>
         <ul>
-          <% allCategoryResults.results.forEach(function(result) { %>
+          <% categories.forEach(function(result) { %>
             <li>
                 <a class="icon" href="/search?categories=<%= encodeURIComponent(result.category) %>"><i class="fa <%= result.metadata.icon %>"></i></a>
                 <a href="/search?categories=<%= encodeURIComponent(result.category) %>"><h3><%= result.category %></h3></a>
@@ -83,20 +83,21 @@
     <div class="container">
         <h4>Partners</h4>
         <div class="slider">
-            <div><img src="/images/v3-zillow.png"></div>
-            <div><img src="/images/v3-building-eye.png"></div>
-            <div><img src="/images/v3-civic-insight.png"></div>
-            <div><img src="/images/v3-basic-gov.png"></div>
-            <div><img src="/images/v3-build-fax.png"></div>
-            <div><img src="/images/v3-realty-trac.png"></div>
-            <div><img src="/images/v3-site-compli.png"></div>
-            <div><img src="/images/v3-ontodia.png"></div>
-            <div><img src="/images/v3-accela.png"></div>
-            <div><img src="/images/v3-citiesense.png"></div>
+            <div><a href="http://zillow.com"><img src="/images/v3-zillow.png"></a></div>
+            <div><a href="https://www.buildingeye.com/"><img src="/images/v3-building-eye.png"></a></div>
+            <div><a href="http://civicinsight.com/"><img src="/images/v3-civic-insight.png"></a></div>
+            <div><a href="http://www.basicgov.com/"><img src="/images/v3-basic-gov.png"></a></div>
+            <div><a href="http://www.buildfax.com/"><img src="/images/v3-build-fax.png"></a></div>
+            <div><a href="http://www.realtytrac.com/"><img src="/images/v3-realty-trac.png"></a></div>
+            <div><a href="http://www.sitecompli.com/"><img src="/images/v3-site-compli.png"></a></div>
+            <div><a href="http://www.ontodia.com/"><img src="/images/v3-ontodia.png"></a></div>
+            <div><a href="https://www.accela.com/"><img src="/images/v3-accela.png"></a></div>
+            <div><a href="http://www.citiesense.com/"><img src="/images/v3-citiesense.png"></a></div>
             <div><img src="/images/v3-drive.png"></div>
-            <div><img src="/images/v3-see-click-fix.png"></div>
+            <div><a href="http://seeclickfix.com/"><img src="/images/v3-see-click-fix.png"></a></div>
+            <div><a href="http://broadside.digital"><img src="/images/v3-broadside.png"></a></div>
         </div>
-        <a href="/join">Join the Network</a>
+        <a class="join" href="/join">Join the Network</a>
     </div>
 </section>
 

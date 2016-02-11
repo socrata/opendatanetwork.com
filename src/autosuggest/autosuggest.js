@@ -62,6 +62,11 @@ class Autosuggest {
 
     enter() {
         if (this.results.index < 0) {
+            if (this.results.options.length == 1) {
+                this.results.index = 0;
+                this.results.enter();
+                return;
+            }
             const path = `/search?${$.param({q: this._currentTerm})}`;
             window.location.href = path;
         } else {

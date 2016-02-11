@@ -36,6 +36,8 @@ $region-color-9: #316395
 @import current-category-info-box
 @import info-icon
 @import map-summary
+@import charts
+@import tables
 
 *::-webkit-input-placeholder,
 *:-moz-placeholder,
@@ -285,7 +287,6 @@ section.results
   color: $black-text-color
 
 .charts
-  margin: 0 0 50px
   padding: 0 35px
 
 .charts-column h1
@@ -299,156 +300,23 @@ section.results
 .charts-column p
     font-size: 14px;
 
-.charts-column label
+.dataset-description
+  padding: 5px 16px 8px 16px
+  background-color: #eee
+
+.attribution
   color: $darker-gray-text-color
   display: block
   font-size: 12px
-  margin: 50px 0 0 0
   text-align: center
 
-.charts-column label a
-  color: $blue-text-color
+  a
+    color: $blue-text-color
 
 .charts-column figure
   height: 320px
   max-width: 1000px
   margin: 0 auto 50px
-
-.charts-column
-  table
-    border-collapse: collapse
-    font-family: 'Myriad Pro'
-    margin: 0 auto 50px
-    td
-      border: 1px solid $table-border-gray
-      font-weight: 600
-      padding: 0px
-      text-align: center
-      position: relative
-
-    .color-0
-      div
-        background-color: $region-color-0
-    .color-1
-      div
-        background-color: $region-color-1
-    .color-2
-      div
-        background-color: $region-color-2
-    .color-3
-      div
-        background-color: $region-color-3
-    .color-4
-      div
-        background-color: $region-color-4
-    .color-5
-      div
-        background-color: $region-color-5
-    .color-6
-      div
-        background-color: $region-color-6
-    .color-7
-      div
-        background-color: $region-color-7
-    .color-8
-      div
-        background-color: $region-color-8
-    .color-9
-      div
-        background-color: $region-color-9
-
-  table.vertical
-
-    tr.sub-header-row
-
-      td
-        border: none
-        color: $table-sub-header-text-gray
-        font-size: 15px
-        padding-top: 0
-
-    th
-      font-size: 15px
-      padding: 10px
-      position: relative
-      text-align: right
-      vertical-align: baseline
-
-      div
-        bottom: 0
-        right: 0
-        position: absolute
-        top: 0
-        width: 5px
-
-    td
-      font-size: 22px
-      padding: 10px
-      position: relative
-
-      div
-        top: 0
-        width: 5px
-        right: 0
-        position: absolute
-        bottom: 0
-
-    td.category-header
-      background-color: $table-header-cell-gray
-      border: 1px solid $table-border-gray
-      color: $black-text-color
-      font-size: 13px
-      font-weight: normal
-      padding: 10px
-
-    td.empty
-      background-color: transparent
-      border: none
-
-    .sub-header
-        font-size: 18px
-        text-align: center
-        vertical-align: baseline
-
-
-  table.horizontal
-    th
-      color: $black-text-color
-      font-size: 18px
-      font-weight: 300
-      padding: 0 0 10px 10px
-    th.empty
-      background-color: transparent
-      border: none
-    td
-      font-size: 22px
-      padding: 10px
-      position: relative
-      text-align: center
-      div
-        bottom: 0
-        height: 5px
-        left: 0
-        position: absolute
-        right: 0
-    td.category-header
-      background-color: $table-header-cell-gray
-      border: 1px solid $table-border-gray
-      color: $black-text-color
-      font-size: 13px
-      font-weight: normal
-      padding: 10px
-      text-align: center
-    td.empty
-      background-color: transparent
-      border: none
-    td:first-of-type
-      border: 1px solid transparent
-      border-right: 1px solid $table-border-gray
-      font-size: 15px
-      font-weight: 600
-      padding: 10px 10px 10px 0
-      text-align: left
 
 /* Controls
 
