@@ -121,6 +121,7 @@ const SOURCES = [
         attribution: ATTRIBUTIONS.acs,
         domain: ODN_DOMAIN,
         fxf: 'e3rd-zzmr',
+        datalensFXF: 'va7f-2qjr',
         regions: ALL_REGIONS,
         charts: [
             {

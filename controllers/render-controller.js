@@ -286,6 +286,10 @@ class RenderController {
                 const source = params.vector === '' ?
                     Sources.get('population') :
                     Sources.get(params.vector);
+                source.datasetURL = source.datalensFXF ?
+                    `https://${source.domain}/view/${source.datalensFXF}` :
+                    `https://${source.domain}/dataset/${source.fxf}`;
+                source.apiURL = `https://dev.socrata.com/foundry/${source.domain}/${source.fxf}`;
 
                 const templateParams = {
                     params,

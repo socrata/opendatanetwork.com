@@ -206,8 +206,9 @@ var _params = <%- JSON.stringify(params) %>;
                 <% if ('sourceURL' in source) { %>
                     <a href="<%= source.sourceURL %>">Data Source</a> |
                 <% } %>
-                <a href="<%= `https://${source.domain}/dataset/${source.fxf}` %>">ODN Dataset</a> |
-                <a href="<%= `https://dev.socrata.com/foundry/${source.domain}/${source.fxf}` %>">API</a> -
+
+                <a href="<%= source.datasetURL %>">ODN Dataset</a> |
+                <a href="<%= source.apiURL %>">API</a> -
                 <span class='info-icon'>
                     <div class='info-tooltip'>
                         <strong>Note</strong> -
