@@ -61,43 +61,6 @@ function _toPercent(column) {
     };
 }
 
-function _toDataTable(groupBy, column, format, filter, id) {
-    id = id || 'id';
-
-    return (rows, regions) => {
-
-        if (filter)
-            rows = _.filter(rows, filter);
-
-        const rg = rows.map(row => _.extend(row, { _value: numeral(row[column]).format(format) }));
-        const data = _.groupBy(rg, groupBy);
-
-        var dataTable = [];
-
-        for (var key in data) {
-
-            var row = [key];
-
-            regions.forEach(region => {
-                const regionData = _.find(data[key], item => (item[id] == region.id));
-                row.push(regionData._value);
-            });
-
-            dataTable.push(row);
-        }
-
-        return dataTable;
-    };
-}
-
-function _toCurrencyString(column) {
-
-    return rows => {
-        rows = _.groupBy(rows, 'variable');
-        return rows.map(row => _.extend(row, { [column]: numeral(row[column]).format('$0,0') }));
-    };
-}
-
 function _rename(column, names) {
     return rows => {
         return rows.map(row => {
@@ -137,7 +100,10 @@ const SOURCES = [
                         format: { pattern: '###,###' }
                     }
                 ],
-                chart: 'line'
+                chart: 'line',
+                options: {
+                    height: 300
+                }
             },
             {
                 name: 'Population Change',
@@ -161,6 +127,7 @@ const SOURCES = [
                 },
                 chart: 'line',
                 options: {
+                    height: 300,
                     vAxis: { format: '#.##%' }
                 }
             }
@@ -190,7 +157,7 @@ const SOURCES = [
                 transpose: [
                     {
                         column: 'variable',
-                        label: 'Graduation Rate',
+                        label: '',
                         type: 'string'
                     },
                     {
@@ -200,10 +167,13 @@ const SOURCES = [
                     }
                 ],
                 transform: _toPercent('value'),
-                tableTransform: _toDataTable('variable', 'value', '0.0%'),
                 chart: 'table',
                 options: {
-                    height: 100,
+                    cssClassNames: { 
+                        headerCell: 'header-cell',
+                        headerRow: 'header-row',
+                        tableCell: 'table-cell',
+                    },
                     vAxis: {
                         format: 'percent',
                         viewWindow: {
@@ -254,10 +224,13 @@ const SOURCES = [
                         format: { pattern: '###,###', prefix: '$' }
                     }
                 ],
-                tableTransform: _toDataTable('variable', 'value', '$0,0'),
                 chart: 'table',
                 options: {
-                    height: 150
+                    cssClassNames: { 
+                        headerCell: 'header-cell',
+                        headerRow: 'header-row',
+                        tableCell: 'table-cell',
+                    }
                 }
             },
             {
@@ -301,7 +274,8 @@ const SOURCES = [
                 ],
                 chart: 'stepped-area',
                 options: {
-                    vAxis: {format: 'currency'},
+                    height: 300,
+                    vAxis: { format: 'currency' },
                     areaOpacity: 0,
                     lineWidth: 2
                 }
@@ -324,7 +298,7 @@ const SOURCES = [
                 data: [
                     {
                         column: 'occupation',
-                        label: 'Occupation',
+                        label: '',
                         type: 'string'
                     },
                     {
@@ -334,10 +308,13 @@ const SOURCES = [
                     }
                 ],
                 transform: _toPercent('percent_employed'),
-                tableTransform: _toDataTable('occupation', 'percent_employed', '0.0%'),
                 chart: 'table',
                 options: {
-                    height: 800
+                    cssClassNames: { 
+                        headerCell: 'header-cell',
+                        headerRow: 'header-row',
+                        tableCell: 'table-cell',
+                    }
                 }
             }
         ]
@@ -377,6 +354,7 @@ const SOURCES = [
                 ],
                 chart: 'line',
                 options: {
+                    height: 300,
                     vAxis: { format: '$###,###' }
                 }
             },
@@ -399,6 +377,7 @@ const SOURCES = [
                 transform: _toPercent('per_capita_gdp_percent_change'),
                 chart: 'line',
                 options: {
+                    height: 300,
                     vAxis: { format: '##.#%' }
                 }
             }
@@ -426,7 +405,7 @@ const SOURCES = [
                 data: [
                     {
                         column: 'component',
-                        label: 'Component',
+                        label: '',
                         type: 'string'
                     },
                     {
@@ -438,9 +417,14 @@ const SOURCES = [
                         label: 'Year'
                     }
                 ],
-                tableTransform: _toDataTable('component', 'index', '0.0', item => (item.year == '2013')),
                 chart: 'table',
-                options: {height: 200}
+                options: { 
+                    cssClassNames: { 
+                        headerCell: 'header-cell',
+                        headerRow: 'header-row',
+                        tableCell: 'table-cell',
+                    }
+                }
             }
             ].concat(['All', 'Rents', 'Goods', 'Other'].map(component => {
             return {
@@ -490,7 +474,10 @@ const SOURCES = [
                     }
                 ],
                 chart: 'line',
-                options: {vAxis: {format: '$###,###M'}}
+                options: {
+                    height: 300,
+                    vAxis: { format: '$###,###M' }
+                }
             },
             {
                 name: 'Change in Personal Consumption Expenditures over Time',
@@ -513,6 +500,7 @@ const SOURCES = [
                 },
                 chart: 'line',
                 options: {
+                    height: 300,
                     vAxis: { format: '#.##%' }
                 }
             }
@@ -559,7 +547,10 @@ const SOURCES = [
                 ],
                 transform: _rename('variable', {'jobs-prox-idx-median': 'Median Jobs Proximity Index'}),
                 chart: 'column',
-                options: {vAxis: {viewWindow: {min: 0}}}
+                options: {
+                    height: 300,
+                    vAxis: { viewWindow: { min: 0 } }
+                }
             }
         ]
     },
@@ -596,7 +587,10 @@ const SOURCES = [
                 ],
                 transform: _rename('variable', {'env-health-idx-median': 'Median Environmental Health Hazard Index'}),
                 chart: 'column',
-                options: {vAxis: {viewWindow: {min: 0}}}
+                options: {
+                    height: 300,
+                    vAxis: { viewWindow: { min: 0 } }
+                }
             }
         ]
     },
@@ -664,7 +658,7 @@ const SOURCES = [
                 transpose: [
                     {
                         column: 'variable',
-                        label: 'Health Behavior',
+                        label: '',
                         type: 'string'
                     },
                     {
@@ -673,8 +667,14 @@ const SOURCES = [
                         format: { pattern: '#.##%' }
                     }
                 ],
-                tableTransform: _toDataTable('variable', 'value', '0.0%'),
-                chart: 'table'
+                chart: 'table',
+                options: { 
+                    cssClassNames: { 
+                        headerCell: 'header-cell',
+                        headerRow: 'header-row',
+                        tableCell: 'table-cell',
+                    }
+                }
             }
         ]
     },
@@ -709,7 +709,7 @@ const SOURCES = [
                 data: [
                     {
                         column: 'question',
-                        label: 'Question',
+                        label: '',
                         type: 'string'
                     },
                     {
@@ -719,10 +719,13 @@ const SOURCES = [
                     }
                 ],
                 transform: _toPercent('data_value'),
-                tableTransform: _toDataTable('question', 'data_value', '0.0%', null, '_geoid'),
                 chart: 'table',
-                options: {
-                    height: 500
+                options: { 
+                    cssClassNames: { 
+                        headerCell: 'header-cell',
+                        headerRow: 'header-row',
+                        tableCell: 'table-cell',
+                    }
                 }
             },
             {
@@ -737,7 +740,7 @@ const SOURCES = [
                 data: [
                     {
                         column: 'question',
-                        label: 'Question',
+                        label: '',
                         type: 'string'
                     },
                     {
@@ -747,8 +750,14 @@ const SOURCES = [
                     }
                 ],
                 transform: _toPercent('data_value'),
-                tableTransform: _toDataTable('question', 'data_value', '0.0%', null, '_geoid'),
-                chart: 'table'
+                chart: 'table',
+                options: { 
+                    cssClassNames: { 
+                        headerCell: 'header-cell',
+                        headerRow: 'header-row',
+                        tableCell: 'table-cell',
+                    }
+                }
             },
             {
                 name: 'Time of Last Checkup',
@@ -786,6 +795,7 @@ const SOURCES = [
                 },
                 chart: 'column',
                 options: {
+                    height: 300,
                     vAxis: { format: '#.##%', viewWindow: { min: 0 } },
                 }
             },
@@ -818,6 +828,7 @@ const SOURCES = [
                 },
                 chart: 'column',
                 options: {
+                    height: 300,
                     vAxis: { format: '#.##%', viewWindow: { min: 0 } },
                 }
             }

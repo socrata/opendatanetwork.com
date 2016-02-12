@@ -44,9 +44,7 @@ class Chart {
         if (!chart.chart) throw Error('chart missing chart');
         if (!(chart.chart in ChartConstants.CHART_TYPES)) throw Error(`invalid chart type: ${chart.chart}`);
         this.chart = ChartConstants.CHART_TYPES[chart.chart];
-        this.chartType = chart.chart;
         this.options = _.extend({}, ChartConstants.CHART_OPTIONS, chart.options || {}, {title: chart.name});
-        this.tableTransform = chart.tableTransform;
         this.transform = chart.transform;
         if (chart.transpose && chart.transpose.length !== 2) throw Error('transpose requires two variables');
         if (chart.transpose) this.transpose = Chart._columns(chart.transpose);
@@ -73,15 +71,10 @@ class Chart {
                 .select(`div.chart#${this.name.toLowerCase().replace(/\W/g, '')}`)
                 .select('.chart-container');
 
-            if (this.chartType == 'table') {
-                const dataTable = this.tableTransform(data, regions);
-                this.renderTable(container, regions, dataTable);
-            } 
-            else {
-                const dataTable = this.dataTable(data, regions);
-                const chart = new this.chart(container[0][0]);
-                chart.draw(dataTable, this.options);
-            }
+            const dataTable = this.dataTable(data, regions);
+            const chart = new this.chart(container[0][0]);
+
+            chart.draw(dataTable, this.options);
         }, error => {
             console.error(error);
         });
