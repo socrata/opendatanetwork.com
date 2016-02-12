@@ -28,7 +28,7 @@ class SearchPageController {
 
         $('#refine-menu-categories-view-more').click(function() {
             d3.promise.json('/categories.json').then(data => {
-                const rg = data.results.map(result => '<li><i class="fa ' + result.metadata.icon + '"></i>' + result.category + '</li>');
+                const rg = data.map(result => '<li><i class="fa ' + result.metadata.icon + '"></i>' + result.category + '</li>');
                 const s = rg.join('');
 
                 $('#refine-menu-categories').html(s);
