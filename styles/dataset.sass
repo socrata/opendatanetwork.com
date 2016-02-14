@@ -81,7 +81,43 @@ body
         
             .description
                 color: $black-text-color
-        
+
+            .columns-container
+                border-top: 1px solid $gray-text-color
+
+                p
+                    color: $black-text-color
+
+                a
+                    color: $blue-color
+                    cursor: pointer;
+
+                table
+                    border-collapse: collapse
+                    border: 1px solid $gray-border-color
+
+                tr:nth-child(odd)
+                    background-color: #f9f9f9
+
+                th
+                    background-color: #f0f0f0
+                    border: 1px solid $gray-border-color
+                    color: #333
+                    font-size: 14px
+                    font-weight: bold
+                    padding: 15px 20px
+                    white-space: nowrap
+
+                td
+                    border: 1px solid $gray-border-color
+                    color: #333
+                    font-size: 14px
+                    overflow: hidden
+                    padding: 15px 20px
+
+                td:nth-child(1)
+                    white-space: nowrap
+
         .right-container
             background-color: white
             color: #222
@@ -104,3 +140,4 @@ body
 
                     a
                       color: #222
+                      
