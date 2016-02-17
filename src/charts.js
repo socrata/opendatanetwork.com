@@ -80,34 +80,6 @@ class Chart {
         });
     }
 
-    renderTable(container, regions, dataTable) {
-
-        const table = container.append('table').attr('class', 'vertical');
-        const tr = table.append('tr');
-        tr.append('th').attr('class', 'empty');
-
-        regions.forEach((region, index) => {
-
-            tr.append('th')
-                .attr('class', 'color-' + index)
-                .text(region.name)
-                .append('div');
-        });
-
-        dataTable.forEach(row => {
-
-            const tr = table.append('tr');
-
-            row.forEach((item, index) => {
-
-                if (index == 0)
-                    tr.append('td').attr('class', 'category-header').text(item);
-                else
-                    tr.append('td').attr('class', 'color-' + (index - 1)).text(item).append('div');
-            });
-        });
-    }
-
     _transpose(rows) {
         this.x = this.transpose[0];
         this.y = this.transpose[1];
