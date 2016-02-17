@@ -1,7 +1,6 @@
 'use strict';
 
 const API = require('./api');
-const ApiController = require('./api-controller');
 const CategoryController = require('./category-controller');
 const TagController = require('./tag-controller');
 const Relatives = require('./relatives');
@@ -18,7 +17,6 @@ const moment = require('moment');
 const numeral = require('numeral');
 const path = require('path');
 
-const apiController = new ApiController();
 const categoryController = new CategoryController();
 const tagController = new TagController();
 
@@ -364,6 +362,7 @@ class RenderController {
     }
 
     static searchResults(req, res) {
+        console.log(req.params.vector);
         RenderController._parameters(req, res).then(params => {
             API.datasets(params).then(searchResults => {
                 if (searchResults.length === 0) {

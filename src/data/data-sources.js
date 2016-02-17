@@ -65,7 +65,7 @@ function _rename(column, names) {
     return rows => {
         return rows.map(row => {
             const name = names[row[column]] || row[column];
-            return _.extend(row, {[column]: name})
+            return _.extend(row, {[column]: name});
         });
     };
 }
@@ -86,6 +86,7 @@ const SOURCES = [
         fxf: 'e3rd-zzmr',
         datalensFXF: 'va7f-2qjr',
         regions: ALL_REGIONS,
+        searchTerms: ['population', 'housing', 'demographics', 'race'],
         charts: [
             {
                 name: 'Population',
@@ -142,6 +143,7 @@ const SOURCES = [
         domain: ODN_DOMAIN,
         fxf: 'uf4m-5u8r',
         regions: ALL_REGIONS,
+        searchTerms: ['college', 'education', 'school', 'university', 'instruction', 'teaching', 'teacher', 'professor'],
         charts: [
             {
                 name: 'Graduation Rates',
@@ -170,7 +172,7 @@ const SOURCES = [
                 transform: _toPercent('value'),
                 chart: 'table',
                 options: {
-                    cssClassNames: { 
+                    cssClassNames: {
                         headerCell: 'header-cell',
                         headerRow: 'header-row',
                         tableCell: 'table-cell',
@@ -194,6 +196,7 @@ const SOURCES = [
         domain: ODN_DOMAIN,
         fxf: 'wmwh-4vak',
         regions: ALL_REGIONS,
+        searchTerms: ['economy', 'revenue', 'gdp', 'tax', 'revenue', 'budget', 'fiscal'],
         charts: [
             {
                 name: 'Earnings and Gender',
@@ -227,7 +230,7 @@ const SOURCES = [
                 ],
                 chart: 'table',
                 options: {
-                    cssClassNames: { 
+                    cssClassNames: {
                         headerCell: 'header-cell',
                         headerRow: 'header-row',
                         tableCell: 'table-cell',
@@ -291,6 +294,7 @@ const SOURCES = [
         domain: ODN_DOMAIN,
         fxf: 'qfcm-fw3i',
         regions: ALL_REGIONS,
+        searchTerms: ['occupations', 'wages', 'wage', 'profession', 'business', 'work', 'commute'],
         charts: [
             {
                 name: 'Occupations',
@@ -311,7 +315,7 @@ const SOURCES = [
                 transform: _toPercent('percent_employed'),
                 chart: 'table',
                 options: {
-                    cssClassNames: { 
+                    cssClassNames: {
                         headerCell: 'header-cell',
                         headerRow: 'header-row',
                         tableCell: 'table-cell',
@@ -336,6 +340,7 @@ const SOURCES = [
         fxf: 'ks2j-vhr8',
         regions: ['state', 'msa'],
         include: region => _.contains(region.name, 'Metro'),
+        searchTerms: ['gdp', 'gross domestic product', 'economy', 'goods', 'production', 'revenue'],
         charts: [
             {
                 name: 'GDP',
@@ -400,6 +405,7 @@ const SOURCES = [
         fxf: 'hpnf-gnfu',
         regions: ['state', 'msa'],
         include: region => _.contains(region.name, 'Metro'),
+        searchTerms: ['cost of living', 'rent', 'housing', 'income', 'tax'],
         charts: [
             {
                 name: 'Cost of Living',
@@ -419,8 +425,8 @@ const SOURCES = [
                     }
                 ],
                 chart: 'table',
-                options: { 
-                    cssClassNames: { 
+                options: {
+                    cssClassNames: {
                         headerCell: 'header-cell',
                         headerRow: 'header-row',
                         tableCell: 'table-cell',
@@ -459,6 +465,7 @@ const SOURCES = [
         domain: ODN_DOMAIN,
         fxf: 'va5j-wsjq',
         regions: ['state', 'nation'],
+        searchTerms: ['consumption', 'consumer', 'spending', 'earning', 'fiscal', 'economy'],
         charts: [
             {
                 name: 'Personal Consumption Expenditures over Time (Millions of USD)',
@@ -531,6 +538,7 @@ const SOURCES = [
         domain: ODN_DOMAIN,
         fxf: '5pnb-mvzq',
         regions: ['county'],
+        searchTerms: ['occupations', 'wages', 'wage', 'profession', 'business', 'work', 'commute'],
         charts: [
             {
                 name: 'Median Jobs Promiximity Index',
@@ -571,6 +579,7 @@ const SOURCES = [
         domain: ODN_DOMAIN,
         fxf: 'nax7-t6ga',
         regions: ['county'],
+        searchTerms: ['environment', 'health', 'pollution', 'carbon', 'emissions', 'energy', 'waste', 'lead', 'inspection'],
         charts: [
             {
                 name: 'Median Environmental Health Hazard Index',
@@ -608,6 +617,7 @@ const SOURCES = [
         domain: ODN_DOMAIN,
         fxf: '7ayp-utp2',
         regions: ['county', 'state'],
+        searchTerms: ['health', 'fitness', 'smoking', 'drinking', 'alcohol', 'tobacco', 'obesity', 'parks'],
         charts: [
             {
                 name: 'Health Behaviors',
@@ -669,8 +679,8 @@ const SOURCES = [
                     }
                 ],
                 chart: 'table',
-                options: { 
-                    cssClassNames: { 
+                options: {
+                    cssClassNames: {
                         headerCell: 'header-cell',
                         headerRow: 'header-row',
                         tableCell: 'table-cell',
@@ -698,6 +708,7 @@ const SOURCES = [
         fxf: 'n4rt-3rmd',
         regions: ['state'],
         idColumn: '_geoid',
+        searchTerms: ['health', 'fitness', 'smoking', 'drinking', 'alcohol', 'tobacco', 'obesity', 'parks'],
         charts: [
             {
                 name: 'Chronic Health Indicators',
@@ -721,8 +732,8 @@ const SOURCES = [
                 ],
                 transform: _toPercent('data_value'),
                 chart: 'table',
-                options: { 
-                    cssClassNames: { 
+                options: {
+                    cssClassNames: {
                         headerCell: 'header-cell',
                         headerRow: 'header-row',
                         tableCell: 'table-cell',
@@ -752,8 +763,8 @@ const SOURCES = [
                 ],
                 transform: _toPercent('data_value'),
                 chart: 'table',
-                options: { 
-                    cssClassNames: { 
+                options: {
+                    cssClassNames: {
                         headerCell: 'header-cell',
                         headerRow: 'header-row',
                         tableCell: 'table-cell',

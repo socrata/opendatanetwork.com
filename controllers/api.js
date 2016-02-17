@@ -5,7 +5,6 @@ const moment = require('moment');
 const numeral = require('numeral');
 const fs = require('fs');
 
-const Synonyms = require('./synonyms');
 const Request = require('./request');
 const Constants = require('./constants');
 const CategoryController = require('./category-controller');
@@ -14,8 +13,6 @@ const Sources = require('../src/data/data-sources.js');
 
 const categoryController = new CategoryController();
 const tagController = new TagController();
-
-const SYNONYMS = Synonyms.fromFile(Constants.SYNONYMS_FILE);
 
 let locations;
 
@@ -42,9 +39,10 @@ class API {
     }
 
     static searchDatasetsURL(requestParams, limit) {
-        const querySynonyms = SYNONYMS.get(requestParams.q);
-        const vectorSynonyms = SYNONYMS.get(requestParams.vector.replace(/_/g, ' '));
-        const synonyms = _.unique(_.flatten([querySynonyms, vectorSynonyms]));
+        const vector = requestParams.vector;
+        console.log(vector);
+        const searchTerms = (vector && Sources.has(vector)) ?
+            (Sources.get(vector).searchTerms || []) : [];
 
         const regionNames = requestParams.regions.map(region => {
             const name = region.name;
@@ -60,7 +58,7 @@ class API {
             }
         }).map(name => `'${name}'`);
 
-        const allTerms = [synonyms, regionNames, requestParams.tags];
+        const allTerms = [searchTerms, regionNames, requestParams.tags];
         const query = allTerms
             .filter(terms => terms.length > 0)
             .map(terms => `(${terms.join(' OR ')})`)
@@ -72,6 +70,7 @@ class API {
 
         const params = {categories, domains, tags, q_internal: query};
         if (limit) params.limit = limit;
+        console.log(params);
         return Request.buildURL(Constants.CATALOG_URL, params);
     }
 

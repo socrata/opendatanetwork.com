@@ -1,10 +1,7 @@
 
 [
-    ["college","education","school","university","instruction","teaching","teacher","professor"],
-    ["economy","revenue","gdp","tax","revenue","budget","fiscal"],
-    ["population","housing","demographics"],
-    ["earnings","income","wages","wage","revenue","budget"],
-    ["occupations","wages","wage","profession","business","work","commute"],
-    ["cost of living","rent","housing","income","tax"]
+    ['population', 'housing', 'demographics'],
+    ['earnings', 'income', 'wages', 'wage', 'revenue', 'budget'],
+    ['occupations', 'wages', 'wage', 'profession', 'business', 'work', 'commute'],
 ]
 
