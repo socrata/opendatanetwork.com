@@ -15,19 +15,22 @@ class Request {
 
         return new Promise((resolve, reject) => {
             cache.get(url, (error, value) => {
-                if (error) {
-                    reject(error);
-                } else if (value) {
+                if (value) {
                     resolve(value);
                 } else {
                     Request.timeout(request(url)).then(body => {
                         resolve(body);
-                        cache.set(url, body, error => {
-                            if (error) {
-                                console.error(`failed to set key "${url}"`);
-                                console.error(error);
-                            }
-                        });
+                        if (error) {
+                            console.error(`failed to get key "${url}"`);
+                            console.error(error);
+                        } else {
+                            cache.set(url, body, error => {
+                                if (error) {
+                                    console.error(`failed to set key "${url}"`);
+                                    console.error(error);
+                                }
+                            });
+                        }
                     }, reject);
                 }
             });
