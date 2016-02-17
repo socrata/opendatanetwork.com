@@ -5,61 +5,52 @@ const NodeCache = require('node-cache');
 const request = require('request-promise');
 const querystring = require('querystring');
 const fs = require('fs');
+const memjs = require('memjs');
 
-const Constants = require('./constants');
 
-const cacheOptions = {
-    stdTTL: Constants.CACHE_TTL_SECONDS,
-    checkperiod: Constants.CACHE_CHECK_SECONDS
-};
-const cache = new NodeCache(cacheOptions);
-const localCache = new NodeCache(cacheOptions);
+try {
+    var cache = memjs.Client.create('localhost:11211');
+} catch (error) {
+    console.log('error creating cache');
+}
 
 class Request {
-    static getJSON(url, timeoutMS) {
-        const jsonPromise = new Promise((resolve, reject) => {
+    static get(url) {
+        return new Promise((resolve, reject) => {
             cache.get(url, (error, value) => {
-                if (value === undefined) {
-                    request(url).then(body => {
-                        const json = JSON.parse(body);
-                        cache.set(url, json);
-                        resolve(json);
-                    }, reject);
-                } else {
+                if (error) {
+                    reject(error);
+                } else if (value) {
                     resolve(value);
+                } else {
+                    request(url).then(body => {
+                        resolve(body);
+                        cache.set(url, body, error => {
+                            console.error(`failed to set key "${url}"`);
+                            console.error(error.stack);
+                        });
+                    }, reject);
                 }
             });
         });
+    }
 
-        timeoutMS = timeoutMS || Constants.TIMEOUT_MS;
-        const timeoutPromise = Request.timeout(timeoutMS);
-
+    static getJSON(url) {
         return new Promise((resolve, reject) => {
-            Promise.race([timeoutPromise, jsonPromise]).then(result => {
-                if (!result) {
-                    reject(`request to ${url} timed out after ${timeoutMS}ms`);
-                } else {
-                    resolve(result);
-                }
+            Request.get(url).then(value => {
+                resolve(JSON.parse(value.toString()));
             }, reject);
         });
     }
 
     static getJSONLocal(path) {
         return new Promise((resolve, reject) => {
-            localCache.get(path, (error, value) => {
-                if (value === undefined) {
-                    fs.readFile(`${__dirname}/../${path}`, (fileError, body) => {
-                        if (fileError) {
-                            reject(error);
-                        } else {
-                            const json = JSON.parse(body);
-                            cache.set(path, json);
-                            resolve(json);
-                        }
-                    });
+            fs.readFile(`${__dirname}/../${path}`, (fileError, body) => {
+                if (fileError) {
+                    reject(fileError);
                 } else {
-                    resolve(value);
+                    const json = JSON.parse(body);
+                    resolve(json);
                 }
             });
         });

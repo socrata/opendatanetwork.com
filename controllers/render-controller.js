@@ -151,7 +151,7 @@ class RenderController {
             } catch (error) {
                 RenderController.error(req, res)(error);
             }
-        });
+        }, RenderController.error(req, res));
     }
 
     static searchWithVector(req, res) {
@@ -170,7 +170,7 @@ class RenderController {
                         RenderController.error(req, res)(error);
                     }
                 }
-            });
+            }, RenderController.error(req, res));
         } else {
             RenderController.error(req, res, 404, `Vector "${vector}" not found`)();
         }
@@ -438,7 +438,7 @@ class RenderController {
                     } else {
                         resolve(params);
                     }
-                });
+                }, reject);
             } else {
                 resolve(params);
             }
@@ -474,5 +474,25 @@ function wordJoin(list, separator) {
     separator = separator || 'and';
     return `${list.slice(0, list.length - 1).join(', ')} ${separator} ${list[list.length - 1]}`;
 }
+
+function all(promises) {
+    return new Promise((resolve, reject) => {
+        let resultCount = 0;
+        let results = [];
+
+        function complete(index) {
+            return result => {
+                resultCount += 1;
+                results[index] = result;
+                if (resultCount == promises.length) resolve(results);
+            };
+        }
+
+        promises.forEach((promise, index) => {
+            promise.then(complete(index), reject);
+        });
+    });
+}
+
 
 module.exports = RenderController;

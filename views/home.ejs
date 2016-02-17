@@ -42,7 +42,7 @@
         <h4>Geographical Regions</h4>
         <ul class="states-list states-list-collapsed">
 
-          <% locations.forEach(function(location) { %>
+          <% if (locations) locations.forEach(function(location) { %>
             <li class="state state-collapsed">
                 <h3>
                     <i class="fa fa-map-marker"></i>
