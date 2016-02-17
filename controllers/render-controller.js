@@ -1,8 +1,6 @@
 'use strict';
 
 const API = require('./api');
-const CategoryController = require('./category-controller');
-const TagController = require('./tag-controller');
 const Relatives = require('./relatives');
 const Constants = require('./constants');
 const Request = require('./request');
@@ -16,9 +14,6 @@ const htmlencode = require('htmlencode').htmlEncode;
 const moment = require('moment');
 const numeral = require('numeral');
 const path = require('path');
-
-const categoryController = new CategoryController();
-const tagController = new TagController();
 
 const defaultSearchResultCount = 10;
 
@@ -97,6 +92,7 @@ class RenderController {
         allPromise.then(data => {
             try {
                 const categories = data[0];
+                console.log(categories);
                 const locations = data[1];
                 const params = data[2];
 
@@ -214,12 +210,8 @@ class RenderController {
 
                     if (data && data.length == allPromises.length) {
                         templateParams.categories = data[0];
-                        templateParams.currentCategory =
-                            categoryController.getCurrentCategory(params, data[0]);
-
-                        templateParams.currentTag =
-                            tagController.getCurrentTag(params, data[1]);
-
+                        templateParams.currentCategory = API.currentCategory(params, data[0]);
+                        templateParams.currentTag = API.currentTag(params, data[1]);
                         templateParams.domainResults = data[2];
                         templateParams.searchResults = data[3];
                     }
@@ -334,13 +326,11 @@ class RenderController {
 
                     if (data[3].length > 0) {
                         templateParams.categories = data[3];
-                        templateParams.currentCategory =
-                            categoryController.getCurrentCategory(params, data[3]);
+                        templateParams.currentCategory = API.currentCategory(params, data[3]);
                     }
 
-                    if (data[4].results.length > 0) {
-                        templateParams.currentTag =
-                            tagController.getCurrentTag(params, data[4]);
+                    if (data[4].length > 0) {
+                        templateParams.currentTag = API.currentTag(params, data[4]);
                     }
 
                     templateParams.domainResults = data[5];
@@ -362,7 +352,6 @@ class RenderController {
     }
 
     static searchResults(req, res) {
-        console.log(req.params.vector);
         RenderController._parameters(req, res).then(params => {
             API.datasets(params).then(searchResults => {
                 if (searchResults.length === 0) {

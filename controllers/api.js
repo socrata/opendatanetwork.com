@@ -7,14 +7,30 @@ const fs = require('fs');
 
 const Request = require('./request');
 const Constants = require('./constants');
-const CategoryController = require('./category-controller');
-const TagController = require('./tag-controller');
 const Sources = require('../src/data/data-sources.js');
 
-const categoryController = new CategoryController();
-const tagController = new TagController();
+const _fileCache = {};
 
-let locations;
+class FileCache {
+    static get(path) {
+        return new Promise((resolve, reject) => {
+            if (path in _fileCache) {
+                resolve(_fileCache[path]);
+            } else {
+                fs.readFile(`${__dirname}/../${path}`, (error, data) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        const json = JSON.parse(data);
+                        _fileCache[path] = json;
+                        resolve(json);
+                    }
+
+                });
+            }
+        });
+    }
+}
 
 class API {
     static regions(ids) {
@@ -26,8 +42,11 @@ class API {
     static datasets(requestParams) {
         return new Promise((resolve, reject) => {
             const hasRegions = requestParams.regions.length > 0;
-            const limit = hasRegions ? 20 : 100;
-            const url = API.searchDatasetsURL(requestParams, limit);
+            const limit = hasRegions ? 2 : 100;
+            const page = requestParams.page || 0;
+            const offset = page * limit;
+            const url = API.searchDatasetsURL(requestParams, limit, offset);
+            console.log(url);
             const timeout = hasRegions ? Constants.TIMEOUT_MS : Constants.TIMEOUT_MS * 10;
             return Request.getJSON(url, timeout).then(results => {
                 annotateData(results);
@@ -38,9 +57,8 @@ class API {
         });
     }
 
-    static searchDatasetsURL(requestParams, limit) {
+    static searchDatasetsURL(requestParams, limit, offset) {
         const vector = requestParams.vector;
-        console.log(vector);
         const searchTerms = (vector && Sources.has(vector)) ?
             (Sources.get(vector).searchTerms || []) : [];
 
@@ -70,7 +88,7 @@ class API {
 
         const params = {categories, domains, tags, q_internal: query};
         if (limit) params.limit = limit;
-        console.log(params);
+        if (offset) params.offset = offset;
         return Request.buildURL(Constants.CATALOG_URL, params);
     }
 
@@ -92,19 +110,41 @@ class API {
     static categories(n) {
         return new Promise((resolve, reject) => {
             API.catalog('categories', n).then(response => {
-                categoryController.attachCategoryMetadata(response, response => {
-                    resolve(response.results);
-                });
-            });
+                API.categoryMetadata().then(metadata => {
+                    const categories = response.results.map(result => {
+                        result.metadata = metadata[result.category] || Constants.DEFAULT_METADATA;
+                        return result;
+                    });
+
+                    resolve(categories);
+                }, reject);
+            }, reject);
         });
+    }
+
+    static currentCategory(params, categories) {
+        if (params.q !== '' || params.tags.length != 1) return null;
+        return _.find(categories, category => category.category ===  params.categories[0].toLowerCase());
     }
 
     static tags(n) {
         return new Promise((resolve, reject) => {
             API.catalog('tags', n).then(response => {
-                tagController.attachTagMetadata(response, resolve);
-            });
+                API.tagMetadata().then(metadata => {
+                    const tags = response.results.map(result => {
+                        result.metadata = metadata[result.tag] || Constants.DEFAULT_METADATA;
+                        return result;
+                    });
+
+                    resolve(tags);
+                }, reject);
+            }, reject);
         });
+    }
+
+    static currentTag(params, tags) {
+        if (params.tags.length != 1) return null;
+        return _.find(tags, tag => tag.tag === params.tags[0].toLowerCase());
     }
 
     static domains(n) {
@@ -125,20 +165,15 @@ class API {
     }
 
     static locations() {
-        return new Promise((resolve, reject) => {
-            if (locations) {
-                resolve(locations);
-            } else {
-                fs.readFile(`${__dirname}/../data/locations.json`, (error, body) => {
-                    if (error) {
-                        reject(error);
-                    } else {
-                        locations = JSON.parse(body);
-                        resolve(locations);
-                    }
-                });
-            }
-        });
+        return FileCache.get('data/locations.json');
+    }
+
+    static tagMetadata() {
+        return FileCache.get('data/tag-metadata.json');
+    }
+
+    static categoryMetadata() {
+        return FileCache.get('data/category-metadata.json');
     }
 }
 

@@ -16,6 +16,12 @@ const Constants = {
     TIMEOUT_MS: 5000,
     CACHE_OPTIONS: {
         expires: 60 * 60
+    },
+
+    DEFAULT_METADATA: {
+        description: '',
+        icon: 'fa-database',
+        showcase: []
     }
 };
 
