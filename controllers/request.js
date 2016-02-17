@@ -5,16 +5,14 @@ const NodeCache = require('node-cache');
 const request = require('request-promise');
 const querystring = require('querystring');
 const memjs = require('memjs');
+const Constants = require('./constants.js');
 
-
-try {
-    var cache = memjs.Client.create('localhost:11211');
-} catch (error) {
-    console.log('error creating cache');
-}
+const cache = memjs.Client.create();
 
 class Request {
     static get(url) {
+        if (!cache) return request(url);
+
         return new Promise((resolve, reject) => {
             cache.get(url, (error, value) => {
                 if (error) {
@@ -22,11 +20,13 @@ class Request {
                 } else if (value) {
                     resolve(value);
                 } else {
-                    request(url).then(body => {
+                    Request.timeout(request(url)).then(body => {
                         resolve(body);
                         cache.set(url, body, error => {
-                            console.error(`failed to set key "${url}"`);
-                            console.error(error.stack);
+                            if (error) {
+                                console.error(`failed to set key "${url}"`);
+                                console.error(error);
+                            }
                         });
                     }, reject);
                 }
@@ -42,9 +42,17 @@ class Request {
         });
     }
 
-    static timeout(milliseconds) {
-        return new Promise(resolve => {
-            setTimeout(resolve, milliseconds);
+    static timeout(promise, milliseconds) {
+        return new Promise((resolve, reject) => {
+            Promise.race([Request._timeout(milliseconds), promise]).then(resolve, reject);
+        });
+    }
+
+    static _timeout(milliseconds) {
+        milliseconds = milliseconds || Constants.TIMEOUT_MS;
+
+        return new Promise((resolve, reject) => {
+            setTimeout(reject, milliseconds);
         });
     }
 
