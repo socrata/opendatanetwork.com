@@ -14,8 +14,9 @@ const Constants = {
     ATHENA_URL: 'https://socrata-athena.herokuapp.com/schema/v1/applied/{0}',
 
     TIMEOUT_MS: 5000,
-    CACHE_TTL_SECONDS: 60 * 60,
-    CACHE_CHECK_SECONDS: 60 * 60
+    CACHE_OPTIONS: {
+        expires: 60 * 60
+    }
 };
 
 module.exports = Constants;

@@ -7,7 +7,7 @@ const querystring = require('querystring');
 const memjs = require('memjs');
 const Constants = require('./constants.js');
 
-const cache = memjs.Client.create();
+const cache = memjs.Client.create(null, Constants.CACHE_OPTIONS);
 
 class Request {
     static get(url) {
