@@ -8,6 +8,11 @@ const ChartConstants = {
         'stepped-area': google.visualization.SteppedAreaChart
     },
     CHART_OPTIONS: {
+        cssClassNames: {
+            headerCell: 'header-cell',
+            headerRow: 'header-row',
+            tableCell: 'table-cell',
+        },
         curveType: 'function',
         lineWidth: 2,
         legend : { position : 'top' },

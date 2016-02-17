@@ -172,11 +172,6 @@ const SOURCES = [
                 transform: _toPercent('value'),
                 chart: 'table',
                 options: {
-                    cssClassNames: {
-                        headerCell: 'header-cell',
-                        headerRow: 'header-row',
-                        tableCell: 'table-cell',
-                    },
                     vAxis: {
                         format: 'percent',
                         viewWindow: {
@@ -228,14 +223,7 @@ const SOURCES = [
                         format: { pattern: '###,###', prefix: '$' }
                     }
                 ],
-                chart: 'table',
-                options: {
-                    cssClassNames: {
-                        headerCell: 'header-cell',
-                        headerRow: 'header-row',
-                        tableCell: 'table-cell',
-                    }
-                }
+                chart: 'table'
             },
             {
                 name: 'Earnings and Education',
@@ -313,14 +301,7 @@ const SOURCES = [
                     }
                 ],
                 transform: _toPercent('percent_employed'),
-                chart: 'table',
-                options: {
-                    cssClassNames: {
-                        headerCell: 'header-cell',
-                        headerRow: 'header-row',
-                        tableCell: 'table-cell',
-                    }
-                }
+                chart: 'table'
             }
         ]
     },
@@ -424,14 +405,7 @@ const SOURCES = [
                         label: 'Year'
                     }
                 ],
-                chart: 'table',
-                options: {
-                    cssClassNames: {
-                        headerCell: 'header-cell',
-                        headerRow: 'header-row',
-                        tableCell: 'table-cell',
-                    }
-                }
+                chart: 'table'
             }
             ].concat(['All', 'Rents', 'Goods', 'Other'].map(component => {
             return {
@@ -678,14 +652,7 @@ const SOURCES = [
                         format: { pattern: '#.##%' }
                     }
                 ],
-                chart: 'table',
-                options: {
-                    cssClassNames: {
-                        headerCell: 'header-cell',
-                        headerRow: 'header-row',
-                        tableCell: 'table-cell',
-                    }
-                }
+                chart: 'table'
             }
         ]
     },
@@ -731,14 +698,7 @@ const SOURCES = [
                     }
                 ],
                 transform: _toPercent('data_value'),
-                chart: 'table',
-                options: {
-                    cssClassNames: {
-                        headerCell: 'header-cell',
-                        headerRow: 'header-row',
-                        tableCell: 'table-cell',
-                    }
-                }
+                chart: 'table'
             },
             {
                 name: 'Disability Status',
@@ -762,14 +722,7 @@ const SOURCES = [
                     }
                 ],
                 transform: _toPercent('data_value'),
-                chart: 'table',
-                options: {
-                    cssClassNames: {
-                        headerCell: 'header-cell',
-                        headerRow: 'header-row',
-                        tableCell: 'table-cell',
-                    }
-                }
+                chart: 'table'
             },
             {
                 name: 'Time of Last Checkup',
