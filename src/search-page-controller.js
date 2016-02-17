@@ -180,157 +180,40 @@ class SearchPageController {
         });
     }
 
-    decrementPage() {
-        this.params.page--;
-    }
-
-    // Paging
-    //
     fetchNextPage() {
-
-        if (this.fetching || this.fetchedAll)
-            return;
-
+        if (this.fetching || this.fetchedAll) return;
         this.fetching = true;
-        this.incrementPage();
+        this.params.page++;
 
-        const self = this;
+        const path = this.params.regions.length > 0 ?
+            `${window.location.pathname}/search-results` :
+            `/search/search-results`;
+        const search = window.location.search === '' ? '?' : window.location.search;
+        const url = `${path}${search}&page=${this.params.page}`;
 
-        $.ajax(this.getSearchResultsUrl()).done(function(data, textStatus, jqXHR) {
-
+        $.ajax(url).done((data, textStatus, jqXHR) => {
             if (jqXHR.status == 204) { // no content
-
-                self.decrementPage();
-                self.fetching = false;
-                self.fetchedAll = true;
-                return;
+                this.params.page--;
+                this.fetchedAll = true;
+            } else {
+                $('.datasets').append(data);
             }
 
-            $('.datasets').append(data);
-            self.fetching = false;
+            this.fetching = false;
         });
     }
 
-    getSearchPageForRegionVectorMetricYearUrl(regionIds, regionNames, vector, metric, year, isSearchResults, queryString) {
-
-        var url = '';
-
-        if (regionIds && (regionIds.length > 0)) {
-
-            url += '/region/' + regionIds.join('-');
-
-            if (regionNames && (regionNames.length > 0)) {
-
-                const parts = regionNames.map(regionName => regionName.replace(/ /g, '_').replace(/\//g, '_').replace(/,/g, ''));
-                url += '/' + parts.join('-');
-            }
-            else
-                url += '/-';
-        }
-        else {
-
-            url += '/search';
-        }
-
-        if (isSearchResults) {
-
-            url += '/search-results';
-        }
-        else {
-
-            if (vector) url += '/' + vector;
-            if (metric) url += '/' + metric;
-            if (year) url += '/' + year;
-        }
-
-        if (queryString)
-            url += queryString;
-
-        return url;
-    }
-
-    getSearchPageUrl(isSearchResults, metric, year) {
-
-        if ((this.params.regions.length > 0) || this.params.autoSuggestedRegion) {
-
-            var regionIds = [];
-            var regionNames = [];
-
-            if (this.params.resetRegions === false) {
-
-                regionIds = this.params.regions.map(region => region.id);
-                regionNames = this.params.regions.map(region => region.name);
-            }
-
-            if (this.params.autoSuggestedRegion) {
-
-                regionIds.push(this.params.autoSuggestedRegion.id);
-                regionNames.push(this.params.autoSuggestedRegion.name);
-            }
-
-            return this.getSearchPageForRegionVectorMetricYearUrl(
-                regionIds,
-                regionNames,
-                this.params.vector || 'population',
-                metric,
-                year,
-                isSearchResults,
-                this.getSearchQueryString(isSearchResults));
-        }
-        else {
-
-            return this.getSearchPageForRegionVectorMetricYearUrl(
-                null,
-                null,
-                this.params.vector || 'population',
-                metric,
-                year,
-                isSearchResults,
-                this.getSearchQueryString(isSearchResults));
-        }
-    }
-
-    getSearchResultsUrl() {
-
-        return this.getSearchPageUrl(true);
-    }
-
-    getSearchQueryString(isSearchResults) {
-
-        const parts = [];
-
-        if (this.params.q.length > 0)
-            parts.push('q=' + encodeURIComponent(this.params.q));
-
-        if ((this.params.page > 1) && isSearchResults)
-            parts.push('page=' + this.params.page);
-
-        if (this.params.categories.length > 0)
-            this.params.categories.forEach(category => parts.push('categories=' + encodeURIComponent(category)));
-
-        if (this.params.domains.length > 0)
-            this.params.domains.forEach(domain => parts.push('domains=' + encodeURIComponent(domain)));
-
-        if (this.params.tags.length > 0)
-            this.params.tags.forEach(tag => parts.push('tags=' + encodeURIComponent(tag)));
-
-        return (parts.length > 0) ? '?' + parts.join('&') : '';
-    }
-
-    incrementPage() {
-
-        this.params.page++;
-    }
-
     navigate() {
-
-        window.location.href = this.getSearchPageUrl();
+        const params = ['q', 'page', 'categories', 'domains', 'tags']
+            .map(name => [name, this.params[name]])
+            .filter(([name, value]) => (value && (value.constructor != Array || value.length > 0)));
+        window.location.search = `?${$.param(_.object(params), true)}`;
     }
 
     removeRegion(regionIndex) {
 
         this.params.regions.splice(regionIndex, 1); // remove at index i
-        this.params.page = 1;
+        this.params.page = 0;
 
         if (this.params.regions.length === 0) // when the last region is removed so should the vector be removed.
             this.params.vector = '';
@@ -340,7 +223,7 @@ class SearchPageController {
 
         this.params.autoSuggestedRegion = region;
         this.params.resetRegions = resetRegions;
-        this.params.page = 1;
+        this.params.page = 0;
     }
 
     toggleCategory(category) {
@@ -352,7 +235,7 @@ class SearchPageController {
         else
             this.params.categories.push(category);
 
-        this.params.page = 1;
+        this.params.page = 0;
     }
 
     toggleDomain(domain) {
@@ -364,7 +247,7 @@ class SearchPageController {
         else
             this.params.domains.push(domain);
 
-        this.params.page = 1;
+        this.params.page = 0;
     }
 
     toggleTag(tag) {
@@ -378,7 +261,7 @@ class SearchPageController {
         else
             this.params.tags = [tag];
 
-        this.params.page = 1;
+        this.params.page = 0;
         this.params.categories = [];
         this.params.domains = [];
         this.params.q = '';

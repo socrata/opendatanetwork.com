@@ -42,11 +42,10 @@ class API {
     static datasets(requestParams) {
         return new Promise((resolve, reject) => {
             const hasRegions = requestParams.regions.length > 0;
-            const limit = hasRegions ? 2 : 100;
+            const limit = 10;
             const page = requestParams.page || 0;
             const offset = page * limit;
             const url = API.searchDatasetsURL(requestParams, limit, offset);
-            console.log(url);
             const timeout = hasRegions ? Constants.TIMEOUT_MS : Constants.TIMEOUT_MS * 10;
             return Request.getJSON(url, timeout).then(results => {
                 annotateData(results);
@@ -123,7 +122,7 @@ class API {
     }
 
     static currentCategory(params, categories) {
-        if (params.q !== '' || params.tags.length != 1) return null;
+        if (params.q !== '' || params.categories.length != 1) return null;
         return _.find(categories, category => category.category ===  params.categories[0].toLowerCase());
     }
 

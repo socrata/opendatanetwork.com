@@ -92,7 +92,6 @@ class RenderController {
         allPromise.then(data => {
             try {
                 const categories = data[0];
-                console.log(categories);
                 const locations = data[1];
                 const params = data[2];
 
@@ -395,7 +394,7 @@ class RenderController {
     static _parameters(req, res) {
         return new Promise((resolve, reject) => {
             const query = req.query;
-            const page = isNaN(query.page) ? 1 : parseInt(query.page);
+            const page = isNaN(query.page) ? 0 : parseInt(query.page);
 
             const params = {
                 categories: asArray(query.categories),
