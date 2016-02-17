@@ -69,13 +69,14 @@ class RenderController {
                         descriptionHtml : htmlencode(dataset.description).replace('\n', '<br>'),
                         name : dataset.name,
                         tags : dataset.tags || [],
-                        columns : dataset.columns,
+                        columns : _.filter(dataset.columns, isNotComputedField),
                         updatedAtString : moment(new Date(dataset.viewLastModified * 1000)).format('D MMM YYYY')
                     },
                     css : [
                         '/styles/dataset.css'
                     ],
                     scripts : [
+                        '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
                         '/lib/third-party/lodash.min.js',
                         '/lib/third-party/d3.min.js',
                         '/lib/dataset.min.js'
@@ -475,24 +476,8 @@ function wordJoin(list, separator) {
     return `${list.slice(0, list.length - 1).join(', ')} ${separator} ${list[list.length - 1]}`;
 }
 
-function all(promises) {
-    return new Promise((resolve, reject) => {
-        let resultCount = 0;
-        let results = [];
-
-        function complete(index) {
-            return result => {
-                resultCount += 1;
-                results[index] = result;
-                if (resultCount == promises.length) resolve(results);
-            };
-        }
-
-        promises.forEach((promise, index) => {
-            promise.then(complete(index), reject);
-        });
-    });
+function isNotComputedField(column) {
+    return !column.fieldName.match(':@computed_');
 }
-
 
 module.exports = RenderController;
