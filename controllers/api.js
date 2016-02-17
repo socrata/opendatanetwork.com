@@ -3,6 +3,7 @@
 const _ = require('lodash');
 const moment = require('moment');
 const numeral = require('numeral');
+const fs = require('fs');
 
 const Synonyms = require('./synonyms');
 const Request = require('./request');
@@ -15,6 +16,8 @@ const categoryController = new CategoryController();
 const tagController = new TagController();
 
 const SYNONYMS = Synonyms.fromFile(Constants.SYNONYMS_FILE);
+
+let locations;
 
 class API {
     static regions(ids) {
@@ -123,7 +126,20 @@ class API {
     }
 
     static locations() {
-        return Request.getJSONLocal('data/locations.json');
+        return new Promise((resolve, reject) => {
+            if (locations) {
+                resolve(locations);
+            } else {
+                fs.readFile(`${__dirname}/../data/locations.json`, (error, body) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        locations = JSON.parse(body);
+                        resolve(locations);
+                    }
+                });
+            }
+        });
     }
 }
 
