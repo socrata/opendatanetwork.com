@@ -1,7 +1,6 @@
 'use strict';
 
 const _ = require('lodash');
-const NodeCache = require('node-cache');
 const request = require('request-promise');
 const querystring = require('querystring');
 const memjs = require('memjs');
