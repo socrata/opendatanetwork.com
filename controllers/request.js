@@ -4,70 +4,58 @@ const _ = require('lodash');
 const NodeCache = require('node-cache');
 const request = require('request-promise');
 const querystring = require('querystring');
-const fs = require('fs');
+const memjs = require('memjs');
+const Constants = require('./constants.js');
 
-const Constants = require('./constants');
-
-const cacheOptions = {
-    stdTTL: Constants.CACHE_TTL_SECONDS,
-    checkperiod: Constants.CACHE_CHECK_SECONDS
-};
-const cache = new NodeCache(cacheOptions);
-const localCache = new NodeCache(cacheOptions);
+const cache = memjs.Client.create(null, Constants.CACHE_OPTIONS);
 
 class Request {
-    static getJSON(url, timeoutMS) {
-        const jsonPromise = new Promise((resolve, reject) => {
+    static get(url) {
+        if (!cache) return request(url);
+
+        return new Promise((resolve, reject) => {
             cache.get(url, (error, value) => {
-                if (value === undefined) {
-                    request(url).then(body => {
-                        const json = JSON.parse(body);
-                        cache.set(url, json);
-                        resolve(json);
-                    }, reject);
-                } else {
+                if (value) {
                     resolve(value);
+                } else {
+                    Request.timeout(request(url)).then(body => {
+                        resolve(body);
+                        if (error) {
+                            console.error(`failed to get key "${url}"`);
+                            console.error(error);
+                        } else {
+                            cache.set(url, body, error => {
+                                if (error) {
+                                    console.error(`failed to set key "${url}"`);
+                                    console.error(error);
+                                }
+                            });
+                        }
+                    }, reject);
                 }
             });
         });
+    }
 
-        timeoutMS = timeoutMS || Constants.TIMEOUT_MS;
-        const timeoutPromise = Request.timeout(timeoutMS);
-
+    static getJSON(url) {
         return new Promise((resolve, reject) => {
-            Promise.race([timeoutPromise, jsonPromise]).then(result => {
-                if (!result) {
-                    reject(`request to ${url} timed out after ${timeoutMS}ms`);
-                } else {
-                    resolve(result);
-                }
+            Request.get(url).then(value => {
+                resolve(JSON.parse(value.toString()));
             }, reject);
         });
     }
 
-    static getJSONLocal(path) {
+    static timeout(promise, milliseconds) {
         return new Promise((resolve, reject) => {
-            localCache.get(path, (error, value) => {
-                if (value === undefined) {
-                    fs.readFile(`${__dirname}/../${path}`, (fileError, body) => {
-                        if (fileError) {
-                            reject(error);
-                        } else {
-                            const json = JSON.parse(body);
-                            cache.set(path, json);
-                            resolve(json);
-                        }
-                    });
-                } else {
-                    resolve(value);
-                }
-            });
+            Promise.race([Request._timeout(milliseconds), promise]).then(resolve, reject);
         });
     }
 
-    static timeout(milliseconds) {
-        return new Promise(resolve => {
-            setTimeout(resolve, milliseconds);
+    static _timeout(milliseconds) {
+        milliseconds = milliseconds || Constants.TIMEOUT_MS;
+
+        return new Promise((resolve, reject) => {
+            setTimeout(reject, milliseconds);
         });
     }
 

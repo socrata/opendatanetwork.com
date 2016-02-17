@@ -152,7 +152,7 @@ class RenderController {
             } catch (error) {
                 RenderController.error(req, res)(error);
             }
-        });
+        }, RenderController.error(req, res));
     }
 
     static searchWithVector(req, res) {
@@ -171,7 +171,7 @@ class RenderController {
                         RenderController.error(req, res)(error);
                     }
                 }
-            });
+            }, RenderController.error(req, res));
         } else {
             RenderController.error(req, res, 404, `Vector "${vector}" not found`)();
         }
@@ -439,7 +439,7 @@ class RenderController {
                     } else {
                         resolve(params);
                     }
-                });
+                }, reject);
             } else {
                 resolve(params);
             }

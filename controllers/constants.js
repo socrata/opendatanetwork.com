@@ -13,9 +13,10 @@ const Constants = {
     DATASET_SUMMARY_URL: 'https://{0}/api/views/{1}.json',
     ATHENA_URL: 'https://socrata-athena.herokuapp.com/schema/v1/applied/{0}',
 
-    TIMEOUT_MS: 2000,
-    CACHE_TTL_SECONDS: 60 * 60,
-    CACHE_CHECK_SECONDS: 60 * 60
+    TIMEOUT_MS: 5000,
+    CACHE_OPTIONS: {
+        expires: 60 * 60
+    }
 };
 
 module.exports = Constants;
