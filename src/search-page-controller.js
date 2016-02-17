@@ -6,6 +6,11 @@ class SearchPageController {
         this.fetchedAll = false;
         const self = this;
 
+        if (params.debug) {
+            console.log(_searchURL.replace(/[!'()*]/g, escape));
+            console.log(decodeURI(_searchURL.split('?')[1]));
+        }
+
         // Refine menus
         //
         $('.refine-link').mouseenter(function() {
@@ -204,7 +209,7 @@ class SearchPageController {
     }
 
     navigate() {
-        const params = ['q', 'page', 'categories', 'domains', 'tags']
+        const params = ['q', 'page', 'categories', 'domains', 'tags', 'debug']
             .map(name => [name, this.params[name]])
             .filter(([name, value]) => (value && (value.constructor != Array || value.length > 0)));
         window.location.search = `?${$.param(_.object(params), true)}`;

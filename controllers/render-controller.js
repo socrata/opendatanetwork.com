@@ -409,7 +409,8 @@ class RenderController {
                 regions: [],
                 resetRegions: false,
                 vector: req.params.vector || '',
-                year: req.params.year || ''
+                year: req.params.year || '',
+                debug: query.debug && query.debug == 'true'
             };
 
             if (req.params.regionIds && req.params.regionIds !== '') {
