@@ -99,12 +99,11 @@ class SearchPageController {
 
         // Add location
         //
-        function selectRegion(option) {
-
+        const selectRegion = option => {
             RegionLookup.byID(option.id)
                 .then(region => {
-                    self.setAutoSuggestedRegion({ id : region.id, name : region.name }, false);
-                    self.navigate();
+                    this.params.regions.push(region);
+                    window.location.href = Navigate.url(this.params);
                 }, error => { throw error; });
         }
 
