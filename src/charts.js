@@ -111,18 +111,6 @@ class Chart {
             const url = `${this.tab.path}?${$.param(params)}`;
 
             resolve(d3.promise.json(url));
-
-            /*
-            d3.promise.json(url).then(data => {
-                const parsed = this.parseData(data, regions);
-
-                if (this.forecast > 0) {
-                    this._forecast(parsed).then(resolve, reject);
-                } else {
-                    resolve(parsed);
-                }
-            }, reject);
-            */
         });
     }
 
@@ -138,7 +126,7 @@ class Chart {
             });
 
             if (this.forecast > 0) {
-                this._forecast(rows).then(forecasted => {
+                this.forecastRows(rows).then(forecasted => {
                     resolve([columns, rows.concat(forecasted)]);
                 }, reject);
             } else {
@@ -147,9 +135,21 @@ class Chart {
         });
     }
 
-    _forecast(rows) {
+    forecastRows(rows) {
         return new Promise((resolve, reject) => {
-            resolve(_.range(this.forecast).map(index => rows[rows.length - 1]));
+            const promises = transpose(rows).map(series => this.forecastSeries(series));
+            Promise.all(promises).then(responses => {
+                resolve(transpose(responses.map(response => response.result)));
+            }, reject);
+        });
+    }
+
+    forecastSeries(series) {
+        return new Promise((resolve, reject) => {
+            Algorithmia.client(Constants.ALGORITHMIA_KEY)
+                .algo(Constants.ALGORITHMIA_FORECAST)
+                .pipe([series, this.forecast, 0])
+                .then(resolve, reject);
         });
     }
 
@@ -181,5 +181,9 @@ class Chart {
 
         return table;
     }
+}
+
+function transpose(matrix) {
+    return _.zip.apply(_, matrix);
 }
 

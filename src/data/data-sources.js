@@ -129,6 +129,7 @@ const SOURCES = [
                         .map(row => _.extend(row, { population_percent_change: parseFloat(row.population_percent_change) / 100 }));
                 },
                 chart: 'line',
+                forecast: 3,
                 options: {
                     height: 300,
                     vAxis: { format: '#.##%' }
