@@ -103,6 +103,7 @@ const SOURCES = [
                     }
                 ],
                 chart: 'line',
+                forecast: 3,
                 options: {
                     height: 300
                 }

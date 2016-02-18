@@ -50,6 +50,8 @@ class Chart {
         if (chart.transpose) this.transpose = Chart._columns(chart.transpose);
         this.params = chart.params || {};
         this.description = chart.description || '';
+        if (chart.chart !== 'line' && chart.forecast) throw Error('forecasting only available for line charts');
+        this.forecast = chart.forecast || 0;
     }
 
     static _columns(columns) {
@@ -106,12 +108,18 @@ class Chart {
         return d3.promise.json(url);
     }
 
+    _forecast(series, steps) {
+        return new Promise((resolve, reject) => {
+            return _.range(steps).map(index => series[series.length - 1] || 0);
+        });
+    }
+
     dataTable(data, regions) {
         const regionColumns = regions.map(region => { return {label: region.name, type: this.y.type}; });
         const columns = [this.x].concat(regionColumns);
 
         const byX = _.groupBy(data, row => row[this.x.column]);
-        const rows = _.pairs(byX).map(([x, rows]) => {
+        const rows = _.pairs(byX).map(([x, rows], index, all) => {
             const byID = _.indexBy(rows, row => row[this.tab.idColumn]);
             return [x].concat(regions.map(region => byID[region.id][this.y.column]));
         });
@@ -127,6 +135,17 @@ class Chart {
             const format = new google.visualization.NumberFormat(this.y.format);
             _.range(1, columns.length).forEach(index => {
                 format.format(table, index);
+            });
+        }
+
+        if (this.forecast > 0) {
+            regions.forEach((region, index) => {
+                const columnIndex = regions.length - index + 1;
+                table.insertColumn(columnIndex, 'boolean');
+                table.setColumnProperty(columnIndex, 'role', 'certainty');
+                rows.forEach((row, rowIndex) => {
+                    table.setCell(rowIndex, columnIndex, rows.length - rowIndex > this.forecast);
+                });
             });
         }
 
