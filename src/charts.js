@@ -50,6 +50,8 @@ class Chart {
         if (chart.transpose) this.transpose = Chart._columns(chart.transpose);
         this.params = chart.params || {};
         this.description = chart.description || '';
+        if (chart.chart !== 'line' && chart.forecast) throw Error('forecasting only available for line charts');
+        this.forecast = chart.forecast || 0;
     }
 
     static _columns(columns) {
@@ -67,44 +69,19 @@ class Chart {
             if (this.transpose) data = this._transpose(data);
             if (this.transform) data = this.transform(data);
 
-            const container = d3
-                .select(`div.chart#${this.name.toLowerCase().replace(/\W/g, '')}`)
-                .select('.chart-container');
+            this.parseData(data, regions).then(parsed => {
+                const container = d3
+                    .select(`div.chart#${this.name.toLowerCase().replace(/\W/g, '')}`)
+                    .select('.chart-container');
 
-            const dataTable = this.dataTable(data, regions);
-            const chart = new this.chart(container[0][0]);
-
-            chart.draw(dataTable, this.options);
+                const dataTable = this.dataTable(parsed);
+                const chart = new this.chart(container[0][0]);
+                chart.draw(dataTable, this.options);
+            }, error => {
+                console.error(error);
+            });
         }, error => {
             console.error(error);
-        });
-    }
-
-    renderTable(container, regions, dataTable) {
-
-        const table = container.append('table').attr('class', 'vertical');
-        const tr = table.append('tr');
-        tr.append('th').attr('class', 'empty');
-
-        regions.forEach((region, index) => {
-
-            tr.append('th')
-                .attr('class', 'color-' + index)
-                .text(region.name)
-                .append('div');
-        });
-
-        dataTable.forEach(row => {
-
-            const tr = table.append('tr');
-
-            row.forEach((item, index) => {
-
-                if (index == 0)
-                    tr.append('td').attr('class', 'category-header').text(item);
-                else
-                    tr.append('td').attr('class', 'color-' + (index - 1)).text(item).append('div');
-            });
         });
     }
 
@@ -124,26 +101,59 @@ class Chart {
     }
 
     getData(regions) {
-        const columns = [this.tab.idColumn].concat(this.data.map(variable => variable.column));
-        const params = _.extend({
-            '$select': columns.join(','),
-            '$where': `${this.tab.idColumn} in (${regions.map(region => `'${region.id}'`)})`,
-            '$order': columns.map(column => `${column} ASC`).join(',')
-        }, this.params);
-        const url = `${this.tab.path}?${$.param(params)}`;
-        return d3.promise.json(url);
+        return new Promise((resolve, reject) => {
+            const columns = [this.tab.idColumn].concat(this.data.map(variable => variable.column));
+            const params = _.extend({
+                '$select': columns.join(','),
+                '$where': `${this.tab.idColumn} in (${regions.map(region => `'${region.id}'`)})`,
+                '$order': columns.map(column => `${column} ASC`).join(',')
+            }, this.params);
+            const url = `${this.tab.path}?${$.param(params)}`;
+
+            resolve(d3.promise.json(url));
+        });
     }
 
-    dataTable(data, regions) {
-        const regionColumns = regions.map(region => { return {label: region.name, type: this.y.type}; });
-        const columns = [this.x].concat(regionColumns);
+    parseData(data, regions) {
+        return new Promise((resolve, reject) => {
+            const regionColumns = regions.map(region => { return {label: region.name, type: this.y.type}; });
+            const columns = [this.x].concat(regionColumns);
 
-        const byX = _.groupBy(data, row => row[this.x.column]);
-        const rows = _.pairs(byX).map(([x, rows]) => {
-            const byID = _.indexBy(rows, row => row[this.tab.idColumn]);
-            return [x].concat(regions.map(region => byID[region.id][this.y.column]));
+            const byX = _.groupBy(data, row => row[this.x.column]);
+            const rows = _.pairs(byX).map(([x, rows], index, all) => {
+                const byID = _.indexBy(rows, row => row[this.tab.idColumn]);
+                return [x].concat(regions.map(region => byID[region.id][this.y.column]));
+            });
+
+            if (this.forecast > 0) {
+                this.forecastRows(rows).then(forecasted => {
+                    resolve([columns, rows.concat(forecasted)]);
+                }, reject);
+            } else {
+                resolve([columns, rows]);
+            }
         });
+    }
 
+    forecastRows(rows) {
+        return new Promise((resolve, reject) => {
+            const promises = transpose(rows).map(series => this.forecastSeries(series));
+            Promise.all(promises).then(responses => {
+                resolve(transpose(responses.map(response => response.result)));
+            }, reject);
+        });
+    }
+
+    forecastSeries(series) {
+        return new Promise((resolve, reject) => {
+            Algorithmia.client(Constants.ALGORITHMIA_KEY)
+                .algo(Constants.ALGORITHMIA_FORECAST)
+                .pipe([series, this.forecast, 0])
+                .then(resolve, reject);
+        });
+    }
+
+    dataTable([columns, rows]) {
         let table = google.visualization.arrayToDataTable([columns].concat(rows));
 
         if (this.x.format) {
@@ -158,7 +168,22 @@ class Chart {
             });
         }
 
+        if (this.forecast > 0) {
+            _.range(columns.length - 1).forEach((region, index) => {
+                const columnIndex = columns.length - index;
+                table.insertColumn(columnIndex, 'boolean');
+                table.setColumnProperty(columnIndex, 'role', 'certainty');
+                rows.forEach((row, rowIndex) => {
+                    table.setCell(rowIndex, columnIndex, rows.length - rowIndex > this.forecast);
+                });
+            });
+        }
+
         return table;
     }
+}
+
+function transpose(matrix) {
+    return _.zip.apply(_, matrix);
 }
 

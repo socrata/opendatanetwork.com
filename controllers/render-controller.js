@@ -305,6 +305,7 @@ class RenderController {
                     scripts: [
                         '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
                         '//www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart", "table"]}]}',
+                        '//algorithmia.com/v1/clients/js/algorithmia-0.2.0.js',
                         '/lib/third-party/leaflet/leaflet.min.js',
                         '/lib/third-party/leaflet/leaflet-omnivore.min.js',
                         '/lib/third-party/colorbrewer.min.js',
