@@ -49,7 +49,14 @@ class RenderController {
                         direct_map: schema.query.length === 0
                     });
                 });
+
                 const params = data[2];
+                const columns = _.filter(dataset.columns, isNotComputedField);
+                const columnsWithDescriptions = _.filter(
+                    columns, 
+                    column => (column.description != null) && (column.description.length > 0));
+
+                const hasDescriptions = (columnsWithDescriptions.length > 0);
 
                 const templateParams = {
                     params,
@@ -62,7 +69,8 @@ class RenderController {
                         descriptionHtml : htmlencode(dataset.description).replace('\n', '<br>'),
                         name : dataset.name,
                         tags : dataset.tags || [],
-                        columns : _.filter(dataset.columns, isNotComputedField),
+                        columns : columns,
+                        hasDescriptions: hasDescriptions,
                         updatedAtString : moment(new Date(dataset.viewLastModified * 1000)).format('D MMM YYYY')
                     },
                     css : [

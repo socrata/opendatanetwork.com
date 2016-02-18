@@ -35,7 +35,7 @@ var _datasetMeta = {
                     <th>Column Name</th>
                     <th>API Column Name</th>
                     <th>Data Type</th>
-                    <th>Description</th>
+                    <% if (dataset.hasDescriptions) { %><th>Description</th><% } %>
                     <th>Popular Values</th>
                 </tr>
             <% for (var i = 0; i < dataset.columns.length; i++) { %>
@@ -43,7 +43,7 @@ var _datasetMeta = {
                     <td class="name"><%- dataset.columns[i].name %></td>
                     <td class="field-name"><%- dataset.columns[i].fieldName %></td>
                     <td class="data-type"><a href="https://dev.socrata.com/docs/datatypes/<%-dataset.columns[i].dataTypeName %>.html" target="blank"><%-dataset.columns[i].dataTypeName %></a></td>
-                    <td class="description"><%- dataset.columns[i].description %></td>
+                    <% if (dataset.hasDescriptions) { %><td class="description"><%- dataset.columns[i].description %></td><% } %>
                     <td class="popular-values"></td>
                 </tr>
             <% } %>
