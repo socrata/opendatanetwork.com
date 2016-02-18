@@ -60,6 +60,7 @@ class API {
         const vector = requestParams.vector;
         const searchTerms = (vector && Sources.has(vector)) ?
             (Sources.get(vector).searchTerms || []) : [];
+        if (requestParams.q) searchTerms.push(requestParams.q);
 
         const regionNames = requestParams.regions.map(region => {
             const name = region.name;

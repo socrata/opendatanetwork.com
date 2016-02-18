@@ -97,18 +97,13 @@ class SearchPageController {
 
         }).scroll();
 
-        // Add location
-        //
-        function selectRegion(option) {
+        const sources = regionsWithData(this.params.vector, option => {
+            RegionLookup.byID(option.id).then(region => {
+                this.params.regions.push(region);
+                this.navigate();
+            }, error => { throw error; });
+        });
 
-            RegionLookup.byID(option.id)
-                .then(region => {
-                    self.setAutoSuggestedRegion({ id : region.id, name : region.name }, false);
-                    self.navigate();
-                }, error => { throw error; });
-        }
-
-        const sources = regionsWithData(this.params.vector, selectRegion);
         const autosuggest = new Autosuggest('.add-region-results', sources);
 
         autosuggest.listen('.add-region-input');
