@@ -69,14 +69,17 @@ class Chart {
             if (this.transpose) data = this._transpose(data);
             if (this.transform) data = this.transform(data);
 
-            const container = d3
-                .select(`div.chart#${this.name.toLowerCase().replace(/\W/g, '')}`)
-                .select('.chart-container');
+            this.parseData(data, regions).then(parsed => {
+                const container = d3
+                    .select(`div.chart#${this.name.toLowerCase().replace(/\W/g, '')}`)
+                    .select('.chart-container');
 
-            const dataTable = this.dataTable(data, regions);
-            const chart = new this.chart(container[0][0]);
-
-            chart.draw(dataTable, this.options);
+                const dataTable = this.dataTable(parsed);
+                const chart = new this.chart(container[0][0]);
+                chart.draw(dataTable, this.options);
+            }, error => {
+                console.error(error);
+            });
         }, error => {
             console.error(error);
         });
@@ -98,32 +101,59 @@ class Chart {
     }
 
     getData(regions) {
-        const columns = [this.tab.idColumn].concat(this.data.map(variable => variable.column));
-        const params = _.extend({
-            '$select': columns.join(','),
-            '$where': `${this.tab.idColumn} in (${regions.map(region => `'${region.id}'`)})`,
-            '$order': columns.map(column => `${column} ASC`).join(',')
-        }, this.params);
-        const url = `${this.tab.path}?${$.param(params)}`;
-        return d3.promise.json(url);
-    }
-
-    _forecast(series, steps) {
         return new Promise((resolve, reject) => {
-            return _.range(steps).map(index => series[series.length - 1] || 0);
+            const columns = [this.tab.idColumn].concat(this.data.map(variable => variable.column));
+            const params = _.extend({
+                '$select': columns.join(','),
+                '$where': `${this.tab.idColumn} in (${regions.map(region => `'${region.id}'`)})`,
+                '$order': columns.map(column => `${column} ASC`).join(',')
+            }, this.params);
+            const url = `${this.tab.path}?${$.param(params)}`;
+
+            resolve(d3.promise.json(url));
+
+            /*
+            d3.promise.json(url).then(data => {
+                const parsed = this.parseData(data, regions);
+
+                if (this.forecast > 0) {
+                    this._forecast(parsed).then(resolve, reject);
+                } else {
+                    resolve(parsed);
+                }
+            }, reject);
+            */
         });
     }
 
-    dataTable(data, regions) {
-        const regionColumns = regions.map(region => { return {label: region.name, type: this.y.type}; });
-        const columns = [this.x].concat(regionColumns);
+    parseData(data, regions) {
+        return new Promise((resolve, reject) => {
+            const regionColumns = regions.map(region => { return {label: region.name, type: this.y.type}; });
+            const columns = [this.x].concat(regionColumns);
 
-        const byX = _.groupBy(data, row => row[this.x.column]);
-        const rows = _.pairs(byX).map(([x, rows], index, all) => {
-            const byID = _.indexBy(rows, row => row[this.tab.idColumn]);
-            return [x].concat(regions.map(region => byID[region.id][this.y.column]));
+            const byX = _.groupBy(data, row => row[this.x.column]);
+            const rows = _.pairs(byX).map(([x, rows], index, all) => {
+                const byID = _.indexBy(rows, row => row[this.tab.idColumn]);
+                return [x].concat(regions.map(region => byID[region.id][this.y.column]));
+            });
+
+            if (this.forecast > 0) {
+                this._forecast(rows).then(forecasted => {
+                    resolve([columns, rows.concat(forecasted)]);
+                }, reject);
+            } else {
+                resolve([columns, rows]);
+            }
         });
+    }
 
+    _forecast(rows) {
+        return new Promise((resolve, reject) => {
+            resolve(_.range(this.forecast).map(index => rows[rows.length - 1]));
+        });
+    }
+
+    dataTable([columns, rows]) {
         let table = google.visualization.arrayToDataTable([columns].concat(rows));
 
         if (this.x.format) {
@@ -139,8 +169,8 @@ class Chart {
         }
 
         if (this.forecast > 0) {
-            regions.forEach((region, index) => {
-                const columnIndex = regions.length - index + 1;
+            _.range(columns.length - 1).forEach((region, index) => {
+                const columnIndex = columns.length - index;
                 table.insertColumn(columnIndex, 'boolean');
                 table.setColumnProperty(columnIndex, 'role', 'certainty');
                 rows.forEach((row, rowIndex) => {
