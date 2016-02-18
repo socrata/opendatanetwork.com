@@ -62,25 +62,21 @@ class SearchPageController {
         // Tokens
         //
         $('.region-token .fa-times-circle').click(function() {
-
             self.removeRegion($(this).parent().index());
             self.navigate();
         });
 
         $('.category-token .fa-times-circle').click(function() {
-
             self.toggleCategory($(this).parent().text().toLowerCase().trim());
             self.navigate();
         });
 
         $('.domain-token .fa-times-circle').click(function() {
-
             self.toggleDomain($(this).parent().text().toLowerCase().trim());
             self.navigate();
         });
 
         $('.standard-token .fa-times-circle').click(function() {
-
             self.toggleTag($(this).parent().text().toLowerCase().trim());
             self.navigate();
         });
@@ -144,37 +140,29 @@ class SearchPageController {
     }
 
     attachCategoriesClickHandlers() {
-
         const self = this;
 
         $('#refine-menu-categories li:not(.refine-view-more)').click(function() {
-
             self.toggleCategory($(this).text().toLowerCase().trim());
             self.navigate();
         });
     }
 
     attachDomainsClickHandlers() {
-
         const self = this;
 
         $('#refine-menu-domains li:not(.refine-view-more)').click(function() {
-
             const domain = $(this).text().toLowerCase().trim();
-
             self.toggleDomain(domain);
             self.navigate();
         });
     }
 
     attachTagsClickHandlers() {
-
         const self = this;
 
         $('#refine-menu-tags li').click(function() {
-
             const tag = $(this).text().toLowerCase().trim();
-
             self.toggleTag(tag);
             self.navigate();
         });
@@ -204,14 +192,10 @@ class SearchPageController {
     }
 
     navigate() {
-        const params = ['q', 'page', 'categories', 'domains', 'tags', 'debug']
-            .map(name => [name, this.params[name]])
-            .filter(([name, value]) => (value && (value.constructor != Array || value.length > 0)));
-        window.location.search = `?${$.param(_.object(params), true)}`;
+        window.location.href = Navigate.url(this.params);
     }
 
     removeRegion(regionIndex) {
-
         this.params.regions.splice(regionIndex, 1); // remove at index i
         this.params.page = 0;
 
