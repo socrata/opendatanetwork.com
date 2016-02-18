@@ -36,7 +36,7 @@ $(document).ready(function() {
             var s = valuesToShow.join('<br>');
 
             if (results.length == 6)
-                s += '<br><a target="blank" href="' + urlForUniqueValues + '&$limit=1000000000">view all</a>';
+                s += '<br><a target="blank" href="' + urlForUniqueValues + '&$limit=1000000000" rel="nofollow">view all</a>';
 
             row.find('.popular-values').html(s);
         });
