@@ -193,6 +193,13 @@ var _searchURL = "<%- searchDatasetsURL %>";
                     <% } %>
 
                     <div class='chart-container'></div>
+
+                    <% if ('forecast' in chart) { %>
+                        <p class='chart-footnote'>
+                            All forecasted data is based on a linear timeseries model
+                            which uses only the measured data displayed in this chart.
+                        </p>
+                    <% } %>
                 </div>
             <% }); %>
         </div>
