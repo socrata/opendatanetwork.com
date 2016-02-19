@@ -427,7 +427,8 @@ const SOURCES = [
                     },
                     {
                         column: 'index',
-                        label: 'Index'
+                        label: 'Index',
+                        format: { pattern: '#.#' }
                     }
                 ],
                 chart: 'line',

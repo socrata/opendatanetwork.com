@@ -160,12 +160,21 @@ class Chart {
 
         if (this.y.format) {
             const format = new google.visualization.NumberFormat(this.y.format);
-            _.range(1, columns.length).forEach(index => {
-                format.format(table, index);
+            _.range(1, columns.length).forEach(columnIndex => {
+                format.format(table, columnIndex);
             });
         }
 
         if (this.forecast) {
+            _.range(1, columns.length).forEach(columnIndex => {
+                _.range(0, rows.length).forEach(rowIndex => {
+                    const forecasted = this.forecast && rows.length - rowIndex - 1 < this.forecast.steps;
+                    const currentValue = table.getFormattedValue(rowIndex, columnIndex);
+                    const formatted = `${currentValue} (${forecasted ? 'Forecasted' : 'Measured'})`;
+                    table.setFormattedValue(rowIndex, columnIndex, formatted);
+                });
+            });
+
             _.range(columns.length - 1).forEach((region, index) => {
                 const columnIndex = columns.length - index;
                 table.insertColumn(columnIndex, 'boolean');
