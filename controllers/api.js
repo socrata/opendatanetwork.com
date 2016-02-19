@@ -74,7 +74,7 @@ class API {
             } else {
                 return name;
             }
-        }).map(name => `'${name}'`);
+        }).map(name => `"${name}"`);
 
         const allTerms = [searchTerms, regionNames, requestParams.tags];
         const query = allTerms
