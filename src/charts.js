@@ -69,17 +69,14 @@ class Chart {
             if (this.transpose) data = this._transpose(data);
             if (this.transform) data = this.transform(data);
 
-            this.parseData(data, regions).then(parsed => {
-                const container = d3
-                    .select(`div.chart#${this.name.toLowerCase().replace(/\W/g, '')}`)
-                    .select('.chart-container');
+            const container = d3
+                .select(`div.chart#${this.name.toLowerCase().replace(/\W/g, '')}`)
+                .select('.chart-container');
 
-                const dataTable = this.dataTable(parsed);
-                const chart = new this.chart(container[0][0]);
-                chart.draw(dataTable, this.options);
-            }, error => {
-                console.error(error);
-            });
+            const parsed = this.parseData(data, regions);
+            const dataTable = this.dataTable(parsed);
+            const chart = new this.chart(container[0][0]);
+            chart.draw(dataTable, this.options);
         }, error => {
             console.error(error);
         });
@@ -115,42 +112,22 @@ class Chart {
     }
 
     parseData(data, regions) {
-        return new Promise((resolve, reject) => {
-            const regionColumns = regions.map(region => { return {label: region.name, type: this.y.type}; });
-            const columns = [this.x].concat(regionColumns);
+        const regionColumns = regions.map(region => { return {label: region.name, type: this.y.type}; });
+        const columns = [this.x].concat(regionColumns);
 
-            const byX = _.groupBy(data, row => row[this.x.column]);
-            const rows = _.pairs(byX).map(([x, rows], index, all) => {
-                const byID = _.indexBy(rows, row => row[this.tab.idColumn]);
-                return [x].concat(regions.map(region => byID[region.id][this.y.column]));
-            });
-
-            if (this.forecast > 0) {
-                this.forecastRows(rows).then(forecasted => {
-                    resolve([columns, rows.concat(forecasted)]);
-                }, reject);
-            } else {
-                resolve([columns, rows]);
-            }
+        const byX = _.groupBy(data, row => row[this.x.column]);
+        let rows = _.pairs(byX).map(([x, rows], index, all) => {
+            const byID = _.indexBy(rows, row => row[this.tab.idColumn]);
+            return [x].concat(regions.map(region => byID[region.id][this.y.column]));
         });
+
+        if (this.forecast > 0) rows = rows.concat(this.forecastRows(rows));
+        return [columns, rows];
     }
 
     forecastRows(rows) {
-        return new Promise((resolve, reject) => {
-            const promises = transpose(rows).map(series => this.forecastSeries(series));
-            Promise.all(promises).then(responses => {
-                resolve(transpose(responses.map(response => response.result)));
-            }, reject);
-        });
-    }
-
-    forecastSeries(series) {
-        return new Promise((resolve, reject) => {
-            Algorithmia.client(Constants.ALGORITHMIA_KEY)
-                .algo(Constants.ALGORITHMIA_FORECAST)
-                .pipe([series, this.forecast, 0])
-                .then(resolve, reject);
-        });
+        const forecast = _.partial(Forecast.linear, this.forecast);
+        return transpose(transpose(rows).map(forecast));
     }
 
     dataTable([columns, rows]) {

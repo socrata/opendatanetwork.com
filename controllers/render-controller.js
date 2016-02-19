@@ -53,8 +53,8 @@ class RenderController {
                 const params = data[2];
                 const columns = _.filter(dataset.columns, isNotComputedField);
                 const columnsWithDescriptions = _.filter(
-                    columns, 
-                    column => (column.description != null) && (column.description.length > 0));
+                    columns,
+                    column => (column.description !== null) && (column.description.length > 0));
 
                 const hasDescriptions = (columnsWithDescriptions.length > 0);
 
@@ -305,7 +305,6 @@ class RenderController {
                     scripts: [
                         '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
                         '//www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart", "table"]}]}',
-                        '//algorithmia.com/v1/clients/js/algorithmia-0.2.0.js',
                         '/lib/third-party/leaflet/leaflet.min.js',
                         '/lib/third-party/leaflet/leaflet-omnivore.min.js',
                         '/lib/third-party/colorbrewer.min.js',

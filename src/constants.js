@@ -11,9 +11,6 @@ const Constants = {
     AUTOCOMPLETE_SHOWN_OPTIONS: 5,
 
     PEER_REGIONS: 5,
-    PEER_REGIONS_MAX: 10,
-
-    ALGORITHMIA_KEY: 'simYpkAEVZ9jk7geAuJol7rrhP/1',
-    ALGORITHMIA_FORECAST: 'algo://TimeSeries/Forecast/0.1.15'
+    PEER_REGIONS_MAX: 10
 };
 
