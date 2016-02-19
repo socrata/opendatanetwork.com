@@ -18,5 +18,3 @@ class Forecast {
     }
 }
 
-console.log(Forecast.linear(3, [1, 2, 3]));
-

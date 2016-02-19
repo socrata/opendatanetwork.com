@@ -103,7 +103,10 @@ const SOURCES = [
                     }
                 ],
                 chart: 'line',
-                forecast: 5,
+                forecast: {
+                    type: 'linear',
+                    steps: 5
+                },
                 options: {
                     height: 300
                 }
@@ -129,7 +132,6 @@ const SOURCES = [
                         .map(row => _.extend(row, { population_percent_change: parseFloat(row.population_percent_change) / 100 }));
                 },
                 chart: 'line',
-                forecast: 5,
                 options: {
                     height: 300,
                     vAxis: { format: '#.##%' }
@@ -342,7 +344,10 @@ const SOURCES = [
                     }
                 ],
                 chart: 'line',
-                forecast: 5,
+                forecast: {
+                    type: 'linear',
+                    steps: 5
+                },
                 options: {
                     height: 300,
                     vAxis: { format: '$###,###' }
@@ -366,7 +371,6 @@ const SOURCES = [
                 ],
                 transform: _toPercent('per_capita_gdp_percent_change'),
                 chart: 'line',
-                forecast: 5,
                 options: {
                     height: 300,
                     vAxis: { format: '##.#%' }
@@ -427,7 +431,10 @@ const SOURCES = [
                     }
                 ],
                 chart: 'line',
-                forecast: 5
+                forecast: {
+                    type: 'linear',
+                    steps: 5
+                }
             };
         }))
     },
@@ -461,7 +468,10 @@ const SOURCES = [
                     }
                 ],
                 chart: 'line',
-                forecast: 5,
+                forecast: {
+                    type: 'linear',
+                    steps: 5
+                },
                 options: {
                     height: 300,
                     vAxis: { format: '$###,###M' }
@@ -487,7 +497,6 @@ const SOURCES = [
                         .map(row => _.extend(row, { expenditures_percent_change: parseFloat(row.expenditures_percent_change) / 100 }));
                 },
                 chart: 'line',
-                forecast: 5,
                 options: {
                     height: 300,
                     vAxis: { format: '#.##%' }

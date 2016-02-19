@@ -35,23 +35,43 @@ class Tab {
 class Chart {
     constructor(tab, chart) {
         this.tab = tab;
-        if (!chart.data) throw Error('chart missing name');
+
+        if (!chart.name) throw Error('chart missing name');
         this.name = chart.name;
+
         if (!chart.data) throw Error('chart missing data');
         this.data = Chart._columns(chart.data);
+
         this.x = chart.data[0];
         this.y = chart.data[1];
+
         if (!chart.chart) throw Error('chart missing chart');
-        if (!(chart.chart in ChartConstants.CHART_TYPES)) throw Error(`invalid chart type: ${chart.chart}`);
+        if (!(chart.chart in ChartConstants.CHART_TYPES))
+            throw Error(`invalid chart type: ${chart.chart}`);
         this.chart = ChartConstants.CHART_TYPES[chart.chart];
+
         this.options = _.extend({}, ChartConstants.CHART_OPTIONS, chart.options || {}, {title: chart.name});
+
         this.transform = chart.transform;
-        if (chart.transpose && chart.transpose.length !== 2) throw Error('transpose requires two variables');
+
+        if (chart.transpose && chart.transpose.length !== 2)
+            throw Error('transpose requires two variables');
         if (chart.transpose) this.transpose = Chart._columns(chart.transpose);
+
         this.params = chart.params || {};
+
         this.description = chart.description || '';
-        if (chart.chart !== 'line' && chart.forecast) throw Error('forecasting only available for line charts');
-        this.forecast = chart.forecast || 0;
+
+        if (chart.forecast && chart.chart !== 'line')
+            throw Error('forecasting only available for line charts');
+        if (chart.forecast && !(chart.forecast.type in ChartConstants.FORECAST_TYPES))
+            throw Error(`invalid forecast type: ${chart.forecast.type}`);
+        if (chart.forecast) {
+            chart.forecast.forecaster = ChartConstants.FORECAST_TYPES[chart.forecast.type];
+            chart.forecast.steps = chart.forecast.steps || 3;
+            chart.forecast.steps = parseInt(chart.forecast.steps);
+            this.forecast = chart.forecast;
+        }
     }
 
     static _columns(columns) {
@@ -121,12 +141,12 @@ class Chart {
             return [x].concat(regions.map(region => byID[region.id][this.y.column]));
         });
 
-        if (this.forecast > 0) rows = rows.concat(this.forecastRows(rows));
+        if (this.forecast) rows = rows.concat(this.forecastRows(rows));
         return [columns, rows];
     }
 
     forecastRows(rows) {
-        const forecast = _.partial(Forecast.linear, this.forecast);
+        const forecast = _.partial(this.forecast.forecaster, this.forecast.steps);
         return transpose(transpose(rows).map(forecast));
     }
 
@@ -145,13 +165,13 @@ class Chart {
             });
         }
 
-        if (this.forecast > 0) {
+        if (this.forecast) {
             _.range(columns.length - 1).forEach((region, index) => {
                 const columnIndex = columns.length - index;
                 table.insertColumn(columnIndex, 'boolean');
                 table.setColumnProperty(columnIndex, 'role', 'certainty');
                 rows.forEach((row, rowIndex) => {
-                    table.setCell(rowIndex, columnIndex, rows.length - rowIndex > this.forecast);
+                    table.setCell(rowIndex, columnIndex, rows.length - rowIndex > this.forecast.steps);
                 });
             });
         }
