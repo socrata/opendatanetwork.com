@@ -25,7 +25,6 @@ class FileCache {
                         _fileCache[path] = json;
                         resolve(json);
                     }
-
                 });
             }
         });
@@ -45,51 +44,60 @@ class API {
             const limit = 10;
             const page = requestParams.page || 0;
             const offset = page * limit;
-            const url = API.searchDatasetsURL(requestParams, limit, offset);
             const timeout = hasRegions ? Constants.TIMEOUT_MS : Constants.TIMEOUT_MS * 10;
-            return Request.getJSON(url, timeout).then(results => {
-                annotateData(results);
-                annotateParams(results, requestParams);
 
-                resolve(results);
+            API.searchDatasetsURL(requestParams, limit, offset).then(url => {
+                Request.getJSON(url, timeout).then(results => {
+                    annotateData(results);
+                    annotateParams(results, requestParams);
+
+                    resolve(results);
+                }, error => resolve({results: []}));
             }, error => resolve({results: []}));
         });
     }
 
     static searchDatasetsURL(requestParams, limit, offset) {
-        const vector = requestParams.vector;
-        const searchTerms = (vector && Sources.has(vector)) ?
-            (Sources.get(vector).searchTerms || []) : [];
-        if (requestParams.q) searchTerms.push(requestParams.q);
+        return new Promise((resolve, reject) => {
+            API.stateNames().then(stateNames => {
+                const vector = requestParams.vector;
+                const searchTerms = (vector && Sources.has(vector)) ?
+                    (Sources.get(vector).searchTerms || []) : [];
+                if (requestParams.q) searchTerms.push(requestParams.q);
 
-        const regionNames = requestParams.regions.map(region => {
-            const name = region.name;
-            const type = region.type;
+                const regionNames = requestParams.regions.map(region => {
+                    const name = region.name;
+                    const type = region.type;
 
-            if (type === 'place' || type === 'county') {
-                return name.split(', ')[0];
-            } else if (type === 'msa') {
-                const words = name.split(' ');
-                return words.slice(0, words.length - 3);
-            } else {
-                return name;
-            }
-        }).map(name => `"${name}"`);
+                    if (type === 'place' || type === 'county') {
+                        const regionName = name.split(', ')[0];
+                        const stateAbbr = name.split(', ')[1];
+                        const stateName = stateNames[stateAbbr] || '';
+                        return `${regionName} AND ("${stateAbbr}" OR ${stateName})`;
+                    } else if (type === 'msa') {
+                        const words = name.split(' ');
+                        return `"${words.slice(0, words.length - 3)}"`;
+                    } else {
+                        return `"${name}"`;
+                    }
+                });
 
-        const allTerms = [searchTerms, regionNames, requestParams.tags];
-        const query = allTerms
-            .filter(terms => terms.length > 0)
-            .map(terms => `(${terms.join(' OR ')})`)
-            .join(' AND ');
+                const allTerms = [searchTerms, regionNames, requestParams.tags];
+                const query = allTerms
+                    .filter(terms => terms.length > 0)
+                    .map(terms => `(${terms.join(' OR ')})`)
+                    .join(' AND ');
 
-        const categories = requestParams.categories || [];
-        const domains = requestParams.domains || [];
-        const tags = requestParams.tags || [];
+                const categories = requestParams.categories || [];
+                const domains = requestParams.domains || [];
+                const tags = requestParams.tags || [];
 
-        const params = {categories, domains, tags, q_internal: query};
-        if (limit) params.limit = limit;
-        if (offset) params.offset = offset;
-        return Request.buildURL(Constants.CATALOG_URL, params);
+                const params = {categories, domains, tags, q_internal: query};
+                if (limit) params.limit = limit;
+                if (offset) params.offset = offset;
+                resolve(Request.buildURL(Constants.CATALOG_URL, params));
+            }, reject);
+        });
     }
 
     static catalog(path, n, defaultResponse) {
@@ -174,6 +182,10 @@ class API {
 
     static categoryMetadata() {
         return FileCache.get('data/category-metadata.json');
+    }
+
+    static stateNames() {
+        return FileCache.get('data/state-names.json');
     }
 }
 

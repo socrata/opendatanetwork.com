@@ -86,7 +86,7 @@ const SOURCES = [
         fxf: 'e3rd-zzmr',
         datalensFXF: 'va7f-2qjr',
         regions: ALL_REGIONS,
-        searchTerms: ['population', 'housing', 'demographics', 'race'],
+        searchTerms: ['population', 'housing', 'demographics', 'race', 'density'],
         charts: [
             {
                 name: 'Population',

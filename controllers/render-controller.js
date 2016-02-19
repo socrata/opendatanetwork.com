@@ -186,15 +186,16 @@ class RenderController {
             const tagsPromise = API.tags();
             const domainsPromise = API.domains(5);
             const datasetsPromise = API.datasets(params);
+            const searchPromise = API.searchDatasetsURL(params);
             const allPromises = [categoriesPromise, tagsPromise,
-                                 domainsPromise, datasetsPromise];
+                                 domainsPromise, datasetsPromise,
+                                 searchPromise];
             const allPromise = Promise.all(allPromises);
 
             allPromise.then(data => {
                 try {
                     const templateParams = {
                         params,
-                        searchDatasetsURL: API.searchDatasetsURL(params),
                         searchPath: req.path,
                         title: searchPageTitle(params),
                         css: [
@@ -221,6 +222,7 @@ class RenderController {
                         templateParams.currentTag = API.currentTag(params, data[1]);
                         templateParams.domainResults = data[2];
                         templateParams.searchResults = data[3];
+                        templateParams.searchDatasetsURL = data[4];
                     }
 
                     res.render('search.ejs', templateParams);
@@ -271,12 +273,11 @@ class RenderController {
         const domainsPromise = API.domains(5);
         const datasetsPromise = API.datasets(params);
         const summaryPromise = MapDescription.summarizeFromParams(params);
+        const searchPromise = API.searchDatasetsURL(params);
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
                              categoriesPromise, tagsPromise, domainsPromise,
-                             datasetsPromise, summaryPromise];
+                             datasetsPromise, summaryPromise, searchPromise];
         const allPromise = Promise.all(allPromises);
-
-        const searchDatasetsURL = API.searchDatasetsURL(params);
 
         allPromise.then(data => {
             try {
@@ -291,7 +292,6 @@ class RenderController {
 
                 const templateParams = {
                     params,
-                    searchDatasetsURL,
                     sources,
                     source,
                     searchPath: req.path,
@@ -344,6 +344,7 @@ class RenderController {
                     templateParams.searchResults = data[6];
                     templateParams.mapSummary = data[7] || '';
                     templateParams.mapVariables = MapDescription.variablesFromParams(params);
+                    templateParams.searchDatasetsURL = data[8];
                 }
 
                 if (templateParams.mapSummary === '') {
