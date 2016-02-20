@@ -54,7 +54,7 @@ class RenderController {
                 const columns = _.filter(dataset.columns, isNotComputedField);
                 const columnsWithDescriptions = _.filter(
                     columns,
-                    column => (column.description !== null) && (column.description.length > 0));
+                    column => !_.isEmpty(column.description));
 
                 const hasDescriptions = (columnsWithDescriptions.length > 0);
 
@@ -251,7 +251,6 @@ class RenderController {
         }
 
         const uids = params.regions.map(region => region.id);
-        const names = params.regions.map(region => region.name);
 
         function processRegions(regions) {
             return regions.filter(region => {
