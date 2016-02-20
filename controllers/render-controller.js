@@ -14,6 +14,7 @@ const htmlencode = require('htmlencode').htmlEncode;
 const moment = require('moment');
 const numeral = require('numeral');
 const path = require('path');
+const defaultMetaSummary = 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.';
 
 const defaultSearchResultCount = 10;
 
@@ -109,6 +110,7 @@ class RenderController {
                     params,
                     searchPath : '/search',
                     title : 'Open Data Network',
+                    metaSummary : defaultMetaSummary,
                     css : [
                         '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css',
                         '/styles/home.css',
@@ -197,6 +199,7 @@ class RenderController {
                         searchDatasetsURL: API.searchDatasetsURL(params),
                         searchPath: req.path,
                         title: searchPageTitle(params),
+                        metaSummary : defaultMetaSummary,
                         css: [
                             '/styles/search.css',
                             '/styles/main.css'
@@ -269,10 +272,11 @@ class RenderController {
         const tagsPromise = API.tags();
         const domainsPromise = API.domains(5);
         const datasetsPromise = API.datasets(params);
-        const summaryPromise = MapDescription.summarizeFromParams(params);
+        const mapSummaryPromise = MapDescription.summarizeFromParams(params, false);
+        const metaSummaryPromise = MapDescription.summarizeFromParams(params, true);
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
                              categoriesPromise, tagsPromise, domainsPromise,
-                             datasetsPromise, summaryPromise];
+                             datasetsPromise, mapSummaryPromise, metaSummaryPromise];
         const allPromise = Promise.all(allPromises);
 
         const searchDatasetsURL = API.searchDatasetsURL(params);
@@ -342,6 +346,7 @@ class RenderController {
                     templateParams.domainResults = data[5];
                     templateParams.searchResults = data[6];
                     templateParams.mapSummary = data[7] || '';
+                    templateParams.metaSummary = data[8] || '';
                     templateParams.mapVariables = MapDescription.variablesFromParams(params);
                 }
 
