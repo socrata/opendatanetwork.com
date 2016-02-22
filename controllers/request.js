@@ -4,22 +4,28 @@ const _ = require('lodash');
 const request = require('request-promise');
 const querystring = require('querystring');
 const memjs = require('memjs');
+const crypto = require('crypto');
 const Constants = require('./constants.js');
 
 const cache = memjs.Client.create(null, Constants.CACHE_OPTIONS);
 
 class Request {
+    static key(url) {
+        if (url.length <= 250) return url;
+        return crypto.createHash('sha512').update(url).digest('base64');
+    }
     static get(url) {
         if (!cache) return request(url);
 
         return new Promise((resolve, reject) => {
-            cache.get(url, (error, value) => {
+            const key = Request.key(url);
+            cache.get(key, (error, value) => {
                 if (value) {
                     resolve(value);
                 } else {
                     Request.timeout(request(url)).then(body => {
                         resolve(body);
-                        if (!error) cache.set(url, body);
+                        if (!error) cache.set(key, body);
                     }, reject);
                 }
             });
