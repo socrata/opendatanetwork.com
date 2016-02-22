@@ -13,9 +13,7 @@ const Constants = {
     ATHENA_URL: 'https://socrata-athena.herokuapp.com/schema/v1/applied/{0}',
 
     TIMEOUT_MS: 5000,
-    CACHE_OPTIONS: {
-        expires: 60 * 60
-    },
+    CACHE_OPTIONS: {},
 
     DEFAULT_METADATA: {
         description: '',
