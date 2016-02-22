@@ -61,8 +61,9 @@ class API {
         return new Promise((resolve, reject) => {
             API.stateNames().then(stateNames => {
                 const vector = requestParams.vector;
-                const searchTerms = (vector && Sources.has(vector)) ?
+                let searchTerms = (vector && Sources.has(vector)) ?
                     (Sources.get(vector).searchTerms || []) : [];
+                searchTerms = searchTerms.map(term => _.contains(term, ' ') ? `"${term}"` : term);
                 if (requestParams.q) searchTerms.push(requestParams.q);
 
                 const regionNames = requestParams.regions.map(region => {
@@ -73,7 +74,7 @@ class API {
                         const regionName = name.split(', ')[0];
                         const stateAbbr = name.split(', ')[1];
                         const stateName = stateNames[stateAbbr] || '';
-                        return `${regionName} AND ("${stateAbbr}" OR ${stateName})`;
+                        return `${regionName} AND ("${stateAbbr}" OR "${stateName}")`;
                     } else if (type === 'msa') {
                         const words = name.split(' ');
                         return `"${words.slice(0, words.length - 3)}"`;
