@@ -67,7 +67,7 @@ class MapView {
             .then(model => this.update(model))
             .catch(error => { throw error; });
 
-        new MapSource(this.source).summarize(variable, year, this.regions).then(summary => {
+        new MapSource(this.source).summarize(variable, year, this.regions).then(([summary, meta]) => {
             d3.select('p.map-summary').text(summary);
         });
     }
@@ -143,11 +143,14 @@ class MapView {
         if (regions.length < 1) throw 'regions cannot be empty';
 
         return new Promise((resolve, reject) => {
-            const regionType = MapConstants.REGIONS[regions[0].type];
+            const regionTypes = regions
+                .map(region => MapConstants.REGIONS[region.type])
+                .filter(_.identity);
 
-            if (regionType === undefined) {
+            if (regionTypes.length < 1) {
                 reject(`invalid region type for map: ${regions[0].type}`);
             } else {
+                const regionType = regionTypes[0];
                 const regionsOfType = _.filter(regions, region => {
                     return region.type == regionType.id;
                 });

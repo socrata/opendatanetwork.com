@@ -19,17 +19,7 @@ class Request {
                 } else {
                     Request.timeout(request(url)).then(body => {
                         resolve(body);
-                        if (error) {
-                            console.error(`failed to get key "${url}"`);
-                            console.error(error);
-                        } else {
-                            cache.set(url, body, error => {
-                                if (error) {
-                                    console.error(`failed to set key "${url}"`);
-                                    console.error(error);
-                                }
-                            });
-                        }
+                        if (!error) cache.set(url, body);
                     }, reject);
                 }
             });

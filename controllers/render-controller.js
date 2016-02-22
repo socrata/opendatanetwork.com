@@ -14,6 +14,7 @@ const htmlencode = require('htmlencode').htmlEncode;
 const moment = require('moment');
 const numeral = require('numeral');
 const path = require('path');
+const defaultMetaSummary = 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.';
 
 const defaultSearchResultCount = 10;
 
@@ -54,7 +55,7 @@ class RenderController {
                 const columns = _.filter(dataset.columns, isNotComputedField);
                 const columnsWithDescriptions = _.filter(
                     columns,
-                    column => (column.description !== null) && (column.description.length > 0));
+                    column => !_.isEmpty(column.description));
 
                 const hasDescriptions = (columnsWithDescriptions.length > 0);
 
@@ -109,6 +110,7 @@ class RenderController {
                     params,
                     searchPath : '/search',
                     title : 'Open Data Network',
+                    metaSummary : defaultMetaSummary,
                     css : [
                         '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css',
                         '/styles/home.css',
@@ -198,6 +200,7 @@ class RenderController {
                         params,
                         searchPath: req.path,
                         title: searchPageTitle(params),
+                        metaSummary : defaultMetaSummary,
                         css: [
                             '/styles/search.css',
                             '/styles/main.css'
@@ -253,7 +256,6 @@ class RenderController {
         }
 
         const uids = params.regions.map(region => region.id);
-        const names = params.regions.map(region => region.name);
 
         function processRegions(regions) {
             return regions.filter(region => {
@@ -272,11 +274,11 @@ class RenderController {
         const tagsPromise = API.tags();
         const domainsPromise = API.domains(5);
         const datasetsPromise = API.datasets(params);
-        const summaryPromise = MapDescription.summarizeFromParams(params);
+        const descriptionPromise = MapDescription.summarizeFromParams(params);
         const searchPromise = API.searchDatasetsURL(params);
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
                              categoriesPromise, tagsPromise, domainsPromise,
-                             datasetsPromise, summaryPromise, searchPromise];
+                             datasetsPromise, descriptionPromise, searchPromise];
         const allPromise = Promise.all(allPromises);
 
         allPromise.then(data => {
@@ -342,8 +344,11 @@ class RenderController {
 
                     templateParams.domainResults = data[5];
                     templateParams.searchResults = data[6];
-                    templateParams.mapSummary = data[7] || '';
+
+                    templateParams.mapSummary = data[7][0];
+                    templateParams.metaSummary = data[7][1];
                     templateParams.mapVariables = MapDescription.variablesFromParams(params);
+
                     templateParams.searchDatasetsURL = data[8];
                 }
 

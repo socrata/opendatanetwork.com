@@ -17,26 +17,25 @@ class MapSource {
         this.year = mapSource.yearColumn || 'year';
     }
 
+    otherVariables(currentVariable) {
+        return this.variables.filter(variable => variable.name !== currentVariable.name);
+    }
+
     summarize(variable, year, regions) {
         return new Promise((resolve, reject) => {
             this.getData(variable, year, regions).then(data => {
-                if (data.length === 0) {
-                    resolve('');
-                } else {
-                    const summary = regions.map(region => {
-                        const row = _.find(data, row => row[this.id] === region.id);
-                        const value = variable.format(row[variable.column]);
+                const _descriptions = regions.map(region => {
+                    const row = _.find(data, row => row[this.id] === region.id);
+                    const value = variable.format(row[variable.column]);
+                    return `${variable.name.toLowerCase()} of ${region.name} in ${year} was ${value}.`;
+                });
 
-                        return `The ${variable.name.toLowerCase()} of ${region.name} in ${year} was ${value}.`;
-                    }).join(' ');
-                    resolve(summary);
-                }
-            }, reject);
+                const descriptions = _descriptions.map(description => `The ${description}`);
+                const metas = _descriptions.map(description => `Maps, charts and data show the ${description}`);
+
+                resolve([descriptions, metas].map(sentences => sentences.join(' ')));
+            }, error => resolve(['', '']));
         });
-    }
-
-    otherVariables(currentVariable) {
-        return this.variables.filter(variable => variable.name !== currentVariable.name);
     }
 
     getData(variable, year, regions) {
@@ -70,18 +69,16 @@ class MapSource {
 
 class MapDescription {
     static summarizeFromParams(params) {
-        return new Promise((resolve, reject) => {
-            if (params.vector && params.vector in MAP_SOURCES) {
-                const source = new MapSource(MAP_SOURCES[params.vector]);
-                const variable = source.getVariable(params.metric);
-                const year = source.getYear(variable, params.year);
-                const regions = params.regions;
+        if (params.vector && params.vector in MAP_SOURCES) {
+            const source = new MapSource(MAP_SOURCES[params.vector]);
+            const variable = source.getVariable(params.metric);
+            const year = source.getYear(variable, params.year);
+            const regions = params.regions;
 
-                source.summarize(variable, year, regions).then(resolve, reject);
-            } else {
-                resolve('');
-            }
-        });
+            return source.summarize(variable, year, regions);
+        } else {
+            return new Promise((resolve, reject) => resolve(['', '']));
+        }
     }
 
     static variablesFromParams(params) {
