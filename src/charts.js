@@ -138,7 +138,7 @@ class Chart {
         const byX = _.groupBy(data, row => row[this.x.column]);
         let rows = _.pairs(byX).map(([x, rows], index, all) => {
             const byID = _.indexBy(rows, row => row[this.tab.idColumn]);
-            return [x].concat(regions.map(region => byID[region.id][this.y.column]));
+            return [x].concat(regions.map(region => ((byID[region.id] || {})[this.y.column] || null)));
         });
 
         if (this.forecast) rows = rows.concat(this.forecastRows(rows));

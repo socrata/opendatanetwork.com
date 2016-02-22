@@ -6,7 +6,7 @@ class Forecast {
     }
 
     static linear(steps, series) {
-        series = series.map(parseFloat);
+        series = series.map(parseFloat).filter(_.negate(isNaN));
         if (steps < 1) return [];
         if (series.length === 0) return [];
         if (series.length === 1) return Forecast.repeat(series[0], steps);
