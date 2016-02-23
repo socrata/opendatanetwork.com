@@ -5,41 +5,54 @@ $(document).ready(function() {
     //
     multiComplete('#q', '.region-list').listen();
 
-    // for each row (each of which represent a dataset column)
+    // Fetch sample values
     //
-    $('.columns-container table tr.column-row').each(function() {
+    d3.promise.json(_datasetMeta.viewsUrl)
+        .then(data => {
 
-        const row = $(this);
-        const fieldName = row.attr('data-field-name');
+            // For each field row in the table, get the matching column from the data
+            //
+            $('.columns-container table tr.column-row').each(function() {
 
-        // Find first 5 unique values
-        //
-        const urlForUniqueValues = _datasetMeta.resourceUrl + 
-            '?$group=' + fieldName + 
-            '&$select=' + fieldName + ' as value,count(*)' + 
-            '&$order=count desc';
+                const row = $(this);
+                const fieldName = row.attr('data-field-name');
+                const dataType = row.attr('data-type');
+                const columns = _.filter(data.columns, column => column.fieldName == fieldName);
 
-        $.getJSON(urlForUniqueValues + '&$limit=6', function(results) {
+                if ((columns == null) || (columns.length == 0))
+                    return;
 
-            const resultsToShow = (results.length == 6) ? _.initial(results, 5) : results;
-            const valuesToShow = _.map(resultsToShow, function(result) {
+                const column = columns[0]; 
 
-                if (!result.value)
-                    result.value = '<em>blank</em>';
+                if ((column == null) || (column.cachedContents == null) || (column.cachedContents.top == null))
+                    return;
 
-                if (_.isObject(result.value))
-                    result.value = JSON.stringify(result.value);
+                const rg = _.slice(column.cachedContents.top, 0, 5);
+                const items = _.map(rg, o => {
+                    return '<div>' + ((dataType == 'location') ?  JSON.stringify(o.item) : o.item) + '</div>';
+                });
 
-                return result.value + ' <small>(' + numeral(result.count).format(',') + ')</small>';
+                var s = items.join('');
+
+                if (column.cachedContents.top.length > 5)
+                    s += '<a class="view-top-100" rel="nofollow">view top 100</a>';
+
+                row.find('.popular-values').html(s);
             });
+            
+            $('.view-top-100').click(event => {
 
-            var s = valuesToShow.join('<br>');
+                const row = $(event.currentTarget).parent().parent();
+                const fieldName = row.attr('data-field-name');
 
-            if (results.length == 6)
-                s += '<br><a target="blank" href="' + urlForUniqueValues + '&$limit=1000000000" rel="nofollow">view all</a>';
-
-            row.find('.popular-values').html(s);
-        });
-    });
+                d3.promise.json(_datasetMeta.migrationsUrl)
+                    .then(
+                        data => { 
+                            window.location.href = _datasetMeta.nbeResourceUrl.format(data.nbeId, fieldName); 
+                        }, 
+                        console.error);
+            });
+        }, 
+        console.error);
 });
 
