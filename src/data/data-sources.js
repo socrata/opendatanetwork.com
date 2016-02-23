@@ -86,7 +86,7 @@ const SOURCES = [
         fxf: 'e3rd-zzmr',
         datalensFXF: 'va7f-2qjr',
         regions: ALL_REGIONS,
-        searchTerms: ['population', 'housing', 'demographics', 'race', 'density'],
+        searchTerms: ['population', 'household', 'demographics', 'ethnicity', 'minority'],
         charts: [
             {
                 name: 'Population',
@@ -147,7 +147,7 @@ const SOURCES = [
         domain: ODN_DOMAIN,
         fxf: 'uf4m-5u8r',
         regions: ALL_REGIONS,
-        searchTerms: ['college', 'education', 'school', 'university', 'instruction', 'teaching', 'teacher', 'professor'],
+        searchTerms: ['college', 'education', 'school', 'university', 'instruction', 'teaching', 'teacher', 'professor', 'student', 'graduation', 'scholastic', 'matriculation'],
         charts: [
             {
                 name: 'Graduation Rates',
@@ -195,7 +195,7 @@ const SOURCES = [
         domain: ODN_DOMAIN,
         fxf: 'wmwh-4vak',
         regions: ALL_REGIONS,
-        searchTerms: ['economy', 'revenue', 'gdp', 'tax', 'revenue', 'budget', 'fiscal'],
+        searchTerms: ['revenue', 'budget', 'dividend', 'wage', 'income', 'compensation', 'assets', 'salary', 'earnings'],
         charts: [
             {
                 name: 'Earnings and Gender',
@@ -286,7 +286,7 @@ const SOURCES = [
         domain: ODN_DOMAIN,
         fxf: 'qfcm-fw3i',
         regions: ALL_REGIONS,
-        searchTerms: ['occupations', 'wages', 'wage', 'profession', 'business', 'work', 'commute'],
+        searchTerms: ['occupations', 'wage', 'profession', 'business', 'work', 'job', 'profession', 'employment', 'labor', 'avocation'],
         charts: [
             {
                 name: 'Occupations',
@@ -325,7 +325,7 @@ const SOURCES = [
         fxf: 'ks2j-vhr8',
         regions: ['state', 'msa'],
         include: region => _.contains(region.name, 'Metro'),
-        searchTerms: ['gdp', 'gross domestic product', 'economy', 'goods', 'production', 'revenue'],
+        searchTerms: ['gdp', 'gross domestic product', 'economy', 'production', 'revenue', 'gross national product', 'gnp'],
         charts: [
             {
                 name: 'GDP',
@@ -394,7 +394,7 @@ const SOURCES = [
         fxf: 'hpnf-gnfu',
         regions: ['state', 'msa'],
         include: region => _.contains(region.name, 'Metro'),
-        searchTerms: ['cost of living', 'rent', 'housing', 'income', 'tax'],
+        searchTerms: ['cost of living', 'rent', 'housing', 'consumer price index', 'expensive', 'inexpensive', 'housing cost', 'home price'],
         charts: [
             {
                 name: 'Cost of Living',
@@ -452,7 +452,7 @@ const SOURCES = [
         domain: ODN_DOMAIN,
         fxf: 'va5j-wsjq',
         regions: ['state', 'nation'],
-        searchTerms: ['consumption', 'consumer', 'spending', 'earning', 'fiscal', 'economy'],
+        searchTerms: ['consumption', 'consumer', 'household consumption', 'goods and services', 'personal expenditure', 'personal expenses', 'pce'],
         charts: [
             {
                 name: 'Personal Consumption Expenditures over Time (Millions of USD)',
@@ -529,7 +529,7 @@ const SOURCES = [
         domain: ODN_DOMAIN,
         fxf: '5pnb-mvzq',
         regions: ['county'],
-        searchTerms: ['occupations', 'wages', 'wage', 'profession', 'business', 'work', 'commute'],
+        searchTerms: ['job location', 'job opportunities', 'employment location', 'employment opportunities', 'commute', 'telecommute', 'transportation', 'traffic'],
         charts: [
             {
                 name: 'Median Jobs Promiximity Index',
@@ -570,7 +570,7 @@ const SOURCES = [
         domain: ODN_DOMAIN,
         fxf: 'nax7-t6ga',
         regions: ['county'],
-        searchTerms: ['environment', 'health', 'pollution', 'carbon', 'emissions', 'energy', 'waste', 'lead', 'inspection'],
+        searchTerms: ['environment', 'pollution', 'carbon', 'emissions', 'energy', 'waste', 'toxic', 'smog', 'climate', 'radiation', 'toxin', 'hazard'],
         charts: [
             {
                 name: 'Median Environmental Health Hazard Index',
@@ -608,7 +608,7 @@ const SOURCES = [
         domain: ODN_DOMAIN,
         fxf: '7ayp-utp2',
         regions: ['county', 'state'],
-        searchTerms: ['health', 'fitness', 'smoking', 'drinking', 'alcohol', 'tobacco', 'obesity', 'parks'],
+        searchTerms: ['health', 'fitness', 'smoking', 'alcohol', 'tobacco', 'obesity', 'tobacco', 'exercise', 'junk food'],
         charts: [
             {
                 name: 'Health Behaviors',
@@ -692,7 +692,7 @@ const SOURCES = [
         fxf: 'n4rt-3rmd',
         regions: ['state'],
         idColumn: '_geoid',
-        searchTerms: ['health', 'fitness', 'smoking', 'drinking', 'alcohol', 'tobacco', 'obesity', 'parks'],
+        searchTerms: ['health', 'asthma', 'arthritis', 'cardiac', 'cancer', 'copd', 'diabetes', 'disease', 'chronic'],
         charts: [
             {
                 name: 'Chronic Health Indicators',
