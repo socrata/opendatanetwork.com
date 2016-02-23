@@ -72,20 +72,22 @@ var _searchURL = "<%- searchDatasetsURL %>";
                 </label>
             </div>
 
-            <div class="search-results-container">
-                <div class="datasets-header">
-                    <h2>
-                        <span class="result-count"><%= searchResults.resultSetSizeString %></span>
-                        <%= source.name %>
-                        Data Sets Involving
-                        <%= regionNames %>
-                    </h2>
-                </div>
+            <% if (searchResults && searchResults.resultSetSizeString > 0) { %>
+                <div class="search-results-container">
+                    <div class="datasets-header">
+                        <h2>
+                            <span class="result-count"><%= searchResults.resultSetSizeString %></span>
+                            <%= source.name %>
+                            Data Sets Involving
+                            <%= regionNames %>
+                        </h2>
+                    </div>
 
-                <ul class="datasets">
-                    <% include _search-results-regular %>
-                </ul>
-            </div>
+                    <ul class="datasets">
+                        <% include _search-results-regular %>
+                    </ul>
+                </div>
+            <% } %>
         </div>
     <% } else { %>
         <div class="search-results-regular-column">
