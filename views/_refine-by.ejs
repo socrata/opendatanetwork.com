@@ -1,10 +1,14 @@
 
 <section class="refine">
     <a class="refine-link">
-        <span>Standards<i class="fa fa-caret-down"></i></span>
-        <ul id="refine-menu-tags" style="display:none">
-            <li>BLDS</li>
-            <li>LIVES</li>
+        <span>Categories<i class="fa fa-caret-down"></i></span>
+        <ul id="refine-menu-categories" style="display:none">
+        <% if (typeof categories != 'undefined' && categories.length > 0) { %>
+            <% categories.forEach(function(category) { %>
+                <li><i class="fa <%= category.metadata.icon %>"></i><%= category.category %></li>
+           <% }); %>
+       <% } %>
+            <li id="refine-menu-categories-view-more" class="refine-view-more">View More...</li>
         </ul>
     </a>
 
@@ -18,17 +22,6 @@
         </ul>
     </a>
 
-    <a class="refine-link">
-        <span>Categories<i class="fa fa-caret-down"></i></span>
-        <ul id="refine-menu-categories" style="display:none">
-        <% if (typeof categories != 'undefined' && categories.length > 0) { %>
-            <% categories.forEach(function(category) { %>
-                <li><i class="fa <%= category.metadata.icon %>"></i><%= category.category %></li>
-           <% }); %>
-       <% } %>
-            <li id="refine-menu-categories-view-more" class="refine-view-more">View More...</li>
-        </ul>
-    </a>
 
     <label class="refine-by-label">Refine by:</label>
 

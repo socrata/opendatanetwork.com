@@ -17,14 +17,14 @@ class SearchPageController {
 
             $(this).addClass('refine-link-selected');
             $(this).children('span').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
-            $(this).children('ul').slideDown(100);
+            $(this).children('ul').show();
         });
 
         $('.refine-link').mouseleave(function() {
 
             $(this).removeClass('refine-link-selected');
             $(this).children('span').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
-            $(this).children('ul').slideUp(100);
+            $(this).children('ul').hide();
         });
 
         // Categories
@@ -134,7 +134,7 @@ class SearchPageController {
         }
 
         $('.map-summary-more').click(() => {
-            $('.map-summary-links').slideToggle(100);
+            $('.map-summary-links').toggle();
             $('.map-summary-more').text($('.map-summary-more').text() == 'More Information' ? 'Less Information' : 'More Information');
         });
     }
