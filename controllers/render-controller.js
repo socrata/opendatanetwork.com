@@ -298,7 +298,7 @@ class RenderController {
                     sources,
                     source,
                     hasRegions: params.regions.length > 0,
-                    regionNames: wordJoin(params.regions.map(region => region.name)),
+                    regionNames: wordJoin(params.regions.map(region => region.name), 'or'),
                     searchPath: req.path,
                     title: searchPageTitle(params, source),
                     css: [
