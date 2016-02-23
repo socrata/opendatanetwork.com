@@ -381,11 +381,7 @@ class RenderController {
                             scripts: []
                         };
 
-                        const template = params.regions.length === 0 ?
-                            '_search-results-regular.ejs' :
-                            '_search-results-compact.ejs';
-
-                        res.render(template, templateParams);
+                        res.render('_search-results-regular.ejs', templateParams);
                     } catch (error) {
                         RenderController.error(req, res)(error);
                     }

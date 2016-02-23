@@ -6,106 +6,101 @@ var _params = <%- JSON.stringify(params) %>;
 var _searchURL = "<%- searchDatasetsURL %>";
 </script>
 
-
 <% if (!hasRegions) { %>
     <% include _refine-by %>
 <% } %>
 
 <section class="results">
+    <% if (hasRegions) { %>
+        <% include _region-navigation %>
 
-<% if (params.regions.length == 0) { %>
-    <div class="search-results-regular-column">
+        <div class="charts-column">
+            <ul class="chart-tabs">
+                <% sources.forEach(function(source) { %>
+                    <li class="<%= source.vector === params.vector || (source.vector === 'population' && params.vector === '') ? 'selected' : '' %>">
+                        <a href="<%= getSearchPageUrl(source) %>">
+                            <%= source.tabName %>
+                        </a>
+                    </li>
+                <% }); %>
+            </ul>
 
-      <% if (typeof currentCategory != 'undefined' && currentCategory && currentCategory.metadata && currentCategory.metadata.description) { %>
-        <div class="current-category">
-            <a class="fa fa-close"></a>
-            <strong><%= currentCategory.category %></strong> - <%- currentCategory.metadata.description %>
-        </div>
-      <% } else if (typeof currentTag != 'undefined' && currentTag && currentTag.metadata && currentTag.metadata.description) { %>
-        <div class="current-category">
-            <a class="fa fa-close"></a>
-            <strong><%= currentTag.tag %></strong> - <%- currentTag.metadata.description %>
-        </div>
-      <% } %>
+            <div class="charts">
+                <div id="map"></div>
+                <% include _map-summary %>
 
-        <ul class="datasets">
-<% include _search-results-regular %>
-        </ul>
-    </div>
+                <% source.charts.forEach(chart => { %>
+                    <div class='chart' id=<%= chart.name.toLowerCase().replace(/\W/g, '') %>>
+                        <h1 class='chart-title'><%= chart.name %></h1>
 
-<% } else { %>
+                        <% if ('description' in chart) { %>
+                            <p class='chart-description'><%- chart.description %></p>
+                        <% } %>
 
-    <% include _region-navigation %>
+                        <div class='chart-container'></div>
 
-    <div class="charts-column">
-        <ul class="chart-tabs">
-            <% sources.forEach(function(source) { %>
-                <li class="<%= source.vector === params.vector || (source.vector === 'population' && params.vector === '') ? 'selected' : '' %>">
-                    <a href="<%= getSearchPageUrl(source) %>">
-                        <%= source.tabName %>
-                    </a>
-                </li>
-            <% }); %>
-        </ul>
+                        <% if ('forecast' in chart) { %>
+                            <p class='chart-footnote'>
+                                All forecasted data is based on a linear timeseries model
+                                which uses only the measured data displayed in this chart.
+                            </p>
+                        <% } %>
+                    </div>
+                <% }); %>
+            </div>
 
-        <div class="charts">
-            <div id="map"></div>
-            <% include _map-summary %>
-
-            <% source.charts.forEach(chart => { %>
-                <div class='chart' id=<%= chart.name.toLowerCase().replace(/\W/g, '') %>>
-                    <h1 class='chart-title'><%= chart.name %></h1>
-
-                    <% if ('description' in chart) { %>
-                        <p class='chart-description'><%- chart.description %></p>
-                    <% } %>
-
-                    <div class='chart-container'></div>
-
-                    <% if ('forecast' in chart) { %>
-                        <p class='chart-footnote'>
-                            All forecasted data is based on a linear timeseries model
-                            which uses only the measured data displayed in this chart.
-                        </p>
-                    <% } %>
-                </div>
-            <% }); %>
-        </div>
-
-        <div class="dataset-description">
-            <% if ('description' in source) { %>
-                <p><%- source.description %></p>
-            <% } %>
-
-            <label class="attribution">
-                Data from the <a href="<%= source.attribution.url %>"><%= source.attribution.name %></a>.
-                <% if ('sourceURL' in source) { %>
-                    <a href="<%= source.sourceURL %>">Data Source</a> |
+            <div class="dataset-description">
+                <% if ('description' in source) { %>
+                    <p><%- source.description %></p>
                 <% } %>
 
-                <a href="<%= source.datasetURL %>">ODN Dataset</a> |
-                <a href="<%= source.apiURL %>">API</a> -
-                <span class='info-icon'>
-                    <div class='info-tooltip'>
-                        <strong>Note</strong> -
-                        ODN datasets and APIs are subject to change and may differ in format from the original
-                        source data in order to provide a user-friendly experience on this site.
-                    </div>
-                </span>
+                <label class="attribution">
+                    Data from the <a href="<%= source.attribution.url %>"><%= source.attribution.name %></a>.
+                    <% if ('sourceURL' in source) { %>
+                        <a href="<%= source.sourceURL %>">Data Source</a> |
+                    <% } %>
+
+                    <a href="<%= source.datasetURL %>">ODN Dataset</a> |
+                    <a href="<%= source.apiURL %>">API</a> -
+                    <span class='info-icon'>
+                        <div class='info-tooltip'>
+                            <strong>Note</strong> -
+                            ODN datasets and APIs are subject to change and may differ in format from the original
+                            source data in order to provide a user-friendly experience on this site.
+                        </div>
+                    </span>
+                </label>
+            </div>
+
+            <div class="search-results-container">
+                <div class="datasets-header">
+                    <h2>Datasets</h2>
+                </div>
+
+                <ul class="datasets">
+                    <% include _search-results-regular %>
+                </ul>
             </div>
         </div>
-    </div>
+    <% } else { %>
+        <div class="search-results-regular-column">
+          <% if (typeof currentCategory != 'undefined' && currentCategory && currentCategory.metadata && currentCategory.metadata.description) { %>
+            <div class="current-category">
+                <a class="fa fa-close"></a>
+                <strong><%= currentCategory.category %></strong> - <%- currentCategory.metadata.description %>
+            </div>
+          <% } else if (typeof currentTag != 'undefined' && currentTag && currentTag.metadata && currentTag.metadata.description) { %>
+            <div class="current-category">
+                <a class="fa fa-close"></a>
+                <strong><%= currentTag.tag %></strong> - <%- currentTag.metadata.description %>
+            </div>
+          <% } %>
 
-<% if (searchResults.results.length > 0) { %>
-    <div class="search-results-compact-column">
-        <ul class="datasets">
-<% include _search-results-compact %>
-        </ul>
-    </div>
-<% } %>
-
-<% } %>
-
+            <ul class="datasets">
+                <% include _search-results-regular %>
+            </ul>
+        </div>
+    <% } %>
 </section>
 
 <% include _google-analytics %>
