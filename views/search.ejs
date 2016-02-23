@@ -74,7 +74,12 @@ var _searchURL = "<%- searchDatasetsURL %>";
 
             <div class="search-results-container">
                 <div class="datasets-header">
-                    <h2>Datasets</h2>
+                    <h2>
+                        <span class="result-count"><%= searchResults.resultSetSizeString %></span>
+                        <%= source.name %>
+                        Data Sets Involving
+                        <%= regionNames %>
+                    </h2>
                 </div>
 
                 <ul class="datasets">
