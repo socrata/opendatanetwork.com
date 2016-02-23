@@ -4,9 +4,9 @@
 <script>
 var _params = <%- JSON.stringify(params) %>;
 var _datasetMeta = {
-    domain: '<%- dataset.domain %>',
-    fourByFour: '<%- dataset.id %>',
-    resourceUrl: 'https://<%- dataset.domain %>/resource/<%- dataset.id %>.json' 
+    migrationsUrl : 'http://<%- dataset.domain %>/api/migrations/<%- dataset.id %>.json',
+    nbeResourceUrl : 'https://<%- dataset.domain %>/resource/{0}.json?$group={1}&$select={1}%20as%20value,count(*)&$order=count%20desc&$limit=100',
+    viewsUrl : 'https://<%- dataset.domain %>/views/<%- dataset.id %>.json',
 };
 </script>
 
@@ -36,7 +36,7 @@ var _datasetMeta = {
                     <th>API Column Name</th>
                     <th>Data Type</th>
                     <% if (dataset.hasDescriptions) { %><th>Description</th><% } %>
-                    <th>Popular Values</th>
+                    <th>Sample Values</th>
                 </tr>
             <% for (var i = 0; i < dataset.columns.length; i++) { %>
                 <tr class="column-row" data-field-name="<%- dataset.columns[i].fieldName %>" data-type="<%- dataset.columns[i].dataTypeName %>">

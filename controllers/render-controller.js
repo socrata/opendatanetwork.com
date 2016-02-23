@@ -78,9 +78,9 @@ class RenderController {
                         '/styles/dataset.css'
                     ],
                     scripts : [
-                        '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
                         '/lib/third-party/lodash.min.js',
                         '/lib/third-party/d3.min.js',
+                        '/lib/third-party/d3.promise.min.js',
                         '/lib/dataset.min.js'
                     ]
                 };
