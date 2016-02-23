@@ -1,9 +1,6 @@
 'use strict';
 
 const API = require('./api');
-const ApiController = require('./api-controller');
-const CategoryController = require('./category-controller');
-const TagController = require('./tag-controller');
 const Relatives = require('./relatives');
 const Constants = require('./constants');
 const Request = require('./request');
@@ -17,10 +14,7 @@ const htmlencode = require('htmlencode').htmlEncode;
 const moment = require('moment');
 const numeral = require('numeral');
 const path = require('path');
-
-const apiController = new ApiController();
-const categoryController = new CategoryController();
-const tagController = new TagController();
+const defaultMetaSummary = 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.';
 
 const defaultSearchResultCount = 10;
 
@@ -56,7 +50,14 @@ class RenderController {
                         direct_map: schema.query.length === 0
                     });
                 });
+
                 const params = data[2];
+                const columns = _.filter(dataset.columns, isNotComputedField);
+                const columnsWithDescriptions = _.filter(
+                    columns,
+                    column => !_.isEmpty(column.description));
+
+                const hasDescriptions = (columnsWithDescriptions.length > 0);
 
                 const templateParams = {
                     params,
@@ -69,13 +70,15 @@ class RenderController {
                         descriptionHtml : htmlencode(dataset.description).replace('\n', '<br>'),
                         name : dataset.name,
                         tags : dataset.tags || [],
-                        columns : dataset.columns,
+                        columns : columns,
+                        hasDescriptions: hasDescriptions,
                         updatedAtString : moment(new Date(dataset.viewLastModified * 1000)).format('D MMM YYYY')
                     },
                     css : [
                         '/styles/dataset.css'
                     ],
                     scripts : [
+                        '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
                         '/lib/third-party/lodash.min.js',
                         '/lib/third-party/d3.min.js',
                         '/lib/dataset.min.js'
@@ -107,6 +110,7 @@ class RenderController {
                     params,
                     searchPath : '/search',
                     title : 'Open Data Network',
+                    metaSummary : defaultMetaSummary,
                     css : [
                         '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css',
                         '/styles/home.css',
@@ -151,7 +155,7 @@ class RenderController {
             } catch (error) {
                 RenderController.error(req, res)(error);
             }
-        });
+        }, RenderController.error(req, res));
     }
 
     static searchWithVector(req, res) {
@@ -170,7 +174,7 @@ class RenderController {
                         RenderController.error(req, res)(error);
                     }
                 }
-            });
+            }, RenderController.error(req, res));
         } else {
             RenderController.error(req, res, 404, `Vector "${vector}" not found`)();
         }
@@ -195,6 +199,7 @@ class RenderController {
                         searchDatasetsURL: API.searchDatasetsURL(params),
                         searchPath: req.path,
                         title: searchPageTitle(params),
+                        metaSummary : defaultMetaSummary,
                         css: [
                             '/styles/search.css',
                             '/styles/main.css'
@@ -215,12 +220,8 @@ class RenderController {
 
                     if (data && data.length == allPromises.length) {
                         templateParams.categories = data[0];
-                        templateParams.currentCategory =
-                            categoryController.getCurrentCategory(params, data[0]);
-
-                        templateParams.currentTag =
-                            tagController.getCurrentTag(params, data[1]);
-
+                        templateParams.currentCategory = API.currentCategory(params, data[0]);
+                        templateParams.currentTag = API.currentTag(params, data[1]);
                         templateParams.domainResults = data[2];
                         templateParams.searchResults = data[3];
                     }
@@ -253,7 +254,6 @@ class RenderController {
         }
 
         const uids = params.regions.map(region => region.id);
-        const names = params.regions.map(region => region.name);
 
         function processRegions(regions) {
             return regions.filter(region => {
@@ -272,10 +272,11 @@ class RenderController {
         const tagsPromise = API.tags();
         const domainsPromise = API.domains(5);
         const datasetsPromise = API.datasets(params);
-        const summaryPromise = MapDescription.summarizeFromParams(params);
+        const mapSummaryPromise = MapDescription.summarizeFromParams(params, false);
+        const metaSummaryPromise = MapDescription.summarizeFromParams(params, true);
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
                              categoriesPromise, tagsPromise, domainsPromise,
-                             datasetsPromise, summaryPromise];
+                             datasetsPromise, mapSummaryPromise, metaSummaryPromise];
         const allPromise = Promise.all(allPromises);
 
         const searchDatasetsURL = API.searchDatasetsURL(params);
@@ -286,6 +287,10 @@ class RenderController {
                 const source = params.vector === '' ?
                     Sources.get('population') :
                     Sources.get(params.vector);
+                source.datasetURL = source.datalensFXF ?
+                    `https://${source.domain}/view/${source.datalensFXF}` :
+                    `https://${source.domain}/dataset/${source.fxf}`;
+                source.apiURL = `https://dev.socrata.com/foundry/${source.domain}/${source.fxf}`;
 
                 const templateParams = {
                     params,
@@ -331,18 +336,17 @@ class RenderController {
 
                     if (data[3].length > 0) {
                         templateParams.categories = data[3];
-                        templateParams.currentCategory =
-                            categoryController.getCurrentCategory(params, data[3]);
+                        templateParams.currentCategory = API.currentCategory(params, data[3]);
                     }
 
-                    if (data[4].results.length > 0) {
-                        templateParams.currentTag =
-                            tagController.getCurrentTag(params, data[4]);
+                    if (data[4].length > 0) {
+                        templateParams.currentTag = API.currentTag(params, data[4]);
                     }
 
                     templateParams.domainResults = data[5];
                     templateParams.searchResults = data[6];
                     templateParams.mapSummary = data[7] || '';
+                    templateParams.metaSummary = data[8] || '';
                     templateParams.mapVariables = MapDescription.variablesFromParams(params);
                 }
 
@@ -402,7 +406,7 @@ class RenderController {
     static _parameters(req, res) {
         return new Promise((resolve, reject) => {
             const query = req.query;
-            const page = isNaN(query.page) ? 1 : parseInt(query.page);
+            const page = isNaN(query.page) ? 0 : parseInt(query.page);
 
             const params = {
                 categories: asArray(query.categories),
@@ -417,7 +421,8 @@ class RenderController {
                 regions: [],
                 resetRegions: false,
                 vector: req.params.vector || '',
-                year: req.params.year || ''
+                year: req.params.year || '',
+                debug: query.debug && query.debug == 'true'
             };
 
             if (req.params.regionIds && req.params.regionIds !== '') {
@@ -434,7 +439,7 @@ class RenderController {
                     } else {
                         resolve(params);
                     }
-                });
+                }, reject);
             } else {
                 resolve(params);
             }
@@ -469,6 +474,10 @@ function wordJoin(list, separator) {
     if (list.length === 1) return list[0];
     separator = separator || 'and';
     return `${list.slice(0, list.length - 1).join(', ')} ${separator} ${list[list.length - 1]}`;
+}
+
+function isNotComputedField(column) {
+    return !column.fieldName.match(':@computed_');
 }
 
 module.exports = RenderController;

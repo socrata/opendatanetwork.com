@@ -17,7 +17,7 @@ class MapSource {
         this.year = mapSource.yearColumn || 'year';
     }
 
-    summarize(variable, year, regions) {
+    summarize(variable, year, regions, metaDescription) {
         return new Promise((resolve, reject) => {
             this.getData(variable, year, regions).then(data => {
                 if (data.length === 0) {
@@ -27,7 +27,9 @@ class MapSource {
                         const row = _.find(data, row => row[this.id] === region.id);
                         const value = variable.format(row[variable.column]);
 
-                        return `The ${variable.name.toLowerCase()} of ${region.name} in ${year} was ${value}.`;
+                        return metaDescription ?
+                            `Maps, charts and data show the ${variable.name.toLowerCase()} of ${region.name} in ${year} was ${value}.` :
+                            `The ${variable.name.toLowerCase()} of ${region.name} in ${year} was ${value}.`;
                     }).join(' ');
                     resolve(summary);
                 }
@@ -69,7 +71,7 @@ class MapSource {
 }
 
 class MapDescription {
-    static summarizeFromParams(params) {
+    static summarizeFromParams(params, metaDescription) {
         return new Promise((resolve, reject) => {
             if (params.vector && params.vector in MAP_SOURCES) {
                 const source = new MapSource(MAP_SOURCES[params.vector]);
@@ -77,7 +79,7 @@ class MapDescription {
                 const year = source.getYear(variable, params.year);
                 const regions = params.regions;
 
-                source.summarize(variable, year, regions).then(resolve, reject);
+                source.summarize(variable, year, regions, metaDescription).then(resolve, reject);
             } else {
                 resolve('');
             }

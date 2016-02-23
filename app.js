@@ -67,6 +67,7 @@ app.get('/region/:regionIds/:regionNames', RenderController.search);
 app.get('/region/:regionIds/:regionNames/search-results', RenderController.searchResults);
 app.get('/region/:regionIds/:regionNames/:vector/search-results', RenderController.searchResults);
 app.get('/region/:regionIds/:regionNames/:vector/:metric/:year', RenderController.searchWithVector);
+app.get('/region/:regionIds/:regionNames/:vector/:metric/:year/search-results', RenderController.searchResults);
 app.get('/region/:regionIds/:regionNames/:vector/:metric', RenderController.searchWithVector);
 app.get('/region/:regionIds/:regionNames/:vector', RenderController.searchWithVector);
 

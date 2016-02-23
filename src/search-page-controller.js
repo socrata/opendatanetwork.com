@@ -6,6 +6,11 @@ class SearchPageController {
         this.fetchedAll = false;
         const self = this;
 
+        if (params.debug) {
+            console.log(_searchURL.replace(/[!'()*]/g, escape));
+            console.log(decodeURI(_searchURL.split('?')[1]));
+        }
+
         // Refine menus
         //
         $('.refine-link').mouseenter(function() {
@@ -28,7 +33,7 @@ class SearchPageController {
 
         $('#refine-menu-categories-view-more').click(function() {
             d3.promise.json('/categories.json').then(data => {
-                const rg = data.results.map(result => '<li><i class="fa ' + result.metadata.icon + '"></i>' + result.category + '</li>');
+                const rg = data.map(result => '<li><i class="fa ' + result.metadata.icon + '"></i>' + result.category + '</li>');
                 const s = rg.join('');
 
                 $('#refine-menu-categories').html(s);
@@ -57,25 +62,21 @@ class SearchPageController {
         // Tokens
         //
         $('.region-token .fa-times-circle').click(function() {
-
             self.removeRegion($(this).parent().index());
             self.navigate();
         });
 
         $('.category-token .fa-times-circle').click(function() {
-
             self.toggleCategory($(this).parent().text().toLowerCase().trim());
             self.navigate();
         });
 
         $('.domain-token .fa-times-circle').click(function() {
-
             self.toggleDomain($(this).parent().text().toLowerCase().trim());
             self.navigate();
         });
 
         $('.standard-token .fa-times-circle').click(function() {
-
             self.toggleTag($(this).parent().text().toLowerCase().trim());
             self.navigate();
         });
@@ -92,18 +93,13 @@ class SearchPageController {
 
         }).scroll();
 
-        // Add location
-        //
-        function selectRegion(option) {
+        const sources = regionsWithData(this.params.vector, option => {
+            RegionLookup.byID(option.id).then(region => {
+                this.params.regions.push(region);
+                this.navigate();
+            }, error => { throw error; });
+        });
 
-            RegionLookup.byID(option.id)
-                .then(region => {
-                    self.setAutoSuggestedRegion({ id : region.id, name : region.name }, false);
-                    self.navigate();
-                }, error => { throw error; });
-        }
-
-        const sources = regionsWithData(this.params.vector, selectRegion);
         const autosuggest = new Autosuggest('.add-region-results', sources);
 
         autosuggest.listen('.add-region-input');
@@ -144,193 +140,64 @@ class SearchPageController {
     }
 
     attachCategoriesClickHandlers() {
-
         const self = this;
 
         $('#refine-menu-categories li:not(.refine-view-more)').click(function() {
-
             self.toggleCategory($(this).text().toLowerCase().trim());
             self.navigate();
         });
     }
 
     attachDomainsClickHandlers() {
-
         const self = this;
 
         $('#refine-menu-domains li:not(.refine-view-more)').click(function() {
-
             const domain = $(this).text().toLowerCase().trim();
-
             self.toggleDomain(domain);
             self.navigate();
         });
     }
 
     attachTagsClickHandlers() {
-
         const self = this;
 
         $('#refine-menu-tags li').click(function() {
-
             const tag = $(this).text().toLowerCase().trim();
-
             self.toggleTag(tag);
             self.navigate();
         });
     }
 
-    decrementPage() {
-        this.params.page--;
-    }
-
-    // Paging
-    //
     fetchNextPage() {
-
-        if (this.fetching || this.fetchedAll)
-            return;
-
+        if (this.fetching || this.fetchedAll) return;
         this.fetching = true;
-        this.incrementPage();
+        this.params.page++;
 
-        const self = this;
+        const path = this.params.regions.length > 0 ?
+            `${window.location.pathname}/search-results` :
+            `/search/search-results`;
+        const search = window.location.search === '' ? '?' : window.location.search;
+        const url = `${path}${search}&page=${this.params.page}`;
 
-        $.ajax(this.getSearchResultsUrl()).done(function(data, textStatus, jqXHR) {
-
+        $.ajax(url).done((data, textStatus, jqXHR) => {
             if (jqXHR.status == 204) { // no content
-
-                self.decrementPage();
-                self.fetching = false;
-                self.fetchedAll = true;
-                return;
+                this.params.page--;
+                this.fetchedAll = true;
+            } else {
+                $('.datasets').append(data);
             }
 
-            $('.datasets').append(data);
-            self.fetching = false;
+            this.fetching = false;
         });
     }
 
-    getSearchPageForRegionVectorMetricYearUrl(regionIds, regionNames, vector, metric, year, isSearchResults, queryString) {
-
-        var url = '';
-
-        if (regionIds && (regionIds.length > 0)) {
-
-            url += '/region/' + regionIds.join('-');
-
-            if (regionNames && (regionNames.length > 0)) {
-
-                const parts = regionNames.map(regionName => regionName.replace(/ /g, '_').replace(/\//g, '_').replace(/,/g, ''));
-                url += '/' + parts.join('-');
-            }
-            else
-                url += '/-';
-        }
-        else {
-
-            url += '/search';
-        }
-
-        if (isSearchResults) {
-
-            url += '/search-results';
-        }
-        else {
-
-            if (vector) url += '/' + vector;
-            if (metric) url += '/' + metric;
-            if (year) url += '/' + year;
-        }
-
-        if (queryString)
-            url += queryString;
-
-        return url;
-    }
-
-    getSearchPageUrl(isSearchResults, metric, year) {
-
-        if ((this.params.regions.length > 0) || this.params.autoSuggestedRegion) {
-
-            var regionIds = [];
-            var regionNames = [];
-
-            if (this.params.resetRegions === false) {
-
-                regionIds = this.params.regions.map(region => region.id);
-                regionNames = this.params.regions.map(region => region.name);
-            }
-
-            if (this.params.autoSuggestedRegion) {
-
-                regionIds.push(this.params.autoSuggestedRegion.id);
-                regionNames.push(this.params.autoSuggestedRegion.name);
-            }
-
-            return this.getSearchPageForRegionVectorMetricYearUrl(
-                regionIds,
-                regionNames,
-                this.params.vector || 'population',
-                metric,
-                year,
-                isSearchResults,
-                this.getSearchQueryString(isSearchResults));
-        }
-        else {
-
-            return this.getSearchPageForRegionVectorMetricYearUrl(
-                null,
-                null,
-                this.params.vector || 'population',
-                metric,
-                year,
-                isSearchResults,
-                this.getSearchQueryString(isSearchResults));
-        }
-    }
-
-    getSearchResultsUrl() {
-
-        return this.getSearchPageUrl(true);
-    }
-
-    getSearchQueryString(isSearchResults) {
-
-        const parts = [];
-
-        if (this.params.q.length > 0)
-            parts.push('q=' + encodeURIComponent(this.params.q));
-
-        if ((this.params.page > 1) && isSearchResults)
-            parts.push('page=' + this.params.page);
-
-        if (this.params.categories.length > 0)
-            this.params.categories.forEach(category => parts.push('categories=' + encodeURIComponent(category)));
-
-        if (this.params.domains.length > 0)
-            this.params.domains.forEach(domain => parts.push('domains=' + encodeURIComponent(domain)));
-
-        if (this.params.tags.length > 0)
-            this.params.tags.forEach(tag => parts.push('tags=' + encodeURIComponent(tag)));
-
-        return (parts.length > 0) ? '?' + parts.join('&') : '';
-    }
-
-    incrementPage() {
-
-        this.params.page++;
-    }
-
     navigate() {
-
-        window.location.href = this.getSearchPageUrl();
+        window.location.href = Navigate.url(this.params);
     }
 
     removeRegion(regionIndex) {
-
         this.params.regions.splice(regionIndex, 1); // remove at index i
-        this.params.page = 1;
+        this.params.page = 0;
 
         if (this.params.regions.length === 0) // when the last region is removed so should the vector be removed.
             this.params.vector = '';
@@ -340,7 +207,7 @@ class SearchPageController {
 
         this.params.autoSuggestedRegion = region;
         this.params.resetRegions = resetRegions;
-        this.params.page = 1;
+        this.params.page = 0;
     }
 
     toggleCategory(category) {
@@ -352,7 +219,7 @@ class SearchPageController {
         else
             this.params.categories.push(category);
 
-        this.params.page = 1;
+        this.params.page = 0;
     }
 
     toggleDomain(domain) {
@@ -364,7 +231,7 @@ class SearchPageController {
         else
             this.params.domains.push(domain);
 
-        this.params.page = 1;
+        this.params.page = 0;
     }
 
     toggleTag(tag) {
@@ -378,7 +245,7 @@ class SearchPageController {
         else
             this.params.tags = [tag];
 
-        this.params.page = 1;
+        this.params.page = 0;
         this.params.categories = [];
         this.params.domains = [];
         this.params.q = '';

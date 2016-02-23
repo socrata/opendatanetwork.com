@@ -40,6 +40,7 @@ var autosuggestScripts = [
 ];
 
 var searchScripts = [
+    'src/forecast.js',
     'src/chart-constants.js',
     'src/data/data-sources.js',
     'src/charts.js',

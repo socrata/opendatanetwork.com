@@ -61,48 +61,11 @@ function _toPercent(column) {
     };
 }
 
-function _toDataTable(groupBy, column, format, filter, id) {
-    id = id || 'id';
-
-    return (rows, regions) => {
-
-        if (filter)
-            rows = _.filter(rows, filter);
-
-        const rg = rows.map(row => _.extend(row, { _value: numeral(row[column]).format(format) }));
-        const data = _.groupBy(rg, groupBy);
-
-        var dataTable = [];
-
-        for (var key in data) {
-
-            var row = [key];
-
-            regions.forEach(region => {
-                const regionData = _.find(data[key], item => (item[id] == region.id));
-                row.push(regionData._value);
-            });
-
-            dataTable.push(row);
-        }
-
-        return dataTable;
-    };
-}
-
-function _toCurrencyString(column) {
-
-    return rows => {
-        rows = _.groupBy(rows, 'variable');
-        return rows.map(row => _.extend(row, { [column]: numeral(row[column]).format('$0,0') }));
-    };
-}
-
 function _rename(column, names) {
     return rows => {
         return rows.map(row => {
             const name = names[row[column]] || row[column];
-            return _.extend(row, {[column]: name})
+            return _.extend(row, {[column]: name});
         });
     };
 }
@@ -121,7 +84,9 @@ const SOURCES = [
         attribution: ATTRIBUTIONS.acs,
         domain: ODN_DOMAIN,
         fxf: 'e3rd-zzmr',
+        datalensFXF: 'va7f-2qjr',
         regions: ALL_REGIONS,
+        searchTerms: ['population', 'household', 'demographics', 'ethnicity', 'minority'],
         charts: [
             {
                 name: 'Population',
@@ -137,7 +102,14 @@ const SOURCES = [
                         format: { pattern: '###,###' }
                     }
                 ],
-                chart: 'line'
+                chart: 'line',
+                forecast: {
+                    type: 'linear',
+                    steps: 5
+                },
+                options: {
+                    height: 300
+                }
             },
             {
                 name: 'Population Change',
@@ -161,6 +133,7 @@ const SOURCES = [
                 },
                 chart: 'line',
                 options: {
+                    height: 300,
                     vAxis: { format: '#.##%' }
                 }
             }
@@ -174,6 +147,7 @@ const SOURCES = [
         domain: ODN_DOMAIN,
         fxf: 'uf4m-5u8r',
         regions: ALL_REGIONS,
+        searchTerms: ['college', 'education', 'school', 'university', 'instruction', 'teaching', 'teacher', 'professor', 'student', 'graduation', 'scholastic', 'matriculation'],
         charts: [
             {
                 name: 'Graduation Rates',
@@ -190,7 +164,7 @@ const SOURCES = [
                 transpose: [
                     {
                         column: 'variable',
-                        label: 'Graduation Rate',
+                        label: '',
                         type: 'string'
                     },
                     {
@@ -200,10 +174,8 @@ const SOURCES = [
                     }
                 ],
                 transform: _toPercent('value'),
-                tableTransform: _toDataTable('variable', 'value', '0.0%'),
                 chart: 'table',
                 options: {
-                    height: 100,
                     vAxis: {
                         format: 'percent',
                         viewWindow: {
@@ -223,6 +195,7 @@ const SOURCES = [
         domain: ODN_DOMAIN,
         fxf: 'wmwh-4vak',
         regions: ALL_REGIONS,
+        searchTerms: ['revenue', 'budget', 'dividend', 'wage', 'income', 'compensation', 'assets', 'salary', 'earnings'],
         charts: [
             {
                 name: 'Earnings and Gender',
@@ -254,11 +227,7 @@ const SOURCES = [
                         format: { pattern: '###,###', prefix: '$' }
                     }
                 ],
-                tableTransform: _toDataTable('variable', 'value', '$0,0'),
-                chart: 'table',
-                options: {
-                    height: 150
-                }
+                chart: 'table'
             },
             {
                 name: 'Earnings and Education',
@@ -301,7 +270,8 @@ const SOURCES = [
                 ],
                 chart: 'stepped-area',
                 options: {
-                    vAxis: {format: 'currency'},
+                    height: 300,
+                    vAxis: { format: 'currency' },
                     areaOpacity: 0,
                     lineWidth: 2
                 }
@@ -316,6 +286,7 @@ const SOURCES = [
         domain: ODN_DOMAIN,
         fxf: 'qfcm-fw3i',
         regions: ALL_REGIONS,
+        searchTerms: ['occupations', 'wage', 'profession', 'business', 'work', 'job', 'profession', 'employment', 'labor', 'avocation'],
         charts: [
             {
                 name: 'Occupations',
@@ -324,7 +295,7 @@ const SOURCES = [
                 data: [
                     {
                         column: 'occupation',
-                        label: 'Occupation',
+                        label: '',
                         type: 'string'
                     },
                     {
@@ -334,11 +305,7 @@ const SOURCES = [
                     }
                 ],
                 transform: _toPercent('percent_employed'),
-                tableTransform: _toDataTable('occupation', 'percent_employed', '0.0%'),
-                chart: 'table',
-                options: {
-                    height: 800
-                }
+                chart: 'table'
             }
         ]
     },
@@ -358,6 +325,7 @@ const SOURCES = [
         fxf: 'ks2j-vhr8',
         regions: ['state', 'msa'],
         include: region => _.contains(region.name, 'Metro'),
+        searchTerms: ['gdp', 'gross domestic product', 'economy', 'production', 'revenue', 'gross national product', 'gnp'],
         charts: [
             {
                 name: 'GDP',
@@ -376,7 +344,12 @@ const SOURCES = [
                     }
                 ],
                 chart: 'line',
+                forecast: {
+                    type: 'linear',
+                    steps: 5
+                },
                 options: {
+                    height: 300,
                     vAxis: { format: '$###,###' }
                 }
             },
@@ -399,6 +372,7 @@ const SOURCES = [
                 transform: _toPercent('per_capita_gdp_percent_change'),
                 chart: 'line',
                 options: {
+                    height: 300,
                     vAxis: { format: '##.#%' }
                 }
             }
@@ -420,13 +394,14 @@ const SOURCES = [
         fxf: 'hpnf-gnfu',
         regions: ['state', 'msa'],
         include: region => _.contains(region.name, 'Metro'),
+        searchTerms: ['cost of living', 'rent', 'housing', 'consumer price index', 'expensive', 'inexpensive', 'housing cost', 'home price'],
         charts: [
             {
                 name: 'Cost of Living',
                 data: [
                     {
                         column: 'component',
-                        label: 'Component',
+                        label: '',
                         type: 'string'
                     },
                     {
@@ -438,9 +413,7 @@ const SOURCES = [
                         label: 'Year'
                     }
                 ],
-                tableTransform: _toDataTable('component', 'index', '0.0', item => (item.year == '2013')),
-                chart: 'table',
-                options: {height: 200}
+                chart: 'table'
             }
             ].concat(['All', 'Rents', 'Goods', 'Other'].map(component => {
             return {
@@ -454,10 +427,15 @@ const SOURCES = [
                     },
                     {
                         column: 'index',
-                        label: 'Index'
+                        label: 'Index',
+                        format: { pattern: '#.#' }
                     }
                 ],
-                chart: 'line'
+                chart: 'line',
+                forecast: {
+                    type: 'linear',
+                    steps: 5
+                }
             };
         }))
     },
@@ -474,6 +452,7 @@ const SOURCES = [
         domain: ODN_DOMAIN,
         fxf: 'va5j-wsjq',
         regions: ['state', 'nation'],
+        searchTerms: ['consumption', 'consumer', 'household consumption', 'goods and services', 'personal expenditure', 'personal expenses', 'pce'],
         charts: [
             {
                 name: 'Personal Consumption Expenditures over Time (Millions of USD)',
@@ -490,7 +469,14 @@ const SOURCES = [
                     }
                 ],
                 chart: 'line',
-                options: {vAxis: {format: '$###,###M'}}
+                forecast: {
+                    type: 'linear',
+                    steps: 5
+                },
+                options: {
+                    height: 300,
+                    vAxis: { format: '$###,###M' }
+                }
             },
             {
                 name: 'Change in Personal Consumption Expenditures over Time',
@@ -513,6 +499,7 @@ const SOURCES = [
                 },
                 chart: 'line',
                 options: {
+                    height: 300,
                     vAxis: { format: '#.##%' }
                 }
             }
@@ -542,6 +529,7 @@ const SOURCES = [
         domain: ODN_DOMAIN,
         fxf: '5pnb-mvzq',
         regions: ['county'],
+        searchTerms: ['job location', 'job opportunities', 'employment location', 'employment opportunities', 'commute', 'telecommute', 'transportation', 'traffic'],
         charts: [
             {
                 name: 'Median Jobs Promiximity Index',
@@ -559,7 +547,10 @@ const SOURCES = [
                 ],
                 transform: _rename('variable', {'jobs-prox-idx-median': 'Median Jobs Proximity Index'}),
                 chart: 'column',
-                options: {vAxis: {viewWindow: {min: 0}}}
+                options: {
+                    height: 300,
+                    vAxis: { viewWindow: { min: 0 } }
+                }
             }
         ]
     },
@@ -579,6 +570,7 @@ const SOURCES = [
         domain: ODN_DOMAIN,
         fxf: 'nax7-t6ga',
         regions: ['county'],
+        searchTerms: ['environment', 'pollution', 'carbon', 'emissions', 'energy', 'waste', 'toxic', 'smog', 'climate', 'radiation', 'toxin', 'hazard'],
         charts: [
             {
                 name: 'Median Environmental Health Hazard Index',
@@ -596,7 +588,10 @@ const SOURCES = [
                 ],
                 transform: _rename('variable', {'env-health-idx-median': 'Median Environmental Health Hazard Index'}),
                 chart: 'column',
-                options: {vAxis: {viewWindow: {min: 0}}}
+                options: {
+                    height: 300,
+                    vAxis: { viewWindow: { min: 0 } }
+                }
             }
         ]
     },
@@ -613,6 +608,7 @@ const SOURCES = [
         domain: ODN_DOMAIN,
         fxf: '7ayp-utp2',
         regions: ['county', 'state'],
+        searchTerms: ['health', 'fitness', 'smoking', 'alcohol', 'tobacco', 'obesity', 'tobacco', 'exercise', 'junk food'],
         charts: [
             {
                 name: 'Health Behaviors',
@@ -664,7 +660,7 @@ const SOURCES = [
                 transpose: [
                     {
                         column: 'variable',
-                        label: 'Health Behavior',
+                        label: '',
                         type: 'string'
                     },
                     {
@@ -673,7 +669,6 @@ const SOURCES = [
                         format: { pattern: '#.##%' }
                     }
                 ],
-                tableTransform: _toDataTable('variable', 'value', '0.0%'),
                 chart: 'table'
             }
         ]
@@ -697,6 +692,7 @@ const SOURCES = [
         fxf: 'n4rt-3rmd',
         regions: ['state'],
         idColumn: '_geoid',
+        searchTerms: ['health', 'asthma', 'arthritis', 'cardiac', 'cancer', 'copd', 'diabetes', 'disease', 'chronic'],
         charts: [
             {
                 name: 'Chronic Health Indicators',
@@ -709,7 +705,7 @@ const SOURCES = [
                 data: [
                     {
                         column: 'question',
-                        label: 'Question',
+                        label: '',
                         type: 'string'
                     },
                     {
@@ -719,11 +715,7 @@ const SOURCES = [
                     }
                 ],
                 transform: _toPercent('data_value'),
-                tableTransform: _toDataTable('question', 'data_value', '0.0%', null, '_geoid'),
-                chart: 'table',
-                options: {
-                    height: 500
-                }
+                chart: 'table'
             },
             {
                 name: 'Disability Status',
@@ -737,7 +729,7 @@ const SOURCES = [
                 data: [
                     {
                         column: 'question',
-                        label: 'Question',
+                        label: '',
                         type: 'string'
                     },
                     {
@@ -747,7 +739,6 @@ const SOURCES = [
                     }
                 ],
                 transform: _toPercent('data_value'),
-                tableTransform: _toDataTable('question', 'data_value', '0.0%', null, '_geoid'),
                 chart: 'table'
             },
             {
@@ -786,6 +777,7 @@ const SOURCES = [
                 },
                 chart: 'column',
                 options: {
+                    height: 300,
                     vAxis: { format: '#.##%', viewWindow: { min: 0 } },
                 }
             },
@@ -818,6 +810,7 @@ const SOURCES = [
                 },
                 chart: 'column',
                 options: {
+                    height: 300,
                     vAxis: { format: '#.##%', viewWindow: { min: 0 } },
                 }
             }

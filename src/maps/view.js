@@ -143,11 +143,14 @@ class MapView {
         if (regions.length < 1) throw 'regions cannot be empty';
 
         return new Promise((resolve, reject) => {
-            const regionType = MapConstants.REGIONS[regions[0].type];
+            const regionTypes = regions
+                .map(region => MapConstants.REGIONS[region.type])
+                .filter(_.identity);
 
-            if (regionType === undefined) {
+            if (regionTypes.length < 1) {
                 reject(`invalid region type for map: ${regions[0].type}`);
             } else {
+                const regionType = regionTypes[0];
                 const regionsOfType = _.filter(regions, region => {
                     return region.type == regionType.id;
                 });
