@@ -6,73 +6,10 @@ var _params = <%- JSON.stringify(params) %>;
 var _searchURL = "<%- searchDatasetsURL %>";
 </script>
 
-<section class="refine">
 
-    <a class="refine-link">
-        <span>Standards<i class="fa fa-caret-down"></i></span>
-        <ul id="refine-menu-tags" style="display:none">
-            <li>BLDS</li>
-            <li>LIVES</li>
-        </ul>
-    </a>
-
-    <a class="refine-link">
-        <span>Publishers<i class="fa fa-caret-down"></i></span>
-        <ul id="refine-menu-domains" style="display:none">
-          <% domainResults.results.forEach(function(result) { %>
-            <li><%= result.domain %></li>
-          <% }); %>
-            <li id="refine-menu-domains-view-more" class="refine-view-more">View More...</li>
-        </ul>
-    </a>
-
-    <a class="refine-link">
-        <span>Categories<i class="fa fa-caret-down"></i></span>
-        <ul id="refine-menu-categories" style="display:none">
-        <% if (typeof categories != 'undefined' && categories.length > 0) { %>
-            <% categories.forEach(function(category) { %>
-                <li><i class="fa <%= category.metadata.icon %>"></i><%= category.category %></li>
-           <% }); %>
-       <% } %>
-            <li id="refine-menu-categories-view-more" class="refine-view-more">View More...</li>
-        </ul>
-    </a>
-
-    <label class="refine-by-label">Refine by:</label>
-
-<% if (params.q.length > 0) { %>
-      <% if (searchResults.results.length > 0) { %>
-        <strong><%= searchResults.resultSetSizeString %></strong> results for <strong>"<%= params.q %>"</strong>
-      <% } else { %>
-        <strong>No results for "<%= params.q %>"</strong>
-      <% } %>
-<% } else { %>
-    <% if (searchResults.results.length > 0) { %>
-      <% if (params.regions.length > 0) { %>
-        <strong><%= searchResults.resultSetSizeString %></strong> results for
-        <strong><%= source.tabName %></strong>
-      <% } else { %>
-        <strong><%= searchResults.resultSetSizeString %></strong> results
-      <% } %>
-    <% } %>
+<% if (!hasRegions) { %>
+    <% include _refine-by %>
 <% } %>
-
-    <ul class="tokens">
-    <% params.regions.forEach(function(region) { %>
-        <li class="region-token"><%= region.name %> <a class="fa fa-times-circle"></a></li>
-    <% }); %>
-    <% params.categories.forEach(function(category) { %>
-        <li class="category-token"><%= category %> <a class="fa fa-times-circle"></a></li>
-    <% }); %>
-    <% params.domains.forEach(function(domain) { %>
-        <li class="domain-token"><%= domain %> <a class="fa fa-times-circle"></a></li>
-    <% }); %>
-    <% params.tags.forEach(function(tag) { %>
-        <li class="standard-token"><%= tag %> <a class="fa fa-times-circle"></a></li>
-    <% }); %>
-    </ul>
-
-</section>
 
 <section class="results">
 
@@ -98,76 +35,7 @@ var _searchURL = "<%- searchDatasetsURL %>";
 
 <% } else { %>
 
-    <div class="controls-column">
-        <div class="controls">
-            <h2>Compare this Data</h2>
-            <div class="add-region">
-                <i class="fa fa-plus"></i><input class="add-region-input" type="text" placeholder="Add Location">
-                <ul class="add-region-results" style="display: none;"></ul>
-            </div>
-            <% if (typeof peers != 'undefined' && peers && peers.length > 0) { %>
-                <ul id="similar-regions">
-                <% peers.forEach(function(region) { %>
-                    <li><a href=<%= region.addURL %>><%= region.name %> <i class="fa fa-plus"></i></a></li>
-                <% }); %>
-                </ul>
-            <% } %>
-
-            <%
-            const PLURALS = {
-                nation: 'Nations',
-                region: 'Regions',
-                division: 'Divisions',
-                state: 'States',
-                county: 'Counties',
-                place: 'Places',
-                msa: 'Metro Areas',
-                zip_code: 'ZIP Codes'
-            };
-            %>
-
-            <% if (typeof siblings != 'undefined' && siblings && siblings.length > 0) { %>
-                <h2 class="places-in-region-header">
-                    <%= PLURALS[params.regions[0].type] %> in
-                    <a class="parent-link" href="<%= parentRegion.navigateURL %>"><%= parentRegion.name %></a>
-                </h2>
-
-                <ul class="places-in-region-list">
-                    <% siblings.forEach(function(region) { %>
-                        <li><a href="<%= region.navigateURL %>"><%= region.name %></a></li>
-                    <% }); %>
-                </ul>
-            <% } %>
-
-            <% if (typeof allChildren != 'undefined' && allChildren && allChildren.length > 0) { %>
-                <% allChildren.forEach(function(children) { %>
-                    <% if (children.length > 0) { %>
-                        <h2 class="places-in-region-header">
-                            <%= PLURALS[children[0].type] %> in <%= params.regions[0].name %>
-                        </h2>
-
-                        <ul class="places-in-region-list">
-                            <% children.forEach(function(child) { %>
-                                <li><a href="<%= child.navigateURL %>"><%= child.name %></a></li>
-                            <% }); %>
-                        </ul>
-                    <% } %>
-                <% }); %>
-            <% } %>
-
-            <h2 id="places-in-region-header-0" class="places-in-region-header" style="display:none"></h2>
-            <ul id="places-in-region-list-0" class="places-in-region-list" style="display:none"></ul>
-            <h3 id="places-in-region-header-1" class="places-in-region-header" style="display:none"></h3>
-            <ul id="places-in-region-list-1" class="places-in-region-list" style="display:none"></ul>
-        </div>
-        <div class="footer">
-            <ul class="footer-links">
-                <li><a class="blue-link" href="http://www.socrata.com/company-info/">About Socrata</a></li>
-                <li><a class="blue-link" href="http://www.opendatanetwork.com/join-open-data-network">Join the Network</a></li>
-            </ul>
-            <a href="http://www.socrata.com/company-info/"><img src="/images/v3-powered-by-socrata.png"></a>
-        </div>
-    </div>
+    <% include _region-navigation %>
 
     <div class="charts-column">
         <ul class="chart-tabs">

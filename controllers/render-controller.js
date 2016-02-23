@@ -198,6 +198,7 @@ class RenderController {
                 try {
                     const templateParams = {
                         params,
+                        hasRegions: params.regions.length > 0,
                         searchPath: req.path,
                         title: searchPageTitle(params),
                         metaSummary : defaultMetaSummary,
@@ -296,6 +297,7 @@ class RenderController {
                     params,
                     sources,
                     source,
+                    hasRegions: params.regions.length > 0,
                     searchPath: req.path,
                     title: searchPageTitle(params, source),
                     css: [

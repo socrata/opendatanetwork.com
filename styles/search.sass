@@ -39,13 +39,22 @@ $orange-color: #ee3b3b
 
 section.refine
   background-color: $dark-gray-background-color
-  margin-top: 60px
-  min-height: 60px
   text-align: left
   font-size: 16px
   line-height: 60px
   padding: 0 0 0 30px
   position: relative
+  margin-top: 60px
+  margin-bottom: -60px
+
+.region-tokens
+  margin-top: 8px
+  margin-bottom: 32px
+
+  .tokens
+    li.region-token
+      display: inline-block
+      margin: 4px 0
 
 .tokens
   display: inline
@@ -54,6 +63,7 @@ section.refine
 .tokens li
   background-color: white
   border-radius: 2px
+  border: 1px solid #CAD0D4
   display: inline
   margin: 0 0 0 5px
   padding: 5px 10px
@@ -142,6 +152,8 @@ section.results
   border-top: 1px solid $gray-border-color
   display: table
   width: 100%
+  margin-top: 60px
+  min-height: 60px
 
 /* Common datasets
 
@@ -360,7 +372,7 @@ section.results
 #similar-regions
   font-size: 14px
   list-style-type: none
-  margin: 0 0 20px
+  margin: 0 0 32px
   padding: 0
 
 #similar-regions li
