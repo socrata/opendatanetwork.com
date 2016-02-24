@@ -7,6 +7,7 @@ class SearchPageController {
         const self = this;
 
         if (params.debug) {
+            console.log(_searchURL);
             console.log(_searchURL.replace(/[!'()*]/g, escape));
             console.log(decodeURI(_searchURL.split('?')[1]));
         }

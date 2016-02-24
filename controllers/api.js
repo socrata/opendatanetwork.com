@@ -77,7 +77,7 @@ class API {
                         return `${regionName} AND ("${stateAbbr}" OR "${stateName}")`;
                     } else if (type === 'msa') {
                         const words = name.split(' ');
-                        return `"${words.slice(0, words.length - 3)}"`;
+                        return `"${words.slice(0, words.length - 3).join(' ')}"`;
                     } else {
                         return `"${name}"`;
                     }
