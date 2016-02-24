@@ -1,7 +1,10 @@
 
 <ul class="tokens">
 <% params.regions.forEach(function(region) { %>
-    <li class="region-token"><%= region.name %> <a class="fa fa-times-circle"></a></li>
+    <li class="region-token">
+        <div><%= region.name %></div>
+        <a class="fa fa-times-circle"></a>
+    </li>
 <% }); %>
 <% params.categories.forEach(function(category) { %>
     <li class="category-token"><%= category %> <a class="fa fa-times-circle"></a></li>
