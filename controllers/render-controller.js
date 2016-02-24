@@ -370,7 +370,7 @@ class RenderController {
     static searchResults(req, res) {
         RenderController._parameters(req, res).then(params => {
             API.datasets(params).then(searchResults => {
-                if (searchResults.length === 0) {
+                if (searchResults.results.length === 0) {
                     res.status(204);
                     res.end();
                 } else {

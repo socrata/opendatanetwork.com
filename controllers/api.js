@@ -60,16 +60,17 @@ class API {
     static _query(requestParams) {
         return new Promise((resolve, reject) => {
             const q = requestParams.q;
-            const vector = requestParams.vector;
+            const vector = requestParams.vector || 'population';
+            const regions = requestParams.regions || [];
 
             if (q && q !== '') {
                 resolve({q});
-            } else if (vector && Sources.has(vector)) {
+            } else if (regions.length > 0 && Sources.has(vector)) {
                 API.stateNames().then(stateNames => {
                     const searchTerms = Sources.get(vector).searchTerms
                         .map(term => _.contains(term, ' ') ? `"${term}"` : term);
 
-                    const regionNames = requestParams.regions.map(region => {
+                    const regionNames = regions.map(region => {
                         const name = region.name;
                         const type = region.type;
 
