@@ -55,7 +55,7 @@ var _searchURL = "<%- searchDatasetsURL %>";
                 <% } %>
 
                 <label class="attribution">
-                    Data from the <a href="<%= source.attribution.url %>"><%= source.attribution.name %></a>.
+                    Above charts are based on data from the <a href="<%= source.attribution.url %>"><%= source.attribution.name %></a>.
                     <% if ('sourceURL' in source) { %>
                         <a href="<%= source.sourceURL %>">Data Source</a> |
                     <% } %>
@@ -64,9 +64,13 @@ var _searchURL = "<%- searchDatasetsURL %>";
                     <a href="<%= source.apiURL %>">API</a> -
                     <span class='info-icon'>
                         <div class='info-tooltip'>
-                            <strong>Note</strong> -
-                            ODN datasets and APIs are subject to change and may differ in format from the original
-                            source data in order to provide a user-friendly experience on this site.
+                            <strong>Notes:</strong>
+                            <br /><br />
+                            1. ODN datasets and APIs are subject to change and may differ in format from the original source data in order to provide a user-friendly experience on this site.
+                            <br /><br />
+                            2. To build your own apps using this data, see the ODN Dataset and API links.
+                            <br /><br />
+                            3. If you use this derived data in an app, we ask that you provide a link somewhere in your applications to the Open Data Network with a citation that states: "Data for this application was provided by the Open Data Network" where "Open Data Network" links to http://opendatanetwork.com. Where an application has a region specific module, we ask that you add an additional line that states: "Data about REGIONX was provided by the Open Data Network." where REGIONX is an HREF with a name for a geographical region like "Seattle, WA" and the link points to this page URL, e.g. http://opendatanetwork.com/region/1600000US5363000/Seattle_WA
                         </div>
                     </span>
                 </label>
