@@ -81,7 +81,7 @@ class API {
                     } else {
                         return `"${name}"`;
                     }
-                });
+                }).map(constraint => `(${constraint})`);
 
                 const allTerms = [searchTerms, regionNames, requestParams.tags];
                 const query = allTerms
