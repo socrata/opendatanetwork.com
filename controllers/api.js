@@ -57,43 +57,56 @@ class API {
         });
     }
 
+    static _query(requestParams) {
+        return new Promise((resolve, reject) => {
+            const q = requestParams.q;
+            const vector = requestParams.vector;
+
+            if (q && q !== '') {
+                resolve({q});
+            } else if (vector && Sources.has(vector)) {
+                API.stateNames().then(stateNames => {
+                    const searchTerms = Sources.get(vector).searchTerms
+                        .map(term => _.contains(term, ' ') ? `"${term}"` : term);
+
+                    const regionNames = requestParams.regions.map(region => {
+                        const name = region.name;
+                        const type = region.type;
+
+                        if (type === 'place' || type === 'county') {
+                            const regionName = name.split(', ')[0];
+                            const stateAbbr = name.split(', ')[1];
+                            const stateName = stateNames[stateAbbr] || '';
+                            return `${regionName} AND ("${stateAbbr}" OR "${stateName}")`;
+                        } else if (type === 'msa') {
+                            const words = name.split(' ');
+                            return `"${words.slice(0, words.length - 3).join(' ')}"`;
+                        } else {
+                            return `"${name}"`;
+                        }
+                    }).map(constraint => `(${constraint})`);
+
+                    const allTerms = [searchTerms, regionNames, requestParams.tags];
+                    const query = allTerms
+                        .filter(terms => terms.length > 0)
+                        .map(terms => `(${terms.join(' OR ')})`)
+                        .join(' AND ');
+
+                    resolve({q_internal: query});
+                }, reject);
+            } else {
+                resolve({q: ''});
+            }
+        });
+    }
+
     static searchDatasetsURL(requestParams, limit, offset) {
         return new Promise((resolve, reject) => {
-            API.stateNames().then(stateNames => {
-                const vector = requestParams.vector;
-                let searchTerms = (vector && Sources.has(vector)) ?
-                    (Sources.get(vector).searchTerms || []) : [];
-                searchTerms = searchTerms.map(term => _.contains(term, ' ') ? `"${term}"` : term);
-                if (requestParams.q) searchTerms.push(requestParams.q);
-
-                const regionNames = requestParams.regions.map(region => {
-                    const name = region.name;
-                    const type = region.type;
-
-                    if (type === 'place' || type === 'county') {
-                        const regionName = name.split(', ')[0];
-                        const stateAbbr = name.split(', ')[1];
-                        const stateName = stateNames[stateAbbr] || '';
-                        return `${regionName} AND ("${stateAbbr}" OR "${stateName}")`;
-                    } else if (type === 'msa') {
-                        const words = name.split(' ');
-                        return `"${words.slice(0, words.length - 3).join(' ')}"`;
-                    } else {
-                        return `"${name}"`;
-                    }
-                }).map(constraint => `(${constraint})`);
-
-                const allTerms = [searchTerms, regionNames, requestParams.tags];
-                const query = allTerms
-                    .filter(terms => terms.length > 0)
-                    .map(terms => `(${terms.join(' OR ')})`)
-                    .join(' AND ');
-
+            API._query(requestParams).then(queryParams => {
                 const categories = requestParams.categories || [];
                 const domains = requestParams.domains || [];
                 const tags = requestParams.tags || [];
-
-                const params = {categories, domains, tags, q_internal: query};
+                const params = _.extend({categories, domains, tags}, queryParams);
                 if (limit) params.limit = limit;
                 if (offset) params.offset = offset;
                 resolve(Request.buildURL(Constants.CATALOG_URL, params));
