@@ -1,5 +1,6 @@
 'use strict';
 
+const _ = require('lodash');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const express = require('express');
@@ -82,5 +83,6 @@ var port = Number(process.env.PORT || 3000);
 app.listen(port);
 console.log('app is listening on ' + port);
 
+app.locals._ = _;
 app.locals.numeral = numeral;
 
