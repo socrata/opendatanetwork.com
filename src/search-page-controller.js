@@ -11,35 +11,35 @@ class SearchPageController {
             console.log(_searchURL.replace(/[!'()*]/g, escape));
             console.log(decodeURI(_searchURL.split('?')[1]));
         }
-        
+
         // Sub-nav
         //
         $('.chart-sub-nav li').mouseenter(function() {
-
             $(this).addClass('selected');
             $(this).children('a').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
-            $(this).children('ul').slideDown(100);
+            $(this).children('ul').show();
         });
 
         $('.chart-sub-nav li').mouseleave(function() {
-
             $(this).removeClass('selected');
             $(this).children('a').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
-            $(this).children('ul').slideUp(100);
+            $(this).children('ul').hide();
         });
-        
+
+        $('.year-nav').click(function() {
+            console.log($(this).text());
+        });
+
 
         // Refine menus
         //
         $('.refine-link').mouseenter(function() {
-
             $(this).addClass('refine-link-selected');
             $(this).children('span').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
             $(this).children('ul').show();
         });
 
         $('.refine-link').mouseleave(function() {
-
             $(this).removeClass('refine-link-selected');
             $(this).children('span').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
             $(this).children('ul').hide();
@@ -143,8 +143,8 @@ class SearchPageController {
                 console.warn(`no map source found for vector: ${vector}`);
             }
 
-            if (vector in SOURCES_BY_VECTOR) {
-                const source = SOURCES_BY_VECTOR[vector];
+            if (vector in DATASETS_BY_VECTOR) {
+                const source = DATASETS_BY_VECTOR[vector];
                 new Tab(source).render(d3.select('div.charts'), regions);
             } else {
                 console.warn(`no source found for vector: ${vector}`);

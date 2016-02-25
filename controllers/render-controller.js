@@ -286,63 +286,38 @@ class RenderController {
 
         allPromise.then(data => {
             try {
+                // groups, group, vectors, vector, metrics, metric, years, year
 
-                const sources = Sources.forRegions(params.regions);
-                const groupKey = (params.group === '') ? 'demographics' : params.group;
-                const vectorKey = (params.vector === '') ? 'population' : params.vector;
-                const metricKey = (params.metric === '') ? 'population' : params.metric;
-                const year = (params.year === '') ? '2013' : params.year;
+                const vector = ((params.vector || '') === '') ? 'population' : params.vector;
 
-                // Groups
-                //
-                const groups = SourceGroups.forRegions(params.regions);
+                const groups = Sources.groups(params.regions);
+                const group = Sources.group(vector);
 
-                // Current group
-                //
-                const group = _.first(_.filter(groups, group => group.name == groupKey));
+                const sources = group.datasets;
+                const source = Sources.source(vector);
 
-                // Vectors for group
-                //
-                var vectors = [];
-                group.sourceVectors.forEach(vector => {
-                    const o = _.filter(sources, source => source.vector == vector);
-                    vectors = _.union(vectors, o);
-                });
+                const mapSource = MapSources[vector];
 
-                // Current vector
-                //
-                const vector = Sources.get(vectorKey);
+                const metrics = mapSource.variables;
+                const metric = _.find(metrics, metric => metric.column === params.metric) || 'population';
 
-                // Metrics for vector
-                //
-                const metrics = MapSources[vectorKey].variables;
+                const years = metric.years;
+                const year = _.find(years, year => parseFloat(year) === parseFloat(params.year)) || '2013';
 
-                // Current metric
-                //
-                const metric = _.first(_.filter(MapSources[vectorKey].variables, source => source.column == metricKey));
-
-                // Years for metric
-                //
-                const years = metric.years.slice();
-                years.reverse();
-
-                vector.datasetURL = vector.datalensFXF ?
+                source.datasetURL = vector.datalensFXF ?
                     `https://${vector.domain}/view/${vector.datalensFXF}` :
                     `https://${vector.domain}/dataset/${vector.fxf}`;
-                vector.apiURL = `https://dev.socrata.com/foundry/${vector.domain}/${vector.fxf}`;
-
-                const source = vector;
+                source.apiURL = `https://dev.socrata.com/foundry/${vector.domain}/${vector.fxf}`;
 
                 const templateParams = {
                     params,
+                    vector,
                     sources,
                     source,
                     groups,
                     group,
-                    vector,
                     year,
                     metric,
-                    vectors,
                     metrics,
                     years,
                     hasRegions: params.regions.length > 0,
@@ -402,8 +377,6 @@ class RenderController {
 
                     templateParams.searchDatasetsURL = data[8];
                 }
-
-console.log(JSON.stringify(templateParams));
 
                 if (templateParams.mapSummary === '') {
                     params.vector = 'population';

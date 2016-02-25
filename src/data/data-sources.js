@@ -836,6 +836,24 @@ const DATASETS = _.flatten(SOURCES.map(tab => tab.datasets));
 const DATASETS_BY_VECTOR = _.indexBy(DATASETS, source => source.vector);
 
 class Sources {
+    static source(vector) {
+        return DATASETS_BY_VECTOR[vector];
+    }
+
+    static groups(regions) {
+        return SOURCES.filter(group => {
+            return group.datasets
+                .map(dataset => Sources.supports(dataset, regions))
+                .some(_.identity);
+        });
+    }
+
+    static group(vector) {
+        return _.find(SOURCES, group => {
+            return _.find(group.datasets, dataset => dataset.vector === vector);
+        });
+    }
+
     static has(vector) {
         return vector in DATASETS_BY_VECTOR;
     }
@@ -853,12 +871,14 @@ class Sources {
         return Sources.supports(DATASETS_BY_VECTOR[vector], regions);
     }
 
-    static supports(source, regions) {
-        for (const region of regions) {
-            if (!_.contains(source.regions, region.type) ||
-               (source.include && !source.include(region))) return false;
-        }
-        return true;
+    /**
+     * True if dataset has data for any of the given regions.
+     */
+    static supports(dataset, regions) {
+        return regions.map(region => {
+            return (_.contains(dataset.regions, region.type) ||
+                    (dataset.include && dataset.include(region)));
+        }).some(_.identity);
     }
 
     static forRegions(regions) {

@@ -18,16 +18,16 @@ var _searchURL = "<%- searchDatasetsURL %>";
             <ul class="chart-tabs">
                 <% groups.forEach(function(group) { %>
                     <li class="<%= (group.name == params.group) ? 'selected' : '' %>">
-                        <a href=""><%= group.tabName %></a>
+                        <a href=""><%= group.name %></a>
                     </li>
                 <% }); %>
             </ul>
             <ul class="chart-sub-nav">
                 <li>
-                    <a href=""><%= vector.tabName %><i class="fa fa-caret-down"></i></a>
+                    <a href=""><%= source.name %><i class="fa fa-caret-down"></i></a>
                     <ul class="chart-sub-nav-menu">
-                        <% vectors.forEach(function(vector) { %>
-                            <li><a><%= vector.tabName %></a></li>
+                        <% sources.forEach(function(source) { %>
+                            <li><a><%= source.name %></a></li>
                         <% }); %>
                     </ul>
                 </li>
@@ -35,7 +35,7 @@ var _searchURL = "<%- searchDatasetsURL %>";
                     <a href=""><%= metric.name %><i class="fa fa-caret-down"></i></a>
                     <ul class="chart-sub-nav-menu">
                         <% metrics.forEach(function(metric) { %>
-                            <li><a><%= metric.name %></a></li>
+                            <li><a class="metric-nav"><%= metric.name %></a></li>
                         <% }); %>
                     </ul>
                 </li>
@@ -43,7 +43,7 @@ var _searchURL = "<%- searchDatasetsURL %>";
                     <a href=""><%= year %><i class="fa fa-caret-down"></i></a>
                     <ul class="chart-sub-nav-menu">
                         <% years.forEach(function(year) { %>
-                            <li><a><%= year %></a></li>
+                            <li><a class="year-nav"><%= year %></a></li>
                         <% }); %>
                     </ul>
                 </li>

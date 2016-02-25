@@ -1,12 +1,10 @@
 
 class Tab {
     constructor(tab) {
-        if (!tab.tabName) throw Error('tab missing tab');
-        this.tabName = tab.tabName;
+        if (!tab.name) throw Error('tab missing name');
+        this.name = tab.name;
 
         this.description = tab.description || '';
-
-        this.name = tab.name || this.tabName;
 
         if (!tab.attribution) throw Error('tab missing attribution');
         this.attribution = tab.attribution;
