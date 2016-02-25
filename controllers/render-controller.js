@@ -78,6 +78,7 @@ class RenderController {
                         '/styles/dataset.css'
                     ],
                     scripts : [
+                        '/lib/third-party/jquery.dotdotdot.min.js',
                         '/lib/third-party/lodash.min.js',
                         '/lib/third-party/d3.min.js',
                         '/lib/third-party/d3.promise.min.js',

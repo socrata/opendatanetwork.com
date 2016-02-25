@@ -29,7 +29,7 @@ $(document).ready(function() {
 
                         const rg = _.slice(column.cachedContents.top, 0, 5);
                         const items = _.map(rg, o => {
-                            return '<div>' + ((dataType == 'location') ?  JSON.stringify(o.item) : o.item) + '</div>';
+                            return '<div class="dotdotdot">' + ((dataType == 'location') ?  JSON.stringify(o.item) : o.item) + '</div>';
                         });
 
                         s += items.join('');
@@ -51,6 +51,13 @@ $(document).ready(function() {
                             window.location.href = _datasetMeta.nbeResourceUrl.format(data.nbeId, fieldName); 
                         }, 
                         console.error);
+            });
+
+            $('.dotdotdot').dotdotdot({
+                ellipsis : '... ',
+                wrap : 'word',
+                fallbackToLetter : true,
+                height: 20
             });
         }, 
         console.error);
