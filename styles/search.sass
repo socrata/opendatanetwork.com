@@ -24,6 +24,7 @@ $orange-color: #ee3b3b
 @import info-icon
 @import map-summary
 @import charts
+@import chart-tabs
 @import tables
 
 *::-webkit-input-placeholder,
@@ -265,34 +266,6 @@ section.results
   text-align: left
   vertical-align: top
 
-.chart-tabs
-  border-bottom: 1px solid $gray-border-color
-  line-height: 55px
-  margin: 0
-  padding: 0 15px
-  list-style-type: none
-  text-align: left
-
-.chart-tabs li
-  color: $dark-gray-text-color
-  display: inline-block
-  padding: 0 20px
-  font-size: 14px
-
-.chart-tabs li.selected
-  border-bottom: 5px solid $blue-text-color
-  font-weight: 600
-
-.chart-tabs li a
-  color: $dark-gray-text-color
-  display: block
-
-.chart-tabs li a:hover
-  color: $blue-text-color
-
-.chart-tabs li.selected a
-  color: $black-text-color
-
 .charts
   padding: 0 35px
 
@@ -323,9 +296,11 @@ section.results
 
   .attribution
     display: block
-    font-size: 12px
+    font-size: 14px
     text-align: center
 
+  a
+    color: $blue-text-color
 
 .charts-column figure
   height: 320px
@@ -336,7 +311,7 @@ section.results
 
 .controls-column
   background-color: $footer-background-color
-  border-left: 1px solid $gray-border-color
+  border-right: 1px solid $gray-border-color
   display: table-cell
   text-align: left
   vertical-align: top

@@ -7,6 +7,8 @@ const Request = require('./request');
 const Navigate = require('./navigate');
 
 const MapDescription = require('../src/maps/description');
+const MapSources = require('../src/data/map-sources');
+const SourceGroups = require('../src/data/data-source-groups');
 const Sources = require('../src/data/data-sources');
 
 const _ = require('lodash');
@@ -284,23 +286,69 @@ class RenderController {
 
         allPromise.then(data => {
             try {
+
                 const sources = Sources.forRegions(params.regions);
-                const source = params.vector === '' ?
-                    Sources.get('population') :
-                    Sources.get(params.vector);
-                source.datasetURL = source.datalensFXF ?
-                    `https://${source.domain}/view/${source.datalensFXF}` :
-                    `https://${source.domain}/dataset/${source.fxf}`;
-                source.apiURL = `https://dev.socrata.com/foundry/${source.domain}/${source.fxf}`;
+                const groupKey = (params.group === '') ? 'demographics' : params.group;
+                const vectorKey = (params.vector === '') ? 'population' : params.vector;
+                const metricKey = (params.metric === '') ? 'population' : params.metric;
+                const year = (params.year === '') ? '2013' : params.year;
+
+                // Groups
+                //
+                const groups = SourceGroups.forRegions(params.regions);
+
+                // Current group
+                //
+                const group = _.first(_.filter(groups, group => group.name == groupKey));
+
+                // Vectors for group
+                //
+                var vectors = [];
+                group.sourceVectors.forEach(vector => {
+                    const o = _.filter(sources, source => source.vector == vector);
+                    vectors = _.union(vectors, o);
+                });
+
+                // Current vector
+                //
+                const vector = Sources.get(vectorKey);
+
+                // Metrics for vector
+                //
+                const metrics = MapSources[vectorKey].variables;
+
+                // Current metric
+                //
+                const metric = _.first(_.filter(MapSources[vectorKey].variables, source => source.column == metricKey));
+
+                // Years for metric
+                //
+                const years = metric.years.slice();
+                years.reverse();
+
+                vector.datasetURL = vector.datalensFXF ?
+                    `https://${vector.domain}/view/${vector.datalensFXF}` :
+                    `https://${vector.domain}/dataset/${vector.fxf}`;
+                vector.apiURL = `https://dev.socrata.com/foundry/${vector.domain}/${vector.fxf}`;
+
+                const source = vector;
 
                 const templateParams = {
                     params,
                     sources,
                     source,
+                    groups,
+                    group,
+                    vector,
+                    year,
+                    metric,
+                    vectors,
+                    metrics,
+                    years,
                     hasRegions: params.regions.length > 0,
                     regionNames: wordJoin(params.regions.map(region => region.name), 'or'),
                     searchPath: req.path,
-                    title: searchPageTitle(params, source),
+                    title: searchPageTitle(params, vector),
                     css: [
                         '/styles/third-party/leaflet.min.css',
                         '/styles/search.css',
@@ -354,6 +402,8 @@ class RenderController {
 
                     templateParams.searchDatasetsURL = data[8];
                 }
+
+console.log(JSON.stringify(templateParams));
 
                 if (templateParams.mapSummary === '') {
                     params.vector = 'population';
@@ -412,7 +462,7 @@ class RenderController {
             const params = {
                 categories: asArray(query.categories),
                 domains: asArray(query.domains),
-                tags: asArray(query.tags),
+                group: req.params.group || '',
                 limit: defaultSearchResultCount,
                 metric: req.params.metric || '',
                 offset: (page - 1) * defaultSearchResultCount,
@@ -421,6 +471,7 @@ class RenderController {
                 q: query.q || '',
                 regions: [],
                 resetRegions: false,
+                tags: asArray(query.tags),
                 vector: req.params.vector || '',
                 year: req.params.year || '',
                 debug: query.debug && query.debug == 'true'
