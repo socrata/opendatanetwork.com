@@ -11,6 +11,23 @@ class SearchPageController {
             console.log(_searchURL.replace(/[!'()*]/g, escape));
             console.log(decodeURI(_searchURL.split('?')[1]));
         }
+        
+        // Sub-nav
+        //
+        $('.chart-sub-nav li').mouseenter(function() {
+
+            $(this).addClass('selected');
+            $(this).children('a').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
+            $(this).children('ul').slideDown(100);
+        });
+
+        $('.chart-sub-nav li').mouseleave(function() {
+
+            $(this).removeClass('selected');
+            $(this).children('a').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
+            $(this).children('ul').slideUp(100);
+        });
+        
 
         // Refine menus
         //

@@ -71,6 +71,9 @@ const VariableControl = L.Control.extend({
             year: this.year,
             metric: Navigate.escapeName(this.variable.name).toLowerCase()
         }));
+
+console.log(JSON.stringify(this.params));        
+        
         history.replaceState(null, null, url);
 
         this.onUpdate(this.variable, this.year);
