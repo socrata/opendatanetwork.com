@@ -41,16 +41,11 @@ var _searchURL = "<%- searchDatasetsURL %>";
 
                         <% if ('forecast' in chart) { %>
                             <p class='chart-footnote dataset-description'>
-                                Forecasted data is based on a seasonally adjusted
-                                linear time series model which uses only available
-                                measured data provided by the
-                                <a href="<%= source.attribution.url %>">
-                                    <%= source.attribution.name %>
-                                </a>.
-                                Model details are available
-                                <a href="https://en.wikipedia.org/wiki/Extrapolation#Linear_extrapolation">
-                                    HERE
-                                </a>.
+                                Forecasted data uses a linear extrapolation algorithm
+                                which uses only available measured data provided by the
+                                <a href="<%= source.attribution.url %>"><%= source.attribution.name %></a>.
+                                Algorithm details are available
+                                <a href="https://en.wikipedia.org/wiki/Extrapolation#Linear_extrapolation">HERE</a>.
                             </p>
                         <% } %>
                     </div>
