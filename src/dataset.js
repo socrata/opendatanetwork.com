@@ -19,22 +19,24 @@ $(document).ready(function() {
                 const dataType = row.attr('data-type');
                 const columns = _.filter(data.columns, column => column.fieldName == fieldName);
 
-                if ((columns == null) || (columns.length == 0))
-                    return;
+                var s = '';
 
-                const column = columns[0]; 
+                if ((columns != null) && (columns.length > 0)) {
 
-                if ((column == null) || (column.cachedContents == null) || (column.cachedContents.top == null))
-                    return;
+                    const column = columns[0]; 
 
-                const rg = _.slice(column.cachedContents.top, 0, 5);
-                const items = _.map(rg, o => {
-                    return '<div>' + ((dataType == 'location') ?  JSON.stringify(o.item) : o.item) + '</div>';
-                });
+                    if ((column != null) && (column.cachedContents != null) && (column.cachedContents.top != null)) {
 
-                var s = items.join('');
+                        const rg = _.slice(column.cachedContents.top, 0, 5);
+                        const items = _.map(rg, o => {
+                            return '<div>' + ((dataType == 'location') ?  JSON.stringify(o.item) : o.item) + '</div>';
+                        });
+
+                        s += items.join('');
+                    }
+                }
+
                 s += '<a class="view-top-100" rel="nofollow">view top 100</a>';
-
                 row.find('.popular-values').html(s);
             });
             
