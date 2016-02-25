@@ -33,9 +33,7 @@ $(document).ready(function() {
                 });
 
                 var s = items.join('');
-
-                if (column.cachedContents.top.length > 5)
-                    s += '<a class="view-top-100" rel="nofollow">view top 100</a>';
+                s += '<a class="view-top-100" rel="nofollow">view top 100</a>';
 
                 row.find('.popular-values').html(s);
             });
