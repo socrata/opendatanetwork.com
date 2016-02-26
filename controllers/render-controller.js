@@ -288,11 +288,12 @@ class RenderController {
             try {
                 const vector = ((params.vector || '') === '') ? 'population' : params.vector;
 
-                const groups = Sources.groups(params.regions).map(group => {
+                const groups = Sources.groups(params.regions).slice(0).map(group => {
                     group.selected = _.contains(group.datasets.map(dataset => dataset.vector), vector);
+                    group.datasets = Sources.sources(group, params.regions);
                     return group;
                 });
-                const group = _.extend({}, Sources.group(vector));
+                const group = Sources.group(vector);
 
                 const sources = Sources.sources(group, params.regions);
                 const source = Sources.source(vector);
