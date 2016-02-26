@@ -288,11 +288,18 @@ class RenderController {
             try {
                 const vector = ((params.vector || '') === '') ? 'population' : params.vector;
 
-                const groups = Sources.groups(params.regions);
-                const group = Sources.group(vector);
+                const groups = Sources.groups(params.regions).map(group => {
+                    group.selected = _.contains(group.datasets.map(dataset => dataset.vector), vector);
+                    return group;
+                });
+                const group = _.extend({}, Sources.group(vector));
 
                 const sources = Sources.sources(group, params.regions);
                 const source = Sources.source(vector);
+                source.datasetURL = vector.datalensFXF ?
+                    `https://${vector.domain}/view/${vector.datalensFXF}` :
+                    `https://${vector.domain}/dataset/${vector.fxf}`;
+                source.apiURL = `https://dev.socrata.com/foundry/${vector.domain}/${vector.fxf}`;
 
                 const mapSource = MapSources[vector];
 
@@ -301,11 +308,6 @@ class RenderController {
 
                 const years = metric.years;
                 const year = _.find(years, year => parseFloat(year) === parseFloat(params.year)) || '2013';
-
-                source.datasetURL = vector.datalensFXF ?
-                    `https://${vector.domain}/view/${vector.datalensFXF}` :
-                    `https://${vector.domain}/dataset/${vector.fxf}`;
-                source.apiURL = `https://dev.socrata.com/foundry/${vector.domain}/${vector.fxf}`;
 
                 const templateParams = {
                     params,

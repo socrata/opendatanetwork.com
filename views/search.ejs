@@ -17,7 +17,7 @@ var _searchURL = "<%- searchDatasetsURL %>";
         <div class="charts-column">
             <ul class="chart-tabs">
                 <% groups.forEach(function(_group) { %>
-                    <li class="<%= (_group.name == params._group) ? 'selected' : '' %>">
+                    <li class="<%= _group.selected ? 'selected' : '' %>">
                         <a href="<%= getSearchPageUrl(_group.datasets[0]) %>">
                             <%= _group.name %>
                         </a>

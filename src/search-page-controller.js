@@ -271,7 +271,6 @@ class SearchPageController {
             $(this).children('ul').hide();
         });
 
-
         $('.dataset-nav').click(function() {
             self.params.vector = $(this).attr('vector');
             self.navigate();
