@@ -10,16 +10,22 @@ const Constants = require('./constants.js');
 const cache = memjs.Client.create(null, Constants.CACHE_OPTIONS);
 
 class Request {
+    /**
+     * Generates a cache key for the given URL.
+     * To get around the 250 character memcache key size limit,
+     * a base64 encoded SHA512 hash is used for urls exceding 250 characters.
+     */
     static key(url) {
         if (url.length <= 250) return url;
         return crypto.createHash('sha512').update(url).digest('base64');
     }
+
     static get(url) {
         if (!cache) return request(url);
 
         return new Promise((resolve, reject) => {
-            const s = _.isString(url) ? url : url.uri;
-            const key = Request.key(s);
+            const key = Request.key(_.isString(url) ? url : url.uri);
+
             cache.get(key, (error, value) => {
                 if (value) {
                     resolve(value);
