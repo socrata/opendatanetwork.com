@@ -30,10 +30,10 @@ class MapView {
         map.setView(MapConstants.INITIAL_CENTER, MapConstants.INITIAL_ZOOM);
 
         map.addControl(this.legend);
-        map.addControl(this.variableControl);
         map.addControl(this.tooltip);
         if (MapConstants.ZOOM_CONTROL)
             map.addControl(this.zoomControl);
+        this.variableControl.onAdd(map);
 
         map.whenReady(() => {
             const url = layerID => `https://api.mapbox.com/v4/${layerID}/{z}/{x}/{y}.png?access_token=${MapConstants.MAPBOX_TOKEN}`;

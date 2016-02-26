@@ -31,22 +31,6 @@ var _searchURL = "<%- searchDatasetsURL %>";
                         <% }); %>
                     </ul>
                 </li>
-                <li>
-                    <a href=""><%= metric.name %><i class="fa fa-caret-down"></i></a>
-                    <ul class="chart-sub-nav-menu">
-                        <% metrics.forEach(function(metric) { %>
-                            <li><a class="metric-nav"><%= metric.name %></a></li>
-                        <% }); %>
-                    </ul>
-                </li>
-                <li>
-                    <a href=""><%= year %><i class="fa fa-caret-down"></i></a>
-                    <ul class="chart-sub-nav-menu">
-                        <% years.forEach(function(year) { %>
-                            <li><a class="year-nav"><%= year %></a></li>
-                        <% }); %>
-                    </ul>
-                </li>
             </ul>
 
             <div class="charts">

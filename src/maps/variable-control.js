@@ -46,8 +46,8 @@ class Navigate {
     }
 }
 
-const VariableControl = L.Control.extend({
-    initialize: function(source, params, onUpdate) {
+class VariableControl {
+    constructor(source, params, onUpdate) {
         this.source = source;
         this.variables = source.variables;
         this.params = params;
@@ -59,13 +59,9 @@ const VariableControl = L.Control.extend({
         params.year = parseInt(params.year);
         this.year = _.contains(this.variable.years, params.year) ?
             params.year : _.max(this.variable.years);
-    },
+    }
 
-    options: {
-        position: 'topleft'
-    },
-
-    update: function() {
+    update() {
         const url = Navigate.url(_.extend(this.params, {
             vector: Navigate.escapeName(this.source.name),
             year: this.year,
@@ -75,11 +71,10 @@ const VariableControl = L.Control.extend({
         history.replaceState(null, null, url);
 
         this.onUpdate(this.variable, this.year);
-    },
+    }
 
-    onAdd: function(map) {
-        const container = L.DomUtil.create('div', 'variable-container');
-        this.container = d3.select(container);
+    onAdd(map) {
+        this.container = d3.select('ul.chart-sub-nav');
 
         this.update();
 
@@ -131,7 +126,7 @@ const VariableControl = L.Control.extend({
 
         updateYearOptions();
 
-        return container;
+        return this.container;
     }
-});
+}
 
