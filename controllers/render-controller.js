@@ -116,8 +116,7 @@ class RenderController {
                     const hasDescriptions = (columnsWithDescriptions.length > 0);
 
                     const columnsWithSampleValues = _.filter(originalColumns, column => {
-                        return ((column.cachedContents !== null) &&
-                                (column.cachedContents.top !== null));
+                        return column.cachedContents && column.cachedContents.top;
                     });
                     const hasSampleValues = (columnsWithSampleValues.length > 0);
 
