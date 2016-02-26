@@ -68,7 +68,7 @@ class MapView {
             .catch(error => { throw error; });
 
         new MapSource(this.source).summarize(variable, year, this.regions).then(([summary, meta]) => {
-            d3.select('p.map-summary').text(summary);
+            d3.select('p#map-summary').text(summary);
         });
     }
 
