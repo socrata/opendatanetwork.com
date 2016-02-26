@@ -26,8 +26,10 @@ class SearchPageController {
             $(this).children('ul').hide();
         });
 
-        $('.year-nav').click(function() {
-            console.log($(this).text());
+
+        $('.dataset-nav').click(function() {
+            self.params.vector = $(this).attr('vector');
+            self.navigate();
         });
 
 

@@ -286,8 +286,6 @@ class RenderController {
 
         allPromise.then(data => {
             try {
-                // groups, group, vectors, vector, metrics, metric, years, year
-
                 const vector = ((params.vector || '') === '') ? 'population' : params.vector;
 
                 const groups = Sources.groups(params.regions);
