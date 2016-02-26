@@ -26,16 +26,23 @@ var _searchURL = "<%- searchDatasetsURL %>";
             </ul>
             <ul class="chart-sub-nav">
                 <li>
-                    <a href=""><%= source.name %><i class="fa fa-caret-down"></i></a>
-                    <ul class="chart-sub-nav-menu">
-                        <% sources.forEach(function(source) { %>
-                            <li>
-                                <a class="dataset-nav" vector="<%= source.vector %>">
-                                    <%= source.name %>
-                                </a>
-                            </li>
-                        <% }); %>
-                    </ul>
+                    <a href="">
+                        <%= source.name %>
+                        <% if (sources.length > 1) { %>
+                            <i class="fa fa-caret-down"></i>
+                        <% } %>
+                    </a>
+                    <% if (sources.length > 1) { %>
+                        <ul class="chart-sub-nav-menu">
+                            <% sources.forEach(function(source) { %>
+                                <li>
+                                    <a class="dataset-nav" vector="<%= source.vector %>">
+                                        <%= source.name %>
+                                    </a>
+                                </li>
+                            <% }); %>
+                        </ul>
+                    <% } %>
                 </li>
             </ul>
 

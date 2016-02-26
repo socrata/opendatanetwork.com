@@ -129,7 +129,7 @@ const SOURCES = [
         datasets: [
             {
                 vector: 'education',
-                name: 'Education',
+                name: 'Graduation Rates',
                 attribution: ATTRIBUTIONS.acs,
                 domain: ODN_DOMAIN,
                 fxf: 'uf4m-5u8r',
@@ -346,71 +346,11 @@ const SOURCES = [
                         }
                     }
                 ]
-            },
-            {
-                vector: 'cost_of_living',
-                name: 'Cost of Living',
-                sourceURL: 'http://www.bea.gov/newsreleases/regional/rpp/rpp_newsrelease.htm',
-                description: `
-                    The cost of living index measures the difference in the price levels of goods
-                    and services across regions.
-                    The average cost of living index in the U.S. is 100,
-                    with higher values corresponding to costlier goods and services.
-                    Data is available for U.S. states and metropolitan areas.`,
-                attribution: ATTRIBUTIONS.bea,
-                domain: ODN_DOMAIN,
-                fxf: 'hpnf-gnfu',
-                regions: ['state', 'msa'],
-                include: region => _.contains(region.name, 'Metro'),
-                searchTerms: ['cost of living', 'rent', 'housing', 'consumer price index', 'expensive', 'inexpensive', 'housing cost', 'home price'],
-                charts: [
-                    {
-                        name: 'Cost of Living',
-                        data: [
-                            {
-                                column: 'component',
-                                label: '',
-                                type: 'string'
-                            },
-                            {
-                                column: 'index',
-                                label: 'Index'
-                            },
-                            {
-                                column: 'year',
-                                label: 'Year'
-                            }
-                        ],
-                        chart: 'table'
-                    }
-                    ].concat(['All', 'Rents', 'Goods', 'Other'].map(component => {
-                    return {
-                        name: `${component}`,
-                        params: {component},
-                        data: [
-                            {
-                                column: 'year',
-                                label: 'Year',
-                                type: 'string'
-                            },
-                            {
-                                column: 'index',
-                                label: 'Index',
-                                format: { pattern: '#.#' }
-                            }
-                        ],
-                        chart: 'line',
-                        forecast: {
-                            type: 'linear',
-                            steps: 5
-                        }
-                    };
-                }))
             }
         ]
     },
     {
-        name: 'Production',
+        name: 'Economy',
         datasets: [
             {
                 vector: 'gdp',
@@ -544,6 +484,66 @@ const SOURCES = [
                         }
                     }
                 ]
+            },
+            {
+                vector: 'cost_of_living',
+                name: 'Cost of Living',
+                sourceURL: 'http://www.bea.gov/newsreleases/regional/rpp/rpp_newsrelease.htm',
+                description: `
+                    The cost of living index measures the difference in the price levels of goods
+                    and services across regions.
+                    The average cost of living index in the U.S. is 100,
+                    with higher values corresponding to costlier goods and services.
+                    Data is available for U.S. states and metropolitan areas.`,
+                attribution: ATTRIBUTIONS.bea,
+                domain: ODN_DOMAIN,
+                fxf: 'hpnf-gnfu',
+                regions: ['state', 'msa'],
+                include: region => _.contains(region.name, 'Metro'),
+                searchTerms: ['cost of living', 'rent', 'housing', 'consumer price index', 'expensive', 'inexpensive', 'housing cost', 'home price'],
+                charts: [
+                    {
+                        name: 'Cost of Living',
+                        data: [
+                            {
+                                column: 'component',
+                                label: '',
+                                type: 'string'
+                            },
+                            {
+                                column: 'index',
+                                label: 'Index'
+                            },
+                            {
+                                column: 'year',
+                                label: 'Year'
+                            }
+                        ],
+                        chart: 'table'
+                    }
+                    ].concat(['All', 'Rents', 'Goods', 'Other'].map(component => {
+                    return {
+                        name: `${component}`,
+                        params: {component},
+                        data: [
+                            {
+                                column: 'year',
+                                label: 'Year',
+                                type: 'string'
+                            },
+                            {
+                                column: 'index',
+                                label: 'Index',
+                                format: { pattern: '#.#' }
+                            }
+                        ],
+                        chart: 'line',
+                        forecast: {
+                            type: 'linear',
+                            steps: 5
+                        }
+                    };
+                }))
             }
         ]
     },
@@ -669,7 +669,7 @@ const SOURCES = [
             },
             {
                 vector: 'health_indicators',
-                name: 'Health',
+                name: 'Health Indicators',
                 sourceURL: 'http://www.cdc.gov/brfss/',
                 description: `
                     The CDC's Behavioral Risk Factor Surveillance System (BRFSS) is the nation's

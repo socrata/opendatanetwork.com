@@ -53,7 +53,7 @@ class VariableControl {
         this.params = params;
         this.onUpdate = onUpdate;
 
-        this.variable = _.find(this.variables, variable => Navigate.escapeName(variable.name).toLowerCase() === params.metric);
+        this.variable = _.find(this.variables, variable => variable.metric === params.metric);
         this.variable = this.variable || this.variables[0];
 
         params.year = parseInt(params.year);
@@ -65,7 +65,7 @@ class VariableControl {
         const url = Navigate.url(_.extend(this.params, {
             vector: Navigate.escapeName(this.source.name),
             year: this.year,
-            metric: Navigate.escapeName(this.variable.name).toLowerCase()
+            metric: this.variable.metric
         }));
 
         history.replaceState(null, null, url);
@@ -88,52 +88,57 @@ class VariableControl {
         const variableContainer = this.container.append('li');
         const variableLink = variableContainer.append('a');
         this.variableSelector = variableLink.append('span');
-        variableLink.append('i').attr('class', 'fa fa-caret-down');
 
-        const variableList = variableContainer
-            .append('ul')
-            .attr('class', 'chart-sub-nav-menu')
-            .selectAll('li')
-            .data(this.variables)
-            .enter()
-            .append('li')
-            .append('a')
-            .text(variable => variable.name)
-            .on('click', variable => {
-                this.variable = variable;
-                if (!_.contains(this.variable, this.year)) this.year = _.max(this.variable.years);
-                this.update();
-                this.updateSelectors();
-            });
+        if (this.variables.length > 1) {
+            variableLink.append('i').attr('class', 'fa fa-caret-down');
 
-        const yearContainer = this.container.append('li');
-        const yearLink = yearContainer.append('a');
-        this.yearSelector = yearLink.append('span');
-        yearLink.append('i').attr('class', 'fa fa-caret-down');
-        this.yearList = yearContainer
-            .append('ul')
-            .attr('class', 'chart-sub-nav-menu');
+            const variableList = variableContainer
+                .append('ul')
+                .attr('class', 'chart-sub-nav-menu')
+                .selectAll('li')
+                .data(this.variables)
+                .enter()
+                .append('li')
+                .append('a')
+                .text(variable => variable.name)
+                .on('click', variable => {
+                    this.variable = variable;
+                    if (!_.contains(this.variable, this.year)) this.year = _.max(this.variable.years);
+                    this.update();
+                    this.updateSelectors();
+                });
+        }
+
+
+        this.yearContainer = this.container.append('li');
+        this.yearLink = this.yearContainer.append('a');
 
         this.updateSelectors();
     }
 
     updateSelectors() {
         this.variableSelector.text(this.variable.name);
-        this.yearSelector.text(this.year);
+        this.yearLink.text(this.year);
 
-        this.yearList.selectAll('li').remove();
-        this.yearList
-            .selectAll('li')
-            .data(this.variable.years)
-            .enter()
-            .append('li')
-            .append('a')
-            .text(year => year)
-            .on('click', year => {
-                this.year = year;
-                this.update();
-                this.updateSelectors();
-            });
+        this.yearContainer.select('ul').remove();
+        if (this.variable.years.length > 1) {
+            this.yearLink.append('i').attr('class', 'fa fa-caret-down');
+
+            this.yearContainer
+                .append('ul')
+                .attr('class', 'chart-sub-nav-menu')
+                .selectAll('li')
+                .data(this.variable.years.slice().reverse())
+                .enter()
+                .append('li')
+                .append('a')
+                .text(year => year)
+                .on('click', year => {
+                    this.year = year;
+                    this.update();
+                    this.updateSelectors();
+                });
+        }
     }
 }
 

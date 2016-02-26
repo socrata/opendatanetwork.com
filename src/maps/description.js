@@ -57,9 +57,7 @@ class MapSource {
     }
 
     getVariable(metric) {
-        const variable = _.find(this.variables, variable => {
-            return Navigate.escapeName(variable.name.toLowerCase()) === metric;
-        });
+        const variable = _.find(this.variables, variable => variable.metric === metric);
         return variable ? variable : this.variables[0];
     }
 
