@@ -29,70 +29,145 @@ class RenderController {
         const domain = req.params.domain;
         const id = req.params.id;
 
-        const datasetPromise = API.datasetSummary(domain, id);
-        const schemasPromise = API.standardSchemas(id);
-        const paramsPromise = RenderController._parameters(req, res);
-        const allPromise = Promise.all([datasetPromise, schemasPromise, paramsPromise]);
+        // We can have a dataset that exists on the old backend or the new backend.  Unfortunately all the "sample values" 
+        // exist in the cachedContents nodes of the old backend dataset JSON.  Also we want the "view top 100" link to use the 
+        // new dataset. 
+        // 
+        const originalDatasetPromise = API.datasetSummary(domain, id);
+        const datasetMigrationsPromise = API.datasetMigrations(domain, id);
+        const promises = Promise.all([originalDatasetPromise, datasetMigrationsPromise]);
 
-        allPromise.then(data => {
-            try {
-                const dataset = data[0];
-                const schemas = data[1].map(schema => {
-                    const uid = schema.url.match(/(\w{4}-\w{4})$/)[1];
-                    const query = Request.buildURL(`https://${domain}/resource/${id}.json?`, schema.query);
+        promises.then(data => {
 
-                    return _.extend(schema, {
-                        uid,
-                        query,
-                        standard: schema.standardIds[0],
-                        required_columns: schema.columns,
-                        opt_columns: schema.optColumns,
-                        direct_map: schema.query.length === 0
-                    });
-                });
+            const originalDataset = data[0];
+            const migrations = data[1];
 
-                const params = data[2];
-                const columns = _.filter(dataset.columns, isNotComputedField);
-                
-                const columnsWithDescriptions = _.filter(columns, column => !_.isEmpty(column.description));
-                const hasDescriptions = (columnsWithDescriptions.length > 0);
-                
-                const columnsWithSampleValues = _.filter(columns, column => (column.cachedContents != null) && (column.cachedContents.top != null));
-                const hasSampleValues = (columnsWithSampleValues.length > 0);
+            var nbeId = null;
+            var obeId = null;
 
-                const templateParams = {
-                    params,
-                    schemas,
-                    searchPath : '/search',
-                    title : dataset.name,
-                    dataset : {
-                        domain,
-                        id,
-                        descriptionHtml : htmlencode(dataset.description).replace('\n', '<br>'),
-                        name : dataset.name,
-                        tags : dataset.tags || [],
-                        columns,
-                        hasDescriptions,
-                        hasSampleValues,
-                        updatedAtString : moment(new Date(dataset.viewLastModified * 1000)).format('D MMM YYYY')
-                    },
-                    css : [
-                        '/styles/dataset.css'
-                    ],
-                    scripts : [
-                        '/lib/third-party/jquery.dotdotdot.min.js',
-                        '/lib/third-party/lodash.min.js',
-                        '/lib/third-party/d3.min.js',
-                        '/lib/third-party/d3.promise.min.js',
-                        '/lib/dataset.min.js'
-                    ]
-                };
-
-                res.render('dataset.ejs', templateParams);
-            } catch (error) {
-                RenderController.error(req, res)(error);
+            if (migrations.error) {
+                if (originalDataset.newBackend) 
+                    nbeId = originalDataset.id;
+                else
+                    obeId = originalDataset.id;
             }
-        }, RenderController.error(req, res, 404, 'Dataset not found'));
+            else {
+                nbeId = originalDataset.newBackend ? originalDataset.id : migrations.nbeId;
+                obeId = originalDataset.newBackend ? migrations.obeId : originalDataset.id;
+            }
+
+            const schemasPromise = API.standardSchemas(id);
+            const paramsPromise = RenderController._parameters(req, res);
+
+            var rg = [schemasPromise, paramsPromise];
+
+            // If we have a new backend dataset, fetch the old backend dataset to get cachedContents "sample values".
+            //
+            if ((originalDataset.newBackend) && (obeId != null)) {
+                rg.push(API.datasetSummary(domain, obeId)); // old dataset
+            }
+
+            // Execute remaining promises
+            //
+            const allPromise = Promise.all(rg);
+
+            allPromise.then(data => {
+
+                try {
+                    var oldDataset;
+
+                    if (data.length == 3)
+                        oldDataset = data[2];
+                    else if (!originalDataset.newBackend)
+                        oldDataset = originalDataset;
+                    else
+                        oldDataset = null;
+
+                    const schemas = data[0].map(schema => {
+
+                        const uid = schema.url.match(/(\w{4}-\w{4})$/)[1];
+                        const query = Request.buildURL(`https://${domain}/resource/${id}.json?`, schema.query);
+
+                        return _.extend(schema, {
+                            uid,
+                            query,
+                            standard: schema.standardIds[0],
+                            required_columns: schema.columns,
+                            opt_columns: schema.optColumns,
+                            direct_map: schema.query.length === 0
+                        });
+                    });
+
+                    const params = data[1];
+                    const originalColumns = _.filter(originalDataset.columns, isNotComputedField);
+
+                    if (oldDataset != null) {
+
+                        const oldColumns = _.filter(oldDataset.columns, isNotComputedField);
+
+                        // If the original columns do not have cacheContents, get the cached contents of the matching 
+                        // field name from the old dataset and attach it to the original column.
+                        //
+                        originalColumns.forEach(originalColumn => {
+
+                            if (originalColumn.cachedContents == null) {
+
+                                var rg = _.filter(oldColumns, o => originalColumn.fieldName == o.fieldName);
+
+                                if (rg.length > 0)
+                                    originalColumn.cachedContents = rg[0].cachedContents;
+                            }
+                        });
+                    }
+
+                    const columnsWithDescriptions = _.filter(originalColumns, column => !_.isEmpty(column.description));
+                    const hasDescriptions = (columnsWithDescriptions.length > 0);
+
+                    const columnsWithSampleValues = _.filter(originalColumns, column => (column.cachedContents != null) && (column.cachedContents.top != null));
+                    const hasSampleValues = (columnsWithSampleValues.length > 0);
+
+                    const templateParams = {
+                        params,
+                        schemas,
+                        searchPath : '/search',
+                        title : originalDataset.name,
+                        dataset : {
+                            domain,
+                            id,
+                            descriptionHtml : htmlencode(originalDataset.description).replace('\n', '<br>'),
+                            name : originalDataset.name,
+                            tags : originalDataset.tags || [],
+                            columns : originalColumns,
+                            hasDescriptions,
+                            hasSampleValues,
+                            nbeId,
+                            updatedAtString : moment(new Date(originalDataset.viewLastModified * 1000)).format('D MMM YYYY')
+                        },
+                        debugInfo : {
+                            id,
+                            nbeId,
+                            obeId,
+                            newBackend : originalDataset.newBackend,
+                            migrationsError : migrations.error,
+                        },
+                        css : [
+                            '/styles/dataset.css'
+                        ],
+                        scripts : [
+                            '/lib/third-party/jquery.dotdotdot.min.js',
+                            '/lib/third-party/lodash.min.js',
+                            '/lib/third-party/d3.min.js',
+                            '/lib/third-party/d3.promise.min.js',
+                            '/lib/dataset.min.js'
+                        ]
+                    };
+
+                    res.render('dataset.ejs', templateParams);
+                } catch (error) {
+                    RenderController.error(req, res)(error);
+                }
+            }, RenderController.error(req, res, 404, 'Dataset not found'));
+        });
     }
 
     static home(req, res) {

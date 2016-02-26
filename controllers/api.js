@@ -178,6 +178,13 @@ class API {
         return Request.getJSON(Constants.DATASET_SUMMARY_URL.format(domain, fxf));
     }
 
+    static datasetMigrations(domain, fxf) {
+        return Request.getJSON({ 
+            uri: Constants.DATASET_MIGRATIONS_URL.format(domain, fxf),
+            simple: false
+        });
+    }
+
     static standardSchemas(fxf) {
         return new Promise((resolve, reject) => {
             Request.getJSON(Constants.ATHENA_URL.format(fxf)).then(json => {

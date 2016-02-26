@@ -18,7 +18,8 @@ class Request {
         if (!cache) return request(url);
 
         return new Promise((resolve, reject) => {
-            const key = Request.key(url);
+            const s = _.isString(url) ? url : url.uri;
+            const key = Request.key(s);
             cache.get(key, (error, value) => {
                 if (value) {
                     resolve(value);

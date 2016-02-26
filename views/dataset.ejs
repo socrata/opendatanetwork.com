@@ -3,6 +3,7 @@
 
 <script>
 var _params = <%- JSON.stringify(params) %>;
+<% if (params.debug != undefined) { %>console.log('<%- JSON.stringify(debugInfo) %>');<% } %>
 </script>
 
 <section class="main-section">
@@ -45,15 +46,16 @@ var _params = <%- JSON.stringify(params) %>;
                 <% } %>
          <% if (dataset.hasSampleValues) { %>
                     <td class="popular-values">
-             <% if ((column.cachedContents != null) && (column.cachedContents.top != null)) {
+            <% if ((column.cachedContents != null) && (column.cachedContents.top != null)) {
                 var rg = _.slice(column.cachedContents.top, 0, 5);
                 rg.forEach(function(o) { %>
-                        <div class="dotdotdot"><%= ((column.dataTypeName == 'location') ?  JSON.stringify(o.item) : o.item) %></div>
-                <% 
+                        <div class="dotdotdot"><%= (((column.dataTypeName == 'location') || (column.dataTypeName == 'point')) ?  JSON.stringify(o.item) : o.item) %></div>
+            <%
                 });
-                if (column.dataTypeName != 'location') { %>
-                        <a class="view-top-100" href="https://<%- dataset.domain %>/resource/<%- dataset.id %>.json?$group=<%- column.fieldName %>&$select=<%- column.fieldName %>%20as%20value,count(*)&$order=count%20desc&$limit=100" rel="nofollow">view top 100</a>
-                <% } %>
+            }
+            %>
+            <% if (dataset.nbeId != null) { %>
+                        <a class="view-top-100" href="https://<%- dataset.domain %>/resource/<%- dataset.nbeId %>.json?$group=<%- column.fieldName %>&$select=<%- column.fieldName %>%20as%20value,count(*)&$order=count%20desc&$limit=100" rel="nofollow">view top 100</a>
             <% } %>
                     </td>
         <% }%>

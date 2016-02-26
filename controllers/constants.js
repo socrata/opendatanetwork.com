@@ -10,6 +10,7 @@ const Constants = {
     N_RELATIVES: 5,
 
     DATASET_SUMMARY_URL: 'https://{0}/api/views/{1}.json',
+    DATASET_MIGRATIONS_URL: 'https://{0}/api/migrations/{1}.json',
     ATHENA_URL: 'https://socrata-athena.herokuapp.com/schema/v1/applied/{0}',
 
     TIMEOUT_MS: 5000,
