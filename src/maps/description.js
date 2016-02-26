@@ -56,8 +56,10 @@ class MapSource {
         }
     }
 
-    getVariable(column) {
-        const variable = _.find(this.variable, variable => variable.column === column);
+    getVariable(metric) {
+        const variable = _.find(this.variables, variable => {
+            return Navigate.escapeName(variable.name.toLowerCase()) === metric;
+        });
         return variable ? variable : this.variables[0];
     }
 
