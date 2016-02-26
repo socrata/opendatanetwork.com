@@ -117,14 +117,20 @@ class VariableControl {
         this.updateSelectors();
     }
 
+    updateYearSelectors(variableChanged) {
+        this.yearLink.text(this.year);
+        if (this.variable.years.length > 1) {
+            this.yearLink.append('i')
+                .attr('class', `fa fa-caret-${variableChanged ? 'down' : 'up'}`);
+        }
+    }
+
     updateSelectors() {
         this.variableSelector.text(this.variable.name);
-        this.yearLink.text(this.year);
+        this.updateYearSelectors(true);
 
         this.yearContainer.select('ul').remove();
         if (this.variable.years.length > 1) {
-            this.yearLink.append('i').attr('class', 'fa fa-caret-down');
-
             this.yearContainer
                 .append('ul')
                 .attr('class', 'chart-sub-nav-menu')
@@ -138,6 +144,7 @@ class VariableControl {
                     if (this.year !== year) {
                         this.year = year;
                         this.update();
+                        this.updateYearSelectors(false);
                     }
                 });
         }
