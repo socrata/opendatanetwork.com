@@ -835,6 +835,10 @@ class Sources {
         });
     }
 
+    static sources(group, regions) {
+        return group.datasets.filter(dataset => Sources.supports(dataset, regions));
+    }
+
     static has(vector) {
         return vector in DATASETS_BY_VECTOR;
     }

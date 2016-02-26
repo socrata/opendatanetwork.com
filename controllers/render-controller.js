@@ -291,7 +291,7 @@ class RenderController {
                 const groups = Sources.groups(params.regions);
                 const group = Sources.group(vector);
 
-                const sources = group.datasets;
+                const sources = Sources.sources(group, params.regions);
                 const source = Sources.source(vector);
 
                 const mapSource = MapSources[vector];
