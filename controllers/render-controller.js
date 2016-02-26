@@ -53,11 +53,12 @@ class RenderController {
 
                 const params = data[2];
                 const columns = _.filter(dataset.columns, isNotComputedField);
-                const columnsWithDescriptions = _.filter(
-                    columns,
-                    column => !_.isEmpty(column.description));
-
+                
+                const columnsWithDescriptions = _.filter(columns, column => !_.isEmpty(column.description));
                 const hasDescriptions = (columnsWithDescriptions.length > 0);
+                
+                const columnsWithSampleValues = _.filter(columns, column => (column.cachedContents != null) && (column.cachedContents.top != null));
+                const hasSampleValues = (columnsWithSampleValues.length > 0);
 
                 const templateParams = {
                     params,
@@ -70,8 +71,9 @@ class RenderController {
                         descriptionHtml : htmlencode(dataset.description).replace('\n', '<br>'),
                         name : dataset.name,
                         tags : dataset.tags || [],
-                        columns : columns,
-                        hasDescriptions: hasDescriptions,
+                        columns,
+                        hasDescriptions,
+                        hasSampleValues,
                         updatedAtString : moment(new Date(dataset.viewLastModified * 1000)).format('D MMM YYYY')
                     },
                     css : [
