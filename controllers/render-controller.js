@@ -7,6 +7,8 @@ const Request = require('./request');
 const Navigate = require('./navigate');
 
 const MapDescription = require('../src/maps/description');
+const MapSources = require('../src/data/map-sources');
+const SourceGroups = require('../src/data/data-source-groups');
 const Sources = require('../src/data/data-sources');
 
 const _ = require('lodash');
@@ -362,19 +364,41 @@ class RenderController {
 
         allPromise.then(data => {
             try {
-                const sources = Sources.forRegions(params.regions);
-                const source = params.vector === '' ?
-                    Sources.get('population') :
-                    Sources.get(params.vector);
-                source.datasetURL = source.datalensFXF ?
-                    `https://${source.domain}/view/${source.datalensFXF}` :
-                    `https://${source.domain}/dataset/${source.fxf}`;
-                source.apiURL = `https://dev.socrata.com/foundry/${source.domain}/${source.fxf}`;
+                const vector = ((params.vector || '') === '') ? 'population' : params.vector;
+
+                const groups = Sources.groups(params.regions).slice(0).map(group => {
+                    group.selected = _.contains(group.datasets.map(dataset => dataset.vector), vector);
+                    group.datasets = Sources.sources(group, params.regions);
+                    return group;
+                });
+                const group = Sources.group(vector);
+
+                const sources = Sources.sources(group, params.regions);
+                const source = Sources.source(vector);
+                source.datasetURL = vector.datalensFXF ?
+                    `https://${vector.domain}/view/${vector.datalensFXF}` :
+                    `https://${vector.domain}/dataset/${vector.fxf}`;
+                source.apiURL = `https://dev.socrata.com/foundry/${vector.domain}/${vector.fxf}`;
+
+                const mapSource = MapSources[vector];
+
+                const metrics = mapSource.variables;
+                const metric = _.find(metrics, metric => metric.column === params.metric) || 'population';
+
+                const years = metric.years;
+                const year = _.find(years, year => parseFloat(year) === parseFloat(params.year)) || '2013';
 
                 const templateParams = {
                     params,
+                    vector,
                     sources,
                     source,
+                    groups,
+                    group,
+                    year,
+                    metric,
+                    metrics,
+                    years,
                     hasRegions: params.regions.length > 0,
                     regionNames: wordJoin(params.regions.map(region => region.name), 'or'),
                     searchPath: req.path,
@@ -490,7 +514,7 @@ class RenderController {
             const params = {
                 categories: asArray(query.categories),
                 domains: asArray(query.domains),
-                tags: asArray(query.tags),
+                group: req.params.group || '',
                 limit: defaultSearchResultCount,
                 metric: req.params.metric || '',
                 offset: (page - 1) * defaultSearchResultCount,
@@ -499,6 +523,7 @@ class RenderController {
                 q: query.q || '',
                 regions: [],
                 resetRegions: false,
+                tags: asArray(query.tags),
                 vector: req.params.vector || '',
                 year: req.params.year || '',
                 debug: query.debug && query.debug == 'true'
@@ -532,10 +557,10 @@ function asArray(parameter) {
     return [];
 }
 
-function searchPageTitle(params, source) {
+function searchPageTitle(params, dataset) {
     const categories = params.categories.map(capitalize);
     const tags = params.tags.map(capitalize);
-    const dataTypes = _.flatten((source ? [source.tabName] : []).concat(categories, tags));
+    const dataTypes = _.flatten((dataset ? [dataset.name] : []).concat(categories, tags));
     const dataDescription = wordJoin(dataTypes);
 
     const locationDescription = params.regions.length > 0 ?

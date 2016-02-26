@@ -71,6 +71,7 @@ app.get('/region/:regionIds/:regionNames/:vector/:metric/:year', RenderControlle
 app.get('/region/:regionIds/:regionNames/:vector/:metric/:year/search-results', RenderController.searchResults);
 app.get('/region/:regionIds/:regionNames/:vector/:metric', RenderController.searchWithVector);
 app.get('/region/:regionIds/:regionNames/:vector', RenderController.searchWithVector);
+app.get('/region/:regionIds/:regionNames', RenderController.search);
 
 app.use((error, req, res, next) => {
     RenderController.error(req, res)(error);

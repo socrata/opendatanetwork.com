@@ -12,17 +12,16 @@ class SearchPageController {
             console.log(decodeURI(_searchURL.split('?')[1]));
         }
 
+
         // Refine menus
         //
         $('.refine-link').mouseenter(function() {
-
             $(this).addClass('refine-link-selected');
             $(this).children('span').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
             $(this).children('ul').show();
         });
 
         $('.refine-link').mouseleave(function() {
-
             $(this).removeClass('refine-link-selected');
             $(this).children('span').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
             $(this).children('ul').hide();
@@ -120,14 +119,15 @@ class SearchPageController {
                 const mapSource = MAP_SOURCES[vector];
                 MapView.create(mapSource, regions, this.params).then(view => {
                     view.show('#map');
+                    this.subMenus();
                 }, error => console.warn(error));
 
             } else {
                 console.warn(`no map source found for vector: ${vector}`);
             }
 
-            if (vector in SOURCES_BY_VECTOR) {
-                const source = SOURCES_BY_VECTOR[vector];
+            if (vector in DATASETS_BY_VECTOR) {
+                const source = DATASETS_BY_VECTOR[vector];
                 new Tab(source).render(d3.select('div.charts'), regions);
             } else {
                 console.warn(`no source found for vector: ${vector}`);
@@ -138,6 +138,8 @@ class SearchPageController {
             $('.map-summary-links').toggle();
             $('.map-summary-more').text($('.map-summary-more').text() == 'More Information' ? 'Less Information' : 'More Information');
         });
+
+        this.subMenus();
     }
 
     attachCategoriesClickHandlers() {
@@ -252,5 +254,26 @@ class SearchPageController {
         this.params.q = '';
         this.params.regions = [];
         this.params.vector = '';
+    }
+
+    subMenus() {
+        const self = this;
+
+        $('.chart-sub-nav li').mouseenter(function() {
+            $(this).addClass('selected');
+            $(this).children('a').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
+            $(this).children('ul').show();
+        });
+
+        $('.chart-sub-nav li').mouseleave(function() {
+            $(this).removeClass('selected');
+            $(this).children('a').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
+            $(this).children('ul').hide();
+        });
+
+        $('.dataset-nav').click(function() {
+            self.params.vector = $(this).attr('vector');
+            self.navigate();
+        });
     }
 }

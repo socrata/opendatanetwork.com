@@ -16,13 +16,27 @@ var _searchURL = "<%- searchDatasetsURL %>";
 
         <div class="charts-column">
             <ul class="chart-tabs">
-                <% sources.forEach(function(source) { %>
-                    <li class="<%= source.vector === params.vector || (source.vector === 'population' && params.vector === '') ? 'selected' : '' %>">
-                        <a href="<%= getSearchPageUrl(source) %>">
-                            <%= source.tabName %>
+                <% groups.forEach(function(_group) { %>
+                    <li class="<%= _group.selected ? 'selected' : '' %>">
+                        <a href="<%= getSearchPageUrl(_group.datasets[0]) %>">
+                            <%= _group.name %>
                         </a>
                     </li>
                 <% }); %>
+            </ul>
+            <ul class="chart-sub-nav">
+                <li>
+                    <a href=""><%= source.name %><i class="fa fa-caret-down"></i></a>
+                    <ul class="chart-sub-nav-menu">
+                        <% sources.forEach(function(source) { %>
+                            <li>
+                                <a class="dataset-nav" vector="<%= source.vector %>">
+                                    <%= source.name %>
+                                </a>
+                            </li>
+                        <% }); %>
+                    </ul>
+                </li>
             </ul>
 
             <div class="charts">
@@ -50,33 +64,33 @@ var _searchURL = "<%- searchDatasetsURL %>";
                         <% } %>
                     </div>
                 <% }); %>
-            </div>
 
-            <div class="dataset-description">
-                <% if ('description' in source) { %>
-                    <p><%- source.description %></p>
-                <% } %>
-
-                <label class="attribution">
-                    Above charts are based on data from the <a href="<%= source.attribution.url %>"><%= source.attribution.name %></a>.
-                    <% if ('sourceURL' in source) { %>
-                        <a href="<%= source.sourceURL %>">Data Source</a> |
+                <div class="dataset-description">
+                    <% if ('description' in source) { %>
+                        <p><%- source.description %></p>
                     <% } %>
 
-                    <a href="<%= source.datasetURL %>">ODN Dataset</a> |
-                    <a href="<%= source.apiURL %>">API</a> -
-                    <span class='info-icon'>
-                        <div class='info-tooltip'>
-                            <strong>Notes:</strong>
-                            <br /><br />
-                            1. ODN datasets and APIs are subject to change and may differ in format from the original source data in order to provide a user-friendly experience on this site.
-                            <br /><br />
-                            2. To build your own apps using this data, see the ODN Dataset and API links.
-                            <br /><br />
-                            3. If you use this derived data in an app, we ask that you provide a link somewhere in your applications to the Open Data Network with a citation that states: "Data for this application was provided by the Open Data Network" where "Open Data Network" links to http://opendatanetwork.com. Where an application has a region specific module, we ask that you add an additional line that states: "Data about REGIONX was provided by the Open Data Network." where REGIONX is an HREF with a name for a geographical region like "Seattle, WA" and the link points to this page URL, e.g. http://opendatanetwork.com/region/1600000US5363000/Seattle_WA
-                        </div>
-                    </span>
-                </label>
+                    <label class="attribution">
+                        Above charts are based on data from the <a href="<%= source.attribution.url %>"><%= source.attribution.name %></a>.
+                        <% if ('sourceURL' in source) { %>
+                            <a href="<%= source.sourceURL %>">Data Source</a> |
+                        <% } %>
+
+                        <a href="<%= source.datasetURL %>">ODN Dataset</a> |
+                        <a href="<%= source.apiURL %>">API</a> -
+                        <span class='info-icon'>
+                            <div class='info-tooltip'>
+                                <strong>Notes:</strong>
+                                <br /><br />
+                                1. ODN datasets and APIs are subject to change and may differ in format from the original source data in order to provide a user-friendly experience on this site.
+                                <br /><br />
+                                2. To build your own apps using this data, see the ODN Dataset and API links.
+                                <br /><br />
+                                3. If you use this derived data in an app, we ask that you provide a link somewhere in your applications to the Open Data Network with a citation that states: "Data for this application was provided by the Open Data Network" where "Open Data Network" links to http://opendatanetwork.com. Where an application has a region specific module, we ask that you add an additional line that states: "Data about REGIONX was provided by the Open Data Network." where REGIONX is an HREF with a name for a geographical region like "Seattle, WA" and the link points to this page URL, e.g. http://opendatanetwork.com/region/1600000US5363000/Seattle_WA
+                            </div>
+                        </span>
+                    </label>
+                </div>
             </div>
 
             <% if (searchResults && searchResults.resultSetSizeString > 0) { %>
@@ -84,7 +98,7 @@ var _searchURL = "<%- searchDatasetsURL %>";
                     <div class="datasets-header">
                         <h2>
                             <span class="result-count"><%= searchResults.resultSetSizeString %></span>
-                            <%= source.tabName %>
+                            <%= source.name %>
                             Data Set<%= searchResults.resultSetSizeString > 1 ? 's' : '' %>
                             Involving
                             <%= regionNames %>
