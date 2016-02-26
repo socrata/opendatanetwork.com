@@ -101,41 +101,39 @@ class VariableControl {
             .text(variable => variable.name)
             .on('click', variable => {
                 this.variable = variable;
+                if (!_.contains(this.variable, this.year)) this.year = _.max(this.variable.years);
                 this.update();
                 this.updateSelectors();
             });
 
+        const yearContainer = this.container.append('li');
+        const yearLink = yearContainer.append('a');
+        this.yearSelector = yearLink.append('span');
+        yearLink.append('i').attr('class', 'fa fa-caret-down');
+        this.yearList = yearContainer
+            .append('ul')
+            .attr('class', 'chart-sub-nav-menu');
 
         this.updateSelectors();
-
-        const yearSelect = this.container
-            .append('select')
-            .attr('class', 'year-select')
-            .on('change', () => {
-                this.year = optionDatum(yearSelect);
-                this.update();
-            });
-
-        const updateYearOptions = () => {
-            yearSelect.selectAll('option').remove();
-
-            yearSelect
-                .selectAll('option')
-                .data(this.variable.years)
-                .enter()
-                .append('option')
-                .property('selected', year => year === this.year)
-                .attr('value', year => year)
-                .text(year => year);
-        };
-
-        updateYearOptions();
-
-        return this.container;
     }
 
     updateSelectors() {
         this.variableSelector.text(this.variable.name);
+        this.yearSelector.text(this.year);
+
+        this.yearList.selectAll('li').remove();
+        this.yearList
+            .selectAll('li')
+            .data(this.variable.years)
+            .enter()
+            .append('li')
+            .append('a')
+            .text(year => year)
+            .on('click', year => {
+                this.year = year;
+                this.update();
+                this.updateSelectors();
+            });
     }
 }
 
