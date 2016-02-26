@@ -14,7 +14,7 @@
         <% if (typeof peers != 'undefined' && peers && peers.length > 0) { %>
             <ul id="similar-regions">
             <% peers.forEach(function(region) { %>
-                <li><a href=<%= region.addURL %>><%= region.name %> <i class="fa fa-plus"></i></a></li>
+                <li><a href=<%= region.addURL %><%- (params.regions.length >= 2) ? ' rel="nofollow"' : '' %>><%= region.name %> <i class="fa fa-plus"></i></a></li>
             <% }); %>
             </ul>
         <% } %>

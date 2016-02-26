@@ -18,7 +18,7 @@ var _searchURL = "<%- searchDatasetsURL %>";
             <ul class="chart-tabs">
                 <% groups.forEach(function(_group) { %>
                     <li class="<%= _group.selected ? 'selected' : '' %>">
-                        <a href="<%= getSearchPageUrl(_group.datasets[0]) %>">
+                        <a href="<%= getSearchPageUrl(_group.datasets[0]) %>"<%- (params.regions.length >= 3) ? ' rel="nofollow"' : '' %>>
                             <%= _group.name %>
                         </a>
                     </li>
@@ -47,6 +47,7 @@ var _searchURL = "<%- searchDatasetsURL %>";
             </ul>
 
             <div class="charts">
+                <p id="map-summary"><%= mapSummary %></p>
                 <div id="map"></div>
                 <% include _map-summary %>
 
