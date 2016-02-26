@@ -12,26 +12,6 @@ class SearchPageController {
             console.log(decodeURI(_searchURL.split('?')[1]));
         }
 
-        // Sub-nav
-        //
-        $('.chart-sub-nav li').mouseenter(function() {
-            $(this).addClass('selected');
-            $(this).children('a').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
-            $(this).children('ul').show();
-        });
-
-        $('.chart-sub-nav li').mouseleave(function() {
-            $(this).removeClass('selected');
-            $(this).children('a').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
-            $(this).children('ul').hide();
-        });
-
-
-        $('.dataset-nav').click(function() {
-            self.params.vector = $(this).attr('vector');
-            self.navigate();
-        });
-
 
         // Refine menus
         //
@@ -139,6 +119,7 @@ class SearchPageController {
                 const mapSource = MAP_SOURCES[vector];
                 MapView.create(mapSource, regions, this.params).then(view => {
                     view.show('#map');
+                    this.subMenus();
                 }, error => console.warn(error));
 
             } else {
@@ -157,6 +138,8 @@ class SearchPageController {
             $('.map-summary-links').toggle();
             $('.map-summary-more').text($('.map-summary-more').text() == 'More Information' ? 'Less Information' : 'More Information');
         });
+
+        this.subMenus();
     }
 
     attachCategoriesClickHandlers() {
@@ -271,5 +254,27 @@ class SearchPageController {
         this.params.q = '';
         this.params.regions = [];
         this.params.vector = '';
+    }
+
+    subMenus() {
+        const self = this;
+
+        $('.chart-sub-nav li').mouseenter(function() {
+            $(this).addClass('selected');
+            $(this).children('a').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
+            $(this).children('ul').show();
+        });
+
+        $('.chart-sub-nav li').mouseleave(function() {
+            $(this).removeClass('selected');
+            $(this).children('a').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
+            $(this).children('ul').hide();
+        });
+
+
+        $('.dataset-nav').click(function() {
+            self.params.vector = $(this).attr('vector');
+            self.navigate();
+        });
     }
 }

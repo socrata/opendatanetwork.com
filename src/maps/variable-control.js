@@ -84,24 +84,29 @@ class VariableControl {
             return option.datum();
         }
 
-        const variableSelect = this.container
-            .append('select')
-            .attr('class', 'variable-select')
-            .on('change', () => {
-                this.variable = optionDatum(variableSelect);
-                if (!_.contains(this.variable.years, this.year)) this.year = _.max(this.variable.years);
-                updateYearOptions();
-                this.update();
-            });
 
-        const variableOptions = variableSelect
-            .selectAll('option')
+        const variableContainer = this.container.append('li');
+        const variableLink = variableContainer.append('a');
+        this.variableSelector = variableLink.append('span');
+        variableLink.append('i').attr('class', 'fa fa-caret-down');
+
+        const variableList = variableContainer
+            .append('ul')
+            .attr('class', 'chart-sub-nav-menu')
+            .selectAll('li')
             .data(this.variables)
             .enter()
-            .append('option')
-            .property('selected', variable => variable === this.variable)
-            .attr('value', variable => variable.name)
-            .text(variable => variable.name);
+            .append('li')
+            .append('a')
+            .text(variable => variable.name)
+            .on('click', variable => {
+                this.variable = variable;
+                this.update();
+                this.updateSelectors();
+            });
+
+
+        this.updateSelectors();
 
         const yearSelect = this.container
             .append('select')
@@ -127,6 +132,10 @@ class VariableControl {
         updateYearOptions();
 
         return this.container;
+    }
+
+    updateSelectors() {
+        this.variableSelector.text(this.variable.name);
     }
 }
 

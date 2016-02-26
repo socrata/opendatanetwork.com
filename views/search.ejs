@@ -18,7 +18,9 @@ var _searchURL = "<%- searchDatasetsURL %>";
             <ul class="chart-tabs">
                 <% groups.forEach(function(_group) { %>
                     <li class="<%= (_group.name == params._group) ? 'selected' : '' %>">
-                        <a href="<%= getSearchPageUrl(_group.datasets[0]) %>"><%= _group.name %></a>
+                        <a href="<%= getSearchPageUrl(_group.datasets[0]) %>">
+                            <%= _group.name %>
+                        </a>
                     </li>
                 <% }); %>
             </ul>
@@ -27,7 +29,11 @@ var _searchURL = "<%- searchDatasetsURL %>";
                     <a href=""><%= source.name %><i class="fa fa-caret-down"></i></a>
                     <ul class="chart-sub-nav-menu">
                         <% sources.forEach(function(source) { %>
-                            <li><a class="dataset-nav" vector="<%= source.vector %>"><%= source.name %></a></li>
+                            <li>
+                                <a class="dataset-nav" vector="<%= source.vector %>">
+                                    <%= source.name %>
+                                </a>
+                            </li>
                         <% }); %>
                     </ul>
                 </li>
