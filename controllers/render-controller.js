@@ -8,7 +8,6 @@ const Navigate = require('./navigate');
 
 const MapDescription = require('../src/maps/description');
 const MapSources = require('../src/data/map-sources');
-const SourceGroups = require('../src/data/data-source-groups');
 const Sources = require('../src/data/data-sources');
 
 const _ = require('lodash');
