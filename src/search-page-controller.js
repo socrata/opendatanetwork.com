@@ -260,15 +260,21 @@ class SearchPageController {
         const self = this;
 
         $('.chart-sub-nav li').mouseenter(function() {
-            $(this).addClass('selected');
-            $(this).children('a').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
-            $(this).children('ul').show();
+            console.log($(this).children('ul').length);
+            if ($(this).children('ul').length) {
+                $(this).addClass('selected');
+                $(this).children('a').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
+                $(this).children('ul').show();
+            }
         });
 
         $('.chart-sub-nav li').mouseleave(function() {
-            $(this).removeClass('selected');
-            $(this).children('a').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
-            $(this).children('ul').hide();
+            console.log($(this).children('ul').length);
+            if ($(this).children('ul').length) {
+                $(this).removeClass('selected');
+                $(this).children('a').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
+                $(this).children('ul').hide();
+            }
         });
 
         $('.dataset-nav').click(function() {

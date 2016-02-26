@@ -102,13 +102,14 @@ class VariableControl {
                 .append('a')
                 .text(variable => variable.name)
                 .on('click', variable => {
-                    this.variable = variable;
-                    if (!_.contains(this.variable, this.year)) this.year = _.max(this.variable.years);
-                    this.update();
-                    this.updateSelectors();
+                    if (this.variable.name !== variable.name) {
+                        this.variable = variable;
+                        if (!_.contains(this.variable, this.year)) this.year = _.max(this.variable.years);
+                        this.update();
+                        this.updateSelectors();
+                    }
                 });
         }
-
 
         this.yearContainer = this.container.append('li');
         this.yearLink = this.yearContainer.append('a');
@@ -134,9 +135,10 @@ class VariableControl {
                 .append('a')
                 .text(year => year)
                 .on('click', year => {
-                    this.year = year;
-                    this.update();
-                    this.updateSelectors();
+                    if (this.year !== year) {
+                        this.year = year;
+                        this.update();
+                    }
                 });
         }
     }
