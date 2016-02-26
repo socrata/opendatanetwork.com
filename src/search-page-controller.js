@@ -260,7 +260,6 @@ class SearchPageController {
         const self = this;
 
         $('.chart-sub-nav li').mouseenter(function() {
-            console.log($(this).children('ul').length);
             if ($(this).children('ul').length) {
                 $(this).addClass('selected');
                 $(this).children('a').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
@@ -269,7 +268,6 @@ class SearchPageController {
         });
 
         $('.chart-sub-nav li').mouseleave(function() {
-            console.log($(this).children('ul').length);
             if ($(this).children('ul').length) {
                 $(this).removeClass('selected');
                 $(this).children('a').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
