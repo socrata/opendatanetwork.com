@@ -86,7 +86,7 @@ class VariableControl {
 
 
         const variableContainer = this.container.append('li');
-        const variableLink = variableContainer.append('a');
+        const variableLink = variableContainer.append('span');
         this.variableSelector = variableLink.append('span');
 
         if (this.variables.length > 1) {

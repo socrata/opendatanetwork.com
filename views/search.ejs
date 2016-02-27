@@ -26,12 +26,12 @@ var _searchURL = "<%- searchDatasetsURL %>";
             </ul>
             <ul class="chart-sub-nav">
                 <li>
-                    <a href="">
+                    <span>
                         <%= source.name %>
                         <% if (sources.length > 1) { %>
                             <i class="fa fa-caret-down"></i>
                         <% } %>
-                    </a>
+                    </span>
                     <% if (sources.length > 1) { %>
                         <ul class="chart-sub-nav-menu">
                             <% sources.forEach(function(source) { %>

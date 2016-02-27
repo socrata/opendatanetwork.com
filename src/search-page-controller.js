@@ -262,7 +262,7 @@ class SearchPageController {
         $('.chart-sub-nav li').mouseenter(function() {
             if ($(this).children('ul').length) {
                 $(this).addClass('selected');
-                $(this).children('a').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
+                $(this).children('span').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
                 $(this).children('ul').show();
             }
         });
@@ -270,7 +270,7 @@ class SearchPageController {
         $('.chart-sub-nav li').mouseleave(function() {
             if ($(this).children('ul').length) {
                 $(this).removeClass('selected');
-                $(this).children('a').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
+                $(this).children('span').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
                 $(this).children('ul').hide();
             }
         });

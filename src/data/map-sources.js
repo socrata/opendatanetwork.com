@@ -8,7 +8,7 @@ if (typeof require !== 'undefined') {
 const DOMAIN = 'odn.data.socrata.com';
 
 function nameToURL(name) {
-    return name.toLowerCase().replace(/,/g, '').replace('/[ \/]/g', '_');
+    return name.toLowerCase().replace(/,/g, '').replace(/[ \/]/g, '_');
 }
 
 function variableGenerator(years, value) {
