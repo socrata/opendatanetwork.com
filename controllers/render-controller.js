@@ -375,7 +375,14 @@ class RenderController {
                 });
                 const group = Sources.group(vector);
 
-                const sources = Sources.sources(group, params.regions);
+                const sources = Sources.sources(group, params.regions).map(source => {
+                    return _.extend({}, source, {
+                        url: Navigate.url({
+                            regions: params.regions,
+                            vector: source.vector
+                        })
+                    });
+                });
                 const source = _.extend({}, Sources.source(vector), {
                     datasetURL: (vector.datalensFXF ?
                         `https://${vector.domain}/view/${vector.datalensFXF}` :

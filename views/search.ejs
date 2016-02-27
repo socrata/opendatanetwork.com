@@ -35,11 +35,7 @@ var _searchURL = "<%- searchDatasetsURL %>";
                     <% if (sources.length > 1) { %>
                         <ul class="chart-sub-nav-menu">
                             <% sources.forEach(function(source) { %>
-                                <li>
-                                    <a class="dataset-nav" vector="<%= source.vector %>">
-                                        <%= source.name %>
-                                    </a>
-                                </li>
+                                <li><a href=<%= source.url %>><%= source.name %></a></li>
                             <% }); %>
                         </ul>
                     <% } %>
