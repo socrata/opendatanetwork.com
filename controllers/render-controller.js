@@ -30,9 +30,10 @@ class RenderController {
         const domain = req.params.domain;
         const id = req.params.id;
 
-        // We can have a dataset that exists on the old backend or the new backend.  Unfortunately all the "sample values"
-        // exist in the cachedContents nodes of the old backend dataset JSON.  Also we want the "view top 100" link to use the
-        // new dataset.
+        // We can have a dataset that exists on the old backend or the new backend.  Unfortunately all the "sample values" 
+        // exist in the cachedContents nodes of the old backend dataset JSON.  Also we want the "view top 100" link to use the 
+        // new dataset. 
+        // 
         const originalDatasetPromise = API.datasetSummary(domain, id);
         const datasetMigrationsPromise = API.datasetMigrations(domain, id);
         const promises = Promise.all([originalDatasetPromise, datasetMigrationsPromise]);
@@ -46,7 +47,7 @@ class RenderController {
             var obeId = null;
 
             if (migrations.error) {
-                if (originalDataset.newBackend)
+                if (originalDataset.newBackend) 
                     nbeId = originalDataset.id;
                 else
                     obeId = originalDataset.id;
@@ -62,11 +63,13 @@ class RenderController {
             var rg = [schemasPromise, paramsPromise];
 
             // If we have a new backend dataset, fetch the old backend dataset to get cachedContents "sample values".
-            if ((originalDataset.newBackend) && (obeId !== null)) {
+            //
+            if ((originalDataset.newBackend) && obeId) {
                 rg.push(API.datasetSummary(domain, obeId)); // old dataset
             }
 
             // Execute remaining promises
+            //
             const allPromise = Promise.all(rg);
 
             allPromise.then(data => {
@@ -99,15 +102,21 @@ class RenderController {
                     const params = data[1];
                     const originalColumns = _.filter(originalDataset.columns, isNotComputedField);
 
-                    if (oldDataset !== null) {
+                    if (oldDataset) {
+
                         const oldColumns = _.filter(oldDataset.columns, isNotComputedField);
 
-                        // If the original columns do not have cacheContents, get the cached contents of the matching
+                        // If the original columns do not have cacheContents, get the cached contents of the matching 
                         // field name from the old dataset and attach it to the original column.
+                        //
                         originalColumns.forEach(originalColumn => {
-                            if (originalColumn.cachedContents === null) {
+
+                            if (!originalColumn.cachedContents) {
+
                                 var rg = _.filter(oldColumns, o => originalColumn.fieldName == o.fieldName);
-                                if (rg.length > 0) originalColumn.cachedContents = rg[0].cachedContents;
+
+                                if (rg.length > 0)
+                                    originalColumn.cachedContents = rg[0].cachedContents;
                             }
                         });
                     }
