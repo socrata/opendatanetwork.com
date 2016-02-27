@@ -30,10 +30,10 @@ class RenderController {
         const domain = req.params.domain;
         const id = req.params.id;
 
-        // We can have a dataset that exists on the old backend or the new backend.  Unfortunately all the "sample values" 
-        // exist in the cachedContents nodes of the old backend dataset JSON.  Also we want the "view top 100" link to use the 
-        // new dataset. 
-        // 
+        // We can have a dataset that exists on the old backend or the new backend.  Unfortunately all the "sample values"
+        // exist in the cachedContents nodes of the old backend dataset JSON.  Also we want the "view top 100" link to use the
+        // new dataset.
+        //
         const originalDatasetPromise = API.datasetSummary(domain, id);
         const datasetMigrationsPromise = API.datasetMigrations(domain, id);
         const promises = Promise.all([originalDatasetPromise, datasetMigrationsPromise]);
@@ -47,7 +47,7 @@ class RenderController {
             var obeId = null;
 
             if (migrations.error) {
-                if (originalDataset.newBackend) 
+                if (originalDataset.newBackend)
                     nbeId = originalDataset.id;
                 else
                     obeId = originalDataset.id;
@@ -106,7 +106,7 @@ class RenderController {
 
                         const oldColumns = _.filter(oldDataset.columns, isNotComputedField);
 
-                        // If the original columns do not have cacheContents, get the cached contents of the matching 
+                        // If the original columns do not have cacheContents, get the cached contents of the matching
                         // field name from the old dataset and attach it to the original column.
                         //
                         originalColumns.forEach(originalColumn => {
@@ -368,18 +368,20 @@ class RenderController {
                 const vector = ((params.vector || '') === '') ? 'population' : params.vector;
 
                 const groups = Sources.groups(params.regions).slice(0).map(group => {
-                    group.selected = _.contains(group.datasets.map(dataset => dataset.vector), vector);
-                    group.datasets = Sources.sources(group, params.regions);
-                    return group;
+                    return _.extend({}, group, {
+                        selected: _.contains(group.datasets.map(dataset => dataset.vector), vector),
+                        datasets: Sources.sources(group, params.regions)
+                    });
                 });
                 const group = Sources.group(vector);
 
                 const sources = Sources.sources(group, params.regions);
-                const source = Sources.source(vector);
-                source.datasetURL = vector.datalensFXF ?
-                    `https://${vector.domain}/view/${vector.datalensFXF}` :
-                    `https://${vector.domain}/dataset/${vector.fxf}`;
-                source.apiURL = `https://dev.socrata.com/foundry/${vector.domain}/${vector.fxf}`;
+                const source = _.extend({}, Sources.source(vector), {
+                    datasetURL: (vector.datalensFXF ?
+                        `https://${vector.domain}/view/${vector.datalensFXF}` :
+                        `https://${vector.domain}/dataset/${vector.fxf}`),
+                    apiURL: `https://dev.socrata.com/foundry/${vector.domain}/${vector.fxf}`
+                });
 
                 const mapSource = MapSources[vector];
 
