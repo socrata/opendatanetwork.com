@@ -407,11 +407,12 @@ class RenderController {
                         })
                     });
                 });
-                const source = _.extend({}, Sources.source(vector), {
-                    datasetURL: (vector.datalensFXF ?
-                        `https://${vector.domain}/view/${vector.datalensFXF}` :
-                        `https://${vector.domain}/dataset/${vector.fxf}`),
-                    apiURL: `https://dev.socrata.com/foundry/${vector.domain}/${vector.fxf}`
+                const _source = Sources.source(vector);
+                const source = _.extend({}, _source, {
+                    datasetURL: (_source.datalensFXF ?
+                        `https://${_source.domain}/view/${_source.datalensFXF}` :
+                        `https://${_source.domain}/dataset/${_source.fxf}`),
+                    apiURL: `https://dev.socrata.com/foundry/${_source.domain}/${_source.fxf}`
                 });
 
                 const mapSource = MapSources[vector];
