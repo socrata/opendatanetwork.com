@@ -822,6 +822,7 @@ const SOURCES = [
                 domain: ODN_DOMAIN,
                 fxf: '5dg8-ztbw',
                 regions: ['place'],
+                include: region => _.contains(['DC', 'VA', 'MD'], _.last(region.name.split(', '))),
                 searchTerms: ['crime'],
                 charts: []
             }
@@ -877,8 +878,8 @@ class Sources {
      */
     static supports(dataset, regions) {
         return regions.map(region => {
-            return (_.contains(dataset.regions, region.type) ||
-                    (dataset.include && dataset.include(region)));
+            return (_.contains(dataset.regions, region.type) &&
+                    (!dataset.include || dataset.include(region)));
         }).some(_.identity);
     }
 
