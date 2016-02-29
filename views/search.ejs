@@ -6,10 +6,6 @@ var _params = <%- JSON.stringify(params) %>;
 var _searchURL = "<%- searchDatasetsURL %>";
 </script>
 
-<% if (!hasRegions) { %>
-    <% include _refine-by %>
-<% } %>
-
 <section class="results">
     <% if (hasRegions) { %>
         <% include _region-navigation %>
