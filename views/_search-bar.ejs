@@ -1,7 +1,10 @@
 <header>
     <form method="GET" action="<%= searchPath %>" id="form" autocomplete="off">
         <a class="logo" href="/" title="Open Data Network"></a>
-        <a class="fa fa-search search-link"></a>
+        <div class="search-buttons">
+            <a class="fa fa-search search-link"></a>
+            <% include _quick-links %>
+        </div>
         <span>
             <input type="text" placeholder="Search the Open Data Network" name="q" id="q" value="<%= params.q %>" autocomplete="off">
             <% if (params.categories.length > 0) { %>

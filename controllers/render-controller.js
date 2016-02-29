@@ -18,6 +18,7 @@ const path = require('path');
 const defaultMetaSummary = 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.';
 
 const defaultSearchResultCount = 10;
+const quickLinksCount = 15;
 
 class RenderController {
     static categories(req, res) {
@@ -57,10 +58,15 @@ class RenderController {
                 obeId = originalDataset.newBackend ? migrations.obeId : originalDataset.id;
             }
 
+            // Remaining promises
+            //
             const schemasPromise = API.standardSchemas(id);
             const paramsPromise = RenderController._parameters(req, res);
+            const categoriesPromise = API.categories(quickLinksCount);
+            const domainsPromise = API.domains(quickLinksCount);
+            const locationsPromise = API.locations();
 
-            var rg = [schemasPromise, paramsPromise];
+            var rg = [schemasPromise, paramsPromise, categoriesPromise, domainsPromise, locationsPromise];
 
             // If we have a new backend dataset, fetch the old backend dataset to get cachedContents "sample values".
             //
@@ -153,6 +159,11 @@ class RenderController {
                             newBackend : originalDataset.newBackend,
                             migrationsError : migrations.error,
                         },
+                        quickLinks : {
+                            categories : data[2],
+                            domains : data[3].results,
+                            regions : data[4].slice(0, quickLinksCount),
+                        },
                         css : [
                             '/styles/dataset.css'
                         ],
@@ -175,9 +186,10 @@ class RenderController {
 
     static home(req, res) {
         const categoriesPromise = API.categories();
+        const domainsPromise = API.domains(quickLinksCount);
         const locationsPromise = API.locations();
         const paramsPromise = RenderController._parameters(req, res);
-        const allPromise = Promise.all([categoriesPromise, locationsPromise, paramsPromise]);
+        const allPromise = Promise.all([categoriesPromise, locationsPromise, paramsPromise, domainsPromise]);
 
         allPromise.then(data => {
             try {
@@ -192,6 +204,11 @@ class RenderController {
                     searchPath : '/search',
                     title : 'Open Data Network',
                     metaSummary : defaultMetaSummary,
+                    quickLinks : {
+                        categories : categories.slice(0, quickLinksCount),
+                        domains : data[3].results,
+                        regions : locations.slice(0, quickLinksCount),
+                    },
                     css : [
                         '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css',
                         '/styles/home.css',
@@ -265,14 +282,15 @@ class RenderController {
         if (params.regions.length > 0) {
             RenderController._regions(req, res, params);
         } else {
-            const categoriesPromise = API.categories(5);
+            const categoriesPromise = API.categories(quickLinksCount);
             const tagsPromise = API.tags();
-            const domainsPromise = API.domains(5);
+            const domainsPromise = API.domains(quickLinksCount);
             const datasetsPromise = API.datasets(params);
             const searchPromise = API.searchDatasetsURL(params);
+            const locationsPromise = API.locations();
             const allPromises = [categoriesPromise, tagsPromise,
                                  domainsPromise, datasetsPromise,
-                                 searchPromise];
+                                 searchPromise, locationsPromise];
             const allPromise = Promise.all(allPromises);
 
             allPromise.then(data => {
@@ -302,12 +320,16 @@ class RenderController {
                     };
 
                     if (data && data.length == allPromises.length) {
-                        templateParams.categories = data[0];
                         templateParams.currentCategory = API.currentCategory(params, data[0]);
                         templateParams.currentTag = API.currentTag(params, data[1]);
-                        templateParams.domainResults = data[2];
                         templateParams.searchResults = data[3];
                         templateParams.searchDatasetsURL = data[4];
+
+                        templateParams.quickLinks = {
+                            categories : data[0],
+                            domains : data[2].results,
+                            regions : data[5].slice(0, quickLinksCount),
+                        };
                     }
 
                     res.render('search.ejs', templateParams);
@@ -352,15 +374,17 @@ class RenderController {
         const peersPromise = forRegion(Relatives.peers);
         const siblingsPromise = forRegion(Relatives.siblings);
         const childrenPromise = forRegion(Relatives.children);
-        const categoriesPromise = API.categories(5);
+        const categoriesPromise = API.categories(quickLinksCount);
         const tagsPromise = API.tags();
-        const domainsPromise = API.domains(5);
+        const domainsPromise = API.domains(quickLinksCount);
         const datasetsPromise = API.datasets(params);
         const descriptionPromise = MapDescription.summarizeFromParams(params);
         const searchPromise = API.searchDatasetsURL(params);
+        const locationsPromise = API.locations();
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
                              categoriesPromise, tagsPromise, domainsPromise,
-                             datasetsPromise, descriptionPromise, searchPromise];
+                             datasetsPromise, descriptionPromise, searchPromise,
+                             locationsPromise];
         const allPromise = Promise.all(allPromises);
 
         allPromise.then(data => {
@@ -458,14 +482,17 @@ class RenderController {
                         templateParams.currentTag = API.currentTag(params, data[4]);
                     }
 
-                    templateParams.domainResults = data[5];
                     templateParams.searchResults = data[6];
-
                     templateParams.mapSummary = data[7][0];
                     templateParams.metaSummary = data[7][1];
                     templateParams.mapVariables = MapDescription.variablesFromParams(params);
-
                     templateParams.searchDatasetsURL = data[8];
+                    
+                    templateParams.quickLinks = {
+                        categories : data[3],
+                        domains : data[5].results,
+                        regions : data[9].slice(0, quickLinksCount),
+                    };
                 }
 
                 if (templateParams.mapSummary === '') {

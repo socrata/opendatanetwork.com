@@ -12,53 +12,6 @@ class SearchPageController {
             console.log(decodeURI(_searchURL.split('?')[1]));
         }
 
-
-        // Refine menus
-        //
-        $('.refine-link').mouseenter(function() {
-            $(this).addClass('refine-link-selected');
-            $(this).children('span').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
-            $(this).children('ul').show();
-        });
-
-        $('.refine-link').mouseleave(function() {
-            $(this).removeClass('refine-link-selected');
-            $(this).children('span').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
-            $(this).children('ul').hide();
-        });
-
-        // Categories
-        //
-        this.attachCategoriesClickHandlers();
-
-        $('#refine-menu-categories-view-more').click(function() {
-            d3.promise.json('/categories.json').then(data => {
-                const rg = data.map(result => '<li><i class="fa ' + result.metadata.icon + '"></i>' + result.category + '</li>');
-                const s = rg.join('');
-
-                $('#refine-menu-categories').html(s);
-                self.attachCategoriesClickHandlers();
-            }, console.error);
-        });
-
-        // Domains
-        //
-        this.attachDomainsClickHandlers();
-
-        $('#refine-menu-domains-view-more').click(function() {
-            d3.promise.json('https://api.us.socrata.com/api/catalog/v1/domains').then(data => {
-                const rg = data.results.map(result => '<li>' + result.domain + '</li>');
-                const s = rg.join('');
-
-                $('#refine-menu-domains').html(s);
-                self.attachDomainsClickHandlers();
-            }, console.error);
-        });
-
-        // Standards
-        //
-        this.attachTagsClickHandlers();
-
         // Tokens
         //
         $('.region-token .fa-times-circle').click(function() {
@@ -140,35 +93,6 @@ class SearchPageController {
         });
 
         this.subMenus();
-    }
-
-    attachCategoriesClickHandlers() {
-        const self = this;
-
-        $('#refine-menu-categories li:not(.refine-view-more)').click(function() {
-            self.toggleCategory($(this).text().toLowerCase().trim());
-            self.navigate();
-        });
-    }
-
-    attachDomainsClickHandlers() {
-        const self = this;
-
-        $('#refine-menu-domains li:not(.refine-view-more)').click(function() {
-            const domain = $(this).text().toLowerCase().trim();
-            self.toggleDomain(domain);
-            self.navigate();
-        });
-    }
-
-    attachTagsClickHandlers() {
-        const self = this;
-
-        $('#refine-menu-tags li').click(function() {
-            const tag = $(this).text().toLowerCase().trim();
-            self.toggleTag(tag);
-            self.navigate();
-        });
     }
 
     fetchNextPage() {
