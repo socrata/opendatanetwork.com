@@ -271,20 +271,50 @@ const MAP_SOURCES = {
         name: 'city_crime',
         domain: DOMAIN,
         fxf: '368f-rei5',
-        variables: [
-            {
-                name: 'Crime Count',
+        variables:
+            ['Theft',
+             'Other',
+             'Traffic',
+             'Breaking & Entering',
+             'Assault',
+             'Theft from Vehicle',
+             'Theft of Vehicle',
+             'Property Crime',
+             'Community Policing',
+             'Vehicle Stop',
+             'Robbery',
+             'Disorder',
+             'Drugs',
+             'Other Sexual Offense',
+             'Assault with Deadly Weapon',
+             'Liquor',
+             'Family Offense',
+             'Weapons Offense',
+             'Death',
+             'Sexual Assault',
+             'Alarm',
+             'Missing Person',
+             'Arson',
+             'Quality of Life',
+             'Emergency',
+             'Kidnapping',
+             'Proactive Policing',
+             'Pedestrian Stop',
+             'Sexual Offense',
+             'Vehicle Recovery',
+             'Homicide',
+             'Fire'].map(crimeType => {
+            return {
+                name: `${crimeType} Count`,
                 column: 'crime_count',
-                metric: 'crime_count',
+                metric: nameToURL(`${crimeType} Count`),
                 years: [2015],
-                params: {
-                    'crime_type': 'Theft'
-                },
+                params: {crime_type: crimeType},
                 format: format.integer,
                 stoplight: true,
                 reverse: true
-            }
-        ]
+            };
+         })
     }
 };
 
