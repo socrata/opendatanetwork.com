@@ -363,6 +363,13 @@ class RenderController {
                              datasetsPromise, descriptionPromise, searchPromise];
         const allPromise = Promise.all(allPromises);
 
+        /*
+        allPromises.forEach((promise, index) => {
+            promise.then(__ => console.log(`done ${index}`),
+                         __ => console.log(`fail ${index}`));
+        });
+        */
+
         allPromise.then(data => {
             try {
                 const vector = ((params.vector || '') === '') ? 'population' : params.vector;
@@ -390,13 +397,13 @@ class RenderController {
                     apiURL: `https://dev.socrata.com/foundry/${vector.domain}/${vector.fxf}`
                 });
 
-                const mapSource = MapSources[vector];
+                const mapSource = MapSources[vector] || {};
 
-                const metrics = mapSource.variables;
-                const metric = _.find(metrics, metric => metric.column === params.metric) || 'population';
+                const metrics = mapSource.variables || [];
+                const metric = _.find(metrics, metric => metric.column === params.metric) || metrics[0];
 
                 const years = metric.years;
-                const year = _.find(years, year => parseFloat(year) === parseFloat(params.year)) || '2013';
+                const year = _.find(years, year => parseFloat(year) === parseFloat(params.year)) || years[0];
 
                 const templateParams = {
                     params,
@@ -467,12 +474,7 @@ class RenderController {
                     templateParams.searchDatasetsURL = data[8];
                 }
 
-                if (templateParams.mapSummary === '') {
-                    params.vector = 'population';
-                    RenderController._regions(req, res, params);
-                } else {
-                    res.render('search.ejs', templateParams);
-                }
+                res.render('search.ejs', templateParams);
             } catch (error) {
                 RenderController.error(req, res)(error);
             }

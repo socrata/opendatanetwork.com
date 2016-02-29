@@ -24,16 +24,25 @@ class MapSource {
     summarize(variable, year, regions) {
         return new Promise((resolve, reject) => {
             this.getData(variable, year, regions).then(data => {
-                const _descriptions = regions.map(region => {
-                    const row = _.find(data, row => row[this.id] === region.id);
-                    const value = variable.format(row[variable.column]);
-                    return `${variable.name.toLowerCase()} of ${region.name} in ${year} was ${value}.`;
-                });
+                if (data && data.length > 0) {
+                    const _descriptions = regions.map(region => {
+                        const row = _.find(data, row => row[this.id] === region.id) || {};
+                        if (!(variable.column in row)) return '';
+                        const value = variable.format(row[variable.column]);
+                        return `${variable.name.toLowerCase()} of ${region.name} in ${year} was ${value}.`;
+                    }).filter(description => description.length > 0);
 
-                const descriptions = _descriptions.map(description => `The ${description}`);
-                const metas = _descriptions.map(description => `Maps, charts and data show the ${description}`);
+                    if (_descriptions.length > 0) {
+                        const descriptions = _descriptions.map(description => `The ${description}`);
+                        const metas = _descriptions.map(description => `Maps, charts and data show the ${description}`);
 
-                resolve([descriptions, metas].map(sentences => sentences.join(' ')));
+                        resolve([descriptions, metas].map(sentences => sentences.join(' ')));
+                    } else {
+                        resolve(['', '']);
+                    }
+                } else {
+                    resolve(['', '']);
+                }
             }, error => resolve(['', '']));
         });
     }

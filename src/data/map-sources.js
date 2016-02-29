@@ -265,6 +265,26 @@ const MAP_SOURCES = {
                 reverse: true
             };
         })
+    },
+
+    city_crime: {
+        name: 'city_crime',
+        domain: DOMAIN,
+        fxf: '368f-rei5',
+        variables: [
+            {
+                name: 'Crime Count',
+                column: 'crime_count',
+                metric: 'crime_count',
+                years: [2015],
+                params: {
+                    'crime_type': 'Theft'
+                },
+                format: format.integer,
+                stoplight: true,
+                reverse: true
+            }
+        ]
     }
 };
 

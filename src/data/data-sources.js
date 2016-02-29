@@ -810,6 +810,22 @@ const SOURCES = [
                 ]
             }
         ]
+    },
+    {
+        name: 'Crime',
+        datasets: [
+            {
+                vector: 'city_crime',
+                name: 'Crime',
+                description: `Crime rates.`,
+                attribution: ATTRIBUTIONS.acs,
+                domain: ODN_DOMAIN,
+                fxf: '5dg8-ztbw',
+                regions: ['place'],
+                searchTerms: ['crime'],
+                charts: []
+            }
+        ]
     }
 ];
 
