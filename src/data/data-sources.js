@@ -823,7 +823,7 @@ const SOURCES = [
                 fxf: '5dg8-ztbw',
                 regions: ['place'],
                 include: region => _.contains(['DC', 'VA', 'MD'], _.last(region.name.split(', '))),
-                searchTerms: ['crime'],
+                searchTerms: ['crime', 'police', 'arrest', 'warrant'],
                 charts: []
             }
         ]
