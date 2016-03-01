@@ -6,6 +6,10 @@ var _params = <%- JSON.stringify(params) %>;
 var _searchURL = "<%- searchDatasetsURL %>";
 </script>
 
+<% if (!hasRegions) { %>
+    <% include _refine-by %>
+<% } %>
+
 <section class="results">
     <% if (hasRegions) { %>
         <% include _region-navigation %>
@@ -93,7 +97,7 @@ var _searchURL = "<%- searchDatasetsURL %>";
                 </div>
             </div>
 
-            <% if (searchResults && searchResults.resultSetSizeString > 0) { %>
+            <% if (searchResults && searchResults.resultSetSize > 0) { %>
                 <div class="search-results-container">
                     <div class="datasets-header">
                         <h2>
@@ -124,10 +128,11 @@ var _searchURL = "<%- searchDatasetsURL %>";
                 <strong><%= currentTag.tag %></strong> - <%- currentTag.metadata.description %>
             </div>
           <% } %>
-
+          <% if (searchResults && searchResults.resultSetSize > 0) { %>
             <ul class="datasets">
                 <% include _search-results-regular %>
             </ul>
+          <% } %>
         </div>
     <% } %>
 </section>

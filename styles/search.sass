@@ -18,7 +18,10 @@ $green-color: #27ae60
 $orange-color: #ee3b3b
 
 @import app
+@import refine-by
+@import region-navigation
 @import search-bar
+@import search-tokens
 @import compare-this-data-menu
 @import current-category-info-box
 @import info-icon
@@ -36,69 +39,6 @@ $orange-color: #ee3b3b
 .hidden
   display: none
 
-/* Refine section
-
-section.refine
-  background-color: $dark-gray-background-color
-  text-align: left
-  font-size: 16px
-  line-height: 60px
-  padding: 0 30px
-  position: relative
-  margin-top: 60px
-  margin-bottom: -60px
-
-.region-tokens
-  margin-top: 8px
-  margin-bottom: 32px
-
-  .tokens
-    li.region-token
-      display: inline-block
-      margin: 4px 0
-
-      div
-        display: inline-block
-        white-space: nowrap
-        overflow: hidden
-        text-overflow: ellipsis
-        max-width: 197px
-
-      .fa-times-circle
-        position: relative
-        top: -3px
-
-.tokens
-  display: inline
-  padding: 0
-  font-size: 14px
-
-.tokens li
-  background-color: white
-  border-radius: 2px
-  border: 1px solid #CAD0D4
-  display: inline
-  margin: 0 0 0 5px
-  padding: 5px 10px
-  white-space: nowrap
-
-.tokens li .fa-times-circle
-  cursor: pointer
-  margin-left: 5px
-
-.category-token
-  color: $orange-color
-
-.domain-token
-  color: $orange-color
-
-.region-token
-  color: $blue-text-color
-
-.standard-token
-  color: $orange-color
-  text-transform: uppercase
-
 /* Results section
 
 section.results
@@ -109,20 +49,6 @@ section.results
   min-height: 60px
 
 /* Common datasets
-
-.datasets
-  background-color: white
-  border: 1px solid $gray-border-color
-  list-style-type: none
-  margin: 0
-  padding: 0
-
-.datasets li
-  border-top: 1px solid $gray-border-color
-  padding: 15px
-
-.datasets li:first-child
-  border: none
 
 .search-results-regular-column
   background-color: $gray-background-color
@@ -147,10 +73,17 @@ section.results
     margin: 0
 
 .datasets
+  background-color: white
   border: 1px solid $gray-border-color
+  list-style-type: none
   margin: 30px
+  padding: 0
+
+  li:first-child
+    border: none
 
   li
+    border-top: 1px solid $gray-border-color
     color: $gray-text-color
     font-size: 14px
     list-style-type: none

@@ -19,6 +19,7 @@ const defaultMetaSummary = 'Find the data you need to power your business, app, 
 
 const defaultSearchResultCount = 10;
 const quickLinksCount = 15;
+const refineByCount = 5;
 
 class RenderController {
     static categories(req, res) {
@@ -329,6 +330,11 @@ class RenderController {
                             categories : data[0],
                             domains : data[2].results,
                             regions : data[5].slice(0, quickLinksCount),
+                        };
+
+                        templateParams.refineBy = {
+                            categories : data[0].slice(0, refineByCount),
+                            domains : data[2].results.slice(0, refineByCount),
                         };
                     }
 
