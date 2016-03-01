@@ -309,10 +309,11 @@ const MAP_SOURCES = {
                 column: 'crime_count',
                 metric: nameToURL(`${crimeType} Count`),
                 years: [2015],
-                params: {crime_type: crimeType},
-                format: format.integer,
-                stoplight: true,
-                reverse: true
+                params: {
+                    crime_type: crimeType,
+                    '$order': 'crime_count ASC'
+                },
+                format: format.integer
             };
          })
     }
