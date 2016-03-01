@@ -31,7 +31,9 @@ class MapSource {
                 });
 
                 const descriptions = _descriptions.map(description => `The ${description}`);
-                const metas = _descriptions.map(description => `Maps, charts and data show the ${description}`);
+                const metas = _descriptions.map((description, index) => {
+                    return (index == 0) ? `Maps, charts and data show the ${description}` : `The ${description}`;
+                });
 
                 resolve([descriptions, metas].map(sentences => sentences.join(' ')));
             }, error => resolve(['', '']));
