@@ -40,8 +40,10 @@ class Chart {
         if (!chart.data) throw Error('chart missing data');
         this.data = Chart._columns(chart.data);
 
-        this.x = chart.data[0];
-        this.y = chart.data[1];
+        this.x = chart.x || chart.data[0];
+        this.xFormatter = ChartConstants.FORMAT_TYPES[this.x.formatter || 'number'];
+        this.y = chart.y || chart.data[1];
+        this.yFormatter = ChartConstants.FORMAT_TYPES[this.y.formatter || 'number'];
 
         if (!chart.chart) throw Error('chart missing chart');
         if (!(chart.chart in ChartConstants.CHART_TYPES))
@@ -152,12 +154,13 @@ class Chart {
         let table = google.visualization.arrayToDataTable([columns].concat(rows));
 
         if (this.x.format) {
-            const format = new google.visualization.NumberFormat(this.x.format);
+            console.log(this.x.format);
+            const format = new this.xFormatter(this.x.format);
             format.format(table, 0);
         }
 
         if (this.y.format) {
-            const format = new google.visualization.NumberFormat(this.y.format);
+            const format = new this.yFormatter(this.y.format);
             _.range(1, columns.length).forEach(columnIndex => {
                 format.format(table, columnIndex);
             });

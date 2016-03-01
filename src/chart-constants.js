@@ -7,6 +7,10 @@ const ChartConstants = {
         'table': google.visualization.Table,
         'stepped-area': google.visualization.SteppedAreaChart
     },
+    FORMAT_TYPES: {
+        'number': google.visualization.NumberFormat,
+        'date': google.visualization.DateFormat
+    },
     CHART_OPTIONS: {
         cssClassNames: {
             headerCell: 'header-cell',
