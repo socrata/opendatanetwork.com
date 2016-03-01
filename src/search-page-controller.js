@@ -12,7 +12,6 @@ class SearchPageController {
             console.log(decodeURI(_searchURL.split('?')[1]));
         }
 
-
         // Refine menus
         //
         $('.refine-link').mouseenter(function() {
@@ -54,10 +53,6 @@ class SearchPageController {
                 self.attachDomainsClickHandlers();
             }, console.error);
         });
-
-        // Standards
-        //
-        this.attachTagsClickHandlers();
 
         // Tokens
         //
@@ -157,16 +152,6 @@ class SearchPageController {
         $('#refine-menu-domains li:not(.refine-view-more)').click(function() {
             const domain = $(this).text().toLowerCase().trim();
             self.toggleDomain(domain);
-            self.navigate();
-        });
-    }
-
-    attachTagsClickHandlers() {
-        const self = this;
-
-        $('#refine-menu-tags li').click(function() {
-            const tag = $(this).text().toLowerCase().trim();
-            self.toggleTag(tag);
             self.navigate();
         });
     }

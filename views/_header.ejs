@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <% if (typeof metaSummary != 'undefined') { %><meta name="description" content="<%= metaSummary %>"><% } %>
+    <% if (params && params.regions && (params.regions.length > 2)) { %><meta name="robots" content="noindex"><% }%>
     <meta name="keywords" content="open data, government data, housing data, restaurant inspecitions data, transit data, health data, crime data, permit data">
     <title><%= title %></title>
     <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,800" rel="stylesheet">
