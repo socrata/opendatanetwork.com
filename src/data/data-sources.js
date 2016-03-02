@@ -848,75 +848,6 @@ const SOURCES = [
                 searchTerms: ['crime', 'police', 'arrest', 'warrant'],
                 charts: [
                     {
-                        name: 'Crime over Time',
-                        description: `
-                            Crimes reported per month.
-                            Only crime types that are reported by every selected city are shown.`,
-                        descriptionPromise: (regions) => {
-                            return new Promise((resolve, reject) => {
-                            });
-                        },
-                        data: [
-                            {
-                                column: 'year',
-                                label: 'Year'
-                            },
-                            {
-                                column: 'crime_count',
-                                label: 'Crime Count'
-                            },
-                            {
-                                column: 'month',
-                                label: 'Month'
-                            },
-                            {
-                                column: 'crime_type'
-                            }
-                        ],
-                        transform: rows => {
-                            const availableTypes = _.chain(rows)
-                                .groupBy(row => [row.id].join(','))
-                                .values()
-                                .map(rows => _.uniq(rows.map(row => row.crime_type)))
-                                .value();
-                            const availableForAll = _.intersection.apply({}, availableTypes);
-
-                            const description = d3.select('div#crimeovertime > p.chart-description');
-                            description.text(`${description.text()}
-                                    For the selected regions, the following crime types are available:
-                                    ${availableForAll.join(', ')}.`);
-
-                            return _.chain(rows)
-                                .groupBy(row => [row.id, row.year, row.month].join(','))
-                                .values()
-                                .map(values => {
-                                    return _.extend({}, _.max(values, value => parseFloat(value.crime_count)), {
-                                        crime_type: 'all',
-                                        crime_count: _.reduce(values, (sum, row) => sum + parseFloat(row.crime_count), 0)
-                                    });
-                                })
-                                .sortBy(row => (parseInt(row.year) - 2000) * 12 + parseInt(row.month))
-                                .map(row => {
-                                    return _.extend({}, row, {
-                                        date: `Date(${parseInt(row.year)}, ${parseInt(row.month) - 1})`
-                                    });
-                                })
-                                .value();
-                        },
-                        x: {
-                            column: 'date',
-                            label: 'Date',
-                            type: 'date',
-                            formatter: 'date',
-                            format: {pattern: 'MMMM y'}
-                        },
-                        chart: 'line',
-                        options: {
-                            height: 300,
-                            hAxis: {format: 'MMMM y'}
-                        }
-                    },
-                    {
                         name: 'Crime Rate over Time',
                         description: `
                             Crimes reported per month per 100,000 people.
@@ -967,6 +898,75 @@ const SOURCES = [
                                     return _.extend({}, _.max(values, value => parseFloat(value.crime_rate)), {
                                         crime_type: 'all',
                                         crime_rate: _.reduce(values, (sum, row) => sum + parseFloat(row.crime_rate), 0) * 100000
+                                    });
+                                })
+                                .sortBy(row => (parseInt(row.year) - 2000) * 12 + parseInt(row.month))
+                                .map(row => {
+                                    return _.extend({}, row, {
+                                        date: `Date(${parseInt(row.year)}, ${parseInt(row.month) - 1})`
+                                    });
+                                })
+                                .value();
+                        },
+                        x: {
+                            column: 'date',
+                            label: 'Date',
+                            type: 'date',
+                            formatter: 'date',
+                            format: {pattern: 'MMMM y'}
+                        },
+                        chart: 'line',
+                        options: {
+                            height: 300,
+                            hAxis: {format: 'MMMM y'}
+                        }
+                    },
+                    {
+                        name: 'Crime over Time',
+                        description: `
+                            Crimes reported per month.
+                            Only crime types that are reported by every selected city are shown.`,
+                        descriptionPromise: (regions) => {
+                            return new Promise((resolve, reject) => {
+                            });
+                        },
+                        data: [
+                            {
+                                column: 'year',
+                                label: 'Year'
+                            },
+                            {
+                                column: 'crime_count',
+                                label: 'Crime Count'
+                            },
+                            {
+                                column: 'month',
+                                label: 'Month'
+                            },
+                            {
+                                column: 'crime_type'
+                            }
+                        ],
+                        transform: rows => {
+                            const availableTypes = _.chain(rows)
+                                .groupBy(row => [row.id].join(','))
+                                .values()
+                                .map(rows => _.uniq(rows.map(row => row.crime_type)))
+                                .value();
+                            const availableForAll = _.intersection.apply({}, availableTypes);
+
+                            const description = d3.select('div#crimeovertime > p.chart-description');
+                            description.text(`${description.text()}
+                                    For the selected regions, the following crime types are available:
+                                    ${availableForAll.join(', ')}.`);
+
+                            return _.chain(rows)
+                                .groupBy(row => [row.id, row.year, row.month].join(','))
+                                .values()
+                                .map(values => {
+                                    return _.extend({}, _.max(values, value => parseFloat(value.crime_count)), {
+                                        crime_type: 'all',
+                                        crime_count: _.reduce(values, (sum, row) => sum + parseFloat(row.crime_count), 0)
                                     });
                                 })
                                 .sortBy(row => (parseInt(row.year) - 2000) * 12 + parseInt(row.month))
