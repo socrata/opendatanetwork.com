@@ -845,7 +845,7 @@ const SOURCES = [
                         name: 'Crime over Time',
                         description: `
                             Crimes reported per month.
-                            All crime types are included.`,
+                            Only crime types that are reported by every selected city are shown.`,
                         descriptionPromise: (regions) => {
                             return new Promise((resolve, reject) => {
                             });
@@ -868,11 +868,22 @@ const SOURCES = [
                             }
                         ],
                         transform: rows => {
+                            const availableTypes = _.chain(rows)
+                                .groupBy(row => [row.id].join(','))
+                                .values()
+                                .map(rows => _.uniq(rows.map(row => row.crime_type)))
+                                .value();
+                            const availableForAll = _.intersection.apply({}, availableTypes);
+
+                            const description = d3.select('div#crimeovertime > p.chart-description');
+                            description.text(`${description.text()}
+                                    For the selected regions, the following crime types are available:
+                                    ${availableForAll.join(', ')}.`);
+
                             return _.chain(rows)
                                 .groupBy(row => [row.id, row.year, row.month].join(','))
-                                .pairs()
-                                .map((pair) => {
-                                    const values = pair[1];
+                                .values()
+                                .map(values => {
                                     return _.extend({}, _.max(values, value => parseFloat(value.crime_count)), {
                                         crime_type: 'all',
                                         crime_count: _.reduce(values, (sum, row) => sum + parseFloat(row.crime_count), 0)
@@ -903,7 +914,7 @@ const SOURCES = [
                         name: 'Crime Rate over Time',
                         description: `
                             Crimes reported per month per 100,000 people.
-                            All crime types are included.`,
+                            Only crime types that are reported by every selected city are shown.`,
                         data: [
                             {
                                 column: 'year',
@@ -923,11 +934,30 @@ const SOURCES = [
                             }
                         ],
                         transform: rows => {
+                            const availableTypes = _.chain(rows)
+                                .groupBy(row => [row.id].join(','))
+                                .values()
+                                .map(rows => _.uniq(rows.map(row => row.crime_type)))
+                                .value();
+                            const availableForAll = _.intersection.apply({}, availableTypes);
+
+                            const description = d3.select('div#crimerateovertime > p.chart-description');
+                            description.text(`${description.text()}
+                                    For the selected regions, the following crime types are available:
+                                    ${availableForAll.join(', ')}.`);
+
                             return _.chain(rows)
                                 .groupBy(row => [row.id, row.year, row.month].join(','))
-                                .pairs()
-                                .map((pair) => {
-                                    const values = pair[1];
+                                .values()
+                                .map(values => {
+                                    return _.chain(values)
+                                        .filter(value => _.contains(availableForAll, value.crime_type))
+                                        .groupBy(value => value.crime_type)
+                                        .values()
+                                        .map(forType => _.max(forType, value => parseFloat(value.crime_rate)))
+                                        .value();
+                                })
+                                .map(values => {
                                     return _.extend({}, _.max(values, value => parseFloat(value.crime_rate)), {
                                         crime_type: 'all',
                                         crime_rate: _.reduce(values, (sum, row) => sum + parseFloat(row.crime_rate), 0) * 100000
