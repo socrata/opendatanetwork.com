@@ -817,7 +817,7 @@ const SOURCES = [
         ]
     },
     {
-        name: 'Crime',
+        name: 'Public Safety',
         datasets: [
             {
                 vector: 'city_crime',
