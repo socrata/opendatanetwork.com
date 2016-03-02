@@ -834,6 +834,11 @@ const SOURCES = [
                     nearest integer value. Crime counts are not available
                     for all cities in the US, and in some cases,
                     policing agencies for a given city may have partial crime type coverage.`,
+                mapDescription: `
+                    Note: Cities often report crimes for a subset of crime types.
+                    As a result, cities may appear or disappear from the map for
+                    a given crime type selection. The absence of a city should not
+                    be interpreted as the absence of the specified crime type.`,
                 attribution: ATTRIBUTIONS.crimeReports,
                 domain: ODN_DOMAIN,
                 fxf: '5dg8-ztbw',

@@ -45,6 +45,13 @@ var _searchURL = "<%- searchDatasetsURL %>";
             <div class="charts">
                 <p id="map-summary"><%= mapSummary %></p>
                 <div id="map"></div>
+                <% if ('mapDescription' in source) { %>
+                    <div class="dataset-description map-description">
+                    <p>
+                    <%= source.mapDescription %>
+                    </p>
+                    </div>
+                <% } %>
                 <% include _map-summary %>
 
                 <% source.charts.forEach(chart => { %>
@@ -58,7 +65,7 @@ var _searchURL = "<%- searchDatasetsURL %>";
                         <div class='chart-container'></div>
 
                         <% if ('forecast' in chart) { %>
-                            <p class='chart-footnote dataset-description'>
+                            <p class='dataset-description'>
                                 Forecasted data uses a linear extrapolation algorithm
                                 which uses only available measured data provided by the
                                 <a href="<%= source.attribution.url %>"><%= source.attribution.name %></a>.
