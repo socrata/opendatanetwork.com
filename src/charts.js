@@ -154,7 +154,6 @@ class Chart {
         let table = google.visualization.arrayToDataTable([columns].concat(rows));
 
         if (this.x.format) {
-            console.log(this.x.format);
             const format = new this.xFormatter(this.x.format);
             format.format(table, 0);
         }

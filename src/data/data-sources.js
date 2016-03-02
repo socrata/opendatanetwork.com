@@ -873,28 +873,30 @@ const SOURCES = [
                                 .pairs()
                                 .map((pair) => {
                                     const values = pair[1];
-                                    return _.extend({}, _.first(values), {
+                                    return _.extend({}, _.max(values, value => parseFloat(value.crime_count)), {
                                         crime_type: 'all',
                                         crime_count: _.reduce(values, (sum, row) => sum + parseFloat(row.crime_count), 0)
                                     });
                                 })
+                                .sortBy(row => (parseInt(row.year) - 2000) * 12 + parseInt(row.month))
                                 .map(row => {
                                     return _.extend({}, row, {
-                                        date: new Date(parseInt(row.year), parseInt(row.month) - 1)
+                                        date: `Date(${parseInt(row.year)}, ${parseInt(row.month) - 1})`
                                     });
                                 })
                                 .value();
                         },
                         x: {
                             column: 'date',
-                            label: 'Date'
+                            label: 'Date',
+                            type: 'date',
+                            formatter: 'date',
+                            format: {pattern: 'MMMM y'}
                         },
                         chart: 'line',
                         options: {
                             height: 300,
-                            hAxis: {
-                                formatType: 'short'
-                            }
+                            hAxis: {format: 'MMMM y'}
                         }
                     },
                     {
@@ -909,7 +911,8 @@ const SOURCES = [
                             },
                             {
                                 column: 'crime_rate',
-                                label: 'Crime Rate'
+                                label: 'Crime Rate',
+                                format: {pattern: '#'}
                             },
                             {
                                 column: 'month',
@@ -925,28 +928,30 @@ const SOURCES = [
                                 .pairs()
                                 .map((pair) => {
                                     const values = pair[1];
-                                    return _.extend({}, _.first(values), {
+                                    return _.extend({}, _.max(values, value => parseFloat(value.crime_rate)), {
                                         crime_type: 'all',
                                         crime_rate: _.reduce(values, (sum, row) => sum + parseFloat(row.crime_rate), 0) * 100000
                                     });
                                 })
+                                .sortBy(row => (parseInt(row.year) - 2000) * 12 + parseInt(row.month))
                                 .map(row => {
                                     return _.extend({}, row, {
-                                        date: new Date(parseInt(row.year), parseInt(row.month) - 1)
+                                        date: `Date(${parseInt(row.year)}, ${parseInt(row.month) - 1})`
                                     });
                                 })
                                 .value();
                         },
                         x: {
                             column: 'date',
-                            label: 'Date'
+                            label: 'Date',
+                            type: 'date',
+                            formatter: 'date',
+                            format: {pattern: 'MMMM y'}
                         },
                         chart: 'line',
                         options: {
                             height: 300,
-                            hAxis: {
-                                formatType: 'short'
-                            }
+                            hAxis: {format: 'MMMM y'}
                         }
                     }
                 ]
