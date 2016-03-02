@@ -84,8 +84,10 @@ class RenderController {
                 try {
                     var oldDataset;
 
-                    if (data.length == 3)
-                        oldDataset = data[2];
+                    // If we add promises above, we need to keep these indices correct.
+                    //
+                    if (data.length == 6)
+                        oldDataset = data[5];
                     else if (!originalDataset.newBackend)
                         oldDataset = originalDataset;
                     else
