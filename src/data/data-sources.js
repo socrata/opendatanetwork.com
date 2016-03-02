@@ -844,7 +844,12 @@ const SOURCES = [
                     {
                         name: 'Crime over Time',
                         description: `
-                            Crime across all types over time.`,
+                            Crimes reported per month.
+                            All crime types are included.`,
+                        descriptionPromise: (regions) => {
+                            return new Promise((resolve, reject) => {
+                            });
+                        },
                         data: [
                             {
                                 column: 'year',
@@ -871,6 +876,58 @@ const SOURCES = [
                                     return _.extend({}, _.first(values), {
                                         crime_type: 'all',
                                         crime_count: _.reduce(values, (sum, row) => sum + parseFloat(row.crime_count), 0)
+                                    });
+                                })
+                                .map(row => {
+                                    return _.extend({}, row, {
+                                        date: new Date(parseInt(row.year), parseInt(row.month) - 1)
+                                    });
+                                })
+                                .value();
+                        },
+                        x: {
+                            column: 'date',
+                            label: 'Date'
+                        },
+                        chart: 'line',
+                        options: {
+                            height: 300,
+                            hAxis: {
+                                formatType: 'short'
+                            }
+                        }
+                    },
+                    {
+                        name: 'Crime Rate over Time',
+                        description: `
+                            Crimes reported per month per 100,000 people.
+                            All crime types are included.`,
+                        data: [
+                            {
+                                column: 'year',
+                                label: 'Year'
+                            },
+                            {
+                                column: 'crime_rate',
+                                label: 'Crime Rate'
+                            },
+                            {
+                                column: 'month',
+                                label: 'Month'
+                            },
+                            {
+                                column: 'crime_type'
+                            }
+                        ],
+                        transform: rows => {
+                            return _.chain(rows)
+                                .groupBy(row => [row.id, row.year, row.month].join(','))
+                                .pairs()
+                                .map((pair) => {
+                                    const values = pair[1];
+                                    return _.extend({}, _.first(values), {
+                                        crime_type: 'all',
+                                        crime_rate: _.reduce(values, (sum, row) => sum + parseFloat(row.crime_rate), 0) * 100000
                                     });
                                 })
                                 .map(row => {
