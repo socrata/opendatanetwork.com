@@ -500,7 +500,7 @@ class RenderController {
                     templateParams.metaSummary = data[7][1];
                     templateParams.mapVariables = MapDescription.variablesFromParams(params);
                     templateParams.searchDatasetsURL = data[8];
-                    
+
                     templateParams.quickLinks = {
                         categories : data[3],
                         domains : data[5].results,

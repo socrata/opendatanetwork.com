@@ -21,12 +21,16 @@ class Tab {
 
         if (!tab.charts) throw Error('tab missing charts');
         this.charts = tab.charts.map(chart => new Chart(this, chart));
+
+        this.callback = tab.callback || (() => {});
     }
 
     render(selection, regions) {
         this.charts.forEach(chart => {
             chart.render(regions);
         });
+
+        this.callback(regions);
     }
 }
 

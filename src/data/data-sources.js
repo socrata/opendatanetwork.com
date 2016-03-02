@@ -833,7 +833,8 @@ const SOURCES = [
                     the result is then multiplied by 100k and rounded to the
                     nearest integer value. Crime counts are not available
                     for all cities in the US, and in some cases,
-                    policing agencies for a given city may have partial crime type coverage.`,
+                    policing agencies for a given city may have partial crime type coverage.
+                    For detailed crime timelines and incidents see: `,
                 mapDescription: `
                     Note: Cities often report crimes for a subset of crime types.
                     As a result, cities may appear or disappear from the map for
@@ -989,7 +990,42 @@ const SOURCES = [
                             hAxis: {format: 'MMMM y'}
                         }
                     }
-                ]
+                ],
+                callback: (regions) => {
+                    const baseURL = 'https://odn.data.socrata.com/resource/gm3u-gw57.json';
+                    const params = {
+                        '$where': `id in (${regions.map(region => `'${region.id}'`).join(',')})`,
+                        '$select': 'id,location,name'
+                    };
+
+                    const url = `${baseURL}?${$.param(params)}`;
+
+                    d3.promise.json(url).then(_regions => {
+                        const links = _.chain(_regions)
+                            .map(_region => _.extend(_region, {
+                                name: _.find(regions, region => region.id === _region.id).name || _region.name,
+                                url: `http://preview.crimereports.com/#!/dashboard?lat=${_region.location.coordinates[1]}&lng=${_region.location.coordinates[0]}&incident_types=Assault%252CAssault%2520with%2520Deadly%2520Weapon%252CBreaking%2520%2526%2520Entering%252CDisorder%252CDrugs%252CHomicide%252CKidnapping%252CLiquor%252COther%2520Sexual%2520Offense%252CProperty%2520Crime%252CProperty%2520Crime%2520Commercial%252CProperty%2520Crime%2520Residential%252CQuality%2520of%2520Life%252CRobbery%252CSexual%2520Assault%252CSexual%2520Offense%252CTheft%252CTheft%2520from%2520Vehicle%252CTheft%2520of%2520Vehicle&start_date=2016-02-23&end_date=2016-03-01&days=sunday%252Cmonday%252Ctuesday%252Cwednesday%252Cthursday%252Cfriday%252Csaturday&start_time=0&end_time=23&include_sex_offenders=false&zoom=15&shapeNames=&show_list=true`
+                            }))
+                            .map(link => `<a href="${link.url}">${link.name}</a>`)
+                            .value();
+
+                        function wordJoin(list, separator) {
+                            if (list.length === 0) return '';
+                            if (list.length === 1) return list[0];
+                            separator = separator || 'and';
+                            return `${list.slice(0, list.length - 1).join(', ')} ${separator} ${list[list.length - 1]}`;
+                        }
+
+                        d3.select('p#dataset-description')
+                            .append('span')
+                            .html(wordJoin(links, 'or'));
+                    }, error => {
+                        console.log('error fetching coordinates for crime description.');
+                        console.log(regions);
+                        console.log(url);
+                        console.log(error);
+                    });
+                }
             }
         ]
     }
