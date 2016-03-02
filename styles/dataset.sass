@@ -1,13 +1,14 @@
 $black-text-color: #222222
 $blue-background-color: #3498db
-$blue-color: #2980b9
+$blue-text-color: #2980b9
+$code-background-color: #f0f0f0
 $dark-gray-background-color: #e5e9eb
-$dark-gray-border-color: #bbbbbb
 $dark-gray-text-color: #7f8c8d
 $gray-background-color: #ecf0f1
 $bottom-gray-border-color: #d4d9dc
 $gray-border-color: #d1d1d1
 $gray-text-color: #bdc3c7
+$odd-row-background-color: #f9f9f9
 $orange-color: #ee3b3b
 
 $fonts: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif
@@ -27,19 +28,17 @@ body
     background-color: $gray-background-color
     border-bottom: 1px solid $bottom-gray-border-color
     box-sizing: border-box
-    display: table
     padding: 90px 30px 30px
     width: 100%
 
     .dataset-wrapper
-        border: 1px solid $gray-text-color
         background-color: white
+        border: 1px solid $gray-text-color
+        text-align: left 
 
         .dataset-container
             background-color: white
             color: $dark-gray-text-color
-            display: table-cell
-            font-family: $fonts
             font-size: 14px
             padding: 65px 90px
             text-align: left
@@ -52,7 +51,7 @@ body
                 padding: 0
         
             .publisher
-                color: $blue-color
+                color: $blue-text-color
         
             .blue-button
                 background-color: $blue-background-color
@@ -89,7 +88,7 @@ body
                     color: $black-text-color
 
                 a
-                    color: $blue-color
+                    color: $blue-text-color
                     cursor: pointer
 
                 table
@@ -97,12 +96,11 @@ body
                     border: 1px solid $gray-border-color
 
                 tr:nth-child(odd)
-                    background-color: #f9f9f9
+                    background-color: $odd-row-background-color
 
                 th
-                    background-color: #f0f0f0
+                    background-color: $code-background-color
                     border: 1px solid $gray-border-color
-                    color: #333
                     font-size: 14px
                     font-weight: bold
                     padding: 15px 20px
@@ -110,32 +108,29 @@ body
 
                 td
                     border: 1px solid $gray-border-color
-                    color: #333
                     font-size: 14px
                     max-width: 320px
                     padding: 15px 20px
                     word-wrap: break-word
 
-        .right-container
+        .schema-container
             background-color: white
-            color: #222
-            display: table-cell
+            color: $black-text-color
             font-size: 14px
-            margin-left: 10px
-            padding: 30px
-            text-align: left 
-            width: 25%
+            padding: 0 90px 65px
 
-            h1, h2, h3, h4
-                font-family: "Lato","Helvetica Neue", Helvetica,Arial,sans-serif
+            a 
+                color: $blue-text-color
 
-            .query-container
-                background-color: #F5F5F5
-                padding: 10px
+            h3
+                margin-top: 40px
 
-                code
-                    word-wrap: break-word
+            code
+                background-color: $code-background-color
+                display: block
+                padding: 15px 20px
+                word-wrap: break-word
 
-                    a
-                      color: #222
+                a
+                    color: $black-text-color
                       
