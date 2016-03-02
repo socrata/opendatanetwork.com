@@ -45,24 +45,22 @@ var _searchURL = "<%- searchDatasetsURL %>";
             <div class="charts">
                 <p id="map-summary"><%= mapSummary %></p>
                 <div id="map"></div>
-                <% if ('mapDescription' in source) { %>
-                    <div class="dataset-description map-description">
-                    <p>
-                    <%= source.mapDescription %>
-                    </p>
-                    </div>
-                <% } %>
+            <% if ('mapDescription' in source) { %>
+                <div class="dataset-description map-description">
+                    <p><%= source.mapDescription %></p>
+                </div>
+            <% } %>
                 <% include _map-summary %>
 
                 <% source.charts.forEach(chart => { %>
                     <div class='chart' id=<%= chart.name.toLowerCase().replace(/\W/g, '') %>>
                         <h1 class='chart-title'><%= chart.name %></h1>
 
-                        <% if ('description' in chart) { %>
-                            <p class='chart-description'><%- chart.description %></p>
-                        <% } %>
-
                         <div class='chart-container'></div>
+
+                        <% if ('description' in chart) { %>
+                            <p class='dataset-description chart-description'><%- chart.description %></p>
+                        <% } %>
 
                         <% if ('forecast' in chart) { %>
                             <p class='dataset-description'>
