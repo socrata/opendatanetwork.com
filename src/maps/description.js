@@ -17,26 +17,39 @@ class MapSource {
         this.year = mapSource.yearColumn || 'year';
     }
 
+    otherVariables(currentVariable) {
+        return this.variables.filter(variable => variable.name !== currentVariable.name);
+    }
+
     summarize(variable, year, regions) {
         return new Promise((resolve, reject) => {
             this.getData(variable, year, regions).then(data => {
-                if (data.length === 0) {
-                    resolve('');
+                if (data && data.length > 0) {
+                    const _descriptions = regions.map(region => {
+                        const rows = _.filter(data, row => row[this.id] === region.id);
+                        if (rows.length === 0) return '';
+                        const row = rows.length > 1 ? _.max(rows, row => parseFloat(row[variable.column])) : rows[0];
+                        if (!(variable.column in row)) return '';
+                        const formatter = variable.descriptionFormat || variable.format || _.identity;
+                        const value = formatter(row[variable.column]);
+                        return `${variable.name.toLowerCase()} of ${region.name} in ${year} was ${value}.`;
+                    }).filter(description => description.length > 0);
+
+                    if (_descriptions.length > 0) {
+                        const descriptions = _descriptions.map(description => `The ${description}`);
+                        const metas = _descriptions.map((description, index) => {
+                            return `${index === 0 ? 'Maps, charts and data show the' : 'The'} ${description}`;
+                        });
+
+                        resolve([descriptions, metas].map(sentences => sentences.join(' ')));
+                    } else {
+                        resolve(['', '']);
+                    }
                 } else {
-                    const summary = regions.map(region => {
-                        const row = _.find(data, row => row[this.id] === region.id);
-                        const value = variable.format(row[variable.column]);
-
-                        return `The ${variable.name.toLowerCase()} of ${region.name} in ${year} was ${value}.`;
-                    }).join(' ');
-                    resolve(summary);
+                    resolve(['', '']);
                 }
-            }, reject);
+            }, error => resolve(['', '']));
         });
-    }
-
-    otherVariables(currentVariable) {
-        return this.variables.filter(variable => variable.name !== currentVariable.name);
     }
 
     getData(variable, year, regions) {
@@ -57,8 +70,8 @@ class MapSource {
         }
     }
 
-    getVariable(column) {
-        const variable = _.find(this.variable, variable => variable.column === column);
+    getVariable(metric) {
+        const variable = _.find(this.variables, variable => variable.metric === metric);
         return variable ? variable : this.variables[0];
     }
 
@@ -70,18 +83,16 @@ class MapSource {
 
 class MapDescription {
     static summarizeFromParams(params) {
-        return new Promise((resolve, reject) => {
-            if (params.vector && params.vector in MAP_SOURCES) {
-                const source = new MapSource(MAP_SOURCES[params.vector]);
-                const variable = source.getVariable(params.metric);
-                const year = source.getYear(variable, params.year);
-                const regions = params.regions;
+        if (params.vector && params.vector in MAP_SOURCES) {
+            const source = new MapSource(MAP_SOURCES[params.vector]);
+            const variable = source.getVariable(params.metric);
+            const year = source.getYear(variable, params.year);
+            const regions = params.regions;
 
-                source.summarize(variable, year, regions).then(resolve, reject);
-            } else {
-                resolve('');
-            }
-        });
+            return source.summarize(variable, year, regions);
+        } else {
+            return new Promise((resolve, reject) => resolve(['', '']));
+        }
     }
 
     static variablesFromParams(params) {

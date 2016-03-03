@@ -1,15 +1,13 @@
 'use strict';
 
 const API = require('./api');
-const ApiController = require('./api-controller');
-const CategoryController = require('./category-controller');
-const TagController = require('./tag-controller');
 const Relatives = require('./relatives');
 const Constants = require('./constants');
 const Request = require('./request');
 const Navigate = require('./navigate');
 
 const MapDescription = require('../src/maps/description');
+const MapSources = require('../src/data/map-sources');
 const Sources = require('../src/data/data-sources');
 
 const _ = require('lodash');
@@ -17,12 +15,11 @@ const htmlencode = require('htmlencode').htmlEncode;
 const moment = require('moment');
 const numeral = require('numeral');
 const path = require('path');
-
-const apiController = new ApiController();
-const categoryController = new CategoryController();
-const tagController = new TagController();
+const defaultMetaSummary = 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.';
 
 const defaultSearchResultCount = 10;
+const quickLinksCount = 15;
+const refineByCount = 5;
 
 class RenderController {
     static categories(req, res) {
@@ -35,65 +32,166 @@ class RenderController {
         const domain = req.params.domain;
         const id = req.params.id;
 
-        const datasetPromise = API.datasetSummary(domain, id);
-        const schemasPromise = API.standardSchemas(id);
-        const paramsPromise = RenderController._parameters(req, res);
-        const allPromise = Promise.all([datasetPromise, schemasPromise, paramsPromise]);
+        // We can have a dataset that exists on the old backend or the new backend.  Unfortunately all the "sample values"
+        // exist in the cachedContents nodes of the old backend dataset JSON.  Also we want the "view top 100" link to use the
+        // new dataset.
+        //
+        const originalDatasetPromise = API.datasetSummary(domain, id);
+        const datasetMigrationsPromise = API.datasetMigrations(domain, id);
+        const promises = Promise.all([originalDatasetPromise, datasetMigrationsPromise]);
 
-        allPromise.then(data => {
-            try {
-                const dataset = data[0];
-                const schemas = data[1].map(schema => {
-                    const uid = schema.url.match(/(\w{4}-\w{4})$/)[1];
-                    const query = Request.buildURL(`https://${domain}/resource/${id}.json?`, schema.query);
+        promises.then(data => {
+            const originalDataset = data[0];
+            const migrations = data[1];
 
-                    return _.extend(schema, {
-                        uid,
-                        query,
-                        standard: schema.standardIds[0],
-                        required_columns: schema.columns,
-                        opt_columns: schema.optColumns,
-                        direct_map: schema.query.length === 0
-                    });
-                });
-                const params = data[2];
+            var nbeId = null;
+            var obeId = null;
 
-                const templateParams = {
-                    params,
-                    schemas,
-                    searchPath : '/search',
-                    title : dataset.name,
-                    dataset : {
-                        domain,
-                        id,
-                        descriptionHtml : htmlencode(dataset.description).replace('\n', '<br>'),
-                        name : dataset.name,
-                        tags : dataset.tags || [],
-                        columns : dataset.columns,
-                        updatedAtString : moment(new Date(dataset.viewLastModified * 1000)).format('D MMM YYYY')
-                    },
-                    css : [
-                        '/styles/dataset.css'
-                    ],
-                    scripts : [
-                        '/lib/third-party/lodash.min.js',
-                        '/lib/third-party/d3.min.js',
-                        '/lib/dataset.min.js'
-                    ]
-                };
-
-                res.render('dataset.ejs', templateParams);
-            } catch (error) {
-                RenderController.error(req, res)(error);
+            if (migrations.error) {
+                if (originalDataset.newBackend)
+                    nbeId = originalDataset.id;
+                else
+                    obeId = originalDataset.id;
             }
+            else {
+                nbeId = originalDataset.newBackend ? originalDataset.id : migrations.nbeId;
+                obeId = originalDataset.newBackend ? migrations.obeId : originalDataset.id;
+            }
+
+            // Remaining promises
+            //
+            const schemasPromise = API.standardSchemas(id);
+            const paramsPromise = RenderController._parameters(req, res);
+            const categoriesPromise = API.categories(quickLinksCount);
+            const domainsPromise = API.domains(quickLinksCount);
+            const locationsPromise = API.locations();
+
+            var rg = [schemasPromise, paramsPromise, categoriesPromise, domainsPromise, locationsPromise];
+
+            // If we have a new backend dataset, fetch the old backend dataset to get cachedContents "sample values".
+            //
+            if ((originalDataset.newBackend) && obeId) {
+                rg.push(API.datasetSummary(domain, obeId)); // old dataset
+            }
+
+            // Execute remaining promises
+            //
+            const allPromise = Promise.all(rg);
+
+            allPromise.then(data => {
+
+                try {
+                    var oldDataset;
+
+                    // If we add promises above, we need to keep these indices correct.
+                    //
+                    if (data.length == 6)
+                        oldDataset = data[5];
+                    else if (!originalDataset.newBackend)
+                        oldDataset = originalDataset;
+                    else
+                        oldDataset = null;
+
+                    const schemas = data[0].map(schema => {
+
+                        const uid = schema.url.match(/(\w{4}-\w{4})$/)[1];
+                        const query = Request.buildURL(`https://${domain}/resource/${id}.json?`, schema.query);
+
+                        return _.extend(schema, {
+                            uid,
+                            query,
+                            standard: schema.standardIds[0],
+                            required_columns: schema.columns,
+                            opt_columns: schema.optColumns,
+                            direct_map: schema.query.length === 0
+                        });
+                    });
+
+                    const params = data[1];
+                    const originalColumns = _.filter(originalDataset.columns, isNotComputedField);
+
+                    if (oldDataset) {
+
+                        const oldColumns = _.filter(oldDataset.columns, isNotComputedField);
+
+                        // If the original columns do not have cacheContents, get the cached contents of the matching
+                        // field name from the old dataset and attach it to the original column.
+                        //
+                        originalColumns.forEach(originalColumn => {
+
+                            if (!originalColumn.cachedContents) {
+
+                                var rg = _.filter(oldColumns, o => originalColumn.fieldName == o.fieldName);
+
+                                if (rg.length > 0)
+                                    originalColumn.cachedContents = rg[0].cachedContents;
+                            }
+                        });
+                    }
+
+                    const columnsWithDescriptions = _.filter(originalColumns, column => !_.isEmpty(column.description));
+                    const hasDescriptions = (columnsWithDescriptions.length > 0);
+
+                    const columnsWithSampleValues = _.filter(originalColumns, column => {
+                        return column.cachedContents && column.cachedContents.top;
+                    });
+                    const hasSampleValues = (columnsWithSampleValues.length > 0);
+
+                    const templateParams = {
+                        params,
+                        schemas,
+                        searchPath : '/search',
+                        title : originalDataset.name,
+                        dataset : {
+                            domain,
+                            id,
+                            descriptionHtml : htmlencode(originalDataset.description).replace('\n', '<br>'),
+                            name : originalDataset.name,
+                            tags : originalDataset.tags || [],
+                            columns : originalColumns,
+                            hasDescriptions,
+                            hasSampleValues,
+                            nbeId,
+                            updatedAtString : moment(new Date(originalDataset.viewLastModified * 1000)).format('D MMM YYYY')
+                        },
+                        debugInfo : {
+                            id,
+                            nbeId,
+                            obeId,
+                            newBackend : originalDataset.newBackend,
+                            migrationsError : migrations.error,
+                        },
+                        quickLinks : {
+                            categories : data[2],
+                            domains : data[3].results,
+                            regions : data[4].slice(0, quickLinksCount),
+                        },
+                        css : [
+                            '/styles/dataset.css'
+                        ],
+                        scripts : [
+                            '/lib/third-party/jquery.dotdotdot.min.js',
+                            '/lib/third-party/lodash.min.js',
+                            '/lib/third-party/d3.min.js',
+                            '/lib/third-party/d3.promise.min.js',
+                            '/lib/dataset.min.js'
+                        ]
+                    };
+
+                    res.render('dataset.ejs', templateParams);
+                } catch (error) {
+                    RenderController.error(req, res)(error);
+                }
+            }, RenderController.error(req, res, 404, 'Dataset not found'));
         }, RenderController.error(req, res, 404, 'Dataset not found'));
     }
 
     static home(req, res) {
         const categoriesPromise = API.categories();
+        const domainsPromise = API.domains(quickLinksCount);
         const locationsPromise = API.locations();
         const paramsPromise = RenderController._parameters(req, res);
-        const allPromise = Promise.all([categoriesPromise, locationsPromise, paramsPromise]);
+        const allPromise = Promise.all([categoriesPromise, locationsPromise, paramsPromise, domainsPromise]);
 
         allPromise.then(data => {
             try {
@@ -107,6 +205,12 @@ class RenderController {
                     params,
                     searchPath : '/search',
                     title : 'Open Data Network',
+                    metaSummary : defaultMetaSummary,
+                    quickLinks : {
+                        categories : categories.slice(0, quickLinksCount),
+                        domains : data[3].results,
+                        regions : locations.slice(0, quickLinksCount),
+                    },
                     css : [
                         '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css',
                         '/styles/home.css',
@@ -151,7 +255,7 @@ class RenderController {
             } catch (error) {
                 RenderController.error(req, res)(error);
             }
-        });
+        }, RenderController.error(req, res));
     }
 
     static searchWithVector(req, res) {
@@ -170,7 +274,7 @@ class RenderController {
                         RenderController.error(req, res)(error);
                     }
                 }
-            });
+            }, RenderController.error(req, res));
         } else {
             RenderController.error(req, res, 404, `Vector "${vector}" not found`)();
         }
@@ -180,21 +284,25 @@ class RenderController {
         if (params.regions.length > 0) {
             RenderController._regions(req, res, params);
         } else {
-            const categoriesPromise = API.categories(5);
+            const categoriesPromise = API.categories(quickLinksCount);
             const tagsPromise = API.tags();
-            const domainsPromise = API.domains(5);
+            const domainsPromise = API.domains(quickLinksCount);
             const datasetsPromise = API.datasets(params);
+            const searchPromise = API.searchDatasetsURL(params);
+            const locationsPromise = API.locations();
             const allPromises = [categoriesPromise, tagsPromise,
-                                 domainsPromise, datasetsPromise];
+                                 domainsPromise, datasetsPromise,
+                                 searchPromise, locationsPromise];
             const allPromise = Promise.all(allPromises);
 
             allPromise.then(data => {
                 try {
                     const templateParams = {
                         params,
-                        searchDatasetsURL: API.searchDatasetsURL(params),
+                        hasRegions: params.regions.length > 0,
                         searchPath: req.path,
                         title: searchPageTitle(params),
+                        metaSummary : defaultMetaSummary,
                         css: [
                             '/styles/search.css',
                             '/styles/main.css'
@@ -214,15 +322,21 @@ class RenderController {
                     };
 
                     if (data && data.length == allPromises.length) {
-                        templateParams.categories = data[0];
-                        templateParams.currentCategory =
-                            categoryController.getCurrentCategory(params, data[0]);
-
-                        templateParams.currentTag =
-                            tagController.getCurrentTag(params, data[1]);
-
-                        templateParams.domainResults = data[2];
+                        templateParams.currentCategory = API.currentCategory(params, data[0]);
+                        templateParams.currentTag = API.currentTag(params, data[1]);
                         templateParams.searchResults = data[3];
+                        templateParams.searchDatasetsURL = data[4];
+
+                        templateParams.quickLinks = {
+                            categories : data[0],
+                            domains : data[2].results,
+                            regions : data[5].slice(0, quickLinksCount),
+                        };
+
+                        templateParams.refineBy = {
+                            categories : data[0].slice(0, refineByCount),
+                            domains : data[2].results.slice(0, refineByCount),
+                        };
                     }
 
                     res.render('search.ejs', templateParams);
@@ -253,7 +367,6 @@ class RenderController {
         }
 
         const uids = params.regions.map(region => region.id);
-        const names = params.regions.map(region => region.name);
 
         function processRegions(regions) {
             return regions.filter(region => {
@@ -268,30 +381,68 @@ class RenderController {
         const peersPromise = forRegion(Relatives.peers);
         const siblingsPromise = forRegion(Relatives.siblings);
         const childrenPromise = forRegion(Relatives.children);
-        const categoriesPromise = API.categories(5);
+        const categoriesPromise = API.categories(quickLinksCount);
         const tagsPromise = API.tags();
-        const domainsPromise = API.domains(5);
+        const domainsPromise = API.domains(quickLinksCount);
         const datasetsPromise = API.datasets(params);
-        const summaryPromise = MapDescription.summarizeFromParams(params);
+        const descriptionPromise = MapDescription.summarizeFromParams(params);
+        const searchPromise = API.searchDatasetsURL(params);
+        const locationsPromise = API.locations();
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
                              categoriesPromise, tagsPromise, domainsPromise,
-                             datasetsPromise, summaryPromise];
+                             datasetsPromise, descriptionPromise, searchPromise,
+                             locationsPromise];
         const allPromise = Promise.all(allPromises);
-
-        const searchDatasetsURL = API.searchDatasetsURL(params);
 
         allPromise.then(data => {
             try {
-                const sources = Sources.forRegions(params.regions);
-                const source = params.vector === '' ?
-                    Sources.get('population') :
-                    Sources.get(params.vector);
+                const vector = ((params.vector || '') === '') ? 'population' : params.vector;
+
+                const groups = Sources.groups(params.regions).slice(0).map(group => {
+                    return _.extend({}, group, {
+                        selected: _.contains(group.datasets.map(dataset => dataset.vector), vector),
+                        datasets: Sources.sources(group, params.regions)
+                    });
+                });
+                const group = Sources.group(vector);
+
+                const sources = Sources.sources(group, params.regions).map(source => {
+                    return _.extend({}, source, {
+                        url: Navigate.url({
+                            regions: params.regions,
+                            vector: source.vector
+                        })
+                    });
+                });
+                const _source = Sources.source(vector);
+                const source = _.extend({}, _source, {
+                    datasetURL: (_source.datalensFXF ?
+                        `https://${_source.domain}/view/${_source.datalensFXF}` :
+                        `https://${_source.domain}/dataset/${_source.fxf}`),
+                    apiURL: `https://dev.socrata.com/foundry/${_source.domain}/${_source.fxf}`
+                });
+
+                const mapSource = MapSources[vector] || {};
+
+                const metrics = mapSource.variables || [];
+                const metric = _.find(metrics, metric => metric.column === params.metric) || metrics[0];
+
+                const years = metric.years;
+                const year = _.find(years, year => parseFloat(year) === parseFloat(params.year)) || years[0];
 
                 const templateParams = {
                     params,
-                    searchDatasetsURL,
+                    vector,
                     sources,
                     source,
+                    groups,
+                    group,
+                    year,
+                    metric,
+                    metrics,
+                    years,
+                    hasRegions: params.regions.length > 0,
+                    regionNames: wordJoin(params.regions.map(region => region.name), 'or'),
                     searchPath: req.path,
                     title: searchPageTitle(params, source),
                     css: [
@@ -331,27 +482,27 @@ class RenderController {
 
                     if (data[3].length > 0) {
                         templateParams.categories = data[3];
-                        templateParams.currentCategory =
-                            categoryController.getCurrentCategory(params, data[3]);
+                        templateParams.currentCategory = API.currentCategory(params, data[3]);
                     }
 
-                    if (data[4].results.length > 0) {
-                        templateParams.currentTag =
-                            tagController.getCurrentTag(params, data[4]);
+                    if (data[4].length > 0) {
+                        templateParams.currentTag = API.currentTag(params, data[4]);
                     }
 
-                    templateParams.domainResults = data[5];
                     templateParams.searchResults = data[6];
-                    templateParams.mapSummary = data[7] || '';
+                    templateParams.mapSummary = data[7][0];
+                    templateParams.metaSummary = data[7][1];
                     templateParams.mapVariables = MapDescription.variablesFromParams(params);
+                    templateParams.searchDatasetsURL = data[8];
+
+                    templateParams.quickLinks = {
+                        categories : data[3],
+                        domains : data[5].results,
+                        regions : data[9].slice(0, quickLinksCount),
+                    };
                 }
 
-                if (templateParams.mapSummary === '') {
-                    params.vector = 'population';
-                    RenderController._regions(req, res, params);
-                } else {
-                    res.render('search.ejs', templateParams);
-                }
+                res.render('search.ejs', templateParams);
             } catch (error) {
                 RenderController.error(req, res)(error);
             }
@@ -361,7 +512,7 @@ class RenderController {
     static searchResults(req, res) {
         RenderController._parameters(req, res).then(params => {
             API.datasets(params).then(searchResults => {
-                if (searchResults.length === 0) {
+                if (searchResults.results.length === 0) {
                     res.status(204);
                     res.end();
                 } else {
@@ -373,11 +524,7 @@ class RenderController {
                             scripts: []
                         };
 
-                        const template = params.regions.length === 0 ?
-                            '_search-results-regular.ejs' :
-                            '_search-results-compact.ejs';
-
-                        res.render(template, templateParams);
+                        res.render('_search-results-regular.ejs', templateParams);
                     } catch (error) {
                         RenderController.error(req, res)(error);
                     }
@@ -402,12 +549,12 @@ class RenderController {
     static _parameters(req, res) {
         return new Promise((resolve, reject) => {
             const query = req.query;
-            const page = isNaN(query.page) ? 1 : parseInt(query.page);
+            const page = isNaN(query.page) ? 0 : parseInt(query.page);
 
             const params = {
                 categories: asArray(query.categories),
                 domains: asArray(query.domains),
-                tags: asArray(query.tags),
+                group: req.params.group || '',
                 limit: defaultSearchResultCount,
                 metric: req.params.metric || '',
                 offset: (page - 1) * defaultSearchResultCount,
@@ -416,8 +563,10 @@ class RenderController {
                 q: query.q || '',
                 regions: [],
                 resetRegions: false,
+                tags: asArray(query.tags),
                 vector: req.params.vector || '',
-                year: req.params.year || ''
+                year: req.params.year || '',
+                debug: query.debug && query.debug == 'true'
             };
 
             if (req.params.regionIds && req.params.regionIds !== '') {
@@ -434,7 +583,7 @@ class RenderController {
                     } else {
                         resolve(params);
                     }
-                });
+                }, reject);
             } else {
                 resolve(params);
             }
@@ -448,10 +597,10 @@ function asArray(parameter) {
     return [];
 }
 
-function searchPageTitle(params, source) {
+function searchPageTitle(params, dataset) {
     const categories = params.categories.map(capitalize);
     const tags = params.tags.map(capitalize);
-    const dataTypes = _.flatten((source ? [source.tabName] : []).concat(categories, tags));
+    const dataTypes = _.flatten((dataset ? [dataset.name] : []).concat(categories, tags));
     const dataDescription = wordJoin(dataTypes);
 
     const locationDescription = params.regions.length > 0 ?
@@ -469,6 +618,10 @@ function wordJoin(list, separator) {
     if (list.length === 1) return list[0];
     separator = separator || 'and';
     return `${list.slice(0, list.length - 1).join(', ')} ${separator} ${list[list.length - 1]}`;
+}
+
+function isNotComputedField(column) {
+    return !column.fieldName.match(':@computed_');
 }
 
 module.exports = RenderController;

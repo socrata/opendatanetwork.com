@@ -15,3 +15,5 @@ geo/*/
 lib/*.es6.js
 lib/*.js
 
+.vscode/
+

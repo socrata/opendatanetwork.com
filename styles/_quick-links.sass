@@ -1,0 +1,88 @@
+$darker-gray-background-color: #545454
+$darker-gray-border-color: #5e5e5e
+
+.quick-links-container
+    color: white
+    display: inline-block
+    padding: 0 20px
+
+    @media (max-width: 1200px)
+        display: none
+
+
+    .fa-caret-down
+        margin-left: 10px
+
+    .fa-caret-up
+        margin-left: 10px
+
+.quick-links-container-selected
+    background-color: $darker-gray-background-color        
+
+.quick-links-menu-container
+    background-color: $darker-gray-background-color
+    display: none
+    position: absolute
+    right: 0
+    z-index: 500
+
+.quick-links-menu
+    display: table
+    line-height: normal
+    margin: 0
+    padding: 0
+
+.quick-links-menu div
+    border-right: 1px solid $darker-gray-border-color
+    display: table-cell
+    margin: 0
+    padding: 0 0 10px
+
+.quick-links-menu > div:last-child .quick-links-sub-menu > li
+    border-right: none 
+
+.quick-links-sub-menu
+    margin: 0
+    padding: 0
+
+.quick-links-sub-menu li
+    font-size: 14px
+    list-style-type: none
+    margin: 0
+    min-width: 120px
+    padding: 0
+
+.quick-links-sub-menu li:first-child
+    border-right: none
+    font-weight: 600
+    padding: 10px 20px
+
+.quick-links-sub-menu li a
+    color: white
+    cursor: pointer
+    display: block
+    padding: 10px 20px
+
+.quick-links-sub-menu li a:hover
+    background-color: $orange-color
+
+.quick-links-sub-menu li .fa
+    margin-right: 10px
+    
+.quick-links-categories li
+    text-transform: capitalize
+
+.quick-links-more
+    background: $darker-gray-border-color
+    cursor: pointer
+    display: block
+    font-size: 14px
+    line-height: normal
+    padding: 10px 0
+    text-align: center
+
+.quick-links-more:hover
+    background: $orange-color
+    
+.quick-links-hidden
+    display: none;

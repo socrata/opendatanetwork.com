@@ -2,9 +2,9 @@
 
 class TopoModel {
     static get(region) {
-       const url = MapConstants.TOPOJSON_DIRECTORY +
-                   region.topo +
-                   MapConstants.TOPOJSON_SUFFIX;
+        const url = MapConstants.TOPOJSON_DIRECTORY +
+                    region.topo +
+                    MapConstants.TOPOJSON_SUFFIX;
 
         return $.getJSON(url);
     }
@@ -56,7 +56,7 @@ class MapModel {
 
                     return {
                         id: region[idColumn],
-                        type: region[typeColumn],
+                        type: region[typeColumn].toLowerCase(),
                         name: region[nameColumn],
                         value: value,
                         valueName: variable.name,

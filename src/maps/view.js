@@ -30,10 +30,10 @@ class MapView {
         map.setView(MapConstants.INITIAL_CENTER, MapConstants.INITIAL_ZOOM);
 
         map.addControl(this.legend);
-        map.addControl(this.variableControl);
         map.addControl(this.tooltip);
         if (MapConstants.ZOOM_CONTROL)
             map.addControl(this.zoomControl);
+        this.variableControl.onAdd(map);
 
         map.whenReady(() => {
             const url = layerID => `https://api.mapbox.com/v4/${layerID}/{z}/{x}/{y}.png?access_token=${MapConstants.MAPBOX_TOKEN}`;
@@ -44,6 +44,8 @@ class MapView {
             const labels = L.tileLayer(url(MapConstants.LABEL_LAYER_ID), {pane}).addTo(map);
 
             this.zoomToSelected(this.map);
+
+            if (this.source.callback) this.source.callback(this.regions);
         });
     }
 
@@ -67,8 +69,8 @@ class MapView {
             .then(model => this.update(model))
             .catch(error => { throw error; });
 
-        new MapSource(this.source).summarize(variable, year, this.regions).then(summary => {
-            d3.select('p.map-summary').text(summary);
+        new MapSource(this.source).summarize(variable, year, this.regions).then(([summary, meta]) => {
+            d3.select('p#map-summary').text(summary);
         });
     }
 
@@ -143,11 +145,14 @@ class MapView {
         if (regions.length < 1) throw 'regions cannot be empty';
 
         return new Promise((resolve, reject) => {
-            const regionType = MapConstants.REGIONS[regions[0].type];
+            const regionTypes = regions
+                .map(region => MapConstants.REGIONS[region.type])
+                .filter(_.identity);
 
-            if (regionType === undefined) {
+            if (regionTypes.length < 1) {
                 reject(`invalid region type for map: ${regions[0].type}`);
             } else {
+                const regionType = regionTypes[0];
                 const regionsOfType = _.filter(regions, region => {
                     return region.type == regionType.id;
                 });

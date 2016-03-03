@@ -1,0 +1,76 @@
+
+<div class="controls-column">
+    <div class="controls">
+        <h2>Data for</h2>
+        <div class="region-tokens">
+            <% include _search-tokens %>
+        </div>
+
+        <h2>Compare this Data</h2>
+        <div class="add-region">
+            <i class="fa fa-plus"></i><input class="add-region-input" type="text" placeholder="Add Location">
+            <ul class="add-region-results" style="display: none;"></ul>
+        </div>
+        <% if (typeof peers != 'undefined' && peers && peers.length > 0) { %>
+            <ul id="similar-regions">
+            <% peers.forEach(function(region) { %>
+                <li><a href=<%= region.addURL %><%- (params.regions.length >= 2) ? ' rel="nofollow"' : '' %>><%= region.name %> <i class="fa fa-plus"></i></a></li>
+            <% }); %>
+            </ul>
+        <% } %>
+
+        <%
+        const PLURALS = {
+            nation: 'Nations',
+            region: 'Regions',
+            division: 'Divisions',
+            state: 'States',
+            county: 'Counties',
+            place: 'Places',
+            msa: 'Metro Areas',
+            zip_code: 'ZIP Codes'
+        };
+        %>
+
+        <% if (typeof siblings != 'undefined' && siblings && siblings.length > 0) { %>
+            <h2 class="places-in-region-header">
+                <%= PLURALS[params.regions[0].type] %> in
+                <a class="parent-link" href="<%= parentRegion.navigateURL %>"><%= parentRegion.name %></a>
+            </h2>
+
+            <ul class="places-in-region-list">
+                <% siblings.forEach(function(region) { %>
+                    <li><a href="<%= region.navigateURL %>"><%= region.name %></a></li>
+                <% }); %>
+            </ul>
+        <% } %>
+
+        <% if (typeof allChildren != 'undefined' && allChildren && allChildren.length > 0) { %>
+            <% allChildren.forEach(function(children) { %>
+                <% if (children.length > 0) { %>
+                    <h2 class="places-in-region-header">
+                        <%= PLURALS[children[0].type] %> in <%= params.regions[0].name %>
+                    </h2>
+
+                    <ul class="places-in-region-list">
+                        <% children.forEach(function(child) { %>
+                            <li><a href="<%= child.navigateURL %>"><%= child.name %></a></li>
+                        <% }); %>
+                    </ul>
+                <% } %>
+            <% }); %>
+        <% } %>
+
+        <h2 id="places-in-region-header-0" class="places-in-region-header" style="display:none"></h2>
+        <ul id="places-in-region-list-0" class="places-in-region-list" style="display:none"></ul>
+        <h3 id="places-in-region-header-1" class="places-in-region-header" style="display:none"></h3>
+        <ul id="places-in-region-list-1" class="places-in-region-list" style="display:none"></ul>
+    </div>
+    <div class="footer">
+        <ul class="footer-links">
+            <li><a class="blue-link" href="http://www.socrata.com/company-info/">About Socrata</a></li>
+            <li><a class="blue-link" href="http://www.opendatanetwork.com/join-open-data-network">Join the Network</a></li>
+        </ul>
+        <a href="http://www.socrata.com/company-info/"><img src="/images/v3-powered-by-socrata.png"></a>
+    </div>
+</div>

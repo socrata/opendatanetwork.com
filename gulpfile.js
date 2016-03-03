@@ -40,13 +40,14 @@ var autosuggestScripts = [
 ];
 
 var searchScripts = [
+    'src/quick-links.js',
+    'src/forecast.js',
     'src/chart-constants.js',
     'src/data/data-sources.js',
     'src/charts.js',
     'src/search-page-controller.js',
     'src/search.js'
 ];
-
 
 function js(src, dest) {
     return function() {
@@ -62,10 +63,11 @@ function js(src, dest) {
     };
 }
 
-
 var homeScripts = baseScripts
     .concat(autosuggestScripts)
-    .concat(['src/home.js']);
+    .concat([
+        'src/quick-links.js',
+        'src/home.js']);
 gulp.task('home', js(homeScripts, 'home.min.js'));
 
 var searchScripts = baseScripts
@@ -76,11 +78,13 @@ gulp.task('search', js(searchScripts, 'search.min.js'));
 
 var datasetScripts = baseScripts
     .concat(autosuggestScripts)
-    .concat(['src/dataset.js']);
+    .concat([
+        'src/quick-links.js',
+        'src/dataset.js'
+        ]);
 gulp.task('dataset', js(datasetScripts, 'dataset.min.js'));
 
 gulp.task('js', ['home', 'search', 'dataset']);
-
 
 gulp.task('css', function() {
     return gulp.src(['styles/**/*.scss', 'styles/**/*.sass'])
@@ -89,7 +93,6 @@ gulp.task('css', function() {
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('styles/compressed'));
 });
-
 
 gulp.task('build', ['js', 'css']);
 

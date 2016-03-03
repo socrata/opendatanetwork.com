@@ -16,27 +16,18 @@ $gray-check-border-color: #d1d1d1
 $gray-text-color: #bdc3c7
 $green-color: #27ae60
 $orange-color: #ee3b3b
-$table-header-cell-gray: #eff2f3
-$table-sub-header-text-gray: #a7a7a7
-$table-border-gray: #c9c9c9
-$region-color-0: #2980b9
-$region-color-1: #ee3b3b
-$region-color-2: #3bdbee
-$region-color-3: #ff9900
-$region-color-4: #109618
-$region-color-5: #0099c6
-$region-color-6: #dd4477
-$region-color-7: #66aa00
-$region-color-8: #b82e2e
-$region-color-9: #316395
 
 @import app
+@import refine-by
+@import region-navigation
 @import search-bar
+@import search-tokens
 @import compare-this-data-menu
 @import current-category-info-box
 @import info-icon
 @import map-summary
 @import charts
+@import chart-tabs
 @import tables
 
 *::-webkit-input-placeholder,
@@ -48,149 +39,16 @@ $region-color-9: #316395
 .hidden
   display: none
 
-/* Refine section
-
-section.refine
-  background-color: $dark-gray-background-color
-  margin-top: 60px
-  min-height: 60px
-  text-align: left
-  font-size: 16px
-  line-height: 60px
-  padding: 0 0 0 30px
-  position: relative
-
-.tokens
-  display: inline
-  padding: 0
-
-.tokens li
-  background-color: white
-  border-radius: 2px
-  display: inline
-  margin: 0 0 0 5px
-  padding: 5px 10px
-  white-space: nowrap
-
-.tokens li .fa-times-circle
-  cursor: pointer
-  margin-left: 5px
-
-.category-token
-  color: $orange-color
-
-.domain-token
-  color: $orange-color
-
-.region-token
-  color: $blue-text-color
-
-.standard-token
-  color: $orange-color
-  text-transform: uppercase
-
-.refine-link
-  color: $blue-text-color
-  cursor: pointer
-  display: inline-block
-  font-size: 16px
-  float: right
-
-.refine-link span
-  padding: 0 25px
-
-.refine-link-selected
-  background-color: $darker-gray-background-color
-  color: white
-
-.refine-link .fa
-  color: $dark-gray-arrow-color
-  margin-left: 10px
-
-.refine-link ul
-  background-color: $darker-gray-background-color
-  border-top: 1px solid $dark-gray-border-color
-  display: block
-  list-style-type: none
-  margin: 0
-  min-width: 145px
-  padding: 0
-  position: absolute
-  z-index: 1000
-
-.refine-link li
-  border-top: 1px solid $darker-gray-border-color
-  color: white
-  font-size: 14px
-  line-height: 40px
-  margin: 0
-  padding: 0 20px
-
-.refine-link li:first-child
-  border-top: 0
-
-.refine-link li:hover
-  background-color: $orange-color
-
-#refine-menu-categories li
-  padding-left: 34px
-  position: relative
-  text-transform: capitalize
-
-#refine-menu-categories li .fa
-  color: white
-  left: 0
-  position: absolute
-  top: 13px
-
-.refine-by-label
-  color: $black-text-color
-  float: right
-  font-size: 14px
-  margin-right: 25px
-
 /* Results section
 
 section.results
   border-top: 1px solid $gray-border-color
   display: table
   width: 100%
+  margin-top: 60px
+  min-height: 60px
 
 /* Common datasets
-
-.datasets
-  background-color: white
-  border: 1px solid $gray-border-color
-  list-style-type: none
-  margin: 0
-  padding: 0
-
-.datasets li
-  border-top: 1px solid $gray-border-color
-  padding: 15px
-
-.datasets li:first-child
-  border: none
-
-/* Compact width search results
-
-.search-results-compact-column
-  background-color: $gray-background-color
-  display: table-cell
-  padding: 15px
-  text-align: left
-  width: 270px
-
-.search-results-compact-column .name
-  color: $black-text-color
-  cursor: pointer
-  font-size: 14px
-
-.search-results-compact-column .domain
-  color: $blue-text-color
-  font-size: 14px
-
-/* Regular width search results
 
 .search-results-regular-column
   background-color: $gray-background-color
@@ -198,57 +56,80 @@ section.results
   text-align: left
   vertical-align: top
 
-.search-results-regular-column ul
+.search-results-container
+  background-color: $gray-background-color
+  padding: 30px 0
+
+  .datasets-header
+    font-size: 14px
+
+    .result-count
+      color: #2068AE
+
+.datasets-header
+  padding: 0 30px
+
+  h2
+    margin: 0
+
+.datasets
+  background-color: white
   border: 1px solid $gray-border-color
-  margin: 30px
-
-.search-results-regular-column li
-  color: $gray-text-color
-  font-size: 14px
   list-style-type: none
-  margin: 0
-  padding: 15px 15px 15px 65px
-  position: relative
+  margin: 30px
+  padding: 0
 
-.search-results-regular-column .tag
-  color: $gray-text-color
+  li:first-child
+    border: none
 
-.search-results-regular-column .tagLabel
-  font-weight: 600
+  li
+    border-top: 1px solid $gray-border-color
+    color: $gray-text-color
+    font-size: 14px
+    list-style-type: none
+    margin: 0
+    padding: 15px 15px 15px 65px
+    position: relative
 
-.search-results-regular-column h2
-  margin: 0
-  font-size: 20px
-  font-weight: 300
+    .tag
+      color: $gray-text-color
 
-.search-results-regular-column h2 a
-  color: $black-text-color
+    .tagLabel
+      font-weight: 600
 
-.search-results-regular-column a
-  color: $blue-text-color
-  cursor: pointer
+    h2
+      margin: 0
+      font-size: 20px
+      font-weight: 300
 
-.search-results-regular-column p
-  color: $black-text-color
+      a
+        color: $black-text-color
 
-.search-results-regular-column li .fa
-  color: $blue-text-color
-  font-size: 32px
-  float: left
-  margin-left: -45px
-  margin-top: 3px
+    a
+      color: $blue-text-color
+      cursor: pointer
 
-.search-results-regular-column li .api-link
-  background-color: $green-color
-  border-radius: 3px
-  color: white
-  float: right
-  font-size: 14px
-  font-weight: 600
-  height: 34px
-  line-height: 34px
-  padding-left: 18px
-  padding-right: 18px
+    p
+      color: $black-text-color
+
+    .fa
+      color: $blue-text-color
+      font-size: 32px
+      float: left
+      margin-left: -45px
+      margin-top: 3px
+
+    .api-link
+      background-color: $green-color
+      border-radius: 3px
+      color: white
+      float: right
+      font-size: 14px
+      font-weight: 600
+      height: 34px
+      line-height: 34px
+      padding-left: 18px
+      padding-right: 18px
 
 /* Charts
 
@@ -257,34 +138,6 @@ section.results
   display: table-cell
   text-align: left
   vertical-align: top
-
-.chart-tabs
-  border-bottom: 1px solid $gray-border-color
-  line-height: 55px
-  margin: 0
-  padding: 0 15px
-  list-style-type: none
-  text-align: left
-
-.chart-tabs li
-  color: $dark-gray-text-color
-  display: inline-block
-  padding: 0 20px
-  font-size: 14px
-
-.chart-tabs li.selected
-  border-bottom: 5px solid $blue-text-color
-  font-weight: 600
-
-.chart-tabs li a
-  color: $dark-gray-text-color
-  display: block
-
-.chart-tabs li a:hover
-  color: $blue-text-color
-
-.chart-tabs li.selected a
-  color: $black-text-color
 
 .charts
   padding: 0 35px
@@ -298,17 +151,29 @@ section.results
   font-weight: normal
 
 .charts-column p
-    font-size: 14px;
+  font-size: 14px;
+
+div.map-description
+  margin: 35px 35px 0
 
 .dataset-description
-  padding: 5px 16px 8px 16px
-  background-color: #eee
-
-.attribution
   color: $darker-gray-text-color
-  display: block
-  font-size: 12px
-  text-align: center
+  margin: 0 35px 35px 35px
+  padding: 24px
+  background: #EBEFF0
+
+  a
+    color: $blue-text-color
+
+  p
+    padding: 0
+    margin: 0
+
+  .attribution
+    display: block
+    font-size: 14px
+    margin-top: 16px
+    text-align: center
 
   a
     color: $blue-text-color
@@ -322,7 +187,7 @@ section.results
 
 .controls-column
   background-color: $footer-background-color
-  border-left: 1px solid $gray-border-color
+  border-right: 1px solid $gray-border-color
   display: table-cell
   text-align: left
   vertical-align: top
@@ -372,7 +237,7 @@ section.results
 #similar-regions
   font-size: 14px
   list-style-type: none
-  margin: 0 0 20px
+  margin: 0 0 32px
   padding: 0
 
 #similar-regions li

@@ -3,46 +3,86 @@
 
 <script>
 var _params = <%- JSON.stringify(params) %>;
+<% if (params.debug != undefined) { %>console.log('<%- JSON.stringify(debugInfo) %>');<% } %>
 </script>
 
 <section class="main-section">
     <div class="dataset-wrapper">
-      <div class="dataset-container">
-          <div class="title-container">
-              <h1><%= dataset.name %></h1>
-              <a class="publisher" href="http://<%= dataset.domain %>"><%= dataset.domain %></a> | Last Updated <span class="last-updated"><%= dataset.updatedAtString %></span>
-          </div>
-          <div class="button-container">
-              <a class="blue-button button" href="http://dev.socrata.com/foundry/<%= dataset.domain %>/<%= dataset.id %>">View API</a>
-              <a class="orange-button button" href="https://<%= dataset.domain %>/d/<%= dataset.id %>">View Data</a>
-          </div>
-  <% if ((dataset.descriptionHtml.length > 0) || (dataset.tags.length > 0)) { %>
-          <div class="description-container">
-              <% if (dataset.descriptionHtml.length > 0) { %><p class="description"><%- dataset.descriptionHtml %></p><% } %>
-              <% if (dataset.tags.length > 0) { %><p class="tags">Tags: <span><%= dataset.tags.join(', ') %></span></p><% } %>
-          </div>
-  <% } %>
-      </div>
+        <div class="dataset-container">
+            <div class="title-container">
+                <h1><%= dataset.name %></h1>
+                <a class="publisher" href="http://<%= dataset.domain %>"><%= dataset.domain %></a> | Last Updated <span class="last-updated"><%= dataset.updatedAtString %></span>
+            </div>
+            <div class="button-container">
+                <a class="blue-button button" href="http://dev.socrata.com/foundry/<%= dataset.domain %>/<%= dataset.id %>">View API</a>
+                <a class="orange-button button" href="https://<%= dataset.domain %>/d/<%= dataset.id %>">View Data</a>
+            </div>
+        <% if ((dataset.descriptionHtml.length > 0) || (dataset.tags.length > 0)) { %>
+            <div class="description-container">
+                <% if (dataset.descriptionHtml.length > 0) { %><p class="description"><%- dataset.descriptionHtml %></p><% } %>
+                <% if (dataset.tags.length > 0) { %><p class="tags">Tags: <span><%= dataset.tags.join(', ') %></span></p><% } %>
+            </div>
+        <% } %>
+        <% if (dataset.columns.length > 0) { %>
+            <div class="columns-container">
+                <p>This dataset has the following <%- dataset.columns.length %> columns:</p>
+                <table>
+                <tr>
+                    <th>Column Name</th>
+                    <th>API Column Name</th>
+                    <th>Data Type</th>
+                    <% if (dataset.hasDescriptions) { %><th>Description</th><% } %>
+                    <% if (dataset.hasSampleValues) { %><th>Sample Values</th><% } %>
+                </tr>
+            <% dataset.columns.forEach(function(column) { %>
+                <tr class="column-row" data-field-name="<%- column.fieldName %>" data-type="<%- column.dataTypeName %>">
+                    <td class="name"><%- column.name %></td>
+                    <td class="field-name"><%- column.fieldName %></td>
+                    <td class="data-type">
+                        <a href="https://dev.socrata.com/docs/datatypes/<%- column.dataTypeName %>.html" target="blank"><%- column.dataTypeName %></a>
+                    </td>
+                <% if (dataset.hasDescriptions) { %>
+                    <td class="description"><%- column.description %></td>
+                <% } %>
+         <% if (dataset.hasSampleValues) { %>
+                    <td class="popular-values">
+            <% if ((column.cachedContents != null) && (column.cachedContents.top != null)) {
+                var rg = _.slice(column.cachedContents.top, 0, 5);
+                rg.forEach(function(o) { %>
+                        <div class="dotdotdot"><%= (((column.dataTypeName == 'location') || (column.dataTypeName == 'point')) ?  JSON.stringify(o.item) : o.item) %></div>
+            <%
+                });
+            }
+            %>
+            <% if (dataset.nbeId != null) { %>
+                        <a class="view-top-100" href="https://<%- dataset.domain %>/resource/<%- dataset.nbeId %>.json?$group=<%- column.fieldName %>&$select=<%- column.fieldName %>%20as%20value,count(*)&$order=count%20desc&$limit=100" rel="nofollow">view top 100</a>
+            <% } %>
+                    </td>
+        <% }%>
+                </tr>
+            <% }); %>
+                </table>
+            </div>
+        <% } %>
+        </div>
 
-      <% if(schemas.length > 0) { %>
-          <div class="right-container">
-              <h2>Standard Schemas</h2>
-
-              <p>Together with the open data community, Socrata has mapped many datasets to open standards in order to provide more consistency between similar classes of data from different sources.</p>
-
-              <% schemas.forEach(function(schema) { %>
-                  <div class="schema">
-                      <h3><%= schema.name %></h3>
-                      <p><%= schema.description %></p>
-                      <% if(!schema.direct_map) { %>
-                        <p>The below <a href="https://dev.socrata.com/docs/queries.html">SoQL query</a> automatically maps this dataset into the <a target="_blank" href="https://github.com/open-data-network/schema-mappings/blob/master/schemas/<%= schema.standard %>.yml"><%= schema.name %></a> standard. You can also augment it with other SoQL filters and parameters for additional functionality.</p>
-                      <% } %>
-                      <div class="query-container">
-                          <code class="sample-query"><a target="_blank" href="<%= schema.query %>"><%= schema.query %></a></code>
-                      </div>
-                  </div>
-              <% }); %>
-          </div>
+      <% if (schemas.length > 0) { %>
+        <div class="schema-container">
+            <h2>Standard Schemas</h2>
+            <p>Together with the open data community, Socrata has mapped many datasets to open standards in order to provide more consistency between similar classes of data from different sources.</p>
+            <% schemas.forEach(function(schema) { %>
+                <div class="schema">
+                    <h3><%= schema.name %></h3>
+                    <p><%= schema.description %></p>
+                <% if (!schema.direct_map) { %>
+                    <p>The below <a href="https://dev.socrata.com/docs/queries.html">SoQL query</a> automatically maps this dataset into the <a target="_blank" href="https://github.com/open-data-network/schema-mappings/blob/master/schemas/<%= schema.standard %>.yml"><%= schema.name %></a> standard. You can also augment it with other SoQL filters and parameters for additional functionality.</p>
+                <% } %>
+                    <code class="sample-query">
+                        <a target="_blank" href="<%= schema.query %>"><%= schema.query %></a>
+                    </code>
+                </div>
+            <% }); %>
+        </div>
       <% } %>
     </div>
 </section>

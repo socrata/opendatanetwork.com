@@ -1,5 +1,6 @@
 'use strict';
 
+const _ = require('lodash');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const express = require('express');
@@ -67,8 +68,10 @@ app.get('/region/:regionIds/:regionNames', RenderController.search);
 app.get('/region/:regionIds/:regionNames/search-results', RenderController.searchResults);
 app.get('/region/:regionIds/:regionNames/:vector/search-results', RenderController.searchResults);
 app.get('/region/:regionIds/:regionNames/:vector/:metric/:year', RenderController.searchWithVector);
+app.get('/region/:regionIds/:regionNames/:vector/:metric/:year/search-results', RenderController.searchResults);
 app.get('/region/:regionIds/:regionNames/:vector/:metric', RenderController.searchWithVector);
 app.get('/region/:regionIds/:regionNames/:vector', RenderController.searchWithVector);
+app.get('/region/:regionIds/:regionNames', RenderController.search);
 
 app.use((error, req, res, next) => {
     RenderController.error(req, res)(error);
@@ -81,5 +84,6 @@ var port = Number(process.env.PORT || 3000);
 app.listen(port);
 console.log('app is listening on ' + port);
 
+app.locals._ = _;
 app.locals.numeral = numeral;
 

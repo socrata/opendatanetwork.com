@@ -3,18 +3,33 @@
 const _ = require('lodash');
 const moment = require('moment');
 const numeral = require('numeral');
+const fs = require('fs');
 
-const Synonyms = require('./synonyms');
 const Request = require('./request');
 const Constants = require('./constants');
-const CategoryController = require('./category-controller');
-const TagController = require('./tag-controller');
 const Sources = require('../src/data/data-sources.js');
 
-const categoryController = new CategoryController();
-const tagController = new TagController();
+const _fileCache = {};
 
-const SYNONYMS = Synonyms.fromFile(Constants.SYNONYMS_FILE);
+class FileCache {
+    static get(path) {
+        return new Promise((resolve, reject) => {
+            if (path in _fileCache) {
+                resolve(_fileCache[path]);
+            } else {
+                fs.readFile(`${__dirname}/../${path}`, (error, data) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        const json = JSON.parse(data);
+                        _fileCache[path] = json;
+                        resolve(json);
+                    }
+                });
+            }
+        });
+    }
+}
 
 class API {
     static regions(ids) {
@@ -26,50 +41,78 @@ class API {
     static datasets(requestParams) {
         return new Promise((resolve, reject) => {
             const hasRegions = requestParams.regions.length > 0;
-            const limit = hasRegions ? 20 : 100;
-            const url = API.searchDatasetsURL(requestParams, limit);
+            const limit = 10;
+            const page = requestParams.page || 0;
+            const offset = page * limit;
             const timeout = hasRegions ? Constants.TIMEOUT_MS : Constants.TIMEOUT_MS * 10;
-            return Request.getJSON(url, timeout).then(results => {
-                annotateData(results);
-                annotateParams(results, requestParams);
 
-                resolve(results);
+            API.searchDatasetsURL(requestParams, limit, offset).then(url => {
+                Request.getJSON(url, timeout).then(results => {
+                    annotateData(results);
+                    annotateParams(results, requestParams);
+
+                    resolve(results);
+                }, error => resolve({results: []}));
             }, error => resolve({results: []}));
         });
     }
 
-    static searchDatasetsURL(requestParams, limit) {
-        const querySynonyms = SYNONYMS.get(requestParams.q);
-        const vectorSynonyms = SYNONYMS.get(requestParams.vector.replace(/_/g, ' '));
-        const synonyms = _.unique(_.flatten([querySynonyms, vectorSynonyms]));
+    static _query(requestParams) {
+        return new Promise((resolve, reject) => {
+            const q = requestParams.q;
+            const vector = requestParams.vector || 'population';
+            const regions = requestParams.regions || [];
 
-        const regionNames = requestParams.regions.map(region => {
-            const name = region.name;
-            const type = region.type;
+            if (q && q !== '') {
+                resolve({q});
+            } else if (regions.length > 0 && Sources.has(vector)) {
+                API.stateNames().then(stateNames => {
+                    const searchTerms = Sources.get(vector).searchTerms
+                        .map(term => _.contains(term, ' ') ? `"${term}"` : term);
 
-            if (type === 'place' || type === 'county') {
-                return name.split(', ')[0];
-            } else if (type === 'msa') {
-                const words = name.split(' ');
-                return words.slice(0, words.length - 3);
+                    const regionNames = regions.map(region => {
+                        const name = region.name;
+                        const type = region.type;
+
+                        if (type === 'place' || type === 'county') {
+                            const regionName = name.split(', ')[0];
+                            const stateAbbr = name.split(', ')[1];
+                            const stateName = stateNames[stateAbbr] || '';
+                            return `${regionName} AND ("${stateAbbr}" OR "${stateName}")`;
+                        } else if (type === 'msa') {
+                            const words = name.split(' ');
+                            return `"${words.slice(0, words.length - 3).join(' ')}"`;
+                        } else {
+                            return `"${name}"`;
+                        }
+                    }).map(constraint => `(${constraint})`);
+
+                    const allTerms = [searchTerms, regionNames, requestParams.tags];
+                    const query = allTerms
+                        .filter(terms => terms.length > 0)
+                        .map(terms => `(${terms.join(' OR ')})`)
+                        .join(' AND ');
+
+                    resolve({q_internal: query});
+                }, reject);
             } else {
-                return name;
+                resolve({q: ''});
             }
-        }).map(name => `'${name}'`);
+        });
+    }
 
-        const allTerms = [synonyms, regionNames, requestParams.tags];
-        const query = allTerms
-            .filter(terms => terms.length > 0)
-            .map(terms => `(${terms.join(' OR ')})`)
-            .join(' AND ');
-
-        const categories = requestParams.categories || [];
-        const domains = requestParams.domains || [];
-        const tags = requestParams.tags || [];
-
-        const params = {categories, domains, tags, q_internal: query};
-        if (limit) params.limit = limit;
-        return Request.buildURL(Constants.CATALOG_URL, params);
+    static searchDatasetsURL(requestParams, limit, offset) {
+        return new Promise((resolve, reject) => {
+            API._query(requestParams).then(queryParams => {
+                const categories = requestParams.categories || [];
+                const domains = requestParams.domains || [];
+                const tags = requestParams.tags || [];
+                const params = _.extend({categories, domains, tags}, queryParams);
+                if (limit) params.limit = limit;
+                if (offset) params.offset = offset;
+                resolve(Request.buildURL(Constants.CATALOG_URL, params));
+            }, reject);
+        });
     }
 
     static catalog(path, n, defaultResponse) {
@@ -90,19 +133,41 @@ class API {
     static categories(n) {
         return new Promise((resolve, reject) => {
             API.catalog('categories', n).then(response => {
-                categoryController.attachCategoryMetadata(response, response => {
-                    resolve(response.results);
-                });
-            });
+                API.categoryMetadata().then(metadata => {
+                    const categories = response.results.map(result => {
+                        result.metadata = metadata[result.category] || Constants.DEFAULT_METADATA;
+                        return result;
+                    });
+
+                    resolve(categories);
+                }, reject);
+            }, reject);
         });
+    }
+
+    static currentCategory(params, categories) {
+        if (params.q !== '' || params.categories.length != 1) return null;
+        return _.find(categories, category => category.category ===  params.categories[0].toLowerCase());
     }
 
     static tags(n) {
         return new Promise((resolve, reject) => {
             API.catalog('tags', n).then(response => {
-                tagController.attachTagMetadata(response, resolve);
-            });
+                API.tagMetadata().then(metadata => {
+                    const tags = response.results.map(result => {
+                        result.metadata = metadata[result.tag] || Constants.DEFAULT_METADATA;
+                        return result;
+                    });
+
+                    resolve(tags);
+                }, reject);
+            }, reject);
         });
+    }
+
+    static currentTag(params, tags) {
+        if (params.tags.length != 1) return null;
+        return _.find(tags, tag => tag.tag === params.tags[0].toLowerCase());
     }
 
     static domains(n) {
@@ -110,7 +175,14 @@ class API {
     }
 
     static datasetSummary(domain, fxf) {
-        return Request.getJSON(Constants.DATASET_SUMMARY_URL.format(domain, fxf));
+        return Request.getJSON(Constants.DATASET_SUMMARY_URL.format(domain, fxf), 1000);
+    }
+
+    static datasetMigrations(domain, fxf) {
+        return Request.getJSON({
+            uri: Constants.DATASET_MIGRATIONS_URL.format(domain, fxf),
+            simple: false
+        }, 1000);
     }
 
     static standardSchemas(fxf) {
@@ -123,7 +195,19 @@ class API {
     }
 
     static locations() {
-        return Request.getJSONLocal('data/locations.json');
+        return FileCache.get('data/locations.json');
+    }
+
+    static tagMetadata() {
+        return FileCache.get('data/tag-metadata.json');
+    }
+
+    static categoryMetadata() {
+        return FileCache.get('data/category-metadata.json');
+    }
+
+    static stateNames() {
+        return FileCache.get('data/state-names.json');
     }
 }
 

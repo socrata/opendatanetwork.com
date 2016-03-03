@@ -1,73 +1,63 @@
 'use strict';
 
 const _ = require('lodash');
-const NodeCache = require('node-cache');
 const request = require('request-promise');
 const querystring = require('querystring');
-const fs = require('fs');
+const memjs = require('memjs');
+const crypto = require('crypto');
+const Constants = require('./constants.js');
 
-const Constants = require('./constants');
-
-const cacheOptions = {
-    stdTTL: Constants.CACHE_TTL_SECONDS,
-    checkperiod: Constants.CACHE_CHECK_SECONDS
-};
-const cache = new NodeCache(cacheOptions);
-const localCache = new NodeCache(cacheOptions);
+const cache = memjs.Client.create(null, Constants.CACHE_OPTIONS);
 
 class Request {
-    static getJSON(url, timeoutMS) {
-        const jsonPromise = new Promise((resolve, reject) => {
-            cache.get(url, (error, value) => {
-                if (value === undefined) {
-                    request(url).then(body => {
-                        const json = JSON.parse(body);
-                        cache.set(url, json);
-                        resolve(json);
-                    }, reject);
-                } else {
+    /**
+     * Generates a cache key for the given URL.
+     * To get around the 250 character memcache key size limit,
+     * a base64 encoded SHA512 hash is used for urls exceding 250 characters.
+     */
+    static key(url) {
+        if (url.length <= 250) return url;
+        return crypto.createHash('sha512').update(url).digest('base64');
+    }
+
+    static get(url, timeout) {
+        if (!cache) return request(url);
+
+        return new Promise((resolve, reject) => {
+            const key = Request.key(_.isString(url) ? url : url.uri);
+
+            cache.get(key, (error, value) => {
+                if (value) {
                     resolve(value);
+                } else {
+                    Request.timeout(request(url), timeout).then(body => {
+                        resolve(body);
+                        if (!error) cache.set(key, body);
+                    }, reject);
                 }
             });
         });
+    }
 
-        timeoutMS = timeoutMS || Constants.TIMEOUT_MS;
-        const timeoutPromise = Request.timeout(timeoutMS);
-
+    static getJSON(url, timeout) {
         return new Promise((resolve, reject) => {
-            Promise.race([timeoutPromise, jsonPromise]).then(result => {
-                if (!result) {
-                    reject(`request to ${url} timed out after ${timeoutMS}ms`);
-                } else {
-                    resolve(result);
-                }
+            Request.get(url, timeout).then(value => {
+                resolve(JSON.parse(value.toString()));
             }, reject);
         });
     }
 
-    static getJSONLocal(path) {
+    static timeout(promise, milliseconds) {
         return new Promise((resolve, reject) => {
-            localCache.get(path, (error, value) => {
-                if (value === undefined) {
-                    fs.readFile(`${__dirname}/../${path}`, (fileError, body) => {
-                        if (fileError) {
-                            reject(error);
-                        } else {
-                            const json = JSON.parse(body);
-                            cache.set(path, json);
-                            resolve(json);
-                        }
-                    });
-                } else {
-                    resolve(value);
-                }
-            });
+            Promise.race([Request._timeout(milliseconds), promise]).then(resolve, reject);
         });
     }
 
-    static timeout(milliseconds) {
-        return new Promise(resolve => {
-            setTimeout(resolve, milliseconds);
+    static _timeout(milliseconds) {
+        milliseconds = milliseconds || Constants.TIMEOUT_MS;
+
+        return new Promise((resolve, reject) => {
+            setTimeout(reject, milliseconds);
         });
     }
 
