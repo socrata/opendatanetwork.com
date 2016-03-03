@@ -272,7 +272,8 @@ const MAP_SOURCES = {
         domain: DOMAIN,
         fxf: 'wehh-eh9p',
         variables:
-            ['Theft',
+            _.flatten([
+             'Theft',
              'Other',
              'Traffic',
              'Breaking & Entering',
@@ -304,20 +305,33 @@ const MAP_SOURCES = {
              'Vehicle Recovery',
              'Homicide',
              'Fire'].map(crimeType => {
-            return {
-                name: `${crimeType} Rate`,
-                column: 'crime_rate',
-                metric: nameToURL(`${crimeType} Count`),
-                years: [2015],
-                params: {
-                    incident_parent_type: crimeType,
-                    '$order': 'crime_rate ASC'
+            return [
+                {
+                    name: `${crimeType} Rate`,
+                    column: 'crime_rate',
+                    metric: nameToURL(`${crimeType} Rate`),
+                    years: [2015],
+                    params: {
+                        incident_parent_type: crimeType,
+                        '$order': 'crime_rate ASC'
+                    },
+                    format: n => `${format.integer(n * 100000)} crimes per month per 100,000 people`,
+                    stoplight: true,
+                    reverse: true
                 },
-                format: n => `${format.integer(n * 100000)} crimes / month / 100k`,
-                stoplight: true,
-                reverse: true
-            };
-        }),
+                {
+                    name: `${crimeType} Count`,
+                    column: 'crime_count',
+                    metric: nameToURL(`${crimeType} Count`),
+                    years: [2015],
+                    params: {
+                        incident_parent_type: crimeType,
+                        '$order': 'crime_count ASC'
+                    },
+                    format: format.integer
+                }
+            ];
+        })),
         callback: (regions) => {
             const baseURL = 'https://odn.data.socrata.com/resource/wehh-eh9p.json';
             const params = {
