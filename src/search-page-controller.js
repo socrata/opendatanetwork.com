@@ -123,7 +123,14 @@ class SearchPageController {
 
             if (vector in DATASETS_BY_VECTOR) {
                 const source = DATASETS_BY_VECTOR[vector];
-                new Tab(source).render(d3.select('div.charts'), regions);
+                var tab = new Tab(source);
+
+                tab.render(d3.select('div.charts'), regions);
+
+                $(window).resize(function() {
+                    tab.clearCharts();
+                    tab.redrawCharts();
+                });
             } else {
                 console.warn(`no source found for vector: ${vector}`);
             }

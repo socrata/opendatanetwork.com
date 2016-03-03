@@ -32,6 +32,14 @@ class Tab {
 
         this.callback(regions);
     }
+
+    clearCharts() {
+        this.charts.forEach(chart => chart.clearChart());
+    }
+
+    redrawCharts() {
+        this.charts.forEach(chart => chart.redraw());
+    }
 }
 
 class Chart {
@@ -87,6 +95,16 @@ class Chart {
             return column;
         });
     }
+    
+    clearChart() {
+        if (this.googleChart)
+            this.googleChart.clearChart();
+    }
+    
+    redraw() {
+        if (this.googleChart && this.dataTable)
+            this.googleChart.draw(this.dataTable, this.options);
+    }
 
     render(regions) {
         this.getData(regions).then(data => {
@@ -98,9 +116,9 @@ class Chart {
                 .select('.chart-container');
 
             const parsed = this.parseData(data, regions);
-            const dataTable = this.dataTable(parsed);
-            const chart = new this.chart(container[0][0]);
-            chart.draw(dataTable, this.options);
+            this.dataTable = this.dataTable(parsed);
+            this.googleChart = new this.chart(container[0][0]);
+            this.googleChart.draw(this.dataTable, this.options);
         }, error => {
             console.error(error);
         });
