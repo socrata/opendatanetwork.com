@@ -842,7 +842,7 @@ const SOURCES = [
                     be interpreted as the absence of the specified crime type.`,
                 attribution: ATTRIBUTIONS.crimeReports,
                 domain: ODN_DOMAIN,
-                fxf: '5dg8-ztbw',
+                fxf: 'ee8v-jgb5',
                 regions: ['place'],
                 include: region => _.contains(['DC', 'VA', 'MD'], _.last(region.name.split(', '))),
                 searchTerms: ['crime', 'police', 'arrest', 'warrant'],
@@ -867,14 +867,14 @@ const SOURCES = [
                                 label: 'Month'
                             },
                             {
-                                column: 'crime_type'
+                                column: 'incident_parent_type'
                             }
                         ],
                         transform: rows => {
                             const availableTypes = _.chain(rows)
                                 .groupBy(row => [row.id].join(','))
                                 .values()
-                                .map(rows => _.uniq(rows.map(row => row.crime_type)))
+                                .map(rows => _.uniq(rows.map(row => row.incident_parent_type)))
                                 .value();
                             const availableForAll = _.intersection.apply({}, availableTypes);
 
@@ -888,15 +888,15 @@ const SOURCES = [
                                 .values()
                                 .map(values => {
                                     return _.chain(values)
-                                        .filter(value => _.contains(availableForAll, value.crime_type))
-                                        .groupBy(value => value.crime_type)
+                                        .filter(value => _.contains(availableForAll, value.incident_parent_type))
+                                        .groupBy(value => value.incident_parent_type)
                                         .values()
                                         .map(forType => _.max(forType, value => parseFloat(value.crime_rate)))
                                         .value();
                                 })
                                 .map(values => {
                                     return _.extend({}, _.max(values, value => parseFloat(value.crime_rate)), {
-                                        crime_type: 'all',
+                                        incident_parent_type: 'all',
                                         crime_rate: _.reduce(values, (sum, row) => sum + parseFloat(row.crime_rate), 0) * 100000
                                     });
                                 })
@@ -944,14 +944,14 @@ const SOURCES = [
                                 label: 'Month'
                             },
                             {
-                                column: 'crime_type'
+                                column: 'incident_parent_type'
                             }
                         ],
                         transform: rows => {
                             const availableTypes = _.chain(rows)
                                 .groupBy(row => [row.id].join(','))
                                 .values()
-                                .map(rows => _.uniq(rows.map(row => row.crime_type)))
+                                .map(rows => _.uniq(rows.map(row => row.incident_parent_type)))
                                 .value();
                             const availableForAll = _.intersection.apply({}, availableTypes);
 
@@ -965,7 +965,7 @@ const SOURCES = [
                                 .values()
                                 .map(values => {
                                     return _.extend({}, _.max(values, value => parseFloat(value.crime_count)), {
-                                        crime_type: 'all',
+                                        incident_parent_type: 'all',
                                         crime_count: _.reduce(values, (sum, row) => sum + parseFloat(row.crime_count), 0)
                                     });
                                 })

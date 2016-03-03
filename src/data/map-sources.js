@@ -270,7 +270,7 @@ const MAP_SOURCES = {
     city_crime: {
         name: 'city_crime',
         domain: DOMAIN,
-        fxf: '368f-rei5',
+        fxf: 'wehh-eh9p',
         variables:
             ['Theft',
              'Other',
@@ -310,17 +310,17 @@ const MAP_SOURCES = {
                 metric: nameToURL(`${crimeType} Count`),
                 years: [2015],
                 params: {
-                    crime_type: crimeType,
+                    incident_parent_type: crimeType,
                     '$order': 'crime_count ASC'
                 },
                 format: format.integer
             };
         }),
         callback: (regions) => {
-            const baseURL = 'https://odn.data.socrata.com/resource/368f-rei5.json';
+            const baseURL = 'https://odn.data.socrata.com/resource/wehh-eh9p.json';
             const params = {
                 '$where': `id in (${regions.map(region => `'${region.id}'`).join(',')})`,
-                '$select': 'id,crime_type,crime_count',
+                '$select': 'id,incident_parent_type,crime_count',
                 year: 2015
             };
             const url = `${baseURL}?${$.param(params)}`;
@@ -331,7 +331,7 @@ const MAP_SOURCES = {
                 const available = _.chain(rows)
                     .groupBy(row => row.id)
                     .values()
-                    .map(rows => _.uniq(rows.map(row => row.crime_type)))
+                    .map(rows => _.uniq(rows.map(row => row.incident_parent_type)))
                     .value();
                 const availableForAll = _.intersection.apply({}, available);
 
