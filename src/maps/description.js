@@ -30,7 +30,8 @@ class MapSource {
                         if (rows.length === 0) return '';
                         const row = rows.length > 1 ? _.max(rows, row => parseFloat(row[variable.column])) : rows[0];
                         if (!(variable.column in row)) return '';
-                        const value = variable.format(row[variable.column]);
+                        const formatter = variable.descriptionFormat || variable.format || _.identity;
+                        const value = formatter(row[variable.column]);
                         return `${variable.name.toLowerCase()} of ${region.name} in ${year} was ${value}.`;
                     }).filter(description => description.length > 0);
 

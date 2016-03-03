@@ -87,10 +87,11 @@ const LegendControl = L.Control.extend({
             .attr('x1', -dimension).attr('y1', 0)
             .attr('x2', 0).attr('y2', 0);
 
+        const formatter = variable.legendFormat || variable.format || _.identity;
         ticks
             .append('text')
             .attr('class', 'tick-value')
-            .text(value => variable.format(value))
+            .text(formatter)
             .attr('alignment-baseline', baseline)
             .attr('transform', `translate(${dimension * 2 + padding}, 0)`);
 

@@ -315,7 +315,9 @@ const MAP_SOURCES = {
                         incident_parent_type: crimeType,
                         '$order': 'crime_rate ASC'
                     },
-                    format: n => `${format.integer(n * 100000)} crimes per month per 100,000 people`,
+                    format: n => format.integer(n * 100000),
+                    descriptionFormat: n => `${format.integer(n * 100000)} crimes per month per 100,000 people`,
+                    legendFormat: n => `${format.integer(n * 100000)} crimes / month / 100K`,
                     stoplight: true,
                     reverse: true
                 },

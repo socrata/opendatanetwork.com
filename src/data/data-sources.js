@@ -830,7 +830,7 @@ const SOURCES = [
                     Normalization is based on US Census 2013 population counts.
                     Crime rates are normalized on a per 100K basis;
                     specifically, the crime count is divided by the population count,
-                    the result is then multiplied by 100k and rounded to the
+                    the result is then multiplied by 100K and rounded to the
                     nearest integer value. Crime counts are not available
                     for all cities in the US, and in some cases,
                     policing agencies for a given city may have partial crime type coverage.
