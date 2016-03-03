@@ -84,8 +84,7 @@ class VariableControl {
             return option.datum();
         }
 
-
-        const variableContainer = this.container.append('li');
+        const variableContainer = this.container.append('li').attr('id', 'map-variable-text');
         const variableLink = variableContainer.append('span');
         this.variableSelector = variableLink.append('span');
 
@@ -95,6 +94,7 @@ class VariableControl {
             const variableList = variableContainer
                 .append('ul')
                 .attr('class', 'chart-sub-nav-menu')
+                .attr('id', 'map-variable-list')
                 .selectAll('li')
                 .data(this.variables)
                 .enter()
@@ -150,4 +150,3 @@ class VariableControl {
         }
     }
 }
-

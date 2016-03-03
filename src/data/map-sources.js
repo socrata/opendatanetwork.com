@@ -315,7 +315,40 @@ const MAP_SOURCES = {
                 },
                 format: format.integer
             };
-         })
+        }),
+        callback: (regions) => {
+            const baseURL = 'https://odn.data.socrata.com/resource/368f-rei5.json';
+            const params = {
+                '$where': `id in (${regions.map(region => `'${region.id}'`).join(',')})`,
+                '$select': 'id,crime_type,crime_count',
+                year: 2015
+            };
+            const url = `${baseURL}?${$.param(params)}`;
+
+            const mapVariableText = d3.select('#map-variable-text').style('opacity', 0);
+
+            d3.promise.json(url).then(rows => {
+                const available = _.chain(rows)
+                    .groupBy(row => row.id)
+                    .values()
+                    .map(rows => _.uniq(rows.map(row => row.crime_type)))
+                    .value();
+                const availableForAll = _.intersection.apply({}, available);
+
+                if (availableForAll.length > 1) {
+                    d3.select('#map-variable-list')
+                        .selectAll('li')
+                        .each(function() {
+                            const li = d3.select(this);
+                            const type = _.initial(li.select('a').text().split(' ')).join(' ');
+                            if (!_.contains(availableForAll, type)) li.remove();
+                        });
+                }
+                d3.select('#map-variable-text').style('opacity', 1);
+            }, error => {
+                d3.select('#map-variable-text').style('opacity', 1);
+            });
+        }
     }
 };
 

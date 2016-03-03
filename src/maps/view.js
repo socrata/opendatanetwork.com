@@ -44,6 +44,8 @@ class MapView {
             const labels = L.tileLayer(url(MapConstants.LABEL_LAYER_ID), {pane}).addTo(map);
 
             this.zoomToSelected(this.map);
+
+            if (this.source.callback) this.source.callback(this.regions);
         });
     }
 
