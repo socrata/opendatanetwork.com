@@ -26,7 +26,9 @@ class MapSource {
             this.getData(variable, year, regions).then(data => {
                 if (data && data.length > 0) {
                     const _descriptions = regions.map(region => {
-                        const row = _.find(data, row => row[this.id] === region.id) || {};
+                        const rows = _.filter(data, row => row[this.id] === region.id);
+                        if (rows.length === 0) return '';
+                        const row = rows.length > 1 ? _.max(rows, row => parseFloat(row[variable.column])) : rows[0];
                         if (!(variable.column in row)) return '';
                         const value = variable.format(row[variable.column]);
                         return `${variable.name.toLowerCase()} of ${region.name} in ${year} was ${value}.`;
