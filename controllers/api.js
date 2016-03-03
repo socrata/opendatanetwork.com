@@ -175,14 +175,14 @@ class API {
     }
 
     static datasetSummary(domain, fxf) {
-        return Request.getJSON(Constants.DATASET_SUMMARY_URL.format(domain, fxf));
+        return Request.getJSON(Constants.DATASET_SUMMARY_URL.format(domain, fxf), 1000);
     }
 
     static datasetMigrations(domain, fxf) {
-        return Request.getJSON({ 
+        return Request.getJSON({
             uri: Constants.DATASET_MIGRATIONS_URL.format(domain, fxf),
             simple: false
-        });
+        }, 1000);
     }
 
     static standardSchemas(fxf) {

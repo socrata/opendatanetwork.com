@@ -41,7 +41,6 @@ class RenderController {
         const promises = Promise.all([originalDatasetPromise, datasetMigrationsPromise]);
 
         promises.then(data => {
-
             const originalDataset = data[0];
             const migrations = data[1];
 
@@ -184,7 +183,7 @@ class RenderController {
                     RenderController.error(req, res)(error);
                 }
             }, RenderController.error(req, res, 404, 'Dataset not found'));
-        });
+        }, RenderController.error(req, res, 404, 'Dataset not found'));
     }
 
     static home(req, res) {
@@ -394,13 +393,6 @@ class RenderController {
                              datasetsPromise, descriptionPromise, searchPromise,
                              locationsPromise];
         const allPromise = Promise.all(allPromises);
-
-        /*
-        allPromises.forEach((promise, index) => {
-            promise.then(__ => console.log(`done ${index}`),
-                         __ => console.log(`fail ${index}`));
-        });
-        */
 
         allPromise.then(data => {
             try {

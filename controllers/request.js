@@ -20,7 +20,7 @@ class Request {
         return crypto.createHash('sha512').update(url).digest('base64');
     }
 
-    static get(url) {
+    static get(url, timeout) {
         if (!cache) return request(url);
 
         return new Promise((resolve, reject) => {
@@ -30,7 +30,7 @@ class Request {
                 if (value) {
                     resolve(value);
                 } else {
-                    Request.timeout(request(url)).then(body => {
+                    Request.timeout(request(url), timeout).then(body => {
                         resolve(body);
                         if (!error) cache.set(key, body);
                     }, reject);
@@ -39,9 +39,9 @@ class Request {
         });
     }
 
-    static getJSON(url) {
+    static getJSON(url, timeout) {
         return new Promise((resolve, reject) => {
-            Request.get(url).then(value => {
+            Request.get(url, timeout).then(value => {
                 resolve(JSON.parse(value.toString()));
             }, reject);
         });
