@@ -860,7 +860,7 @@ const SOURCES = [
                             {
                                 column: 'crime_rate',
                                 label: 'Crime Rate',
-                                format: {pattern: '#'}
+                                format: {pattern: '###,###'}
                             },
                             {
                                 column: 'month',
@@ -937,7 +937,8 @@ const SOURCES = [
                             },
                             {
                                 column: 'crime_count',
-                                label: 'Crime Count'
+                                label: 'Crime Count',
+                                format: { pattern: '###,###' }
                             },
                             {
                                 column: 'month',

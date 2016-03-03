@@ -313,7 +313,7 @@ const MAP_SOURCES = {
                     incident_parent_type: crimeType,
                     '$order': 'crime_rate ASC'
                 },
-                format: n => `${d3.format('0f')(n * 100000)} crimes / month / 100k`,
+                format: n => `${format.integer(n * 100000)} crimes / month / 100k`,
                 stoplight: true,
                 reverse: true
             };
