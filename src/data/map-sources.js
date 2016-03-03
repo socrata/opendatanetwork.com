@@ -305,22 +305,24 @@ const MAP_SOURCES = {
              'Homicide',
              'Fire'].map(crimeType => {
             return {
-                name: `${crimeType} Count`,
-                column: 'crime_count',
+                name: `${crimeType} Rate`,
+                column: 'crime_rate',
                 metric: nameToURL(`${crimeType} Count`),
                 years: [2015],
                 params: {
                     incident_parent_type: crimeType,
-                    '$order': 'crime_count ASC'
+                    '$order': 'crime_rate ASC'
                 },
-                format: format.integer
+                format: n => `${d3.format('0f')(n * 100000)} crimes / month / 100k`,
+                stoplight: true,
+                reverse: true
             };
         }),
         callback: (regions) => {
             const baseURL = 'https://odn.data.socrata.com/resource/wehh-eh9p.json';
             const params = {
                 '$where': `id in (${regions.map(region => `'${region.id}'`).join(',')})`,
-                '$select': 'id,incident_parent_type,crime_count',
+                '$select': 'id,incident_parent_type,crime_rate',
                 year: 2015
             };
             const url = `${baseURL}?${$.param(params)}`;
