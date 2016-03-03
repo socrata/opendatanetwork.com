@@ -901,6 +901,7 @@ const SOURCES = [
                                     });
                                 })
                                 .sortBy(row => (parseInt(row.year) - 2000) * 12 + parseInt(row.month))
+                                .filter(row => (row.year) && (row.month))
                                 .map(row => {
                                     return _.extend({}, row, {
                                         date: `Date(${parseInt(row.year)}, ${parseInt(row.month) - 1})`
