@@ -436,7 +436,7 @@ class RenderController {
                 const mapSource = MapSources[vector] || {};
 
                 const metrics = mapSource.variables || [];
-                const metric = _.find(metrics, metric => metric.column === params.metric) || metrics[0];
+                const metric = _.find(metrics, metric => metric.metric === params.metric) || metrics[0];
 
                 const years = metric.years;
                 const year = _.find(years, year => parseFloat(year) === parseFloat(params.year)) || years[0];
@@ -455,7 +455,7 @@ class RenderController {
                     hasRegions: params.regions.length > 0,
                     regionNames: wordJoin(params.regions.map(region => region.name), 'or'),
                     searchPath: req.path,
-                    title: searchPageTitle(params, source),
+                    title: searchPageTitle(params, source, metric),
                     css: [
                         '/styles/third-party/leaflet.min.css',
                         '/styles/search.css',
@@ -608,16 +608,21 @@ function asArray(parameter) {
     return [];
 }
 
-function searchPageTitle(params, dataset) {
+function searchPageTitle(params, source, metric) {
     const categories = params.categories.map(capitalize);
     const tags = params.tags.map(capitalize);
-    const dataTypes = _.flatten((dataset ? [dataset.name] : []).concat(categories, tags));
+    const dataTypes = _.flatten((metric ? [metric.name] : []).concat(categories, tags));
     const dataDescription = wordJoin(dataTypes);
 
     const locationDescription = params.regions.length > 0 ?
-        ` for ${wordJoin(params.regions.map(region => region.name))}` : '';
+        `for ${wordJoin(params.regions.map(region => region.name))}` : '';
 
-    return `${dataDescription} Data${locationDescription} on the Open Data Network`;
+    if (source && source.name.length > 0) 
+        return `${dataDescription} ${locationDescription} - ${source.name} on the Open Data Network`;
+    else if (dataDescription)
+        return `${dataDescription} on the Open Data Network`;
+    else
+        return `Open Data Network`;
 }
 
 function capitalize(string) {
