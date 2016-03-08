@@ -875,43 +875,9 @@ const SOURCES = [
                             }
                         ],
                         transform: rows => {
-                            const availableTypes = _.chain(rows)
-                                .groupBy(row => [row.id].join(','))
-                                .values()
-                                .map(rows => _.uniq(rows.map(row => row.incident_parent_type)))
-                                .value();
-                            const availableForAll = _.intersection.apply({}, availableTypes);
-
-                            const description = d3.select('div#crimerateovertime > p.chart-description');
-                            description.text(`${description.text()}
-                                    For the selected regions, the following crime types are available:
-                                    ${availableForAll.join(', ')}.`);
-
-                            return _.chain(rows)
-                                .groupBy(row => [row.id, row.year, row.month].join(','))
-                                .values()
-                                .map(values => {
-                                    return _.chain(values)
-                                        .filter(value => _.contains(availableForAll, value.incident_parent_type))
-                                        .groupBy(value => value.incident_parent_type)
-                                        .values()
-                                        .map(forType => _.max(forType, value => parseFloat(value.crime_rate)))
-                                        .value();
-                                })
-                                .map(values => {
-                                    return _.extend({}, _.max(values, value => parseFloat(value.crime_rate)), {
-                                        incident_parent_type: 'all',
-                                        crime_rate: _.reduce(values, (sum, row) => sum + parseFloat(row.crime_rate), 0) * 100000
-                                    });
-                                })
-                                .sortBy(row => (parseInt(row.year) - 2000) * 12 + parseInt(row.month))
-                                .filter(row => (row.year) && (row.month))
-                                .map(row => {
-                                    return _.extend({}, row, {
-                                        date: `Date(${parseInt(row.year)}, ${parseInt(row.month) - 1})`
-                                    });
-                                })
-                                .value();
+                            return _crimeTransform('crime_rate')(rows).map(row => _.extend(row, {
+                                crime_rate: row.crime_rate * 100000
+                            }));
                         },
                         x: {
                             column: 'date',
@@ -953,45 +919,7 @@ const SOURCES = [
                                 column: 'incident_parent_type'
                             }
                         ],
-                        transform: rows => {
-                            const availableTypes = _.chain(rows)
-                                .groupBy(row => [row.id].join(','))
-                                .values()
-                                .map(rows => _.uniq(rows.map(row => row.incident_parent_type)))
-                                .value();
-                            const availableForAll = _.intersection.apply({}, availableTypes);
-
-                            const description = d3.select('div#crimeovertime > p.chart-description');
-                            description.text(`${description.text()}
-                                    For the selected regions, the following crime types are available:
-                                    ${availableForAll.join(', ')}.`);
-
-                            return _.chain(rows)
-                                .groupBy(row => [row.id, row.year, row.month].join(','))
-                                .values()
-                                .map(values => {
-                                    return _.chain(values)
-                                        .filter(value => _.contains(availableForAll, value.incident_parent_type))
-                                        .groupBy(value => value.incident_parent_type)
-                                        .values()
-                                        .map(forType => _.max(forType, value => parseFloat(value.crime_count)))
-                                        .value();
-                                })
-                                .map(values => {
-                                    return _.extend({}, _.max(values, value => parseFloat(value.crime_count)), {
-                                        incident_parent_type: 'all',
-                                        crime_count: _.reduce(values, (sum, row) => sum + parseFloat(row.crime_count), 0)
-                                    });
-                                })
-                                .sortBy(row => (parseInt(row.year) - 2000) * 12 + parseInt(row.month))
-                                .filter(row => (row.year) && (row.month))
-                                .map(row => {
-                                    return _.extend({}, row, {
-                                        date: `Date(${parseInt(row.year)}, ${parseInt(row.month) - 1})`
-                                    });
-                                })
-                                .value();
-                        },
+                        transform: _crimeTransform('crime_count'),
                         x: {
                             column: 'date',
                             label: 'Date',
@@ -1132,6 +1060,48 @@ class Sources {
                 }, reject);
             }
         });
+    }
+}
+
+function _crimeTransform(column) {
+    return rows => {
+        const availableTypes = _.chain(rows)
+            .groupBy(row => [row.id].join(','))
+            .values()
+            .map(rows => _.uniq(rows.map(row => row.incident_parent_type)))
+            .value();
+        const availableForAll = _.intersection.apply({}, availableTypes);
+
+        const description = d3.select('div#crimeovertime > p.chart-description');
+        description.text(`${description.text()}
+                For the selected regions, the following crime types are available:
+                ${availableForAll.join(', ')}.`);
+
+        return _.chain(rows)
+            .groupBy(row => [row.id, row.year, row.month].join(','))
+            .values()
+            .map(values => {
+                return _.chain(values)
+                    .filter(value => _.contains(availableForAll, value.incident_parent_type))
+                    .groupBy(value => value.incident_parent_type)
+                    .values()
+                    .map(forType => _.max(forType, value => parseFloat(value[column])))
+                    .value();
+            })
+            .map(values => {
+                return _.extend({}, _.max(values, value => parseFloat(value[column])), {
+                    incident_parent_type: 'all',
+                    [column]: _.reduce(values, (sum, row) => sum + parseFloat(row[column]), 0)
+                });
+            })
+            .sortBy(row => (parseInt(row.year) - 2000) * 12 + parseInt(row.month))
+            .filter(row => (row.year) && (row.month))
+            .map(row => {
+                return _.extend({}, row, {
+                    date: `Date(${parseInt(row.year)}, ${parseInt(row.month) - 1})`
+                });
+            })
+            .value();
     }
 }
 
