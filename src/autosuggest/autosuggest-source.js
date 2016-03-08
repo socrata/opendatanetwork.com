@@ -1,6 +1,6 @@
 
 class AutosuggestSource {
-    constructor(name, image, domain, fxf, column, encoded, select, show, sort) {
+    constructor(name, image, domain, fxf, column, encoded, select, show, sort, filter) {
         this.name = name;
         this.image = image;
         this.domain = domain;
@@ -10,6 +10,7 @@ class AutosuggestSource {
         this.select = select;
         this.show = show;
         this.sort = sort;
+        this.filter = filter;
     }
 
     static fromJSON(json) {
@@ -19,7 +20,7 @@ class AutosuggestSource {
         });
 
         return new AutosuggestSource(json.name, json.image, json.domain, json.fxf, json.column,
-                                     encoded, json.select, show, json.sort);
+                                     encoded, json.select, show, json.sort, json.filter);
     }
 
     get(term) {
@@ -57,11 +58,10 @@ class AutosuggestSource {
     }
 
     display(container, options) {
-        if (options.length === 0)
-            return [];
+        if (options.length === 0) return [];
 
-        if (this.sort)
-            options = _.sortBy(options, this.sort).slice(0, Constants.AUTOCOMPLETE_SHOWN_OPTIONS);
+        if (this.sort) options = _.sortBy(options, this.sort).slice(0, Constants.AUTOCOMPLETE_SHOWN_OPTIONS);
+        if (this.filter) options = options.filter(this.filter);
 
         const category = container
             .append('li')

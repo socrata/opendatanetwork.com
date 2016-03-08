@@ -88,7 +88,7 @@ class SearchPageController {
 
         }).scroll();
 
-        const sources = regionsWithData(this.params.vector, option => {
+        const sources = regionsWithData(this.params.vector, this.params.regions, option => {
             RegionLookup.byID(option.id).then(region => {
                 this.params.regions.push(region);
                 this.navigate();
