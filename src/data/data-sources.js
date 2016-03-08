@@ -875,7 +875,7 @@ const SOURCES = [
                             }
                         ],
                         transform: rows => {
-                            return _crimeTransform('crime_rate')(rows).map(row => _.extend(row, {
+                            return _crimeTransform('crimerateovertime', 'crime_rate')(rows).map(row => _.extend(row, {
                                 crime_rate: row.crime_rate * 100000
                             }));
                         },
@@ -919,7 +919,7 @@ const SOURCES = [
                                 column: 'incident_parent_type'
                             }
                         ],
-                        transform: _crimeTransform('crime_count'),
+                        transform: _crimeTransform('crimeovertime', 'crime_count'),
                         x: {
                             column: 'date',
                             label: 'Date',
@@ -1063,19 +1063,23 @@ class Sources {
     }
 }
 
-function _crimeTransform(column) {
+function _crimeTransform(div, column) {
     return rows => {
         const availableTypes = _.chain(rows)
             .groupBy(row => [row.id].join(','))
             .values()
             .map(rows => _.uniq(rows.map(row => row.incident_parent_type)))
             .value();
-        const availableForAll = _.intersection.apply({}, availableTypes);
+        let availableForAll = _.intersection.apply({}, availableTypes);
 
-        const description = d3.select('div#crimeovertime > p.chart-description');
-        description.text(`${description.text()}
-                For the selected regions, the following crime types are available:
-                ${availableForAll.join(', ')}.`);
+        const description = availableForAll.length > 1 ?
+            `For the selected regions, the following crime types are available:
+             ${availableForAll.join(', ')}.` :
+            `Since there are no crime types for which every selected region has data,
+             data for all crime types is shown.`;
+        const descriptionSel = d3.select(`div#${div} > p.chart-description`);
+        descriptionSel.text(`${descriptionSel.text()} ${description}`);
+        if (availableForAll.length < 1) availableForAll = _.union.apply({}, availableTypes);
 
         return _.chain(rows)
             .groupBy(row => [row.id, row.year, row.month].join(','))
