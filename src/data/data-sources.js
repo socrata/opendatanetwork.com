@@ -1,6 +1,10 @@
 'use strict';
 
-if (typeof require !== 'undefined') var _ = require('lodash');
+if (typeof require !== 'undefined') {
+    var _ = require('lodash');
+
+    var Requests = require('../../controllers/request');
+}
 
 /**
  * Data Sources.
@@ -1088,6 +1092,37 @@ class Sources {
 
     static forRegions(regions) {
         return DATASETS.filter(source => Sources.supports(source, regions));
+    }
+
+    static validRegions(source, regions) {
+        return new Promise((resolve, reject) => {
+            if (regions.length < 1) {
+                resolve([]);
+            } else {
+                const path = `https://${source.domain}/resource/${source.fxf}.json`;
+                const id = source.idColumn || 'id';
+                const params = {
+                    '$select': id,
+                    '$where': `${id} in (${regions.map(region => `'${region.id}'`)})`,
+                };
+
+                function request() {
+                    if (typeof Requests === 'undefined') {
+                        const url = `${path}?${$.param(params)}`;
+                        return d3.promise.json(url);
+                    } else {
+                        const url = Requests.buildURL(path, params);
+                        return Requests.getJSON(url);
+                    }
+                }
+
+                request().then(data => {
+                    const ids = _.uniq(data.map(_.property(id)));
+                    const validRegions = regions.filter(region => _.contains(ids, region.id));
+                    resolve(validRegions);
+                }, reject);
+            }
+        });
     }
 }
 

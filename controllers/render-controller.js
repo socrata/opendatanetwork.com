@@ -348,7 +348,10 @@ class RenderController {
     }
 
     static _regions(req, res, params) {
-        function forRegion(regionPromise) {
+        const uids = params.regions.map(region => region.id);
+        const vector = ((params.vector || '') === '') ? 'population' : params.vector;
+
+        function forRegion(regionPromise, filterInvalid) {
             return new Promise(resolve => {
                 if (params.regions.length === 0) {
                     resolve([]);
@@ -357,7 +360,17 @@ class RenderController {
                         if (!result) {
                             resolve([]);
                         } else {
-                            resolve(result);
+                            if (filterInvalid) {
+                                const source = Sources.source(vector);
+                                Sources.validRegions(source, result).then(validRegions => {
+                                    resolve(validRegions);
+                                }, error => {
+                                    console.error(error);
+                                    resolve(result);
+                                });
+                            } else {
+                                resolve(result);
+                            }
                         }
                     }, error => {
                         resolve([]);
@@ -366,7 +379,6 @@ class RenderController {
             });
         }
 
-        const uids = params.regions.map(region => region.id);
 
         function processRegions(regions) {
             return regions.filter(region => {
@@ -378,7 +390,7 @@ class RenderController {
             });
         }
 
-        const peersPromise = forRegion(Relatives.peers);
+        const peersPromise = forRegion(Relatives.peers, true);
         const siblingsPromise = forRegion(Relatives.siblings);
         const childrenPromise = forRegion(Relatives.children);
         const categoriesPromise = API.categories(quickLinksCount);
@@ -396,7 +408,6 @@ class RenderController {
 
         allPromise.then(data => {
             try {
-                const vector = ((params.vector || '') === '') ? 'population' : params.vector;
 
                 const groups = Sources.groups(params.regions).slice(0).map(group => {
                     return _.extend({}, group, {

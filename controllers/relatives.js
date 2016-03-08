@@ -9,7 +9,7 @@ class Relatives {
     static peers(region) {
         return new Promise((resolve, reject) => {
             const url = Request.buildURL(`${Constants.PEERS_URL}/${region.id}`, {
-                n: Constants.N_PEERS * 2
+                n: Constants.N_PEERS * 4
             });
 
             Request.getJSON(url).then(json => resolve(json.peers), reject);
