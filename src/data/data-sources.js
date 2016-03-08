@@ -970,12 +970,21 @@ const SOURCES = [
                                 .groupBy(row => [row.id, row.year, row.month].join(','))
                                 .values()
                                 .map(values => {
+                                    return _.chain(values)
+                                        .filter(value => _.contains(availableForAll, value.incident_parent_type))
+                                        .groupBy(value => value.incident_parent_type)
+                                        .values()
+                                        .map(forType => _.max(forType, value => parseFloat(value.crime_count)))
+                                        .value();
+                                })
+                                .map(values => {
                                     return _.extend({}, _.max(values, value => parseFloat(value.crime_count)), {
                                         incident_parent_type: 'all',
                                         crime_count: _.reduce(values, (sum, row) => sum + parseFloat(row.crime_count), 0)
                                     });
                                 })
                                 .sortBy(row => (parseInt(row.year) - 2000) * 12 + parseInt(row.month))
+                                .filter(row => (row.year) && (row.month))
                                 .map(row => {
                                     return _.extend({}, row, {
                                         date: `Date(${parseInt(row.year)}, ${parseInt(row.month) - 1})`
