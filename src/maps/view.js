@@ -45,6 +45,16 @@ class MapView {
 
             this.zoomToSelected(this.map);
 
+            const model = new GeoMapModel({
+                domain: 'odn.data.socrata.com',
+                fxf: 'rz8v-4esg',
+            });
+            model.inBounds(map.getBounds()).then(response => {
+                console.log(response);
+            }, error => {
+                console.log(error);
+            });
+
             if (this.source.callback) this.source.callback(this.regions);
         });
     }
