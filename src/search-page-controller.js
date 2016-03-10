@@ -113,7 +113,9 @@ class SearchPageController {
             if (vector in MAP_SOURCES) {
                 const mapSource = MAP_SOURCES[vector];
                 if (mapSource.poi) {
-                    new POIMapView(mapSource, this.params).show('#map');
+                    Geocode.regions(this.params.regions).then(regions => {
+                        new POIMapView(mapSource, regions, this.params).show('#map');
+                    }, error => console.error(error));
                 } else {
                     MapView.create(mapSource, regions, this.params).then(view => {
                         view.show('#map');
