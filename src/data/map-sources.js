@@ -98,15 +98,16 @@ const MAP_SOURCES = {
         ])
     },
 
+
     education_places: {
         name: 'education_places',
         domain: DOMAIN,
         fxf: 'rz8v-4esg',
         poi: true, // point of interest map
-        variables: ['Head Start Center', 'Parks', 'Landmarks'].map(classification => {
+        variables: ['Head Start Center', 'Public Art', 'Computer/Media Center', 'Playfields', 'Elementary Schools', 'Libraries', 'Community Centers', 'Museums and Galleries', 'Alternative Schools', 'High Schools', 'Middle Schools', 'Family Support Center', 'Higher Education', 'Neighborhood Service Centers', 'Environmental Learning  Centers'].map(classification => {
             return {
-                name: classification,
-                metric: nameToURL(classification),
+                name: classification.replace('  ', ' '),
+                metric: nameToURL(classification.replace('  ', ' ')),
                 params: {classification}
             };
         })
