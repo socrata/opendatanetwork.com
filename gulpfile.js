@@ -18,6 +18,7 @@ var baseScripts = [
 ];
 
 var mapScripts = [
+    'src/maps/geocode.js',
     'src/maps/scales.js',
     'src/maps/constants.js',
     'src/maps/model.js',
