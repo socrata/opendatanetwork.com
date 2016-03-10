@@ -43,7 +43,9 @@ var _searchURL = "<%- searchDatasetsURL %>";
             </ul>
 
             <div class="charts">
-                <p id="map-summary"><%= mapSummary %></p>
+                <p id="map-summary" style="display: <%= mapSummary === '' ? 'none' : 'block' %>">
+                    <%= mapSummary %>
+                </p>
                 <div id="map"></div>
             <% if ('mapDescription' in source) { %>
                 <div class="dataset-description map-description">
