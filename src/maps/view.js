@@ -53,13 +53,22 @@ class POIMapView {
             response.forEach(point => {
                 const marker = L.marker(point.location.coordinates.reverse());
 
-                const properties = ['address']
-                    .map(property => point[property])
-                    .filter(_.negate(_.isUndefined));
+                const isLink = /^https?:\/\/[^ ]+/.test(point.description);
                 marker.bindPopup(`
-                    <div class="name">${point.name}</div>
+                    <div class="name">
+                        ${point.name}
+                        ${isLink ?
+                            `<a href=${point.description} target="_blank">
+                                <i class="fa fa-external-link"></i>
+                            </a>` : ''}
+                    </div>
                     <div class="value">
-                        ${properties.map(property => `<p>${property}</p>`).join('\n')}
+                        ${isLink ? '' : point.description}
+
+                        <p class="address">
+                            ${point.address || ''}<br />
+                            ${(point.city && point.state) ? `${point.city}, ${point.state}` : ''}<br />
+                        </p>
                     </div>
                 `, {closeButton: false});
 
