@@ -113,7 +113,7 @@ class SearchPageController {
             if (vector in MAP_SOURCES) {
                 const mapSource = MAP_SOURCES[vector];
                 if (mapSource.poi) {
-                    new POIMapView(mapSource).show('#map');
+                    new POIMapView(mapSource, this.params).show('#map');
                 } else {
                     MapView.create(mapSource, regions, this.params).then(view => {
                         view.show('#map');

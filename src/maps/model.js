@@ -26,10 +26,10 @@ class POIMapModel {
         limit = limit || MapConstants.LIMIT;
 
         return new Promise((resolve, reject) => {
-            const params = {
+            const params = _.extend({
                 '$where': POIMapModel._withinBox(this.locationColumn, bounds),
                 '$limit': limit
-            };
+            }, this.variable.params);
             const url = `https://${this.source.domain}/resource/${this.source.fxf}.json?${$.param(params)}`;
 
             d3.promise.json(url).then(resolve, reject);

@@ -108,7 +108,7 @@ const MAP_SOURCES = {
                 name: classification,
                 metric: nameToURL(classification),
                 params: {classification}
-            }
+            };
         })
     },
 

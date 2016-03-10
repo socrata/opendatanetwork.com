@@ -1,9 +1,13 @@
 
 class POIMapView {
-    constructor(source) {
+    constructor(source, params) {
         this.model = new POIMapModel(source);
 
         this.zoomControl = new L.Control.Zoom(MapConstants.ZOOM_CONTROL_OPTIONS);
+        this.variableControl = new VariableControl(source, params, (variable, year) => {
+            this.model = new POIMapModel(source, variable);
+            this.update();
+        });
     }
 
     show(selector) {
@@ -17,6 +21,7 @@ class POIMapView {
         map.setView(MapConstants.INITIAL_CENTER, MapConstants.INITIAL_ZOOM);
 
         if (MapConstants.ZOOM_CONTROL) map.addControl(this.zoomControl);
+        this.variableControl.onAdd(map);
 
         map.whenReady(() => {
             const url = layerID => `https://api.mapbox.com/v4/${layerID}/{z}/{x}/{y}.png?access_token=${MapConstants.MAPBOX_TOKEN}`;
