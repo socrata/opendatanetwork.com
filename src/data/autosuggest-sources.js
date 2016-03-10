@@ -1,6 +1,7 @@
 
 function regionsWithData(vector, regions, select) {
-    const column = vector || 'population';
+    vector = vector || 'population';
+    const column = Sources.get(vector).hasAutosuggest || true ? vector : 'all';
     const selectedIDs = regions.map(region => region.id);
     return [_.extend({
         name: 'Regions with Data',

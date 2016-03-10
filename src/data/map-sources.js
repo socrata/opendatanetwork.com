@@ -98,6 +98,20 @@ const MAP_SOURCES = {
         ])
     },
 
+    education_places: {
+        name: 'education_places',
+        domain: DOMAIN,
+        fxf: 'rz8v-4esg',
+        poi: true, // point of interest map
+        variables: ['Head Start Center'].map(classification => {
+            return {
+                name: classification,
+                metric: nameToURL(classification),
+                params: {classification}
+            }
+        })
+    },
+
     occupations: {
         name: 'occupations',
         domain: DOMAIN,

@@ -182,6 +182,17 @@ const SOURCES = [
                         }
                     }
                 ]
+            },
+            {
+                vector: 'education_places',
+                name: 'Education Places',
+                attribution: ATTRIBUTIONS.acs,
+                domain: ODN_DOMAIN,
+                fxf: 'rz8v-4esg',
+                regions: ['place'],
+                hasAutosuggest: false,
+                searchTerms: ['college', 'education', 'school', 'university', 'instruction', 'teaching', 'teacher', 'professor', 'student', 'graduation', 'scholastic', 'matriculation'],
+                charts: []
             }
         ]
     },
@@ -1106,7 +1117,7 @@ function _crimeTransform(div, column) {
                 });
             })
             .value();
-    }
+    };
 }
 
 

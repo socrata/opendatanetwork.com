@@ -436,10 +436,10 @@ class RenderController {
                 const mapSource = MapSources[vector] || {};
 
                 const metrics = mapSource.variables || [];
-                const metric = _.find(metrics, metric => metric.metric === params.metric) || metrics[0];
+                const metric = _.find(metrics, metric => metric.metric === params.metric) || metrics[0] || {};
 
-                const years = metric.years;
-                const year = _.find(years, year => parseFloat(year) === parseFloat(params.year)) || years[0];
+                const years = metric.years || [];
+                const year = _.find(years, year => parseFloat(year) === parseFloat(params.year)) || years[0] || 2016;
 
                 const templateParams = {
                     params,
@@ -611,13 +611,13 @@ function asArray(parameter) {
 function searchPageTitle(params, source, metric) {
     const categories = params.categories.map(capitalize);
     const tags = params.tags.map(capitalize);
-    const dataTypes = _.flatten((metric ? [metric.name] : []).concat(categories, tags));
-    const dataDescription = wordJoin(dataTypes);
+    const dataTypes = _.flatten((metric && metric.name ? [metric.name] : []).concat(categories, tags));
+    const dataDescription = dataTypes.length > 0 ? wordJoin(dataTypes) : 'Data';
 
     const locationDescription = params.regions.length > 0 ?
         `for ${wordJoin(params.regions.map(region => region.name))}` : '';
 
-    if (source && source.name.length > 0) 
+    if (source && source.name.length > 0)
         return `${dataDescription} ${locationDescription} - ${source.name} on the Open Data Network`;
     else if (dataDescription)
         return `${dataDescription} on the Open Data Network`;

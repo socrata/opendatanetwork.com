@@ -88,7 +88,7 @@ class MapModel {
             const params = _.extend({}, baseParams, sortParams, variable.params);
             const url = `https://${source.domain}/resource/${source.fxf}.json?${$.param(params)}`;
 
-            function success(results) {
+            $.getJSON(url).then(results => {
                 const regions = results.map(region => {
                     const value = valueFunction(region[variable.column]);
 
@@ -104,13 +104,7 @@ class MapModel {
                 });
 
                 resolve(new MapModel(source, region, variable, year, regions));
-            }
-
-            function failure(error) {
-                throw error;
-            }
-
-            $.getJSON(url).then(success, failure);
+            }, reject);
         });
     }
 
