@@ -458,6 +458,8 @@ class RenderController {
                     title: searchPageTitle(params, source, metric),
                     css: [
                         '/styles/third-party/leaflet.min.css',
+                        '/styles/third-party/leaflet-markercluster.min.css',
+                        '/styles/third-party/leaflet-markercluster-default.min.css',
                         '/styles/search.css',
                         '/styles/maps.css',
                         '/styles/main.css'
@@ -467,6 +469,7 @@ class RenderController {
                         '//www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart", "table"]}]}',
                         '/lib/third-party/leaflet/leaflet.min.js',
                         '/lib/third-party/leaflet/leaflet-omnivore.min.js',
+                        '/lib/third-party/leaflet/leaflet-markercluster.min.js',
                         '/lib/third-party/colorbrewer.min.js',
                         '/lib/third-party/d3.min.js',
                         '/lib/third-party/d3.promise.min.js',

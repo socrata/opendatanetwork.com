@@ -1,4 +1,51 @@
 
+class POIMapView {
+    constructor(source) {
+        this.model = new POIMapModel(source);
+
+        this.zoomControl = new L.Control.Zoom(MapConstants.ZOOM_CONTROL_OPTIONS);
+    }
+
+    show(selector) {
+        const container = d3.select(selector)
+            .append('div')
+            .attr('class', 'map-container')
+            .attr('id', MapConstants.CSS_ID);
+
+        const map = L.map(MapConstants.CSS_ID, MapConstants.MAP_OPTIONS);
+        this.map = map;
+        map.setView(MapConstants.INITIAL_CENTER, MapConstants.INITIAL_ZOOM);
+
+        if (MapConstants.ZOOM_CONTROL) map.addControl(this.zoomControl);
+
+        map.whenReady(() => {
+            const url = layerID => `https://api.mapbox.com/v4/${layerID}/{z}/{x}/{y}.png?access_token=${MapConstants.MAPBOX_TOKEN}`;
+            const base = L.tileLayer(url(MapConstants.BASE_LAYER_ID)).addTo(map);
+            const pane = map.createPane('labels');
+            const labels = L.tileLayer(url(MapConstants.LABEL_LAYER_ID), {pane}).addTo(map);
+
+            this.update();
+            // map.on('moveend zoomend', () => this.update());
+        });
+    }
+
+    update() {
+        this.model.inBounds(this.map.getBounds()).then(response => {
+            if (this.markers) this.map.removeLayer(this.markers);
+            this.markers = new L.MarkerClusterGroup();
+
+            response.forEach(point => {
+                const marker = L.marker(point.location.coordinates.reverse());
+                this.markers.addLayer(marker);
+            });
+
+            this.map.addLayer(this.markers);
+        }, error => {
+            console.error(error);
+        });
+    }
+}
+
 class MapView {
     constructor(source, regionType, regions, features, params) {
         this.source = source;
@@ -31,8 +78,7 @@ class MapView {
 
         map.addControl(this.legend);
         map.addControl(this.tooltip);
-        if (MapConstants.ZOOM_CONTROL)
-            map.addControl(this.zoomControl);
+        if (MapConstants.ZOOM_CONTROL) map.addControl(this.zoomControl);
         this.variableControl.onAdd(map);
 
         map.whenReady(() => {
@@ -44,16 +90,6 @@ class MapView {
             const labels = L.tileLayer(url(MapConstants.LABEL_LAYER_ID), {pane}).addTo(map);
 
             this.zoomToSelected(this.map);
-
-            const model = new GeoMapModel({
-                domain: 'odn.data.socrata.com',
-                fxf: 'rz8v-4esg',
-            });
-            model.inBounds(map.getBounds()).then(response => {
-                console.log(response);
-            }, error => {
-                console.log(error);
-            });
 
             if (this.source.callback) this.source.callback(this.regions);
         });

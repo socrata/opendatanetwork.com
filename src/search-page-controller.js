@@ -112,10 +112,14 @@ class SearchPageController {
         if (regions.length > 0) {
             if (vector in MAP_SOURCES) {
                 const mapSource = MAP_SOURCES[vector];
-                MapView.create(mapSource, regions, this.params).then(view => {
-                    view.show('#map');
-                    this.subMenus();
-                }, error => console.warn(error));
+                if (mapSource.poi) {
+                    new POIMapView(mapSource).show('#map');
+                } else {
+                    MapView.create(mapSource, regions, this.params).then(view => {
+                        view.show('#map');
+                        this.subMenus();
+                    }, error => console.warn(error));
+                }
 
             } else {
                 console.warn(`no map source found for vector: ${vector}`);

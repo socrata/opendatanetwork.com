@@ -11,17 +11,12 @@ class TopoModel {
 }
 
 
-class GeoMapModel {
-    constructor(source, variable, year) {
+class POIMapModel {
+    constructor(source, variable) {
         this.source = source;
-        this.idColumn = source.idColumn || 'id';
-        this.typeColumn = source.typeColumn || 'type';
-        this.nameColumn = source.nameColumn || 'name';
-        this.yearColumn = source.yearColumn || 'year';
         this.locationColumn = source.locationColumn || 'location';
 
         this.variable = variable;
-        this.year = year;
     }
 
     /**
@@ -32,7 +27,7 @@ class GeoMapModel {
 
         return new Promise((resolve, reject) => {
             const params = {
-                '$where': GeoMapModel._withinBox(this.locationColumn, bounds),
+                '$where': POIMapModel._withinBox(this.locationColumn, bounds),
                 '$limit': limit
             };
             const url = `https://${this.source.domain}/resource/${this.source.fxf}.json?${$.param(params)}`;
