@@ -188,7 +188,7 @@ const SOURCES = [
                 name: 'Education Places',
                 attribution: ATTRIBUTIONS.acs,
                 domain: ODN_DOMAIN,
-                fxf: 'rz8v-4esg',
+                fxf: 'uf4m-5u8r',
                 regions: ['place'],
                 hasAutosuggest: false,
                 searchTerms: ['college', 'education', 'school', 'university', 'instruction', 'teaching', 'teacher', 'professor', 'student', 'graduation', 'scholastic', 'matriculation'],

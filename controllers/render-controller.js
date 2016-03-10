@@ -408,7 +408,6 @@ class RenderController {
 
         allPromise.then(data => {
             try {
-
                 const groups = Sources.groups(params.regions).slice(0).map(group => {
                     return _.extend({}, group, {
                         selected: _.contains(group.datasets.map(dataset => dataset.vector), vector),
