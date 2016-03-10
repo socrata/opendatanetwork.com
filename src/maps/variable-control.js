@@ -118,7 +118,7 @@ class VariableControl {
 
         if (this.hasYear) {
             this.yearContainer = this.container.append('li');
-            this.yearLink = this.yearContainer.append('a');
+            this.yearLink = this.yearContainer.append('span');
         }
 
         this.updateSelectors();
