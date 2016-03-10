@@ -36,6 +36,17 @@ class POIMapView {
 
             response.forEach(point => {
                 const marker = L.marker(point.location.coordinates.reverse());
+
+                const properties = ['address']
+                    .map(property => point[property])
+                    .filter(_.negate(_.isUndefined));
+                marker.bindPopup(`
+                    <div class="name">${point.name}</div>
+                    <div class="value">
+                        ${properties.map(property => `<p>${property}</p>`).join('\n')}
+                    </div>
+                `, {closeButton: false});
+
                 this.markers.addLayer(marker);
             });
 
