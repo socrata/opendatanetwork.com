@@ -1,7 +1,7 @@
 
 class POIMapView {
     constructor(source, regions, params) {
-        this.model = new POIMapModel(source);
+        this.model = new POIMapModel(source, source.variables[0]);
         this.regions = regions;
 
         this.zoomControl = new L.Control.Zoom(MapConstants.ZOOM_CONTROL_OPTIONS);
@@ -30,14 +30,15 @@ class POIMapView {
             const pane = map.createPane('labels');
             const labels = L.tileLayer(url(MapConstants.LABEL_LAYER_ID), {pane}).addTo(map);
 
-            this.zoomToRegions(map);
+            this.zoomToRegions();
+            map.on('moveend', _.debounce(() => this.update(), MapConstants.POI_WAIT_MS));
         });
     }
 
-    zoomToRegions(map) {
+    zoomToRegions() {
         if (this.regions.length > 0) {
             const coordinates = this.regions[0].coordinates.slice(0).reverse();
-            map.setView(coordinates, MapConstants.POI_ZOOM);
+            this.map.setView(coordinates, MapConstants.POI_ZOOM);
         }
     }
 

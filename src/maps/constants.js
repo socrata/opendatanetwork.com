@@ -42,6 +42,7 @@ const MapConstants = {
     AUTO_ZOOM_OUT: 1, // amount to zoom out with only one selected region
 
     POI_ZOOM: 11.0, // auto zoom for point of interest maps
+    POI_WAIT_MS: 100, // amount of time to wait to debounce updates
 
     POINT_RADIUS_SCALE: d3.scale.log,
     POINT_RADIUS_RANGE_METERS: [500, 2000],
