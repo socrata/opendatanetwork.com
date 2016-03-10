@@ -115,6 +115,7 @@ class SearchPageController {
                 if (mapSource.poi) {
                     Geocode.regions(this.params.regions).then(regions => {
                         new POIMapView(mapSource, regions, this.params).show('#map');
+                        this.subMenus();
                     }, error => console.error(error));
                 } else {
                     MapView.create(mapSource, regions, this.params).then(view => {

@@ -103,7 +103,7 @@ const MAP_SOURCES = {
         domain: DOMAIN,
         fxf: 'rz8v-4esg',
         poi: true, // point of interest map
-        variables: ['Head Start Center'].map(classification => {
+        variables: ['Head Start Center', 'Parks', 'Landmarks'].map(classification => {
             return {
                 name: classification,
                 metric: nameToURL(classification),

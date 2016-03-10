@@ -19,7 +19,7 @@ const MapConstants = {
     // http://leafletjs.com/reference.html#map-options
     MAP_OPTIONS: {
         minZoom: 3.0,
-        maxZoom: 15.0,
+        maxZoom: 18.0,
         zoomControl: false,
         attributionControl: false,
         scrollWheelZoom: false
