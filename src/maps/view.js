@@ -1,14 +1,11 @@
 
 class POIMapView {
     constructor(source, regions, params) {
-        this.model = new POIMapModel(source, source.variables[0]);
+        this.source = source;
         this.regions = regions;
+        this.params = params;
 
-        this.zoomControl = new L.Control.Zoom(MapConstants.ZOOM_CONTROL_OPTIONS);
-        this.variableControl = new VariableControl(source, params, (variable, year) => {
-            this.model = new POIMapModel(source, variable);
-            this.update();
-        });
+        this.model = new POIMapModel(source, source.variables[0]);
     }
 
     show(selector) {
@@ -21,8 +18,8 @@ class POIMapView {
         this.map = map;
         map.setView(MapConstants.INITIAL_CENTER, MapConstants.INITIAL_ZOOM);
 
+        this.zoomControl = new L.Control.Zoom(MapConstants.ZOOM_CONTROL_OPTIONS);
         if (MapConstants.ZOOM_CONTROL) map.addControl(this.zoomControl);
-        this.variableControl.onAdd(map);
 
         map.whenReady(() => {
             const url = layerID => `https://api.mapbox.com/v4/${layerID}/{z}/{x}/{y}.png?access_token=${MapConstants.MAPBOX_TOKEN}`;
@@ -32,6 +29,12 @@ class POIMapView {
 
             this.zoomToRegions();
             map.on('moveend', _.debounce(() => this.update(), MapConstants.POI_WAIT_MS));
+
+            this.variableControl = new VariableControl(this.source, this.params, (variable, year) => {
+                this.model = new POIMapModel(this.source, variable);
+                this.update();
+            });
+            this.variableControl.onAdd(map);
         });
     }
 
