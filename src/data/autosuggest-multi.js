@@ -1,8 +1,10 @@
 
 // Autocomplete on datasets, regions, publishers, and categories.
 function multiComplete(inputSelector, resultSelector) {
-    function navigate(path) {
-        window.location.href = path;
+    function navigate(path, params) {
+        params = params || {};
+        const url = `${path}?${$.param(params)}`;
+        window.location.href = url;
     }
 
     const domain = 'odn.data.socrata.com';
@@ -43,7 +45,7 @@ function multiComplete(inputSelector, resultSelector) {
             domain: domain,
             fxf: '8ae5-ghum',
             column: 'domain',
-            select: option => navigate(`/search?domains=${option.text}`)
+            select: option => navigate('/search', {domains: option.text})
         },
         {
             name: 'Categories',
@@ -51,7 +53,7 @@ function multiComplete(inputSelector, resultSelector) {
             domain: domain,
             fxf: '864v-r7tf',
             column: 'category',
-            select: option => navigate(`/search?categories=${option.text}`),
+            select: option => navigate('/search', {categories: option.text}),
             show: (selection, option) => {
                 selection.append('span')
                     .attr('class', 'capitalize')
