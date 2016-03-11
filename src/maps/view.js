@@ -63,7 +63,8 @@ class POIMapView {
                             </a>` : ''}
                     </div>
                     <div class="value">
-                        ${isLink ? '' : point.description || ''}
+                        ${isLink ? '' : `${point.description || ''}<br />`}
+                        ${point.classification || ''}
 
                         <p class="address">
                             ${point.address || ''}<br />
