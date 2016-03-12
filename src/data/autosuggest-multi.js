@@ -11,6 +11,18 @@ function multiComplete(inputSelector, resultSelector) {
 
     const sources = [
         {
+            name: 'Regions',
+            image: 'fa-globe',
+            domain: domain,
+            fxf: '68ht-6puw',
+            column: 'all',
+            encoded: ['id', 'type', 'population'],
+            select: option => {
+                navigate(`/region/${option.id}/${option.text.replace(/ /g, '_').replace(/\//g, '_').replace(/,/g, '')}`);
+            },
+            sort: option => -parseFloat(option.population)
+        },
+        {
             name: 'Datasets',
             image: 'fa-bar-chart',
             domain: domain,
@@ -26,18 +38,6 @@ function multiComplete(inputSelector, resultSelector) {
                     .attr('id', 'tag')
                     .text(option.domain);
             }
-        },
-        {
-            name: 'Regions',
-            image: 'fa-globe',
-            domain: domain,
-            fxf: '68ht-6puw',
-            column: 'all',
-            encoded: ['id', 'type', 'population'],
-            select: option => {
-                navigate(`/region/${option.id}/${option.text.replace(/ /g, '_').replace(/\//g, '_').replace(/,/g, '')}`);
-            },
-            sort: option => -parseFloat(option.population)
         },
         {
             name: 'Publishers',
