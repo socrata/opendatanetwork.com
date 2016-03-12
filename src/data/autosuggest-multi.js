@@ -20,7 +20,15 @@ function multiComplete(inputSelector, resultSelector) {
             select: option => {
                 navigate(`/region/${option.id}/${option.text.replace(/ /g, '_').replace(/\//g, '_').replace(/,/g, '')}`);
             },
-            sort: option => -parseFloat(option.population)
+            sort: option => -parseFloat(option.population),
+            show: (selection, option) => {
+                selection.append('span')
+                    .attr('class', 'name')
+                    .text(option.text)
+                    .append('span')
+                    .attr('id', 'tag')
+                    .text(Constants.REGION_NAMES[option.type] || '');
+            }
         },
         {
             name: 'Datasets',
