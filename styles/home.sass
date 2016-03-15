@@ -13,10 +13,6 @@ $orange-color: #e74c3c
 @import home-hero
 @import locations-by-state
 
-.quick-links-container
-    float: right
-    margin-right: 20px
-
 /* Gray section
 
 section.gray
@@ -112,6 +108,7 @@ section.partners .join
   background-color: white
   display: block
   margin: 0 auto
+  position: relative
   text-align: left
   width: 600px
 
@@ -140,4 +137,12 @@ section.partners .join
   padding: 0
   text-align: center
   width: 80px
+
+#form .fa-search:hover
+    background-color: $orange-color
+
+#form .quick-links-container
+    background-color: $darker-gray-background-color
+    float: right
+    line-height: 50px
 

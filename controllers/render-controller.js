@@ -164,6 +164,7 @@ class RenderController {
                         quickLinks : {
                             categories : data[2],
                             domains : data[3].results,
+                            ref : 'dp',
                             regions : data[4].slice(0, quickLinksCount),
                         },
                         css : [
@@ -209,6 +210,7 @@ class RenderController {
                     quickLinks : {
                         categories : categories.slice(0, quickLinksCount),
                         domains : data[3].results,
+                        ref : 'hp',
                         regions : locations.slice(0, quickLinksCount),
                     },
                     css : [
@@ -330,6 +332,7 @@ class RenderController {
                         templateParams.quickLinks = {
                             categories : data[0],
                             domains : data[2].results,
+                            ref : 'sp',
                             regions : data[5].slice(0, quickLinksCount),
                         };
 
@@ -509,6 +512,7 @@ class RenderController {
                     templateParams.quickLinks = {
                         categories : data[3],
                         domains : data[5].results,
+                        ref : 'rp',
                         regions : data[9].slice(0, quickLinksCount),
                     };
                 }

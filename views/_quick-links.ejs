@@ -6,7 +6,7 @@
                 <ul class="quick-links-sub-menu quick-links-categories">
                     <li>Categories</li>
                 <% quickLinks.categories.forEach(function(category, index) { %>
-                    <li<%- (index > 4) ? ' class="quick-links-hidden"' : '' %>><a href="/search?categories=<%- encodeURIComponent(category.category) %>"><i class="fa <%- category.metadata.icon %>"></i><%= category.category %></a></li>
+                    <li<%- (index > 4) ? ' class="quick-links-hidden"' : '' %>><a href="/search?categories=<%- encodeURIComponent(category.category) %>&ref=<%= quickLinks.ref %>"><i class="fa <%- category.metadata.icon %>"></i><%= category.category %></a></li>
                 <% }); %>
                 </ul>
             </div>
@@ -14,7 +14,7 @@
                 <ul class="quick-links-sub-menu">
                     <li>Regions</li>
                 <% quickLinks.regions.forEach(function(region, index) { %>
-                    <li<%- (index > 4) ? ' class="quick-links-hidden"' : '' %>><a href="/region/<%= region.id %>/<%= region.name %>"><%= region.name %></a></li>
+                    <li<%- (index > 4) ? ' class="quick-links-hidden"' : '' %>><a href="/region/<%= region.id %>/<%= region.name %>&ref=<%= quickLinks.ref %>"><%= region.name %></a></li>
                 <% }); %>
                 </ul>
             </div>
@@ -22,15 +22,15 @@
                 <ul class="quick-links-sub-menu">
                     <li>Publisher</li>
                 <% quickLinks.domains.forEach(function(domain, index) { %>
-                    <li<%- (index > 4) ? ' class="quick-links-hidden"' : '' %>><a href="/search?domains=<%- encodeURIComponent(domain.domain) %>"><%= domain.domain %></a></li>
+                    <li<%- (index > 4) ? ' class="quick-links-hidden"' : '' %>><a href="/search?domains=<%- encodeURIComponent(domain.domain) %>&ref=<%= quickLinks.ref %>"><%= domain.domain %></a></li>
                 <% }); %>
                 </ul>
             </div>
             <div>
                 <ul class="quick-links-sub-menu">
                     <li>Standards</li>
-                    <li><a href="/search?tags=blds">BLDS</a></li>
-                    <li><a href="/search?tags=lives">LIVES</a></li>
+                    <li><a href="/search?tags=blds&ref=<%= quickLinks.ref %>">BLDS</a></li>
+                    <li><a href="/search?tags=lives&ref=<%= quickLinks.ref %>">LIVES</a></li>
                 </ul>
             </div>
         </div>

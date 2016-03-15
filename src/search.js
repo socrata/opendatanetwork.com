@@ -7,7 +7,13 @@ $(document).ready(function() {
 
     // Main search box
     //
-    multiComplete('#q', '.region-list').listen();
+    const autosuggest = multiComplete('#q', '.region-list');
+    autosuggest.listen();
+
+    // QuickLinks
+    //
+    const quickLinks = new QuickLinks();
+    quickLinks.onShow = () => autosuggest.results.hide();
 
     // Selected category (yellow box)
     //
