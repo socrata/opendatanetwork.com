@@ -111,6 +111,27 @@ class Chart {
             if (this.transpose) data = this._transpose(data);
             if (this.transform) data = this.transform(data);
 
+            if (this.forecast && (this.forecast.type === 'linear')) {
+
+                const groupedData = _.groupBy(data, 'id');
+                const rg = regions.map(region => {
+
+                    const regionData = groupedData[region.id];
+                    const firstMeasured = parseFloat(regionData[0][this.y.column]);
+                    const firstMeasuredYear = parseInt(regionData[0].year); 
+                    const lastMeasured = parseFloat(regionData[regionData.length - 1][this.y.column]);
+                    const lastMeasuredYear = parseInt(regionData[regionData.length - 1].year);
+                    const percentChange = parseFloat((lastMeasured - firstMeasured) / firstMeasured) / parseFloat(regionData.length - 1);
+                    const slope = (lastMeasured - firstMeasured) / (regionData.length - 1);
+                    const lastForecast = (slope * this.forecast.steps) + lastMeasured;
+                    const lastForecastYear = lastMeasuredYear + this.forecast.steps;
+
+                    return `The last measured ${this.y.label.toLowerCase()} for ${region.name} was ${numeral(lastMeasured).format(this.y.format.pattern)}. ${region.name} experienced an average annual growth rate of ${numeral(percentChange).format('0.00%')} from our first ${this.y.label.toLowerCase()} statistic recorded in ${firstMeasuredYear}. If past trends continue, we forecast the ${this.y.label.toLowerCase()} to be ${numeral(lastForecast).format(this.y.format.pattern)} by ${lastForecastYear}.`;
+                });
+
+                d3.select('.chart-summary').text(rg.join(' '));
+            }
+
             const container = d3
                 .select(`div.chart#${this.name.toLowerCase().replace(/\W/g, '')}`)
                 .select('.chart-container');

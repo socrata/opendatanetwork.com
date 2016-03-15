@@ -53,23 +53,28 @@ var _searchURL = "<%- searchDatasetsURL %>";
                 <% include _map-summary %>
 
                 <% source.charts.forEach(chart => { %>
-                    <div class='chart' id=<%= chart.name.toLowerCase().replace(/\W/g, '') %>>
-                        <h1 class='chart-title'><%= chart.name %></h1>
+                    <div class="chart" id=<%= chart.name.toLowerCase().replace(/\W/g, '') %>>
+                        <h1 class="chart-title"><%= chart.name %></h1>
 
-                        <div class='chart-container'></div>
+                        <div class="chart-container"></div>
 
-                        <% if ('description' in chart) { %>
-                            <p class='dataset-description chart-description'><%- chart.description %></p>
+                        <% if (chart.description) { %>
+                            <p class="dataset-description chart-description"><%- chart.description %></p>
                         <% } %>
 
-                        <% if ('forecast' in chart) { %>
-                            <p class='dataset-description'>
-                                Forecasted data uses a linear extrapolation algorithm
-                                which uses only available measured data provided by the
-                                <a href="<%= source.attribution.url %>"><%= source.attribution.name %></a>.
-                                Algorithm details are available
-                                <a href="https://en.wikipedia.org/wiki/Extrapolation#Linear_extrapolation">HERE</a>.
-                            </p>
+                        <% if (chart.forecast) { %>
+                            <div class="dataset-description">
+
+                            <% if (chart.forecast.type === 'linear') { %>
+                                <p class="chart-summary"></p><br>
+                            <% } %>
+
+                                <p>Forecasted data uses a linear extrapolation algorithm which uses only available measured data provided by the
+                                    <a href="<%= source.attribution.url %>"><%= source.attribution.name %></a>.
+                                    Algorithm details are available
+                                    <a href="https://en.wikipedia.org/wiki/Extrapolation#Linear_extrapolation">HERE</a>.
+                                </p>
+                            </div>
                         <% } %>
                     </div>
                 <% }); %>
@@ -77,6 +82,7 @@ var _searchURL = "<%- searchDatasetsURL %>";
                 <div class="dataset-description">
                     <% if ('description' in source) { %>
                         <p id="dataset-description"><%- source.description %></p>
+                        <br>
                     <% } %>
 
                     <label class="attribution">
@@ -87,14 +93,14 @@ var _searchURL = "<%- searchDatasetsURL %>";
 
                         <a href="<%= source.datasetURL %>">ODN Dataset</a> |
                         <a href="<%= source.apiURL %>">API</a> -
-                        <span class='info-icon'>
-                            <div class='info-tooltip'>
+                        <span class="info-icon">
+                            <div class="info-tooltip">
                                 <strong>Notes:</strong>
-                                <br /><br />
+                                <br><br>
                                 1. ODN datasets and APIs are subject to change and may differ in format from the original source data in order to provide a user-friendly experience on this site.
-                                <br /><br />
+                                <br><br>
                                 2. To build your own apps using this data, see the ODN Dataset and API links.
-                                <br /><br />
+                                <br><br>
                                 3. If you use this derived data in an app, we ask that you provide a link somewhere in your applications to the Open Data Network with a citation that states: "Data for this application was provided by the Open Data Network" where "Open Data Network" links to http://opendatanetwork.com. Where an application has a region specific module, we ask that you add an additional line that states: "Data about REGIONX was provided by the Open Data Network." where REGIONX is an HREF with a name for a geographical region like "Seattle, WA" and the link points to this page URL, e.g. http://opendatanetwork.com/region/1600000US5363000/Seattle_WA
                             </div>
                         </span>
