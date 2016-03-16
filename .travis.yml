@@ -4,6 +4,7 @@ node_js:
 before_install:
   - npm install -g casperjs
   - npm install -g gulp
-script: gulp build test
+  - gulp build
+script: gulp test
 services:
   - memcached

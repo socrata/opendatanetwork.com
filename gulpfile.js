@@ -108,6 +108,7 @@ gulp.task('watch', ['build'], function() {
 gulp.task('test', function () {
     var server = nodemon({
         script: 'app.js',
+        ignore: '*', // HACK: Prevent restarting
         env: { 'PORT' : 3002 }
     });
 
