@@ -5,7 +5,7 @@ casper.test.begin('homepage', function checkHomepage(test) {
   casper.then(function() {
     // Check some basic stuff about the page
     test.assertTitleMatch(/^Open Data Network$/, 'browser title correct');
-    test.assertSelectorHasText('.container h1', 'Open Datas Network', 'h1 title correct');
+    test.assertSelectorHasText('.container h1', 'Open Data Network', 'h1 title correct');
 
     // Try filling in a city to see what we can search for
     casper.sendKeys('input#q', 'Seattle', { keepFocus: true });
