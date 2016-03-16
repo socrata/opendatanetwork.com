@@ -2,10 +2,8 @@ language: node_js
 node_js:
   - "5.1.1"
 before_install:
-  - npm install
   - npm install -g casperjs
   - npm install -g gulp
-  - gulp build
-script: gulp
+script: gulp build test
 services:
   - memcached
