@@ -1,9 +1,17 @@
 language: node_js
 node_js:
-  - "5.1.1"
+- 5.1.1
 before_install:
-  - npm install -g casperjs
-  - npm install -g gulp
+- npm install -g casperjs
+- npm install -g gulp
 script: gulp build test
 services:
-  - memcached
+- memcached
+notifications:
+  email:
+  - deep.dhillon@socrata.com
+  - lane.aasen@socrata.com
+  - tosh.meston@gmail.com
+  - chris.metcalf@socrata.com
+  slack:
+    secure: kkCaTBDLdrLJW9tuuWX7Ta8vYFmekDdSKx/jmbh82mEkxqHOgtr3RRObsR9KJE3Pr9lXMDJrsFPdDbVgjch8NDYT9oV7Ka/5h/Skm9JPOFHPICDwHzV3ydbNQ42C5wHocjd0rst1p3EAzizxku2wweyZ9iT4uaXx2pUh66l6ch27miWTk+Sq7ZA0rgF9DNcqNQyqrRtlyQ0wtPMoCwWmLsS0VY8WcqnikQzAUeZs9GF27qWaFEI+T3bxtkboLdK7N4HGtnSnBbvO1YgFbSbE3rkbmTEqJa4377DqRWlinKQSkz6tnVe6VP95t4TSVnIg6vUkNMB2KRfXN/fFPxTZAlnqQWpIYIN2h343YVTMElnVTlif/2DVdXIRRjgoF2CIt6BLKn7UY8Pd7xQRCupfiuDiONLFjBK5pOv1xILJYv030zduM8X/vwycsIZKRxjqxVyxIJNkdKO/DJ0Jc7UtFFxrt0Y6SmJ/62cx10mSQ7GdashV4P28uk93Ro5EBKZq2b4wo2ojX3cf4mPIBzm4fAi5VIWiJsOFcVCZTHKBTGhcVWGFafNhOtxzMpTLvCD5BPLLIT0+pwxFN2Kx/TgSwvWtlNwRoGxRK/8jnlahGPo09uweBLqACVM3uJ9ryQvFMnto5mMDqiZvqveml0u/lu0NEwzdA2ckXp8yy1AP+r0=
