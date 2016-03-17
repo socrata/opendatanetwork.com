@@ -98,6 +98,21 @@ const MAP_SOURCES = {
         ])
     },
 
+    student_teacher_ratios: {
+        name: 'student_teacher_ratios',
+        domain: DOMAIN,
+        fxf: 'kx62-ayme',
+        variables: [
+            {
+                name: 'Student Teacher Ratio',
+                column: 'value',
+                metric: 'student_teacher_ratios',
+                years: _.range(2004, 2014),
+                format: format.ratio
+            }
+        ]
+    },
+
     occupations: {
         name: 'occupations',
         domain: DOMAIN,

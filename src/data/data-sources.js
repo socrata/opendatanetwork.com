@@ -39,6 +39,11 @@ const ATTRIBUTIONS = {
         name: 'CrimeReports.com',
         url: 'http://crimereports.socrata.com/'
 
+    },
+    iesNces: {
+        name: 'Institute of Education Sciences at National Center for Education Statistics',
+        url: 'http://nces.ed.gov/ccd/elsi'
+
     }
 };
 
@@ -136,6 +141,42 @@ const SOURCES = [
     {
         name: 'Education',
         datasets: [
+            {
+                vector: 'student_teacher_ratios',
+                name: 'Student Teacher Ratios',
+                description: 'Student teacher ratios are awesome.',
+                attribution: ATTRIBUTIONS.iesNces,
+                domain: ODN_DOMAIN,
+                fxf: 'kx62-ayme',
+                datalensFXF: '6xsy-aftn',
+                regions: ['state', 'county'],
+                searchTerms: ['class size', 'pupil teacher ratio', 'student teacher ratios', 'student teacher ratio', 'college', 'education', 'school', 'university', 'instruction', 'teaching', 'teacher', 'professor', 'student', 'scholastic', 'matriculation'],
+                charts: [
+                    {
+                        name: 'Student Teacher Ratio',
+                        data: [
+                            {
+                                column: 'year',
+                                label: 'Year',
+                                type: 'string'
+                            },
+                            {
+                                column: 'value',
+                                label: 'Student Teacher Ratios',
+                                format: { pattern: '#.#%' }
+                            }
+                        ],
+                        chart: 'line',
+                        forecast: {
+                            type: 'linear',
+                            steps: 5
+                        },
+                        options: {
+                            height: 300
+                        }
+                    }
+                ]
+            },
             {
                 vector: 'education',
                 name: 'Graduation Rates',
