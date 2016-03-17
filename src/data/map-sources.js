@@ -100,7 +100,7 @@ const MAP_SOURCES = {
     },
 
     student_teacher_ratios: {
-        name: 'student_teacher_ratios',
+        name: 'classroom_statistics',
         domain: DOMAIN,
         fxf: 'kx62-ayme',
         variables: [
@@ -109,7 +109,8 @@ const MAP_SOURCES = {
                 column: 'value',
                 metric: 'student_teacher_ratios',
                 years: _.range(2004, 2015),
-                format: format.terse_float
+                format: format.terse_float,
+                stoplight: true
             }
         ]
     },

@@ -143,8 +143,7 @@ const SOURCES = [
         datasets: [
             {
                 vector: 'student_teacher_ratios',
-                name: 'Student Teacher Ratios',
-                description: 'Student teacher ratios are awesome.',
+                name: 'Classroom Statistics',
                 attribution: ATTRIBUTIONS.iesNces,
                 domain: ODN_DOMAIN,
                 fxf: 'kx62-ayme',
@@ -169,7 +168,7 @@ const SOURCES = [
                         chart: 'line',
                         forecast: {
                             type: 'linear',
-                            steps: 10
+                            steps: 7
                         },
                         options: {
                             height: 300
