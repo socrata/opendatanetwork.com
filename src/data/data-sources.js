@@ -163,13 +163,13 @@ const SOURCES = [
                             {
                                 column: 'value',
                                 label: 'Student Teacher Ratios',
-                                format: { pattern: '#.#%' }
+                                format: { pattern: '###.##' }
                             }
                         ],
                         chart: 'line',
                         forecast: {
                             type: 'linear',
-                            steps: 5
+                            steps: 10
                         },
                         options: {
                             height: 300

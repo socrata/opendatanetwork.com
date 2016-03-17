@@ -32,6 +32,7 @@ function variableGenerator(years, value) {
 
 const format = {
     integer: d3.format(',.0f'),
+    terse_float: n => `${d3.format('.1f')(n)}`,
     percent: n => `${d3.format('.1f')(n)}%`,
     ratio: d3.format('.1%'),
     dollar: d3.format('$,.0f'),
@@ -107,8 +108,8 @@ const MAP_SOURCES = {
                 name: 'Student Teacher Ratio',
                 column: 'value',
                 metric: 'student_teacher_ratios',
-                years: _.range(2004, 2014),
-                format: format.ratio
+                years: _.range(2004, 2015),
+                format: format.terse_float
             }
         ]
     },
