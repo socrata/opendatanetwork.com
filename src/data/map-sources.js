@@ -107,7 +107,8 @@ const MAP_SOURCES = {
             {
                 name: 'Student Teacher Ratio',
                 column: 'value',
-                metric: 'student_teacher_ratios',
+                metric: 'student_teacher_ratio',
+                params: {variable: `student-teacher-ratio`},
                 years: _.range(2004, 2015),
                 format: format.terse_float,
                 stoplight: true
