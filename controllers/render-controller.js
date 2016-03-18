@@ -6,6 +6,7 @@ const Constants = require('./constants');
 const Request = require('./request');
 const Navigate = require('./navigate');
 
+const ForecastDescriptions = require('../src/forecast-descriptions');
 const MapDescription = require('../src/maps/description');
 const MapSources = require('../src/data/map-sources');
 const Sources = require('../src/data/data-sources');
@@ -382,7 +383,6 @@ class RenderController {
             });
         }
 
-
         function processRegions(regions) {
             return regions.filter(region => {
                 return !_.contains(uids, region.id);
@@ -392,6 +392,17 @@ class RenderController {
                 return _.extend({}, region, {addURL, navigateURL});
             });
         }
+
+        const _source = Sources.source(vector);
+        const source = _.extend({}, _source, {
+            datasetURL: (_source.datalensFXF ?
+                `https://${_source.domain}/view/${_source.datalensFXF}` :
+                `https://${_source.domain}/dataset/${_source.fxf}`),
+            apiURL: `https://dev.socrata.com/foundry/${_source.domain}/${_source.fxf}`
+        });
+
+        const forecastDescriptions = new ForecastDescriptions(source);
+        const forecastDescriptionsPromise = forecastDescriptions.getPromise(params.regions);
 
         const peersPromise = forRegion(Relatives.peers, true);
         const siblingsPromise = forRegion(Relatives.siblings);
@@ -406,7 +417,7 @@ class RenderController {
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
                              categoriesPromise, tagsPromise, domainsPromise,
                              datasetsPromise, descriptionPromise, searchPromise,
-                             locationsPromise];
+                             locationsPromise, forecastDescriptionsPromise];
         const allPromise = Promise.all(allPromises);
 
         allPromise.then(data => {
@@ -427,13 +438,6 @@ class RenderController {
                             vector: source.vector
                         })
                     });
-                });
-                const _source = Sources.source(vector);
-                const source = _.extend({}, _source, {
-                    datasetURL: (_source.datalensFXF ?
-                        `https://${_source.domain}/view/${_source.datalensFXF}` :
-                        `https://${_source.domain}/dataset/${_source.fxf}`),
-                    apiURL: `https://dev.socrata.com/foundry/${_source.domain}/${_source.fxf}`
                 });
 
                 const mapSource = MapSources[vector] || {};
@@ -515,6 +519,8 @@ class RenderController {
                         ref : 'rp',
                         regions : data[9].slice(0, quickLinksCount),
                     };
+
+                    templateParams.forecastDescriptions = data[10];
                 }
 
                 res.render('search.ejs', templateParams);

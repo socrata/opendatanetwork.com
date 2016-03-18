@@ -52,22 +52,24 @@ var _searchURL = "<%- searchDatasetsURL %>";
             <% } %>
                 <% include _map-summary %>
 
-                <% source.charts.forEach(chart => { %>
+                <% source.charts.forEach((chart, index) => { %>
                     <div class="chart" id=<%= chart.name.toLowerCase().replace(/\W/g, '') %>>
                         <h1 class="chart-title"><%= chart.name %></h1>
 
                         <div class="chart-container"></div>
 
-                        <% if (chart.description) { %>
-                            <p class="dataset-description chart-description"><%- chart.description %></p>
-                        <% } %>
-
-                        <% if (chart.forecast) { %>
+                        <% if (chart.description || chart.forecast) { %>
                             <div class="dataset-description">
 
-                            <% if (chart.forecast.type === 'linear') { %>
-                                <p class="chart-summary"></p><br>
+                            <% if (chart.description) { %>
+                                <p class="chart-description"><%= chart.description %></p><br>
                             <% } %>
+
+                            <% if (chart.forecast) {
+                                var forecastDescription = forecastDescriptions[index];
+                                if (forecastDescription.description.length > 0) { %>
+                                <p><%= forecastDescription.description %></p><br>
+                            <% } }%>
 
                                 <p>Forecasted data uses a linear extrapolation algorithm which uses only available measured data provided by the
                                     <a href="<%= source.attribution.url %>"><%= source.attribution.name %></a>.

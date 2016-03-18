@@ -50,6 +50,10 @@ const ATTRIBUTIONS = {
 const ALL_REGIONS = ['nation', 'region', 'division', 'state', 'county',
                      'msa', 'place', 'zip_code'];
 
+function _getParams(component) {
+    return { component };
+}
+
 function _toPercent(column) {
     return rows => {
         return rows.map(row => _.extend(row, { [column]: parseFloat(row[column]) / 100 }));
@@ -590,10 +594,14 @@ const SOURCES = [
                         ],
                         chart: 'table'
                     }
-                    ].concat(['All', 'Rents', 'Goods', 'Other'].map(component => {
+                    ].concat([
+                        ['All', 'Overall Cost of Living'], 
+                        ['Goods', 'Cost of Goods'], 
+                        ['Rents', 'Cost of Rents'], 
+                        ['Other', 'Other Costs']].map(component => {
                     return {
-                        name: `${component}`,
-                        params: {component},
+                        name: component[1],
+                        params: _getParams(component[0]),
                         data: [
                             {
                                 column: 'year',
@@ -602,7 +610,7 @@ const SOURCES = [
                             },
                             {
                                 column: 'index',
-                                label: 'Index',
+                                label: component[1],
                                 format: { pattern: '#.#' }
                             }
                         ],

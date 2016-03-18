@@ -7,6 +7,10 @@ if (typeof require !== 'undefined') {
 
 const DOMAIN = 'odn.data.socrata.com';
 
+function _getParams(component) {
+    return { component };
+}
+
 function nameToURL(name) {
     return name.toLowerCase().replace(/,/g, '').replace(/[ \/]/g, '_');
 }
@@ -207,13 +211,17 @@ const MAP_SOURCES = {
         name: 'cost_of_living',
         domain: DOMAIN,
         fxf: 'hpnf-gnfu',
-        variables: ['All', 'Goods', 'Rents', 'Other'].map(component => {
+        variables: [
+            ['All', 'Overall Cost of Living'], 
+            ['Goods', 'Cost of Goods'], 
+            ['Rents', 'Cost of Rents'],
+            ['Other', 'Other Costs']].map(component => {
             return {
-                name: component,
+                name: component[1],
                 column: 'index',
-                metric: nameToURL(component),
+                metric: nameToURL(component[0]),
                 reverse: true,
-                params: {component},
+                params: _getParams(component[0]),
                 years: _.range(2008, 2014),
                 format: d3.format('.1f'),
                 stoplight: true
