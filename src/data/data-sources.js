@@ -142,7 +142,54 @@ const SOURCES = [
         name: 'Education',
         datasets: [
             {
-                vector: 'student_teacher_ratios',
+                vector: 'education',
+                name: 'Graduation Rates',
+                attribution: ATTRIBUTIONS.acs,
+                domain: ODN_DOMAIN,
+                fxf: 'uf4m-5u8r',
+                regions: ALL_REGIONS,
+                searchTerms: ['college', 'education', 'school', 'university', 'instruction', 'teaching', 'teacher', 'professor', 'student', 'graduation', 'scholastic', 'matriculation'],
+                charts: [
+                    {
+                        name: 'Graduation Rates',
+                        data: [
+                            {
+                                column: 'percent_high_school_graduate_or_higher',
+                                label: 'High School',
+                            },
+                            {
+                                column: 'percent_bachelors_degree_or_higher',
+                                label: 'College',
+                            }
+                        ],
+                        transpose: [
+                            {
+                                column: 'variable',
+                                label: '',
+                                type: 'string'
+                            },
+                            {
+                                column: 'value',
+                                label: 'Value',
+                                format: { pattern: '#.#%' }
+                            }
+                        ],
+                        transform: _toPercent('value'),
+                        chart: 'table',
+                        options: {
+                            vAxis: {
+                                format: 'percent',
+                                viewWindow: {
+                                    min: 0,
+                                    max: 1
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                vector: 'classroom_statistics',
                 name: 'Classroom Statistics',
                 attribution: ATTRIBUTIONS.iesNces,
                 domain: ODN_DOMAIN,
@@ -192,53 +239,6 @@ const SOURCES = [
                         },
                         options: {
                             height: 300
-                        }
-                    }
-                ]
-            },
-            {
-                vector: 'education',
-                name: 'Graduation Rates',
-                attribution: ATTRIBUTIONS.acs,
-                domain: ODN_DOMAIN,
-                fxf: 'uf4m-5u8r',
-                regions: ALL_REGIONS,
-                searchTerms: ['college', 'education', 'school', 'university', 'instruction', 'teaching', 'teacher', 'professor', 'student', 'graduation', 'scholastic', 'matriculation'],
-                charts: [
-                    {
-                        name: 'Graduation Rates',
-                        data: [
-                            {
-                                column: 'percent_high_school_graduate_or_higher',
-                                label: 'High School',
-                            },
-                            {
-                                column: 'percent_bachelors_degree_or_higher',
-                                label: 'College',
-                            }
-                        ],
-                        transpose: [
-                            {
-                                column: 'variable',
-                                label: '',
-                                type: 'string'
-                            },
-                            {
-                                column: 'value',
-                                label: 'Value',
-                                format: { pattern: '#.#%' }
-                            }
-                        ],
-                        transform: _toPercent('value'),
-                        chart: 'table',
-                        options: {
-                            vAxis: {
-                                format: 'percent',
-                                viewWindow: {
-                                    min: 0,
-                                    max: 1
-                                }
-                            }
                         }
                     }
                 ]

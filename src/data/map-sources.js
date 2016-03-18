@@ -104,9 +104,15 @@ const MAP_SOURCES = {
             ['College Graduation Rate', 'percent_bachelors_degree_or_higher', format.percent, true]
         ])
     },
-    student_teacher_ratios: {
+
+    /**
+     * Corresponds to the subcat, forms URL of the form: /region/0400000US53/Washington/classroom_statistics. Name must
+     * match the name param below as well as the vector in data-sources.js.
+     */
+    classroom_statistics: {
         /**
         * Corresponds to the subcat, forms URL of the form: /region/0400000US53/Washington/classroom_statistics
+        * Note: name must match the above node name. @TODO Fix this dependency
         */
         name: 'classroom_statistics',
 
@@ -151,12 +157,7 @@ const MAP_SOURCES = {
                  * Corresponds to the number format used in the map and summary text, i.e. The student teacher ratio of
                  * Washington in 2014 was 19.3.
                  */
-                format: format.terse_float,
-
-                /**
-                 * Corresponds to the type of map to use.
-                 */
-                stoplight: true
+                format: format.terse_float
             }
         ]
     },
