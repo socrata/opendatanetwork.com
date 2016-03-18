@@ -32,6 +32,7 @@ function variableGenerator(years, value) {
 
 const format = {
     integer: d3.format(',.0f'),
+    terse_float: n => `${d3.format('.1f')(n)}`,
     percent: n => `${d3.format('.1f')(n)}%`,
     ratio: d3.format('.1%'),
     dollar: d3.format('$,.0f'),
@@ -39,6 +40,12 @@ const format = {
 };
 
 
+/**
+ * Defines mappings from data to maps appearing on site under the subcat/subsubcat URL structure where the high
+ * level category, e.g. Education is not in the URL structure (since we often change these, subcat corresponds to
+ * high level rollup of map and charts that corresponds to a question answer, e.g. Classroom Statistics, Graduation
+ * Rates, etc., and the subsubcat corresponds to the specific variable of interest, e.g. student_teacher_ratio
+ */
 const MAP_SOURCES = {
     population: {
         name: 'population',
@@ -96,6 +103,63 @@ const MAP_SOURCES = {
             ['High School Graduation Rate', 'percent_high_school_graduate_or_higher', format.percent, true],
             ['College Graduation Rate', 'percent_bachelors_degree_or_higher', format.percent, true]
         ])
+    },
+
+    /**
+     * Corresponds to the subcat, forms URL of the form: /region/0400000US53/Washington/classroom_statistics. Name must
+     * match the name param below as well as the vector in data-sources.js.
+     */
+    classroom_statistics: {
+        /**
+        * Corresponds to the subcat, forms URL of the form: /region/0400000US53/Washington/classroom_statistics
+        * Note: name must match the above node name. @TODO Fix this dependency
+        */
+        name: 'classroom_statistics',
+
+        domain: DOMAIN,
+
+        /**
+         * NBE 4x4 of public dataset on odn.data.socrata.com
+         */
+        fxf: 'kx62-ayme',
+
+        variables: [
+            {
+                /**
+                 * Corresponds to the visually displayed subsubcat defined above. Used to populate the menu, mouseovers
+                 * inside the map, and the summary sentence above the map, e.g. The Student Teacher Ratio of Washington
+                 * was blah.
+                 */
+                name: 'Student Teacher Ratio',
+
+                /**
+                 * Corresponds to the column in the source dataset containing the variable value.
+                 */
+                column: 'value',
+
+                /**
+                 * Corresponds to the visually displayed subsubcat defined above. Used to populate part of the URL,
+                 * e.g. /region/0400000US53/Washington/classroom_statistics/student_teacher_ratio
+                 */
+                metric: 'student_teacher_ratio',
+
+                /**
+                 * Corresponds to the name of the variable in the variable column of the source dataset.
+                 */
+                params: {variable: `student-teacher-ratio`},
+
+                /**
+                 * Corresponds to the range of years to use. The largest year is the default.
+                 */
+                years: _.range(2004, 2015),
+
+                /**
+                 * Corresponds to the number format used in the map and summary text, i.e. The student teacher ratio of
+                 * Washington in 2014 was 19.3.
+                 */
+                format: format.terse_float
+            }
+        ]
     },
 
     occupations: {

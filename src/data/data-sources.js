@@ -39,6 +39,11 @@ const ATTRIBUTIONS = {
         name: 'CrimeReports.com',
         url: 'http://crimereports.socrata.com/'
 
+    },
+    iesNces: {
+        name: 'Institute of Education Sciences at National Center for Education Statistics',
+        url: 'http://nces.ed.gov/ccd/elsi'
+
     }
 };
 
@@ -179,6 +184,61 @@ const SOURCES = [
                                     max: 1
                                 }
                             }
+                        }
+                    }
+                ]
+            },
+            {
+                vector: 'classroom_statistics',
+                name: 'Classroom Statistics',
+                attribution: ATTRIBUTIONS.iesNces,
+                domain: ODN_DOMAIN,
+
+                /**
+                 * NBE 4x4 of public dataset on odn.data.socrata.com
+                 */
+                fxf: 'kx62-ayme',
+
+                datalensFXF: '6xsy-aftn',
+
+                regions: ['state', 'county'],
+
+                /**
+                 * Terms used to formulate search query to populate datasets. Choose such that subcat, i.e. Classroom
+                 * statistics is well represented, but if recall is a problem, include generalizing terms to capture
+                 * the category, e.g. Education.
+                 */
+                searchTerms: ['class size', 'pupil teacher ratio', 'student teacher ratios', 'student teacher ratio', 'college', 'education', 'school', 'university', 'instruction', 'teaching', 'teacher', 'professor', 'student', 'scholastic', 'matriculation'],
+
+                charts: [
+                    {
+                        name: 'Student Teacher Ratio',
+                        data: [
+                            /**
+                             * X axis variable definition.
+                             */
+                            {
+                                /**
+                                 * Corresponds to the column in the source dataset containing the variable value.
+                                 */
+                                column: 'year',
+
+                                label: 'Year',
+                                type: 'string'
+                            },
+                            {
+                                column: 'value',
+                                label: 'Student Teacher Ratios',
+                                format: { pattern: '###.##' }
+                            }
+                        ],
+                        chart: 'line',
+                        forecast: {
+                            type: 'linear',
+                            steps: 7
+                        },
+                        options: {
+                            height: 300
                         }
                     }
                 ]

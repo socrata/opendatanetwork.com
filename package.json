@@ -1,5 +1,5 @@
 {
-  "name": "OpenDataNetwork.com",
+  "name": "deep",
   "description": "Open Data Network Website",
   "private": true,
   "dependencies": {
@@ -40,5 +40,18 @@
   "scripts": {
     "postinstall": "gulp build",
     "start": "node app.js"
-  }
+  },
+  "version": "1.0.0",
+  "main": "app.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/socrata/opendatanetwork.com.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/socrata/opendatanetwork.com/issues"
+  },
+  "homepage": "https://github.com/socrata/opendatanetwork.com#readme"
 }
