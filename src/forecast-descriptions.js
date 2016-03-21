@@ -71,13 +71,18 @@ class ForecastDescription {
                     descriptions = regions.map(region => {
 
                         var regionData = groupedData[region.id];
-                        var firstMeasured = parseFloat(regionData[0][this.y.column]);
-                        var firstMeasuredYear = parseInt(regionData[0].year); 
+
+                        var firstMeasuredIndex = this.getFirstMeasuredIndex(regionData, this.y.column);
+                        var firstMeasured = parseFloat(regionData[firstMeasuredIndex][this.y.column]);
+                        var firstMeasuredYear = parseInt(regionData[firstMeasuredIndex].year); 
                         
-                        var lastMeasured = parseFloat(regionData[regionData.length - 1][this.y.column]);
-                        var lastMeasuredYear = parseInt(regionData[regionData.length - 1].year);
-                        var percentChange = parseFloat((lastMeasured - firstMeasured) / firstMeasured) / parseFloat(regionData.length - 1);
-                        var slope = (lastMeasured - firstMeasured) / (regionData.length - 1);
+                        var lastMeasuredIndex = this.getLastMeasuredIndex(regionData, this.y.column);
+                        var lastMeasured = parseFloat(regionData[lastMeasuredIndex][this.y.column]);
+                        var lastMeasuredYear = parseInt(regionData[lastMeasuredIndex].year);
+
+                        var years = lastMeasuredYear - firstMeasuredYear;
+                        var percentChange = parseFloat((lastMeasured - firstMeasured) / firstMeasured) / parseFloat(years);
+                        var slope = parseFloat(lastMeasured - firstMeasured) / parseFloat(years);
                         var lastForecast = (slope * this.forecast.steps) + lastMeasured;
                         var lastForecastYear = lastMeasuredYear + this.forecast.steps;
 
@@ -94,6 +99,26 @@ class ForecastDescription {
                 reject();
             });
         });
+    }
+    
+    getFirstMeasuredIndex(data, column) {
+
+        for (var i = 0; i < data.length; i++) {
+            if (!_.isUndefined(data[i][column]))
+                return i;
+        }
+
+        return 0;
+    }
+    
+    getLastMeasuredIndex(data, column) {
+
+        for (var i = data.length - 1; i >= 0; i--) {
+            if (!_.isUndefined(data[i][column]))
+                return i;
+        }
+
+        return 0;
     }
 
     _transpose(rows) {
