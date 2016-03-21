@@ -80,9 +80,9 @@ class ForecastDescription {
                         var lastMeasured = parseFloat(regionData[lastMeasuredIndex][this.y.column]);
                         var lastMeasuredYear = parseInt(regionData[lastMeasuredIndex].year);
 
-                        var years = lastMeasuredYear - firstMeasuredYear;
-                        var percentChange = parseFloat((lastMeasured - firstMeasured) / firstMeasured) / parseFloat(years);
-                        var slope = parseFloat(lastMeasured - firstMeasured) / parseFloat(years);
+                        var years = parseFloat(lastMeasuredYear - firstMeasuredYear);
+                        var percentChange = parseFloat((lastMeasured - firstMeasured) / firstMeasured) / years;
+                        var slope = parseFloat(lastMeasured - firstMeasured) / years;
                         var lastForecast = (slope * this.forecast.steps) + lastMeasured;
                         var lastForecastYear = lastMeasuredYear + this.forecast.steps;
 
