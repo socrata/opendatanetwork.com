@@ -2,7 +2,7 @@
 
 if (typeof require !== 'undefined') {
     var _ = require('lodash');
-
+    var d3 = require('d3');
     var Requests = require('../../controllers/request');
 }
 
@@ -1145,7 +1145,7 @@ function _crimeTransform(div, column) {
              ${availableForAll.join(', ')}.` :
             `Since there are no crime types for which every selected region has data,
              data for all crime types is shown.`;
-        const descriptionSel = d3.select(`div#${div} > p.chart-description`);
+        var descriptionSel = d3.select(`div#${div} p.chart-description`);
         descriptionSel.text(`${descriptionSel.text()} ${description}`);
         if (availableForAll.length < 1) availableForAll = _.union.apply({}, availableTypes);
 

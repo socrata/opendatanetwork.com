@@ -1,13 +1,13 @@
 
 class MapView {
     constructor(source, regionType, regions, features, params) {
-        this.source = source;
 
+        this.source = source;
         this.regionType = regionType;
         this.regions = regions;
         this.regionIDs = new Set(regions.map(region => region.id));
-
         this.features = features;
+        this.params = params;
 
         this.legend = new LegendControl();
         this.tooltip = new TooltipControl();
@@ -105,6 +105,7 @@ class MapView {
                     if (!(region.id in this._popups)) {
                         const popup = L.popup(MapConstants.POPUP_OPTIONS)
                             .setLatLng(MapView.center(layer));
+                        popup.originalRegion = true;
                         this._popups[region.id] = popup;
                     }
 
@@ -115,20 +116,80 @@ class MapView {
                 }
 
                 layer.on({
-                    mouseover: () => {
+                    click: () => {
+
                         this.closePopups();
-                        this.tooltip.showRegion(region);
-                    },
-                    mouseout: () => this.tooltip.hide()
+
+                        if (!(region.id in this._popups)) {
+
+                            var container = d3.select(document.createElement('div'));
+                            container.append('div').attr('class', 'name').text(region.name);
+                            container.append('div').attr('class', 'value').text(`${region.valueName} (${region.year}): ${region.valueFormatted}`);
+
+                            var tooltipsControls = container.append('div').attr('class', 'tooltip-controls');
+
+                            var addLink = tooltipsControls.append('a').attr('href', this.getUrlWithAddedRegion(region));
+                            addLink.append('i').attr('class', 'fa fa-plus');
+                            addLink.append('span').text('Add');
+                            addLink.on('click', () => console.log(region.name));
+
+                            var goToLink = tooltipsControls.append('a').attr('href', this.getUrlToRegion(region));
+                            goToLink.append('i').attr('class', 'fa fa-location-arrow');
+                            goToLink.append('span').text('Go To');
+
+                            if (this.params.vector == 'city_crime') {
+
+                                var moreLink = tooltipsControls.append('a')
+                                    .attr('href', 'http://bit.ly/1Yxxqmz')
+                                    .attr('target', '_blank');
+
+                                moreLink.append('i').attr('class', 'fa fa-external-link');
+                                moreLink.append('span').text('More');
+                            }
+
+                            const popup = L.popup(MapConstants.POPUP_OPTIONS)
+                                .setLatLng(MapView.center(layer));
+
+                            popup.setContent(container.node());
+                            this._popups[region.id] = popup;
+                        }
+
+                        this._popups[region.id].addTo(this.map);
+                    }
                 });
-            } else {
+            } 
+            else {
                 layer.setStyle(MapConstants.NO_DATA_STYLE);
             }
         });
     }
+    
+    getUrlWithAddedRegion(region) {
+
+        const ids = this.params.regions.map(o => o.id);
+        ids.push(region.id);
+
+        const names = this.params.regions.map(o => this.segmentEscape(o.name));
+        names.push(this.segmentEscape(region.name));
+
+        return `/region/${ids.join('-')}/${names.join('-')}/${this.params.vector}/${this.params.metric}/${this.params.year}`;
+    }
+
+    getUrlToRegion(region) {
+
+        const name = region.name.replace(/,/g, '').replace(/[ \/]/g, '_');
+        return `/region/${region.id}/${name}/${this.params.vector}/${this.params.metric}/${this.params.year}`;
+    }
+
+    segmentEscape(s) {
+        return s.replace(/,/g, '').replace(/[ \/]/g, '_');
+    }
 
     closePopups() {
-        _.values(this._popups).forEach(popup => this.map.closePopup(popup));
+        _.values(this._popups).forEach(popup => {
+            if (_.isUndefined(popup.originalRegion))
+                this.map.closePopup(popup);
+        });
     }
 
     static center(layer) {

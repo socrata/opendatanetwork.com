@@ -59,12 +59,12 @@ class ForecastDescription {
 
             this.getData(regions).then(data => {
 
-                if (this.transpose) data = this._transpose(data);
-                if (this.transform) data = this.transform(data);
-
                 var descriptions = [];
 
                 if (this.forecast && (this.forecast.type === 'linear')) {
+
+                    if (this.transpose) data = this._transpose(data);
+                    if (this.transform) data = this.transform(data);
 
                     const groupedData = _.groupBy(data, 'id');
 
