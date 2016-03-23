@@ -33,10 +33,12 @@ The build process is automated using `gulp` and configured with `gulpfile.js`.
 A suite of [casperjs](http://casperjs.org/) tests has been made available in `tests/*`. To create a new test suite, copy one of the files in that directory and add tests for your own page. To run the tests, run `gulp test` from the command line.
 
 Casperjs must be in the path so install with -g:
-    npm install -g casperjs
+
+	npm install -g casperjs
 
 Also needed:
-    npm install phantomjs -g
+
+	npm install phantomjs -g
 
 Continuous integration tests are run for each push and pull request on [Travis CI](https://travis-ci.org/socrata/opendatanetwork.com).
 
