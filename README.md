@@ -38,7 +38,7 @@ Casperjs must be in the path so install with -g:
 
 Also needed:
 
-	npm install phantomjs -g
+	npm install -g phantomjs
 
 Continuous integration tests are run for each push and pull request on [Travis CI](https://travis-ci.org/socrata/opendatanetwork.com).
 
