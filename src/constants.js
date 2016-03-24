@@ -1,3 +1,4 @@
+'use strict';
 
 const Constants = {
     ROSTER_URL: 'https://federal.demo.socrata.com/resource/bdeb-mf9k.json',
@@ -25,3 +26,4 @@ const Constants = {
     }
 };
 
+if (typeof module !== 'undefined') module.exports = Constants;

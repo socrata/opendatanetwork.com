@@ -112,7 +112,7 @@ var _searchURL = "<%- searchDatasetsURL %>";
 
             <% if (searchResults && searchResults.resultSetSize > 0) { %>
                 <div class="search-results-container">
-                    <div class="datasets-header">
+                    <div class="search-results-header">
                         <h2>
                             <span class="result-count"><%= searchResults.resultSetSizeString %></span>
                             <%= group.name %> and <%= source.name %>
@@ -122,7 +122,7 @@ var _searchURL = "<%- searchDatasetsURL %>";
                         </h2>
                     </div>
 
-                    <ul class="datasets">
+                    <ul class="search-results">
                         <% include _search-results-regular %>
                     </ul>
                 </div>
@@ -141,8 +141,13 @@ var _searchURL = "<%- searchDatasetsURL %>";
                 <strong><%= currentTag.tag %></strong> - <%- currentTag.metadata.description %>
             </div>
           <% } %>
+          <% if (searchResultsRegions && (searchResultsRegions.length > 0)) { %>
+            <ul class="search-results search-results-regions">
+                <% include _search-results-regions %>
+            </ul>
+          <% } %>
           <% if (searchResults && searchResults.resultSetSize > 0) { %>
-            <ul class="datasets">
+            <ul class="search-results datasets">
                 <% include _search-results-regular %>
             </ul>
           <% } %>
@@ -178,7 +183,7 @@ function getSearchPageUrl(source) {
         // Region names
         //
         var regionNames = params.regions.map(function(region) {
-            return region.name.replace(/ /g, '_').replace(/\//g, '_').replace(/,/g, '');
+            return regionToUrlSegment(region.name);
         });
 
         url += '/' + regionNames.join('-');
@@ -194,6 +199,10 @@ function getSearchPageUrl(source) {
     url += getSearchQueryString();
 
     return url;
+}
+
+function regionToUrlSegment(name) {
+    return name.replace(/ /g, '_').replace(/\//g, '_').replace(/,/g, '');
 }
 
 function getSearchQueryString() {

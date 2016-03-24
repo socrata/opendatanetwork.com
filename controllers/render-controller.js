@@ -10,6 +10,7 @@ const ForecastDescriptions = require('../src/forecast-descriptions');
 const MapDescription = require('../src/maps/description');
 const MapSources = require('../src/data/map-sources');
 const Sources = require('../src/data/data-sources');
+const SrcConstants = require('../src/constants');
 
 const _ = require('lodash');
 const htmlencode = require('htmlencode').htmlEncode;
@@ -293,19 +294,27 @@ class RenderController {
             const datasetsPromise = API.datasets(params);
             const searchPromise = API.searchDatasetsURL(params);
             const locationsPromise = API.locations();
+            const searchResultsRegionsPromise = API.searchResultsRegions(params.q);
             const allPromises = [categoriesPromise, tagsPromise,
                                  domainsPromise, datasetsPromise,
-                                 searchPromise, locationsPromise];
+                                 searchPromise, locationsPromise, 
+                                 searchResultsRegionsPromise];
             const allPromise = Promise.all(allPromises);
 
             allPromise.then(data => {
                 try {
+                    const searchResultsRegions = data[6];
+                    searchResultsRegions.forEach(region => {
+                        region.regionType = SrcConstants.REGION_NAMES[region.type] || '';
+                    });
+
                     const templateParams = {
                         params,
                         hasRegions: params.regions.length > 0,
                         searchPath: req.path,
                         title: searchPageTitle(params),
                         metaSummary : defaultMetaSummary,
+                        searchResultsRegions : searchResultsRegions,
                         css: [
                             '/styles/search.css',
                             '/styles/main.css'
