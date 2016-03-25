@@ -14,8 +14,8 @@ class MapView {
         this.variableControl = new VariableControl(source, params, (variable, year) => {
             this.display(variable, year);
         });
-        this.zoomControl = new L.Control.Zoom(MapConstants.ZOOM_CONTROL_OPTIONS);
 
+        this.zoomControl = new L.Control.Zoom(MapConstants.ZOOM_CONTROL_OPTIONS);
         this._popups = [];
     }
 
@@ -46,6 +46,11 @@ class MapView {
             this.zoomToSelected(this.map);
 
             if (this.source.callback) this.source.callback(this.regions);
+        });
+
+        map.on('click', (e) => {
+            if (e.originalEvent.srcElement.id == 'leaflet-map')
+                this.closePopups();
         });
     }
 
@@ -109,48 +114,25 @@ class MapView {
                         this._popups[region.id] = popup;
                     }
 
-                    const content = `<div class="name">${region.name}</div>\
-                        <div class="value">${region.valueName} (${region.year}):\
-                        ${region.valueFormatted}</div>`;
-                    this._popups[region.id].setContent(content).addTo(this.map);
+                    const showGoTo = (this.regions.length > 1);
+                    const showDigIn = (this.params.vector == 'city_crime');
+                    const node = this.getPopupNode(region, layer, this._popups[region.id], false, showGoTo, showDigIn);
+
+                    this._popups[region.id].setContent(node).addTo(this.map);
                 }
 
                 layer.on({
-                    click: () => {
+                    click: (map) => {
 
                         this.closePopups();
 
                         if (!(region.id in this._popups)) {
+                            const showDigIn = (this.params.vector == 'city_crime');
+                            const popup = L.popup(MapConstants.POPUP_OPTIONS).setLatLng(MapView.center(layer));
+                            const node = this.getPopupNode(region, layer, popup, true, true, showDigIn);
 
-                            var container = d3.select(document.createElement('div'));
-                            container.append('div').attr('class', 'name').text(region.name);
-                            container.append('div').attr('class', 'value').text(`${region.valueName} (${region.year}): ${region.valueFormatted}`);
+                            popup.setContent(node);
 
-                            var tooltipsControls = container.append('div').attr('class', 'tooltip-controls');
-
-                            var addLink = tooltipsControls.append('a').attr('href', this.getUrlWithAddedRegion(region));
-                            addLink.append('i').attr('class', 'fa fa-plus');
-                            addLink.append('span').text('Add');
-                            addLink.on('click', () => console.log(region.name));
-
-                            var goToLink = tooltipsControls.append('a').attr('href', this.getUrlToRegion(region));
-                            goToLink.append('i').attr('class', 'fa fa-location-arrow');
-                            goToLink.append('span').text('Go To');
-
-                            if (this.params.vector == 'city_crime') {
-
-                                var moreLink = tooltipsControls.append('a')
-                                    .attr('href', 'http://bit.ly/1Yxxqmz')
-                                    .attr('target', '_blank');
-
-                                moreLink.append('i').attr('class', 'fa fa-external-link');
-                                moreLink.append('span').text('More');
-                            }
-
-                            const popup = L.popup(MapConstants.POPUP_OPTIONS)
-                                .setLatLng(MapView.center(layer));
-
-                            popup.setContent(container.node());
                             this._popups[region.id] = popup;
                         }
 
@@ -163,7 +145,56 @@ class MapView {
             }
         });
     }
+
+    getPopupNode(region, layer, popup, showAdd, showGoTo, showDigIn) {
+
+        const container = d3.select(document.createElement('div'));
+
+        container.append('a')
+            .attr('class', 'fa fa-times')
+            .on('click', () => this.map.closePopup(popup));
+
+        container.append('div').attr('class', 'name').text(region.name);
+        container.append('div').attr('class', 'value').text(`${region.valueName} (${region.year}): ${region.valueFormatted}`);
+
+        if (showAdd || showGoTo || showDigIn) {
+
+            const tooltipsControls = container.append('div').attr('class', 'tooltip-controls');
+
+            if (showAdd) {
+                const addLink = tooltipsControls.append('a').attr('href', this.getUrlWithAddedRegion(region));
+                addLink.append('i').attr('class', 'fa fa-plus');
+                addLink.append('span').text('Add');
+            }
+
+            if (showGoTo) {
+                const goToLink = tooltipsControls.append('a').attr('href', this.getUrlToRegion(region));
+                goToLink.append('i').attr('class', 'fa fa-location-arrow');
+                goToLink.append('span').text('Go To');
+            }
+
+            if (showDigIn) {
+                const endDateString = this.getDateString(new Date());
+                const startDate = new Date();
+                startDate.setMonth(startDate.getMonth() - 1); // one month ago
+                const startDateString = this.getDateString(startDate);
+
+                const digInLink = tooltipsControls.append('a')
+                    .attr('href', `https://preview.crimereports.com/#!/dashboard?lat=${layer._latlng.lat}&lng=${layer._latlng.lng}&incident_types=Assault%252CAssault%2520with%2520Deadly%2520Weapon%252CBreaking%2520%2526%2520Entering%252CDisorder%252CDrugs%252CHomicide%252CKidnapping%252CLiquor%252COther%2520Sexual%2520Offense%252CProperty%2520Crime%252CProperty%2520Crime%2520Commercial%252CProperty%2520Crime%2520Residential%252CQuality%2520of%2520Life%252CRobbery%252CSexual%2520Assault%252CSexual%2520Offense%252CTheft%252CTheft%2520from%2520Vehicle%252CTheft%2520of%2520Vehicle&start_date=${startDateString}&end_date=${endDateString}&days=sunday%252Cmonday%252Ctuesday%252Cwednesday%252Cthursday%252Cfriday%252Csaturday&start_time=0&end_time=23&include_sex_offenders=false&zoom=15&shapeNames=&show_list=true`)
+                    .attr('target', '_blank');
+
+                digInLink.append('i').attr('class', 'fa fa-external-link');
+                digInLink.append('span').text('Dig In');
+            }
+        }
+
+        return container.node();
+    }
     
+    getDateString(date) {
+        return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+    }
+
     getUrlWithAddedRegion(region) {
 
         const ids = this.params.regions.map(o => o.id);

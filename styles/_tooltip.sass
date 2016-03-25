@@ -1,5 +1,5 @@
+$black-text-color: #222222
 $blue-text-color: #2980b9
-$gray-border-color: #d1d1d1
 $orange-color: #e74c3c
 
 #map
@@ -17,6 +17,12 @@ $orange-color: #e74c3c
     .leaflet-popup-content
         margin: 0
 
+    .fa-times
+        color: $black-text-color
+        cursor: pointer
+        float: right
+        margin: 0.75em 0.75em 0 0
+
     .name
         font-weight: bold
         padding: .75em 1em 0 1em
@@ -30,6 +36,7 @@ $orange-color: #e74c3c
     .tooltip-controls
         font-weight: bold
         padding: 0 1em 0.75em 1em
+        text-align: center
         
         a
             color: $primary-color
