@@ -109,6 +109,24 @@ const MAP_SOURCES = {
         ])
     },
 
+    education_places: {
+        name: 'education_places',
+        domain: DOMAIN,
+        fxf: 'rz8v-4esg',
+        poi: true, // point of interest map
+        variables: ['Head Start Center',
+                    'Public Art', 'Museums and Galleries', 'Libraries', 'Playfields',
+                    'Elementary Schools', 'Middle Schools', 'High Schools', 'Higher Education', 'Alternative Schools',
+                    'Computer/Media Center', 'Environmental Learning  Centers',
+                    'Community Centers', 'Family Support Center', 'Neighborhood Service Centers'].map(classification => {
+            return {
+                name: classification.replace('  ', ' '),
+                metric: nameToURL(classification.replace('  ', ' ')),
+                params: {classification}
+            };
+        })
+    },
+
     /**
      * Corresponds to the subcat, forms URL of the form: /region/0400000US53/Washington/classroom_statistics. Name must
      * match the name param below as well as the vector in data-sources.js.
@@ -212,8 +230,8 @@ const MAP_SOURCES = {
         domain: DOMAIN,
         fxf: 'hpnf-gnfu',
         variables: [
-            ['All', 'Overall Cost of Living'], 
-            ['Goods', 'Cost of Goods'], 
+            ['All', 'Overall Cost of Living'],
+            ['Goods', 'Cost of Goods'],
             ['Rents', 'Cost of Rents'],
             ['Other', 'Other Costs']].map(component => {
             return {

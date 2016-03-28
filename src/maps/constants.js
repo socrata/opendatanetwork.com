@@ -1,5 +1,7 @@
 
 const MapConstants = {
+    GEOCODE_URL: 'https://odn.data.socrata.com/resource/gm3u-gw57.json',
+
     // Maximum number of regions to display
     LIMIT: 5000,
 
@@ -17,7 +19,7 @@ const MapConstants = {
     // http://leafletjs.com/reference.html#map-options
     MAP_OPTIONS: {
         minZoom: 3.0,
-        maxZoom: 12.0,
+        maxZoom: 18.0,
         zoomControl: false,
         attributionControl: false,
         scrollWheelZoom: false
@@ -38,6 +40,9 @@ const MapConstants = {
         paddingTopLeft: [50, 0]
     },
     AUTO_ZOOM_OUT: 1, // amount to zoom out with only one selected region
+
+    POI_ZOOM: 11.0, // auto zoom for point of interest maps
+    POI_WAIT_MS: 100, // amount of time to wait to debounce updates
 
     POINT_RADIUS_SCALE: d3.scale.log,
     POINT_RADIUS_RANGE_METERS: [500, 2000],

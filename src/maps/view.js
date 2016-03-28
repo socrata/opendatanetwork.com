@@ -1,4 +1,93 @@
 
+class POIMapView {
+    constructor(source, regions, params) {
+        this.source = source;
+        this.regions = regions;
+        this.params = params;
+
+        this.model = new POIMapModel(source, source.variables[0]);
+    }
+
+    show(selector) {
+        const container = d3.select(selector)
+            .append('div')
+            .attr('class', 'map-container')
+            .attr('id', MapConstants.CSS_ID);
+
+        const map = L.map(MapConstants.CSS_ID, MapConstants.MAP_OPTIONS);
+        this.map = map;
+        map.setView(MapConstants.INITIAL_CENTER, MapConstants.INITIAL_ZOOM);
+
+        this.zoomControl = new L.Control.Zoom(MapConstants.ZOOM_CONTROL_OPTIONS);
+        if (MapConstants.ZOOM_CONTROL) map.addControl(this.zoomControl);
+
+        map.whenReady(() => {
+            const url = layerID => `https://api.mapbox.com/v4/${layerID}/{z}/{x}/{y}.png?access_token=${MapConstants.MAPBOX_TOKEN}`;
+            const base = L.tileLayer(url(MapConstants.BASE_LAYER_ID)).addTo(map);
+            const pane = map.createPane('labels');
+            const labels = L.tileLayer(url(MapConstants.LABEL_LAYER_ID), {pane}).addTo(map);
+
+            this.zoomToRegions();
+            map.on('moveend', _.debounce(() => this.update(), MapConstants.POI_WAIT_MS));
+
+            this.variableControl = new VariableControl(this.source, this.params, (variable, year) => {
+                this.model = new POIMapModel(this.source, variable);
+                this.update();
+            });
+            this.variableControl.onAdd(map);
+        });
+    }
+
+    zoomToRegions() {
+        if (this.regions.length > 0) {
+            const coordinates = this.regions[0].coordinates.slice(0).reverse();
+            this.map.setView(coordinates, MapConstants.POI_ZOOM);
+        }
+    }
+
+    update() {
+        this.model.inBounds(this.map.getBounds()).then(response => {
+            if (this.markers) this.map.removeLayer(this.markers);
+            this.markers = new L.MarkerClusterGroup();
+
+            response.forEach(point => {
+                const marker = L.marker(point.location.coordinates.reverse());
+
+                const isLink = /^https?:\/\/[^ ]+/.test(point.description);
+                marker.bindPopup(`
+                    <div class="name">
+                        ${point.name}
+                        ${isLink ?
+                            `<a href=${point.description} target="_blank">
+                                <i class="fa fa-external-link"></i>
+                            </a>` : ''}
+                    </div>
+                    <div class="value">
+                        ${isLink ? '' : `${point.description || ''}<br />`}
+                        ${point.classification || ''}
+
+                        <p class="address">
+                            ${point.address || ''}<br />
+                            ${(point.city && point.state) ? `${point.city}, ${point.state}` : ''}<br />
+                        </p>
+                    </div>
+                `, {closeButton: false});
+
+                this.markers.addLayer(marker);
+            });
+
+            this.map.addLayer(this.markers);
+        }, error => {
+            console.error(error);
+        });
+    }
+
+    _geocodeRegion(region) {
+
+
+    }
+}
+
 class MapView {
     constructor(source, regionType, regions, features, params) {
 
@@ -31,8 +120,7 @@ class MapView {
 
         map.addControl(this.legend);
         map.addControl(this.tooltip);
-        if (MapConstants.ZOOM_CONTROL)
-            map.addControl(this.zoomControl);
+        if (MapConstants.ZOOM_CONTROL) map.addControl(this.zoomControl);
         this.variableControl.onAdd(map);
 
         map.whenReady(() => {
@@ -75,7 +163,9 @@ class MapView {
             .catch(error => { throw error; });
 
         new MapSource(this.source).summarize(variable, year, this.regions).then(([summary, meta]) => {
-            d3.select('p#map-summary').text(summary);
+            d3.select('p#map-summary')
+                .text(summary)
+                .style('display', summary === '' ? 'none' : 'block');
         });
     }
 

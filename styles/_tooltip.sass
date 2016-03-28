@@ -13,9 +13,14 @@ $orange-color: #e74c3c
     box-shadow: none
     border: 0
     border-radius: 0
+    word-wrap: break-word
 
     .leaflet-popup-content
         margin: 0
+
+        p
+            font-size: 12px
+            margin: 0
 
     .fa-times
         color: $black-text-color
@@ -31,31 +36,35 @@ $orange-color: #e74c3c
         padding: 0 1em 0.75em 1em
 
         .value-name::after
-            content: ': ' 
+            content: ': '
 
     .tooltip-controls
         font-weight: bold
         padding: 0 1em 0.75em 1em
         text-align: center
-        
+
         a
             color: $primary-color
             cursor: pointer
             padding-right: 1em
-            
+
         i
             padding-right: 0.4em
             font-size: 14px
 
         .fa-plus
             color: $blue-text-color
-       
+
         .fa-location-arrow
             color: $orange-color
-            
+
         .fa-external-link
             position: relative
             top: 2px
+
+    .address
+        padding-top: 4px
+        font-style: italic
 
 .leaflet-popup-tip
     background-color: $background-color

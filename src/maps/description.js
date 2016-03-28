@@ -23,32 +23,36 @@ class MapSource {
 
     summarize(variable, year, regions) {
         return new Promise((resolve, reject) => {
-            this.getData(variable, year, regions).then(data => {
-                if (data && data.length > 0) {
-                    const _descriptions = regions.map(region => {
-                        const rows = _.filter(data, row => row[this.id] === region.id);
-                        if (rows.length === 0) return '';
-                        const row = rows.length > 1 ? _.max(rows, row => parseFloat(row[variable.column])) : rows[0];
-                        if (!(variable.column in row)) return '';
-                        const formatter = variable.descriptionFormat || variable.format || _.identity;
-                        const value = formatter(row[variable.column]);
-                        return `${variable.name.toLowerCase()} of ${region.name} in ${year} was ${value}.`;
-                    }).filter(description => description.length > 0);
+            if (this.source.poi) {
+                resolve(['', '']);
+            } else {
+                this.getData(variable, year, regions).then(data => {
+                    if (data && data.length > 0) {
+                        const _descriptions = regions.map(region => {
+                            const rows = _.filter(data, row => row[this.id] === region.id);
+                            if (rows.length === 0) return '';
+                            const row = rows.length > 1 ? _.max(rows, row => parseFloat(row[variable.column])) : rows[0];
+                            if (!(variable.column in row)) return '';
+                            const formatter = variable.descriptionFormat || variable.format || _.identity;
+                            const value = formatter(row[variable.column]);
+                            return `${variable.name.toLowerCase()} of ${region.name} in ${year} was ${value}.`;
+                        }).filter(description => description.length > 0);
 
-                    if (_descriptions.length > 0) {
-                        const descriptions = _descriptions.map(description => `The ${description}`);
-                        const metas = _descriptions.map((description, index) => {
-                            return `${index === 0 ? 'Maps, charts and data show the' : 'The'} ${description}`;
-                        });
+                        if (_descriptions.length > 0) {
+                            const descriptions = _descriptions.map(description => `The ${description}`);
+                            const metas = _descriptions.map((description, index) => {
+                                return `${index === 0 ? 'Maps, charts and data show the' : 'The'} ${description}`;
+                            });
 
-                        resolve([descriptions, metas].map(sentences => sentences.join(' ')));
+                            resolve([descriptions, metas].map(sentences => sentences.join(' ')));
+                        } else {
+                            resolve(['', '']);
+                        }
                     } else {
                         resolve(['', '']);
                     }
-                } else {
-                    resolve(['', '']);
-                }
-            }, error => resolve(['', '']));
+                }, error => resolve(['', '']));
+            }
         });
     }
 

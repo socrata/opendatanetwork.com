@@ -431,7 +431,6 @@ class RenderController {
 
         allPromise.then(data => {
             try {
-
                 const groups = Sources.groups(params.regions).slice(0).map(group => {
                     return _.extend({}, group, {
                         selected: _.contains(group.datasets.map(dataset => dataset.vector), vector),
@@ -452,10 +451,10 @@ class RenderController {
                 const mapSource = MapSources[vector] || {};
 
                 const metrics = mapSource.variables || [];
-                const metric = _.find(metrics, metric => metric.metric === params.metric) || metrics[0];
+                const metric = _.find(metrics, metric => metric.metric === params.metric) || metrics[0] || {};
 
-                const years = metric.years;
-                const year = _.find(years, year => parseFloat(year) === parseFloat(params.year)) || years[0];
+                const years = metric.years || [];
+                const year = _.find(years, year => parseFloat(year) === parseFloat(params.year)) || years[0] || 2016;
 
                 const templateParams = {
                     params,
@@ -474,6 +473,8 @@ class RenderController {
                     title: searchPageTitle(params, source, metric),
                     css: [
                         '/styles/third-party/leaflet.min.css',
+                        '/styles/third-party/leaflet-markercluster.min.css',
+                        '/styles/third-party/leaflet-markercluster-default.min.css',
                         '/styles/search.css',
                         '/styles/maps.css',
                         '/styles/main.css'
@@ -483,6 +484,7 @@ class RenderController {
                         '//www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart", "table"]}]}',
                         '/lib/third-party/leaflet/leaflet.min.js',
                         '/lib/third-party/leaflet/leaflet-omnivore.min.js',
+                        '/lib/third-party/leaflet/leaflet-markercluster.min.js',
                         '/lib/third-party/colorbrewer.min.js',
                         '/lib/third-party/d3.min.js',
                         '/lib/third-party/d3.promise.min.js',
@@ -630,13 +632,13 @@ function asArray(parameter) {
 function searchPageTitle(params, source, metric) {
     const categories = params.categories.map(capitalize);
     const tags = params.tags.map(capitalize);
-    const dataTypes = _.flatten((metric ? [metric.name] : []).concat(categories, tags));
-    const dataDescription = wordJoin(dataTypes);
+    const dataTypes = _.flatten((metric && metric.name ? [metric.name] : []).concat(categories, tags));
+    const dataDescription = dataTypes.length > 0 ? wordJoin(dataTypes) : 'Data';
 
     const locationDescription = params.regions.length > 0 ?
         `for ${wordJoin(params.regions.map(region => region.name))}` : '';
 
-    if (source && source.name.length > 0) 
+    if (source && source.name.length > 0)
         return `${dataDescription} ${locationDescription} - ${source.name} on the Open Data Network`;
     else if (dataDescription)
         return `${dataDescription} on the Open Data Network`;

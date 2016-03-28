@@ -11,6 +11,39 @@ class TopoModel {
 }
 
 
+class POIMapModel {
+    constructor(source, variable) {
+        this.source = source;
+        this.locationColumn = source.locationColumn || 'location';
+
+        this.variable = variable;
+    }
+
+    /**
+     * Retrieve maximum `limit` data points in the given Leaflet LatLngBounds.
+     */
+    inBounds(bounds, limit) {
+        limit = limit || MapConstants.LIMIT;
+
+        return new Promise((resolve, reject) => {
+            const params = _.extend({
+                '$where': POIMapModel._withinBox(this.locationColumn, bounds),
+                '$limit': limit
+            }, this.variable.params);
+            const url = `https://${this.source.domain}/resource/${this.source.fxf}.json?${$.param(params)}`;
+
+            d3.promise.json(url).then(resolve, reject);
+        });
+    }
+
+    static _withinBox(column, bounds) {
+        const northwest = bounds.getNorthWest();
+        const southeast = bounds.getSouthEast();
+        return `within_box(${column}, ${northwest.lat}, ${northwest.lng}, ${southeast.lat}, ${southeast.lng})`;
+    }
+}
+
+
 class MapModel {
     constructor(source, region, variable, year, regions) {
         this.source = source;
@@ -50,7 +83,7 @@ class MapModel {
             const params = _.extend({}, baseParams, sortParams, variable.params);
             const url = `https://${source.domain}/resource/${source.fxf}.json?${$.param(params)}`;
 
-            function success(results) {
+            $.getJSON(url).then(results => {
                 const regions = results.map(region => {
                     const value = valueFunction(region[variable.column]);
 
@@ -66,13 +99,7 @@ class MapModel {
                 });
 
                 resolve(new MapModel(source, region, variable, year, regions));
-            }
-
-            function failure(error) {
-                throw error;
-            }
-
-            $.getJSON(url).then(success, failure);
+            }, reject);
         });
     }
 

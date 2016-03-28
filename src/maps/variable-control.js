@@ -56,9 +56,14 @@ class VariableControl {
         this.variable = _.find(this.variables, variable => variable.metric === params.metric);
         this.variable = this.variable || this.variables[0];
 
-        params.year = parseInt(params.year);
-        this.year = _.contains(this.variable.years, params.year) ?
-            params.year : _.max(this.variable.years);
+        if (this.variable.years) {
+            params.year = parseInt(params.year);
+            this.year = _.contains(this.variable.years, params.year) ?
+                params.year : _.max(this.variable.years);
+            this.hasYear = true;
+        } else {
+            this.hasYear = false;
+        }
     }
 
     update() {
@@ -104,24 +109,27 @@ class VariableControl {
                 .on('click', variable => {
                     if (this.variable.name !== variable.name) {
                         this.variable = variable;
-                        if (!_.contains(this.variable, this.year)) this.year = _.max(this.variable.years);
+                        if (this.hasYear && !_.contains(this.variables.years, this.year)) this.year = _.max(this.variable.years);
                         this.update();
                         this.updateSelectors();
                     }
                 });
         }
 
-        this.yearContainer = this.container.append('li');
-        this.yearLink = this.yearContainer.append('a');
+        if (this.hasYear) {
+            this.yearContainer = this.container.append('li');
+            this.yearLink = this.yearContainer.append('span');
+        }
 
         this.updateSelectors();
     }
 
     updateYearSelectors(variableChanged) {
-        this.yearLink.text(this.year);
-        if (this.variable.years.length > 1) {
-            this.yearLink.append('i')
-                .attr('class', `fa fa-caret-${variableChanged ? 'down' : 'up'}`);
+        if (this.hasYear) {
+            this.yearLink.text(this.year);
+            if (this.variable.years && this.variable.years.length > 1) {
+                this.yearLink.append('i').attr('class', `fa fa-caret-${variableChanged ? 'down' : 'up'}`);
+            }
         }
     }
 
@@ -129,8 +137,8 @@ class VariableControl {
         this.variableSelector.text(this.variable.name);
         this.updateYearSelectors(true);
 
-        this.yearContainer.select('ul').remove();
-        if (this.variable.years.length > 1) {
+        if (this.hasYear && this.variable.years && this.variable.years.length > 1) {
+            this.yearContainer.select('ul').remove();
             this.yearContainer
                 .append('ul')
                 .attr('class', 'chart-sub-nav-menu')
@@ -147,6 +155,7 @@ class VariableControl {
                         this.updateYearSelectors(false);
                     }
                 });
+
         }
     }
 }
