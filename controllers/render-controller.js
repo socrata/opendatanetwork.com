@@ -6,9 +6,11 @@ const Constants = require('./constants');
 const Request = require('./request');
 const Navigate = require('./navigate');
 
+const ForecastDescriptions = require('../src/forecast-descriptions');
 const MapDescription = require('../src/maps/description');
 const MapSources = require('../src/data/map-sources');
 const Sources = require('../src/data/data-sources');
+const SrcConstants = require('../src/constants');
 
 const _ = require('lodash');
 const htmlencode = require('htmlencode').htmlEncode;
@@ -164,6 +166,7 @@ class RenderController {
                         quickLinks : {
                             categories : data[2],
                             domains : data[3].results,
+                            ref : 'dp',
                             regions : data[4].slice(0, quickLinksCount),
                         },
                         css : [
@@ -209,6 +212,7 @@ class RenderController {
                     quickLinks : {
                         categories : categories.slice(0, quickLinksCount),
                         domains : data[3].results,
+                        ref : 'hp',
                         regions : locations.slice(0, quickLinksCount),
                     },
                     css : [
@@ -290,19 +294,27 @@ class RenderController {
             const datasetsPromise = API.datasets(params);
             const searchPromise = API.searchDatasetsURL(params);
             const locationsPromise = API.locations();
+            const searchResultsRegionsPromise = API.searchResultsRegions(params.q);
             const allPromises = [categoriesPromise, tagsPromise,
                                  domainsPromise, datasetsPromise,
-                                 searchPromise, locationsPromise];
+                                 searchPromise, locationsPromise, 
+                                 searchResultsRegionsPromise];
             const allPromise = Promise.all(allPromises);
 
             allPromise.then(data => {
                 try {
+                    const searchResultsRegions = data[6];
+                    searchResultsRegions.forEach(region => {
+                        region.regionType = SrcConstants.REGION_NAMES[region.type] || '';
+                    });
+
                     const templateParams = {
                         params,
                         hasRegions: params.regions.length > 0,
                         searchPath: req.path,
                         title: searchPageTitle(params),
                         metaSummary : defaultMetaSummary,
+                        searchResultsRegions : searchResultsRegions,
                         css: [
                             '/styles/search.css',
                             '/styles/main.css'
@@ -330,6 +342,7 @@ class RenderController {
                         templateParams.quickLinks = {
                             categories : data[0],
                             domains : data[2].results,
+                            ref : 'sp',
                             regions : data[5].slice(0, quickLinksCount),
                         };
 
@@ -379,7 +392,6 @@ class RenderController {
             });
         }
 
-
         function processRegions(regions) {
             return regions.filter(region => {
                 return !_.contains(uids, region.id);
@@ -389,6 +401,17 @@ class RenderController {
                 return _.extend({}, region, {addURL, navigateURL});
             });
         }
+
+        const _source = Sources.source(vector);
+        const source = _.extend({}, _source, {
+            datasetURL: (_source.datalensFXF ?
+                `https://${_source.domain}/view/${_source.datalensFXF}` :
+                `https://${_source.domain}/dataset/${_source.fxf}`),
+            apiURL: `https://dev.socrata.com/foundry/${_source.domain}/${_source.fxf}`
+        });
+
+        const forecastDescriptions = new ForecastDescriptions(source);
+        const forecastDescriptionsPromise = forecastDescriptions.getPromise(params.regions);
 
         const peersPromise = forRegion(Relatives.peers, true);
         const siblingsPromise = forRegion(Relatives.siblings);
@@ -403,7 +426,7 @@ class RenderController {
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
                              categoriesPromise, tagsPromise, domainsPromise,
                              datasetsPromise, descriptionPromise, searchPromise,
-                             locationsPromise];
+                             locationsPromise, forecastDescriptionsPromise];
         const allPromise = Promise.all(allPromises);
 
         allPromise.then(data => {
@@ -423,13 +446,6 @@ class RenderController {
                             vector: source.vector
                         })
                     });
-                });
-                const _source = Sources.source(vector);
-                const source = _.extend({}, _source, {
-                    datasetURL: (_source.datalensFXF ?
-                        `https://${_source.domain}/view/${_source.datalensFXF}` :
-                        `https://${_source.domain}/dataset/${_source.fxf}`),
-                    apiURL: `https://dev.socrata.com/foundry/${_source.domain}/${_source.fxf}`
                 });
 
                 const mapSource = MapSources[vector] || {};
@@ -511,8 +527,11 @@ class RenderController {
                     templateParams.quickLinks = {
                         categories : data[3],
                         domains : data[5].results,
+                        ref : 'rp',
                         regions : data[9].slice(0, quickLinksCount),
                     };
+
+                    templateParams.forecastDescriptions = data[10];
                 }
 
                 res.render('search.ejs', templateParams);

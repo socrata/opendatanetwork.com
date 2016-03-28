@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/socrata/opendatanetwork.com.svg?branch=master)](https://travis-ci.org/socrata/opendatanetwork.com)
+
 #OpenDataNetwork.com
 
 ##Summary
@@ -24,6 +26,21 @@ The build process is automated using `gulp` and configured with `gulpfile.js`.
  - `gulp build`: build javascript and css
  - `gulp watch` (or `gulp`): rebuild source on change
  - `gulp start`: run local webserver at [localhost:3000](http://localhost:3000)
+ - `gulp test`: run [casperjs](http://casperjs.org/) tests
+
+### Testing
+
+A suite of [casperjs](http://casperjs.org/) tests has been made available in `tests/*`. To create a new test suite, copy one of the files in that directory and add tests for your own page. To run the tests, run `gulp test` from the command line.
+
+Casperjs must be in the path so install with -g:
+
+	npm install -g casperjs
+
+Also needed:
+
+	npm install -g phantomjs
+
+Continuous integration tests are run for each push and pull request on [Travis CI](https://travis-ci.org/socrata/opendatanetwork.com).
 
 ##Source Files
 

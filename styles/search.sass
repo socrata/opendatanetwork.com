@@ -60,19 +60,19 @@ section.results
   background-color: $gray-background-color
   padding: 30px 0
 
-  .datasets-header
+  .search-results-header
     font-size: 14px
 
     .result-count
       color: #2068AE
 
-.datasets-header
+.search-results-header
   padding: 0 30px
 
   h2
     margin: 0
 
-.datasets
+.search-results
   background-color: white
   border: 1px solid $gray-border-color
   list-style-type: none
@@ -84,7 +84,7 @@ section.results
 
   li
     border-top: 1px solid $gray-border-color
-    color: $gray-text-color
+    color: $dark-gray-text-color
     font-size: 14px
     list-style-type: none
     margin: 0
@@ -92,7 +92,7 @@ section.results
     position: relative
 
     .tag
-      color: $gray-text-color
+      color: $dark-gray-text-color
 
     .tagLabel
       font-weight: 600
@@ -131,6 +131,13 @@ section.results
       padding-left: 18px
       padding-right: 18px
 
+.search-results-regions
+    li
+        .regionType
+            color: $dark-gray-text-color
+            margin: 0;
+
+
 /* Charts
 
 .charts-column
@@ -159,7 +166,7 @@ div.map-description
 .dataset-description
   color: $darker-gray-text-color
   margin: 0 35px 35px 35px
-  padding: 24px
+  padding: 20px 35px
   background: #EBEFF0
 
   a
@@ -172,11 +179,13 @@ div.map-description
   .attribution
     display: block
     font-size: 14px
-    margin-top: 16px
     text-align: center
 
   a
     color: $blue-text-color
+
+.chart-description
+  font-weight: 600
 
 .charts-column figure
   height: 320px
@@ -237,7 +246,7 @@ div.map-description
 #similar-regions
   font-size: 14px
   list-style-type: none
-  margin: 0 0 32px
+  margin: 0 0 30px
   padding: 0
 
 #similar-regions li
@@ -260,7 +269,7 @@ div.map-description
 .places-in-region-list
   font-size: 14px
   list-style-type: none
-  margin: 0 0 20px
+  margin: 0
   padding: 0
 
 .places-in-region-list li

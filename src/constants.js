@@ -1,3 +1,4 @@
+'use strict';
 
 const Constants = {
     ROSTER_URL: 'https://federal.demo.socrata.com/resource/bdeb-mf9k.json',
@@ -11,6 +12,18 @@ const Constants = {
     AUTOCOMPLETE_SHOWN_OPTIONS: 5,
 
     PEER_REGIONS: 5,
-    PEER_REGIONS_MAX: 10
+    PEER_REGIONS_MAX: 10,
+
+    REGION_NAMES: {
+        nation: 'Nation',
+        region: 'US Census Region',
+        division: 'US Census Division',
+        state: 'US State',
+        county: 'US County',
+        msa: 'Metropolitan Statistical Area',
+        place: 'City',
+        zip_code: 'ZIP Code'
+    }
 };
 
+if (typeof module !== 'undefined') module.exports = Constants;

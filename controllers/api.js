@@ -38,6 +38,12 @@ class API {
         return Request.getJSON(url);
     }
 
+    static searchResultsRegions(q) {
+        const params = { '$q': q, '$order': 'population desc', '$limit': 5 };
+        const url = Request.buildURL(Constants.SEARCH_RESULTS_REGIONS_URL, params);
+        return Request.getJSON(url);
+    }
+
     static datasets(requestParams) {
         return new Promise((resolve, reject) => {
             const hasRegions = requestParams.regions.length > 0;

@@ -1,13 +1,35 @@
 
 // Autocomplete on datasets, regions, publishers, and categories.
 function multiComplete(inputSelector, resultSelector) {
-    function navigate(path) {
-        window.location.href = path;
+    function navigate(path, params) {
+        params = params || {};
+        const url = `${path}?${$.param(params)}`;
+        window.location.href = url;
     }
 
     const domain = 'odn.data.socrata.com';
 
     const sources = [
+        {
+            name: 'Regions',
+            image: 'fa-globe',
+            domain: domain,
+            fxf: '68ht-6puw',
+            column: 'all',
+            encoded: ['id', 'type', 'population'],
+            select: option => {
+                navigate(`/region/${option.id}/${option.text.replace(/ /g, '_').replace(/\//g, '_').replace(/,/g, '')}`);
+            },
+            sort: option => -parseFloat(option.population),
+            show: (selection, option) => {
+                selection.append('span')
+                    .attr('class', 'name')
+                    .text(option.text)
+                    .append('span')
+                    .attr('id', 'tag')
+                    .text(Constants.REGION_NAMES[option.type] || '');
+            }
+        },
         {
             name: 'Datasets',
             image: 'fa-bar-chart',
@@ -26,24 +48,12 @@ function multiComplete(inputSelector, resultSelector) {
             }
         },
         {
-            name: 'Regions',
-            image: 'fa-globe',
-            domain: domain,
-            fxf: '68ht-6puw',
-            column: 'all',
-            encoded: ['id', 'type', 'population'],
-            select: option => {
-                navigate(`/region/${option.id}/${option.text.replace(/ /g, '_').replace(/\//g, '_').replace(/,/g, '')}`);
-            },
-            sort: option => -parseFloat(option.population)
-        },
-        {
             name: 'Publishers',
             image: 'fa-newspaper-o',
             domain: domain,
             fxf: '8ae5-ghum',
             column: 'domain',
-            select: option => navigate(`/search?domains=${option.text}`)
+            select: option => navigate('/search', {domains: option.text})
         },
         {
             name: 'Categories',
@@ -51,7 +61,7 @@ function multiComplete(inputSelector, resultSelector) {
             domain: domain,
             fxf: '864v-r7tf',
             column: 'category',
-            select: option => navigate(`/search?categories=${option.text}`),
+            select: option => navigate('/search', {categories: option.text}),
             show: (selection, option) => {
                 selection.append('span')
                     .attr('class', 'capitalize')

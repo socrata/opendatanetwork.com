@@ -2,7 +2,7 @@
 
 if (typeof require !== 'undefined') {
     var _ = require('lodash');
-
+    var d3 = require('d3');
     var Requests = require('../../controllers/request');
 }
 
@@ -39,11 +39,20 @@ const ATTRIBUTIONS = {
         name: 'CrimeReports.com',
         url: 'http://crimereports.socrata.com/'
 
+    },
+    iesNces: {
+        name: 'Institute of Education Sciences at National Center for Education Statistics',
+        url: 'http://nces.ed.gov/ccd/elsi'
+
     }
 };
 
 const ALL_REGIONS = ['nation', 'region', 'division', 'state', 'county',
                      'msa', 'place', 'zip_code'];
+
+function _getParams(component) {
+    return { component };
+}
 
 function _toPercent(column) {
     return rows => {
@@ -193,6 +202,61 @@ const SOURCES = [
                 hasAutosuggest: false,
                 searchTerms: ['college', 'education', 'school', 'university', 'instruction', 'teaching', 'teacher', 'professor', 'student', 'graduation', 'scholastic', 'matriculation'],
                 charts: []
+            },
+            {
+                vector: 'classroom_statistics',
+                name: 'Classroom Statistics',
+                attribution: ATTRIBUTIONS.iesNces,
+                domain: ODN_DOMAIN,
+
+                /**
+                 * NBE 4x4 of public dataset on odn.data.socrata.com
+                 */
+                fxf: 'kx62-ayme',
+
+                datalensFXF: '6xsy-aftn',
+
+                regions: ['state', 'county'],
+
+                /**
+                 * Terms used to formulate search query to populate datasets. Choose such that subcat, i.e. Classroom
+                 * statistics is well represented, but if recall is a problem, include generalizing terms to capture
+                 * the category, e.g. Education.
+                 */
+                searchTerms: ['class size', 'pupil teacher ratio', 'student teacher ratios', 'student teacher ratio', 'college', 'education', 'school', 'university', 'instruction', 'teaching', 'teacher', 'professor', 'student', 'scholastic', 'matriculation'],
+
+                charts: [
+                    {
+                        name: 'Student Teacher Ratio',
+                        data: [
+                            /**
+                             * X axis variable definition.
+                             */
+                            {
+                                /**
+                                 * Corresponds to the column in the source dataset containing the variable value.
+                                 */
+                                column: 'year',
+
+                                label: 'Year',
+                                type: 'string'
+                            },
+                            {
+                                column: 'value',
+                                label: 'Student Teacher Ratios',
+                                format: { pattern: '###.##' }
+                            }
+                        ],
+                        chart: 'line',
+                        forecast: {
+                           type: 'linear',
+                           steps: 7
+                         },
+                         options: {
+                            height: 300
+                        }
+                    }
+                ]
             }
         ]
     },
@@ -541,10 +605,14 @@ const SOURCES = [
                         ],
                         chart: 'table'
                     }
-                    ].concat(['All', 'Rents', 'Goods', 'Other'].map(component => {
+                    ].concat([
+                        ['All', 'Overall Cost of Living'],
+                        ['Goods', 'Cost of Goods'],
+                        ['Rents', 'Cost of Rents'],
+                        ['Other', 'Other Costs']].map(component => {
                     return {
-                        name: `${component}`,
-                        params: {component},
+                        name: component[1],
+                        params: _getParams(component[0]),
                         data: [
                             {
                                 column: 'year',
@@ -553,7 +621,7 @@ const SOURCES = [
                             },
                             {
                                 column: 'index',
-                                label: 'Index',
+                                label: component[1],
                                 format: { pattern: '#.#' }
                             }
                         ],
@@ -1088,7 +1156,7 @@ function _crimeTransform(div, column) {
              ${availableForAll.join(', ')}.` :
             `Since there are no crime types for which every selected region has data,
              data for all crime types is shown.`;
-        const descriptionSel = d3.select(`div#${div} > p.chart-description`);
+        var descriptionSel = d3.select(`div#${div} p.chart-description`);
         descriptionSel.text(`${descriptionSel.text()} ${description}`);
         if (availableForAll.length < 1) availableForAll = _.union.apply({}, availableTypes);
 

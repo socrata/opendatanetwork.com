@@ -31,7 +31,7 @@ class Tab {
         });
 
         this.callback(regions);
-    }
+    } 
 
     clearCharts() {
         this.charts.forEach(chart => chart.clearChart());

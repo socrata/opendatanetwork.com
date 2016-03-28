@@ -1,3 +1,4 @@
+'use strict';
 
 class Forecast {
     static repeat(value, n) {
@@ -18,3 +19,4 @@ class Forecast {
     }
 }
 
+if (typeof module !== 'undefined') module.exports = Forecast;
