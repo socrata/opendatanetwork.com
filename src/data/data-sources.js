@@ -205,7 +205,7 @@ const SOURCES = [
 
                 datalensFXF: '6xsy-aftn',
 
-                regions: ['state', 'county'],
+                regions: ['state', 'county', 'msa'],
 
                 /**
                  * Terms used to formulate search query to populate datasets. Choose such that subcat, i.e. Classroom
