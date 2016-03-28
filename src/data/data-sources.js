@@ -44,6 +44,10 @@ const ATTRIBUTIONS = {
         name: 'Institute of Education Sciences at National Center for Education Statistics',
         url: 'http://nces.ed.gov/ccd/elsi'
 
+    },
+    hhs: {
+        name: 'U.S. Department of Health and Human Services',
+        url: 'http://www.hhs.gov/'
     }
 };
 
@@ -195,9 +199,15 @@ const SOURCES = [
             {
                 vector: 'education_places',
                 name: 'Education Places',
-                attribution: ATTRIBUTIONS.acs,
+                attribution: ATTRIBUTIONS.hhs,
                 domain: ODN_DOMAIN,
                 fxf: 'uf4m-5u8r',
+                datalensFXF: '72qd-7s2t',
+                description: `
+                    The above map shows schools, libraries, parks, and other education-related
+                    places near the selected city.
+                    Head Start Centers are available for the entire nation,
+                    but other types of places are only available for some cities.`,
                 regions: ['place'],
                 hasAutosuggest: false,
                 searchTerms: ['college', 'education', 'school', 'university', 'instruction', 'teaching', 'teacher', 'professor', 'student', 'graduation', 'scholastic', 'matriculation'],
