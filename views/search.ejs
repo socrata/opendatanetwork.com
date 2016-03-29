@@ -64,7 +64,7 @@ var _searchURL = "<%- searchDatasetsURL %>";
                             <div class="dataset-description">
 
                             <% if (chart.description) { %>
-                                <p class="chart-description"><%= chart.description %></p><br>
+                                <p class="chart-description"><%- chart.description %></p><br>
                             <% } %>
 
                             <% if (chart.forecast) {
