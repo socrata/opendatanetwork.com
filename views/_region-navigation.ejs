@@ -6,19 +6,17 @@
             <% include _search-tokens %>
         </div>
 
-    <% if (typeof peers != 'undefined') { %>
         <h2>Compare this Data</h2>
         <div class="add-region">
             <i class="fa fa-plus"></i><input class="add-region-input" type="text" placeholder="Add Location">
             <ul class="add-region-results" style="display: none;"></ul>
         </div>
-        <% if (peers && peers.length > 0) { %>
+    <% if (peers && peers.length > 0) { %>
         <ul id="similar-regions">
         <% peers.forEach(function(region) { %>
             <li><a href=<%= region.addURL %><%- (params.regions.length >= 2) ? ' rel="nofollow"' : '' %>><%= region.name %> <i class="fa fa-plus"></i></a></li>
         <% }); %>
         </ul>
-        <% } %>
     <% } %>
 
         <%
