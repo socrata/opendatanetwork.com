@@ -1,7 +1,8 @@
 
 class SearchPageController {
-    constructor(params) {
+    constructor(params, searchResultsRegions) {
         this.params = params;
+        this.searchResultsRegions = searchResultsRegions;
         this.fetching = false;
         this.fetchedAll = false;
         const self = this;
@@ -10,6 +11,13 @@ class SearchPageController {
             console.log(_searchURL);
             console.log(_searchURL.replace(/[!'()*]/g, escape));
             console.log(decodeURI(_searchURL.split('?')[1]));
+        }
+
+        // Search results regions
+        //
+        if (this.params.regions.length == 0) {
+            this.renderSearchResultsRegions();
+            window.onresize = () => { this.renderSearchResultsRegions(); };
         }
 
         // Refine menus
@@ -149,6 +157,98 @@ class SearchPageController {
         });
 
         this.subMenus();
+    }
+
+    renderSearchResultsRegions() {
+
+        const columns = this.getColumns();
+        const dataTable = this.getDataTable(this.searchResultsRegions, columns);
+        const container = d3.select('.search-results-regions');
+
+        container.html('');
+
+        dataTable.forEach(dataRow => {
+
+            var row = container.append('div').attr('class', 'search-results-regions-row');
+
+            dataRow.forEach(region => {
+
+                var cell = row.append('div');
+                cell.append('h2')
+                    .append('a')                    
+                    .attr('href', this.getRegionUrl(region))
+                    .text(region.name);
+
+                if (columns == 3)
+                    cell.attr('class', 'search-results-regions-cell w33');
+                else if (columns == 2)
+                    cell.attr('class', 'search-results-regions-cell w50');
+                else
+                    cell.attr('class', 'search-results-regions-cell');
+
+                cell.append('div')
+                    .attr('class', 'regionType')
+                    .text(region.regionType);
+            });
+        });
+    }
+
+    getColumns() {
+
+        const regionCount = this.searchResultsRegions.length;
+        const width = $(document).width();
+        const widthForThree = 1200;
+        const widthForTwo = 800;
+
+        var columns;
+
+        if (regionCount >= 3) {
+
+            if (width >= widthForThree)
+                columns = 3;
+            else if (width >= widthForTwo)
+                columns = 2;
+            else 
+                columns = 1;
+        }
+        else if (regionCount >= 2) {
+
+            columns = (width >= widthForTwo) ? 2 : 1;
+        }
+        else {
+
+            columns = 1;
+        }
+
+        return columns;
+    }
+    
+    getRegionUrl(region) {
+        
+        const segment = this.regionToUrlSegment(region.name);
+        return `/region/${region.id}/${segment}`;
+    }
+    
+    regionToUrlSegment(name) {
+        return name.replace(/ /g, '_').replace(/\//g, '_').replace(/,/g, '');
+    }
+    
+    getDataTable(source, columns) {
+        
+        const table = [];
+        var row;
+
+        source.forEach((item, index) => {
+            
+            if ((index % columns) == 0) {
+                row =[];
+                table.push(row);
+            }
+            
+            row.push(item);
+        });
+        
+        return table;
     }
 
     attachCategoriesClickHandlers() {

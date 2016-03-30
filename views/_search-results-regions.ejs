@@ -1,9 +1,3 @@
-<% searchResultsRegions.forEach(function(region) { %>
-    <li>
-        <i class="fa fa-globe"></i>
-        <h2>
-            <a href="/region/<%= region.id %>/<%= regionToUrlSegment(region.name) %>"><%= region.name %></a>
-        </h2>
-        <div class="regionType"><%= region.regionType %></div>
-    </li>
-<% }); %>
+<div class="search-results">
+    <div class="search-results-regions"></div>
+</div>

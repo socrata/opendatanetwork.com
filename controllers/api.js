@@ -39,7 +39,7 @@ class API {
     }
 
     static searchResultsRegions(q) {
-        const params = { '$q': q, '$order': 'population desc', '$limit': 5 };
+        const params = { '$q': q, '$order': 'population desc', '$limit': 6 };
         const url = Request.buildURL(Constants.SEARCH_RESULTS_REGIONS_URL, params);
         return Request.getJSON(url);
     }

@@ -21,6 +21,7 @@ $orange-color: #ee3b3b
 @import refine-by
 @import region-navigation
 @import search-bar
+@import search-results-regions
 @import search-tokens
 @import compare-this-data-menu
 @import current-category-info-box
@@ -75,6 +76,7 @@ section.results
 .search-results
   background-color: white
   border: 1px solid $gray-border-color
+  clear: both
   list-style-type: none
   margin: 30px
   padding: 0
@@ -111,6 +113,7 @@ section.results
 
     p
       color: $black-text-color
+      word-break: break-word
 
     .fa
       color: $blue-text-color

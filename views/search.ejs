@@ -3,12 +3,9 @@
 
 <script>
 var _params = <%- JSON.stringify(params) %>;
+var _searchResultsRegions = <%- (typeof searchResultsRegions === 'undefined') ? '[]' : JSON.stringify(searchResultsRegions) %>;
 var _searchURL = "<%- searchDatasetsURL %>";
 </script>
-
-<% if (!hasRegions) { %>
-    <% include _refine-by %>
-<% } %>
 
 <section class="results">
     <% if (hasRegions) { %>
@@ -123,7 +120,6 @@ var _searchURL = "<%- searchDatasetsURL %>";
                             <%= regionNames %>
                         </h2>
                     </div>
-
                     <ul class="search-results">
                         <% include _search-results-regular %>
                     </ul>
@@ -144,11 +140,11 @@ var _searchURL = "<%- searchDatasetsURL %>";
             </div>
           <% } %>
           <% if (searchResultsRegions && (searchResultsRegions.length > 0)) { %>
-            <ul class="search-results search-results-regions">
-                <% include _search-results-regions %>
-            </ul>
+            <% include _search-results-regions-bar %>
+            <% include _search-results-regions %>
           <% } %>
           <% if (searchResults && searchResults.resultSetSize > 0) { %>
+            <% include _refine-by %>
             <ul class="search-results datasets">
                 <% include _search-results-regular %>
             </ul>
