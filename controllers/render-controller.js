@@ -359,12 +359,29 @@ class RenderController {
                         };
                     }
 
+                    // If only one region result and no search results, just redirect to the region page.
+                    //
+                    if ((templateParams.searchResultsRegions.length == 1) &&
+                        (templateParams.searchResults.results) && 
+                        (templateParams.searchResults.results.length == 0)) {
+
+                        const region = templateParams.searchResultsRegions[0];
+                        const segment = this.regionToUrlSegment(region.name);
+
+                        res.redirect(301, `/region/${region.id}/${segment}`);
+                        return;
+                    }
+
                     res.render('search.ejs', templateParams);
                 } catch (error) {
                     RenderController.error(req, res)(error);
                 }
             }, RenderController.error(req, res));
         }
+    }
+
+    static regionToUrlSegment(name) {
+        return name.replace(/ /g, '_').replace(/\//g, '_').replace(/,/g, '');
     }
 
     static _regions(req, res, params) {
