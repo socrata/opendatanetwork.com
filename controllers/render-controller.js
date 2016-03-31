@@ -265,12 +265,17 @@ class RenderController {
     static searchWithVector(req, res) {
         const vector = req.params.vector;
 
+        function toDefaultVector() {
+            const vector = Sources.defaultVector().vector;
+            res.redirect(req.url.split('/').slice(0, 4).concat([vector]).join('/'));
+        }
+
         if (vector === '' || Sources.has(vector)) {
             RenderController._parameters(req, res).then(params => {
                 const regions = params.regions;
 
                 if (!Sources.supportsVector(vector, regions)) {
-                    RenderController.error(req, res, 404, `"${vector}" data not available for ${regions.map(region => region.name).join(' and ')}`)();
+                    toDefaultVector();
                 } else {
                     try {
                         RenderController._search(req, res, params);
@@ -280,9 +285,7 @@ class RenderController {
                 }
             }, RenderController.error(req, res));
         } else {
-            // if the vector is invalid, redirect to the default vector
-            const vector = Sources.defaultVector().vector;
-            res.redirect(req.url.split('/').slice(0, 4).concat([vector]).join('/'));
+            toDefaultVector();
         }
     }
 
