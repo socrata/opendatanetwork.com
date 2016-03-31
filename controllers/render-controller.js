@@ -280,7 +280,9 @@ class RenderController {
                 }
             }, RenderController.error(req, res));
         } else {
-            RenderController.error(req, res, 404, `Vector "${vector}" not found`)();
+            // if the vector is invalid, redirect to the default vector
+            const vector = Sources.defaultVector().vector;
+            res.redirect(req.url.split('/').slice(0, 4).concat([vector]).join('/'));
         }
     }
 
@@ -297,14 +299,14 @@ class RenderController {
             const searchResultsRegionsPromise = API.searchResultsRegions(params.q);
             const allPromises = [categoriesPromise, tagsPromise,
                                  domainsPromise, datasetsPromise,
-                                 searchPromise, locationsPromise, 
+                                 searchPromise, locationsPromise,
                                  searchResultsRegionsPromise];
             const allPromise = Promise.all(allPromises);
 
             allPromise.then(data => {
                 try {
                     var searchResultsRegions;
- 
+
                     if (params.q == '') {
                         searchResultsRegions = [];
                     }

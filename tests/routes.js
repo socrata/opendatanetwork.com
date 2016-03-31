@@ -24,6 +24,8 @@ casper.test.begin('routes', function testRoutes(test) {
     urlExists('/');
     redirects('/region/0400000US53/', '/region/0400000US53/Washington/');
     urlExists('/region/0400000US53/Washington/');
+    redirects('/region/0400000US53/Washington/invalid-vector/', '/region/0400000US53/Washington/population');
+    redirects('/region/0400000US53/Washington/invalid-vector/invalid-variable/invalid-year', '/region/0400000US53/Washington/population');
 
     casper.run(function() {
         test.done();
