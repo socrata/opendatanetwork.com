@@ -25,14 +25,14 @@
     <label class="search-results-header-label">
     <% if (params.q.length > 0) { %>
           <% if (searchResults.results.length > 0) { %>
-            <%= searchResults.resultSetSizeString %> results for "<%= params.q %>"
+            <%= searchResults.resultSetSizeString %> datasets for "<%= params.q %>"
           <% } else { %>
-            No results for "<%= params.q %>"
+            No datasets for "<%= params.q %>"
           <% } %>
     <% } else { %>
         <% if (searchResults.results.length > 0) { %>
           <% if (params.regions.length > 0) { %>
-            <%= searchResults.resultSetSizeString %> results for <%= source.tabName %>
+            <%= searchResults.resultSetSizeString %> datasets for <%= source.tabName %>
           <% } else { %>
             <%= searchResults.resultSetSizeString %> results
           <% } %>
