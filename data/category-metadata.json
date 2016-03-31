@@ -1,102 +1,70 @@
 {
-    "default" : {
-        "showcase" : [
-            {
-                "image" : "v3-showcase-1.png",
-                "publisher" : "Some Publisher",
-                "title" : "Ornare Ullamcorper Mollis Pharetra",
-                "url" : ""
-            },
-            {
-                "image" : "v3-showcase-2.png",
-                "publisher" : "Some Publisher",
-                "title" : "Ornare Ullamcorper Mollis Pharetra",
-                "url" : ""
-            },
-            {
-                "image" : "v3-showcase-3.png",
-                "publisher" : "Some Publisher",
-                "title" : "Ornare Ullamcorper Mollis Pharetra",
-                "url" : ""
-            },
-            {
-                "image" : "v3-showcase-4.png",
-                "publisher" : "Some Publisher",
-                "title" : "Ornare Ullamcorper Mollis Pharetra",
-                "url" : ""
-            }
-        ]
-    },
     "health" : {
         "icon" : "fa-heart",
-        "description" : "The Health category contains data, from across the Open Data Network&trade; of publishers, related to health, hospital locations, infectious diseases, restaurants, deaths, and vaccination.",
-        "showcase" : [
-            {
-                "image" : "v3-showcase-4.png",
-                "publisher" : "Some Publisher",
-                "title" : "Ornare Ullamcorper Mollis Pharetra",
-                "url" : ""
-            }
-        ]
+        "description" : "The Health category contains data, from across the Open Data Network&trade; of publishers, related to health, hospital locations, infectious diseases, restaurants, deaths, and vaccination."
     },
     "transportation" : {
         "icon" : "fa-car",
-        "description" : "The Transportation category contains data, from across the Open Data Network&trade; of publishers, related to transportation, taxis, uberlyft, bikes, parking, buses, road congestion, road repair, ferries, bridges, rideshare and tolls.",
-        "showcase" : []
+        "description" : "The Transportation category contains data, from across the Open Data Network&trade; of publishers, related to transportation, taxis, uberlyft, bikes, parking, buses, road congestion, road repair, ferries, bridges, rideshare and tolls."
     },
     "economy" : {
         "icon" : "fa-line-chart",
-        "description" : "The Economy category contains data, from across the Open Data Network&trade; of publishers, related to the economy, permits, licenses, business locations, and jobs.",
-        "showcase" : []
+        "description" : "The Economy category contains data, from across the Open Data Network&trade; of publishers, related to the economy, permits, licenses, business locations, and jobs."
     },
     "finance" : {
         "icon" : "fa-money",
-        "description" : "The Finance category contains data, from across the Open Data Network&trade; of publishers, related to finance, government spending, salaries, budgets, revenues, and taxes.",
-        "showcase" : []
+        "description" : "The Finance category contains data, from across the Open Data Network&trade; of publishers, related to finance, government spending, salaries, budgets, revenues, and taxes."
     },
     "geographical & map" : {
         "icon" : "fa-globe",
-        "description" : "The Geographical &amp; Map category contains data, from across the Open Data Network&trade; of publishers, related to transporation, politices, finance, business, health, and the environment.",
-        "showcase" : []
+        "description" : "The Geographical &amp; Map category contains data, from across the Open Data Network&trade; of publishers, related to transporation, politices, finance, business, health, and the environment."
     },
     "social services" : {
         "icon" : "fa-child",
-        "description" : "The Social Services category contains data, from across the Open Data Network&trade; of publishers, related to social services, homelessness, child protective services, rehab, welfare, and 311 data.",
-        "showcase" : []
+        "description" : "The Social Services category contains data, from across the Open Data Network&trade; of publishers, related to social services, homelessness, child protective services, rehab, welfare, and 311 data."
     },
     "environment" : {
         "icon" : "fa-leaf",
-        "description" : "The Environment category contains data, from across the Open Data Network&trade; of publishers, related to the environment, environmental waste, air, energy, climate, and recycling.",
-        "showcase" : []
+        "description" : "The Environment category contains data, from across the Open Data Network&trade; of publishers, related to the environment, environmental waste, air, energy, climate, and recycling."
     },
     "politics" : {
         "icon" : "fa-database",
-        "description" : "The Politics category contains data, from across the Open Data Network&trade; of publishers, related to politics.",
-        "showcase" : []
+        "description" : "The Politics category contains data, from across the Open Data Network&trade; of publishers, related to politics."
     },
     "public safety" : {
         "icon" : "fa-shield",
-        "description" : "The Public Safety category contains data, from across the Open Data Network&trade; of publishers, related to public safety, 911 data, ambulance, emergency, fire, police, prison, evacuation, arrests, and crime.",
-        "showcase" : []
+        "description" : "The Public Safety category contains data, from across the Open Data Network&trade; of publishers, related to public safety, 911 data, ambulance, emergency, fire, police, prison, evacuation, arrests, and crime."
     },
     "housing & development" : {
         "icon" : "fa-building",
-        "description" : "The Housing &amp; Development category contains data, from across the Open Data Network&trade; of publishers, related to housing, construction, zoning, building info, and land use.",
-        "showcase" : []
+        "description" : "The Housing &amp; Development category contains data, from across the Open Data Network&trade; of publishers, related to housing, construction, zoning, building info, and land use."
     },
     "infrastructure" : {
         "icon" : "fa-road",
-        "description" : "The Infrastructure category contains data, from across the Open Data Network&trade; of publishers, related to infrastructure, streets, 311 data, parking, and construction.",
-        "showcase" : []
+        "description" : "The Infrastructure category contains data, from across the Open Data Network&trade; of publishers, related to infrastructure, streets, 311 data, parking, and construction."
     },
     "education" : {
         "icon" : "fa-graduation-cap",
-        "description" : "The Education category contains data, from across the Open Data Network&trade; of publishers, related to education, school locations, school exams, school performance, and after-school programs.",
-        "showcase" : []
+        "description" : "The Education category contains data, from across the Open Data Network&trade; of publishers, related to education, school locations, school exams, school performance, and after-school programs."
     },
     "recreation" : {
         "icon" : "fa-ticket",
-        "description" : "The Recreation category contains data, from across the Open Data Network&trade; of publishers, related to recreation, parks, art, boating, and libraries.",
-        "showcase" : []
+        "description" : "The Recreation category contains data, from across the Open Data Network&trade; of publishers, related to recreation, parks, art, boating, and libraries."
+    },
+    "library" : {
+        "icon" : "fa-book",
+        "description" : ""
+    },
+    "construction" : {
+        "icon" : "fa-building",
+        "description" : ""
+    },
+    "crime" : {
+        "icon" : "fa-link",
+        "description" : ""
+    },
+    "business" : {
+        "icon" : "fa-usd",
+        "description" : ""
     }
 }

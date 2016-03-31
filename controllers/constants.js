@@ -20,7 +20,6 @@ const Constants = {
     DEFAULT_METADATA: {
         description: '',
         icon: 'fa-database',
-        showcase: []
     }
 };
 
