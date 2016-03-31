@@ -368,7 +368,7 @@ class RenderController {
                         const region = templateParams.searchResultsRegions[0];
                         const segment = this.regionToUrlSegment(region.name);
 
-                        res.redirect(301, `/region/${region.id}/${segment}`);
+                        res.redirect(302, `/region/${region.id}/${segment}`);
                         return;
                     }
 
