@@ -303,10 +303,17 @@ class RenderController {
 
             allPromise.then(data => {
                 try {
-                    const searchResultsRegions = data[6];
-                    searchResultsRegions.forEach(region => {
-                        region.regionType = SrcConstants.REGION_NAMES[region.type] || '';
-                    });
+                    var searchResultsRegions;
+ 
+                    if (params.q == '') {
+                        searchResultsRegions = [];
+                    }
+                    else {
+                        searchResultsRegions = data[6];
+                        searchResultsRegions.forEach(region => {
+                            region.regionType = SrcConstants.REGION_NAMES[region.type] || '';
+                        });
+                    }
 
                     const templateParams = {
                         params,

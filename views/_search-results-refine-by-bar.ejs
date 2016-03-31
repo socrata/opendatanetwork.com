@@ -21,22 +21,24 @@
 
     <label class="refine-by-label">Refine by:</label>
 
+    <i class="fa fa-bar-chart search-results-header-icon"></i>
+    <label class="search-results-header-label">
     <% if (params.q.length > 0) { %>
           <% if (searchResults.results.length > 0) { %>
-            <strong><%= searchResults.resultSetSizeString %></strong> results for <strong>"<%= params.q %>"</strong>
+            <%= searchResults.resultSetSizeString %> results for "<%= params.q %>"
           <% } else { %>
-            <strong>No results for "<%= params.q %>"</strong>
+            No results for "<%= params.q %>"
           <% } %>
     <% } else { %>
         <% if (searchResults.results.length > 0) { %>
           <% if (params.regions.length > 0) { %>
-            <strong><%= searchResults.resultSetSizeString %></strong> results for
-            <strong><%= source.tabName %></strong>
+            <%= searchResults.resultSetSizeString %> results for <%= source.tabName %>
           <% } else { %>
-            <strong><%= searchResults.resultSetSizeString %></strong> results
+            <%= searchResults.resultSetSizeString %> results
           <% } %>
         <% } %>
     <% } %>
+    </label>
 
     <% include _search-tokens %>
 </section>

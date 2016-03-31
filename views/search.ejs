@@ -128,6 +128,14 @@ var _searchURL = "<%- searchDatasetsURL %>";
         </div>
     <% } else { %>
         <div class="search-results-regular-column">
+
+          <% if (searchResultsRegions && (searchResultsRegions.length > 0)) { %>
+            <% include _search-results-regions-bar %>
+            <% include _search-results-regions %>
+          <% } %>
+          <% if (searchResults && searchResults.resultSetSize > 0) { %>
+            <% include _search-results-refine-by-bar %>
+
           <% if (typeof currentCategory != 'undefined' && currentCategory && currentCategory.metadata && currentCategory.metadata.description) { %>
             <div class="current-category">
                 <a class="fa fa-close"></a>
@@ -139,12 +147,7 @@ var _searchURL = "<%- searchDatasetsURL %>";
                 <strong><%= currentTag.tag %></strong> - <%- currentTag.metadata.description %>
             </div>
           <% } %>
-          <% if (searchResultsRegions && (searchResultsRegions.length > 0)) { %>
-            <% include _search-results-regions-bar %>
-            <% include _search-results-regions %>
-          <% } %>
-          <% if (searchResults && searchResults.resultSetSize > 0) { %>
-            <% include _refine-by %>
+
             <ul class="search-results datasets">
                 <% include _search-results-regular %>
             </ul>
@@ -160,8 +163,8 @@ var _searchURL = "<%- searchDatasetsURL %>";
 </html>
 
 <%
-
 function getSearchPageUrl(source) {
+  
     const vector = source.vector;
 
     var url;
@@ -224,12 +227,4 @@ function getSearchQueryString() {
 
     return (parts.length > 0) ? '?' + parts.join('&') : '';
 };
-
-function getSelectedVector(vector) {
-
-    if ((params.vector == vector) || ((params.vector == '') && (vector == 'population')))
-        return ' class="selected"';
-    else
-        return '';
-}
 %>

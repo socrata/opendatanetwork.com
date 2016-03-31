@@ -162,7 +162,7 @@ class SearchPageController {
     renderSearchResultsRegions() {
 
         const columns = this.getColumns();
-        const dataTable = this.getDataTable(this.searchResultsRegions, columns);
+        const dataTable = this.getDataTable(this.searchResultsRegions, columns).slice(0, 2);
         const container = d3.select('.search-results-regions');
 
         container.html('');
