@@ -138,7 +138,7 @@ class MapView {
 
         map.on('click', (e) => {
             if (e.originalEvent.srcElement.id == 'leaflet-map')
-                this.closePopups();
+                this.closeUserOpenedPopups();
         });
     }
 
@@ -184,6 +184,9 @@ class MapView {
     }
 
     updateFeatures(model, scale) {
+
+        this.closeUserOpenedPopups();
+
         this.features.eachLayer(layer => {
             const region = model.regionById.get(layer.feature.id);
 
@@ -214,7 +217,7 @@ class MapView {
                 layer.on({
                     click: (map) => {
 
-                        this.closePopups();
+                        this.closeUserOpenedPopups();
 
                         if (!(region.id in this._popups)) {
                             const showDigIn = (this.params.vector == 'city_crime');
@@ -306,7 +309,7 @@ class MapView {
         return s.replace(/,/g, '').replace(/[ \/]/g, '_');
     }
 
-    closePopups() {
+    closeUserOpenedPopups() {
         _.values(this._popups).forEach(popup => {
             if (_.isUndefined(popup.originalRegion))
                 this.map.closePopup(popup);
