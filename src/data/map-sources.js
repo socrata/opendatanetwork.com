@@ -187,7 +187,7 @@ const MAP_SOURCES = {
                  * inside the map, and the summary sentence above the map, e.g. The Student Teacher Ratio of Washington
                  * was blah.
                  */
-                name: 'Instruction Salary Dollars',
+                name: 'Total Instruction Related Salaries in Dollars',
 
                 /**
                  * Corresponds to the column in the source dataset containing the variable value.
@@ -257,7 +257,7 @@ const MAP_SOURCES = {
                  * inside the map, and the summary sentence above the map, e.g. The Student Teacher Ratio of Washington
                  * was blah.
                  */
-                name: 'Administration Salary Dollars',
+                name: 'Total Administration Salaries in Dollars',
 
                 /**
                  * Corresponds to the column in the source dataset containing the variable value.
@@ -327,7 +327,7 @@ const MAP_SOURCES = {
                  * inside the map, and the summary sentence above the map, e.g. The Student Teacher Ratio of Washington
                  * was blah.
                  */
-                name: 'Capital Expenditure Dollars',
+                name: 'Total Capital Expenditures in Dollars',
 
                 /**
                  * Corresponds to the column in the source dataset containing the variable value.

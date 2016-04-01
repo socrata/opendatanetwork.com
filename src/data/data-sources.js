@@ -225,7 +225,12 @@ const SOURCES = [
                 fxf: 'nxzi-u9nr',
 
                 datalensFXF: '55b9-6f2w',
-
+                description: `
+                    All expenditures data are in US$. Year values represent the end of a school year; for example, if the
+                    school year was 2004-2005, the listed year will be 2005. Normalization is applied against the total
+                    student enrollment for that year; for example, the capital expenditures per student takes the total
+                    capital expenditures ending in the given school year, and divides by the total enrollees in that
+                    given year, with the result rounded to the nearest integer.`,
                 regions: ['state'],
 
                 /**
@@ -234,7 +239,9 @@ const SOURCES = [
                  * the category, e.g. Education.
                  */
                 searchTerms: ['school budget', 'school funding', 'school construction', 'teacher salaries', 'university salaries',
-                'college budget', 'college funding', 'college salaries', 'university budget', 'university funding'],
+                'college budget', 'college funding', 'college salaries', 'university budget', 'university funding',
+                'college', 'education', 'school', 'university', 'instruction', 'teaching', 'teacher', 'professor',
+                'student', 'graduation', 'scholastic', 'matriculation'],
 
                 charts: [
                     {
