@@ -224,7 +224,7 @@ const SOURCES = [
                  */
                 fxf: 'nxzi-u9nr',
 
-                datalensFXF: '6xsy-aftn',
+                datalensFXF: '55b9-6f2w',
 
                 regions: ['state'],
 
