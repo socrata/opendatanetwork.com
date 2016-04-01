@@ -408,7 +408,7 @@ class RenderController {
             return regions.filter(region => {
                 return !_.contains(uids, region.id);
             }).slice(0, Constants.N_RELATIVES).map(region => {
-                const navigateURL = Navigate.region(region);
+                const navigateURL = Navigate.url(_.extend({}, params, {regions: [region]}));
                 const addURL = Navigate.url(_.extend({}, params, {regions: params.regions.concat([region])}));
                 return _.extend({}, region, {addURL, navigateURL});
             });
