@@ -131,6 +131,238 @@ const MAP_SOURCES = {
      * Corresponds to the subcat, forms URL of the form: /region/0400000US53/Washington/classroom_statistics. Name must
      * match the name param below as well as the vector in data-sources.js.
      */
+    education_expenditures: {
+        /**
+        * Corresponds to the subcat, forms URL of the form: /region/0400000US53/Washington/classroom_statistics
+        * Note: name must match the above node name. @TODO Fix this dependency
+        */
+        name: 'education_expenditures',
+
+        domain: DOMAIN,
+
+        /**
+         * NBE 4x4 of public dataset on odn.data.socrata.com
+         */
+        fxf: 'nxzi-u9nr',
+
+        variables: [
+            {
+                /**
+                 * Corresponds to the visually displayed subsubcat defined above. Used to populate the menu, mouseovers
+                 * inside the map, and the summary sentence above the map, e.g. The Student Teacher Ratio of Washington
+                 * was blah.
+                 */
+                name: 'Instruction Salary Dollars Per Student',
+
+                /**
+                 * Corresponds to the column in the source dataset containing the variable value.
+                 */
+                column: 'value',
+
+                /**
+                 * Corresponds to the visually displayed subsubcat defined above. Used to populate part of the URL,
+                 * e.g. /region/0400000US53/Washington/classroom_statistics/student_teacher_ratio
+                 */
+                metric: 'instruction_salaries_per_student',
+
+                /**
+                 * Corresponds to the name of the variable in the variable column of the source dataset.
+                 */
+                params: {variable: `instruction-salaries-per-student`},
+
+                /**
+                 * Corresponds to the range of years to use. The largest year is the default.
+                 */
+                years: _.range(2005, 2014),
+
+                /**
+                 * Corresponds to the number format used in the map and summary text, i.e. The student teacher ratio of
+                 * Washington in 2014 was 19.3.
+                 */
+                format: format.integer
+            },
+            {
+                /**
+                 * Corresponds to the visually displayed subsubcat defined above. Used to populate the menu, mouseovers
+                 * inside the map, and the summary sentence above the map, e.g. The Student Teacher Ratio of Washington
+                 * was blah.
+                 */
+                name: 'Total Instruction Related Salaries in Dollars',
+
+                /**
+                 * Corresponds to the column in the source dataset containing the variable value.
+                 */
+                column: 'value',
+
+                /**
+                 * Corresponds to the visually displayed subsubcat defined above. Used to populate part of the URL,
+                 * e.g. /region/0400000US53/Washington/classroom_statistics/student_teacher_ratio
+                 */
+                metric: 'instruction_salaries',
+
+                /**
+                 * Corresponds to the name of the variable in the variable column of the source dataset.
+                 */
+                params: {variable: `instruction-salaries`},
+
+                /**
+                 * Corresponds to the range of years to use. The largest year is the default.
+                 */
+                years: _.range(2005, 2014),
+
+                /**
+                 * Corresponds to the number format used in the map and summary text, i.e. The student teacher ratio of
+                 * Washington in 2014 was 19.3.
+                 */
+                format: format.integer
+            },
+            {
+                /**
+                 * Corresponds to the visually displayed subsubcat defined above. Used to populate the menu, mouseovers
+                 * inside the map, and the summary sentence above the map, e.g. The Student Teacher Ratio of Washington
+                 * was blah.
+                 */
+                name: 'Administration Salary Dollars Per Student',
+
+                /**
+                 * Corresponds to the column in the source dataset containing the variable value.
+                 */
+                column: 'value',
+
+                /**
+                 * Corresponds to the visually displayed subsubcat defined above. Used to populate part of the URL,
+                 * e.g. /region/0400000US53/Washington/classroom_statistics/student_teacher_ratio
+                 */
+                metric: 'administration_salaries_per_student',
+
+                /**
+                 * Corresponds to the name of the variable in the variable column of the source dataset.
+                 */
+                params: {variable: `administration-salaries-per-student`},
+
+                /**
+                 * Corresponds to the range of years to use. The largest year is the default.
+                 */
+                years: _.range(2005, 2014),
+
+                /**
+                 * Corresponds to the number format used in the map and summary text, i.e. The student teacher ratio of
+                 * Washington in 2014 was 19.3.
+                 */
+                format: format.integer
+            },
+            {
+                /**
+                 * Corresponds to the visually displayed subsubcat defined above. Used to populate the menu, mouseovers
+                 * inside the map, and the summary sentence above the map, e.g. The Student Teacher Ratio of Washington
+                 * was blah.
+                 */
+                name: 'Total Administration Salaries in Dollars',
+
+                /**
+                 * Corresponds to the column in the source dataset containing the variable value.
+                 */
+                column: 'value',
+
+                /**
+                 * Corresponds to the visually displayed subsubcat defined above. Used to populate part of the URL,
+                 * e.g. /region/0400000US53/Washington/classroom_statistics/student_teacher_ratio
+                 */
+                metric: 'administration_salaries',
+
+                /**
+                 * Corresponds to the name of the variable in the variable column of the source dataset.
+                 */
+                params: {variable: `administration-salaries`},
+
+                /**
+                 * Corresponds to the range of years to use. The largest year is the default.
+                 */
+                years: _.range(2005, 2014),
+
+                /**
+                 * Corresponds to the number format used in the map and summary text, i.e. The student teacher ratio of
+                 * Washington in 2014 was 19.3.
+                 */
+                format: format.integer
+            },
+            {
+                /**
+                 * Corresponds to the visually displayed subsubcat defined above. Used to populate the menu, mouseovers
+                 * inside the map, and the summary sentence above the map, e.g. The Student Teacher Ratio of Washington
+                 * was blah.
+                 */
+                name: 'Capital Expenditure Dollars Per Student',
+
+                /**
+                 * Corresponds to the column in the source dataset containing the variable value.
+                 */
+                column: 'value',
+
+                /**
+                 * Corresponds to the visually displayed subsubcat defined above. Used to populate part of the URL,
+                 * e.g. /region/0400000US53/Washington/classroom_statistics/student_teacher_ratio
+                 */
+                metric: 'capital_expenditures_per_student',
+
+                /**
+                 * Corresponds to the name of the variable in the variable column of the source dataset.
+                 */
+                params: {variable: `capital-expenditures-per-student`},
+
+                /**
+                 * Corresponds to the range of years to use. The largest year is the default.
+                 */
+                years: _.range(2005, 2014),
+
+                /**
+                 * Corresponds to the number format used in the map and summary text, i.e. The student teacher ratio of
+                 * Washington in 2014 was 19.3.
+                 */
+                format: format.integer
+            },
+            {
+                /**
+                 * Corresponds to the visually displayed subsubcat defined above. Used to populate the menu, mouseovers
+                 * inside the map, and the summary sentence above the map, e.g. The Student Teacher Ratio of Washington
+                 * was blah.
+                 */
+                name: 'Total Capital Expenditures in Dollars',
+
+                /**
+                 * Corresponds to the column in the source dataset containing the variable value.
+                 */
+                column: 'value',
+
+                /**
+                 * Corresponds to the visually displayed subsubcat defined above. Used to populate part of the URL,
+                 * e.g. /region/0400000US53/Washington/classroom_statistics/student_teacher_ratio
+                 */
+                metric: 'capital_expenditures',
+
+                /**
+                 * Corresponds to the name of the variable in the variable column of the source dataset.
+                 */
+                params: {variable: `capital-expenditures`},
+
+                /**
+                 * Corresponds to the range of years to use. The largest year is the default.
+                 */
+                years: _.range(2005, 2014),
+
+                /**
+                 * Corresponds to the number format used in the map and summary text, i.e. The student teacher ratio of
+                 * Washington in 2014 was 19.3.
+                 */
+                format: format.integer
+            }
+        ]
+    },
+
+    /**
+     * Corresponds to the subcat, forms URL of the form: /region/0400000US53/Washington/classroom_statistics. Name must
+     * match the name param below as well as the vector in data-sources.js.
+     */
     classroom_statistics: {
         /**
         * Corresponds to the subcat, forms URL of the form: /region/0400000US53/Washington/classroom_statistics
