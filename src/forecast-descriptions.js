@@ -6,7 +6,7 @@ if (typeof require !== 'undefined') {
     var forecast = require('./forecast');
     var numeral = require('numeral');
     var queryString = require('query-string');
-    var Request = require('../controllers/request'); 
+    var Request = require('../controllers/request');
 }
 
 class ForecastDescriptions {
@@ -24,13 +24,13 @@ class ForecastDescriptions {
 
         const promises = this.charts.map(chart => chart.getPromise(regions));
         return Promise.all(promises);
-    };
+    }
 }
 
 class ForecastDescription {
-    
+
     constructor(tab, chart) {
-        
+
         this.tab = tab;
         this.name = chart.name;
         this.data = ForecastDescription._columns(chart.data);
@@ -58,49 +58,45 @@ class ForecastDescription {
         return new Promise((resolve, reject) => {
 
             this.getData(regions).then(data => {
-
                 var descriptions = [];
 
                 if (this.forecast && (this.forecast.type === 'linear')) {
-
                     if (this.transpose) data = this._transpose(data);
                     if (this.transform) data = this.transform(data);
 
                     const groupedData = _.groupBy(data, 'id');
 
-                    descriptions = regions.map(region => {
+                    descriptions = regions
+                        .filter(region => region.id in groupedData)
+                        .map(region => {
+                            var regionData = groupedData[region.id];
 
-                        var regionData = groupedData[region.id];
+                            var firstMeasuredIndex = this.getFirstMeasuredIndex(regionData, this.y.column);
+                            var firstMeasured = parseFloat(regionData[firstMeasuredIndex][this.y.column]);
+                            var firstMeasuredYear = parseInt(regionData[firstMeasuredIndex].year);
 
-                        var firstMeasuredIndex = this.getFirstMeasuredIndex(regionData, this.y.column);
-                        var firstMeasured = parseFloat(regionData[firstMeasuredIndex][this.y.column]);
-                        var firstMeasuredYear = parseInt(regionData[firstMeasuredIndex].year); 
-                        
-                        var lastMeasuredIndex = this.getLastMeasuredIndex(regionData, this.y.column);
-                        var lastMeasured = parseFloat(regionData[lastMeasuredIndex][this.y.column]);
-                        var lastMeasuredYear = parseInt(regionData[lastMeasuredIndex].year);
+                            var lastMeasuredIndex = this.getLastMeasuredIndex(regionData, this.y.column);
+                            var lastMeasured = parseFloat(regionData[lastMeasuredIndex][this.y.column]);
+                            var lastMeasuredYear = parseInt(regionData[lastMeasuredIndex].year);
 
-                        var years = parseFloat(lastMeasuredYear - firstMeasuredYear);
-                        var percentChange = parseFloat((lastMeasured - firstMeasured) / firstMeasured) / years;
-                        var slope = parseFloat(lastMeasured - firstMeasured) / years;
-                        var lastForecast = (slope * this.forecast.steps) + lastMeasured;
-                        var lastForecastYear = lastMeasuredYear + this.forecast.steps;
+                            var years = parseFloat(lastMeasuredYear - firstMeasuredYear);
+                            var percentChange = parseFloat((lastMeasured - firstMeasured) / firstMeasured) / years;
+                            var slope = parseFloat(lastMeasured - firstMeasured) / years;
+                            var lastForecast = (slope * this.forecast.steps) + lastMeasured;
+                            var lastForecastYear = lastMeasuredYear + this.forecast.steps;
 
-                        return `The last measured ${this.y.label.toLowerCase()} for ${region.name} was ${numeral(lastMeasured).format(this.y.format.pattern)}. ${region.name} experienced an average annual growth rate of ${numeral(percentChange).format('0.00%')} from our first ${this.y.label.toLowerCase()} statistic recorded in ${firstMeasuredYear}. If past trends continue, we forecast the ${this.y.label.toLowerCase()} to be ${numeral(lastForecast).format(this.y.format.pattern)} by ${lastForecastYear}.`;
-                    });
+                            return `The last measured ${this.y.label.toLowerCase()} for ${region.name} was ${numeral(lastMeasured).format(this.y.format.pattern)}. ${region.name} experienced an average annual growth rate of ${numeral(percentChange).format('0.00%')} from our first ${this.y.label.toLowerCase()} statistic recorded in ${firstMeasuredYear}. If past trends continue, we forecast the ${this.y.label.toLowerCase()} to be ${numeral(lastForecast).format(this.y.format.pattern)} by ${lastForecastYear}.`;
+                        });
                 }
-                
-                resolve({ 
+
+                resolve({
                     column: this.y.column,
                     description: descriptions.join('  ')
                 });
-            }, 
-            error => {
-                reject();
-            });
+            }, reject);
         });
     }
-    
+
     getFirstMeasuredIndex(data, column) {
 
         for (var i = 0; i < data.length; i++) {
@@ -110,7 +106,7 @@ class ForecastDescription {
 
         return 0;
     }
-    
+
     getLastMeasuredIndex(data, column) {
 
         for (var i = data.length - 1; i >= 0; i--) {

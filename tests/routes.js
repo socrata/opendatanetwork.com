@@ -5,8 +5,6 @@ casper.test.begin('routes', function testRoutes(test) {
         return 'http://localhost:3002' + path;
     }
 
-    casper.start(url());
-
     function exists(path, message) {
         message = message || path + ' exists';
         casper.thenOpen(url(path), function(response) {
@@ -20,6 +18,8 @@ casper.test.begin('routes', function testRoutes(test) {
             test.assertUrlMatch(destination, message);
         });
     }
+
+    casper.start(url());
 
     exists('/',
         'homepage exists');
@@ -46,7 +46,6 @@ casper.test.begin('routes', function testRoutes(test) {
         'two regions with invalid vector redirects to default vector');
     exists('/region/310M200US42660-1600000US5363000/Seattle_Metro_Area_(WA)-Seattle_WA/gdp',
         'two regions work with data for only one');
-
 
     casper.run(function() {
         test.done();
