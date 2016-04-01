@@ -214,6 +214,176 @@ const SOURCES = [
                 charts: []
             },
             {
+                vector: 'education_expenditures',
+                name: 'Expenditures',
+                attribution: ATTRIBUTIONS.iesNces,
+                domain: ODN_DOMAIN,
+
+                /**
+                 * NBE 4x4 of public dataset on odn.data.socrata.com
+                 */
+                fxf: 'nxzi-u9nr',
+
+                datalensFXF: '6xsy-aftn',
+
+                regions: ['state'],
+
+                /**
+                 * Terms used to formulate search query to populate datasets. Choose such that subcat, i.e. Classroom
+                 * statistics is well represented, but if recall is a problem, include generalizing terms to capture
+                 * the category, e.g. Education.
+                 */
+                searchTerms: ['school budget', 'school funding', 'school construction', 'teacher salaries', 'university salaries',
+                'college budget', 'college funding', 'college salaries', 'university budget', 'university funding'],
+
+                charts: [
+                    {
+                        name: 'Capital Expenditures (US$)',
+                        params: {variable: 'capital-expenditures'},
+                        data: [
+                            {
+                                column: 'year',
+                                label: 'Year',
+                                type: 'string'
+                            },
+                            {
+                                column: 'value',
+                                label: 'education related capital expenditures',
+                                format: { pattern: '###,###' }
+                            }
+                        ],
+                        chart: 'line',
+                        forecast: {
+                           type: 'linear',
+                           steps: 7
+                         },
+                         options: {
+                            height: 300
+                        }
+                    },
+                    {
+                        name: 'Capital Expenditures Per Student (US$)',
+                        params: {variable: 'capital-expenditures-per-student'},
+                        data: [
+                            {
+                                column: 'year',
+                                label: 'Year',
+                                type: 'string'
+                            },
+                            {
+                                column: 'value',
+                                label: 'capital expenditures per student',
+                                format: { pattern: '###,###' }
+                            }
+                        ],
+                        chart: 'line',
+                        forecast: {
+                           type: 'linear',
+                           steps: 7
+                         },
+                         options: {
+                            height: 300
+                        }
+                    },
+                    {
+                        name: 'Administration Salaries (US$)',
+                        params: {variable: 'administration-salaries'},
+                        data: [
+                            {
+                                column: 'year',
+                                label: 'Year',
+                                type: 'string'
+                            },
+                            {
+                                column: 'value',
+                                label: 'education related administration salaries',
+                                format: { pattern: '###,###' }
+                            }
+                        ],
+                        chart: 'line',
+                        forecast: {
+                           type: 'linear',
+                           steps: 7
+                         },
+                         options: {
+                            height: 300
+                        }
+                    },
+                    {
+                        name: 'Administration Salaries Per Student (US$)',
+                        params: {variable: 'administration-salaries-per-student'},
+                        data: [
+                            {
+                                column: 'year',
+                                label: 'Year',
+                                type: 'string'
+                            },
+                            {
+                                column: 'value',
+                                label: 'administration salaries per student',
+                                format: { pattern: '###,###' }
+                            }
+                        ],
+                        chart: 'line',
+                        forecast: {
+                           type: 'linear',
+                           steps: 7
+                         },
+                         options: {
+                            height: 300
+                        }
+                    },
+                    {
+                        name: 'Instruction Salaries (US$)',
+                        params: {variable: 'instruction-salaries'},
+                        data: [
+                            {
+                                column: 'year',
+                                label: 'Year',
+                                type: 'string'
+                            },
+                            {
+                                column: 'value',
+                                label: 'teacher and other instruction related salaries',
+                                format: { pattern: '###,###' }
+                            }
+                        ],
+                        chart: 'line',
+                        forecast: {
+                           type: 'linear',
+                           steps: 7
+                         },
+                         options: {
+                            height: 300
+                        }
+                    },
+                    {
+                        name: 'Instruction Salaries Per Student (US$)',
+                        params: {variable: 'instruction-salaries-per-student'},
+                        data: [
+                            {
+                                column: 'year',
+                                label: 'Year',
+                                type: 'string'
+                            },
+                            {
+                                column: 'value',
+                                label: 'teacher and other instruction related salaries per student',
+                                format: { pattern: '###,###' }
+                            }
+                        ],
+                        chart: 'line',
+                        forecast: {
+                           type: 'linear',
+                           steps: 7
+                         },
+                         options: {
+                            height: 300
+                        }
+                    }
+                ]
+            },
+            {
                 vector: 'classroom_statistics',
                 name: 'Classroom Statistics',
                 attribution: ATTRIBUTIONS.iesNces,
