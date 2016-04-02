@@ -73,6 +73,14 @@ class VariableControl {
             metric: this.variable.metric
         }));
 
+        d3.selectAll('a.region-link').each(function() {
+            const link = d3.select(this);
+            const currentHref = link.attr('href');
+            const variables = url.split('/').slice(4);
+            const href = currentHref.split('/').slice(0, 4).concat(variables).join('/');
+            link.attr('href', href);
+        });
+
         history.replaceState(null, null, url);
 
         this.onUpdate(this.variable, this.year);
