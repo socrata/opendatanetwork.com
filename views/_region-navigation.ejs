@@ -14,7 +14,7 @@
     <% if (typeof peers != 'undefined' && peers && peers.length > 0) { %>
         <ul id="similar-regions">
         <% peers.forEach(function(region) { %>
-            <li><a href=<%= region.addURL %><%- (params.regions.length >= 2) ? ' rel="nofollow"' : '' %>><%= region.name %> <i class="fa fa-plus"></i></a></li>
+            <li><a class="region-link" href=<%= region.addURL %><%- (params.regions.length >= 2) ? ' rel="nofollow"' : '' %>><%= region.name %> <i class="fa fa-plus"></i></a></li>
         <% }); %>
         </ul>
     <% } %>
@@ -40,7 +40,7 @@
 
             <ul class="places-in-region-list">
                 <% siblings.forEach(function(region) { %>
-                    <li><a href="<%= region.navigateURL %>"><%= region.name %></a></li>
+                    <li><a class="region-link" href="<%= region.navigateURL %>"><%= region.name %></a></li>
                 <% }); %>
             </ul>
         <% } %>
@@ -54,7 +54,7 @@
 
                     <ul class="places-in-region-list">
                         <% children.forEach(function(child) { %>
-                            <li><a href="<%= child.navigateURL %>"><%= child.name %></a></li>
+                            <li><a class="region-link" href="<%= child.navigateURL %>"><%= child.name %></a></li>
                         <% }); %>
                     </ul>
                 <% } %>

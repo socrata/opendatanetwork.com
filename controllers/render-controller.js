@@ -265,12 +265,17 @@ class RenderController {
     static searchWithVector(req, res) {
         const vector = req.params.vector;
 
+        function toDefaultVector() {
+            const vector = Sources.defaultVector().vector;
+            res.redirect(req.url.split('/').slice(0, 4).concat([vector]).join('/'));
+        }
+
         if (vector === '' || Sources.has(vector)) {
             RenderController._parameters(req, res).then(params => {
                 const regions = params.regions;
 
                 if (!Sources.supportsVector(vector, regions)) {
-                    RenderController.error(req, res, 404, `"${vector}" data not available for ${regions.map(region => region.name).join(' and ')}`)();
+                    toDefaultVector();
                 } else {
                     try {
                         RenderController._search(req, res, params);
@@ -280,7 +285,7 @@ class RenderController {
                 }
             }, RenderController.error(req, res));
         } else {
-            RenderController.error(req, res, 404, `Vector "${vector}" not found`)();
+            toDefaultVector();
         }
     }
 
@@ -297,14 +302,14 @@ class RenderController {
             const searchResultsRegionsPromise = API.searchResultsRegions(params.q);
             const allPromises = [categoriesPromise, tagsPromise,
                                  domainsPromise, datasetsPromise,
-                                 searchPromise, locationsPromise, 
+                                 searchPromise, locationsPromise,
                                  searchResultsRegionsPromise];
             const allPromise = Promise.all(allPromises);
 
             allPromise.then(data => {
                 try {
                     var searchResultsRegions;
- 
+
                     if (params.q == '') {
                         searchResultsRegions = [];
                     }
@@ -420,7 +425,7 @@ class RenderController {
             return regions.filter(region => {
                 return !_.contains(uids, region.id);
             }).slice(0, Constants.N_RELATIVES).map(region => {
-                const navigateURL = Navigate.region(region);
+                const navigateURL = Navigate.url(_.extend({}, params, {regions: [region]}));
                 const addURL = Navigate.url(_.extend({}, params, {regions: params.regions.concat([region])}));
                 return _.extend({}, region, {addURL, navigateURL});
             });
