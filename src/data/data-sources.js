@@ -64,6 +64,12 @@ function _toPercent(column) {
     };
 }
 
+function _toMillions(column) {
+    return rows => {
+        return rows.map(row => _.extend(row, { [column]: parseFloat(row[column]) / 1000000 }));
+    };
+}
+
 function _rename(column, names) {
     return rows => {
         return rows.map(row => {
@@ -246,7 +252,7 @@ const SOURCES = [
 
                 charts: [
                     {
-                        name: 'Capital Expenditures (US$)',
+                        name: 'Capital Expenditures',
                         params: {variable: 'capital-expenditures'},
                         data: [
                             {
@@ -257,20 +263,22 @@ const SOURCES = [
                             {
                                 column: 'value',
                                 label: 'education related capital expenditures',
-                                format: { pattern: '###,###' }
+                                format: { pattern: '$###,###M' }
                             }
                         ],
+                        transform: _toMillions('value'),
                         chart: 'line',
                         forecast: {
                            type: 'linear',
                            steps: 7
-                         },
-                         options: {
-                            height: 300
+                        },
+                        options: {
+                            height: 300,
+                            vAxis: { format: '$###,###M' }
                         }
                     },
                     {
-                        name: 'Capital Expenditures Per Student (US$)',
+                        name: 'Capital Expenditures Per Student',
                         params: {variable: 'capital-expenditures-per-student'},
                         data: [
                             {
@@ -281,7 +289,7 @@ const SOURCES = [
                             {
                                 column: 'value',
                                 label: 'capital expenditures per student',
-                                format: { pattern: '###,###' }
+                                format: { pattern: '$###,###' }
                             }
                         ],
                         chart: 'line',
@@ -289,12 +297,13 @@ const SOURCES = [
                            type: 'linear',
                            steps: 7
                          },
-                         options: {
-                            height: 300
+                        options: {
+                            height: 300,
+                            vAxis: { format: '$###,###' }
                         }
                     },
                     {
-                        name: 'Administration Salaries (US$)',
+                        name: 'Administration Salaries',
                         params: {variable: 'administration-salaries'},
                         data: [
                             {
@@ -305,20 +314,22 @@ const SOURCES = [
                             {
                                 column: 'value',
                                 label: 'education related administration salaries',
-                                format: { pattern: '###,###' }
+                                format: { pattern: '$###,###M' }
                             }
                         ],
+                        transform: _toMillions('value'),
                         chart: 'line',
                         forecast: {
                            type: 'linear',
                            steps: 7
-                         },
-                         options: {
-                            height: 300
+                        },
+                        options: {
+                            height: 300,
+                            vAxis: { format: '$###,###M' }
                         }
                     },
                     {
-                        name: 'Administration Salaries Per Student (US$)',
+                        name: 'Administration Salaries Per Student',
                         params: {variable: 'administration-salaries-per-student'},
                         data: [
                             {
@@ -337,12 +348,13 @@ const SOURCES = [
                            type: 'linear',
                            steps: 7
                          },
-                         options: {
-                            height: 300
+                        options: {
+                            height: 300,
+                            vAxis: { format: '$###,###' }
                         }
                     },
                     {
-                        name: 'Instruction Salaries (US$)',
+                        name: 'Instruction Salaries',
                         params: {variable: 'instruction-salaries'},
                         data: [
                             {
@@ -353,20 +365,22 @@ const SOURCES = [
                             {
                                 column: 'value',
                                 label: 'teacher and other instruction related salaries',
-                                format: { pattern: '###,###' }
+                                format: { pattern: '$###,###M' }
                             }
                         ],
+                        transform: _toMillions('value'),
                         chart: 'line',
                         forecast: {
                            type: 'linear',
                            steps: 7
                          },
-                         options: {
-                            height: 300
+                        options: {
+                            height: 300,
+                            vAxis: { format: '$###,###M' }
                         }
                     },
                     {
-                        name: 'Instruction Salaries Per Student (US$)',
+                        name: 'Instruction Salaries Per Student',
                         params: {variable: 'instruction-salaries-per-student'},
                         data: [
                             {
@@ -385,8 +399,9 @@ const SOURCES = [
                            type: 'linear',
                            steps: 7
                          },
-                         options: {
-                            height: 300
+                        options: {
+                            height: 300,
+                            vAxis: { format: '$###,###' }
                         }
                     }
                 ]

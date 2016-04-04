@@ -40,7 +40,9 @@ const format = {
     percent: n => `${d3.format('.1f')(n)}%`,
     ratio: d3.format('.1%'),
     dollar: d3.format('$,.0f'),
-    millionDollar: n => `${d3.format('$,.0f')(n)}M`
+    millionDollar: n => `${d3.format('$,.0f')(n)}M`,
+    millionDollarWConversion: n => `${d3.format('$,.0f')(.000001*n)}M`
+
 };
 
 
@@ -152,7 +154,7 @@ const MAP_SOURCES = {
                  * inside the map, and the summary sentence above the map, e.g. The Student Teacher Ratio of Washington
                  * was blah.
                  */
-                name: 'Instruction Salary Dollars Per Student',
+                name: 'Instruction Salaries Per Student',
 
                 /**
                  * Corresponds to the column in the source dataset containing the variable value.
@@ -179,7 +181,8 @@ const MAP_SOURCES = {
                  * Corresponds to the number format used in the map and summary text, i.e. The student teacher ratio of
                  * Washington in 2014 was 19.3.
                  */
-                format: format.integer
+                format: format.dollar,
+
             },
             {
                 /**
@@ -187,7 +190,7 @@ const MAP_SOURCES = {
                  * inside the map, and the summary sentence above the map, e.g. The Student Teacher Ratio of Washington
                  * was blah.
                  */
-                name: 'Total Instruction Related Salaries in Dollars',
+                name: 'Total Instruction Related Salaries',
 
                 /**
                  * Corresponds to the column in the source dataset containing the variable value.
@@ -214,7 +217,7 @@ const MAP_SOURCES = {
                  * Corresponds to the number format used in the map and summary text, i.e. The student teacher ratio of
                  * Washington in 2014 was 19.3.
                  */
-                format: format.integer
+                format: format.millionDollarWConversion,
             },
             {
                 /**
@@ -222,7 +225,7 @@ const MAP_SOURCES = {
                  * inside the map, and the summary sentence above the map, e.g. The Student Teacher Ratio of Washington
                  * was blah.
                  */
-                name: 'Administration Salary Dollars Per Student',
+                name: 'Administration Salaries Per Student',
 
                 /**
                  * Corresponds to the column in the source dataset containing the variable value.
@@ -249,7 +252,7 @@ const MAP_SOURCES = {
                  * Corresponds to the number format used in the map and summary text, i.e. The student teacher ratio of
                  * Washington in 2014 was 19.3.
                  */
-                format: format.integer
+                format: format.dollar,
             },
             {
                 /**
@@ -257,7 +260,7 @@ const MAP_SOURCES = {
                  * inside the map, and the summary sentence above the map, e.g. The Student Teacher Ratio of Washington
                  * was blah.
                  */
-                name: 'Total Administration Salaries in Dollars',
+                name: 'Total Administration Salaries',
 
                 /**
                  * Corresponds to the column in the source dataset containing the variable value.
@@ -284,7 +287,7 @@ const MAP_SOURCES = {
                  * Corresponds to the number format used in the map and summary text, i.e. The student teacher ratio of
                  * Washington in 2014 was 19.3.
                  */
-                format: format.integer
+                format: format.millionDollarWConversion,
             },
             {
                 /**
@@ -292,7 +295,7 @@ const MAP_SOURCES = {
                  * inside the map, and the summary sentence above the map, e.g. The Student Teacher Ratio of Washington
                  * was blah.
                  */
-                name: 'Capital Expenditure Dollars Per Student',
+                name: 'Capital Expenditure Per Student',
 
                 /**
                  * Corresponds to the column in the source dataset containing the variable value.
@@ -319,7 +322,7 @@ const MAP_SOURCES = {
                  * Corresponds to the number format used in the map and summary text, i.e. The student teacher ratio of
                  * Washington in 2014 was 19.3.
                  */
-                format: format.integer
+                format: format.dollar,
             },
             {
                 /**
@@ -327,7 +330,7 @@ const MAP_SOURCES = {
                  * inside the map, and the summary sentence above the map, e.g. The Student Teacher Ratio of Washington
                  * was blah.
                  */
-                name: 'Total Capital Expenditures in Dollars',
+                name: 'Total Capital Expenditures',
 
                 /**
                  * Corresponds to the column in the source dataset containing the variable value.
@@ -354,7 +357,7 @@ const MAP_SOURCES = {
                  * Corresponds to the number format used in the map and summary text, i.e. The student teacher ratio of
                  * Washington in 2014 was 19.3.
                  */
-                format: format.integer
+                format: format.millionDollarWConversion,
             }
         ]
     },
