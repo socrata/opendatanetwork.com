@@ -117,7 +117,7 @@ class MapView {
         map.addControl(this.legend);
         map.addControl(this.tooltip);
         if (MapConstants.ZOOM_CONTROL) map.addControl(this.zoomControl);
-        this.variableControl.onAdd(map);
+        this.variableControl.onAdd(map, this.regions);
 
         map.whenReady(() => {
             const url = layerID => `https://api.mapbox.com/v4/${layerID}/{z}/{x}/{y}.png?access_token=${MapConstants.MAPBOX_TOKEN}`;

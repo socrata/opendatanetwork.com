@@ -102,6 +102,7 @@ class VariableControl {
 
     onAdd(map, regions) {
         this.container = d3.select('ul.chart-sub-nav');
+        this.regions = regions;
 
         function optionDatum(select) {
             const value = select.property('value');
@@ -161,15 +162,15 @@ class VariableControl {
 
     updateSelectors() {
         this.variableSelector.text(this.variable.name);
-        this.updateYearSelectors(true);
 
-        if (this.hasYear && this.variable.years && this.variable.years.length > 1) {
+        const updateYears = () => {
+            this.updateYearSelectors(true);
             this.yearContainer.select('ul').remove();
             this.yearContainer
                 .append('ul')
                 .attr('class', 'chart-sub-nav-menu')
                 .selectAll('li')
-                .data(this.variable.years.slice().reverse())
+                .data(this.variable.years)
                 .enter()
                 .append('li')
                 .append('a')
@@ -181,7 +182,25 @@ class VariableControl {
                         this.updateYearSelectors(false);
                     }
                 });
+        };
 
+        if (this.hasYear && this.regions) {
+            const url = `https://${this.source.domain}/resource/${this.source.fxf}?
+                $where=id+in+(${this.regions.map(region => `'${region.id}'`).join(',')})+AND+${this.variable.column}+IS+NOT+NULL&
+                $select=year&
+                $group=year&
+                $order=year+DESC`.replace(/[ \n]/g, '');
+
+            d3.promise.json(url).then(response => {
+                const years = response.map(_.property('year'));
+                if (response.length > 0) this.variable.years = years;
+                updateYears();
+            }, error => {
+                updateYears();
+            });
+        }
+
+        if (this.hasYear && this.variable.years && this.variable.years.length > 1) {
         }
     }
 }
