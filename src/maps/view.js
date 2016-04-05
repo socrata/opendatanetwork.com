@@ -34,7 +34,7 @@ class POIMapView {
                 this.model = new POIMapModel(this.source, variable);
                 this.update();
             });
-            this.variableControl.onAdd(map);
+            this.variableControl.onAdd(map, this.regions);
         });
     }
 
@@ -232,7 +232,7 @@ class MapView {
                         this._popups[region.id].addTo(this.map);
                     }
                 });
-            } 
+            }
             else {
                 layer.setStyle(MapConstants.NO_DATA_STYLE);
             }
@@ -283,7 +283,7 @@ class MapView {
 
         return container.node();
     }
-    
+
     getDateString(date) {
         return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
     }
