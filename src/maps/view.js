@@ -321,10 +321,15 @@ class MapView {
     }
 
     closeUserOpenedPopups() {
+
         _.values(this._popups).forEach(popup => {
-            if (_.isUndefined(popup.originalRegion))
+            if (_.isUndefined(popup.originalRegion) ||
+                this._noDataPopups.length > 0)
                 this.map.closePopup(popup);
         });
+
+        this._noDataPopups.forEach(popup => this.map.closePopup(popup));
+        this._noDataPopups = [];
     }
 
     static center(layer) {
