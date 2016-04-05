@@ -41,7 +41,7 @@ const format = {
     ratio: d3.format('.1%'),
     dollar: d3.format('$,.0f'),
     millionDollar: n => `${d3.format('$,.0f')(n)}M`,
-    millionDollarWConversion: n => `${d3.format('$,.0f')(.000001*n)}M`
+    millionDollarWConversion: n => `${d3.format('$,.0f')(0.000001*n)}M`
 
 };
 
@@ -126,7 +126,25 @@ const MAP_SOURCES = {
                 metric: nameToURL(classification.replace('  ', ' ')),
                 params: {classification}
             };
-        })
+        }),
+        variableFilter: (regions, source) => {
+            return new Promise((resolve, reject) => {
+                const url = `https://odn.data.socrata.com/resource/rz8v-4esg.json?
+                    $select=classification,count(*)&
+                    $where=within_circle(location,${regions[0].coordinates.slice(0).reverse().join(',')},10000)&
+                    $group=classification&
+                    $order=count+DESC`.replace(/[ \n]/g, '');
+
+                d3.promise.json(url).then(response => {
+                    const classifications = response.map(_.property('classification'));
+                    const validVariables = source.variables.filter(variable => {
+                        return _.contains(classifications, variable.params.classification);
+                    });
+
+                    resolve(validVariables);
+                }, reject);
+            });
+        }
     },
 
     /**

@@ -34,7 +34,7 @@ class POIMapView {
                 this.model = new POIMapModel(this.source, variable);
                 this.update();
             });
-            this.variableControl.onAdd(map);
+            this.variableControl.onAdd(map, this.regions);
         });
     }
 
