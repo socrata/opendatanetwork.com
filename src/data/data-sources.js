@@ -1278,6 +1278,55 @@ class Sources {
         });
     }
 
+    static sourcesPromiseFromParams(params) {
+        const vector = params.vector || 'population';
+        const group = Sources.group(vector) || SOURCES[0];
+        const regions = params.regions;
+        return Sources.sourcesPromise(group, regions);
+    }
+
+    static sourcesPromise(group, regions) {
+        return new Promise((resolve, reject) => {
+            const supportsPromises = group.datasets.map(dataset => {
+                return Sources.supportsPromise(dataset, regions);
+            });
+
+            Promise.all(supportsPromises).then(results => {
+                if (results.length !== group.datasets.length) {
+                    console.error('error validating sources: length should be the same');
+                    resolve(group.datasets);
+                } else {
+                    const supported = group.datasets.filter((dataset, index) => results[index]);
+                    resolve(supported);
+                }
+            }, error => {
+                console.error(error);
+                resolve(group.datasets);
+            });
+        });
+    }
+
+    static supportsPromise(dataset, regions) {
+        return new Promise((resolve, reject) => {
+            if (Sources.supports(dataset, regions)) {
+                const path = `http://${dataset.domain}/resource/${dataset.fxf}`;
+                const params = {
+                    '$where': `${dataset.idColumn || 'id'} in (${regions.map(region =>`'${region.id}'`).join(',')})`
+                };
+                const url = Requests.buildURL(path, params);
+
+                return Requests.getJSON(url).then(response => {
+                    resolve(response.length > 0);
+                }, error => {
+                    console.error(error);
+                    resolve(true);
+                });
+            } else {
+                resolve(false);
+            }
+        });
+    }
+
     static sources(group, regions) {
         return group.datasets.filter(dataset => Sources.supports(dataset, regions));
     }
