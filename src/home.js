@@ -13,13 +13,20 @@ $(document).ready(function() {
 
     // Autocomplete
     //
-    const autosuggest = multiComplete('#q', '.region-list');
-    autosuggest.listen();
+    const headerAutoSuggest = multiComplete('#q', '.region-list');
+    headerAutoSuggest.listen();
+
+    const heroAutoSuggest = multiComplete('.home-search-bar-controls #q', '.home-search-bar-controls .region-list');
+    heroAutoSuggest.listen();
 
     // QuickLinks
     //
     const quickLinks = new QuickLinks();
-    quickLinks.onShow = () => autosuggest.results.hide();
+
+    quickLinks.onShow = () => {
+        headerAutoSuggest.results.hide();
+        heroAutoSuggest.results.hide();
+    };
 
     // Search button
     //

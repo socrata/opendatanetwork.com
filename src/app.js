@@ -9,7 +9,7 @@ $(document).ready(function() {
         if (text.length === 0)
             $('#q').focus();
         else
-            $('#form').submit();
+            $('#search-bar-form').submit();
     });
 });
 

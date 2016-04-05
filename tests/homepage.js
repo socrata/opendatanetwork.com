@@ -11,8 +11,8 @@ casper.test.begin('homepage', function checkHomepage(test) {
     casper.sendKeys('input#q', 'Seattle', { keepFocus: true });
 
     // Wait for the search results to come back
-    casper.waitForSelectorTextChange('#form .region-list', function waitForAutocomplete() {
-      test.assertVisible('#form .region-list', 'autocomplete is visible');
+    casper.waitForSelectorTextChange('#search-bar-form .region-list', function waitForAutocomplete() {
+      test.assertVisible('#search-bar-form .region-list', 'autocomplete is visible');
 
       // Datasets
       test.assertSelectorHasText('.autocomplete-category .autocomplete-title', 'Datasets', 'we match at least some datasets');

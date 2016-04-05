@@ -1,19 +1,23 @@
 
 $background-color: #3498db
+$gray-border-color: #d1d1d1
 
 
 /* Autocomplete
 
 .region-list
     background-color: white
-    border: 1px solid #d1d1d1
-    box-sizing: border-box;
+    border: 1px solid $gray-border-color
+    border-top: 0
+    box-sizing: border-box
     margin: 0
     padding: 0
+    position: relative
+    text-align: left
     z-index: 100
 
     li
-        border-top: 1px solid #d1d1d1
+        border-top: 1px solid $gray-border-color
         position: relative
 
     li:first-of-type

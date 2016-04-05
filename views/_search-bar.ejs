@@ -1,22 +1,4 @@
 <header>
-    <form method="GET" action="<%= searchPath %>" id="form" autocomplete="off">
-        <a class="logo" href="/" title="Open Data Network"></a>
-        <div class="search-buttons">
-            <a class="fa fa-search search-link"></a>
-            <% include _quick-links %>
-        </div>
-        <span>
-            <input type="text" placeholder="Search the Open Data Network" name="q" id="q" value="<%= params.q %>" autocomplete="off">
-            <% if (params.categories.length > 0) { %>
-            <input type="hidden" name="categories" value="<%= params.categories.join(',') %>">
-            <% } %>
-            <% if (params.domains.length > 0) { %>
-            <input type="hidden" name="domains" value="<%= params.domains.join(',') %>">
-            <% } %>
-            <% if (params.tags.length > 0) { %>
-            <input type="hidden" name="tags" value="<%= params.tags.join(',') %>">
-            <% } %>
-            <ul class="region-list" style="display:none"></ul>
-        </span>
-    </form>
+    <a class="logo" href="/" title="Open Data Network"></a>
+    <% include _search-bar-controls %>
 </header>

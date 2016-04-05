@@ -1,14 +1,17 @@
+$black-text-color: #222222
 $darker-gray-background-color: #545454
 $darker-gray-border-color: #5e5e5e
 
 .quick-links-container
+    background-color: $black-text-color
     color: white
     display: inline-block
+    float: right
+    height: 50px
+    line-height: 50px
     padding: 0 20px
-
-    @media (max-width: 1200px)
-        display: none
-
+    @media (min-width: 1200px)
+        width: 300px
 
     .fa-caret-down
         margin-left: 10px
@@ -19,12 +22,24 @@ $darker-gray-border-color: #5e5e5e
 .quick-links-container-selected
     background-color: $darker-gray-background-color        
 
+.quick-links-button-wide
+    @media (max-width: $mobile-width)
+        display: none
+
+.quick-links-button-narrow
+    display: block
+    font-size: 28px
+    line-height: 50px
+    @media (min-width: $mobile-width)
+        display: none
+
 .quick-links-menu-container
     background-color: $darker-gray-background-color
     border-top: 1px solid $darker-gray-border-color
     display: none
     position: absolute
     right: 0
+    text-align: left
     z-index: 500
 
 .quick-links-menu

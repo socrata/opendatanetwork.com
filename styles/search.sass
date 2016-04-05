@@ -17,8 +17,9 @@ $green-color: #27ae60
 $orange-color: #ee3b3b
 
 @import app
-@import region-navigation
 @import search-bar
+@import search-bar-controls
+@import region-navigation
 @import search-results-refine-by-bar
 @import search-results-regions
 @import search-tokens
@@ -44,8 +45,7 @@ $orange-color: #ee3b3b
 section.results
   border-top: 1px solid $gray-border-color
   display: table
-  min-height: 60px
-  padding-top: 60px
+  padding-top: 50px
   width: 100%
 
 /* Common datasets
@@ -197,6 +197,7 @@ div.map-description
   background-color: $footer-background-color
   border-right: 1px solid $gray-border-color
   display: table-cell
+  min-width: 300px
   text-align: left
   vertical-align: top
   width: 300px
