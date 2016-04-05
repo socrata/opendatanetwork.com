@@ -233,9 +233,6 @@ class MapView {
                 if (this.map &&
                     this.regionIDs.has(layer.feature.id)) {
 
-                    this.map.setZoom(MapConstants.NO_DATA_ZOOM,
-                        MapConstants.AUTO_ZOOM_OPTIONS);
-
                     const region = this.regions[0];
                     const popup = L.popup(MapConstants.NO_DATA_POPUP_OPTIONS)
                         .setLatLng(layer.getBounds().getCenter())
