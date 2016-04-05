@@ -81,11 +81,6 @@ class POIMapView {
             console.error(error);
         });
     }
-
-    _geocodeRegion(region) {
-
-
-    }
 }
 
 class MapView {
@@ -106,6 +101,7 @@ class MapView {
 
         this.zoomControl = new L.Control.Zoom(MapConstants.ZOOM_CONTROL_OPTIONS);
         this._popups = [];
+        this._noDataPopups = [];
     }
 
     show(selector) {
@@ -184,7 +180,6 @@ class MapView {
     }
 
     updateFeatures(model, scale) {
-
         this.closeUserOpenedPopups();
 
         this.features.eachLayer(layer => {
@@ -232,9 +227,25 @@ class MapView {
                         this._popups[region.id].addTo(this.map);
                     }
                 });
-            } 
-            else {
+            } else {
                 layer.setStyle(MapConstants.NO_DATA_STYLE);
+
+                if (this.map &&
+                    this.regionIDs.has(layer.feature.id)) {
+
+                    this.map.setZoom(MapConstants.NO_DATA_ZOOM,
+                        MapConstants.AUTO_ZOOM_OPTIONS);
+
+                    const region = this.regions[0];
+                    const popup = L.popup(MapConstants.NO_DATA_POPUP_OPTIONS)
+                        .setLatLng(layer.getBounds().getCenter())
+                        .setContent(`No data exists for ${region.name} in ${model.year}.
+                            Try another year, or go to another region on the map
+                            by clicking on it`)
+                        .openOn(this.map);
+
+                    this._noDataPopups.push(popup);
+                }
             }
         });
     }
@@ -283,7 +294,7 @@ class MapView {
 
         return container.node();
     }
-    
+
     getDateString(date) {
         return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
     }
