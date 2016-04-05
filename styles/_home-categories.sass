@@ -1,0 +1,117 @@
+
+// Mobile
+//
+.categories-section-mobile
+    background-color: $gray-background-color
+    color: $gray-text-color
+
+    @media (min-width: $mobile-width)
+        display: none
+
+    h4
+        color: $black-text-color
+        font-size: 20px
+        font-weight: 700
+        height: 50px
+        line-height: 50px
+        margin: 0
+        text-transform: uppercase
+
+    .categories-dropdown-mobile
+        background-color: white
+        color: $blue-text-color
+        cursor: pointer
+        display: block
+        font-size: 20px
+        font-weight: 600
+        height: 50px
+        line-height: 50px
+
+        .fa
+            margin-left: 10px
+
+    .categories-list-mobile
+        background-color: white
+        display: none
+        list-style-item: none
+        margin: 0
+        padding: 0 15px
+        text-align: left
+
+        li
+            border-top: 1px solid $gray-border-color
+            margin: 0
+            padding: 0 15px 0 55px
+            position: relative
+
+        a
+            color: $blue-text-color
+            font-size: 22px
+            height: 50px
+            line-height: 50px
+            margin: 0
+            padding: 0
+            text-transform: capitalize
+
+            .fa
+                left: 15px
+                top: 14px
+                position: absolute
+
+
+// Desktop
+//
+.categories-section
+    background-color: $gray-background-color
+    color: $gray-text-color
+
+    @media (max-width: $mobile-width)
+        display: none
+
+    .container
+        margin: 0 auto
+        padding: 60px 0
+        width: $container-width
+
+    h4
+        color: $black-text-color
+        font-size: 32px
+        font-weight: 700
+        margin: 0 0 60px
+        text-transform: uppercase
+
+    ul
+        float: left
+        margin: 0
+        padding: 0
+
+        li
+            float: left
+            list-style-type: none
+            margin: 0
+            min-height: 250px
+            padding: 0
+            width: $category-item-width
+
+            h3
+                color: $blue-text-color
+                font-size: 24px
+                font-weight: 300
+                margin: 0 0 15px
+                text-transform: capitalize
+
+            .fa
+                color: $blue-text-color
+                display: block
+                font-size: 40px
+                height: 100%
+                line-height: 130px
+                width: 100%
+
+            .icon
+                background-image: url("/images/v3-category-background.png")
+                display: inline-block
+                height: 130px
+                margin-bottom: 25px
+                width: 130px
+

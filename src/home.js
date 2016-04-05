@@ -1,6 +1,19 @@
 
 $(document).ready(function() {
 
+    // Mobile categories
+    //
+    $('.categories-dropdown-mobile').click(() => {
+
+        if ($('.categories-list-mobile').is(':visible'))
+            $('.categories-dropdown-mobile .fa').removeClass('fa-caret-up').addClass('fa-caret-down');
+        else
+            $('.categories-dropdown-mobile .fa').removeClass('fa-caret-down').addClass('fa-caret-up');
+
+        $('.categories-list-mobile').slideToggle(100);
+    });
+    
+
     // Slider
     //
     $('.slider').slick({

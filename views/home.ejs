@@ -18,20 +18,7 @@
     </div>
 </section>
 
-<section class="gray">
-    <div class="container">
-        <h4>Data Categories</h4>
-        <ul>
-          <% categories.forEach(function(result) { %>
-            <li>
-                <a class="icon" href="/search?categories=<%= encodeURIComponent(result.category) %>"><i class="fa <%= result.metadata.icon %>"></i></a>
-                <a href="/search?categories=<%= encodeURIComponent(result.category) %>"><h3><%= result.category %></h3></a>
-            </li>
-          <% }); %>
-        </ul>
-        <div class="cb"></div>
-    </div>
-</section>
+<% include _home-categories %>
 
 <section class="states">
     <div class="container">
