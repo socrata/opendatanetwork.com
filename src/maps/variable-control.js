@@ -193,14 +193,19 @@ class VariableControl {
 
             d3.promise.json(url).then(response => {
                 const years = response.map(_.property('year'));
-                if (response.length > 0) this.variable.years = years;
+                if (years.length > 0) {
+                    this.variable.years = years;
+                    if (!_.contains(years, this.year)) {
+                        this.year = years[0];
+                        this.update();
+                    }
+                }
+
                 updateYears();
             }, error => {
                 updateYears();
             });
         }
-
-        if (this.hasYear && this.variable.years && this.variable.years.length > 1) {
-        }
     }
 }
+
