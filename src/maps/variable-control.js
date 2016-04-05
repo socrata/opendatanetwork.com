@@ -121,21 +121,20 @@ class VariableControl {
                 this.updateVariable(variables[0]);
             }
 
-            if (this.variables.length > 1) {
-                variableLink.append('i').attr('class', 'fa fa-caret-down');
+            if (variables.length === 0) variables = this.source.variables;
+            if (variables.length > 1) variableLink.append('i').attr('class', 'fa fa-caret-down');
 
-                const variableList = variableContainer
-                    .append('ul')
-                    .attr('class', 'chart-sub-nav-menu')
-                    .attr('id', 'map-variable-list')
-                    .selectAll('li')
-                    .data(variables)
-                    .enter()
-                    .append('li')
-                    .append('a')
-                    .text(variable => variable.name)
-                    .on('click', variable => this.updateVariable(variable));
-            }
+            const variableList = variableContainer
+                .append('ul')
+                .attr('class', 'chart-sub-nav-menu')
+                .attr('id', 'map-variable-list')
+                .selectAll('li')
+                .data(variables)
+                .enter()
+                .append('li')
+                .append('a')
+                .text(variable => variable.name)
+                .on('click', variable => this.updateVariable(variable));
         };
 
         this.variableFilter(regions, this.source).then(drawVariableList, error => {
