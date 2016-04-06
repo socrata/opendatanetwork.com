@@ -31,7 +31,7 @@ class Tab {
         });
 
         this.callback(regions);
-    } 
+    }
 
     clearCharts() {
         this.charts.forEach(chart => chart.clearChart());
@@ -95,12 +95,12 @@ class Chart {
             return column;
         });
     }
-    
+
     clearChart() {
         if (this.googleChart)
             this.googleChart.clearChart();
     }
-    
+
     redraw() {
         if (this.googleChart && this.dataTable)
             this.googleChart.draw(this.dataTable, this.options);
@@ -142,9 +142,10 @@ class Chart {
     getData(regions) {
         return new Promise((resolve, reject) => {
             const columns = [this.tab.idColumn].concat(this.data.map(variable => variable.column));
+            const notNull = columns.map(column => `${column} IS NOT NULL`).join(' AND ');
             const params = _.extend({
                 '$select': columns.join(','),
-                '$where': `${this.tab.idColumn} in (${regions.map(region => `'${region.id}'`)})`,
+                '$where': `${this.tab.idColumn} in (${regions.map(region => `'${region.id}'`)}) AND (${notNull})`,
                 '$order': columns.map(column => `${column} ASC`).join(',')
             }, this.params);
             const url = `${this.tab.path}?${$.param(params)}`;

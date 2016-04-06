@@ -367,7 +367,7 @@ class RenderController {
                     // If only one region result and no search results, just redirect to the region page.
                     //
                     if ((templateParams.searchResultsRegions.length == 1) &&
-                        (templateParams.searchResults.results) && 
+                        (templateParams.searchResults.results) &&
                         (templateParams.searchResults.results.length == 0)) {
 
                         const region = templateParams.searchResultsRegions[0];
@@ -452,10 +452,12 @@ class RenderController {
         const descriptionPromise = MapDescription.summarizeFromParams(params);
         const searchPromise = API.searchDatasetsURL(params);
         const locationsPromise = API.locations();
+        const sourcesPromise = Sources.sourcesPromiseFromParams(params);
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
                              categoriesPromise, tagsPromise, domainsPromise,
                              datasetsPromise, descriptionPromise, searchPromise,
-                             locationsPromise, forecastDescriptionsPromise];
+                             locationsPromise, forecastDescriptionsPromise,
+                             sourcesPromise];
         const allPromise = Promise.all(allPromises);
 
         allPromise.then(data => {
@@ -468,7 +470,7 @@ class RenderController {
                 });
                 const group = Sources.group(vector);
 
-                const sources = Sources.sources(group, params.regions).map(source => {
+                const sources = data[11].map(source => {
                     return _.extend({}, source, {
                         url: Navigate.url({
                             regions: params.regions,

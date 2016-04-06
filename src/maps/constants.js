@@ -41,6 +41,10 @@ const MapConstants = {
     },
     AUTO_ZOOM_OUT: 1, // amount to zoom out with only one selected region
 
+    NO_DATA_POPUP_OPTIONS: {
+        className: 'no-data-popup'
+    },
+
     POI_ZOOM: 11.0, // auto zoom for point of interest maps
     POI_WAIT_MS: 100, // amount of time to wait to debounce updates
 
