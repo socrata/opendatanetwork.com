@@ -29,6 +29,7 @@
     "matchdep": "^0.3.0",
     "memjs": "0.9.0",
     "moment": "^2.10.2",
+    "morgan": "^1.7.0",
     "numeral": "^1.5.3",
     "orchestrator": "^0.3.7",
     "path": "^0.12.7",

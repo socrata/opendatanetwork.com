@@ -4,6 +4,7 @@ const _ = require('lodash');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const express = require('express');
+const morgan = require('morgan');
 const favicon = require('serve-favicon');
 const helmet = require('helmet');
 const numeral = require('numeral');
@@ -20,6 +21,9 @@ app.use(cookieParser());
 // Set X-Frame-Options header
 //
 app.use(helmet.xframe('deny'));
+
+// Set up apache common log format output
+app.use(morgan('combined'));
 
 // Set up static folders
 //
