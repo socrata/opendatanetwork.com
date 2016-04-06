@@ -19,10 +19,12 @@
     <ul class="categories-list-mobile">
         <% categories.forEach(function(result) { %>
         <li>
-            <a href="/search?categories=<%= encodeURIComponent(result.category) %>">
-                <i class="fa <%= result.metadata.icon %>"></i>
-                <%= result.category %>
-            </a>
+            <h3>
+                <a href="/search?categories=<%= encodeURIComponent(result.category) %>">
+                    <i class="fa <%= result.metadata.icon %>"></i>
+                    <%= result.category %>
+                </a>
+            </h3>
         </li>
         <% }); %>
     </ul>

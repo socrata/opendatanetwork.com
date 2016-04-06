@@ -1,0 +1,81 @@
+<section class="regions-section">
+    <div class="container">
+        <h4>Geographical Regions</h4>
+        <ul class="states-list states-list-collapsed">
+
+          <% if (locations) locations.forEach(function(location) { %>
+            <li class="state state-collapsed">
+                <h3>
+                    <i class="fa fa-map-marker"></i>
+                    <a href="/region/<%= location.id %>/<%= location.name %>"><%= location.name %></a>
+                </h3>
+                <ul class="regions-list">
+                  <% for (var i = 0; i < location.msas.length; i++) { %>
+                    <li class="region">
+                        <a href="<%= location.msas[i].url %>"><%= location.msas[i].name %></a>
+                    </li>
+                  <% } %>
+                </ul>
+                <ul class="regions-list">
+                  <% for (var i = 0; i < location.counties.length; i++) { %>
+                    <li class="region">
+                        <a href="<%= location.counties[i].url %>"><%= location.counties[i].name %></a>
+                    </li>
+                  <% } %>
+                </ul>
+                <ul class="regions-list">
+                  <% for (var i = 0; i < location.cities.length; i++) { %>
+                    <li class="region">
+                        <a href="<%= location.cities[i].url %>"><%= location.cities[i].name %></a>
+                    </li>
+                  <% } %>
+                </ul>
+                <a class="more-subregions-link">View More</a>
+             </li>
+          <% }) %>
+
+        </ul>
+        <div class="cb"></div>
+        <a class="more-regions-link">View More Regions</a>
+    </div>
+</section>
+
+<section class="regions-section-mobile">
+    <h4>Geographical Regions</h4>
+    <ul class="states-list-mobile">
+      <% if (locations) locations.forEach(function(location) { %>
+        <li>
+            <h3>
+                <a class="state-expand-mobile fa fa-plus" region-id="<%= location.id %>"></a>
+                <a class="state-link-mobile" href="/region/<%= location.id %>/<%= location.name %>">
+                    <i class="fa fa-map-marker"></i>
+                    <%= location.name %>
+                </a>
+            </h3>
+            <div class="sub-regions-container-<%=location.id %>-mobile sub-regions-container-mobile">
+                <ul class="sub-regions-list-mobile">
+                    <% for (var i = 0; i < location.msas.length; i++) { %>
+                    <li>
+                        <a href="<%= location.msas[i].url %>"><%= location.msas[i].name %></a>
+                    </li>
+                    <% } %>
+                </ul>
+                <ul class="sub-regions-list-mobile">
+                    <% for (var i = 0; i < location.counties.length; i++) { %>
+                    <li>
+                        <a href="<%= location.counties[i].url %>"><%= location.counties[i].name %></a>
+                    </li>
+                    <% } %>
+                </ul>
+                <ul class="sub-regions-list-mobile">
+                    <% for (var i = 0; i < location.cities.length; i++) { %>
+                    <li>
+                        <a href="<%= location.cities[i].url %>"><%= location.cities[i].name %></a>
+                    </li>
+                    <% } %>
+                </ul>
+            </div>
+        </li>
+      <% }) %>
+    </ul>
+</section>

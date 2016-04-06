@@ -12,7 +12,20 @@ $(document).ready(function() {
 
         $('.categories-list-mobile').slideToggle(100);
     });
-    
+
+    // Mobile regions
+    //
+    $('.state-expand-mobile').click(function() {
+
+        const regionId = $(this).attr('region-id');
+
+        if ($('.sub-regions-container-' + regionId + '-mobile').is(':visible'))
+            $(this).removeClass('fa-minus').addClass('fa-plus');
+        else
+            $(this).removeClass('fa-plus').addClass('fa-minus');
+
+        $('.sub-regions-container-' + regionId + '-mobile').slideToggle(100);
+    });
 
     // Slider
     //

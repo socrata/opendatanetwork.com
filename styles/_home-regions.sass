@@ -1,10 +1,88 @@
 
+// Mobile
+//
+.regions-section-mobile
+
+    h4
+        color: $black-text-color
+        font-size: 20px
+        font-weight: 700
+        height: 50px
+        line-height: 50px
+        margin: 0
+        text-transform: uppercase
+
+    .states-list-mobile
+        list-style-type: none
+        margin: 0
+        padding: 0
+        text-align: left
+
+        >li
+            border-top: 1px solid $gray-border-color
+
+        >li:first-child
+            border-top: 0
+
+        li
+            h3
+                background-color: white
+                margin: 0
+                padding: 0
+
+                .state-link-mobile
+                    color: $blue-text-color
+                    font-size: 22px
+                    font-weight: normal
+                    height: 50px
+                    line-height: 50px
+                    margin-left: 30px
+                    
+                    .fa-map-marker
+                        font-size: 26px
+                        margin-right: 10px
+
+                .state-expand-mobile
+                    color: $blue-text-color
+                    cursor: pointer
+                    float: right
+                    line-height: 50px
+                    padding: 0 30px
+
+            .sub-regions-container-mobile
+                display: none
+
+                .sub-regions-list-mobile
+                    list-style-type: none
+                    margin: 0
+                    padding: 20px 0
+                    text-align: center
+
+                    a
+                        color: $blue-text-color
+                        display: block
+                        height: 35px
+                        line-height: 35px
+
+        
+
+
+
+
+
+// Desktop
+//
 $container-width: 1020px
 $category-item-width: 245px
 
-section.states
-
+.regions-section
     clear: both
+
+
+    display: none
+
+
+
 
     .container
         margin: 0 auto

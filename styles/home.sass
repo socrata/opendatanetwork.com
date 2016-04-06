@@ -9,19 +9,22 @@ $green-color: #27ae60
 $orange-color: #e74c3c
 
 @import app
+@import quick-links
+@import search-bar-controls
+@import home-hero
 @import home-bar
 @import home-categories
-@import search-bar-controls
-@import quick-links
-@import home-hero
-@import locations-by-state
-
+@import home-regions
 
 /* Partners
 
 section.partners
   background-color: white
   clear: both
+  
+  @media (max-width: $mobile-width)
+    display: none
+
 
 section.partners .container
   margin: 0 auto
@@ -49,4 +52,3 @@ section.partners .join
   padding-left: 30px
   padding-right: 30px
   vertical-align: middle
-
