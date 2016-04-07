@@ -214,16 +214,13 @@ class MapView {
 
                         this.closeUserOpenedPopups();
 
-                        if (!(region.id in this._popups)) {
-                            const showDigIn = (this.params.vector == 'city_crime');
-                            const popup = L.popup(MapConstants.POPUP_OPTIONS).setLatLng(MapView.center(layer));
-                            const node = this.getPopupNode(region, layer, popup, true, true, showDigIn);
+                        const showDigIn = (this.params.vector == 'city_crime');
+                        const popup = L.popup(MapConstants.POPUP_OPTIONS).setLatLng(MapView.center(layer));
+                        const node = this.getPopupNode(region, layer, popup, true, true, showDigIn);
 
-                            popup.setContent(node);
+                        popup.setContent(node);
 
-                            this._popups[region.id] = popup;
-                        }
-
+                        this._popups[region.id] = popup;
                         this._popups[region.id].addTo(this.map);
                     }
                 });
