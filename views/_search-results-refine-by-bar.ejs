@@ -20,7 +20,6 @@
     </a>
 
     <label class="refine-by-label">Refine by:</label>
-
     <i class="fa fa-bar-chart search-results-header-icon"></i>
     <label class="search-results-header-label">
     <% if (params.q.length > 0) { %>
@@ -36,6 +35,8 @@
           <% } else { %>
             Found <%= searchResults.resultSetSizeString %> results
           <% } %>
+        <% } else { %>
+            Found 0 results
         <% } %>
     <% } %>
     </label>

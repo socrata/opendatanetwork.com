@@ -338,21 +338,14 @@ class SearchPageController {
 
     toggleTag(tag) {
 
-        // Selecting a standard (tag) resets any other search filter
-        //
         const i = this.params.tags.indexOf(tag);
 
         if (i > -1)
             this.params.tags.splice(i, 1); // remove at index i
         else
-            this.params.tags = [tag];
+            this.params.tags.push(tag);
 
         this.params.page = 0;
-        this.params.categories = [];
-        this.params.domains = [];
-        this.params.q = '';
-        this.params.regions = [];
-        this.params.vector = '';
     }
 
     subMenus() {
