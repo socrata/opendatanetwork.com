@@ -84,8 +84,10 @@ class ForecastDescription {
                             var slope = parseFloat(lastMeasured - firstMeasured) / years;
                             var lastForecast = (slope * this.forecast.steps) + lastMeasured;
                             var lastForecastYear = lastMeasuredYear + this.forecast.steps;
+                            var prefix = this.y.format.prefix || '';
+                            var suffix = this.y.format.suffix || '';
 
-                            return `The last measured ${this.y.label.toLowerCase()} for ${region.name} was ${numeral(lastMeasured).format(this.y.format.pattern)}. ${region.name} experienced an average annual growth rate of ${numeral(percentChange).format('0.00%')} from our first ${this.y.label.toLowerCase()} statistic recorded in ${firstMeasuredYear}. If past trends continue, we forecast the ${this.y.label.toLowerCase()} to be ${numeral(lastForecast).format(this.y.format.pattern)} by ${lastForecastYear}.`;
+                            return `The last measured ${this.y.label.toLowerCase()} for ${region.name} was ${prefix}${numeral(lastMeasured).format(this.y.format.pattern)}${suffix}. ${region.name} experienced an average annual growth rate of ${numeral(percentChange).format('0.00%')} from our first ${this.y.label.toLowerCase()} statistic recorded in ${firstMeasuredYear}. If past trends continue, we forecast the ${this.y.label.toLowerCase()} to be ${numeral(lastForecast).format(this.y.format.pattern)} by ${lastForecastYear}.`;
                         });
                 }
 
