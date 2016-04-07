@@ -224,7 +224,7 @@ const SOURCES = [
                 name: 'Expenditures',
                 attribution: ATTRIBUTIONS.iesNces,
                 domain: ODN_DOMAIN,
-                hasAutosuggest: false,
+                autosuggestColumn: 'health_indicators',
 
                 /**
                  * NBE 4x4 of public dataset on odn.data.socrata.com
