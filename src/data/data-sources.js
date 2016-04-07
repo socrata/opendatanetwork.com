@@ -263,7 +263,7 @@ const SOURCES = [
                             {
                                 column: 'value',
                                 label: 'education related capital expenditures',
-                                format: { pattern: '$###,###M' }
+                                format: { pattern: '$###,###', suffix: 'M' }
                             }
                         ],
                         transform: _toMillions('value'),
@@ -314,7 +314,7 @@ const SOURCES = [
                             {
                                 column: 'value',
                                 label: 'education related administration salaries',
-                                format: { pattern: '$###,###M' }
+                                format: { pattern: '$###,###', suffix: 'M' }
                             }
                         ],
                         transform: _toMillions('value'),
@@ -340,7 +340,7 @@ const SOURCES = [
                             {
                                 column: 'value',
                                 label: 'administration salaries per student',
-                                format: { pattern: '###,###' }
+                                format: { pattern: '$###,###' }
                             }
                         ],
                         chart: 'line',
@@ -365,7 +365,7 @@ const SOURCES = [
                             {
                                 column: 'value',
                                 label: 'teacher and other instruction related salaries',
-                                format: { pattern: '$###,###M' }
+                                format: { pattern: '$###,###', suffix: 'M' }
                             }
                         ],
                         transform: _toMillions('value'),
@@ -391,7 +391,7 @@ const SOURCES = [
                             {
                                 column: 'value',
                                 label: 'teacher and other instruction related salaries per student',
-                                format: { pattern: '###,###' }
+                                format: { pattern: '$###,###' }
                             }
                         ],
                         chart: 'line',
