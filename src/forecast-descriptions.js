@@ -87,7 +87,7 @@ class ForecastDescription {
                             var prefix = this.y.format.prefix || '';
                             var suffix = this.y.format.suffix || '';
 
-                            return `The last measured ${this.y.label.toLowerCase()} for ${region.name} was ${prefix}${numeral(lastMeasured).format(this.y.format.pattern)}${suffix}. ${region.name} experienced an average annual growth rate of ${numeral(percentChange).format('0.00%')} from our first ${this.y.label.toLowerCase()} statistic recorded in ${firstMeasuredYear}. If past trends continue, we forecast the ${this.y.label.toLowerCase()} to be ${numeral(lastForecast).format(this.y.format.pattern)} by ${lastForecastYear}.`;
+                            return `The last measured ${this.y.label.toLowerCase()} for ${region.name} was ${prefix}${numeral(lastMeasured).format(this.y.format.pattern)}${suffix}. ${region.name} experienced an average annual growth rate of ${numeral(percentChange).format('0.00%')} from our first ${this.y.label.toLowerCase()} statistic recorded in ${firstMeasuredYear}. If past trends continue, we forecast the ${this.y.label.toLowerCase()} to be ${prefix}${numeral(lastForecast).format(this.y.format.pattern)}${suffix} by ${lastForecastYear}.`;
                         });
                 }
 
