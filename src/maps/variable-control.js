@@ -133,7 +133,10 @@ class VariableControl {
                 .append('li')
                 .append('a')
                 .text(variable => variable.name)
-                .on('click', variable => this.updateVariable(variable));
+                .on('click', variable => { 
+                    this.updateVariable(variable);
+                    $('.chart-sub-nav li').trigger('mouseleave');
+                });
 
             this.update();
         };
@@ -181,6 +184,7 @@ class VariableControl {
                         this.update();
                         this.updateYearSelectors(false);
                     }
+                    $('.chart-sub-nav li').trigger('mouseleave');
                 });
         };
 
