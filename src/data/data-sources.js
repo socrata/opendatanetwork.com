@@ -210,10 +210,8 @@ const SOURCES = [
                 fxf: 'uf4m-5u8r',
                 datalensFXF: '72qd-7s2t',
                 description: `
-                    The above map shows schools, libraries, parks, and other education-related
-                    places near the selected city.
-                    Head Start Centers are available for the entire nation,
-                    but other types of places are only available for some cities.`,
+                    The above map shows schools, libraries, and other education related
+                    places in and near the selected city. Not all types of places are available for all cities.`,
                 regions: ['place'],
                 hasAutosuggest: false,
                 searchTerms: ['college', 'education', 'school', 'university', 'instruction', 'teaching', 'teacher', 'professor', 'student', 'graduation', 'scholastic', 'matriculation'],
@@ -842,46 +840,6 @@ const SOURCES = [
         name: 'Health',
         datasets: [
             {
-                vector: 'environmental_health',
-                name: 'Environment',
-                sourceURL: 'http://egis.hud.opendata.arcgis.com/datasets/53a856bef6f24356abee30653399e94a_0',
-                description: `
-                    The environmental health hazard exposure index summarizes potential exposure to harmful toxins
-                    including carcinogenic, respiratory, and neurological hazards.
-                    Values are percentile ranked and range from 0 to 100,
-                    with higher values corresponding to less exposure to harmful toxins.
-                    Data is computed for U.S. counties by applying summary statistics across
-                    all census tracts present in a county and is current as of 2015.`,
-                attribution: ATTRIBUTIONS.hud,
-                domain: ODN_DOMAIN,
-                fxf: 'nax7-t6ga',
-                regions: ['county'],
-                searchTerms: ['environment', 'pollution', 'carbon', 'emissions', 'energy', 'waste', 'toxic', 'smog', 'climate', 'radiation', 'toxin', 'hazard'],
-                charts: [
-                    {
-                        name: 'Median Environmental Health Hazard Index',
-                        params: {variable: 'env-health-idx-median'},
-                        data: [
-                            {
-                                column: 'variable',
-                                label: 'Environmental Health Hazard Index',
-                                type: 'string'
-                            },
-                            {
-                                column: 'value',
-                                label: 'Value'
-                            }
-                        ],
-                        transform: _rename('variable', {'env-health-idx-median': 'Median Environmental Health Hazard Index'}),
-                        chart: 'column',
-                        options: {
-                            height: 300,
-                            vAxis: { viewWindow: { min: 0 } }
-                        }
-                    }
-                ]
-            },
-            {
                 vector: 'health',
                 name: 'Health Behaviors',
                 sourceURL: 'http://www.countyhealthrankings.org/rankings/data',
@@ -1096,6 +1054,46 @@ const SOURCES = [
                         options: {
                             height: 300,
                             vAxis: { format: '#.##%', viewWindow: { min: 0 } },
+                        }
+                    }
+                ]
+            },
+            {
+                vector: 'environmental_health',
+                name: 'Environment',
+                sourceURL: 'http://egis.hud.opendata.arcgis.com/datasets/53a856bef6f24356abee30653399e94a_0',
+                description: `
+                    The environmental health hazard exposure index summarizes potential exposure to harmful toxins
+                    including carcinogenic, respiratory, and neurological hazards.
+                    Values are percentile ranked and range from 0 to 100,
+                    with higher values corresponding to less exposure to harmful toxins.
+                    Data is computed for U.S. counties by applying summary statistics across
+                    all census tracts present in a county and is current as of 2015.`,
+                attribution: ATTRIBUTIONS.hud,
+                domain: ODN_DOMAIN,
+                fxf: 'nax7-t6ga',
+                regions: ['county'],
+                searchTerms: ['environment', 'pollution', 'carbon', 'emissions', 'energy', 'waste', 'toxic', 'smog', 'climate', 'radiation', 'toxin', 'hazard'],
+                charts: [
+                    {
+                        name: 'Median Environmental Health Hazard Index',
+                        params: {variable: 'env-health-idx-median'},
+                        data: [
+                            {
+                                column: 'variable',
+                                label: 'Environmental Health Hazard Index',
+                                type: 'string'
+                            },
+                            {
+                                column: 'value',
+                                label: 'Value'
+                            }
+                        ],
+                        transform: _rename('variable', {'env-health-idx-median': 'Median Environmental Health Hazard Index'}),
+                        chart: 'column',
+                        options: {
+                            height: 300,
+                            vAxis: { viewWindow: { min: 0 } }
                         }
                     }
                 ]
