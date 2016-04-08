@@ -34,7 +34,7 @@ class POIMapView {
                 this.model = new POIMapModel(this.source, variable);
                 this.update();
             });
-            this.variableControl.onAdd(map);
+            this.variableControl.onAdd(map, this.regions);
         });
     }
 
@@ -81,11 +81,6 @@ class POIMapView {
             console.error(error);
         });
     }
-
-    _geocodeRegion(region) {
-
-
-    }
 }
 
 class MapView {
@@ -106,6 +101,7 @@ class MapView {
 
         this.zoomControl = new L.Control.Zoom(MapConstants.ZOOM_CONTROL_OPTIONS);
         this._popups = [];
+        this._noDataPopups = [];
     }
 
     show(selector) {
@@ -121,7 +117,7 @@ class MapView {
         map.addControl(this.legend);
         map.addControl(this.tooltip);
         if (MapConstants.ZOOM_CONTROL) map.addControl(this.zoomControl);
-        this.variableControl.onAdd(map);
+        this.variableControl.onAdd(map, this.regions);
 
         map.whenReady(() => {
             const url = layerID => `https://api.mapbox.com/v4/${layerID}/{z}/{x}/{y}.png?access_token=${MapConstants.MAPBOX_TOKEN}`;
@@ -184,7 +180,6 @@ class MapView {
     }
 
     updateFeatures(model, scale) {
-
         this.closeUserOpenedPopups();
 
         this.features.eachLayer(layer => {
@@ -219,22 +214,32 @@ class MapView {
 
                         this.closeUserOpenedPopups();
 
-                        if (!(region.id in this._popups)) {
-                            const showDigIn = (this.params.vector == 'city_crime');
-                            const popup = L.popup(MapConstants.POPUP_OPTIONS).setLatLng(MapView.center(layer));
-                            const node = this.getPopupNode(region, layer, popup, true, true, showDigIn);
+                        const showDigIn = (this.params.vector == 'city_crime');
+                        const popup = L.popup(MapConstants.POPUP_OPTIONS).setLatLng(MapView.center(layer));
+                        const node = this.getPopupNode(region, layer, popup, true, true, showDigIn);
 
-                            popup.setContent(node);
+                        popup.setContent(node);
 
-                            this._popups[region.id] = popup;
-                        }
-
+                        this._popups[region.id] = popup;
                         this._popups[region.id].addTo(this.map);
                     }
                 });
-            } 
-            else {
+            } else {
                 layer.setStyle(MapConstants.NO_DATA_STYLE);
+
+                if (this.map &&
+                    this.regionIDs.has(layer.feature.id)) {
+
+                    const region = this.regions[0];
+                    const popup = L.popup(MapConstants.NO_DATA_POPUP_OPTIONS)
+                        .setLatLng(layer.getBounds().getCenter())
+                        .setContent(`No data exists for ${region.name} in ${model.year}.
+                            Try another year, or go to another region on the map
+                            by clicking on it`)
+                        .openOn(this.map);
+
+                    this._noDataPopups.push(popup);
+                }
             }
         });
     }
@@ -283,7 +288,7 @@ class MapView {
 
         return container.node();
     }
-    
+
     getDateString(date) {
         return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
     }
@@ -310,10 +315,15 @@ class MapView {
     }
 
     closeUserOpenedPopups() {
+
         _.values(this._popups).forEach(popup => {
-            if (_.isUndefined(popup.originalRegion))
+            if (_.isUndefined(popup.originalRegion) ||
+                this._noDataPopups.length > 0)
                 this.map.closePopup(popup);
         });
+
+        this._noDataPopups.forEach(popup => this.map.closePopup(popup));
+        this._noDataPopups = [];
     }
 
     static center(layer) {

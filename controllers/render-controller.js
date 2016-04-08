@@ -367,7 +367,7 @@ class RenderController {
                     // If only one region result and no search results, just redirect to the region page.
                     //
                     if ((templateParams.searchResultsRegions.length == 1) &&
-                        (templateParams.searchResults.results) && 
+                        (templateParams.searchResults.results) &&
                         (templateParams.searchResults.results.length == 0)) {
 
                         const region = templateParams.searchResultsRegions[0];
@@ -452,11 +452,45 @@ class RenderController {
         const descriptionPromise = MapDescription.summarizeFromParams(params);
         const searchPromise = API.searchDatasetsURL(params);
         const locationsPromise = API.locations();
+        const sourcesPromise = Sources.sourcesPromiseFromParams(params);
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
                              categoriesPromise, tagsPromise, domainsPromise,
                              datasetsPromise, descriptionPromise, searchPromise,
-                             locationsPromise, forecastDescriptionsPromise];
-        const allPromise = Promise.all(allPromises);
+                             locationsPromise, forecastDescriptionsPromise,
+                             sourcesPromise];
+
+
+        function awaitPromises(promises, timeoutMS) {
+            timeoutMS = timeoutMS || 5000;
+
+            return new Promise((resolve, reject) => {
+                let resolved = 0;
+                let unresolved = _.range(0, promises.length);
+                let results = new Array(promises.length);
+
+                promises.forEach((promise, index) => {
+                    promise.then(result => {
+                        results[index] = result;
+                        unresolved = _.without(unresolved, index);
+                        resolved++;
+                        if (resolved === promises.length) resolve(results);
+                    }, error => {
+                        console.log(index);
+                    });
+                });
+
+                setTimeout(() => {
+                    if (resolved != promises.length) {
+                        console.log(`awaiting promises timeout after ${timeoutMS}ms`);
+                        console.log(`resolved ${resolved} of ${promises.length} promises`);
+                        console.log(`failed to resolve promises at indexes ${unresolved.join(', ')}`);
+                        reject();
+                    }
+                }, timeoutMS);
+            });
+        }
+
+        const allPromise = awaitPromises(allPromises);
 
         allPromise.then(data => {
             try {
@@ -468,7 +502,7 @@ class RenderController {
                 });
                 const group = Sources.group(vector);
 
-                const sources = Sources.sources(group, params.regions).map(source => {
+                const sources = data[11].map(source => {
                     return _.extend({}, source, {
                         url: Navigate.url({
                             regions: params.regions,

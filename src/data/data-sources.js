@@ -210,10 +210,8 @@ const SOURCES = [
                 fxf: 'uf4m-5u8r',
                 datalensFXF: '72qd-7s2t',
                 description: `
-                    The above map shows schools, libraries, parks, and other education-related
-                    places near the selected city.
-                    Head Start Centers are available for the entire nation,
-                    but other types of places are only available for some cities.`,
+                    The above map shows schools, libraries, and other education related
+                    places in and near the selected city. Not all types of places are available for all cities.`,
                 regions: ['place'],
                 hasAutosuggest: false,
                 searchTerms: ['college', 'education', 'school', 'university', 'instruction', 'teaching', 'teacher', 'professor', 'student', 'graduation', 'scholastic', 'matriculation'],
@@ -224,7 +222,7 @@ const SOURCES = [
                 name: 'Expenditures',
                 attribution: ATTRIBUTIONS.iesNces,
                 domain: ODN_DOMAIN,
-                hasAutosuggest: false,
+                autosuggestColumn: 'health_indicators',
 
                 /**
                  * NBE 4x4 of public dataset on odn.data.socrata.com
@@ -263,7 +261,7 @@ const SOURCES = [
                             {
                                 column: 'value',
                                 label: 'education related capital expenditures',
-                                format: { pattern: '$###,###M' }
+                                format: { pattern: '$###,###', suffix: 'M' }
                             }
                         ],
                         transform: _toMillions('value'),
@@ -314,7 +312,7 @@ const SOURCES = [
                             {
                                 column: 'value',
                                 label: 'education related administration salaries',
-                                format: { pattern: '$###,###M' }
+                                format: { pattern: '$###,###', suffix: 'M' }
                             }
                         ],
                         transform: _toMillions('value'),
@@ -340,7 +338,7 @@ const SOURCES = [
                             {
                                 column: 'value',
                                 label: 'administration salaries per student',
-                                format: { pattern: '###,###' }
+                                format: { pattern: '$###,###' }
                             }
                         ],
                         chart: 'line',
@@ -365,7 +363,7 @@ const SOURCES = [
                             {
                                 column: 'value',
                                 label: 'teacher and other instruction related salaries',
-                                format: { pattern: '$###,###M' }
+                                format: { pattern: '$###,###', suffix: 'M' }
                             }
                         ],
                         transform: _toMillions('value'),
@@ -391,7 +389,7 @@ const SOURCES = [
                             {
                                 column: 'value',
                                 label: 'teacher and other instruction related salaries per student',
-                                format: { pattern: '###,###' }
+                                format: { pattern: '$###,###' }
                             }
                         ],
                         chart: 'line',
@@ -842,46 +840,6 @@ const SOURCES = [
         name: 'Health',
         datasets: [
             {
-                vector: 'environmental_health',
-                name: 'Environment',
-                sourceURL: 'http://egis.hud.opendata.arcgis.com/datasets/53a856bef6f24356abee30653399e94a_0',
-                description: `
-                    The environmental health hazard exposure index summarizes potential exposure to harmful toxins
-                    including carcinogenic, respiratory, and neurological hazards.
-                    Values are percentile ranked and range from 0 to 100,
-                    with higher values corresponding to less exposure to harmful toxins.
-                    Data is computed for U.S. counties by applying summary statistics across
-                    all census tracts present in a county and is current as of 2015.`,
-                attribution: ATTRIBUTIONS.hud,
-                domain: ODN_DOMAIN,
-                fxf: 'nax7-t6ga',
-                regions: ['county'],
-                searchTerms: ['environment', 'pollution', 'carbon', 'emissions', 'energy', 'waste', 'toxic', 'smog', 'climate', 'radiation', 'toxin', 'hazard'],
-                charts: [
-                    {
-                        name: 'Median Environmental Health Hazard Index',
-                        params: {variable: 'env-health-idx-median'},
-                        data: [
-                            {
-                                column: 'variable',
-                                label: 'Environmental Health Hazard Index',
-                                type: 'string'
-                            },
-                            {
-                                column: 'value',
-                                label: 'Value'
-                            }
-                        ],
-                        transform: _rename('variable', {'env-health-idx-median': 'Median Environmental Health Hazard Index'}),
-                        chart: 'column',
-                        options: {
-                            height: 300,
-                            vAxis: { viewWindow: { min: 0 } }
-                        }
-                    }
-                ]
-            },
-            {
                 vector: 'health',
                 name: 'Health Behaviors',
                 sourceURL: 'http://www.countyhealthrankings.org/rankings/data',
@@ -1099,6 +1057,46 @@ const SOURCES = [
                         }
                     }
                 ]
+            },
+            {
+                vector: 'environmental_health',
+                name: 'Environment',
+                sourceURL: 'http://egis.hud.opendata.arcgis.com/datasets/53a856bef6f24356abee30653399e94a_0',
+                description: `
+                    The environmental health hazard exposure index summarizes potential exposure to harmful toxins
+                    including carcinogenic, respiratory, and neurological hazards.
+                    Values are percentile ranked and range from 0 to 100,
+                    with higher values corresponding to less exposure to harmful toxins.
+                    Data is computed for U.S. counties by applying summary statistics across
+                    all census tracts present in a county and is current as of 2015.`,
+                attribution: ATTRIBUTIONS.hud,
+                domain: ODN_DOMAIN,
+                fxf: 'nax7-t6ga',
+                regions: ['county'],
+                searchTerms: ['environment', 'pollution', 'carbon', 'emissions', 'energy', 'waste', 'toxic', 'smog', 'climate', 'radiation', 'toxin', 'hazard'],
+                charts: [
+                    {
+                        name: 'Median Environmental Health Hazard Index',
+                        params: {variable: 'env-health-idx-median'},
+                        data: [
+                            {
+                                column: 'variable',
+                                label: 'Environmental Health Hazard Index',
+                                type: 'string'
+                            },
+                            {
+                                column: 'value',
+                                label: 'Value'
+                            }
+                        ],
+                        transform: _rename('variable', {'env-health-idx-median': 'Median Environmental Health Hazard Index'}),
+                        chart: 'column',
+                        options: {
+                            height: 300,
+                            vAxis: { viewWindow: { min: 0 } }
+                        }
+                    }
+                ]
             }
         ]
     },
@@ -1275,6 +1273,55 @@ class Sources {
     static group(vector) {
         return _.find(SOURCES, group => {
             return _.find(group.datasets, dataset => dataset.vector === vector);
+        });
+    }
+
+    static sourcesPromiseFromParams(params) {
+        const vector = params.vector || 'population';
+        const group = Sources.group(vector) || SOURCES[0];
+        const regions = params.regions;
+        return Sources.sourcesPromise(group, regions);
+    }
+
+    static sourcesPromise(group, regions) {
+        return new Promise((resolve, reject) => {
+            const supportsPromises = group.datasets.map(dataset => {
+                return Sources.supportsPromise(dataset, regions);
+            });
+
+            Promise.all(supportsPromises).then(results => {
+                if (results.length !== group.datasets.length) {
+                    console.error('error validating sources: length should be the same');
+                    resolve(group.datasets);
+                } else {
+                    const supported = group.datasets.filter((dataset, index) => results[index]);
+                    resolve(supported);
+                }
+            }, error => {
+                console.error(error);
+                resolve(group.datasets);
+            });
+        });
+    }
+
+    static supportsPromise(dataset, regions) {
+        return new Promise((resolve, reject) => {
+            if (Sources.supports(dataset, regions)) {
+                const path = `http://${dataset.domain}/resource/${dataset.fxf}`;
+                const params = {
+                    '$where': `${dataset.idColumn || 'id'} in (${regions.map(region =>`'${region.id}'`).join(',')})`
+                };
+                const url = Requests.buildURL(path, params);
+
+                return Requests.getJSON(url).then(response => {
+                    resolve(response.length > 0);
+                }, error => {
+                    console.error(error);
+                    resolve(true);
+                });
+            } else {
+                resolve(false);
+            }
         });
     }
 

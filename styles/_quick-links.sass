@@ -10,7 +10,9 @@ $darker-gray-border-color: #5e5e5e
     height: 50px
     line-height: 50px
     padding: 0 20px
+
     @media (min-width: 1200px)
+        display: none
         width: 300px
 
     .fa-caret-down
@@ -83,11 +85,18 @@ $darker-gray-border-color: #5e5e5e
 .quick-links-sub-menu li a:hover
     background-color: $orange-color
 
-.quick-links-sub-menu li .fa
-    margin-right: 10px
-    
 .quick-links-categories li
     text-transform: capitalize
+
+    a
+        position: relative
+        padding: 10px 20px 10px 45px
+        
+        .fa
+            left: 20px
+            position: absolute
+            top: 12px
+            
 
 .quick-links-more
     background: $darker-gray-border-color
