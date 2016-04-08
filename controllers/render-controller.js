@@ -458,7 +458,39 @@ class RenderController {
                              datasetsPromise, descriptionPromise, searchPromise,
                              locationsPromise, forecastDescriptionsPromise,
                              sourcesPromise];
-        const allPromise = Promise.all(allPromises);
+
+
+        function awaitPromises(promises, timeoutMS) {
+            timeoutMS = timeoutMS || 5000;
+
+            return new Promise((resolve, reject) => {
+                let resolved = 0;
+                let unresolved = _.range(0, promises.length);
+                let results = new Array(promises.length);
+
+                promises.forEach((promise, index) => {
+                    promise.then(result => {
+                        results[index] = result;
+                        unresolved = _.without(unresolved, index);
+                        resolved++;
+                        if (resolved === promises.length) resolve(results);
+                    }, error => {
+                        console.log(index);
+                    });
+                });
+
+                setTimeout(() => {
+                    if (resolved != promises.length) {
+                        console.log(`awaiting promises timeout after ${timeoutMS}ms`);
+                        console.log(`resolved ${resolved} of ${promises.length} promises`);
+                        console.log(`failed to resolve promises at indexes ${unresolved.join(', ')}`);
+                        reject();
+                    }
+                }, timeoutMS);
+            });
+        }
+
+        const allPromise = awaitPromises(allPromises);
 
         allPromise.then(data => {
             try {

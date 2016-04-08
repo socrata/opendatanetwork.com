@@ -54,47 +54,54 @@ class ForecastDescription {
     }
 
     getPromise(regions) {
-
         return new Promise((resolve, reject) => {
-
             this.getData(regions).then(data => {
-                var descriptions = [];
+                try {
+                    var descriptions = [];
 
-                if (this.forecast && (this.forecast.type === 'linear')) {
-                    if (this.transpose) data = this._transpose(data);
-                    if (this.transform) data = this.transform(data);
+                    if (this.forecast && (this.forecast.type === 'linear')) {
+                        if (this.transpose) data = this._transpose(data);
+                        if (this.transform) data = this.transform(data);
 
-                    const groupedData = _.groupBy(data, 'id');
+                        const groupedData = _.groupBy(data, 'id');
 
-                    descriptions = regions
-                        .filter(region => region.id in groupedData)
-                        .map(region => {
-                            var regionData = groupedData[region.id];
+                        descriptions = regions
+                            .filter(region => region.id in groupedData)
+                            .map(region => {
+                                var regionData = groupedData[region.id];
+                                if (regionData.length > 1) {
+                                    var firstMeasuredIndex = this.getFirstMeasuredIndex(regionData, this.y.column);
+                                    var firstMeasured = parseFloat(regionData[firstMeasuredIndex][this.y.column]);
+                                    var firstMeasuredYear = parseInt(regionData[firstMeasuredIndex].year);
 
-                            var firstMeasuredIndex = this.getFirstMeasuredIndex(regionData, this.y.column);
-                            var firstMeasured = parseFloat(regionData[firstMeasuredIndex][this.y.column]);
-                            var firstMeasuredYear = parseInt(regionData[firstMeasuredIndex].year);
+                                    var lastMeasuredIndex = this.getLastMeasuredIndex(regionData, this.y.column);
+                                    var lastMeasured = parseFloat(regionData[lastMeasuredIndex][this.y.column]);
+                                    var lastMeasuredYear = parseInt(regionData[lastMeasuredIndex].year);
 
-                            var lastMeasuredIndex = this.getLastMeasuredIndex(regionData, this.y.column);
-                            var lastMeasured = parseFloat(regionData[lastMeasuredIndex][this.y.column]);
-                            var lastMeasuredYear = parseInt(regionData[lastMeasuredIndex].year);
+                                    var years = parseFloat(lastMeasuredYear - firstMeasuredYear);
+                                    var percentChange = parseFloat((lastMeasured - firstMeasured) / firstMeasured) / years;
+                                    var slope = parseFloat(lastMeasured - firstMeasured) / years;
+                                    var lastForecast = (slope * this.forecast.steps) + lastMeasured;
+                                    var lastForecastYear = lastMeasuredYear + this.forecast.steps;
+                                    var prefix = this.y.format.prefix || '';
+                                    var suffix = this.y.format.suffix || '';
 
-                            var years = parseFloat(lastMeasuredYear - firstMeasuredYear);
-                            var percentChange = parseFloat((lastMeasured - firstMeasured) / firstMeasured) / years;
-                            var slope = parseFloat(lastMeasured - firstMeasured) / years;
-                            var lastForecast = (slope * this.forecast.steps) + lastMeasured;
-                            var lastForecastYear = lastMeasuredYear + this.forecast.steps;
-                            var prefix = this.y.format.prefix || '';
-                            var suffix = this.y.format.suffix || '';
+                                    return `The last measured ${this.y.label.toLowerCase()} for ${region.name} was ${prefix}${numeral(lastMeasured).format(this.y.format.pattern)}${suffix}. ${region.name} experienced an average annual growth rate of ${numeral(percentChange).format('0.00%')} from our first ${this.y.label.toLowerCase()} statistic recorded in ${firstMeasuredYear}. If past trends continue, we forecast the ${this.y.label.toLowerCase()} to be ${prefix}${numeral(lastForecast).format(this.y.format.pattern)}${suffix} by ${lastForecastYear}.`;
+                                } else {
+                                    return '';
+                                }
+                            });
+                    }
 
-                            return `The last measured ${this.y.label.toLowerCase()} for ${region.name} was ${prefix}${numeral(lastMeasured).format(this.y.format.pattern)}${suffix}. ${region.name} experienced an average annual growth rate of ${numeral(percentChange).format('0.00%')} from our first ${this.y.label.toLowerCase()} statistic recorded in ${firstMeasuredYear}. If past trends continue, we forecast the ${this.y.label.toLowerCase()} to be ${prefix}${numeral(lastForecast).format(this.y.format.pattern)}${suffix} by ${lastForecastYear}.`;
-                        });
+                    resolve({
+                        column: this.y.column,
+                        description: descriptions.join('  ')
+                    });
+                } catch (error) {
+                    console.error(error);
+                    console.error(error.stack);
+                    reject(error);
                 }
-
-                resolve({
-                    column: this.y.column,
-                    description: descriptions.join('  ')
-                });
             }, reject);
         });
     }
