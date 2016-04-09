@@ -26,42 +26,44 @@ var _params = <%- JSON.stringify(params) %>;
         <% if (dataset.columns.length > 0) { %>
             <div class="columns-container">
                 <p>This dataset has the following <%- dataset.columns.length %> columns:</p>
-                <table>
-                <tr>
-                    <th>Column Name</th>
-                    <th>API Column Name</th>
-                    <th>Data Type</th>
-                    <% if (dataset.hasDescriptions) { %><th>Description</th><% } %>
-                    <% if (dataset.hasSampleValues) { %><th>Sample Values</th><% } %>
-                </tr>
-            <% dataset.columns.forEach(function(column) { %>
-                <tr class="column-row" data-field-name="<%- column.fieldName %>" data-type="<%- column.dataTypeName %>">
-                    <td class="name"><%- column.name %></td>
-                    <td class="field-name"><%- column.fieldName %></td>
-                    <td class="data-type">
-                        <a href="https://dev.socrata.com/docs/datatypes/<%- column.dataTypeName %>.html" target="blank"><%- column.dataTypeName %></a>
-                    </td>
-                <% if (dataset.hasDescriptions) { %>
-                    <td class="description"><%- column.description %></td>
+                <div class="table-container">
+                    <table>
+                    <tr>
+                        <th>Column Name</th>
+                        <th>API Column Name</th>
+                        <th>Data Type</th>
+                        <% if (dataset.hasDescriptions) { %><th>Description</th><% } %>
+                        <% if (dataset.hasSampleValues) { %><th>Sample Values</th><% } %>
+                    </tr>
+                <% dataset.columns.forEach(function(column) { %>
+                    <tr class="column-row" data-field-name="<%- column.fieldName %>" data-type="<%- column.dataTypeName %>">
+                        <td class="name"><%- column.name %></td>
+                        <td class="field-name"><%- column.fieldName %></td>
+                        <td class="data-type">
+                            <a href="https://dev.socrata.com/docs/datatypes/<%- column.dataTypeName %>.html" target="blank"><%- column.dataTypeName %></a>
+                        </td>
+                    <% if (dataset.hasDescriptions) { %>
+                        <td class="description"><%- column.description %></td>
+                    <% } %>
+            <% if (dataset.hasSampleValues) { %>
+                        <td class="popular-values">
+                <% if ((column.cachedContents != null) && (column.cachedContents.top != null)) {
+                    var rg = _.slice(column.cachedContents.top, 0, 5);
+                    rg.forEach(function(o) { %>
+                            <div class="dotdotdot"><%= (((column.dataTypeName == 'location') || (column.dataTypeName == 'point')) ?  JSON.stringify(o.item) : o.item) %></div>
+                <%
+                    });
+                }
+                %>
+                <% if (dataset.nbeId != null) { %>
+                            <a class="view-top-100" href="https://<%- dataset.domain %>/resource/<%- dataset.nbeId %>.json?$group=<%- column.fieldName %>&$select=<%- column.fieldName %>%20as%20value,count(*)&$order=count%20desc&$limit=100" rel="nofollow">view top 100</a>
                 <% } %>
-         <% if (dataset.hasSampleValues) { %>
-                    <td class="popular-values">
-            <% if ((column.cachedContents != null) && (column.cachedContents.top != null)) {
-                var rg = _.slice(column.cachedContents.top, 0, 5);
-                rg.forEach(function(o) { %>
-                        <div class="dotdotdot"><%= (((column.dataTypeName == 'location') || (column.dataTypeName == 'point')) ?  JSON.stringify(o.item) : o.item) %></div>
-            <%
-                });
-            }
-            %>
-            <% if (dataset.nbeId != null) { %>
-                        <a class="view-top-100" href="https://<%- dataset.domain %>/resource/<%- dataset.nbeId %>.json?$group=<%- column.fieldName %>&$select=<%- column.fieldName %>%20as%20value,count(*)&$order=count%20desc&$limit=100" rel="nofollow">view top 100</a>
-            <% } %>
-                    </td>
-        <% }%>
-                </tr>
-            <% }); %>
-                </table>
+                        </td>
+            <% }%>
+                    </tr>
+                <% }); %>
+                    </table>
+                </div>
             </div>
         <% } %>
         </div>

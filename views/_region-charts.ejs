@@ -1,0 +1,109 @@
+<div class="charts-column">
+    <ul class="chart-tabs">
+        <% groups.forEach(function(_group) { %>
+            <li class="<%= _group.selected ? 'selected' : '' %>">
+                <a href="<%= getSearchPageUrl(_group.datasets[0]) %>"<%- (params.regions.length >= 3) ? ' rel="nofollow"' : '' %>>
+                    <%= _group.name %>
+                </a>
+            </li>
+        <% }); %>
+    </ul>
+    <ul class="chart-sub-nav">
+        <li>
+            <span>
+                <%= source.name %>
+                <% if (sources.length > 1) { %>
+                    <i class="fa fa-caret-down"></i>
+                <% } %>
+            </span>
+            <% if (sources.length > 1) { %>
+                <ul class="chart-sub-nav-menu">
+                    <% sources.forEach(function(source) { %>
+                        <li><a href=<%= source.url %>><%= source.name %></a></li>
+                    <% }); %>
+                </ul>
+            <% } %>
+        </li>
+    </ul>
+    <div class="charts-container">
+        <p id="map-summary" style="display: <%= mapSummary === '' ? 'none' : 'block' %>">
+            <%= mapSummary %>
+        </p>
+        <div id="map"></div>
+    <% if ('mapDescription' in source) { %>
+        <div class="dataset-description map-description">
+            <p><%= source.mapDescription %></p>
+        </div>
+    <% } %>
+        <% include _map-summary %>
+        <% source.charts.forEach((chart, index) => { %>
+            <div class="chart" id=<%= chart.name.toLowerCase().replace(/\W/g, '') %>>
+                <h1 class="chart-title"><%= chart.name %></h1>
+
+                <div class="chart-container"></div>
+
+                <% if (chart.description || chart.forecast) { %>
+                    <div class="dataset-description">
+
+                    <% if (chart.description) { %>
+                        <p class="chart-description"><%- chart.description %></p><br>
+                    <% } %>
+
+                    <% if (chart.forecast) {
+                        var forecastDescription = forecastDescriptions[index];
+                        if (forecastDescription.description.length > 0) { %>
+                        <p><%= forecastDescription.description %></p><br>
+                    <% } }%>
+
+                        <p>Forecasted data uses a linear extrapolation algorithm which uses only available measured data provided by the
+                            <a href="<%= source.attribution.url %>"><%= source.attribution.name %></a>.
+                            Algorithm details are available
+                            <a href="https://en.wikipedia.org/wiki/Extrapolation#Linear_extrapolation">HERE</a>.
+                        </p>
+                    </div>
+                <% } %>
+            </div>
+        <% }); %>
+        <div class="dataset-description">
+            <% if ('description' in source) { %>
+                <p id="dataset-description"><%- source.description %></p>
+                <br>
+            <% } %>
+            <label class="attribution">
+                Above charts are based on data from the <a href="<%= source.attribution.url %>"><%= source.attribution.name %></a>.
+                <% if ('sourceURL' in source) { %>
+                    <a href="<%= source.sourceURL %>">Data Source</a> |
+                <% } %>
+                <a href="<%= source.datasetURL %>">ODN Dataset</a> |
+                <a href="<%= source.apiURL %>">API</a> -
+                <span class="info-icon">
+                    <div class="info-tooltip">
+                        <strong>Notes:</strong>
+                        <br><br>
+                        1. ODN datasets and APIs are subject to change and may differ in format from the original source data in order to provide a user-friendly experience on this site.
+                        <br><br>
+                        2. To build your own apps using this data, see the ODN Dataset and API links.
+                        <br><br>
+                        3. If you use this derived data in an app, we ask that you provide a link somewhere in your applications to the Open Data Network with a citation that states: "Data for this application was provided by the Open Data Network" where "Open Data Network" links to http://opendatanetwork.com. Where an application has a region specific module, we ask that you add an additional line that states: "Data about REGIONX was provided by the Open Data Network." where REGIONX is an HREF with a name for a geographical region like "Seattle, WA" and the link points to this page URL, e.g. http://opendatanetwork.com/region/1600000US5363000/Seattle_WA
+                    </div>
+                </span>
+            </label>
+        </div>
+    </div>
+<% if (searchResults && searchResults.resultSetSize > 0) { %>
+    <div class="search-results-container">
+        <div class="search-results-header">
+            <h2>
+                <span class="result-count"><%= searchResults.resultSetSizeString %></span>
+                <%= group.name %> and <%= source.name %>
+                Dataset<%= searchResults.resultSetSizeString > 1 ? 's' : '' %>
+                Involving
+                <%= regionNames %>
+            </h2>
+        </div>
+        <ul class="search-results">
+            <% include _search-results-items %>
+        </ul>
+    </div>
+<% } %>
+</div>

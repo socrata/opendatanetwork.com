@@ -1,4 +1,3 @@
-
 .search-results-regions-bar
     background-color: $dark-gray-background-color
     line-height: 50px
@@ -14,34 +13,31 @@
     display: table
     width: 100%
 
-.search-results-regions-row
-    display: table-row
+    .search-results-regions-row:first-child .search-results-regions-cell
+        border: none
 
-.search-results-regions-row:first-child .search-results-regions-cell
-    border: none
-    
-.search-results-regions-cell
-    border-top: 1px solid $gray-border-color
-    padding: 7px 30px 15px
-    display: table-cell
-    
-    h2
-        margin: 0
+    .search-results-regions-row
+        display: table-row
 
-        a
-            color: $black-text-color
-            font-size: 18px
-            font-weight: 300
+        .search-results-regions-cell
+            border-top: 1px solid $gray-border-color
+            padding: 7px 30px 15px
+            display: table-cell
 
-    .regionType
-        color: $dark-gray-text-color
-        font-size: 14px
+            h2
+                margin: 0
 
-.search-results-bots-only
-    display: none
+                a
+                    color: $black-text-color
+                    font-size: 18px
+                    font-weight: 300
 
-.w50
-    width: 50%
-    
-.w33
-    width: 33.3%
+            .regionType
+                color: $dark-gray-text-color
+                font-size: 14px
+
+        .w50
+            width: 50%
+
+        .w33
+            width: 33.3%

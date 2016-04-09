@@ -619,7 +619,7 @@ class RenderController {
                             scripts: []
                         };
 
-                        res.render('_search-results-regular.ejs', templateParams);
+                        res.render('_search-results-items.ejs', templateParams);
                     } catch (error) {
                         RenderController.error(req, res)(error);
                     }

@@ -1,0 +1,27 @@
+<div class="search-results-regular-column">
+
+<% if (searchResultsRegions && (searchResultsRegions.length > 0)) { %>
+    <% include _search-results-regions-bar %>
+    <% include _search-results-regions %>
+<% } %>
+
+    <% include _search-results-refine-by-bar %>
+
+<% if (searchResults && searchResults.resultSetSize > 0) { %>
+    <% if (typeof currentCategory != 'undefined' && currentCategory && currentCategory.metadata && currentCategory.metadata.description) { %>
+    <div class="current-category">
+        <a class="fa fa-close"></a>
+        <strong><%= currentCategory.category %></strong> - <%- currentCategory.metadata.description %>
+    </div>
+    <% } else if (typeof currentTag != 'undefined' && currentTag && currentTag.metadata && currentTag.metadata.description) { %>
+    <div class="current-category">
+        <a class="fa fa-close"></a>
+        <strong><%= currentTag.tag %></strong> - <%- currentTag.metadata.description %>
+    </div>
+    <% } %>
+
+    <ul class="search-results datasets">
+        <% include _search-results-items %>
+    </ul>
+<% } %>
+</div>
