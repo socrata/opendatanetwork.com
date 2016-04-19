@@ -52,26 +52,35 @@ class QuickLinks {
         //
         $('.quick-links-container').click(function() {
 
-            $(this).addClass('quick-links-container-selected');
+            if ($(this).hasClass('quick-links-container-selected'))
+                $(this).removeClass('quick-links-container-selected');
+            else
+                $(this).addClass('quick-links-container-selected');
+
             $(this).children('.quick-links-menu-container-mobile').toggle();
         });
-        
-        $('.quick-links-container').mouseover(function() {
 
-            if (self.onShow) self.onShow();
+        // Do not bind mouse events on mobile
+        //
+        if (!$('.quick-links-button-narrow').is(':visible')) {
 
-            $(this).addClass('quick-links-container-selected');
-            $(this).children('.quick-links-button-wide').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
-            $(this).children('.quick-links-menu-container').show();
-            $(this).children('.quick-links-menu-container-mobile').show();
-        });
+            $('.quick-links-container').mouseover(function() {
 
-        $('.quick-links-container').mouseout(function() {
+                if (self.onShow) self.onShow();
 
-            $(this).removeClass('quick-links-container-selected');
-            $(this).children('.quick-links-button-wide').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
-            $(this).children('.quick-links-menu-container').hide();
-            $(this).children('.quick-links-menu-container-mobile').hide();
-        });
+                $(this).addClass('quick-links-container-selected');
+                $(this).children('.quick-links-button-wide').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
+                $(this).children('.quick-links-menu-container').show();
+                $(this).children('.quick-links-menu-container-mobile').show();
+            });
+
+            $('.quick-links-container').mouseout(function() {
+
+                $(this).removeClass('quick-links-container-selected');
+                $(this).children('.quick-links-button-wide').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
+                $(this).children('.quick-links-menu-container').hide();
+                $(this).children('.quick-links-menu-container-mobile').hide();
+            });
+        }
     }
 }
