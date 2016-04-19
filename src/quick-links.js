@@ -28,7 +28,7 @@ class QuickLinks {
             $(carets.join(', ')).removeClass('fa-caret-up').addClass('fa-caret-down');
             
             const subLists = menusToClose.map(s => (s + ' .quick-links-menu-sub-list-mobile')); 
-            $(subLists.join(', ')).slideUp(100);
+            $(subLists.join(', ')).slideUp();
 
             // Open selected
             //
@@ -37,8 +37,7 @@ class QuickLinks {
             else
                 $(this).find('.quick-links-expand-caret-mobile').removeClass('fa-caret-down').addClass('fa-caret-up');
 
-            $(menuToToggle).slideToggle(100);
- 
+            $(menuToToggle).slideToggle(); 
         });
 
         // Desktop

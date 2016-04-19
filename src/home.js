@@ -10,7 +10,7 @@ $(document).ready(function() {
         else
             $('.categories-dropdown-mobile .fa').removeClass('fa-caret-down').addClass('fa-caret-up');
 
-        $('.categories-list-mobile').slideToggle(100);
+        $('.categories-list-mobile').slideToggle();
     });
 
     // Mobile regions
@@ -24,7 +24,7 @@ $(document).ready(function() {
         else
             $(this).removeClass('fa-plus').addClass('fa-minus');
 
-        $('.sub-regions-container-' + regionId + '-mobile').slideToggle(100);
+        $('.sub-regions-container-' + regionId + '-mobile').slideToggle();
     });
 
     // Slider
@@ -58,20 +58,6 @@ $(document).ready(function() {
     //
     $('#search-button').click(() => {
         window.location.href = '/search?q=' + encodeURIComponent($('#q').val());
-    });
-
-    // Communities menu
-    //
-    $('#menu-item-communities').mouseenter(function() {
-
-        $('#menu-communities').slideToggle(100);
-        $('#menu-item-communities').addClass('selected');
-    });
-
-    $('#menu-item-communities').mouseleave(function() {
-
-        $('#menu-communities').hide(100);
-        $('#menu-item-communities').removeClass('selected');
     });
 
     // Locations by state
