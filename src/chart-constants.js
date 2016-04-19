@@ -12,6 +12,7 @@ const ChartConstants = {
         'date': google.visualization.DateFormat
     },
     CHART_OPTIONS: {
+        chartArea: { width: '100%' },
         cssClassNames: {
             headerCell: 'header-cell',
             headerRow: 'header-row',
