@@ -1,7 +1,91 @@
 $black-text-color: #222222
 $darker-gray-background-color: #545454
+$darker-but-less-so-gray-background-color: #585858
 $darker-gray-border-color: #5e5e5e
 
+// Mobile
+//
+.quick-links-menu-container-mobile
+    display: none
+    
+    .quick-links-menu-inner-container-mobile
+        @media (min-width: $mobile-width)
+            display: none
+
+    .quick-links-menu-list-mobile
+        background-color: $darker-gray-background-color
+        border-top: 1px solid $darker-gray-border-color
+        color: white
+        display: block
+        margin: 0
+        padding: 0
+        position: absolute
+        left: 0
+        right: 0
+
+        >li:first-child
+            border-top: 0
+
+        >li
+            border-top: 1px solid $darker-gray-border-color
+            list-style-type: none
+
+            h3
+                margin: 0
+                padding: 0
+
+                a
+                    cursor: pointer
+                    display: block
+                    font-size: 22px
+                    font-weight: normal
+                    height: 50px
+                    line-height: 50px
+                    margin: 0
+                    padding: 0 27px 0 30px
+
+                    .fa 
+                        float: right
+                        line-height: 50px
+
+            .quick-links-menu-sub-list-mobile
+                background-color: $darker-but-less-so-gray-background-color
+                display: none
+                margin: 0
+                max-height: 250px
+                overflow: auto
+                padding: 0
+
+                >li
+                    border-top: 1px solid $darker-gray-border-color
+                    list-style-type: none
+                    margin: 0
+                    padding: 0 0 0 30px
+
+                    a
+                        color: white
+                        display: block
+                        height: 50px
+                        line-height: 50px
+                        margin: 0
+                        padding: 0 30px
+                        position: relative
+                        text-transform: capitalize
+                        
+                        .fa
+                            height: 50px
+                            left: 0;
+                            line-height: 50px
+                            position: absolute
+
+        #quick-link-menu-list-item-categories-mobile
+            .quick-links-menu-sub-list-mobile
+                >li
+                    padding: 0 0 0 60px
+        
+        
+// Desktop
+//
 .quick-links-container
     background-color: $black-text-color
     color: white
@@ -42,6 +126,10 @@ $darker-gray-border-color: #5e5e5e
     right: 0
     text-align: left
     z-index: 500
+
+.quick-links-menu-inner-container
+    @media (max-width: $mobile-width)
+        display: none
 
 .quick-links-menu
     display: table

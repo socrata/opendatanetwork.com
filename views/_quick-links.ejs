@@ -1,40 +1,110 @@
 <div class="quick-links-container">
     <div class="quick-links-button-wide">Quick Links<i class="fa fa-caret-down"></i></div>
     <i class="quick-links-button-narrow fa fa-bars"></i>
-    <div class="quick-links-menu-container">
-        <div class="quick-links-menu">
-            <div>
-                <ul class="quick-links-sub-menu quick-links-categories">
-                    <li>Categories</li>
-                <% quickLinks.categories.forEach(function(category, index) { %>
-                    <li<%- (index > 4) ? ' class="quick-links-hidden"' : '' %>><a href="/search?categories=<%- encodeURIComponent(category.category) %>&ref=<%= quickLinks.ref %>"><i class="fa <%- category.metadata.icon %>"></i><%= category.category %></a></li>
-                <% }); %>
-                </ul>
-            </div>
-            <div>
-                <ul class="quick-links-sub-menu">
-                    <li>Regions</li>
-                <% quickLinks.regions.forEach(function(region, index) { %>
-                    <li<%- (index > 4) ? ' class="quick-links-hidden"' : '' %>><a href="/region/<%= region.id %>/<%= region.name %>&ref=<%= quickLinks.ref %>"><%= region.name %></a></li>
-                <% }); %>
-                </ul>
-            </div>
-            <div>
-                <ul class="quick-links-sub-menu">
-                    <li>Publisher</li>
-                <% quickLinks.domains.forEach(function(domain, index) { %>
-                    <li<%- (index > 4) ? ' class="quick-links-hidden"' : '' %>><a href="/search?domains=<%- encodeURIComponent(domain.domain) %>&ref=<%= quickLinks.ref %>"><%= domain.domain %></a></li>
-                <% }); %>
-                </ul>
-            </div>
-            <div>
-                <ul class="quick-links-sub-menu">
-                    <li>Standards</li>
-                    <li><a href="/search?tags=blds&ref=<%= quickLinks.ref %>">BLDS</a></li>
-                    <li><a href="/search?tags=lives&ref=<%= quickLinks.ref %>">LIVES</a></li>
-                </ul>
-            </div>
+
+    <div class="quick-links-menu-container-mobile">
+        <div class="quick-links-menu-inner-container-mobile">
+            <ul class="quick-links-menu-list-mobile">
+                <li id="quick-link-menu-list-item-categories-mobile">
+                    <h3>
+                        <a class="quick-links-menu-header-mobile">
+                            <i class="quick-links-expand-caret-mobile fa fa-caret-down"></i>Categories
+                        </a>
+                    </h3>
+                    <ul class="quick-links-menu-sub-list-mobile">
+                        <% quickLinks.categories.forEach(function(category, index) { %>
+                            <li>
+                                <a href="/search?categories=<%- encodeURIComponent(category.category) %>&ref=<%= quickLinks.ref %>">
+                                    <i class="fa <%- category.metadata.icon %>"></i>
+                                    <%= category.category %>
+                                </a>
+                            </li>
+                        <% }); %>
+                    </ul>
+                </li>
+                <li id="quick-link-menu-list-item-regions-mobile">
+                    <h3>
+                        <a class="quick-links-menu-header-mobile">
+                            <i class="quick-links-expand-caret-mobile fa fa-caret-down"></i>Regions
+                        </a>
+                    </h3>
+                    <ul class="quick-links-menu-sub-list-mobile">
+                        <% quickLinks.regions.forEach(function(region, index) { %>
+                            <li>
+                                <a href="/region/<%= region.id %>/<%= region.name %>&ref=<%= quickLinks.ref %>">
+                                    <%= region.name %>
+                                </a>
+                            </li>
+                        <% }); %>
+                    </ul>
+                </li>
+                <li id="quick-link-menu-list-item-publishers-mobile">
+                    <h3>
+                        <a class="quick-links-menu-header-mobile">
+                            <i class="quick-links-expand-caret-mobile fa fa-caret-down"></i>Publishers
+                        </a>
+                    </h3>
+                    <ul class="quick-links-menu-sub-list-mobile">
+                    <% quickLinks.domains.forEach(function(domain, index) { %>
+                        <li>
+                            <a href="/search?domains=<%- encodeURIComponent(domain.domain) %>&ref=<%= quickLinks.ref %>">
+                                <%= domain.domain %>
+                            </a>
+                        </li>
+                    <% }); %>
+                    </ul>
+                </li>
+                <li id="quick-link-menu-list-item-standards-mobile">
+                    <h3>
+                        <a class="quick-links-menu-header-mobile">
+                            <i class="quick-links-expand-caret-mobile fa fa-caret-down"></i>Standards
+                        </a>
+                    </h3>
+                    <ul class="quick-links-menu-sub-list-mobile">
+                        <li><a href="/search?tags=blds&ref=<%= quickLinks.ref %>">BLDS</a></li>
+                        <li><a href="/search?tags=lives&ref=<%= quickLinks.ref %>">LIVES</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
-        <a class="quick-links-more">More</a>
+    </div>
+
+    <div class="quick-links-menu-container">
+        <div class="quick-links-menu-inner-container">
+            <div class="quick-links-menu">
+                <div>
+                    <ul class="quick-links-sub-menu quick-links-categories">
+                        <li>Categories</li>
+                    <% quickLinks.categories.forEach(function(category, index) { %>
+                        <li<%- (index > 4) ? ' class="quick-links-hidden"' : '' %>><a href="/search?categories=<%- encodeURIComponent(category.category) %>&ref=<%= quickLinks.ref %>"><i class="fa <%- category.metadata.icon %>"></i><%= category.category %></a></li>
+                    <% }); %>
+                    </ul>
+                </div>
+                <div>
+                    <ul class="quick-links-sub-menu">
+                        <li>Regions</li>
+                    <% quickLinks.regions.forEach(function(region, index) { %>
+                        <li<%- (index > 4) ? ' class="quick-links-hidden"' : '' %>><a href="/region/<%= region.id %>/<%= region.name %>&ref=<%= quickLinks.ref %>"><%= region.name %></a></li>
+                    <% }); %>
+                    </ul>
+                </div>
+                <div>
+                    <ul class="quick-links-sub-menu">
+                        <li>Publisher</li>
+                    <% quickLinks.domains.forEach(function(domain, index) { %>
+                        <li<%- (index > 4) ? ' class="quick-links-hidden"' : '' %>><a href="/search?domains=<%- encodeURIComponent(domain.domain) %>&ref=<%= quickLinks.ref %>"><%= domain.domain %></a></li>
+                    <% }); %>
+                    </ul>
+                </div>
+                <div>
+                    <ul class="quick-links-sub-menu">
+                        <li>Standards</li>
+                        <li><a href="/search?tags=blds&ref=<%= quickLinks.ref %>">BLDS</a></li>
+                        <li><a href="/search?tags=lives&ref=<%= quickLinks.ref %>">LIVES</a></li>
+                    </ul>
+                </div>
+            </div>
+            <a class="quick-links-more">More</a>
+        </div>
     </div>
 </div>
