@@ -70,8 +70,7 @@ var _searchURL = "<%- searchDatasetsURL %>";
                                 <p><%= forecastDescription.description %></p><br>
                             <% } }%>
 
-                                <p>Forecasted data uses a linear extrapolation algorithm which uses only available measured data provided by the
-                                    <a href="<%= source.attribution.url %>"><%= source.attribution.name %></a>.
+                                <p>Forecasted data uses a linear extrapolation algorithm which uses only available measured data.
                                     Algorithm details are available
                                     <a href="https://en.wikipedia.org/wiki/Extrapolation#Linear_extrapolation">HERE</a>.
                                 </p>
@@ -87,12 +86,24 @@ var _searchURL = "<%- searchDatasetsURL %>";
                     <% } %>
 
                     <label class="attribution">
-                        Above charts are based on data from the <a href="<%= source.attribution.url %>"><%= source.attribution.name %></a>.
+                        Above charts are based on data from the
+
+                        <% i=0 %>
+                        <% source.attribution.forEach(citation => { %>
+                            <% i=i+1; %>
+                            <% if (i==source.attribution.length) { %>
+                                and
+                            <% } else if (i>1) {%>
+                                ,
+                            <% } %>
+                            <a href="<%= citation.url %>"><%= citation.name %></a>
+                        <% }); %>
+
                         <% if ('sourceURL' in source) { %>
                             <a href="<%= source.sourceURL %>">Data Source</a> |
                         <% } %>
 
-                        <a href="<%= source.datasetURL %>">ODN Dataset</a> |
+                        | <a href="<%= source.datasetURL %>">ODN Dataset</a> |
                         <a href="<%= source.apiURL %>">API</a> -
                         <span class="info-icon">
                             <div class="info-tooltip">

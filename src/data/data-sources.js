@@ -92,7 +92,7 @@ const SOURCES = [
             {
                 vector: 'population',
                 name: 'Population',
-                attribution: ATTRIBUTIONS.acs,
+                attribution: [ATTRIBUTIONS.acs],
                 domain: ODN_DOMAIN,
                 fxf: 'e3rd-zzmr',
                 datalensFXF: 'va7f-2qjr',
@@ -158,7 +158,7 @@ const SOURCES = [
             {
                 vector: 'education',
                 name: 'Graduation Rates',
-                attribution: ATTRIBUTIONS.acs,
+                attribution: [ATTRIBUTIONS.acs],
                 domain: ODN_DOMAIN,
                 fxf: 'uf4m-5u8r',
                 regions: ALL_REGIONS,
@@ -205,7 +205,7 @@ const SOURCES = [
             {
                 vector: 'education_places',
                 name: 'Education Places',
-                attribution: ATTRIBUTIONS.hhs,
+                attribution: [ATTRIBUTIONS.hhs, ATTRIBUTIONS.iesNces],
                 domain: ODN_DOMAIN,
                 fxf: 'uf4m-5u8r',
                 datalensFXF: '72qd-7s2t',
@@ -220,7 +220,7 @@ const SOURCES = [
             {
                 vector: 'education_expenditures',
                 name: 'Expenditures',
-                attribution: ATTRIBUTIONS.iesNces,
+                attribution: [ATTRIBUTIONS.iesNces],
                 domain: ODN_DOMAIN,
                 autosuggestColumn: 'health_indicators',
 
@@ -407,7 +407,7 @@ const SOURCES = [
             {
                 vector: 'classroom_statistics',
                 name: 'Classroom Statistics',
-                attribution: ATTRIBUTIONS.iesNces,
+                attribution: [ATTRIBUTIONS.iesNces],
                 domain: ODN_DOMAIN,
 
                 /**
@@ -467,7 +467,7 @@ const SOURCES = [
             {
                 vector: 'earnings',
                 name: 'Earnings',
-                attribution: ATTRIBUTIONS.acs,
+                attribution: [ATTRIBUTIONS.acs],
                 domain: ODN_DOMAIN,
                 fxf: 'wmwh-4vak',
                 regions: ALL_REGIONS,
@@ -557,7 +557,7 @@ const SOURCES = [
             {
                 vector: 'occupations',
                 name: 'Occupations',
-                attribution: ATTRIBUTIONS.acs,
+                attribution: [ATTRIBUTIONS.acs],
                 domain: ODN_DOMAIN,
                 fxf: 'qfcm-fw3i',
                 regions: ALL_REGIONS,
@@ -603,7 +603,7 @@ const SOURCES = [
                     distance to all job locations, with the distance from any single job
                     location positively weighted by the size of employment (job opportunities)
                     at that location and inversely weighted by the labor supply (competition) to that location.`,
-                attribution: ATTRIBUTIONS.hud,
+                attribution: [ATTRIBUTIONS.hud],
                 domain: ODN_DOMAIN,
                 fxf: '5pnb-mvzq',
                 regions: ['county'],
@@ -647,7 +647,7 @@ const SOURCES = [
                     Real GDP is adjusted for changes in the value of money (inflation and deflation)
                     so that values can be compared between years.
                     Data is available for U.S. states and metropolitan areas.`,
-                attribution: ATTRIBUTIONS.bea,
+                attribution: [ATTRIBUTIONS.bea],
                 domain: ODN_DOMAIN,
                 fxf: 'ks2j-vhr8',
                 regions: ['state', 'msa'],
@@ -713,7 +713,7 @@ const SOURCES = [
                     Personal consumption expenditure is a measure of goods and services
                     purchased by or on behalf of households.
                     Data is available for U.S. states and for the nation as a whole.`,
-                attribution: ATTRIBUTIONS.bea,
+                attribution: [ATTRIBUTIONS.bea],
                 domain: ODN_DOMAIN,
                 fxf: 'va5j-wsjq',
                 regions: ['state', 'nation'],
@@ -780,7 +780,7 @@ const SOURCES = [
                     The average cost of living index in the U.S. is 100,
                     with higher values corresponding to costlier goods and services.
                     Data is available for U.S. states and metropolitan areas.`,
-                attribution: ATTRIBUTIONS.bea,
+                attribution: [ATTRIBUTIONS.bea],
                 domain: ODN_DOMAIN,
                 fxf: 'hpnf-gnfu',
                 regions: ['state', 'msa'],
@@ -847,7 +847,7 @@ const SOURCES = [
                     The Robert Wood Johnson Foundation produces health rankings for states and counties.
                     They explore many aspects of health including quality of life, health behaviors,
                     access to clinical care, socioeconomic factors, and environmental factors.`,
-                attribution: ATTRIBUTIONS.rwjf,
+                attribution: [ATTRIBUTIONS.rwjf],
                 domain: ODN_DOMAIN,
                 fxf: '7ayp-utp2',
                 regions: ['county', 'state'],
@@ -929,7 +929,7 @@ const SOURCES = [
                     all 50 states as well as the District of Columbia and three U.S. territories.
                     BRFSS completes more than 400,000 adult interviews each year,
                     making it the largest continuously conducted health survey system in the world.`,
-                attribution: ATTRIBUTIONS.cdc,
+                attribution: [ATTRIBUTIONS.cdc],
                 domain: ODN_DOMAIN,
                 fxf: 'n4rt-3rmd',
                 regions: ['state'],
@@ -1069,7 +1069,7 @@ const SOURCES = [
                     with higher values corresponding to less exposure to harmful toxins.
                     Data is computed for U.S. counties by applying summary statistics across
                     all census tracts present in a county and is current as of 2015.`,
-                attribution: ATTRIBUTIONS.hud,
+                attribution: [ATTRIBUTIONS.hud],
                 domain: ODN_DOMAIN,
                 fxf: 'nax7-t6ga',
                 regions: ['county'],
@@ -1124,7 +1124,7 @@ const SOURCES = [
                     As a result, cities may appear or disappear from the map for
                     a given crime type selection. The absence of a city should not
                     be interpreted as the absence of the specified crime type.`,
-                attribution: ATTRIBUTIONS.crimeReports,
+                attribution: [ATTRIBUTIONS.crimeReports],
                 domain: ODN_DOMAIN,
                 fxf: 'ee8v-jgb5',
                 regions: ['place'],
