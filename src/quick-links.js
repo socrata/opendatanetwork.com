@@ -52,6 +52,8 @@ class QuickLinks {
         //
         $('.quick-links-container').click(function() {
 
+            if (self.onShow) self.onShow();
+
             if ($(this).hasClass('quick-links-container-selected'))
                 $(this).removeClass('quick-links-container-selected');
             else
