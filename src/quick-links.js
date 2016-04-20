@@ -54,12 +54,23 @@ class QuickLinks {
 
             if (self.onShow) self.onShow();
 
-            if ($(this).hasClass('quick-links-container-selected'))
-                $(this).removeClass('quick-links-container-selected');
-            else
-                $(this).addClass('quick-links-container-selected');
+            if ($(this).hasClass('quick-links-container-selected')) {
 
-            $(this).children('.quick-links-menu-container-mobile').toggle();
+                $(this).removeClass('quick-links-container-selected');
+                $(this).children('.quick-links-menu-container-mobile').hide();
+                
+                // Collapse all sub lists
+                //
+                const carets = mobileSubMenus.map(s => (s + ' .quick-links-expand-caret-mobile'));
+                $(carets.join(', ')).removeClass('fa-caret-up').addClass('fa-caret-down');
+
+                const subLists = mobileSubMenus.map(s => (s + ' .quick-links-menu-sub-list-mobile'));
+                $(subLists.join(', ')).hide();
+            }
+            else {
+                $(this).addClass('quick-links-container-selected');
+                $(this).children('.quick-links-menu-container-mobile').show();
+            }
         });
 
         // Do not bind mouse events on mobile
