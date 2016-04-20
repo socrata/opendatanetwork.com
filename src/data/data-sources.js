@@ -1126,9 +1126,8 @@ const SOURCES = [
                     be interpreted as the absence of the specified crime type.`,
                 attribution: [ATTRIBUTIONS.crimeReports],
                 domain: ODN_DOMAIN,
-                fxf: 'ee8v-jgb5',
+                fxf: 'pbea-gn2u',
                 regions: ['place'],
-                include: region => _.contains(['DC', 'VA', 'MD'], _.last(region.name.split(', '))),
                 searchTerms: ['crime', 'police', 'arrest', 'warrant'],
                 charts: [
                     {
@@ -1151,7 +1150,7 @@ const SOURCES = [
                                 label: 'Month'
                             },
                             {
-                                column: 'incident_parent_type'
+                                column: 'crime_type'
                             }
                         ],
                         transform: rows => {
@@ -1196,7 +1195,7 @@ const SOURCES = [
                                 label: 'Month'
                             },
                             {
-                                column: 'incident_parent_type'
+                                column: 'crime_type'
                             }
                         ],
                         transform: _crimeTransform('crimeovertime', 'crime_count'),
@@ -1215,6 +1214,10 @@ const SOURCES = [
                     }
                 ],
                 callback: (regions) => {
+
+                    /**
+                    * NBE fxf US Gazetteer
+                    */
                     const baseURL = 'https://odn.data.socrata.com/resource/gm3u-gw57.json';
                     const params = {
                         '$where': `id in (${regions.map(region => `'${region.id}'`).join(',')})`,
@@ -1397,7 +1400,7 @@ function _crimeTransform(div, column) {
         const availableTypes = _.chain(rows)
             .groupBy(row => [row.id].join(','))
             .values()
-            .map(rows => _.uniq(rows.map(row => row.incident_parent_type)))
+            .map(rows => _.uniq(rows.map(row => row.crime_type)))
             .value();
         let availableForAll = _.intersection.apply({}, availableTypes);
 
@@ -1415,15 +1418,15 @@ function _crimeTransform(div, column) {
             .values()
             .map(values => {
                 return _.chain(values)
-                    .filter(value => _.contains(availableForAll, value.incident_parent_type))
-                    .groupBy(value => value.incident_parent_type)
+                    .filter(value => _.contains(availableForAll, value.crime_type))
+                    .groupBy(value => value.crime_type)
                     .values()
                     .map(forType => _.max(forType, value => parseFloat(value[column])))
                     .value();
             })
             .map(values => {
                 return _.extend({}, _.max(values, value => parseFloat(value[column])), {
-                    incident_parent_type: 'all',
+                    crime_type: 'all',
                     [column]: _.reduce(values, (sum, row) => sum + parseFloat(row[column]), 0)
                 });
             })
