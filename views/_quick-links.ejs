@@ -15,8 +15,10 @@
                         <% quickLinks.categories.forEach(function(category, index) { %>
                             <li>
                                 <a href="/search?categories=<%- encodeURIComponent(category.category) %>&ref=<%= quickLinks.ref %>">
-                                    <i class="fa <%- category.metadata.icon %>"></i>
-                                    <%= category.category %>
+                                    <div>
+                                        <i class="fa <%- category.metadata.icon %>"></i>
+                                        <%= category.category %>
+                                    </div>
                                 </a>
                             </li>
                         <% }); %>
