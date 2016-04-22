@@ -67,6 +67,17 @@ function multiComplete(inputSelector, resultSelector) {
                     .attr('class', 'capitalize')
                     .text(option.text);
             }
+        },
+        {
+            name: 'Questions',
+            image: 'fa-question-circle',
+            domain: domain,
+            fxf: 'nbz9-6226',
+            column: 'question',
+            encoded: ['url'],
+            select: option => {
+                navigate(option.url);
+            }
         }
     ];
 
