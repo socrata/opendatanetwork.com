@@ -74,14 +74,26 @@ class QuestionSource {
         return (_.contains(this.dataSource.regions, region.type) &&
             (!this.dataSource.include || this.dataSource.include(region)));
     }
+
+    questions(allRegions) {
+        const questions = this.variables.map(variable => variable.questions(allRegions));
+        return _.flatten(questions);
+    }
 }
 
 _regions().then(regions => {
     try {
         const mapSource = MAP_SOURCES.population;
-        const questionSource = new QuestionSource(mapSource);
-        questionSource.variables[0].questions(regions).forEach(question => {
-            console.log(question.text);
+
+        const nestedQuestions = _.values(MAP_SOURCES).slice(0, 1).map(mapSource => {
+            const questionSource = new QuestionSource(mapSource);
+            return questionSource.questions(regions);
+        });
+        const questions = _.flatten(nestedQuestions);
+        const questionsString = questions.map(question => `"${question.encoded}"`).join('\n');
+
+        fs.writeFile('tasks/questions.csv', questionsString, error => {
+            if (error) console.error(error);
         });
     } catch (error) {
         console.error(error);
@@ -103,7 +115,7 @@ function _regions() {
 }
 
 function _encode(ascii) {
-    return new Buffer(ascii, 'base64');
+    return new Buffer(ascii).toString('base64');
 }
 
 function _allUpperCase(word) {
