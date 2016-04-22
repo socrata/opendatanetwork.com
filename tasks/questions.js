@@ -16,7 +16,7 @@ const fs = require('fs');
 
 const Request = require('../controllers/request.js');
 const MAP_SOURCES = require('../src/data/map-sources.js');
-
+const Sources = require('../src/data/data-sources.js');
 
 class Question {
     constructor(source, variable, region) {
@@ -42,15 +42,103 @@ class Question {
     }
 }
 
+class QuestionVariable {
+    constructor(questionSource, variable) {
+        this.source = questionSource;
+        this.mapSource = questionSource.mapSource;
+        this.dataSource = questionSource.dataSource;
+        this.variable = variable;
+    }
+
+    supportsRegion(region) {
+        return new Promise((resolve, reject) => {
+            if (!this.source.supportsRegion(region)) {
+                resolve(false);
+            } else {
+                resolve(true);
+                /*
+                const path = `https://${this.mapSource.domain}/resource/${this.mapSource.fxf}.json`;
+                const baseParams = {
+                    [this.mapSource.idColumn || 'id']: region.id,
+                    [this.mapSource.typeColumn || 'type']: region.type,
+                    [this.mapSource.yearColumn || 'year']: _.max(this.variable.years),
+                };
+                const params = _.extend(baseParams, this.variable.params);
+                const url = Request.buildURL(path, params);
+
+                Request.getJSON(url).then(response => {
+                    console.log(response);
+                    resolve(response.length > 0);
+                }, reject);
+                */
+            }
+        });
+    }
+
+    filterRegions(regions) {
+        return new Promise((resolve, reject) => {
+            const promises = regions.map(region => this.supportsRegion(region));
+
+            Promise.all(promises).then(supportsVector => {
+                console.log(supportsVector);
+                resolve(regions.filter((region, index) => {
+                    return supportsVector[index];
+                }));
+            }, reject);
+        });
+    }
+
+    questions(allRegions) {
+        return new Promise((resolve, reject) => {
+            try {
+            allRegions.forEach(region => {
+                this.supportsRegion(region).then(supported => {
+                    if (supported) {
+                        resolve(new Question(this.dataSource, this.variable, region));
+                    }
+                }, error => {
+                    console.error(error);
+                });
+            });
+            } catch (error) { throw error; }
+        });
+
+        /*
+        return new Promise((resolve, reject) => {
+            this.filterRegions(allRegions).then(regions => {
+                resolve(regions.map(region => {
+                    return new Question(this.dataSource, this.variable, region);
+                }));
+            }, reject);
+        });
+        */
+    }
+}
+
+class QuestionSource {
+    constructor(mapSource) {
+        this.mapSource = mapSource;
+        this.dataSource = Sources.source(mapSource.name);
+
+        this.variables = mapSource.variables.map(variable => {
+            return new QuestionVariable(this, variable);
+        });
+    }
+
+    supportsRegion(region) {
+        return (_.contains(this.dataSource.regions, region.type) &&
+            (!this.dataSource.include || this.dataSource.include(region)));
+    }
+}
+
 _regions().then(regions => {
     try {
-        const sources = _.values(MAP_SOURCES);
-
-        _.values(MAP_SOURCES).forEach(source => {
-            source.variables.forEach(variable => {
-                const question = new Question(source, variable, regions[0]);
-                console.log(question.text);
-            });
+        const mapSource = MAP_SOURCES.population;
+        const questionSource = new QuestionSource(mapSource);
+        questionSource.variables[0].questions(regions).then(question => {
+            console.log(question);
+        }, error => {
+            console.error(error);
         });
     } catch (error) {
         console.error(error);
