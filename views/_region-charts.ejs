@@ -1,30 +1,33 @@
 <div class="charts-column">
-    <ul class="chart-tabs">
-        <% groups.forEach(function(_group) { %>
-            <li class="<%= _group.selected ? 'selected' : '' %>">
-                <a href="<%= getSearchPageUrl(_group.datasets[0]) %>"<%- (params.regions.length >= 3) ? ' rel="nofollow"' : '' %>>
-                    <%= _group.name %>
-                </a>
-            </li>
-        <% }); %>
-    </ul>
-    <ul class="chart-sub-nav">
-        <li>
-            <span>
-                <%= source.name %>
+    <% include _refine-controls-mobile %>
+    <div class="refine-controls">
+        <ul class="chart-tabs">
+            <% groups.forEach(function(_group) { %>
+                <li class="<%= _group.selected ? 'selected' : '' %>">
+                    <a href="<%= getSearchPageUrl(_group.datasets[0]) %>"<%- (params.regions.length >= 3) ? ' rel="nofollow"' : '' %>>
+                        <%= _group.name %>
+                    </a>
+                </li>
+            <% }); %>
+        </ul>
+        <ul class="chart-sub-nav">
+            <li>
+                <span>
+                    <%= source.name %>
+                    <% if (sources.length > 1) { %>
+                        <i class="fa fa-caret-down"></i>
+                    <% } %>
+                </span>
                 <% if (sources.length > 1) { %>
-                    <i class="fa fa-caret-down"></i>
+                    <ul class="chart-sub-nav-menu">
+                        <% sources.forEach(function(source) { %>
+                            <li><a href=<%= source.url %>><%= source.name %></a></li>
+                        <% }); %>
+                    </ul>
                 <% } %>
-            </span>
-            <% if (sources.length > 1) { %>
-                <ul class="chart-sub-nav-menu">
-                    <% sources.forEach(function(source) { %>
-                        <li><a href=<%= source.url %>><%= source.name %></a></li>
-                    <% }); %>
-                </ul>
-            <% } %>
-        </li>
-    </ul>
+            </li>
+        </ul>
+    </div>
     <div class="charts-container">
         <p id="map-summary" style="display: <%= mapSummary === '' ? 'none' : 'block' %>">
             <%= mapSummary %>
@@ -116,3 +119,66 @@
     </div>
 <% } %>
 </div>
+
+<%
+function getSearchPageUrl(source) {
+  
+    const vector = source.vector;
+
+    var url;
+
+    if (params.regions.length > 0) {
+
+        url = '/region';
+
+        // Region ids
+        //
+        var regionIds = params.regions.map(function(region) {
+            return region.id;
+        });
+
+        url += '/' + regionIds.join('-');
+
+        // Region names
+        //
+        var regionNames = params.regions.map(function(region) {
+            return regionToUrlSegment(region.name);
+        });
+
+        url += '/' + regionNames.join('-');
+
+        if (vector)
+            url += '/' + vector;
+    }
+    else {
+
+        url = '/search';
+    }
+
+    url += getSearchQueryString();
+
+    return url;
+}
+
+function getSearchQueryString() {
+
+    var parts = [];
+
+    if (params.q.length > 0)
+        parts.push('q=' + encodeURIComponent(params.q));
+
+    if (params.page > 1)
+        parts.push('page=' + params.page);
+
+    if (params.categories.length > 0)
+        params.categories.forEach(category => parts.push('categories=' + encodeURIComponent(category)));
+
+    if (params.domains.length > 0)
+        params.domains.forEach(domain => parts.push('domains=' + encodeURIComponent(domain)));
+
+    if (params.tags.length > 0)
+        params.tags.forEach(tag => parts.push('tags=' + encodeURIComponent(tag)));
+
+    return (parts.length > 0) ? '?' + parts.join('&') : '';
+};
+%>

@@ -44,12 +44,13 @@ var autosuggestScripts = [
     'src/data/autosuggest-sources.js'
 ];
 
-var searchScripts = [
+var regionsScripts = [
     'src/quick-links.js',
     'src/forecast.js',
     'src/chart-constants.js',
     'src/data/data-sources.js',
     'src/charts.js',
+    'src/refine-controls-mobile.js',
     'src/search-page-controller.js',
     'src/search.js'
 ];
@@ -78,7 +79,7 @@ gulp.task('home', js(homeScripts, 'home.min.js'));
 var searchScripts = baseScripts
     .concat(autosuggestScripts)
     .concat(mapScripts)
-    .concat(searchScripts);
+    .concat(regionsScripts);
 gulp.task('search', js(searchScripts, 'search.min.js'));
 
 var datasetScripts = baseScripts

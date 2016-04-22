@@ -21,70 +21,8 @@ var _searchURL = "<%- searchDatasetsURL %>";
 
 </body>
 </html>
-
 <%
-function getSearchPageUrl(source) {
-  
-    const vector = source.vector;
-
-    var url;
-
-    if (params.regions.length > 0) {
-
-        url = '/region';
-
-        // Region ids
-        //
-        var regionIds = params.regions.map(function(region) {
-            return region.id;
-        });
-
-        url += '/' + regionIds.join('-');
-
-        // Region names
-        //
-        var regionNames = params.regions.map(function(region) {
-            return regionToUrlSegment(region.name);
-        });
-
-        url += '/' + regionNames.join('-');
-
-        if (vector)
-            url += '/' + vector;
-    }
-    else {
-
-        url = '/search';
-    }
-
-    url += getSearchQueryString();
-
-    return url;
-}
-
 function regionToUrlSegment(name) {
     return name.replace(/ /g, '_').replace(/\//g, '_').replace(/,/g, '');
 }
-
-function getSearchQueryString() {
-
-    var parts = [];
-
-    if (params.q.length > 0)
-        parts.push('q=' + encodeURIComponent(params.q));
-
-    if (params.page > 1)
-        parts.push('page=' + params.page);
-
-    if (params.categories.length > 0)
-        params.categories.forEach(category => parts.push('categories=' + encodeURIComponent(category)));
-
-    if (params.domains.length > 0)
-        params.domains.forEach(domain => parts.push('domains=' + encodeURIComponent(domain)));
-
-    if (params.tags.length > 0)
-        params.tags.forEach(tag => parts.push('tags=' + encodeURIComponent(tag)));
-
-    return (parts.length > 0) ? '?' + parts.join('&') : '';
-};
 %>
