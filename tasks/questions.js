@@ -50,68 +50,13 @@ class QuestionVariable {
         this.variable = variable;
     }
 
-    supportsRegion(region) {
-        return new Promise((resolve, reject) => {
-            if (!this.source.supportsRegion(region)) {
-                resolve(false);
-            } else {
-                resolve(true);
-                /*
-                const path = `https://${this.mapSource.domain}/resource/${this.mapSource.fxf}.json`;
-                const baseParams = {
-                    [this.mapSource.idColumn || 'id']: region.id,
-                    [this.mapSource.typeColumn || 'type']: region.type,
-                    [this.mapSource.yearColumn || 'year']: _.max(this.variable.years),
-                };
-                const params = _.extend(baseParams, this.variable.params);
-                const url = Request.buildURL(path, params);
-
-                Request.getJSON(url).then(response => {
-                    console.log(response);
-                    resolve(response.length > 0);
-                }, reject);
-                */
-            }
-        });
-    }
-
     filterRegions(regions) {
-        return new Promise((resolve, reject) => {
-            const promises = regions.map(region => this.supportsRegion(region));
-
-            Promise.all(promises).then(supportsVector => {
-                console.log(supportsVector);
-                resolve(regions.filter((region, index) => {
-                    return supportsVector[index];
-                }));
-            }, reject);
-        });
+        return regions.filter(region => this.source.supportsRegion(region));
     }
 
     questions(allRegions) {
-        return new Promise((resolve, reject) => {
-            try {
-            allRegions.forEach(region => {
-                this.supportsRegion(region).then(supported => {
-                    if (supported) {
-                        resolve(new Question(this.dataSource, this.variable, region));
-                    }
-                }, error => {
-                    console.error(error);
-                });
-            });
-            } catch (error) { throw error; }
-        });
-
-        /*
-        return new Promise((resolve, reject) => {
-            this.filterRegions(allRegions).then(regions => {
-                resolve(regions.map(region => {
-                    return new Question(this.dataSource, this.variable, region);
-                }));
-            }, reject);
-        });
-        */
+        return this.filterRegions(allRegions)
+            .map(region => new Question(this.dataSource, this.variable, region));
     }
 }
 
@@ -135,10 +80,8 @@ _regions().then(regions => {
     try {
         const mapSource = MAP_SOURCES.population;
         const questionSource = new QuestionSource(mapSource);
-        questionSource.variables[0].questions(regions).then(question => {
-            console.log(question);
-        }, error => {
-            console.error(error);
+        questionSource.variables[0].questions(regions).forEach(question => {
+            console.log(question.text);
         });
     } catch (error) {
         console.error(error);
