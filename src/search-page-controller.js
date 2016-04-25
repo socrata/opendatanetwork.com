@@ -103,14 +103,20 @@ class SearchPageController {
             }, error => { throw error; });
         });
 
+        // Autosuggest
+        //
         const autosuggest = new Autosuggest('.add-region-results', sources);
-
         autosuggest.listen('.add-region-input');
 
         $('.add-region .fa-plus').click(function() {
 
             $('.add-region input[type="text"]').focus();
         });
+
+        // Autosuggest mobile
+        //
+        const autosuggestMobile = new Autosuggest('.add-region-results-mobile', sources);
+        autosuggestMobile.listen('.add-region-input-mobile');
 
         // Chart column
         //

@@ -1,86 +1,82 @@
 <div class="refine-controls-mobile">
     <a class="refine-results-link-mobile">Refine Results</a>
     <div class="refine-popup-mobile">
-        <div class="refine-popup-inner-container-mobile">
-            <div class="refine-similar-regions-mobile">
-                <label>Data for</label>
-                <ul class="displayed-regions-list-mobile">
-                    <li>
-                        <div>California</div>
-                        <a class="fa fa-times-circle"></a>
+        <div class="refine-popup-mobile-container">
+            <div class="refine-popup-inner-container-mobile">
+                <div class="refine-similar-regions-mobile">
+                    <label>Data for</label>
+                    <ul class="displayed-regions-list-mobile">
+                    <% params.regions.forEach(function(region) { %>
+                        <li class="region-token">
+                            <div><%= region.name %></div>
+                            <a class="fa fa-times-circle"></a>
+                        </li>
+                    <% }); %>
+                    </ul>
+                    <div class="add-region-mobile">
+                        <i class="fa fa-plus"></i>
+                        <input type="text" class="add-region-input-mobile" placeholder="Add Location">
+                        <ul class="add-region-results-mobile"></ul>
+                    </div>
+                </div>
+
+                <ul class="data-source-menu-list-mobile">
+                    <li id="data-source-menu-list-item-sources-mobile">
+                        <h3>
+                            <a class="data-source-menu-header-mobile">
+                                Economy
+                                <i class="data-source-menu-header-caret-mobile fa fa-caret-down"></i>
+                            </a>
+                        </h3>
+                        <ul>
+                            <li>Demographics</li>
+                            <li>Education</li>
+                            <li>Jobs</li>
+                            <li>Economy</li>
+                        </ul>
                     </li>
-                    <li>
-                        <div>Washington</div>
-                        <a class="fa fa-times-circle"></a>
+                    <li id="data-source-menu-list-item-vectors-mobile">
+                        <h3>
+                            <a class="data-source-menu-header-mobile">
+                                GDP
+                                <i class="data-source-menu-header-caret-mobile fa fa-caret-down"></i>
+                            </a>
+                        </h3>
+                        <ul>
+                            <li>GDP</li>
+                            <li>Cost of Living</li>
+                        </ul>
                     </li>
-                    <li>
-                        <div>Massachusetts</div>
-                        <a class="fa fa-times-circle"></a>
+                    <li id="data-source-menu-list-item-metrics-mobile">
+                        <h3>
+                            <a class="data-source-menu-header-mobile">
+                                GDP per Capita
+                                <i class="data-source-menu-header-caret-mobile fa fa-caret-down"></i>
+                            </a>
+                        </h3>
+                        <ul>
+                            <li>GDP per Capita</li>
+                            <li>Annual Change in GDP</li>
+                        </ul>
+                    </li>
+                    <li id="data-source-menu-list-item-years-mobile">
+                        <h3>
+                            <a class="data-source-menu-header-mobile">
+                                2013
+                                <i class="data-source-menu-header-caret-mobile fa fa-caret-down"></i>
+                            </a>
+                        </h3>
+                        <ul>
+                            <li>2013</li>
+                            <li>2012</li>
+                            <li>2011</li>
+                            <li>2010</li>
+                            <li>2009</li>
+                        </ul>
                     </li>
                 </ul>
-                <div class="add-region-mobile">
-                    <i class="fa fa-plus"></i>
-                    <input type="text" placeholder="Add Location">
-                    <ul></ul>
-                </div>
             </div>
-
-            <ul class="data-source-menu-list-mobile">
-                <li id="data-source-menu-list-item-sources-mobile">
-                    <h3>
-                        <a class="data-source-menu-header-mobile">
-                            Economy
-                            <i class="data-source-menu-header-caret-mobile fa fa-caret-down"></i>
-                        </a>
-                    </h3>
-                    <ul>
-                        <li>Demographics</li>
-                        <li>Education</li>
-                        <li>Jobs</li>
-                        <li>Economy</li>
-                    </ul>
-                </li>
-                <li id="data-source-menu-list-item-vectors-mobile">
-                    <h3>
-                        <a class="data-source-menu-header-mobile">
-                            GDP
-                            <i class="data-source-menu-header-caret-mobile fa fa-caret-down"></i>
-                        </a>
-                    </h3>
-                    <ul>
-                        <li>GDP</li>
-                        <li>Cost of Living</li>
-                    </ul>
-                </li>
-                <li id="data-source-menu-list-item-metrics-mobile">
-                    <h3>
-                        <a class="data-source-menu-header-mobile">
-                            GDP per Capita
-                            <i class="data-source-menu-header-caret-mobile fa fa-caret-down"></i>
-                        </a>
-                    </h3>
-                    <ul>
-                        <li>GDP per Capita</li>
-                        <li>Annual Change in GDP</li>
-                    </ul>
-                </li>
-                <li id="data-source-menu-list-item-years-mobile">
-                    <h3>
-                        <a class="data-source-menu-header-mobile">
-                            2013
-                            <i class="data-source-menu-header-caret-mobile fa fa-caret-down"></i>
-                        </a>
-                    </h3>
-                    <ul>
-                        <li>2013</li>
-                        <li>2012</li>
-                        <li>2011</li>
-                        <li>2010</li>
-                        <li>2009</li>
-                    </ul>
-                </li>
-            </ul>
+            <a class="refine-go-to-results-mobile">Go to Results</a>
         </div>
-        <a class="refine-go-to-results-mobile">Go to Results</a>
     </div>
 </div>

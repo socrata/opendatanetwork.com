@@ -18,140 +18,176 @@
         text-align: center
 
     .refine-popup-mobile
-        background-color: white
-        border: 1px solid $gray-border-color
-        border-radius: 3px
-        color: $black-text-color
+        background-color: $gray-background-color
         display: none
-        margin: 20px 30px
+        padding: 30px
 
-        .refine-popup-inner-container-mobile
-            padding: 10px
+        .refine-popup-mobile-container
+            border: 1px solid $gray-border-color
+            border-radius: 3px
+            color: $black-text-color
 
-            label
-                display: inline-block
-                font-size: 16px
-                font-weight: 600
-                margin-bottom: 10px
+            .refine-popup-inner-container-mobile
+                background-color: white
+                padding: 10px
 
-            .refine-similar-regions-mobile
-                border-bottom: 1px solid $gray-border-color
-                padding: 10px 10px 20px
-                margin: 0
+                label
+                    display: inline-block
+                    font-size: 16px
+                    font-weight: 600
+                    margin-bottom: 10px
 
-                .displayed-regions-list-mobile
-                    list-style-type: none
-                    margin: 0 0 10px
-                    padding: 0
+                .refine-similar-regions-mobile
+                    border-bottom: 1px solid $gray-border-color
+                    padding: 10px 10px 20px
+                    margin: 0
 
-                    li
-                        border: 1px solid $gray-border-color
-                        border-radius: 2px
-                        color: $blue-text-color
-                        display: inline-block
-                        font-size: 14px
-                        margin: 0 0 4px 0
-                        padding: 5px 10px
-
-                        div
-                            display: inline-block
-
-                        .fa-times-circle
-                            cursor: pointer
-                            display: inline-block
-                            margin-left: 5px
-
-                .add-region-mobile
-                    border: 1px solid $gray-border-color
-                    border-radius: 2px
-                    height: 25px
-                    line-height: 25px
-                    position: relative
-
-                    .fa-plus
-                        color: $blue-text-color
-                        left: 6px
-                        position: absolute
-                        top: 5px
-
-                    input[type=text]
-                        border: 0
-                        box-sizing: border-box
-                        display: inline-block
-                        font-size: 14px
-                        height: 25px
-                        line-height: 25px
-                        margin: 0
-                        outline: none
-                        padding: 0 0 0 25px
-                        vertical-align: top
-                        width: 100%
-
-            .data-source-menu-list-mobile
-                list-style-type: none
-                margin: 0
-                padding: 0
-
-                >li:first-child
-                    border-top: 0
-
-                >li
-                    border-top: 1px solid $gray-border-color
-
-                    h3
-                        background: $gray-background-color
-                        color: $darker-gray-text-color
-                        cursor: pointer
-                        font-size: 16px
-                        font-weight: 600
-                        height: 50px
-                        line-height: 50px
-                        margin: 0
-                        padding: 0 10px
-
-                        a
-                            cursor: pointer
-                            display: block
-
-                            .fa
-                                color: $blue-text-color
-                                float: right
-                                height: 50px
-                                line-height: 50px
-
-                    ul
-                        display: none
+                    .displayed-regions-list-mobile
                         list-style-type: none
-                        margin: 0
+                        margin: 0 0 10px
                         padding: 0
 
                         li
-                            background: $light-gray-background-color
-                            border-top: 1px solid $gray-border-color
+                            border: 1px solid $gray-border-color
+                            border-radius: 2px
+                            color: $blue-text-color
+                            display: inline-block
                             font-size: 14px
-                            padding: 0 10px 0 30px
+                            margin: 0 0 4px 0
+                            padding: 5px 10px
+
+                            div
+                                display: inline-block
+
+                            .fa-times-circle
+                                cursor: pointer
+                                display: inline-block
+                                margin-left: 5px
+
+                    .add-region-mobile
+                        border: 1px solid $gray-border-color
+                        border-radius: 2px
+                        height: 25px
+                        line-height: 25px
+                        position: relative
+
+                        .fa-plus
+                            color: $blue-text-color
+                            left: 6px
+                            position: absolute
+                            top: 5px
+
+                        input[type=text]
+                            border: 0
+                            box-sizing: border-box
+                            display: inline-block
+                            font-size: 14px
+                            height: 25px
+                            line-height: 25px
+                            margin: 0
+                            outline: none
+                            padding: 0 0 0 25px
+                            vertical-align: top
+                            width: 100%
+
+                    .add-region-results-mobile
+                        background-color: white
+                        border: 1px solid $gray-border-color
+                        display: none
+                        left: 0
+                        list-style-type: none;
+                        margin: 0 -1px
+                        padding: 0
+                        position: absolute
+                        width: 100%
+                        z-index: 10
+
+                        .sub-list
+                            padding: 0
+                            marign: 0
+
+                            li
+                                border-top: 1px solid #eee
+                                box-sizing: border-box
+                                cursor: pointer
+                                font-size: 14px
+                                list-style-type: none
+                                margin: 0
+                                padding: 0 10px
+                                height: 50px
+                                line-height: 50px
+
+                            li:first-of-type
+                                border-top: none
+
+                            li.selected
+                                background-color: $blue-background-color
+                                color: white
+
+                .data-source-menu-list-mobile
+                    list-style-type: none
+                    margin: 0
+                    padding: 0
+
+                    >li:first-child
+                        border-top: 0
+
+                    >li
+                        border-top: 1px solid $gray-border-color
+
+                        h3
+                            background: $gray-background-color
+                            color: $darker-gray-text-color
+                            cursor: pointer
+                            font-size: 16px
+                            font-weight: 600
                             height: 50px
                             line-height: 50px
+                            margin: 0
+                            padding: 0 10px
 
-                #data-source-menu-list-item-sources-mobile
-                    border-bottom: 4px solid $blue-text-color
+                            a
+                                cursor: pointer
+                                display: block
 
-                    h3
-                        background: white
-                        color: $blue-text-color
-                        
-                #data-source-menu-list-item-vectors-mobile
-                    border-top: 0
+                                .fa
+                                    color: $blue-text-color
+                                    float: right
+                                    height: 50px
+                                    line-height: 50px
+
+                        ul
+                            display: none
+                            list-style-type: none
+                            margin: 0
+                            padding: 0
+
+                            li
+                                border-top: 1px solid $gray-border-color
+                                font-size: 14px
+                                padding: 0 10px 0 30px
+                                height: 50px
+                                line-height: 50px
+
+                    #data-source-menu-list-item-sources-mobile
+                        border-bottom: 4px solid $blue-text-color
+
+                        h3
+                            background: white
+                            color: $blue-text-color
+                            
+                    #data-source-menu-list-item-vectors-mobile
+                        border-top: 0
 
 
-        .refine-go-to-results-mobile
-            background-color: $blue-text-color
-            color: white
-            cursor: pointer
-            display: block
-            font-weight: 600
-            height: 50px
-            line-height: 50px
-            text-align: center
+            .refine-go-to-results-mobile
+                background-color: $blue-text-color
+                color: white
+                cursor: pointer
+                display: block
+                font-weight: 600
+                height: 50px
+                line-height: 50px
+                text-align: center
 
 
