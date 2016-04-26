@@ -128,7 +128,7 @@ class VariableControl {
             }
 
             if (variables.length === 0) variables = this.source.variables;
-            if (variables.length > 1) variableLink.append('i').attr('class', 'fa fa-caret-down odn-caret');
+            variableLink.append('i').attr('class', 'fa fa-caret-down odn-caret');
 
             const variableList = variableContainer
                 .append('ul')
@@ -169,11 +169,10 @@ class VariableControl {
 
         if (this.hasYear) {
 
-            var yearLink = d3.selectAll('.map-variable-year-link').text(this.year);
-
-            if (this.variable.years && this.variable.years.length > 1) {
-                yearLink.append('i').attr('class', `fa fa-caret-${variableChanged ? 'down' : 'up'}`);
-            }
+            d3.selectAll('.map-variable-year-link')
+                .text(this.year)
+                .append('i')
+                .attr('class', `fa fa-caret-${variableChanged ? 'down' : 'up'} odn-caret`);
         }
     }
 
