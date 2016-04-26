@@ -13,6 +13,10 @@ class SearchPageController {
             console.log(decodeURI(_searchURL.split('?')[1]));
         }
 
+        // Refine controls for mobile
+        //
+        this.refineControlsMobile = new RefineControlsMobile();
+
         // Search results regions
         //
         if (this.params.regions.length == 0) {
@@ -372,5 +376,7 @@ class SearchPageController {
                 $(this).children('ul').hide();
             }
         });
+
+        this.refineControlsMobile.bindHeaderClickEvents();
     }
 }

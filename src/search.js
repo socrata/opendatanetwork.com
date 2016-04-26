@@ -1,10 +1,6 @@
 
 $(document).ready(function() {
 
-    // Refine controls for mobile
-    //
-    new RefineControlsMobile();
-
     // Search page controller
     //
     new SearchPageController(_params, _searchResultsRegions);

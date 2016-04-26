@@ -21,7 +21,7 @@
                 <% if (sources.length > 1) { %>
                     <ul class="chart-sub-nav-menu">
                         <% sources.forEach(function(source) { %>
-                            <li><a href=<%= source.url %>><%= source.name %></a></li>
+                            <li><a href="<%= source.url %>"><%= source.name %></a></li>
                         <% }); %>
                     </ul>
                 <% } %>
@@ -40,7 +40,7 @@
     <% } %>
         <% include _map-summary %>
         <% source.charts.forEach((chart, index) => { %>
-            <div class="chart" id=<%= chart.name.toLowerCase().replace(/\W/g, '') %>>
+            <div class="chart" id="<%= chart.name.toLowerCase().replace(/\W/g, '') %>">
                 <h1 class="chart-title"><%= chart.name %></h1>
 
                 <div class="chart-container"></div>

@@ -21,57 +21,32 @@
                 </div>
 
                 <ul class="data-source-menu-list-mobile">
-                    <li id="data-source-menu-list-item-sources-mobile">
-                        <h3>
-                            <a class="data-source-menu-header-mobile">
-                                Economy
-                                <i class="data-source-menu-header-caret-mobile fa fa-caret-down"></i>
-                            </a>
-                        </h3>
+                    <li class="data-source-menu-list-item-groups-mobile">
+                        <a class="data-source-menu-header-mobile">
+                            <%= group.name %>
+                            <i class="fa fa-caret-down odn-caret"></i>
+                        </a>
                         <ul>
-                            <li>Demographics</li>
-                            <li>Education</li>
-                            <li>Jobs</li>
-                            <li>Economy</li>
+                            <% groups.forEach(function(_group) { %>
+                                <li>
+                                    <a href="<%= getSearchPageUrl(_group.datasets[0]) %>"<%- (params.regions.length >= 3) ? ' rel="nofollow"' : '' %>>
+                                        <%= _group.name %>
+                                    </a>
+                                </li>
+                            <% }); %>
                         </ul>
                     </li>
-                    <li id="data-source-menu-list-item-vectors-mobile">
-                        <h3>
-                            <a class="data-source-menu-header-mobile">
-                                GDP
-                                <i class="data-source-menu-header-caret-mobile fa fa-caret-down"></i>
-                            </a>
-                        </h3>
+                    <li class="data-source-menu-list-item-sources-mobile">
+                        <a class="data-source-menu-header-mobile">
+                            <%= source.name %>
+                            <i class="fa fa-caret-down odn-caret"></i>
+                        </a>
                         <ul>
-                            <li>GDP</li>
-                            <li>Cost of Living</li>
-                        </ul>
-                    </li>
-                    <li id="data-source-menu-list-item-metrics-mobile">
-                        <h3>
-                            <a class="data-source-menu-header-mobile">
-                                GDP per Capita
-                                <i class="data-source-menu-header-caret-mobile fa fa-caret-down"></i>
-                            </a>
-                        </h3>
-                        <ul>
-                            <li>GDP per Capita</li>
-                            <li>Annual Change in GDP</li>
-                        </ul>
-                    </li>
-                    <li id="data-source-menu-list-item-years-mobile">
-                        <h3>
-                            <a class="data-source-menu-header-mobile">
-                                2013
-                                <i class="data-source-menu-header-caret-mobile fa fa-caret-down"></i>
-                            </a>
-                        </h3>
-                        <ul>
-                            <li>2013</li>
-                            <li>2012</li>
-                            <li>2011</li>
-                            <li>2010</li>
-                            <li>2009</li>
+                        <% sources.forEach(function(source) { %>
+                            <li>
+                                <a href="<%= source.url %>"><%= source.name %></a>
+                            </li>
+                        <% }); %>
                         </ul>
                     </li>
                 </ul>

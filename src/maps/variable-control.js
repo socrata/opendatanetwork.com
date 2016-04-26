@@ -100,8 +100,8 @@ class VariableControl {
         }
     }
 
-    onAdd(map, regions) {
-        this.container = d3.select('ul.chart-sub-nav');
+    onAdd(map, regions, containerSelector) {
+        this.container = d3.select(containerSelector);
         this.regions = regions;
 
         function optionDatum(select) {
@@ -110,8 +110,15 @@ class VariableControl {
             return option.datum();
         }
 
-        const variableContainer = this.container.append('li').attr('id', 'map-variable-text');
-        const variableLink = variableContainer.append('span');
+        const variableContainer = this.container
+            .append('li')
+            .attr('id', 'map-variable-text')
+            .attr('class', 'map-variable-container');
+
+        const variableLink = variableContainer
+            .append('span')
+            .attr('class', 'data-source-menu-header-mobile');
+
         this.variableSelector = variableLink.append('span');
 
         const drawVariableList = variables => {
@@ -121,7 +128,7 @@ class VariableControl {
             }
 
             if (variables.length === 0) variables = this.source.variables;
-            if (variables.length > 1) variableLink.append('i').attr('class', 'fa fa-caret-down');
+            if (variables.length > 1) variableLink.append('i').attr('class', 'fa fa-caret-down odn-caret');
 
             const variableList = variableContainer
                 .append('ul')
@@ -147,18 +154,25 @@ class VariableControl {
         });
 
         if (this.hasYear) {
-            this.yearContainer = this.container.append('li');
-            this.yearLink = this.yearContainer.append('span');
+
+            this.container
+                .append('li')
+                .attr('class', 'map-variable-year-container')
+                .append('span')
+                .attr('class', 'map-variable-year-link data-source-menu-header-mobile');
         }
 
         this.updateSelectors();
     }
 
     updateYearSelectors(variableChanged) {
+
         if (this.hasYear) {
-            this.yearLink.text(this.year);
+
+            var yearLink = d3.selectAll('.map-variable-year-link').text(this.year);
+
             if (this.variable.years && this.variable.years.length > 1) {
-                this.yearLink.append('i').attr('class', `fa fa-caret-${variableChanged ? 'down' : 'up'}`);
+                yearLink.append('i').attr('class', `fa fa-caret-${variableChanged ? 'down' : 'up'}`);
             }
         }
     }
@@ -168,8 +182,10 @@ class VariableControl {
 
         const updateYears = () => {
             this.updateYearSelectors(true);
-            this.yearContainer.select('ul').remove();
-            this.yearContainer
+
+            var yearContainer = d3.selectAll('.map-variable-year-container');
+            yearContainer.selectAll('ul').remove();
+            yearContainer
                 .append('ul')
                 .attr('class', 'chart-sub-nav-menu')
                 .selectAll('li')
