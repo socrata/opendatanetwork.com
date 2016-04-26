@@ -18,7 +18,7 @@ class QuickLinks {
 
             event.stopPropagation();
 
-            const selectedMenu = '#' + $(this).parent().parent().attr('id');
+            const selectedMenu = '#' + $(this).parent().attr('id');
             const menusToClose = _.filter(mobileSubMenus, s => s != selectedMenu);
             const menuToToggle = $(selectedMenu + '>ul');
 
