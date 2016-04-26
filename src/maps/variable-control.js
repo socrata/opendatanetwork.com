@@ -119,6 +119,7 @@ class VariableControl {
             .append('span')
             .attr('class', 'data-source-menu-header-mobile');
 
+        variableLink.append('i').attr('class', 'fa fa-caret-down odn-caret');
         this.variableSelector = variableLink.append('span');
 
         const drawVariableList = variables => {
@@ -128,7 +129,6 @@ class VariableControl {
             }
 
             if (variables.length === 0) variables = this.source.variables;
-            variableLink.append('i').attr('class', 'fa fa-caret-down odn-caret');
 
             const variableList = variableContainer
                 .append('ul')
