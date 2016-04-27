@@ -49,39 +49,37 @@
                     <div class="dataset-description">
 
                     <% if (chart.description) { %>
-                        <p class="chart-description"><%- chart.description %></p><br>
+                        <p class="chart-description"><%- chart.description %></p>
                     <% } %>
 
                     <% if (chart.forecast) {
                         var forecastDescription = forecastDescriptions[index];
                         if (forecastDescription.description.length > 0) { %>
-                        <p><%= forecastDescription.description %></p><br>
-                    <% } }%>
-
+                        <p><%= forecastDescription.description %></p>
                         <p>Forecasted data uses a linear extrapolation algorithm which uses only available measured data.
                             Algorithm details are available
                             <a href="https://en.wikipedia.org/wiki/Extrapolation#Linear_extrapolation">HERE</a>.
                         </p>
+                    <% } }%>
                     </div>
                 <% } %>
             </div>
         <% }); %>
         <div class="dataset-description">
-            <% if ('description' in source) { %>
-                <p id="dataset-description"><%- source.description %></p>
-                <br>
-            <% } %>
-            <label class="attribution">
+          <% if ('description' in source) { %>
+            <p id="dataset-description"><%- source.description %></p>
+          <% } %>
+            <p class="attribution">
                 Above charts are based on data from the
-                <% i=0 %>
+                <% i = 0 %>
                 <% source.attribution.forEach(citation => { %>
-                    <% i=i+1; %>
-                    <% if (i==source.attribution.length) { %>
+                    <% if (i == source.attribution.length) { %>
                         and
-                    <% } else if (i>1) {%>
+                    <% } else if (i > 1) {%>
                         ,
                     <% } %>
                     <a href="<%= citation.url %>"><%= citation.name %></a> |
+                    <% i = i + 1; %>
                 <% }); %>
                 <% if ('sourceURL' in source) { %>
                     <a href="<%= source.sourceURL %>">Data Source</a> |
@@ -89,7 +87,7 @@
                 <a href="<%= source.datasetURL %>">ODN Dataset</a> |
                 <a href="<%= source.apiURL %>">API</a> -
                 <span class="info-icon">
-                    <div class="info-tooltip">
+                    <span class="info-tooltip">
                         <strong>Notes:</strong>
                         <br><br>
                         1. ODN datasets and APIs are subject to change and may differ in format from the original source data in order to provide a user-friendly experience on this site.
@@ -97,9 +95,9 @@
                         2. To build your own apps using this data, see the ODN Dataset and API links.
                         <br><br>
                         3. If you use this derived data in an app, we ask that you provide a link somewhere in your applications to the Open Data Network with a citation that states: "Data for this application was provided by the Open Data Network" where "Open Data Network" links to http://opendatanetwork.com. Where an application has a region specific module, we ask that you add an additional line that states: "Data about REGIONX was provided by the Open Data Network." where REGIONX is an HREF with a name for a geographical region like "Seattle, WA" and the link points to this page URL, e.g. http://opendatanetwork.com/region/1600000US5363000/Seattle_WA
-                    </div>
+                    </span>
                 </span>
-            </label>
+            </p>
         </div>
     </div>
 <% if (searchResults && searchResults.resultSetSize > 0) { %>
