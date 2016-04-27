@@ -267,7 +267,7 @@ class MapView {
             if (showAdd) {
                 const addLink = tooltipsControls.append('a').attr('href', this.getUrlWithAddedRegion(region));
                 addLink.append('i').attr('class', 'fa fa-plus');
-                addLink.append('span').text('Add');
+                addLink.append('span').text('Compare');
             }
 
             if (showGoTo) {
