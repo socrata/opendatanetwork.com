@@ -12,46 +12,58 @@ class RefineControlsMobile {
             '.map-variable-year-container',
         ];
 
+        // Open button
+        //
         $('.refine-results-link-mobile').click(function() {
 
             $(this).slideUp();
             $('.refine-popup-mobile').slideDown();
         });
 
-        $('.refine-go-to-results-mobile').click(function() {
+        // Close button
+        //
+        $('#refine-close-mobile').click(function() {
             
             $('.refine-results-link-mobile').slideDown();
             $('.refine-popup-mobile').slideUp();
         });
         
-        this.bindHeaderClickEvents();
+        this.bindHeaderClickHandlers();
     }
 
-    bindHeaderClickEvents() {
+    bindHeaderClickHandlers() {
 
-        $('.data-source-menu-header-mobile').unbind('click');
-        $('.data-source-menu-header-mobile').click(function() {
+        $('.data-source-menu-list-mobile .data-source-menu-header-mobile').unbind('click').click(function() {
 
             const selectedMenu = '.' + $(this).parent().attr('class');
             const menusToClose = _.filter(self.mobileSubMenus, s => s != selectedMenu);
-            const menuToToggle = $(selectedMenu + '>ul');
 
             // Close others
             //
             const carets = menusToClose.map(s => (s + ' .odn-caret'));
             $(carets.join(', ')).removeClass('fa-caret-up').addClass('fa-caret-down');
 
-            const subLists = menusToClose.map(s => (s + '>ul')); 
+            const subLists = menusToClose.map(s => ('.data-source-menu-list-mobile ' + s + ' > ul')); 
             $(subLists.join(', ')).slideUp();
 
-            // Open selected
+            // Caret to toggle
             //
-            if ($(selectedMenu + '>ul').is(':visible'))
+            if ($(selectedMenu + ' > ul').is(':visible'))
                 $(this).find('.odn-caret').removeClass('fa-caret-up').addClass('fa-caret-down');
             else
                 $(this).find('.odn-caret').removeClass('fa-caret-down').addClass('fa-caret-up');
 
-            $(menuToToggle).slideToggle(); 
+            // Menu to toggle
+            //
+            $('.data-source-menu-list-mobile ' + selectedMenu + ' > ul').slideToggle(); 
+        });
+        
+        // Sub menu item click
+        //
+        $('.data-source-menu-list-item-groups-mobile li, .data-source-menu-list-item-sources-mobile li').unbind('click').click(function() {
+
+           $(this).parent().slideUp();
+           $(this).parent().parent().find('.odn-caret').removeClass('fa-caret-up').addClass('fa-caret-down')
         });
     }
 }

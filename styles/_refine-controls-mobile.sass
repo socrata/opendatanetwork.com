@@ -23,13 +23,13 @@
         padding: 30px
 
         .refine-popup-mobile-container
+            background-color: white
             border: 1px solid $gray-border-color
             border-radius: 3px
             color: $black-text-color
 
             .refine-popup-inner-container-mobile
-                background-color: white
-                padding: 10px
+                padding: 10px 20px 20px
 
                 label
                     display: inline-block
@@ -38,9 +38,15 @@
                     margin-bottom: 10px
 
                 .refine-similar-regions-mobile
-                    border-bottom: 1px solid $gray-border-color
-                    padding: 10px 10px 20px
+                    padding: 10px 0 20px
                     margin: 0
+
+                    #refine-close-mobile
+                        cursor: pointer
+                        float: right
+                        font-size: 22px
+                        margin: -20px -20px 0 0;
+                        padding: 15px 20px 10px;
 
                     .displayed-regions-list-mobile
                         list-style-type: none
@@ -129,9 +135,6 @@
                     margin: 0
                     padding: 0
 
-                    >li:first-child
-                        border-top: 0
-
                     >li
                         border-top: 1px solid $gray-border-color
 
@@ -197,29 +200,3 @@
                                     font-size: 14px;
                                     font-weight: normal
                                     padding: 0 10px 0 30px
-
-                    .data-source-menu-list-item-groups-mobile
-                        border-bottom: 4px solid $blue-text-color
-
-                        a
-                            background: white
-                            color: $blue-text-color
-
-                        ul
-                            a
-                                color: $black-text-color
-
-                    .data-source-menu-list-item-sources-mobile
-                        border-top: 0
-
-            .refine-go-to-results-mobile
-                background-color: $blue-text-color
-                color: white
-                cursor: pointer
-                display: block
-                font-weight: 600
-                height: 50px
-                line-height: 50px
-                text-align: center
-
-

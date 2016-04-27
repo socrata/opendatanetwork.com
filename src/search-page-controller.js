@@ -377,6 +377,6 @@ class SearchPageController {
             }
         });
 
-        this.refineControlsMobile.bindHeaderClickEvents();
+        this.refineControlsMobile.bindHeaderClickHandlers();
     }
 }

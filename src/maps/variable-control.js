@@ -118,9 +118,9 @@ class VariableControl {
         const variableLink = variableContainer
             .append('span')
             .attr('class', 'data-source-menu-header-mobile');
-
+            
         variableLink.append('i').attr('class', 'fa fa-caret-down odn-caret');
-        this.variableSelector = variableLink.append('span');
+        variableLink.append('span');
 
         const drawVariableList = variables => {
             if (variables.length > 0 &&
@@ -143,6 +143,7 @@ class VariableControl {
                 .on('click', variable => { 
                     this.updateVariable(variable);
                     $('.chart-sub-nav li').trigger('mouseleave');
+                    $('.data-source-menu-list-mobile .map-variable-container .data-source-menu-header-mobile').trigger('click');
                 });
 
             this.update();
@@ -177,7 +178,7 @@ class VariableControl {
     }
 
     updateSelectors() {
-        this.variableSelector.text(this.variable.name);
+        d3.selectAll('.map-variable-container > span > span').text(this.variable.name);
 
         const updateYears = () => {
             this.updateYearSelectors(true);
@@ -200,6 +201,7 @@ class VariableControl {
                         this.updateYearSelectors(false);
                     }
                     $('.chart-sub-nav li').trigger('mouseleave');
+                    $('.data-source-menu-list-mobile .map-variable-year-container .data-source-menu-header-mobile').trigger('click');
                 });
         };
 
