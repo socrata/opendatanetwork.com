@@ -105,7 +105,12 @@ class Question {
     }
 
     _url() {
-        return `/region/${this.region.id}/${this.source.name}/${this.variable.metric}`;
+        const regionID = this.region.id;
+        const regionName = this.region.name.replace(/,/g, '').replace(/[ \/]/g, '_');
+        const source = this.source.name.toLowerCase();
+        const metric = this.variable.metric;
+
+        return `/region/${regionID}/${regionName}/${source}/${metric}`;
     }
 
     _encoded() {
