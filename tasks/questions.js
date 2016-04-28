@@ -46,7 +46,8 @@ class Question {
         } else if (type === 'place' || type === 'county') {
             return name.split(',')[0];
         } else if (type === 'msa') {
-            return _.initial(name.split(' '), 3);
+            const words = name.split(' ');
+            return words.slice(0, words.length - 3).join(' ');
         } else {
             return name;
         }
@@ -168,7 +169,6 @@ _regions().then(regions => {
         try {
             const mapSource = MAP_SOURCES.population;
 
-            regions = regions.slice(0, 100);
             const nestedQuestions = _.values(MAP_SOURCES).slice(0, 1).map(mapSource => {
                 const questionSource = new QuestionSource(mapSource, stopwords);
                 return questionSource.questions(regions);
