@@ -1,7 +1,18 @@
 'use strict';
 
-/*
- * Generating questions for the ODN to answer.
+/* Generating questions for the ODN to answer.
+ *
+ * Questions are generated for each map variable (metric)
+ * that has data for the given region.
+ *
+ * Word Ordering.
+ *  Autosuggest depends on word ordering. For example, "seattle population"
+ *  will not match "population seattle". To get around this, we generate
+ *  all of the likely permutations of each question.
+ *
+ *  To generate a question given a variable and a region,
+ *
+ *
  *
  * Region -> topic -> subtopic
  *
@@ -18,6 +29,28 @@ const Request = require('../controllers/request.js');
 const MAP_SOURCES = require('../src/data/map-sources.js');
 const Sources = require('../src/data/data-sources.js');
 
+_regions().then(regions => {
+    _stopwords().then(stopwords => {
+        try {
+            const mapSource = MAP_SOURCES.population;
+
+            const nestedQuestions = _.values(MAP_SOURCES).slice(0, 1).map(mapSource => {
+                const questionSource = new QuestionSource(mapSource, stopwords);
+                return questionSource.questions(regions);
+            });
+            const questions = _.flatten(nestedQuestions);
+            const questionsString = questions.map(question => `"${question.encoded}"`).join('\n');
+
+            fs.writeFile('tasks/questions.csv', questionsString, error => {
+                if (error) console.error(error);
+            });
+        } catch (error) {
+            _error(error);
+        }
+    }, _error);
+}, _error);
+
+
 class Question {
     constructor(source, variable, region, stopwords) {
         this.source = source;
@@ -30,13 +63,14 @@ class Question {
         this.encoded = this._encoded();
     }
 
-    // Generates a simplifed name for a region for autocompletion.
-    //
-    // e.g. Seattle Metro Area (WA) -> Seattle
-    //      Seattle, WA -> Seattle
-    //      King County, WA -> King County
-    //      98122 ZIP Code -> 98122
-    //      Washington -> Washington
+    /* Generates a simplifed name for a region for autocompletion.
+     *
+     * e.g. Seattle Metro Area (WA) -> Seattle
+     *      Seattle, WA -> Seattle
+     *      King County, WA -> King County
+     *      98122 ZIP Code -> 98122
+     *      Washington -> Washington
+     */
     _simpleRegionName() {
         const name = this.region.name;
         const type = this.region.type;
@@ -160,31 +194,20 @@ class QuestionSource {
     }
 }
 
-function _error(error) {
-    console.error(error.stack);
+/* Encodes a list in base64. Elements of the list are delimited with a ":". */
+function _encode(list) {
+    return new Buffer(list.join(':')).toString('base64');
 }
 
-_regions().then(regions => {
-    _stopwords().then(stopwords => {
-        try {
-            const mapSource = MAP_SOURCES.population;
+function _regions() {
+    return _readJSONFile('tasks/roster.json');
+}
 
-            const nestedQuestions = _.values(MAP_SOURCES).slice(0, 1).map(mapSource => {
-                const questionSource = new QuestionSource(mapSource, stopwords);
-                return questionSource.questions(regions);
-            });
-            const questions = _.flatten(nestedQuestions);
-            const questionsString = questions.map(question => `"${question.encoded}"`).join('\n');
+function _stopwords() {
+    return _readJSONFile('tasks/stopwords.json');
+}
 
-            fs.writeFile('tasks/questions.csv', questionsString, error => {
-                if (error) console.error(error);
-            });
-        } catch (error) {
-            _error(error);
-        }
-    }, _error);
-}, _error);
-
+/* Reads the JSON file at the given path and returns a promise with the result. */
 function _readJSONFile(path) {
     return new Promise((resolve, reject) => {
         fs.readFile(path, (error, data) => {
@@ -197,28 +220,18 @@ function _readJSONFile(path) {
     });
 }
 
-function _regions() {
-    return _readJSONFile('tasks/roster.json');
-}
-
-function _stopwords() {
-    return _readJSONFile('tasks/stopwords.json');
-}
-
-function _encode(list) {
-    return new Buffer(list.join(':')).toString('base64');
-}
-
-function _allUpperCase(word) {
-    return word.split('').reduce((previous, current) => {
-        return previous && (current == current.toUpperCase());
-    }, true);
-}
-
+/* Lowercase of string unless string is all uppercase. */
 function _lowercase(string) {
     return string.split(' ').map(word => {
         return _allUpperCase(word) ? word : word.toLowerCase();
     }).join(' ');
+}
+
+/* Tests if a word is all uppercase. */
+function _allUpperCase(word) {
+    return word.split('').reduce((previous, current) => {
+        return previous && (current == current.toUpperCase());
+    }, true);
 }
 
 /* Generates all permutations of the given list.
@@ -245,5 +258,10 @@ function _removeAdjacentDuplicates(list) {
     return list.filter((element, index) => {
         return (index === list.length - 1) || (element !== list[index + 1]);
     });
+}
+
+/* Handles a promise rejection by logging the stack trace. */
+function _error(error) {
+    console.error(error.stack);
 }
 

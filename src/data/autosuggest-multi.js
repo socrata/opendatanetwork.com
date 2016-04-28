@@ -72,7 +72,7 @@ function multiComplete(inputSelector, resultSelector) {
             name: 'Questions',
             image: 'fa-question-circle',
             domain: domain,
-            fxf: 'c5nk-kv4n',
+            fxf: 'gv6h-569v',
             column: 'question',
             encoded: ['regionName', 'variableName', 'url'],
             select: option => {
