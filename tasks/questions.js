@@ -100,7 +100,7 @@ class Question {
         const regionName = this._simpleRegionName(this.region);
 
         const permutations = _permutations(variableWords.concat(regionName));
-        const permutationString = _.flatten(permutations).join(' ');
+        const permutationString = _removeAdjacentDuplicates(_.flatten(permutations)).join(' ');
         return permutationString;
     }
 
@@ -230,5 +230,15 @@ function _permutations(list) {
         return _permutations(_.without(list, element))
             .map(permutation => [element].concat(permutation));
     }));
+}
+
+/* Replaces groups of duplicates with only one element.
+ *
+ * e.g. [1, 2, 2, 1, 1, 1] -> [1, 2, 1]
+ */
+function _removeAdjacentDuplicates(list) {
+    return list.filter((element, index) => {
+        return (index === list.length - 1) || (element !== list[index + 1]);
+    });
 }
 
