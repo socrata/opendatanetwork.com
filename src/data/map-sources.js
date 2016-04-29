@@ -28,7 +28,8 @@ function variableGenerator(years, value) {
                 metric: nameToURL(variable[0]),
                 column: variable[1],
                 format: variable[2],
-                stoplight: variable[3]
+                stoplight: variable[3],
+                questions: variable.length < 5 || variable[4]
             };
         });
     };
@@ -88,17 +89,17 @@ const MAP_SOURCES = {
             ['Median Earnings', 'median_earnings', format.dollar, true],
             ['Median Female Earnings', 'female_median_earnings', format.dollar, true],
             ['Median Male Earnings', 'male_median_earnings', format.dollar, true],
-            ['Median Female Earnings (Full Time)', 'female_full_time_median_earnings', format.dollar, true],
-            ['Median Male Earnings (Full Time)', 'male_full_time_median_earnings', format.dollar, true],
-            ['Percent Earning less than $10,000', 'percent_with_earnings_1_to_9999', format.percent, false],
-            ['Percent Earning $10,000 to $14,999', 'percent_with_earnings_10000_to_14999', format.percent, false],
-            ['Percent Earning $15,000 to $24,999', 'percent_with_earnings_15000_to_24999', format.percent, false],
-            ['Percent Earning $25,000 to $34,999', 'percent_with_earnings_25000_to_34999', format.percent, false],
-            ['Percent Earning $35,000 to $49,999', 'percent_with_earnings_35000_to_49999', format.percent, false],
-            ['Percent Earning $50,000 to $64,999', 'percent_with_earnings_50000_to_64999', format.percent, false],
-            ['Percent Earning $65,000 to $74,999', 'percent_with_earnings_65000_to_74999', format.percent, false],
-            ['Percent Earning $75,000 to $99,999', 'percent_with_earnings_75000_to_99999', format.percent, false],
-            ['Percent Earning over $100,000', 'percent_with_earnings_over_100000', format.percent, false]
+            ['Median Female Earnings (Full Time)', 'female_full_time_median_earnings', format.dollar, true, false],
+            ['Median Male Earnings (Full Time)', 'male_full_time_median_earnings', format.dollar, true, false],
+            ['Percent Earning less than $10,000', 'percent_with_earnings_1_to_9999', format.percent, false, false],
+            ['Percent Earning $10,000 to $14,999', 'percent_with_earnings_10000_to_14999', format.percent, false, false],
+            ['Percent Earning $15,000 to $24,999', 'percent_with_earnings_15000_to_24999', format.percent, false, false],
+            ['Percent Earning $25,000 to $34,999', 'percent_with_earnings_25000_to_34999', format.percent, false, false],
+            ['Percent Earning $35,000 to $49,999', 'percent_with_earnings_35000_to_49999', format.percent, false, false],
+            ['Percent Earning $50,000 to $64,999', 'percent_with_earnings_50000_to_64999', format.percent, false, false],
+            ['Percent Earning $65,000 to $74,999', 'percent_with_earnings_65000_to_74999', format.percent, false, false],
+            ['Percent Earning $75,000 to $99,999', 'percent_with_earnings_75000_to_99999', format.percent, false, false],
+            ['Percent Earning over $100,000', 'percent_with_earnings_over_100000', format.percent, false, false]
         ])
     },
 
@@ -167,6 +168,11 @@ const MAP_SOURCES = {
          * NBE 4x4 of public dataset on odn.data.socrata.com
          */
         fxf: 'nxzi-u9nr',
+
+        /**
+         * Whether or not to generate questions. Defaults to false
+         */
+        questions: true,
 
         variables: [
             {
@@ -445,6 +451,7 @@ const MAP_SOURCES = {
         domain: DOMAIN,
         fxf: 'qfcm-fw3i',
         hasPopulation: true,
+        questions: true,
         variables: ['Business and Finance', 'Computers and Math', 'Construction and Extraction', 'Education', 'Engineering', 'Farming, Fishing, Foresty', 'Fire Fighting', 'Food Service', 'Healthcare', 'Health Support', 'Health Technicians', 'Janitorial', 'Law Enforcement', 'Legal', 'Management', 'Material Moving', 'Media', 'Office and Administration', 'Personal Care', 'Production', 'Repair', 'Sales', 'Social Sciences', 'Social Services', 'Transportation'].map(occupation => {
             return {
                 name: `${occupation} Employment Rate`,
@@ -461,6 +468,7 @@ const MAP_SOURCES = {
         name: 'gdp',
         domain: DOMAIN,
         fxf: 'ks2j-vhr8',
+        questions: true,
         variables: [
             {
                 name: 'GDP per Capita',
@@ -485,6 +493,7 @@ const MAP_SOURCES = {
         name: 'cost_of_living',
         domain: DOMAIN,
         fxf: 'hpnf-gnfu',
+        questions: true,
         variables: [
             ['All', 'Overall Cost of Living'],
             ['Goods', 'Cost of Goods'],
@@ -530,6 +539,7 @@ const MAP_SOURCES = {
         name: 'job_proximity',
         domain: DOMAIN,
         fxf: '5pnb-mvzq',
+        questions: true,
         variables: [['Median', 'median', true], ['Mean', 'mean', true]].map(tuple => {
             return {
                 name: `${tuple[0]} Jobs Proximity Index`,
@@ -547,7 +557,8 @@ const MAP_SOURCES = {
         name: 'environmental_health',
         domain: DOMAIN,
         fxf: 'nax7-t6ga',
-        variables: [['Median', 'median', true], ['Mean', 'mean', true]].map(tuple => {
+        questions: true,
+        variables: [['Median', 'median', true], ['Mean', 'mean', true]].map((tuple, index) => {
             return {
                 name: `${tuple[0]} Environmental Health Hazard Index`,
                 column: 'value',
@@ -555,7 +566,8 @@ const MAP_SOURCES = {
                 params: {variable: `env-health-idx-${tuple[1]}`},
                 years: [2015],
                 format: format.integer,
-                stoplight: true
+                stoplight: true,
+                questions: index === 0
             };
         })
     },
@@ -564,6 +576,7 @@ const MAP_SOURCES = {
         name: 'health',
         domain: DOMAIN,
         fxf: '7ayp-utp2',
+        questions: true,
         variables: ['Adult Obesity', 'Adult Smoking',
                     'Physical Inactivity', 'Excessive Drinking',
                     'Access to Exercise Opportunities'].map((name, index) => {
@@ -574,7 +587,8 @@ const MAP_SOURCES = {
                 years: [2015],
                 reverse: index != 4,
                 format: format.ratio,
-                stoplight: true
+                stoplight: true,
+                questions: index % 2 === 0 // hacky - only questions for non-sparse variables
             };
         })
     },

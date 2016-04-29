@@ -36,14 +36,19 @@ _regions().then(regions => {
         try {
 
             _.values(MAP_SOURCES)
-                //.filter(source => source.questions)
-                .filter(source => source.name === 'population')
+                .filter(source => source.questions)
                 .forEach(mapSource => {
+                console.log(`generating questions for ${mapSource.name}...`);
+                const counter = new Counter(n => `wrote ${n} questions for ${mapSource.name}`);
+
                 new QuestionSource(mapSource, stopwords)
                     .questions(regions)
                     .forEach(question => {
-                        fs.writeSync(fd, `"${question.encoded}\n"`);
+                        fs.writeSync(fd, `"${question.encoded}"\n`);
+                        counter.increment();
                     });
+
+                counter.log();
             });
         } catch (error) {
             _error(error);
@@ -53,6 +58,20 @@ _regions().then(regions => {
     }, _error);
 }, _error);
 
+class Counter {
+    constructor(template) {
+        this.template = template || (n => `${n}`);
+        this.counter = 0;
+    }
+
+    increment() {
+        this.counter++;
+    }
+
+    log() {
+        console.log(this.template(this.counter));
+    }
+}
 
 class Question {
     constructor(source, variable, region, stopwords) {
@@ -170,6 +189,8 @@ class QuestionVariable {
     }
 
     questions(allRegions, stopwords) {
+        if ('questions' in this.variable && !this.variable.questions) return [];
+
         return this.filterRegions(allRegions)
             .map(region => new Question(this.dataSource, this.variable, region, this.stopwords));
     }
