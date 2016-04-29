@@ -72,15 +72,28 @@ function multiComplete(inputSelector, resultSelector) {
             name: 'Questions',
             image: 'fa-question-circle',
             domain: domain,
-            fxf: 'gv6h-569v',
+            fxf: 'usa3-f8qu',
             column: 'question',
-            encoded: ['regionName', 'variableName', 'url'],
+            encoded: ['regionName', 'regionID', 'regionPopulation',
+                      'source', 'variable', 'metric', 'index'],
             select: option => {
-                navigate(option.url);
+                const regionID = option.regionID;
+                const regionName = option.regionName.replace(/,/g, '').replace(/[ \/]/g, '_');
+                const source = option.source;
+                const metric = option.metric;
+                const url = `/region/${regionID}/${regionName}/${source}/${metric}`;
+
+                navigate(url);
+            },
+            sort: option => {
+                const population = parseFloat(option.regionPopulation);
+                const index = parseFloat(option.index);
+
+                return -(population - index);
             },
             show: (selection, option) => {
                 selection.append('span')
-                    .text(`What is the ${option.variableName} of ${option.regionName}?`);
+                    .text(`What is the ${option.variable} of ${option.regionName}?`);
             }
         }
     ];

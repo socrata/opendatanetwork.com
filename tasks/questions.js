@@ -34,7 +34,6 @@ _regions().then(regions => {
         const fd = fs.openSync('tasks/questions.csv', 'w');
 
         try {
-
             _.values(MAP_SOURCES)
                 .filter(source => source.questions)
                 .forEach(mapSource => {
@@ -74,14 +73,14 @@ class Counter {
 }
 
 class Question {
-    constructor(source, variable, region, stopwords) {
+    constructor(source, variable, region, stopwords, index) {
         this.source = source;
         this.variable = variable;
         this.region = region;
         this.stopwords = stopwords;
+        this.index = index;
 
         this.text = this._text();
-        this.url = this._url();
         this.encoded = this._encoded();
     }
 
@@ -161,27 +160,23 @@ class Question {
         return permutationString;
     }
 
-    _url() {
-        const regionID = this.region.id;
-        const regionName = this.region.name.replace(/,/g, '').replace(/[ \/]/g, '_');
-        const source = this.source.name.toLowerCase();
-        const metric = this.variable.metric;
-
-        return `/region/${regionID}/${regionName}/${source}/${metric}`;
-    }
-
     _encoded() {
-        return `${this.text} ${_encode([this.region.name, _lowercase(this.variable.name), this.url])}`;
+        const encodedFields = [this.region.name, this.region.id, this.region.population,
+                               this.source.name.toLowerCase(),
+                               _lowercase(this.variable.name), this.variable.metric,
+                               this.index];
+        return `${this.text} ${_encode(encodedFields)}`;
     }
 }
 
 class QuestionVariable {
-    constructor(questionSource, variable, stopwords) {
+    constructor(questionSource, variable, stopwords, index) {
         this.source = questionSource;
         this.mapSource = questionSource.mapSource;
         this.dataSource = questionSource.dataSource;
         this.variable = variable;
         this.stopwords = stopwords;
+        this.index = index; // index is used to rank variables so default appears first
     }
 
     filterRegions(regions) {
@@ -192,7 +187,7 @@ class QuestionVariable {
         if ('questions' in this.variable && !this.variable.questions) return [];
 
         return this.filterRegions(allRegions)
-            .map(region => new Question(this.dataSource, this.variable, region, this.stopwords));
+            .map(region => new Question(this.dataSource, this.variable, region, this.stopwords, this.index));
     }
 }
 
@@ -202,8 +197,8 @@ class QuestionSource {
         this.dataSource = Sources.source(mapSource.name);
         this.stopwords = stopwords;
 
-        this.variables = mapSource.variables.map(variable => {
-            return new QuestionVariable(this, variable, stopwords);
+        this.variables = mapSource.variables.map((variable, index) => {
+            return new QuestionVariable(this, variable, stopwords, index);
         });
     }
 
