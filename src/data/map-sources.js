@@ -58,6 +58,7 @@ const MAP_SOURCES = {
         domain: DOMAIN,
         fxf: 'e3rd-zzmr',
         hasPopulation: true,
+        questions: true,
         variables: [
             {
                 name: 'Population Count',
@@ -82,6 +83,7 @@ const MAP_SOURCES = {
         domain: DOMAIN,
         fxf: 'wmwh-4vak',
         hasPopulation: true,
+        questions: true,
         variables: variableGenerator()([
             ['Median Earnings', 'median_earnings', format.dollar, true],
             ['Median Female Earnings', 'female_median_earnings', format.dollar, true],
@@ -105,6 +107,7 @@ const MAP_SOURCES = {
         domain: DOMAIN,
         fxf: 'uf4m-5u8r',
         hasPopulation: true,
+        questions: true,
         variables: variableGenerator()([
             ['High School Graduation Rate', 'percent_high_school_graduate_or_higher', format.percent, true],
             ['College Graduation Rate', 'percent_bachelors_degree_or_higher', format.percent, true]
@@ -504,6 +507,7 @@ const MAP_SOURCES = {
         name: 'consumption',
         domain: DOMAIN,
         fxf: 'va5j-wsjq',
+        questions: true,
         variables: [
             {
                 name: 'Personal Consumption Expenditure',

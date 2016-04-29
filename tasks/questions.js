@@ -31,21 +31,24 @@ const Sources = require('../src/data/data-sources.js');
 
 _regions().then(regions => {
     _stopwords().then(stopwords => {
+        const fd = fs.openSync('tasks/questions.csv', 'w');
+
         try {
-            const mapSource = MAP_SOURCES.population;
 
-            const nestedQuestions = _.values(MAP_SOURCES).slice(0, 1).map(mapSource => {
-                const questionSource = new QuestionSource(mapSource, stopwords);
-                return questionSource.questions(regions);
-            });
-            const questions = _.flatten(nestedQuestions);
-            const questionsString = questions.map(question => `"${question.encoded}"`).join('\n');
-
-            fs.writeFile('tasks/questions.csv', questionsString, error => {
-                if (error) console.error(error);
+            _.values(MAP_SOURCES)
+                //.filter(source => source.questions)
+                .filter(source => source.name === 'population')
+                .forEach(mapSource => {
+                new QuestionSource(mapSource, stopwords)
+                    .questions(regions)
+                    .forEach(question => {
+                        fs.writeSync(fd, `"${question.encoded}\n"`);
+                    });
             });
         } catch (error) {
             _error(error);
+        } finally {
+            fs.closeSync(fd);
         }
     }, _error);
 }, _error);
