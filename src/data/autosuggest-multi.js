@@ -67,6 +67,21 @@ function multiComplete(inputSelector, resultSelector) {
                     .attr('class', 'capitalize')
                     .text(option.text);
             }
+        },
+        {
+            name: 'Questions',
+            image: 'fa-question-circle',
+            domain: domain,
+            fxf: 'gv6h-569v',
+            column: 'question',
+            encoded: ['regionName', 'variableName', 'url'],
+            select: option => {
+                navigate(option.url);
+            },
+            show: (selection, option) => {
+                selection.append('span')
+                    .text(`What is the ${option.variableName} of ${option.regionName}?`);
+            }
         }
     ];
 

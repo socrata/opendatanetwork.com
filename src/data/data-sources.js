@@ -98,6 +98,7 @@ const SOURCES = [
                 datalensFXF: 'va7f-2qjr',
                 regions: ALL_REGIONS,
                 searchTerms: ['population', 'household', 'demographics', 'ethnicity', 'minority'],
+                sparse: false,
                 charts: [
                     {
                         name: 'Population',
@@ -163,6 +164,7 @@ const SOURCES = [
                 fxf: 'uf4m-5u8r',
                 regions: ALL_REGIONS,
                 searchTerms: ['college', 'education', 'school', 'university', 'instruction', 'teaching', 'teacher', 'professor', 'student', 'graduation', 'scholastic', 'matriculation'],
+                sparse: false,
                 charts: [
                     {
                         name: 'Graduation Rates',
@@ -472,6 +474,7 @@ const SOURCES = [
                 fxf: 'wmwh-4vak',
                 regions: ALL_REGIONS,
                 searchTerms: ['revenue', 'budget', 'dividend', 'wage', 'income', 'compensation', 'assets', 'salary', 'earnings'],
+                sparse: false,
                 charts: [
                     {
                         name: 'Earnings and Gender',
@@ -562,6 +565,7 @@ const SOURCES = [
                 fxf: 'qfcm-fw3i',
                 regions: ALL_REGIONS,
                 searchTerms: ['occupations', 'wage', 'profession', 'business', 'work', 'job', 'profession', 'employment', 'labor', 'avocation'],
+                sparse: false,
                 charts: [
                     {
                         name: 'Occupations',
@@ -608,6 +612,7 @@ const SOURCES = [
                 fxf: '5pnb-mvzq',
                 regions: ['county'],
                 searchTerms: ['job location', 'job opportunities', 'employment location', 'employment opportunities', 'commute', 'telecommute', 'transportation', 'traffic'],
+                sparse: false,
                 charts: [
                     {
                         name: 'Median Jobs Promiximity Index',
@@ -652,6 +657,7 @@ const SOURCES = [
                 fxf: 'ks2j-vhr8',
                 regions: ['state', 'msa'],
                 include: region => _.contains(region.name, 'Metro'),
+                sparse: false,
                 searchTerms: ['gdp', 'gross domestic product', 'economy', 'production', 'revenue', 'gross national product', 'gnp'],
                 charts: [
                     {
@@ -717,6 +723,7 @@ const SOURCES = [
                 domain: ODN_DOMAIN,
                 fxf: 'va5j-wsjq',
                 regions: ['state', 'nation'],
+                sparse: false,
                 searchTerms: ['consumption', 'consumer', 'household consumption', 'goods and services', 'personal expenditure', 'personal expenses', 'pce'],
                 charts: [
                     {
@@ -785,6 +792,7 @@ const SOURCES = [
                 fxf: 'hpnf-gnfu',
                 regions: ['state', 'msa'],
                 include: region => _.contains(region.name, 'Metro'),
+                sparse: false,
                 searchTerms: ['cost of living', 'rent', 'housing', 'consumer price index', 'expensive', 'inexpensive', 'housing cost', 'home price'],
                 charts: [
                     {
@@ -1129,6 +1137,7 @@ const SOURCES = [
                 fxf: 'pbea-gn2u',
                 regions: ['place'],
                 searchTerms: ['crime', 'police', 'arrest', 'warrant'],
+                sparse: true,
                 charts: [
                     {
                         name: 'Crime Rate over Time',
