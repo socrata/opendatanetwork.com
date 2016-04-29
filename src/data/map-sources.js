@@ -688,7 +688,7 @@ const MAP_SOURCES = {
             };
             const url = `${baseURL}?${$.param(params)}`;
 
-            const mapVariableText = d3.select('#map-variable-text').style('opacity', 0);
+            const mapVariableText = d3.select('.map-variable-text').style('opacity', 0);
 
             d3.promise.json(url).then(rows => {
                 const available = _.chain(rows)
@@ -699,7 +699,7 @@ const MAP_SOURCES = {
                 const availableForAll = _.intersection.apply({}, available);
 
                 if (availableForAll.length > 1) {
-                    d3.select('#map-variable-list')
+                    d3.select('.map-variable-list')
                         .selectAll('li')
                         .each(function() {
                             const li = d3.select(this);
@@ -707,9 +707,9 @@ const MAP_SOURCES = {
                             if (!_.contains(availableForAll, type)) li.remove();
                         });
                 }
-                d3.select('#map-variable-text').style('opacity', 1);
+                d3.select('.map-variable-text').style('opacity', 1);
             }, error => {
-                d3.select('#map-variable-text').style('opacity', 1);
+                d3.select('.map-variable-text').style('opacity', 1);
             });
         }
     }

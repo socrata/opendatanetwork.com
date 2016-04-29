@@ -1,0 +1,56 @@
+<div class="refine-controls-mobile">
+    <a class="refine-results-link-mobile">Refine Results</a>
+    <div class="refine-popup-mobile">
+        <div class="refine-popup-mobile-container">
+            <div class="refine-popup-inner-container-mobile">
+                <div class="refine-similar-regions-mobile">
+                    <a id="refine-close-mobile" class="fa fa-caret-up"></a>
+                    <label>Data for</label>
+                    <ul class="displayed-regions-list-mobile">
+                    <% params.regions.forEach(function(region) { %>
+                        <li class="region-token">
+                            <div><%= region.name %></div>
+                            <a class="fa fa-times-circle"></a>
+                        </li>
+                    <% }); %>
+                    </ul>
+                    <div class="add-region-mobile">
+                        <i class="fa fa-plus"></i>
+                        <input type="text" class="add-region-input-mobile" placeholder="Add Location">
+                        <ul class="add-region-results-mobile"></ul>
+                    </div>
+                </div>
+                <ul class="data-source-menu-list-mobile">
+                    <li class="data-source-menu-list-item-groups-mobile">
+                        <a class="data-source-menu-header-mobile">
+                            <%= group.name %>
+                            <i class="fa fa-caret-down odn-caret"></i>
+                        </a>
+                        <ul>
+                            <% groups.forEach(function(_group) { %>
+                                <li>
+                                    <a href="<%= getSearchPageUrl(_group.datasets[0]) %>"<%- (params.regions.length >= 3) ? ' rel="nofollow"' : '' %>>
+                                        <%= _group.name %>
+                                    </a>
+                                </li>
+                            <% }); %>
+                        </ul>
+                    </li>
+                    <li class="data-source-menu-list-item-sources-mobile">
+                        <a class="data-source-menu-header-mobile">
+                            <%= source.name %>
+                            <i class="fa fa-caret-down odn-caret"></i>
+                        </a>
+                        <ul>
+                        <% sources.forEach(function(source) { %>
+                            <li>
+                                <a href="<%= source.url %>"><%= source.name %></a>
+                            </li>
+                        <% }); %>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

@@ -34,7 +34,9 @@ class POIMapView {
                 this.model = new POIMapModel(this.source, variable);
                 this.update();
             });
-            this.variableControl.onAdd(map, this.regions);
+
+            this.variableControl.onAdd(map, this.regions, 'ul.chart-sub-nav');
+            this.variableControl.onAdd(map, this.regions, 'ul.data-source-menu-list-mobile');
         });
     }
 
@@ -116,8 +118,11 @@ class MapView {
 
         map.addControl(this.legend);
         map.addControl(this.tooltip);
+
         if (MapConstants.ZOOM_CONTROL) map.addControl(this.zoomControl);
-        this.variableControl.onAdd(map, this.regions);
+
+        this.variableControl.onAdd(map, this.regions, 'ul.chart-sub-nav');
+        this.variableControl.onAdd(map, this.regions, 'ul.data-source-menu-list-mobile');
 
         map.whenReady(() => {
             const url = layerID => `https://api.mapbox.com/v4/${layerID}/{z}/{x}/{y}.png?access_token=${MapConstants.MAPBOX_TOKEN}`;
@@ -262,7 +267,7 @@ class MapView {
             if (showAdd) {
                 const addLink = tooltipsControls.append('a').attr('href', this.getUrlWithAddedRegion(region));
                 addLink.append('i').attr('class', 'fa fa-plus');
-                addLink.append('span').text('Add');
+                addLink.append('span').text('Compare');
             }
 
             if (showGoTo) {

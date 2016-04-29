@@ -18,7 +18,7 @@
         margin: 0 auto 50px
 
     p
-        font-size: 14px;
+        font-size: 14px
 
     .charts-container
         padding: 0 35px
@@ -30,7 +30,7 @@
             background: $gray-background-color
             color: $darker-gray-text-color
             margin: 0 30px 30px
-            padding: 20px 30px
+            padding: 10px 30px
 
             @media (max-width: $mobile-width)
                 margin: 0 0 30px
@@ -39,13 +39,19 @@
                 color: $blue-text-color
 
             p
-                padding: 0
+                padding: 10px 0
                 margin: 0
 
             .attribution
                 display: block
                 font-size: 14px
-                text-align: center
+
+
+    // Refine controls desktop
+    //
+    .refine-controls
+        @media (max-width: $mobile-width)
+            display: none
 
     .search-results-container
         background-color: $gray-background-color

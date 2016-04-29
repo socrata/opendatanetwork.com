@@ -1,0 +1,202 @@
+
+.refine-controls-mobile
+
+    @media (min-width: $mobile-width)
+        display: none
+
+    .refine-results-link-mobile
+        background-color: $blue-text-color
+        border-radius: 3px
+        color: white
+        cursor: pointer
+        display: block
+        font-size: 16px
+        font-weight: 600
+        height: 50px
+        line-height: 50px
+        margin: 20px 30px 0
+        text-align: center
+
+    .refine-popup-mobile
+        background-color: $gray-background-color
+        display: none
+        padding: 30px
+
+        .refine-popup-mobile-container
+            background-color: white
+            border: 1px solid $gray-border-color
+            border-radius: 3px
+            color: $black-text-color
+
+            .refine-popup-inner-container-mobile
+                padding: 10px 20px 20px
+
+                label
+                    display: inline-block
+                    font-size: 16px
+                    font-weight: 600
+                    margin-bottom: 10px
+
+                .refine-similar-regions-mobile
+                    padding: 10px 0 20px
+                    margin: 0
+
+                    #refine-close-mobile
+                        cursor: pointer
+                        float: right
+                        font-size: 22px
+                        margin: -20px -20px 0 0;
+                        padding: 15px 20px 10px;
+
+                    .displayed-regions-list-mobile
+                        list-style-type: none
+                        margin: 0 0 10px
+                        padding: 0
+
+                        li
+                            border: 1px solid $gray-border-color
+                            border-radius: 2px
+                            color: $blue-text-color
+                            display: inline-block
+                            font-size: 14px
+                            margin: 0 0 4px 0
+                            padding: 5px 10px
+
+                            div
+                                display: inline-block
+
+                            .fa-times-circle
+                                cursor: pointer
+                                display: inline-block
+                                margin-left: 5px
+
+                    .add-region-mobile
+                        border: 1px solid $gray-border-color
+                        border-radius: 2px
+                        height: 50px
+                        line-height: 50px
+                        position: relative
+
+                        .fa-plus
+                            color: $blue-text-color
+                            left: 6px
+                            position: absolute
+                            top: 18px
+
+                        input[type=text]
+                            border: 0
+                            box-sizing: border-box
+                            display: inline-block
+                            font-size: 14px
+                            height: 50px
+                            line-height: 50px
+                            margin: 0
+                            outline: none
+                            padding: 0 0 0 25px
+                            vertical-align: top
+                            width: 100%
+
+                    .add-region-results-mobile
+                        background-color: white
+                        border: 1px solid $gray-border-color
+                        display: none
+                        left: 0
+                        list-style-type: none;
+                        margin: 0 -1px
+                        padding: 0
+                        position: absolute
+                        width: 100%
+                        z-index: 10
+
+                        .sub-list
+                            padding: 0
+                            marign: 0
+
+                            li
+                                border-top: 1px solid #eee
+                                box-sizing: border-box
+                                cursor: pointer
+                                font-size: 14px
+                                list-style-type: none
+                                margin: 0
+                                padding: 0 10px
+                                height: 50px
+                                line-height: 50px
+
+                            li:first-of-type
+                                border-top: none
+
+                            li.selected
+                                background-color: $blue-background-color
+                                color: white
+
+                .data-source-menu-list-mobile
+                    list-style-type: none
+                    margin: 0
+                    padding: 0
+
+                    >li
+                        border-top: 1px solid $gray-border-color
+
+                        a
+                            background: $gray-background-color
+                            color: $darker-gray-text-color
+                            cursor: pointer
+                            display: block
+                            font-size: 16px
+                            font-weight: 600
+                            height: 50px
+                            line-height: 50px
+                            margin: 0
+                            overflow: hidden;
+                            padding: 0 10px
+
+                            .odn-caret
+                                color: $blue-text-color
+                                float: right
+                                height: 50px
+                                line-height: 50px
+                                margin: 0 0 0 10px
+
+                        >span
+                            background: $gray-background-color
+                            color: $darker-gray-text-color
+                            cursor: pointer
+                            display: block
+                            font-size: 16px
+                            font-weight: 600
+                            height: 50px
+                            line-height: 50px
+                            margin: 0
+                            overflow: hidden;
+                            padding: 0 10px
+
+                            .odn-caret
+                                color: $blue-text-color
+                                float: right
+                                height: 50px
+                                line-height: 50px
+                                margin: 0 0 0 10px
+
+                        ul
+                            display: none
+                            list-style-type: none
+                            margin: 0
+                            padding: 0
+                            position: static
+                            z-index: auto
+
+                            li
+                                border-top: 1px solid $gray-border-color
+                                font-size: 14px
+                                padding: 0
+                                height: 50px
+                                line-height: 50px
+
+                                a
+                                    background: white
+                                    color: $black-text-color
+                                    display: block
+                                    font-size: 14px;
+                                    font-weight: normal
+                                    padding: 0 10px 0 30px

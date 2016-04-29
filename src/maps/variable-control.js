@@ -100,8 +100,8 @@ class VariableControl {
         }
     }
 
-    onAdd(map, regions) {
-        this.container = d3.select('ul.chart-sub-nav');
+    onAdd(map, regions, containerSelector) {
+        this.container = d3.select(containerSelector);
         this.regions = regions;
 
         function optionDatum(select) {
@@ -110,9 +110,17 @@ class VariableControl {
             return option.datum();
         }
 
-        const variableContainer = this.container.append('li').attr('id', 'map-variable-text');
-        const variableLink = variableContainer.append('span');
-        this.variableSelector = variableLink.append('span');
+        const variableContainer = this.container
+            .append('li')
+            .attr('id', 'map-variable-text')
+            .attr('class', 'map-variable-container');
+
+        const variableLink = variableContainer
+            .append('span')
+            .attr('class', 'data-source-menu-header-mobile');
+            
+        variableLink.append('i').attr('class', 'fa fa-caret-down odn-caret');
+        variableLink.append('span');
 
         const drawVariableList = variables => {
             if (variables.length > 0 &&
@@ -121,7 +129,6 @@ class VariableControl {
             }
 
             if (variables.length === 0) variables = this.source.variables;
-            if (variables.length > 1) variableLink.append('i').attr('class', 'fa fa-caret-down');
 
             const variableList = variableContainer
                 .append('ul')
@@ -136,6 +143,7 @@ class VariableControl {
                 .on('click', variable => { 
                     this.updateVariable(variable);
                     $('.chart-sub-nav li').trigger('mouseleave');
+                    $('.data-source-menu-list-mobile .map-variable-container .data-source-menu-header-mobile').trigger('click');
                 });
 
             this.update();
@@ -147,29 +155,37 @@ class VariableControl {
         });
 
         if (this.hasYear) {
-            this.yearContainer = this.container.append('li');
-            this.yearLink = this.yearContainer.append('span');
+
+            this.container
+                .append('li')
+                .attr('class', 'map-variable-year-container')
+                .append('span')
+                .attr('class', 'map-variable-year-link data-source-menu-header-mobile');
         }
 
         this.updateSelectors();
     }
 
     updateYearSelectors(variableChanged) {
+
         if (this.hasYear) {
-            this.yearLink.text(this.year);
-            if (this.variable.years && this.variable.years.length > 1) {
-                this.yearLink.append('i').attr('class', `fa fa-caret-${variableChanged ? 'down' : 'up'}`);
-            }
+
+            d3.selectAll('.map-variable-year-link')
+                .text(this.year)
+                .append('i')
+                .attr('class', `fa fa-caret-${variableChanged ? 'down' : 'up'} odn-caret`);
         }
     }
 
     updateSelectors() {
-        this.variableSelector.text(this.variable.name);
+        d3.selectAll('.map-variable-container > span > span').text(this.variable.name);
 
         const updateYears = () => {
             this.updateYearSelectors(true);
-            this.yearContainer.select('ul').remove();
-            this.yearContainer
+
+            var yearContainer = d3.selectAll('.map-variable-year-container');
+            yearContainer.selectAll('ul').remove();
+            yearContainer
                 .append('ul')
                 .attr('class', 'chart-sub-nav-menu')
                 .selectAll('li')
@@ -185,6 +201,7 @@ class VariableControl {
                         this.updateYearSelectors(false);
                     }
                     $('.chart-sub-nav li').trigger('mouseleave');
+                    $('.data-source-menu-list-mobile .map-variable-year-container .data-source-menu-header-mobile').trigger('click');
                 });
         };
 

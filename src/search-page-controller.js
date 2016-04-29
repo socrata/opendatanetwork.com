@@ -13,6 +13,10 @@ class SearchPageController {
             console.log(decodeURI(_searchURL.split('?')[1]));
         }
 
+        // Refine controls for mobile
+        //
+        this.refineControlsMobile = new RefineControlsMobile();
+
         // Search results regions
         //
         if (this.params.regions.length == 0) {
@@ -103,14 +107,20 @@ class SearchPageController {
             }, error => { throw error; });
         });
 
+        // Autosuggest
+        //
         const autosuggest = new Autosuggest('.add-region-results', sources);
-
         autosuggest.listen('.add-region-input');
 
         $('.add-region .fa-plus').click(function() {
 
             $('.add-region input[type="text"]').focus();
         });
+
+        // Autosuggest mobile
+        //
+        const autosuggestMobile = new Autosuggest('.add-region-results-mobile', sources);
+        autosuggestMobile.listen('.add-region-input-mobile');
 
         // Chart column
         //
@@ -366,5 +376,7 @@ class SearchPageController {
                 $(this).children('ul').hide();
             }
         });
+
+        this.refineControlsMobile.bindHeaderClickHandlers();
     }
 }

@@ -18,21 +18,21 @@ class QuickLinks {
 
             event.stopPropagation();
 
-            const selectedMenu = '#' + $(this).parent().parent().attr('id');
+            const selectedMenu = '#' + $(this).parent().attr('id');
             const menusToClose = _.filter(mobileSubMenus, s => s != selectedMenu);
-            const menuToToggle = $(selectedMenu + ' .quick-links-menu-sub-list-mobile');
+            const menuToToggle = $(selectedMenu + '>ul');
 
             // Close others
             //
             const carets = menusToClose.map(s => (s + ' .quick-links-expand-caret-mobile'));
             $(carets.join(', ')).removeClass('fa-caret-up').addClass('fa-caret-down');
             
-            const subLists = menusToClose.map(s => (s + ' .quick-links-menu-sub-list-mobile')); 
+            const subLists = menusToClose.map(s => (s + '>ul')); 
             $(subLists.join(', ')).slideUp();
 
             // Open selected
             //
-            if ($(selectedMenu + ' .quick-links-menu-sub-list-mobile').is(':visible'))
+            if ($(selectedMenu + '>ul').is(':visible'))
                 $(this).find('.quick-links-expand-caret-mobile').removeClass('fa-caret-up').addClass('fa-caret-down');
             else
                 $(this).find('.quick-links-expand-caret-mobile').removeClass('fa-caret-down').addClass('fa-caret-up');
