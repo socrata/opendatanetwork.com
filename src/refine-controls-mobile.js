@@ -14,7 +14,7 @@ class RefineControlsMobile {
 
         // Open button
         //
-        $('.refine-results-link-mobile').click(function() {
+        $('.refine-results-link-container-mobile').click(function() {
 
             $(this).slideUp();
             $('.refine-popup-mobile').slideDown();
@@ -24,7 +24,7 @@ class RefineControlsMobile {
         //
         $('#refine-close-mobile').click(function() {
             
-            $('.refine-results-link-mobile').slideDown();
+            $('.refine-results-link-container-mobile').slideDown();
             $('.refine-popup-mobile').slideUp();
         });
         
@@ -56,14 +56,6 @@ class RefineControlsMobile {
             // Menu to toggle
             //
             $('.data-source-menu-list-mobile ' + selectedMenu + ' > ul').slideToggle(); 
-        });
-        
-        // Sub menu item click
-        //
-        $('.data-source-menu-list-item-groups-mobile li, .data-source-menu-list-item-sources-mobile li').unbind('click').click(function() {
-
-           $(this).parent().slideUp();
-           $(this).parent().parent().find('.odn-caret').removeClass('fa-caret-up').addClass('fa-caret-down')
         });
     }
 }
