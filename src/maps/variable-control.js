@@ -143,6 +143,7 @@ class VariableControl {
                 .on('click', variable => { 
                     this.updateVariable(variable);
                     $('.chart-sub-nav li').trigger('mouseleave');
+                    $('.data-source-menu-list-mobile .map-variable-container .data-source-menu-header-mobile').trigger('click');
                 });
 
             this.update();
@@ -200,6 +201,7 @@ class VariableControl {
                         this.updateYearSelectors(false);
                     }
                     $('.chart-sub-nav li').trigger('mouseleave');
+                    $('.data-source-menu-list-mobile .map-variable-year-container .data-source-menu-header-mobile').trigger('click');
                 });
         };
 
