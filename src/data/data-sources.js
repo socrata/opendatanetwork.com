@@ -1134,7 +1134,7 @@ const SOURCES = [
                     be interpreted as the absence of the specified crime type.`,
                 attribution: [ATTRIBUTIONS.crimeReports],
                 domain: ODN_DOMAIN,
-                fxf: 'pbea-gn2u',
+                fxf: 'g3g3-3wk6',
                 regions: ['place'],
                 searchTerms: ['crime', 'police', 'arrest', 'warrant'],
                 sparse: true,
@@ -1163,9 +1163,11 @@ const SOURCES = [
                             }
                         ],
                         transform: rows => {
-                            return _crimeTransform('crimerateovertime', 'crime_rate')(rows).map(row => _.extend(row, {
-                                crime_rate: row.crime_rate * 100000
-                            }));
+                            return _crimeTransform('crimerateovertime', 'crime_rate')(rows)
+                                .filter(row => (row.year>='2013'))
+                                .map(row => _.extend(row, {
+                                    crime_rate: row.crime_rate * 100000
+                                }));
                         },
                         x: {
                             column: 'date',
@@ -1207,7 +1209,13 @@ const SOURCES = [
                                 column: 'crime_type'
                             }
                         ],
-                        transform: _crimeTransform('crimeovertime', 'crime_count'),
+                        transform: rows => {
+                            return _crimeTransform('crimeovertime', 'crime_count')(rows)
+                                .filter(row => (row.year>='2013'))
+                                .map(row => _.extend(row, {
+                                    crime_count: row.crime_count
+                                }));
+                        },
                         x: {
                             column: 'date',
                             label: 'Date',

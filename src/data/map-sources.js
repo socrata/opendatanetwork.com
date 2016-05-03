@@ -631,7 +631,7 @@ const MAP_SOURCES = {
     city_crime: {
         name: 'city_crime',
         domain: DOMAIN,
-        fxf: 'pbea-gn2u',
+        fxf: 'g3g3-3wk6',
         variables:
             _.flatten([
              ['Theft', 'The taking or attempting to take anything of value from the care, custody, or control of a person.'],
@@ -698,7 +698,7 @@ const MAP_SOURCES = {
             ];
         })),
         callback: (regions) => {
-            const baseURL = 'https://odn.data.socrata.com/resource/pbea-gn2u.json';
+            const baseURL = 'https://odn.data.socrata.com/resource/g3g3-3wk6.json';
             const params = {
                 '$where': `id in (${regions.map(region => `'${region.id}'`).join(',')})`,
                 '$select': 'id,crime_type,crime_rate',
