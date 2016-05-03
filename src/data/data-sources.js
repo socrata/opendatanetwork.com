@@ -1134,8 +1134,9 @@ const SOURCES = [
                     be interpreted as the absence of the specified crime type.`,
                 attribution: [ATTRIBUTIONS.crimeReports],
                 domain: ODN_DOMAIN,
-                fxf: 'g3g3-3wk6',
+                fxf: 'ee8v-jgb5',
                 regions: ['place'],
+                include: region => _.contains(['DC', 'VA', 'MD'], _.last(region.name.split(', '))),
                 searchTerms: ['crime', 'police', 'arrest', 'warrant'],
                 sparse: true,
                 charts: [
@@ -1159,15 +1160,13 @@ const SOURCES = [
                                 label: 'Month'
                             },
                             {
-                                column: 'crime_type'
+                                column: 'incident_parent_type'
                             }
                         ],
                         transform: rows => {
-                            return _crimeTransform('crimerateovertime', 'crime_rate')(rows)
-                                .filter(row => (row.year>='2013'))
-                                .map(row => _.extend(row, {
-                                    crime_rate: row.crime_rate * 100000
-                                }));
+                            return _crimeTransform('crimerateovertime', 'crime_rate')(rows).map(row => _.extend(row, {
+                                crime_rate: row.crime_rate * 100000
+                            }));
                         },
                         x: {
                             column: 'date',
@@ -1206,16 +1205,10 @@ const SOURCES = [
                                 label: 'Month'
                             },
                             {
-                                column: 'crime_type'
+                                column: 'incident_parent_type'
                             }
                         ],
-                        transform: rows => {
-                            return _crimeTransform('crimeovertime', 'crime_count')(rows)
-                                .filter(row => (row.year>='2013'))
-                                .map(row => _.extend(row, {
-                                    crime_count: row.crime_count
-                                }));
-                        },
+                        transform: _crimeTransform('crimeovertime', 'crime_count'),
                         x: {
                             column: 'date',
                             label: 'Date',
@@ -1417,7 +1410,7 @@ function _crimeTransform(div, column) {
         const availableTypes = _.chain(rows)
             .groupBy(row => [row.id].join(','))
             .values()
-            .map(rows => _.uniq(rows.map(row => row.crime_type)))
+            .map(rows => _.uniq(rows.map(row => row.incident_parent_type)))
             .value();
         let availableForAll = _.intersection.apply({}, availableTypes);
 
@@ -1435,15 +1428,15 @@ function _crimeTransform(div, column) {
             .values()
             .map(values => {
                 return _.chain(values)
-                    .filter(value => _.contains(availableForAll, value.crime_type))
-                    .groupBy(value => value.crime_type)
+                    .filter(value => _.contains(availableForAll, value.incident_parent_type))
+                    .groupBy(value => value.incident_parent_type)
                     .values()
                     .map(forType => _.max(forType, value => parseFloat(value[column])))
                     .value();
             })
             .map(values => {
                 return _.extend({}, _.max(values, value => parseFloat(value[column])), {
-                    crime_type: 'all',
+                    incident_parent_type: 'all',
                     [column]: _.reduce(values, (sum, row) => sum + parseFloat(row[column]), 0)
                 });
             })

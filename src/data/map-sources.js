@@ -631,7 +631,7 @@ const MAP_SOURCES = {
     city_crime: {
         name: 'city_crime',
         domain: DOMAIN,
-        fxf: 'g3g3-3wk6',
+        fxf: 'wehh-eh9p',
         variables:
             _.flatten([
              ['Theft', 'The taking or attempting to take anything of value from the care, custody, or control of a person.'],
@@ -673,7 +673,7 @@ const MAP_SOURCES = {
                     metric: nameToURL(`${tuple[0]} Rate`),
                     years: [2015],
                     params: {
-                        crime_type: tuple[0],
+                        incident_parent_type: tuple[0],
                         '$order': 'crime_rate ASC'
                     },
                     format: n => format.integer(n * 100000),
@@ -689,7 +689,7 @@ const MAP_SOURCES = {
                     metric: nameToURL(`${tuple[0]} Count`),
                     years: [2015],
                     params: {
-                        crime_type: tuple[0],
+                        incident_parent_type: tuple[0],
                         '$order': 'crime_count ASC',
                     },
                     format: format.integer,
@@ -698,10 +698,10 @@ const MAP_SOURCES = {
             ];
         })),
         callback: (regions) => {
-            const baseURL = 'https://odn.data.socrata.com/resource/g3g3-3wk6.json';
+            const baseURL = 'https://odn.data.socrata.com/resource/wehh-eh9p.json';
             const params = {
                 '$where': `id in (${regions.map(region => `'${region.id}'`).join(',')})`,
-                '$select': 'id,crime_type,crime_rate',
+                '$select': 'id,incident_parent_type,crime_rate',
                 year: 2015
             };
             const url = `${baseURL}?${$.param(params)}`;
