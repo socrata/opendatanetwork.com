@@ -1,6 +1,6 @@
 
 class RefineControlsMobile {
-    
+
     constructor() {
 
         this.self = this;
@@ -18,14 +18,18 @@ class RefineControlsMobile {
 
             $(this).slideUp();
             $('.refine-popup-mobile').slideDown();
+
+            Cookies.remove('refinePopupCollapsed');
         });
 
         // Close button
         //
         $('#refine-close-mobile').click(function() {
-            
+
             $('.refine-results-link-container-mobile').slideDown();
             $('.refine-popup-mobile').slideUp();
+
+            Cookies.set('refinePopupCollapsed', '1');
         });
         
         this.bindHeaderClickHandlers();

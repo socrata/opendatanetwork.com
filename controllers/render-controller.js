@@ -12,6 +12,7 @@ const MapSources = require('../src/data/map-sources');
 const Sources = require('../src/data/data-sources');
 const SrcConstants = require('../src/constants');
 
+const cookie = require('cookie');
 const _ = require('lodash');
 const htmlencode = require('htmlencode').htmlEncode;
 const moment = require('moment');
@@ -177,6 +178,7 @@ class RenderController {
                             '/lib/third-party/lodash.min.js',
                             '/lib/third-party/d3.min.js',
                             '/lib/third-party/d3.promise.min.js',
+                            '/lib/third-party/js.cookie-2.1.1.min.js',
                             '/lib/dataset.min.js'
                         ]
                     };
@@ -228,6 +230,7 @@ class RenderController {
                         },
                         '/lib/third-party/d3.min.js',
                         '/lib/third-party/d3.promise.min.js',
+                        '/lib/third-party/js.cookie-2.1.1.min.js',
                         '/lib/third-party/lodash.min.js',
                         '/lib/home.min.js'
                     ]
@@ -339,6 +342,7 @@ class RenderController {
                             '/lib/third-party/colorbrewer.min.js',
                             '/lib/third-party/d3.min.js',
                             '/lib/third-party/d3.promise.min.js',
+                            '/lib/third-party/js.cookie-2.1.1.min.js',
                             '/lib/third-party/leaflet-omnivore.min.js',
                             '/lib/third-party/lodash.min.js',
                             '/lib/search.min.js'
@@ -551,6 +555,7 @@ class RenderController {
                         '/lib/third-party/colorbrewer.min.js',
                         '/lib/third-party/d3.min.js',
                         '/lib/third-party/d3.promise.min.js',
+                        '/lib/third-party/js.cookie-2.1.1.min.js',
                         '/lib/third-party/leaflet-omnivore.min.js',
                         '/lib/third-party/lodash.min.js',
                         '/lib/search.min.js'
@@ -595,6 +600,9 @@ class RenderController {
                     };
 
                     templateParams.forecastDescriptions = data[10];
+
+                    const cookieObject = cookie.parse(req.headers.cookie);
+                    templateParams.refinePopupCollapsed = !!cookieObject.refinePopupCollapsed;
                 }
 
                 res.render('search.ejs', templateParams);

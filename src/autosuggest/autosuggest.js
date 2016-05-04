@@ -28,6 +28,8 @@ class Autosuggest {
                 } else {
                     self.results.keydown(keyCode);
                 }
+
+                Cookies.remove('refinePopupCollapsed');
             })
             .on('input', function() {
                 self.throttledSuggest(this.value);
