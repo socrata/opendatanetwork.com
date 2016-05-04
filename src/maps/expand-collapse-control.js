@@ -14,27 +14,27 @@ const ExpandCollapseControl = L.Control.extend({
 
                 if (this.expanded) {
 
-                    $('.map-container').animate({ height: 200 });
+                    $('.map-container').animate({ height: 200 }, null, null, () => {
+                        this.bounds.update();
+                    });
 
                     if (!this.buttonIcon.classed('fa-expand'))
                         this.buttonIcon.classed('fa-expand', true).classed('fa-compress', false);
 
                     map.dragging.disable();
                     map.touchZoom.disable();
-
-                    this.bounds.update();
                }
                 else {
 
-                    $('.map-container').animate({ height: 500 });
+                    $('.map-container').animate({ height: 500 }, null, null, () => {
+                        this.bounds.update();
+                    });
 
                     if (this.buttonIcon.classed('fa-expand'))
                         this.buttonIcon.classed('fa-expand', false).classed('fa-compress', true);
 
                     map.dragging.enable();
                     map.touchZoom.enable();
-
-                    this.bounds.update();
                 }
 
                 this.expanded = !this.expanded;
