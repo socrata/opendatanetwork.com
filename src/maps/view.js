@@ -9,9 +9,11 @@ class POIMapView {
     }
 
     show(selector) {
+
+        const isMobile = (d3.select("body").node().getBoundingClientRect().width < 800);
         const container = d3.select(selector)
             .append('div')
-            .attr('class', 'map-container')
+            .attr('class', isMobile ? 'map-container map-container-collapsed' : 'map-container map-container-expanded')
             .attr('id', MapConstants.CSS_ID);
 
         const map = L.map(MapConstants.CSS_ID, MapConstants.MAP_OPTIONS);
@@ -108,9 +110,10 @@ class MapView {
     }
 
     show(selector) {
+        const isMobile = (d3.select("body").node().getBoundingClientRect().width < 800);
         const container = d3.select(selector)
             .append('div')
-            .attr('class', 'map-container')
+            .attr('class', isMobile ? 'map-container map-container-collapsed' : 'map-container map-container-expanded')
             .attr('id', MapConstants.CSS_ID);
 
         const map = L.map(MapConstants.CSS_ID, MapConstants.MAP_OPTIONS);
