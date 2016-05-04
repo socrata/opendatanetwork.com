@@ -14,8 +14,10 @@ const ExpandCollapseControl = L.Control.extend({
 
                 if (this.expanded) {
 
-                    $('.map-container').animate({ height: 200 }, null, null, () => {
-                        this.bounds.update();
+                    $('#leaflet-map').animate({ height: 200 }, null, null, () => {
+
+                        map.invalidateSize();
+                        console.log(this.bounds);
                     });
 
                     if (!this.buttonIcon.classed('fa-expand'))
@@ -27,8 +29,10 @@ const ExpandCollapseControl = L.Control.extend({
                }
                 else {
 
-                    $('.map-container').animate({ height: 500 }, null, null, () => {
-                        this.bounds.update();
+                    $('#leaflet-map').animate({ height: 500 }, null, null, () => {
+
+                        map.invalidateSize();
+                        console.log(this.bounds);
                     });
 
                     if (this.buttonIcon.classed('fa-expand'))
