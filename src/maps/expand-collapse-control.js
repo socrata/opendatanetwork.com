@@ -23,6 +23,7 @@ const ExpandCollapseControl = L.Control.extend({
 
                     map.dragging.disable();
                     map.touchZoom.disable();
+                    if (map.tap) map.tap.disable();
                }
                 else {
 
@@ -35,6 +36,7 @@ const ExpandCollapseControl = L.Control.extend({
 
                     map.dragging.enable();
                     map.touchZoom.enable();
+                    if (map.tap) map.tap.enable();
                 }
 
                 this.expanded = !this.expanded;
