@@ -32,11 +32,7 @@
         <p id="map-summary" style="display: <%= mapSummary === '' ? 'none' : 'block' %>">
             <%= mapSummary %>
         </p>
-        <div id="map">
-            <a class="map-expand">
-                <i class="fa fa-arrows" aria-hidden="true"></i>
-            </a>
-        </div>
+        <div id="map"></div>
     <% if ('mapDescription' in source) { %>
         <div class="dataset-description map-description">
             <p><%= source.mapDescription %></p>

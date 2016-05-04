@@ -97,6 +97,7 @@ class MapView {
 
         this.legend = new LegendControl();
         this.tooltip = new TooltipControl();
+        this.expandCollapseControl = new ExpandCollapseControl();
         this.variableControl = new VariableControl(source, params, (variable, year) => {
             this.display(variable, year);
         });
@@ -120,6 +121,8 @@ class MapView {
         map.addControl(this.tooltip);
 
         if (MapConstants.ZOOM_CONTROL) map.addControl(this.zoomControl);
+
+        map.addControl(this.expandCollapseControl);
 
         this.variableControl.onAdd(map, this.regions, 'ul.chart-sub-nav');
         this.variableControl.onAdd(map, this.regions, 'ul.data-source-menu-list-mobile');

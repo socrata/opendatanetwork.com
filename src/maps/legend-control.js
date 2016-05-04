@@ -1,7 +1,7 @@
 
 const LegendControl = L.Control.extend({
     options: {
-        position: 'bottomleft'
+        position: 'bottomright'
     },
 
     onAdd: function(map) {
