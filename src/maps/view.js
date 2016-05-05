@@ -125,7 +125,8 @@ class MapView {
 
         if (MapConstants.ZOOM_CONTROL) map.addControl(this.zoomControl);
 
-        map.addControl(this.expandCollapseControl);
+        if (d3.select("body").node().getBoundingClientRect().width <= 800)
+            map.addControl(this.expandCollapseControl);
 
         this.variableControl.onAdd(map, this.regions, 'ul.chart-sub-nav');
         this.variableControl.onAdd(map, this.regions, 'ul.data-source-menu-list-mobile');
