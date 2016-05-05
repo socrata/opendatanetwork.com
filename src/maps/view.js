@@ -1,10 +1,11 @@
 
 class POIMapView {
+
     constructor(source, regions, params) {
+
         this.source = source;
         this.regions = regions;
         this.params = params;
-
         this.model = new POIMapModel(source, source.variables[0]);
     }
 
@@ -39,6 +40,11 @@ class POIMapView {
 
             this.variableControl.onAdd(map, this.regions, 'ul.chart-sub-nav');
             this.variableControl.onAdd(map, this.regions, 'ul.data-source-menu-list-mobile');
+
+            this.expandCollapseControl = new ExpandCollapseControl();
+
+            if (d3.select("body").node().getBoundingClientRect().width <= 800)
+                map.addControl(this.expandCollapseControl);
         });
     }
 
@@ -88,6 +94,7 @@ class POIMapView {
 }
 
 class MapView {
+
     constructor(source, regionType, regions, features, params) {
 
         this.source = source;
