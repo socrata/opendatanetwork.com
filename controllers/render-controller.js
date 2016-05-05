@@ -601,8 +601,13 @@ class RenderController {
 
                     templateParams.forecastDescriptions = data[10];
 
-                    const cookieObject = cookie.parse(req.headers.cookie);
-                    templateParams.refinePopupCollapsed = !!cookieObject.refinePopupCollapsed;
+                    if ((req.headers != null) && (req.headers.cookie != null)) {
+                        const cookieObject = cookie.parse(req.headers.cookie);
+                        templateParams.refinePopupCollapsed = !!cookieObject.refinePopupCollapsed;
+                    }
+                    else {
+                        templateParams.refinePopupCollapsed = false;
+                    }
                 }
 
                 res.render('search.ejs', templateParams);
