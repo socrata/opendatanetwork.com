@@ -12,7 +12,6 @@ const MapSources = require('../src/data/map-sources');
 const Sources = require('../src/data/data-sources');
 const SrcConstants = require('../src/constants');
 
-const cookie = require('cookie');
 const _ = require('lodash');
 const htmlencode = require('htmlencode').htmlEncode;
 const moment = require('moment');
@@ -600,14 +599,7 @@ class RenderController {
                     };
 
                     templateParams.forecastDescriptions = data[10];
-
-                    if ((req.headers != null) && (req.headers.cookie != null)) {
-                        const cookieObject = cookie.parse(req.headers.cookie);
-                        templateParams.refinePopupCollapsed = !!cookieObject.refinePopupCollapsed;
-                    }
-                    else {
-                        templateParams.refinePopupCollapsed = false;
-                    }
+                    templateParams.refinePopupCollapsed = (req.query.question == '1') || !!req.cookies.refinePopupCollapsed;
                 }
 
                 res.render('search.ejs', templateParams);
