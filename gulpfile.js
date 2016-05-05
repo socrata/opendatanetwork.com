@@ -38,6 +38,7 @@ var mapScripts = [
 
 var autosuggestScripts = [
     'src/autosuggest/base64.js',
+    'src/autosuggest/stopwords.js',
     'src/autosuggest/autosuggest-source.js',
     'src/autosuggest/autosuggest-results.js',
     'src/autosuggest/autosuggest.js',
@@ -132,7 +133,7 @@ gulp.task('test', function () {
               var casper = spawn('casperjs', ['test', './tests'], {
                   stdio: 'inherit'
               });
-              
+
               casper.on('close', function(code) {
                   util.log("code: " + code);
                   if(code === 0) {

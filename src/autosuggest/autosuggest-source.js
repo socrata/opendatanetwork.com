@@ -28,6 +28,7 @@ class AutosuggestSource {
             if (term === '') {
                 resolve([]);
             } else {
+                term = Stopwords.strip(term);
                 const baseURL = Constants.AUTOCOMPLETE_URL(this.domain, this.fxf, this.column, term);
                 const size = this.sort ?
                     Constants.AUTOCOMPLETE_MAX_OPTIONS :

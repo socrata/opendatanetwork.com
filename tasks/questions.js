@@ -16,9 +16,9 @@ const fs = require('fs');
 const Request = require('../controllers/request.js');
 const MAP_SOURCES = require('../src/data/map-sources.js');
 const Sources = require('../src/data/data-sources.js');
+const Stopwords = require('../src/autosuggest/stopwords.js');
 
 const REGIONS = JSON.parse(fs.readFileSync('tasks/roster.json'));
-const STOPWORDS = new Set(JSON.parse(fs.readFileSync('tasks/stopwords.json')));
 
 function main() {
     const fd = fs.openSync('tasks/questions.csv', 'w');
@@ -93,7 +93,7 @@ class Question {
      *      "population seattle"
      */
     _text() {
-        const variableWords = _importantWords(this.variable.name);
+        const variableWords = Stopwords.importantWords(this.variable.name);
         const regionName = _simpleRegionName(this.region);
 
         const permutations = _permutations(variableWords.concat(regionName));
@@ -183,18 +183,6 @@ class Counter {
     log() {
         console.log(this.template(this.counter));
     }
-}
-
-/* Extracts all the important words from a string.
- *
- * Ignores all words in stopwords.json.
- */
-function _importantWords(string) {
-    return string.replace(/[\.,]/g, '')
-        .replace(/[\\\/]/g, ' ')
-        .toLowerCase()
-        .split(' ')
-        .filter(word => !STOPWORDS.has(word));
 }
 
 /* Generates a simplifed name for a region for autocompletion.
