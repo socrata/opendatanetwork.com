@@ -15,7 +15,6 @@ function multiComplete(inputSelector, resultSelector) {
 
     function path(elements) {
         return `/${elements.map(urlEscape).join('/')}`;
-
     }
 
     const domain = 'odn.data.socrata.com';
@@ -47,8 +46,9 @@ function multiComplete(inputSelector, resultSelector) {
             column: 'question',
             encoded: ['regionName', 'regionID', 'regionPopulation',
                       'source', 'variable', 'metric', 'index'],
-            select: option => navigate(path(
-                ['region', option.regionID, option.regionName, option.source, option.metric])),
+            select: option => navigate(
+                path(['region', option.regionID, option.regionName, option.source, option.metric]),
+                { question: 1 }),
             sort: option => {
                 const population = parseFloat(option.regionPopulation);
                 const index = parseFloat(option.index);
