@@ -1,7 +1,6 @@
 <% searchResults.results.forEach(function(result) { %>
     <li>
-        <% var fxf = result.resource.nbe_fxf || result.resource.obe_fxf %>
-        <a class="api-link" href="http://dev.socrata.com/foundry/<%= result.metadata.domain %>/<%= fxf %>">API</a>
+        <a class="api-link" href="http://dev.socrata.com/foundry/<%= result.metadata.domain %>/<%= result.resource.id %>">API</a>
         <i class="fa <%= result.classification.categoryGlyphString %>"></i>
         <h2>
             <a href="/dataset/<%= result.metadata.domain %>/<%= result.resource.id %><%= (params.debug != null) ? '?debug=1' : '' %>">
