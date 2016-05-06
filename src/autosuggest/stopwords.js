@@ -2,6 +2,7 @@
 
 const _STOPWORDS = new Set([
     "and",
+    "is",
     "or",
     "the",
     "in",
