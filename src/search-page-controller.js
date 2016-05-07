@@ -124,12 +124,29 @@ class SearchPageController {
         // Questions
         //
         if (this.params.regions.length == 0 && this.params.q && this.params.q !== '') {
-            const questionAutosuggest = new AutosuggestSource(autosuggestSources.questions);
+            const source = _.extend({}, autosuggestSources.questions, {
+                image: false,
+                select: option => {},
+                show: (selection, option) => {
+                    const url = path(['region', option.regionID, option.regionName,
+                                      option.source, option.metric]);
+                    const text = `What is the ${option.variable} of ${option.regionName}?`;
+
+                    selection.append('a')
+                        .attr('href', url)
+                        .text(text);
+                }
+            });
+            const questionAutosuggest = new AutosuggestSource(source);
 
             questionAutosuggest.get(this.params.q).then(options => {
-                questionAutosuggest.display(d3.select('.questions'), options);
+                if (options.length > 0) {
+                    d3.select('#question-bar').style('display', 'block');
+                    d3.select('#question-container').style('display', 'block');
+                    questionAutosuggest.display(d3.select('#question-container'), options);
+                }
             }, error => {
-                console.error(error)
+                console.error(error);
             });
         }
 
