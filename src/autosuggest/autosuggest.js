@@ -8,7 +8,7 @@ function delay(milliseconds) {
 
 class Autosuggest {
     constructor(resultSelector, sources) {
-        this.sources = sources.map(AutosuggestSource.fromJSON);
+        this.sources = sources.map(source => new AutosuggestSource(source));
         this.results = new AutosuggestResults(resultSelector);
 
         this._currentTerm = '';

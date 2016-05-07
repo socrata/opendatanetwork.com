@@ -113,7 +113,6 @@ class SearchPageController {
         autosuggest.listen('.add-region-input');
 
         $('.add-region .fa-plus').click(function() {
-
             $('.add-region input[type="text"]').focus();
         });
 
@@ -121,6 +120,18 @@ class SearchPageController {
         //
         const autosuggestMobile = new Autosuggest('.add-region-results-mobile', sources);
         autosuggestMobile.listen('.add-region-input-mobile');
+
+        // Questions
+        //
+        if (this.params.regions.length == 0 && this.params.q && this.params.q !== '') {
+            const questionAutosuggest = new AutosuggestSource(autosuggestSources.questions);
+
+            questionAutosuggest.get(this.params.q).then(options => {
+                questionAutosuggest.display(d3.select('.questions'), options);
+            }, error => {
+                console.error(error)
+            });
+        }
 
         // Chart column
         //
@@ -185,7 +196,7 @@ class SearchPageController {
 
                 var cell = row.append('div');
                 cell.append('h2')
-                    .append('a')                    
+                    .append('a')
                     .attr('href', this.getRegionUrl(region))
                     .text(region.name);
 
@@ -218,7 +229,7 @@ class SearchPageController {
                 columns = 3;
             else if (width >= widthForTwo)
                 columns = 2;
-            else 
+            else
                 columns = 1;
         }
         else if (regionCount >= 2) {
@@ -232,32 +243,32 @@ class SearchPageController {
 
         return columns;
     }
-    
+
     getRegionUrl(region) {
-        
+
         const segment = this.regionToUrlSegment(region.name);
         return `/region/${region.id}/${segment}`;
     }
-    
+
     regionToUrlSegment(name) {
         return name.replace(/ /g, '_').replace(/\//g, '_').replace(/,/g, '');
     }
-    
+
     getDataTable(source, columns) {
-        
+
         const table = [];
         var row;
 
         source.forEach((item, index) => {
-            
+
             if ((index % columns) == 0) {
                 row =[];
                 table.push(row);
             }
-            
+
             row.push(item);
         });
-        
+
         return table;
     }
 
