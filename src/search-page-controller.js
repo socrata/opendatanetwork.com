@@ -128,8 +128,9 @@ class SearchPageController {
                 image: false,
                 select: option => {},
                 show: (selection, option) => {
-                    const url = path(['region', option.regionID, option.regionName,
-                                      option.source, option.metric]);
+                    const baseURL = path(['region', option.regionID, option.regionName,
+                                          option.source, option.metric]);
+                    const url = `${baseURL}?question=1`;
                     const text = `What is the ${option.variable} of ${option.regionName}?`;
 
                     selection.append('a')

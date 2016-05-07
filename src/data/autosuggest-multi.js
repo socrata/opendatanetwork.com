@@ -45,7 +45,8 @@ const autosuggestSources = {
         encoded: ['regionName', 'regionID', 'regionPopulation',
                   'source', 'variable', 'metric', 'index'],
         select: option => navigate(path(
-            ['region', option.regionID, option.regionName, option.source, option.metric])),
+            ['region', option.regionID, option.regionName, option.source, option.metric]),
+            {question: 1}),
         sort: option => {
             const population = parseFloat(option.regionPopulation);
             const index = parseFloat(option.index);
