@@ -3,9 +3,7 @@ class SearchRefineControlsMobile {
 
     constructor() {
 
-        this.self = this;
-
-        self.mobileSubMenus = [
+        this.mobileSubMenus = [
             '.search-refine-menu-list-item-categories-mobile',
             '.search-refine-menu-list-item-domains-mobile',
         ];
@@ -17,7 +15,7 @@ class SearchRefineControlsMobile {
             $(this).slideUp();
             $('.search-refine-popup-mobile').slideDown();
 
-            Cookies.remove('refinePopupCollapsed');
+            Cookies.set('refinePopupCollapsed', '0');
         });
 
         // Close button
@@ -34,6 +32,8 @@ class SearchRefineControlsMobile {
     }
 
     bindHeaderClickHandlers() {
+
+        const self = this;
 
         $('.search-refine-menu-list-mobile .data-source-menu-header-mobile').unbind('click').click(function() {
 

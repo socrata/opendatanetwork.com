@@ -385,7 +385,10 @@ class RenderController {
                         return;
                     }
 
-                    templateParams.refinePopupCollapsed = !!req.cookies.refinePopupCollapsed;
+                    if (typeof req.cookies.refinePopupCollapsed === 'undefined')
+                        templateParams.refinePopupCollapsed = true;
+                    else
+                        templateParams.refinePopupCollapsed = (req.cookies.refinePopupCollapsed === '1');
 
                     res.render('search.ejs', templateParams);
                 } catch (error) {
@@ -606,7 +609,7 @@ class RenderController {
                     };
 
                     templateParams.forecastDescriptions = data[10];
-                    templateParams.refinePopupCollapsed = (req.query.question == '1') || !!req.cookies.refinePopupCollapsed;
+                    templateParams.refinePopupCollapsed = (req.query.question === '1') || (req.cookies.refinePopupCollapsed === '1');
                 }
 
                 res.render('search.ejs', templateParams);

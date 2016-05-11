@@ -3,9 +3,7 @@ class RefineControlsMobile {
 
     constructor() {
 
-        this.self = this;
-
-        self.mobileSubMenus = [
+        this.mobileSubMenus = [
             '.data-source-menu-list-item-groups-mobile',
             '.data-source-menu-list-item-sources-mobile',
             '.map-variable-container',
@@ -19,7 +17,7 @@ class RefineControlsMobile {
             $(this).slideUp();
             $('.refine-popup-mobile').slideDown();
 
-            Cookies.remove('refinePopupCollapsed');
+            Cookies.set('refinePopupCollapsed', '0');
         });
 
         // Close button
@@ -37,6 +35,8 @@ class RefineControlsMobile {
 
     bindHeaderClickHandlers() {
 
+        const self = this;
+        
         $('.data-source-menu-list-mobile .data-source-menu-header-mobile').unbind('click').click(function() {
 
             const selectedMenu = '.' + $(this).parent().attr('class');
