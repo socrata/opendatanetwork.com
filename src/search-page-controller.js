@@ -16,6 +16,7 @@ class SearchPageController {
         // Refine controls for mobile
         //
         this.refineControlsMobile = new RefineControlsMobile();
+        this.searchRefineControlsMobile = new SearchRefineControlsMobile();
 
         // Search results regions
         //
@@ -293,7 +294,7 @@ class SearchPageController {
     attachCategoriesClickHandlers() {
         const self = this;
 
-        $('#refine-menu-categories li:not(.refine-view-more)').click(function() {
+        $('#refine-menu-categories li:not(.refine-view-more), .search-refine-menu-list-item-categories-mobile li').click(function() {
             self.toggleCategory($(this).text().toLowerCase().trim());
             self.navigate();
         });
@@ -302,7 +303,7 @@ class SearchPageController {
     attachDomainsClickHandlers() {
         const self = this;
 
-        $('#refine-menu-domains li:not(.refine-view-more)').click(function() {
+        $('#refine-menu-domains li:not(.refine-view-more), .search-refine-menu-list-item-domains-mobile li').click(function() {
             const domain = $(this).text().toLowerCase().trim();
             self.toggleDomain(domain);
             self.navigate();

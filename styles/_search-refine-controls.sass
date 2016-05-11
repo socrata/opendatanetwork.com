@@ -6,8 +6,12 @@
     line-height: 50px
     padding: 0 0 0 30px
 
-    .tokens li
-        border: 1px solid $dark-gray-border-color
+    .tokens
+        @media (max-width: $mobile-width)
+            display: none
+
+        li
+            border: 1px solid $dark-gray-border-color
 
 .refine-link
     color: $blue-text-color

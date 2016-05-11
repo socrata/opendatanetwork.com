@@ -295,9 +295,9 @@ class RenderController {
         if (params.regions.length > 0) {
             RenderController._regions(req, res, params);
         } else {
-            const categoriesPromise = API.categories(quickLinksCount);
+            const categoriesPromise = API.categories();
             const tagsPromise = API.tags();
-            const domainsPromise = API.domains(quickLinksCount);
+            const domainsPromise = API.domains();
             const datasetsPromise = API.datasets(params);
             const searchPromise = API.searchDatasetsURL(params);
             const locationsPromise = API.locations();
@@ -355,8 +355,8 @@ class RenderController {
                         templateParams.searchDatasetsURL = data[4];
 
                         templateParams.quickLinks = {
-                            categories : data[0],
-                            domains : data[2].results,
+                            categories : data[0].slice(0, quickLinksCount),
+                            domains : data[2].results.slice(0, quickLinksCount),
                             ref : 'sp',
                             regions : data[5].slice(0, quickLinksCount),
                         };
@@ -365,6 +365,11 @@ class RenderController {
                             categories : data[0].slice(0, refineByCount),
                             domains : data[2].results.slice(0, refineByCount),
                         };
+                        
+                        templateParams.refineByMobile = {
+                            categories : data[0],
+                            domains : data[2].results,
+                        }
                     }
 
                     // If only one region result and no search results, just redirect to the region page.
@@ -379,6 +384,8 @@ class RenderController {
                         res.redirect(302, `/region/${region.id}/${segment}`);
                         return;
                     }
+
+                    templateParams.refinePopupCollapsed = !!req.cookies.refinePopupCollapsed;
 
                     res.render('search.ejs', templateParams);
                 } catch (error) {

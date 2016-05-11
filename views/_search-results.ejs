@@ -6,8 +6,8 @@
 <% } %>
 
     <% include _questions %>
-
-    <% include _search-results-refine-by-bar %>
+    <% include _search-refine-controls %>
+    <% include _search-refine-controls-mobile %>
 
 <% if (searchResults && searchResults.resultSetSize > 0) { %>
     <% if (typeof currentCategory != 'undefined' && currentCategory && currentCategory.metadata && currentCategory.metadata.description) { %>

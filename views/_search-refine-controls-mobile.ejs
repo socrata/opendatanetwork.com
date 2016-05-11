@@ -1,0 +1,42 @@
+<div class="search-refine-controls-mobile">
+    <div class="search-refine-results-link-container-mobile<%= refinePopupCollapsed ? '' : ' search-refine-controls-mobile-hidden' %>">
+        <a class="search-refine-results-link-mobile">Refine Results</a>
+    </div>
+    <div class="search-refine-popup-mobile<%= refinePopupCollapsed ? ' search-refine-controls-mobile-hidden' : '' %>">
+        <div class="search-refine-popup-mobile-container">
+            <div class="search-refine-popup-inner-container-mobile">
+                <div class="search-refine-similar-regions-mobile">
+                    <a id="search-refine-close-mobile" class="fa fa-caret-up"></a>
+                    <label>Refine by</label>
+                    <% include _search-tokens %>
+                </div>
+
+                <ul class="search-refine-menu-list-mobile">
+                    <li class="search-refine-menu-list-item-categories-mobile">
+                        <a class="data-source-menu-header-mobile">
+                            Categories
+                            <i class="fa fa-caret-down odn-caret"></i>
+                        </a>
+                        <ul>
+                            <% refineByMobile.categories.forEach(category => { %>
+                                <li><%= category.category %></li>
+                            <% }); %>
+                        </ul>
+                    </li>
+                    <li class="search-refine-menu-list-item-domains-mobile">
+                        <a class="data-source-menu-header-mobile">
+                            Domains
+                            <i class="fa fa-caret-down odn-caret"></i>
+                        </a>
+                        <ul>
+                            <% refineByMobile.domains.forEach(domain => { %>
+                                <li><%= domain.domain %></li>
+                            <% }); %>
+                        </ul>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,111 @@
+
+.search-refine-controls-mobile
+
+    @media (min-width: $mobile-width)
+        display: none
+
+    .search-refine-controls-mobile-hidden
+        display: none
+
+    .search-refine-results-link-mobile
+        background-color: $blue-text-color
+        border-radius: 3px
+        color: white
+        cursor: pointer
+        display: block
+        font-size: 16px
+        font-weight: 600
+        height: 50px
+        line-height: 50px
+        margin: 20px 30px
+        text-align: center
+
+    .search-refine-popup-mobile
+        margin: 30px
+
+        .search-refine-popup-mobile-container
+            background-color: white
+            border: 1px solid $gray-border-color
+            border-radius: 3px
+            color: $black-text-color
+
+            .search-refine-popup-inner-container-mobile
+                padding: 10px 20px 20px
+
+                label
+                    display: inline-block
+                    font-size: 16px
+                    font-weight: 600
+                    margin-bottom: 10px
+
+                .tokens
+                    margin: 0
+
+                .search-refine-similar-regions-mobile
+                    padding: 10px 0
+                    margin: 0
+
+                    #search-refine-close-mobile
+                        cursor: pointer
+                        float: right
+                        font-size: 22px
+                        margin: -20px -20px 0 0
+                        padding: 15px 20px 10px
+
+                    .tokens
+                        display: block
+
+                .search-refine-menu-list-mobile
+                    list-style-type: none
+                    margin: 0
+                    padding: 0
+
+                    >li
+                        border-top: 1px solid $gray-border-color
+
+                        a
+                            background: $gray-background-color
+                            color: $darker-gray-text-color
+                            cursor: pointer
+                            display: block
+                            font-size: 16px
+                            font-weight: 600
+                            height: 50px
+                            line-height: 50px
+                            margin: 0
+                            overflow: hidden
+                            padding: 0 10px
+
+                            .odn-caret
+                                color: $blue-text-color
+                                float: right
+                                height: 50px
+                                line-height: 50px
+                                margin: 0 0 0 10px
+
+                        ul
+                            display: none
+                            list-style-type: none
+                            margin: 0
+                            max-height: 250px
+                            overflow-y: scroll
+                            padding: 0
+                            position: static
+                            z-index: auto
+
+                            li
+                                background: white
+                                border-top: 1px solid $gray-border-color
+                                color: $black-text-color
+                                cursor: pointer
+                                font-size: 14px
+                                font-weight: normal
+                                padding: 0 10px 0 30px
+                                height: 50px
+                                line-height: 50px
+
+                .search-refine-menu-list-item-categories-mobile
+                    li
+                        text-transform: capitalize
+                                    
+

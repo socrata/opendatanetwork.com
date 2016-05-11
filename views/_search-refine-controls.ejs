@@ -2,7 +2,7 @@
     <a class="refine-link">
         <span>Categories<i class="fa fa-caret-down"></i></span>
         <ul id="refine-menu-categories" style="display:none">
-          <% refineBy.categories.forEach(function(category) { %>
+          <% refineBy.categories.forEach(category => { %>
             <li><i class="fa <%= category.metadata.icon %>"></i><%= category.category %></li>
           <% }); %>
             <li id="refine-menu-categories-view-more" class="refine-view-more">More</li>
@@ -12,7 +12,7 @@
     <a class="refine-link">
         <span>Publishers<i class="fa fa-caret-down"></i></span>
         <ul id="refine-menu-domains" style="display:none">
-          <% refineBy.domains.forEach(function(domain) { %>
+          <% refineBy.domains.forEach(domain => { %>
             <li><%= domain.domain %></li>
           <% }); %>
             <li id="refine-menu-domains-view-more" class="refine-view-more">More</li>

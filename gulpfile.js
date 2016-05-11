@@ -53,6 +53,7 @@ var regionsScripts = [
     'src/data/data-sources.js',
     'src/charts.js',
     'src/refine-controls-mobile.js',
+    'src/search-refine-controls-mobile.js',
     'src/search-page-controller.js',
     'src/search.js'
 ];
