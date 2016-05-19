@@ -84,12 +84,12 @@ class API {
                             const regionName = name.split(', ')[0];
                             const stateAbbr = name.split(', ')[1];
                             const stateName = stateNames[stateAbbr] || '';
-                            return `${regionName} AND ("${stateAbbr}" OR "${stateName}")`;
+                            return `${_alphanumeric(regionName)} AND ("${stateAbbr}" OR "${stateName}")`;
                         } else if (type === 'msa') {
                             const words = name.split(' ');
-                            return `"${words.slice(0, words.length - 3).join(' ')}"`;
+                            return `"${_alphanumeric(words.slice(0, words.length - 3).join(' '))}"`;
                         } else {
-                            return `"${name}"`;
+                            return `"${_alphanumeric(name)}"`;
                         }
                     }).map(constraint => `(${constraint})`);
 
@@ -267,5 +267,12 @@ String.prototype.format = function() {
         return typeof args[number] != 'undefined' ? args[number] : match;
     });
 };
+
+/**
+ * Replaces all non-alphanumeric characters with spaces.
+ */
+function _alphanumeric(string) {
+    return string.replace(/[^a-zA-Z0-9]/g, ' ');
+}
 
 module.exports = API;
