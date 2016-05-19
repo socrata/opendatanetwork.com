@@ -17,16 +17,6 @@ const autosuggest = new Autosuggest({
     }
 });
 
-function urlEscape(string) {
-    return string
-        .replace(/,/g, '')
-        .replace(/[ \/]/g, '_');
-}
-
-function path(elements) {
-    return `/${elements.map(urlEscape).join('/')}`;
-}
-
 class Questions {
     static get(term) {
         return new Promise((resolve, reject) => {
@@ -40,6 +30,44 @@ class Questions {
                 resolve(questions);
             }, reject);
         });
+    }
+
+    static getForRegion(region) {
+        return Questions.get(_simpleRegionName(region));
+    }
+}
+
+function urlEscape(string) {
+    return string
+        .replace(/,/g, '')
+        .replace(/[ \/]/g, '_');
+}
+
+function path(elements) {
+    return `/${elements.map(urlEscape).join('/')}`;
+}
+
+/* Generates a simplifed name for a region for autocompletion.
+ *
+ * e.g. Seattle Metro Area (WA) -> Seattle
+ *      Seattle, WA -> Seattle
+ *      King County, WA -> King County
+ *      98122 ZIP Code -> 98122
+ *      Washington -> Washington
+ */
+function _simpleRegionName(region) {
+    const name = region.name;
+    const type = region.type;
+
+    if (type === 'zip_code') {
+        return name.split(' ')[0];
+    } else if (type === 'place' || type === 'county') {
+        return name.split(',')[0];
+    } else if (type === 'msa') {
+        const words = name.split(' ');
+        return words.slice(0, words.length - 3).join(' ');
+    } else {
+        return name;
     }
 }
 

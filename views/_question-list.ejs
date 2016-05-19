@@ -1,0 +1,17 @@
+
+<% questions.forEach(function(question) { %>
+    <li class="question">
+        <a href="<%= question.url %>">
+            What is the
+            <span class="question-variable">
+                <%= question.variable %>
+            </span>
+            of
+            <span class="question-region-name">
+                <%= question.regionName %>
+            </span>
+            ?
+        </a>
+    </li>
+<% }); %>
+

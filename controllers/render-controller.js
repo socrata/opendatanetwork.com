@@ -471,11 +471,12 @@ class RenderController {
         const searchPromise = API.searchDatasetsURL(params);
         const locationsPromise = API.locations();
         const sourcesPromise = Sources.sourcesPromiseFromParams(params);
+        const questionsPromise = Questions.getForRegion(params.regions[0]);
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
                              categoriesPromise, tagsPromise, domainsPromise,
                              datasetsPromise, descriptionPromise, searchPromise,
                              locationsPromise, forecastDescriptionsPromise,
-                             sourcesPromise];
+                             sourcesPromise, questionsPromise];
 
 
         function awaitPromises(promises, timeoutMS) {
@@ -615,6 +616,8 @@ class RenderController {
 
                     templateParams.forecastDescriptions = data[10];
                     templateParams.refinePopupCollapsed = (req.query.question === '1') || (req.cookies.refinePopupCollapsed === '1');
+
+                    templateParams.questions = data[12];
                 }
 
                 res.render('search.ejs', templateParams);
