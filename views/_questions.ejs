@@ -4,4 +4,11 @@
 </section>
 
 <div class="search-results" id="question-container" style="display: none">
+    <% questions.forEach(function(question) { %>
+        <li class="question">
+            <a href="<%= question.url %>">
+                <%= question.text %>
+            </a>
+        </li>
+    <% }); %>
 </div>

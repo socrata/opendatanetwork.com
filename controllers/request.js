@@ -21,7 +21,7 @@ class Request {
     }
 
     static get(url, timeout) {
-        return request(url);
+        if (!cache) return request(url);
 
         return new Promise((resolve, reject) => {
             const key = Request.key(_.isString(url) ? url : url.uri);

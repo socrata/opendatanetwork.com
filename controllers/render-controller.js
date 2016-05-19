@@ -5,6 +5,7 @@ const Relatives = require('./relatives');
 const Constants = require('./constants');
 const Request = require('./request');
 const Navigate = require('./navigate');
+const Questions = require('./questions');
 
 const ForecastDescriptions = require('../src/forecast-descriptions');
 const MapDescription = require('../src/maps/description');
@@ -302,10 +303,12 @@ class RenderController {
             const searchPromise = API.searchDatasetsURL(params);
             const locationsPromise = API.locations();
             const searchResultsRegionsPromise = API.searchResultsRegions(params.q);
+            const questionsPromise = Questions.get(params.q);
             const allPromises = [categoriesPromise, tagsPromise,
                                  domainsPromise, datasetsPromise,
                                  searchPromise, locationsPromise,
-                                 searchResultsRegionsPromise];
+                                 searchResultsRegionsPromise,
+                                 questionsPromise];
             const allPromise = Promise.all(allPromises);
 
             allPromise.then(data => {
@@ -365,11 +368,13 @@ class RenderController {
                             categories : data[0].slice(0, refineByCount),
                             domains : data[2].results.slice(0, refineByCount),
                         };
-                        
+
                         templateParams.refineByMobile = {
                             categories : data[0],
                             domains : data[2].results,
-                        }
+                        };
+
+                        templateParams.questions = data[7];
                     }
 
                     // If only one region result and no search results, just redirect to the region page.
