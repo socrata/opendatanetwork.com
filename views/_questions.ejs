@@ -1,14 +1,18 @@
-<section class="search-results-regions-bar search-header-bar" id="question-bar" style="display: none">
-    <i class="fa fa-question search-results-header-icon"></i>
-    <label class="search-results-header-label">Questions for "<%= params.q %>"</label>
-</section>
 
-<div class="search-results" id="question-container" style="display: none">
-    <% questions.forEach(function(question) { %>
-        <li class="question">
-            <a href="<%= question.url %>">
-                <%= question.text %>
-            </a>
-        </li>
-    <% }); %>
-</div>
+<% if (typeof questions != 'undefined' && questions && questions.length > 0) { %>
+    <section class="search-results-regions-bar search-header-bar" id="question-bar">
+        <i class="fa fa-question-circle search-results-header-icon"></i>
+        <label class="search-results-header-label">Questions for "<%= params.q %>"</label>
+    </section>
+
+    <div class="search-results" id="question-container">
+        <% questions.forEach(function(question) { %>
+            <li class="question">
+                <a href="<%= question.url %>">
+                    <%= question.text %>
+                </a>
+            </li>
+        <% }); %>
+    </div>
+<% } %>
+

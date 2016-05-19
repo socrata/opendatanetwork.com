@@ -34,7 +34,7 @@ class Questions {
                 questions.forEach(question => {
                     question.url = path(['region', question.regionID, question.regionName,
                             question.source, question.metric]) + '?question=1';
-                    question.text = `What is the ${question.variable} of ${question.regionName}`;
+                    question.text = `What is the ${question.variable} of ${question.regionName}?`;
                 });
 
                 resolve(questions);

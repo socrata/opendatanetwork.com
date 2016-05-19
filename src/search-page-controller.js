@@ -122,36 +122,6 @@ class SearchPageController {
         const autosuggestMobile = new Autosuggest('.add-region-results-mobile', sources);
         autosuggestMobile.listen('.add-region-input-mobile');
 
-        // Questions
-        //
-        if (this.params.regions.length == 0 && this.params.q && this.params.q !== '') {
-            const source = _.extend({}, autosuggestSources.questions, {
-                image: false,
-                select: option => {},
-                show: (selection, option) => {
-                    const baseURL = path(['region', option.regionID, option.regionName,
-                                          option.source, option.metric]);
-                    const url = `${baseURL}?question=1`;
-                    const text = `What is the ${option.variable} of ${option.regionName}?`;
-
-                    selection.append('a')
-                        .attr('href', url)
-                        .text(text);
-                }
-            });
-            const questionAutosuggest = new AutosuggestSource(source);
-
-            questionAutosuggest.get(this.params.q).then(options => {
-                if (options.length > 0) {
-                    d3.select('#question-bar').style('display', 'block');
-                    d3.select('#question-container').style('display', 'block');
-                    questionAutosuggest.display(d3.select('#question-container'), options);
-                }
-            }, error => {
-                console.error(error);
-            });
-        }
-
         // Chart column
         //
         const regions = this.params.regions;
