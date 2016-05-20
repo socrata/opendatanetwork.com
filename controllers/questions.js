@@ -6,8 +6,7 @@ const autosuggest = new Autosuggest({
     name: 'Questions',
     image: 'fa-question-circle',
     domain: 'odn.data.socrata.com',
-//    fxf: '234x-8y9w',
-    fxf: 'ufjz-39xc', // OBE FXF for use until synchronization is done
+    fxf: '234x-8y9w',
     column: 'question',
     encoded: ['regionName', 'regionID', 'regionPopulation',
               'vector', 'source', 'variable', 'metric', 'index'],

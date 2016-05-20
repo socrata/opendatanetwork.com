@@ -21,21 +21,27 @@ class Request {
     }
 
     static get(url, timeout) {
-        if (!cache) return request(url);
-
         return new Promise((resolve, reject) => {
-            const key = Request.key(_.isString(url) ? url : url.uri);
+            if (!cache) {
+                console.log('WARNING: no cache found');
 
-            cache.get(key, (error, value) => {
-                if (value) {
-                    resolve(value);
-                } else {
-                    Request.timeout(request(url), timeout).then(body => {
-                        resolve(body);
-                        if (!error) cache.set(key, body);
-                    }, reject);
-                }
-            });
+                Request.timeout(request(url), timeout).then(body => {
+                    resolve(body);
+                }, reject);
+            } else {
+                const key = Request.key(_.isString(url) ? url : url.uri);
+
+                cache.get(key, (error, value) => {
+                    if (value) {
+                        resolve(value);
+                    } else {
+                        Request.timeout(request(url), timeout).then(body => {
+                            resolve(body);
+                            if (!error) cache.set(key, body);
+                        }, reject);
+                    }
+                });
+            }
         });
     }
 

@@ -309,7 +309,7 @@ class RenderController {
                                  searchPromise, locationsPromise,
                                  searchResultsRegionsPromise,
                                  questionsPromise];
-            const allPromise = Promise.all(allPromises);
+            const allPromise = awaitPromises(allPromises);
 
             allPromise.then(data => {
                 try {
@@ -477,37 +477,6 @@ class RenderController {
                              datasetsPromise, descriptionPromise, searchPromise,
                              locationsPromise, forecastDescriptionsPromise,
                              sourcesPromise, questionsPromise];
-
-
-        function awaitPromises(promises, timeoutMS) {
-            timeoutMS = timeoutMS || 5000;
-
-            return new Promise((resolve, reject) => {
-                let resolved = 0;
-                let unresolved = _.range(0, promises.length);
-                let results = new Array(promises.length);
-
-                promises.forEach((promise, index) => {
-                    promise.then(result => {
-                        results[index] = result;
-                        unresolved = _.without(unresolved, index);
-                        resolved++;
-                        if (resolved === promises.length) resolve(results);
-                    }, error => {
-                        console.log(index);
-                    });
-                });
-
-                setTimeout(() => {
-                    if (resolved != promises.length) {
-                        console.log(`awaiting promises timeout after ${timeoutMS}ms`);
-                        console.log(`resolved ${resolved} of ${promises.length} promises`);
-                        console.log(`failed to resolve promises at indexes ${unresolved.join(', ')}`);
-                        reject();
-                    }
-                }, timeoutMS);
-            });
-        }
 
         const allPromise = awaitPromises(allPromises);
 
@@ -745,6 +714,39 @@ function wordJoin(list, separator) {
 
 function isNotComputedField(column) {
     return !column.fieldName.match(':@computed_');
+}
+
+/**
+ * Like Promise.all but with more verbose error handling for debugging.
+ */
+function awaitPromises(promises, timeoutMS) {
+    timeoutMS = timeoutMS || 5000;
+
+    return new Promise((resolve, reject) => {
+        let resolved = 0;
+        let unresolved = _.range(0, promises.length);
+        let results = new Array(promises.length);
+
+        promises.forEach((promise, index) => {
+            promise.then(result => {
+                results[index] = result;
+                unresolved = _.without(unresolved, index);
+                resolved++;
+                if (resolved === promises.length) resolve(results);
+            }, error => {
+                console.log(index);
+            });
+        });
+
+        setTimeout(() => {
+            if (resolved != promises.length) {
+                console.log(`awaiting promises timeout after ${timeoutMS}ms`);
+                console.log(`resolved ${resolved} of ${promises.length} promises`);
+                console.log(`failed to resolve promises at indexes ${unresolved.join(', ')}`);
+                reject();
+            }
+        }, timeoutMS);
+    });
 }
 
 module.exports = RenderController;
