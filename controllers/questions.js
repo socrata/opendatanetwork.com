@@ -37,7 +37,6 @@ class Questions {
         return new Promise((resolve, reject) => {
             promise.then(questions => {
                 questions.forEach(question => {
-                    console.log(question);
                     question.url = path(['region', question.regionID, question.regionName,
                             question.vector, question.metric]) + '?question=1';
                 });

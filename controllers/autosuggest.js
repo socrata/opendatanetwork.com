@@ -49,13 +49,11 @@ class Autosuggest {
                 '$limit': this.size
             }, clientParams);
             const url = Request.buildURL(path, params);
-            console.log(url);
 
             Request.getJSON(url).then(response => {
                 let options = response.map(option => this.decode(option[this.column]));
                 if (this.sort) options = _.sortBy(options, this.sort)
                     .slice(0, Constants.AUTOCOMPLETE_SHOWN_OPTIONS);
-                console.log(options);
 
                 resolve(options);
             }, reject);

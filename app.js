@@ -23,7 +23,7 @@ app.use(cookieParser());
 app.use(helmet.xframe('deny'));
 
 // Set up apache common log format output
-//app.use(morgan('combined'));
+app.use(morgan('combined'));
 
 // Set up static folders
 //
