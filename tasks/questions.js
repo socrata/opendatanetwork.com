@@ -24,6 +24,8 @@ function main() {
     const fd = fs.openSync('tasks/questions.csv', 'w');
 
     try {
+        fs.writeSync(fd, 'question,source,variable,variableIndex,regionID,regionType,regionName,regionPopulation\n');
+
         _.values(MAP_SOURCES)
             .filter(source => source.questions)
             .forEach(mapSource => {
@@ -33,7 +35,20 @@ function main() {
             new QuestionSource(mapSource)
                 .questions(REGIONS)
                 .forEach(question => {
-                    fs.writeSync(fd, `"${question.encoded}"\n`);
+                    const fields = [
+                        question.encoded,
+                        question.source.name.toLowerCase(),
+                        question.variable.metric,
+                        question.index,
+                        question.region.id,
+                        question.region.type,
+                        question.region.name,
+                        question.region.population
+                    ];
+
+                    const row = fields.map(field => `"${field}"`).join(',');
+                    fs.writeSync(fd, `${row}\n`);
+
                     counter.increment();
                 });
 
@@ -96,7 +111,7 @@ class Question {
         const variableWords = Stopwords.importantWords(this.variable.name);
         const regionName = _simpleRegionName(this.region);
 
-        const permutations = _permutations(variableWords.concat(regionName));
+        const permutations = _permutations([regionName].concat(variableWords));
         const permutationString = _removeAdjacentDuplicates(_.flatten(permutations)).join(' ');
         return permutationString;
     }
