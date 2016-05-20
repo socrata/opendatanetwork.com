@@ -1,6 +1,6 @@
 
-<% questions.forEach(function(question) { %>
-    <li class="question">
+<% questions.forEach(function(question, index) { %>
+    <li class="question <%= index > 1 ? 'collapsed' : '' %>">
         <a href="<%= question.url %>">
             What is the
             <span class="question-variable">
@@ -14,4 +14,22 @@
         </a>
     </li>
 <% }); %>
+
+<li a class="more-container" id="questions">
+    <a class="more" id="questions">View more</a>
+</li>
+
+<script>
+    $('a.more#questions').click(function() {
+        var $container = $(this).parent();
+
+        $container
+            .parent()
+            .children('li.question.collapsed')
+            .removeClass('collapsed');
+
+        $container
+            .hide();
+    });
+</script>
 
