@@ -6,10 +6,11 @@ const autosuggest = new Autosuggest({
     name: 'Questions',
     image: 'fa-question-circle',
     domain: 'odn.data.socrata.com',
-    fxf: 'd6be-a5xs',
+//    fxf: '234x-8y9w',
+    fxf: 'ufjz-39xc', // OBE FXF for use until synchronization is done
     column: 'question',
     encoded: ['regionName', 'regionID', 'regionPopulation',
-              'source', 'variable', 'metric', 'index'],
+              'vector', 'source', 'variable', 'metric', 'index'],
     sort: option => {
         const population = parseFloat(option.regionPopulation);
         const index = parseFloat(option.index);
@@ -19,21 +20,31 @@ const autosuggest = new Autosuggest({
 
 class Questions {
     static get(term) {
+        return Questions._extend(autosuggest.search(term));
+    }
+
+    static forRegion(region) {
+        return Questions._extend(autosuggest.get({
+            'regionid': region.id,
+            '$order': 'variableindex DESC'
+        }));
+    }
+
+    /**
+     * Adds url field to each question.
+     */
+    static _extend(promise) {
         return new Promise((resolve, reject) => {
-            autosuggest.search(term).then(questions => {
+            promise.then(questions => {
                 questions.forEach(question => {
+                    console.log(question);
                     question.url = path(['region', question.regionID, question.regionName,
-                            question.source, question.metric]) + '?question=1';
-                    question.text = `What is the ${question.variable} of ${question.regionName}?`;
+                            question.vector, question.metric]) + '?question=1';
                 });
 
                 resolve(questions);
             }, reject);
         });
-    }
-
-    static getForRegion(region) {
-        return Questions.get(_simpleRegionName(region));
     }
 }
 
@@ -45,30 +56,6 @@ function urlEscape(string) {
 
 function path(elements) {
     return `/${elements.map(urlEscape).join('/')}`;
-}
-
-/* Generates a simplifed name for a region for autocompletion.
- *
- * e.g. Seattle Metro Area (WA) -> Seattle
- *      Seattle, WA -> Seattle
- *      King County, WA -> King County
- *      98122 ZIP Code -> 98122
- *      Washington -> Washington
- */
-function _simpleRegionName(region) {
-    const name = region.name;
-    const type = region.type;
-
-    if (type === 'zip_code') {
-        return name.split(' ')[0];
-    } else if (type === 'place' || type === 'county') {
-        return name.split(',')[0];
-    } else if (type === 'msa') {
-        const words = name.split(' ');
-        return words.slice(0, words.length - 3).join(' ');
-    } else {
-        return name;
-    }
 }
 
 module.exports = Questions;

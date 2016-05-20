@@ -42,6 +42,26 @@ class Autosuggest {
             Constants.AUTOCOMPLETE_SHOWN_OPTIONS;
     }
 
+    get(clientParams) {
+        return new Promise((resolve, reject) => {
+            const path = `https://${this.domain}/resource/${this.fxf}.json`;
+            const params = _.extend({}, {
+                '$limit': this.size
+            }, clientParams);
+            const url = Request.buildURL(path, params);
+            console.log(url);
+
+            Request.getJSON(url).then(response => {
+                let options = response.map(option => this.decode(option[this.column]));
+                if (this.sort) options = _.sortBy(options, this.sort)
+                    .slice(0, Constants.AUTOCOMPLETE_SHOWN_OPTIONS);
+                console.log(options);
+
+                resolve(options);
+            }, reject);
+        });
+    }
+
     /**
      * Searches for the given term using text search.
      */
@@ -51,17 +71,7 @@ class Autosuggest {
                 resolve([]);
             } else {
                 term = Stopwords.strip(term);
-                const path = `https://${this.domain}/resource/${this.fxf}`;
-                const params = {'$q': `'${term}'`, '$limit': this.size};
-                const url = Request.buildURL(path, params);
-
-                Request.getJSON(url).then(response => {
-                    let options = response.map(option => this.decode(option[this.column]));
-                    if (this.sort) options = _.sortBy(options, this.sort)
-                        .slice(0, Constants.AUTOCOMPLETE_SHOWN_OPTIONS);
-
-                    resolve(options);
-                }, reject);
+                this.get({'$q': `'${term}'`}).then(resolve, reject);
             }
         });
     }

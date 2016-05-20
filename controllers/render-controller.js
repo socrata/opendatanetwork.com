@@ -471,7 +471,7 @@ class RenderController {
         const searchPromise = API.searchDatasetsURL(params);
         const locationsPromise = API.locations();
         const sourcesPromise = Sources.sourcesPromiseFromParams(params);
-        const questionsPromise = Questions.getForRegion(params.regions[0]);
+        const questionsPromise = Questions.forRegion(params.regions[0]);
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
                              categoriesPromise, tagsPromise, domainsPromise,
                              datasetsPromise, descriptionPromise, searchPromise,
