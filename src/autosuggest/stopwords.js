@@ -29,7 +29,16 @@ const _STOPWORDS = new Set([
     "annual",
     "overall",
     "other",
-    "index"
+    "index",
+    "what",
+    "what's",
+    "whats",
+    "wat",
+    "where",
+    "when",
+    "for",
+    "at",
+    "are"
 ]);
 
 class Stopwords {
