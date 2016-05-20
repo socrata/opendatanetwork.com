@@ -39,26 +39,11 @@ class AutosuggestSource {
                 const path = Constants.AUTOCOMPLETE_URL(this.domain, this.fxf, this.column, term);
 
                 AutosuggestSource.request(path, {size: this.size}).then(response => {
-                    resolve(response.options.map(option => this.decode(option.text)));
-                }, reject);
-            }
-        });
-    }
+                    const decoded = response.options
+                        .map(option => this.decode(option.text))
+                        .filter(option => option !== null);
 
-    /**
-     * Searches for the given term using text search.
-     */
-    search(term) {
-        return new Promise((resolve, reject) => {
-            if (term === '') {
-                resolve([]);
-            } else {
-                term = Stopwords.strip(term);
-                const path = `https://${this.domain}/resource/${this.fxf}`;
-                const params = {'$q': `'${term}'`, '$limit': this.size};
-
-                AutosuggestSource.request(path, params).then(response => {
-                    resolve(response.map(option => this.decode(option[this.column])));
+                    resolve(decoded);
                 }, reject);
             }
         });
@@ -90,6 +75,13 @@ class AutosuggestSource {
             const base64 = allText.substring(index + 1);
             const decoded = Base64.decode(base64);
             const attributes = decoded.split(Constants.AUTOCOMPLETE_SEPARATOR);
+
+            if (this.encoded.length != attributes.length) {
+                console.warn(`expected ${this.encoded.length} fields but found ${attributes.length} in ${this.name} autosuggest.`);
+                console.warn(`expected: ${this.encoded}`);
+                console.warn(`actual:   ${attributes.map(attr => `"${attr}"`)}`);
+                return null;
+            }
 
             return _.extend({text}, _.object(this.encoded, attributes));
         } else {

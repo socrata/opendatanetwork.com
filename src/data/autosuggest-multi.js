@@ -40,13 +40,14 @@ const autosuggestSources = {
         name: 'Questions',
         image: 'fa-question-circle',
         domain: domain,
-        fxf: 'd6be-a5xs',
+        fxf: '234x-8y9w',
         column: 'question',
         encoded: ['regionName', 'regionID', 'regionPopulation',
-                  'source', 'variable', 'metric', 'index'],
-        select: option => navigate(path(
-            ['region', option.regionID, option.regionName, option.source, option.metric]),
-            {question: 1}),
+                  'vector', 'source', 'variable', 'metric', 'index'],
+        select: option => {
+            navigate(path(['region', option.regionID, option.regionName, option.vector, option.metric]),
+                {question: 1});
+        },
         sort: option => {
             const population = parseFloat(option.regionPopulation);
             const index = parseFloat(option.index);
