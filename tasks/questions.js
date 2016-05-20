@@ -37,7 +37,7 @@ function main() {
                 .forEach(question => {
                     const fields = [
                         question.encoded,
-                        question.source.name.toLowerCase(),
+                        question.source.vector,
                         question.variable.metric,
                         question.index,
                         question.region.id,
@@ -123,6 +123,7 @@ class Question {
      *  - region name (complete name with state suffix)
      *  - region id
      *  - region population (estimate from 2013 ACS)
+     *  - data source vector
      *  - data source name (lowercase)
      *  - variable name (lowercase with respect for all-caps words like "GDP")
      *  - metric name
@@ -133,6 +134,7 @@ class Question {
             this.region.name,
             this.region.id,
             this.region.population,
+            this.source.vector,
             this.source.name.toLowerCase(),
             _lowercase(this.variable.name),
             this.variable.metric,
