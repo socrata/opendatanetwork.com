@@ -14,7 +14,9 @@ const autosuggest = new Autosuggest({
         const population = parseFloat(option.regionPopulation);
         const index = parseFloat(option.index);
         return -(population - index);
-    }
+    },
+    max: 100,
+    shown: 20
 });
 
 class Questions {

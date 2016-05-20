@@ -34,12 +34,12 @@ class Autosuggest {
         });
         this.sort = json.sort;
         this.filter = json.filter;
+        this.max = json.max || Constants.AUTOCOMPLETE_MAX_OPTIONS;
+        this.shown = json.shown || Constants.AUTOCOMPLETE_SHOWN_OPTIONS;
 
         // If we have to sort the results then pull down extra results,
         // sort them, and take the first few elements.
-        this.size = this.sort ?
-            Constants.AUTOCOMPLETE_MAX_OPTIONS :
-            Constants.AUTOCOMPLETE_SHOWN_OPTIONS;
+        this.size = this.sort ? this.max : this.shown;
     }
 
     get(clientParams) {
@@ -53,7 +53,7 @@ class Autosuggest {
             Request.getJSON(url).then(response => {
                 let options = response.map(option => this.decode(option[this.column]));
                 if (this.sort) options = _.sortBy(options, this.sort)
-                    .slice(0, Constants.AUTOCOMPLETE_SHOWN_OPTIONS);
+                    .slice(0, this.shown);
 
                 resolve(options);
             }, reject);
