@@ -13,6 +13,11 @@ class SearchPageController {
             console.log(decodeURI(_searchURL.split('?')[1]));
         }
 
+        // Questions controls
+        //
+        new Questions();
+        new QuestionsMobile();
+
         // Refine controls for mobile
         //
         this.refineControlsMobile = new RefineControlsMobile();

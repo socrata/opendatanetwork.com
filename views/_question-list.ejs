@@ -19,30 +19,5 @@
     <li a class="more-container" id="questions">
         <a class="more" id="questions">show more questions</a>
     </li>
-
-    <script>
-        var expanded = false;
-
-        $('a.more#questions').click(function() {
-            var $this = $(this);
-            var $container = $this.parent();
-            var $list = $container.parent();
-
-            if (!expanded) {
-                $list
-                    .children('li.question.collapsed')
-                    .removeClass('collapsed');
-            } else {
-                $list
-                    .children('li.question.collapsible')
-                    .addClass('collapsed');
-            }
-
-            expanded = !expanded;
-
-            $this
-                .text(expanded ? 'show fewer questions' : 'show more questions');
-        });
-    </script>
 <% } %>
 

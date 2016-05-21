@@ -1,0 +1,21 @@
+<% if (questions.length > 0) { %>
+<div class="questions-mobile">
+    <a class="question-list-header-mobile">
+    <% if (questions.length > 1) { %>
+        <i class="fa fa-caret-down odn-caret"></i>
+    <% } %>
+        What is the <%= questions[0].variable %> of <%= questions[0].regionName %>?
+    </a>
+  <% if (questions.length > 1) { %>
+    <ul>
+    <% for (var i = 1; i < questions.length; i++) { %>
+        <li>
+            <a href="<%= questions[i].url %>">
+                What is the <%= questions[i].variable %> of <%= questions[i].regionName %>?
+            </a>
+        </li>
+    <% } %>
+    </ul>
+  <% } %>
+</div>
+<% } %>
