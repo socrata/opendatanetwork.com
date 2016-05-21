@@ -24,7 +24,7 @@ class Questions {
             this.expanded = !this.expanded;
 
             $this
-                .text(this.expanded ? 'show fewer questions' : 'show more questions');
+                .text(this.expanded ? 'show fewer' : 'show more');
         });
     }
 }

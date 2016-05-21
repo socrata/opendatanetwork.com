@@ -16,7 +16,7 @@ const autosuggest = new Autosuggest({
         return -(population - index);
     },
     max: 100,
-    shown: 20
+    shown: 15
 });
 
 class Questions {
