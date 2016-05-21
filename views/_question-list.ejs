@@ -2,15 +2,7 @@
 <% questions.forEach(function(question, index) { %>
     <li class="question <%= index > 1 ? 'collapsible collapsed' : '' %>">
         <a href="<%= question.url %>">
-            What is the
-            <span class="question-variable">
-                <%= question.variable %>
-            </span>
-            of
-            <span class="question-region-name">
-                <%= question.regionName %>
-            </span>
-            ?
+            What is the <span class="question-variable"><%= question.variable %></span> of <span class="question-region-name"><%= question.regionName %></span>?
         </a>
     </li>
 <% }); %>
