@@ -1,20 +1,16 @@
-<% if (questions.length > 0) { %>
+<% if ((params.regions.length > 0) && (questions.length > 0)) { %>
 <div class="questions-mobile">
     <div class="question-list-header-mobile">
-        <div>
-            What is the <%= questions[0].variable %> of <%= questions[0].regionName %>?
-        </div>
-      <% if (questions.length > 1) { %>
+        <div>What is the <%= metric.name.toLowerCase() %> of <%= params.regions[0].name %>?</div>
+      <% if (questions.length > 0) { %>
         <i class="fa fa-caret-down odn-caret"></i>
       <% } %>
     </div>
-  <% if (questions.length > 1) { %>
+  <% if (questions.length > 0) { %>
     <ul>
-    <% for (var i = 1; i < questions.length; i++) { %>
+    <% for (var i = 0; i < questions.length; i++) { %>
         <li>
-            <a href="<%= questions[i].url %>">
-                What is the <%= questions[i].variable %> of <%= questions[i].regionName %>?
-            </a>
+            <a href="<%= questions[i].url %>">What is the <%= questions[i].variable %> of <%= questions[i].regionName %>?</a>
         </li>
     <% } %>
     </ul>
