@@ -3,15 +3,19 @@
     .question-list-header-mobile
         color: $darker-gray-text-color
         cursor: pointer
-        display: block
+        display: table
         font-size: 16px
         margin-bottom: 20px
         padding: 0 10px
 
+        div
+            display: table-cell
+
         .odn-caret
             color: $darker-gray-text-color
-            float: right
-            margin-left: 10px
+            display: table-cell
+            padding-left: 10px
+            vertical-align: middle
 
     ul
         display: none
