@@ -94,7 +94,7 @@ class VariableControl {
     updateVariable(variable, update) {
         if (this.variable.name !== variable.name) {
             this.variable = variable;
-            if (this.hasYear && !_.contains(this.variables.years, this.year)) this.year = _.max(this.variable.years);
+            if (this.hasYear && !_.contains(variable.years, this.year)) this.year = _.max(this.variable.years);
             if (update === undefined || update) this.update();
             this.updateSelectors();
         }
@@ -146,7 +146,7 @@ class VariableControl {
                     $('.data-source-menu-list-mobile .map-variable-container .data-source-menu-header-mobile').trigger('click');
                 });
 
-            this.update();
+                this.update();
         };
 
         this.variableFilter(regions, this.source).then(drawVariableList, error => {
@@ -213,7 +213,7 @@ class VariableControl {
                 $order=year+DESC`.replace(/[ \n]/g, '');
 
             d3.promise.json(url).then(response => {
-                const years = response.map(_.property('year'));
+                const years = response.map(_.property('year')).map((year) => parseInt(year));
                 if (years.length > 0) {
                     this.variable.years = years;
                     if (!_.contains(years, this.year)) {
