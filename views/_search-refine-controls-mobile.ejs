@@ -10,7 +10,6 @@
                     <label>Refine by</label>
                     <% include _search-tokens %>
                 </div>
-
                 <ul class="search-refine-menu-list-mobile">
                     <li class="search-refine-menu-list-item-categories-mobile">
                         <a class="data-source-menu-header-mobile">
@@ -18,9 +17,9 @@
                             <i class="fa fa-caret-down odn-caret"></i>
                         </a>
                         <ul>
-                            <% refineByMobile.categories.forEach(category => { %>
-                                <li><%= category.category %></li>
-                            <% }); %>
+                          <% refineByMobile.categories.forEach(category => { %>
+                            <li><%= category.category %></li>
+                          <% }); %>
                         </ul>
                     </li>
                     <li class="search-refine-menu-list-item-domains-mobile">
@@ -29,13 +28,12 @@
                             <i class="fa fa-caret-down odn-caret"></i>
                         </a>
                         <ul>
-                            <% refineByMobile.domains.forEach(domain => { %>
-                                <li><%= domain.domain %></li>
-                            <% }); %>
+                          <% refineByMobile.domains.forEach(domain => { %>
+                            <li><%= domain.domain %></li>
+                          <% }); %>
                         </ul>
                     </li>
                 </ul>
-
             </div>
         </div>
     </div>

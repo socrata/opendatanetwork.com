@@ -36,6 +36,7 @@ class POIMapView {
             this.variableControl = new VariableControl(this.source, this.params, (variable, year) => {
                 this.model = new POIMapModel(this.source, variable);
                 this.update();
+                $('#question-mobile').text(`What are the ${variable.name.toLowerCase()} in ${this.regions[0].name}?`);
             });
 
             this.variableControl.onAdd(map, this.regions, 'ul.chart-sub-nav');
@@ -109,6 +110,11 @@ class MapView {
         this.expandCollapseControl = new ExpandCollapseControl();
         this.variableControl = new VariableControl(source, params, (variable, year) => {
             this.display(variable, year);
+
+            if (_.isUndefined(year))
+                $('#question-mobile').text(`What is the ${variable.name.toLowerCase()} of ${this.regions[0].name}?`);
+            else
+                $('#question-mobile').text(`What is the ${variable.name.toLowerCase()} of ${this.regions[0].name} in ${year}?`);
         });
 
         this.zoomControl = new L.Control.Zoom(MapConstants.ZOOM_CONTROL_OPTIONS);

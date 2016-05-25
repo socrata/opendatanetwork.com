@@ -210,6 +210,7 @@ const SOURCES = [
                 attribution: [ATTRIBUTIONS.hhs, ATTRIBUTIONS.iesNces],
                 domain: ODN_DOMAIN,
                 fxf: 'uf4m-5u8r',
+                poi: true, // point of interest
                 datalensFXF: '72qd-7s2t',
                 description: `
                     The above map shows schools, libraries, and other education related
