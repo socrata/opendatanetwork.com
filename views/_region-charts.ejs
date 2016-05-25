@@ -32,39 +32,39 @@
         <p id="map-summary" style="display: <%= mapSummary === '' ? 'none' : 'block' %>">
             <%= mapSummary %>
         </p>
-        <div id="map"></div>
-    <% if ('mapDescription' in source) { %>
-        <div class="dataset-description map-description">
-            <p><%= source.mapDescription %></p>
-        </div>
-    <% } %>
-        <% include _map-summary %>
-        <% source.charts.forEach((chart, index) => { %>
-            <div class="chart" id="<%= chart.name.toLowerCase().replace(/\W/g, '') %>">
-                <h1 class="chart-title"><%= chart.name %></h1>
-
-                <div class="chart-container"></div>
-
-                <% if (chart.description || chart.forecast) { %>
-                    <div class="dataset-description">
-
-                    <% if (chart.description) { %>
-                        <p class="chart-description"><%- chart.description %></p>
-                    <% } %>
-
-                    <% if (chart.forecast) {
-                        var forecastDescription = forecastDescriptions[index];
-                        if (forecastDescription.description.length > 0) { %>
-                        <p><%= forecastDescription.description %></p>
-                        <p>Forecasted data uses a linear extrapolation algorithm which uses only available measured data.
-                            Algorithm details are available
-                            <a href="https://en.wikipedia.org/wiki/Extrapolation#Linear_extrapolation">HERE</a>.
-                        </p>
-                    <% } }%>
-                    </div>
-                <% } %>
+        <div id="map-container-desktop">
+            <div id="map-container">
+                <div id="map"></div>
+            <% if ('mapDescription' in source) { %>
+                <div class="dataset-description map-description">
+                    <p><%= source.mapDescription %></p>
+                </div>
+            <% } %>
+                <% include _map-summary %>
             </div>
-        <% }); %>
+        </div>
+      <% source.charts.forEach((chart, index) => { %>
+        <div class="chart" id="<%= chart.name.toLowerCase().replace(/\W/g, '') %>">
+            <h1 class="chart-title"><%= chart.name %></h1>
+            <div class="chart-container"></div>
+            <% if (chart.description || chart.forecast) { %>
+                <div class="dataset-description">
+                <% if (chart.description) { %>
+                    <p class="chart-description"><%- chart.description %></p>
+                <% } %>
+                <% if (chart.forecast) {
+                    var forecastDescription = forecastDescriptions[index];
+                    if (forecastDescription.description.length > 0) { %>
+                    <p><%= forecastDescription.description %></p>
+                    <p>Forecasted data uses a linear extrapolation algorithm which uses only available measured data.
+                        Algorithm details are available
+                        <a href="https://en.wikipedia.org/wiki/Extrapolation#Linear_extrapolation">HERE</a>.
+                    </p>
+                <% } }%>
+                </div>
+            <% } %>
+        </div>
+      <% }); %>
         <div class="dataset-description">
           <% if ('description' in source) { %>
             <p id="dataset-description"><%- source.description %></p>
@@ -99,6 +99,7 @@
                 </span>
             </p>
         </div>
+        <div id="map-container-mobile"></div>
     </div>
 <% if (searchResults && searchResults.resultSetSize > 0) { %>
     <div class="search-results-container">

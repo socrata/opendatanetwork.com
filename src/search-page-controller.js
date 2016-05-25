@@ -1,6 +1,8 @@
 
 class SearchPageController {
     constructor(params, searchResultsRegions) {
+
+        this.maxMobileWidth = 800;
         this.params = params;
         this.searchResultsRegions = searchResultsRegions;
         this.fetching = false;
@@ -27,7 +29,7 @@ class SearchPageController {
         //
         if (this.params.regions.length == 0) {
             this.renderSearchResultsRegions();
-            window.onresize = () => { this.renderSearchResultsRegions(); };
+            $(window).resize(() => { this.renderSearchResultsRegions(); });
         }
 
         // Refine menus
@@ -157,7 +159,7 @@ class SearchPageController {
 
                 tab.render(d3.select('div.charts'), regions);
 
-                $(window).resize(function() {
+                $(window).resize(() => {
                     tab.clearCharts();
                     tab.redrawCharts();
                 });
@@ -172,6 +174,19 @@ class SearchPageController {
         });
 
         this.subMenus();
+
+        // Map should display above charts on the desktop, below charts on mobile.
+        //
+        $(window).resize(() => this.moveMap());
+        this.moveMap();
+    }
+
+    moveMap() {
+
+        if ($(document).width() > this.maxMobileWidth)
+            $('#map-container-mobile #map-container').appendTo('#map-container-desktop');
+        else
+            $('#map-container-desktop #map-container').appendTo('#map-container-mobile');
     }
 
     renderSearchResultsRegions() {
