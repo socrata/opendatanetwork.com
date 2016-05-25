@@ -1,11 +1,7 @@
 
 <% if (typeof questions != 'undefined' && questions && questions.length > 0) { %>
-    <section class="search-results-regions-bar search-header-bar">
-        <i class="fa fa-question-circle search-results-header-icon"></i>
-        <label class="search-results-header-label">Questions for "<%= params.q %>"</label>
-    </section>
-
-    <div class="search-results" id="search-questions">
+    <h2>Questions</h2>
+    <div id="sidebar-questions">
         <% include _question-list %>
     </div>
 <% } %>

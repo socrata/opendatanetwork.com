@@ -6,12 +6,7 @@
             <% include _search-tokens %>
         </div>
 
-        <% if (typeof questions != 'undefined' && questions && questions.length > 0) { %>
-            <h2>Questions</h2>
-            <div id="sidebar-questions">
-                <% include _question-list %>
-            </div>
-        <% } %>
+        <% include _questions %>
 
         <h2>Compare this Data</h2>
         <div class="add-region">
