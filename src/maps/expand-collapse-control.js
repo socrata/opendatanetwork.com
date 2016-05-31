@@ -63,7 +63,7 @@ const ExpandCollapseControl = L.Control.extend({
 
     collapseMap: function(map) {
 
-        $('#leaflet-map').animate({ height: 200 }, null, null, () => {
+        $('#leaflet-map').animate({ height: 300 }, null, null, () => {
             map.invalidateSize();    
         });
 
