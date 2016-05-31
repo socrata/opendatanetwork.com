@@ -22,7 +22,7 @@
                         <ul class="add-region-results-mobile"></ul>
                     </div>
                 </div>
-                <% include _questions-mobile %>
+                <% if (params.regions.length == 1) { %><% include _questions-mobile %><% } %>
                 <ul class="data-source-menu-list-mobile">
                     <li class="data-source-menu-list-item-groups-mobile">
                         <a class="data-source-menu-header-mobile">

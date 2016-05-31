@@ -5,9 +5,7 @@
         <div class="region-tokens">
             <% include _search-tokens %>
         </div>
-
-        <% include _questions %>
-
+        <% if (params.regions.length == 1) { %><% include _questions %><% } %>
         <h2>Compare this Data</h2>
         <div class="add-region">
             <i class="fa fa-plus"></i><input class="add-region-input" type="text" placeholder="Add Location">
