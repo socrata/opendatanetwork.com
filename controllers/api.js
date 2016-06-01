@@ -177,7 +177,27 @@ class API {
     }
 
     static domains(n) {
-        return API.catalog('domains', n);
+        const defaultResponse = { results: [] };
+        return new Promise((resolve, reject) => {
+            Request.getJSON(`${Constants.CATALOG_URL}/domains`).then(response => {
+                if (response) {
+
+                    // Filter out domains without datasets
+                    //
+                    const filteredResults = [];
+                    for (var i in response.results) {
+                        var result = response.results[i];
+                        if (result.count > 0) filteredResults.push(result);
+                    }
+                    response.results = filteredResults;
+
+                    if (n) response.results = response.results.slice(0, n);
+                    resolve(response);
+                } else {
+                    resolve(defaultResponse);
+                }
+            }, error => resolve(defaultResponse));
+        });
     }
 
     static datasetSummary(domain, fxf) {

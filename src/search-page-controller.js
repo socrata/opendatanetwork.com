@@ -66,6 +66,16 @@ class SearchPageController {
 
         $('#refine-menu-domains-view-more').click(function() {
             d3.promise.json('https://api.us.socrata.com/api/catalog/v1/domains').then(data => {
+
+                // Filter out domains without datasets
+                //
+                const filteredResults = [];
+                for (var i in data.results) {
+                    var result = data.results[i];
+                    if (result.count > 0) filteredResults.push(result);
+                }
+                data.results = filteredResults;
+
                 const rg = data.results.map(result => '<li>' + result.domain + '</li>');
                 const s = rg.join('');
 
