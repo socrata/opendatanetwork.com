@@ -12,6 +12,8 @@ const RenderController = require('./controllers/render-controller');
 
 const app = express();
 
+// Compression
+//
 app.use(compression());
 
 // Cookie parser
@@ -45,6 +47,16 @@ app.use('/robots.txt', express.static(__dirname + '/views/static/robots.txt'));
 app.use('/error.html', express.static(__dirname + '/views/static/error.html'));
 app.use('/robots.txt', express.static(__dirname + '/views/static/robots.txt'));
 app.use('/sitemap.xml', express.static(__dirname + '/views/static/sitemap.xml'));
+
+// Ensure HTTP
+//
+app.get('*', function(req, res, next) {
+
+    if (req.headers['x-forwarded-proto'] === 'https')
+        res.redirect(301, 'http://' + req.hostname + req.url);
+    else
+        next();
+});
 
 // Set up 301 redirects for old routes
 //
