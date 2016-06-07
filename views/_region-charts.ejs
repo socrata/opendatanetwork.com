@@ -65,10 +65,13 @@
             <% } %>
         </div>
       <% }); %>
+
+      <% if (('description' in source) || (('charts' in source) && (source.charts.length > 0))) { %>
         <div class="dataset-description">
           <% if ('description' in source) { %>
             <p id="dataset-description"><%- source.description %></p>
           <% } %>
+          <% if (('charts' in source) && (source.charts.length > 0)) { %>
             <p class="attribution">
                 Above charts are based on data from the
                 <% i = 0 %>
@@ -98,7 +101,9 @@
                     </span>
                 </span>
             </p>
+          <% } %>
         </div>
+      <% } %>
         <div id="map-container-mobile"></div>
     </div>
 <% if (searchResults && searchResults.resultSetSize > 0) { %>

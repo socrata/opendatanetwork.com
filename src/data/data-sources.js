@@ -212,7 +212,7 @@ const SOURCES = [
                 fxf: 'uf4m-5u8r',
                 poi: true, // point of interest
                 datalensFXF: '72qd-7s2t',
-                description: `
+                mapDescription: `
                     The above map shows schools, libraries, and other education related
                     places in and near the selected city. Not all types of places are available for all cities.`,
                 regions: ['state', 'county', 'msa', 'place'],
