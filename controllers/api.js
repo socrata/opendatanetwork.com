@@ -113,9 +113,16 @@ class API {
                 const categories = requestParams.categories || [];
                 const domains = requestParams.domains || [];
                 const tags = requestParams.tags || [];
-                const params = _.extend({categories, domains, tags}, queryParams);
+                const params = _.extend({domains, tags}, queryParams);
                 if (limit) params.limit = limit;
                 if (offset) params.offset = offset;
+
+                if (categories.length > 0) {
+                    params.q = (params.q.length > 0) ? 
+                        `${params.q} ${categories.join(' ')}` : 
+                        categories.join(' ');
+                }
+
                 resolve(Request.buildURL(Constants.CATALOG_URL, params));
             }, reject);
         });
