@@ -1,6 +1,9 @@
 
 $(document).ready(function() {
 
+    const controller = new HomePageController();
+    controller.beginSampleQuestions();
+
     // Mobile categories
     //
     $('.categories-dropdown-mobile').click(() => {

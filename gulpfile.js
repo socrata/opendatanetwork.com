@@ -78,6 +78,7 @@ var homeScripts = baseScripts
     .concat(autosuggestScripts)
     .concat([
         'src/quick-links.js',
+        'src/home-page-controller.js',
         'src/home.js']);
 gulp.task('home', js(homeScripts, 'home.min.js'));
 
