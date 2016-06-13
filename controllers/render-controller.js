@@ -204,43 +204,90 @@ class RenderController {
                 const locations = data[1];
                 const params = data[2];
 
-                const templateParams = {
-                    categories,
-                    locations,
-                    params,
-                    searchPath : '/search',
-                    title : 'Open Data Network',
-                    metaSummary : defaultMetaSummary,
-                    quickLinks : {
-                        categories : categories.slice(0, quickLinksCount),
-                        domains : data[3].results,
-                        ref : 'hp',
-                        regions : locations.slice(0, quickLinksCount),
-                    },
-                    css : [
-                        '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css',
-                        '/styles/home.css',
-                        '/styles/main.css'
-                    ],
-                    scripts : [
-                        '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js',
-                        {
-                            'url' : '//fast.wistia.net/static/popover-v1.js',
-                            'charset' : 'ISO-8859-1'
-                        },
-                        '/lib/third-party/d3.min.js',
-                        '/lib/third-party/d3.promise.min.js',
-                        '/lib/third-party/js.cookie-2.1.1.min.js',
-                        '/lib/third-party/lodash.min.js',
-                        '/lib/home.min.js'
-                    ]
-                };
+                const randomRegions = RenderController._getRandomMostPopulousRegionsFromEachState(locations, 100);
+                const questionsPromises = _.map(randomRegions, region => Questions.forRegion(region));
 
-                res.render('home.ejs', templateParams);
+                Promise.all(questionsPromises).then(questionsData => {
+
+                    const randomQuestions = RenderController._getRandomQuestions(questionsData);
+
+//console.log('randomQuestions: ' + JSON.stringify(randomQuestions));
+
+                    const templateParams = {
+                        categories,
+                        locations,
+                        params,
+                        searchPath : '/search',
+                        title : 'Open Data Network',
+                        metaSummary : defaultMetaSummary,
+                        questions : randomQuestions,
+                        quickLinks : {
+                            categories : categories.slice(0, quickLinksCount),
+                            domains : data[3].results,
+                            ref : 'hp',
+                            regions : locations.slice(0, quickLinksCount),
+                        },
+                        css : [
+                            '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css',
+                            '/styles/home.css',
+                            '/styles/main.css'
+                        ],
+                        scripts : [
+                            '//cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js',
+                            {
+                                'url' : '//fast.wistia.net/static/popover-v1.js',
+                                'charset' : 'ISO-8859-1'
+                            },
+                            '/lib/third-party/d3.min.js',
+                            '/lib/third-party/d3.promise.min.js',
+                            '/lib/third-party/js.cookie-2.1.1.min.js',
+                            '/lib/third-party/lodash.min.js',
+                            '/lib/home.min.js'
+                        ]
+                    };
+
+                    res.render('home.ejs', templateParams);
+                });
             } catch (error) {
                 RenderController.error(req, res)(error);
             }
         }, RenderController.error(req, res));
+    }
+
+    static _getRandomQuestions(questionsSet) {
+
+        const selected = [];
+
+        questionsSet.forEach(questions => {
+
+            var index = Math.floor(Math.random() * questions.length);
+            selected.push(questions[index]);
+        })
+
+        return selected;
+    }
+
+    static _getRandomMostPopulousRegionsFromEachState(locations, count) {
+
+        const mostPopulous = [];
+        const selected = [];
+
+        locations.forEach(location => {
+
+            if (location.msas.length > 0) mostPopulous.push(location.msas[0]);
+            if (location.counties.length > 0) mostPopulous.push(location.counties[0]);
+            if (location.cities.length > 0) mostPopulous.push(location.cities[0]);
+        });
+
+        for (var i = 0; i < count; i++) {
+
+            var index = Math.floor(Math.random() * mostPopulous.length);
+
+            selected.push(mostPopulous[index]);
+            mostPopulous.splice(index, 1);
+        }
+
+        return selected;
     }
 
     static join(req, res) {

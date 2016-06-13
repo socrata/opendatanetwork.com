@@ -33,7 +33,7 @@ function getMsaPromise(state) {
                 return { 
                     name : result.child_name, 
                     id : result.child_id,
-                    url : '/region/' + result.child_id + '/' + result.child_name.replace(/ /g, '_').replace(/,/g, '')
+                    url : '/region/' + result.child_id + '/' + result.child_name.replace(/ /g, '_').replace(/,/g, ''),
                 } 
             });
         });

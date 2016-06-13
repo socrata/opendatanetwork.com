@@ -3,6 +3,8 @@ class HomePageController {
 
     constructor() {
 
+        // Sample questions appearing in the textbox
+        //
         this.samples = [
             'Alameda County Sheriff Crime Reports',
             'Baltimore City Employee Salaries FY2015',
@@ -32,6 +34,15 @@ class HomePageController {
 
         this.sampleIndex = this.getRandomSampleIndex(this.samples.length);
         this.sampleCharacterIndex = 0;
+        this.beginSampleQuestions();
+
+        // Questions section
+        //
+        $('.more-questions-link').click(() => {
+
+            $('.more-questions-link').hide();
+            $('.questions-section li').removeClass('hidden');
+        });
     }
     
     beginSampleQuestions() {

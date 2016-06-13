@@ -1,0 +1,13 @@
+<section class="questions-section">
+    <div class="container">
+        <h4>Questions</h4>
+        <ul>
+          <% questions.forEach(function(question, index) { %>
+            <li<% if (index >= 10) { %> class="hidden"<% } %>>
+                <a href="<%= question.url %>">What is the <%= question.variable.toLowerCase() %> of <%= question.regionName %>?</a>
+            </li>
+          <% }); %>
+        </ul>
+        <a class="more-questions-link">Show More</a>
+    </div>
+</section>

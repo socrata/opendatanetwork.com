@@ -1,8 +1,7 @@
 
 $(document).ready(function() {
 
-    const controller = new HomePageController();
-    controller.beginSampleQuestions();
+    new HomePageController();
 
     // Mobile categories
     //
