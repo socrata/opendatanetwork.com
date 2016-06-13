@@ -8,6 +8,7 @@ const crypto = require('crypto');
 const Constants = require('./constants.js');
 
 const cache = memjs.Client.create(null, Constants.CACHE_OPTIONS);
+const timersEnabled = true;
 
 class Request {
     /**
@@ -21,6 +22,10 @@ class Request {
     }
 
     static get(url, timeout) {
+
+        if (timersEnabled)
+            var start = new Date();
+
         return new Promise((resolve, reject) => {
             if (!cache) {
                 console.log('WARNING: no cache found');
@@ -33,9 +38,17 @@ class Request {
 
                 cache.get(key, (error, value) => {
                     if (value) {
+
+                        if (timersEnabled) 
+                            console.log('Request (cache hit): ' + (new Date() - start) + 'ms URL: ' + url);
+
                         resolve(value);
                     } else {
                         Request.timeout(request(url), timeout).then(body => {
+
+                            if (timersEnabled)
+                                console.log('Request (cache miss): ' + (new Date() - start) + 'ms URL: ' + url);
+
                             resolve(body);
                             if (!error) cache.set(key, body);
                         }, reject);
