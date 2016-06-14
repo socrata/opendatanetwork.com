@@ -211,8 +211,6 @@ class RenderController {
 
                     const randomQuestions = RenderController._getRandomQuestions(questionsData);
 
-//console.log('randomQuestions: ' + JSON.stringify(randomQuestions));
-
                     const templateParams = {
                         categories,
                         locations,
