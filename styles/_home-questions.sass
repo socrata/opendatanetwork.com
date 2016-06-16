@@ -1,12 +1,14 @@
-// Desktop
-//
+
 .questions-section
     background-color: white
     color: $gray-text-color
 
     .container
         margin: 0 auto
-        padding: 60px 0
+        padding: 60px 0 30px
+
+        @media (max-width: $mobile-width) /* mobile */
+            padding: 0
 
     h4
         color: $black-text-color
@@ -15,25 +17,71 @@
         margin: 0 0 60px
         text-transform: uppercase
 
-    ul 
-        margin: 0 0 30px
-        padding: 0
+        @media (max-width: $mobile-width) /* mobile */
+            background-color: $gray-background-color
+            font-size: 20px
+            height: 50px
+            line-height: 50px
+            margin: 0
+            text-transform: uppercase
 
-        li
-            list-style-type: none
-            margin: 15px 0
+    .questions-dropdown
+        display: none
 
-            a
-                color: $blue-text-color
-                font-size: 20px
-                font-weight: 300
+        @media (max-width: $mobile-width) /* mobile */
+            background-color: white
+            color: $blue-text-color
+            cursor: pointer
+            display: block
+            font-size: 20px
+            font-weight: 600
+            height: 50px
+            line-height: 50px
 
-        li.hidden
+        .fa
+            @media (max-width: $mobile-width) /* mobile */
+                margin-left: 10px
+
+    .questions-list-container
+        padding: 0 0 30px
+
+        @media (max-width: $mobile-width) /* mobile */
             display: none
 
-    .more-questions-link
-        color: $blue-text-color
-        cursor: pointer
-        font-size: 16px
-        font-weight: bold
-        text-transform: uppercase
+        ul
+            margin: 0 0 30px
+            padding: 0
+
+            @media (max-width: $mobile-width) /* mobile */
+                margin: 0 30px 30px
+
+            li
+                list-style-type: none
+                margin: 20px 0
+
+                @media (max-width: $mobile-width) /* mobile */
+                    min-height: 30px
+
+                a
+                    color: $blue-text-color
+                    font-size: 20px
+                    font-weight: 300
+
+                    @media (max-width: $mobile-width) /* mobile */
+                        font-size: 16px
+                        font-weight: normal
+
+            li.hidden
+                display: none
+        
+            li.hidden-on-mobile
+                @media (max-width: $mobile-width) /* mobile */
+                    display: none
+
+        .more-questions-link
+            color: $blue-text-color
+            cursor: pointer
+            font-size: 16px
+            font-weight: bold
+            text-transform: uppercase
+
