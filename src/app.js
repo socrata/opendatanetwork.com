@@ -2,14 +2,14 @@ $(document).ready(function() {
 
     // Attach handler to the search button
     //
-    $('.search-link').click(function() {
+    $('header .search-link').click(() => {
 
-        var text = $('#q').val().trim();
+        var text = $('header .search-bar-input').val().trim();
 
         if (text.length === 0)
-            $('#q').focus();
+            $('header .search-bar-input').focus();
         else
-            $('#search-bar-form').submit();
+            $('header .search-bar-form').submit();
     });
 });
 

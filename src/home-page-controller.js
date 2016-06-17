@@ -51,6 +51,18 @@ class HomePageController {
         this.sampleCharacterIndex = 0;
         this.beginSampleQuestions();
 
+        // Search link
+        //
+        $('.home-search-bar-controls .search-link').click(() => {
+
+            var text = $('.home-search-bar-controls .search-bar-input').val().trim();
+
+            if (text.length === 0)
+                $('.home-search-bar-controls .search-bar-input').focus();
+            else
+                $('.home-search-bar-controls .search-bar-form').submit();
+        });
+
         // Questions section
         //
         $('.questions-dropdown').click(() => {
@@ -113,10 +125,10 @@ class HomePageController {
 
         // Autocomplete
         //
-        const headerAutoSuggest = multiComplete('#q', '.region-list');
+        const headerAutoSuggest = multiComplete('.search-bar-input', '.region-list');
         headerAutoSuggest.listen();
 
-        const heroAutoSuggest = multiComplete('.home-search-bar-controls #q', '.home-search-bar-controls .region-list');
+        const heroAutoSuggest = multiComplete('.home-search-bar-controls .search-bar-input', '.home-search-bar-controls .region-list');
         heroAutoSuggest.listen();
 
         // QuickLinks
@@ -131,7 +143,7 @@ class HomePageController {
         // Search button
         //
         $('#search-button').click(() => {
-            window.location.href = '/search?q=' + encodeURIComponent($('#q').val());
+            window.location.href = '/search?q=' + encodeURIComponent($('.search-bar-input').val());
         });
 
         // Locations by state

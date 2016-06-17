@@ -8,11 +8,11 @@ casper.test.begin('homepage', function checkHomepage(test) {
     test.assertSelectorHasText('.container h1', 'Open Data Network', 'h1 title correct');
 
     // Try filling in a city to see what we can search for
-    casper.sendKeys('input#q', 'Seattle', { keepFocus: true });
+    casper.sendKeys('input.search-bar-input', 'Seattle', { keepFocus: true });
 
     // Wait for the search results to come back
-    casper.waitForSelectorTextChange('#search-bar-form .region-list', function waitForAutocomplete() {
-      test.assertVisible('#search-bar-form .region-list', 'autocomplete is visible');
+    casper.waitForSelectorTextChange('.search-bar-form .region-list', function waitForAutocomplete() {
+      test.assertVisible('.search-bar-form .region-list', 'autocomplete is visible');
 
       // Datasets
       test.assertSelectorHasText('.autocomplete-category .autocomplete-title', 'Datasets', 'we match at least some datasets');

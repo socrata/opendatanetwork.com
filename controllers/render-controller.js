@@ -143,7 +143,6 @@ class RenderController {
                     const templateParams = {
                         params,
                         schemas,
-                        searchPath : '/search',
                         title : originalDataset.name,
                         dataset : {
                             domain,
@@ -215,7 +214,6 @@ class RenderController {
                         categories,
                         locations,
                         params,
-                        searchPath : '/search',
                         title : 'Open Data Network',
                         metaSummary : defaultMetaSummary,
                         questions : randomQuestions,
@@ -373,7 +371,6 @@ class RenderController {
                     const templateParams = {
                         params,
                         hasRegions: params.regions.length > 0,
-                        searchPath: req.path,
                         title: searchPageTitle(params),
                         metaSummary : defaultMetaSummary,
                         searchResultsRegions : searchResultsRegions,
@@ -565,7 +562,6 @@ class RenderController {
                     years,
                     hasRegions: params.regions.length > 0,
                     regionNames: wordJoin(params.regions.map(region => region.name), 'or'),
-                    searchPath: req.path,
                     title: searchPageTitle(params, source, metric),
                     css: [
                         '/styles/third-party/leaflet.min.css',

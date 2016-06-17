@@ -1,11 +1,11 @@
-<form method="GET" action="<%= searchPath %>" id="search-bar-form" autocomplete="off">
+<form method="GET" action="/search" class="search-bar-form" autocomplete="off">
     <a class="logo-small" href="/" title="Open Data Network"><div></div></a>
     <div class="search-buttons">
         <% include _quick-links %>
         <a class="fa fa-search search-link"></a>
     </div>
     <span>
-        <input type="text" placeholder="Search Open Data Network" name="q" id="q" value="<%= params.q %>" autocomplete="off">
+        <input type="text" placeholder="Search Open Data Network" name="q" class="search-bar-input" value="<%= params.q %>" autocomplete="off">
         <% if (params.categories.length > 0) { %>
         <input type="hidden" name="categories" value="<%= params.categories.join(',') %>">
         <% } %>

@@ -7,7 +7,7 @@ $(document).ready(function() {
 
     // Main search box
     //
-    const autosuggest = multiComplete('#q', '.region-list');
+    const autosuggest = multiComplete('.search-bar-input', '.region-list');
     autosuggest.listen();
 
     // QuickLinks
