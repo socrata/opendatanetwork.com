@@ -59,10 +59,11 @@ class Questions {
     static _extend(promise) {
         return new Promise((resolve, reject) => {
             promise.then(questions => {
-                questions.forEach(question => {
-                    question.url = path(['region', question.regionID, question.regionName,
-                            question.vector, question.metric]) + '?question=1';
-                });
+                questions = questions.map(question => _.extend({}, question, {
+                    url: path(['region', question.regionID, question.regionName,
+                            question.vector, question.metric]) + '?question=1',
+                    numRegions: 1
+                }));
 
                 resolve(questions);
             }, reject);
