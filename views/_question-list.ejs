@@ -2,7 +2,18 @@
 <% questions.forEach(function(question, index) { %>
     <li class="question <%= index > 1 ? 'collapsible collapsed' : '' %>">
         <a href="<%= question.url %>">
-            What is the <span class="question-variable"><%= question.variable %></span> of <span class="question-region-name"><%= question.regionName %></span>?
+            <% if (question.numRegions === 1) { %>
+                What is the
+                <span class="question-variable"><%= question.variable %></span>
+                of
+                <span class="question-region-name"><%= question.regionName %></span>?
+            <% } else if (question.numRegions >= 2) { %>
+                How do the
+                <span class="question-variable"><%= question.variable %>s</span>
+                of
+                <span class="question-region-name"><%= question.regionName %></span>
+                compare?
+            <% } %>
         </a>
     </li>
 <% }); %>

@@ -1,5 +1,7 @@
 'use strict';
 
+const _ = require('lodash');
+
 const Autosuggest = require('./autosuggest');
 
 const autosuggest = new Autosuggest({
@@ -16,7 +18,7 @@ const autosuggest = new Autosuggest({
         return -(population - index);
     },
     max: 100,
-    shown: 15
+    shown: 100
 });
 
 class Questions {
@@ -24,23 +26,27 @@ class Questions {
         return Questions._extend(autosuggest.search(term));
     }
 
-    static forRegion(region) {
-        return Questions._extend(autosuggest.get({
-            'regionid': region.id,
-            '$order': 'variableindex DESC'
-        }));
-    }
-
-    /**
-     * Adds url field to each question.
-     */
-    static _extend(promise) {
+    static forRegions(regions) {
         return new Promise((resolve, reject) => {
-            promise.then(questions => {
-                questions.forEach(question => {
-                    question.url = path(['region', question.regionID, question.regionName,
-                            question.vector, question.metric]) + '?question=1';
+            autosuggest.get({
+                '$where': `regionid in(${regions.map(region => `'${region.id}'`).join(',')})`,
+                '$order': 'variableindex ASC'
+            }).then(questions => {
+                questions = _.groupBy(questions, question => question.vector + question.metric);
+                questions = _.values(questions);
+                questions = questions.map(questionGroup => {
+                    const question = questionGroup[0];
+
+                    return _.extend({}, question, {
+                        numRegions: questionGroup.length,
+                        url: path(['region',
+                            questionGroup.map(_.property('regionID')).join('-'),
+                            questionGroup.map(_.property('regionName')).join('-'),
+                            question.vector, question.metric]) + '?question=1',
+                        regionName: englishJoin(questionGroup.map(_.property('regionName')))
+                    });
                 });
+                questions = questions.slice(0, 15);
 
                 resolve(questions);
             }, reject);
@@ -56,6 +62,18 @@ function urlEscape(string) {
 
 function path(elements) {
     return `/${elements.map(urlEscape).join('/')}`;
+}
+
+function englishJoin(elements) {
+    if (elements.length === 0) {
+        return '';
+    } else if (elements.length === 1) {
+        return elements[0];
+    } else if (elements.length === 2) {
+        return elements.join(' and ');
+    } else {
+        return englishJoin([elements.slice(0, 2).join(', ')].concat(elements.slice(2)));
+    }
 }
 
 module.exports = Questions;

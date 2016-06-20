@@ -204,10 +204,9 @@ class RenderController {
                 const params = data[2];
 
                 const randomRegions = RenderController._getRandomMostPopulousRegionsFromEachState(locations, 100);
-                const questionsPromises = _.map(randomRegions, region => Questions.forRegion(region));
+                const questionsPromises = _.map(randomRegions, region => Questions.forRegions([region]));
 
                 Promise.all(questionsPromises).then(questionsData => {
-
                     const randomQuestions = RenderController._getRandomQuestions(questionsData);
 
                     const templateParams = {
@@ -513,7 +512,7 @@ class RenderController {
         const searchPromise = API.searchDatasetsURL(params);
         const locationsPromise = API.locations();
         const sourcesPromise = Sources.sourcesPromiseFromParams(params);
-        const questionsPromise = Questions.forRegion(params.regions[0]);
+        const questionsPromise = Questions.forRegions(params.regions);
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
                              categoriesPromise, tagsPromise, domainsPromise,
                              datasetsPromise, descriptionPromise, searchPromise,

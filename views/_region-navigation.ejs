@@ -1,11 +1,11 @@
 
 <div class="controls-column">
     <div class="controls">
-        <h2>Data for</h2> 
+        <h2>Data for</h2>
         <div class="region-tokens">
             <% include _search-tokens %>
         </div>
-        <% if (params.regions.length == 1) { %><% include _questions %><% } %>
+        <% include _questions %>
         <h2>Compare this Data</h2>
         <div class="add-region">
             <i class="fa fa-plus"></i><input class="add-region-input" type="text" placeholder="Add Location">
