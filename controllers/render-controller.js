@@ -462,8 +462,9 @@ class RenderController {
                             resolve([]);
                         } else {
                             if (filterInvalid) {
+                                const allEntities = _.flatten(result.relatives.map(relative => relative.entities));
                                 const source = Sources.source(vector);
-                                Sources.validRegions(source, result).then(validRegions => {
+                                Sources.validRegions(source, allEntities).then(validRegions => {
                                     resolve(validRegions);
                                 }, error => {
                                     console.error(error);
@@ -513,11 +514,12 @@ class RenderController {
         const locationsPromise = API.locations();
         const sourcesPromise = Sources.sourcesPromiseFromParams(params);
         const questionsPromise = Questions.forRegions(params.regions);
+        const parentPromise = forRegion(Relatives.parent);
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
                              categoriesPromise, tagsPromise, domainsPromise,
                              datasetsPromise, descriptionPromise, searchPromise,
-                             locationsPromise, forecastDescriptionsPromise,
-                             sourcesPromise, questionsPromise];
+                             locationsPromise, forecastDescriptionsPromise, sourcesPromise, 
+                             questionsPromise, parentPromise];
 
         const allPromise = awaitPromises(allPromises);
 
@@ -586,19 +588,30 @@ class RenderController {
                     ]
                 };
 
-                if (data && data.length == allPromises.length) {
-                    if (data[0].length > 0) {
-                        templateParams.peers = processRegions(data[0]);
+                if (data && (data.length == allPromises.length)) {
+
+                    const peersResponse = data[0]; // already flattened
+                    if (peersResponse) {
+                        templateParams.peers = processRegions(peersResponse);
                     }
 
-                    if (data[1].length == 2 && data[1][1].length > 0) {
-                        templateParams.parentRegion = processRegions([data[1][0]])[0];
-                        templateParams.siblings = processRegions(data[1][1]);
+                    const siblingsResponse = data[1];
+                    if (siblingsResponse && siblingsResponse.relatives && (siblingsResponse.relatives.length > 0)) {
+                        templateParams.siblings = processRegions(siblingsResponse.relatives[0].entities);
                     }
 
-                    if (data[2].length > 0) {
-                        templateParams.allChildren =
-                            data[2].map(children => processRegions(children));
+                    const parentResponse = data[13];
+                    if (parentResponse && parentResponse.relatives && (parentResponse.relatives.length > 0)) {
+                        templateParams.parentRegion = processRegions(parentResponse.relatives[0].entities)[0];
+                    }
+
+                    const childrenResponse = data[2];
+                    if (childrenResponse && childrenResponse.relatives) {
+                        childrenResponse.relatives.forEach(relative => {
+                            relative.entities = processRegions(relative.entities);
+                        });
+
+                        templateParams.allChildren = childrenResponse;
                     }
 
                     if (data[3].length > 0) {

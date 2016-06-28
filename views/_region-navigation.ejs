@@ -12,7 +12,7 @@
             <ul class="add-region-results" style="display: none;"></ul>
         </div>
 
-    <% if (typeof peers != 'undefined' && peers && peers.length > 0) { %>
+    <% if ((typeof peers != 'undefined') && peers && (peers.length > 0)) { %>
         <ul id="similar-regions">
         <% peers.forEach(function(region) { %>
             <li><a class="region-link" href=<%= region.addURL %><%- (params.regions.length >= 2) ? ' rel="nofollow"' : '' %>><%= region.name %> <i class="fa fa-plus"></i></a></li>
@@ -33,7 +33,7 @@
         };
         %>
 
-        <% if (typeof siblings != 'undefined' && siblings && siblings.length > 0) { %>
+        <% if ((typeof siblings != 'undefined') && siblings && (siblings.length > 0)) { %>
             <h2 class="places-in-region-header">
                 <%= PLURALS[params.regions[0].type] %> in
                 <a class="parent-link" href="<%= parentRegion.navigateURL %>"><%= parentRegion.name %></a>
@@ -46,15 +46,14 @@
             </ul>
         <% } %>
 
-        <% if (typeof allChildren != 'undefined' && allChildren && allChildren.length > 0) { %>
-            <% allChildren.forEach(function(children) { %>
-                <% if (children.length > 0) { %>
+        <% if ((typeof allChildren != 'undefined') && allChildren && (typeof allChildren.relatives != 'undefined')) { %>
+            <% allChildren.relatives.forEach(function(relative) { %>
+                <% if (relative.entities.length > 0) { %>
                     <h2 class="places-in-region-header">
-                        <%= PLURALS[children[0].type] %> in <%= params.regions[0].name %>
+                        <%= PLURALS[relative.type.substring(relative.type.indexOf('.') + 1)] %> in <%= params.regions[0].name %>
                     </h2>
-
                     <ul class="places-in-region-list">
-                        <% children.forEach(function(child) { %>
+                        <% relative.entities.forEach(function(child) { %>
                             <li><a class="region-link" href="<%= child.navigateURL %>"><%= child.name %></a></li>
                         <% }); %>
                     </ul>
