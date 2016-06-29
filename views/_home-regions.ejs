@@ -3,12 +3,27 @@
         <h4>Geographical Regions</h4>
         <ul class="states-list states-list-collapsed">
 
-          <% if (locations) locations.forEach(function(location) { %>
+          <% if (locations) locations.forEach(location => { %>
             <li class="state state-collapsed">
                 <h3>
+                    <a class="small-api-link">API</a>
                     <i class="fa fa-map-marker"></i>
                     <a href="/region/<%= location.id %>/<%= location.name %>"><%= location.name %></a>
                 </h3>
+                <div class="api-info-box">
+                    <a class="fa fa-close"></a>
+                    <strong>
+                        <a href="http://docs.odn.apiary.io/#reference/0/relatives" target="_blank">/related</a> endpoint
+                    </strong>
+                    <dl>
+                        <dt>Example:</dt>
+                        <dd><a href="http://odn-backend.herokuapp.com/related/v1/child?id=<%= location.id %>&limit=10" target="_blank">Metros in <%= location.name %></a></dd>
+                        <dd><a href="http://odn-backend.herokuapp.com/related/v1/child?id=<%= location.id %>&limit=10" target="_blank">Counties in <%= location.name %></a></dd>
+                        <dd><a href="http://odn-backend.herokuapp.com/related/v1/child?id=<%= location.id %>&limit=10" target="_blank">Cities in <%= location.name %></a></dd>
+                        <dt>API Docs:</dt>
+                        <dd><a href="http://docs.odn.apiary.io/#reference/0/relatives/find-the-relatives-of-an-entity" target="_blank">Find the relatives of an entity</a></dd>
+                    </dl>
+                </div>
                 <ul class="regions-list">
                   <% for (var i = 0; i < location.msas.length; i++) { %>
                     <li class="region">

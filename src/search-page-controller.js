@@ -15,6 +15,19 @@ class SearchPageController {
             console.log(decodeURI(_searchURL.split('?')[1]));
         }
 
+        // API boxes
+        //
+        this.initApiBoxes([
+            '#related-peer-info-box', 
+            '#related-sibling-info-box', 
+            '#related-child-region-info-box', 
+            '#related-child-division-info-box', 
+            '#related-child-state-info-box', 
+            '#related-child-county-info-box', 
+            '#related-child-msa-info-box', 
+            '#related-child-place-info-box'
+            ]);
+
         // Questions controls
         //
         new Questions();
@@ -189,6 +202,24 @@ class SearchPageController {
         //
         $(window).resize(() => this.moveMap());
         this.moveMap();
+    }
+
+    initApiBoxes(boxSelectors) {
+
+        boxSelectors.forEach(boxSelector => {
+            this.initApiBox(boxSelector);
+        });
+    }
+
+    initApiBox(boxSelector) {
+
+        $(boxSelector + '-button').click(() => {
+            $(boxSelector).slideToggle();
+        });
+
+        $(boxSelector + ' .fa-close').click(() => {
+            $(boxSelector).slideUp();
+        });
     }
 
     moveMap() {

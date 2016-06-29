@@ -51,6 +51,16 @@ class HomePageController {
         this.sampleCharacterIndex = 0;
         this.beginSampleQuestions();
 
+        // API boxes
+        //
+        $('.small-api-link').click(function() {
+            $(this).parent().parent().find('.api-info-box').slideToggle();
+        });
+
+        $('.api-info-box .fa-close').click(function() {
+            $(this).parent().parent().find('.api-info-box').slideUp();
+        });
+
         // Search link
         //
         $('.home-search-bar-controls .search-link').click(() => {

@@ -1,3 +1,5 @@
+@import api-info-box
+
 $container-width: 1020px
 $category-item-width: 245px
 
@@ -138,20 +140,28 @@ $category-item-width: 245px
                 display: block
                 font-size: 16px
                 font-weight: bold
-                line-height: 50px
+                min-height: 50px
                 margin: 0 0 12px
-                padding: 0 6px 0 12px
+                padding: 15px 10px 0 36px
+                position: relative
                 text-transform: uppercase
 
                 .fa-map-marker
                     color: $blue-text-color
                     font-size: 28px
+                    left: 10px
                     margin-right: 10px
-                    position: relative
-                    top: 3px
+                    position: absolute
+                    top: 11px
 
                 a
                     color: $blue-text-color
+
+                a.small-api-link
+                    color: white
+                    margin: 0
+                    position: relative
+                    top: 1px
 
             .regions-list
                 list-style-type: none

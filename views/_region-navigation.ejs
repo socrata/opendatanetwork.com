@@ -6,7 +6,24 @@
             <% include _search-tokens %>
         </div>
         <% include _questions %>
-        <h2>Compare this Data</h2>
+        <h2>
+            <a id="related-peer-info-box-button" class="small-api-link">API</a>
+            Compare this Data
+        </h2>
+        <div id="related-peer-info-box" class="api-info-box">
+            <a class="fa fa-close"></a>
+            <strong>
+                <a href="http://docs.odn.apiary.io/#reference/0/relatives" target="_blank">/related</a> endpoint
+            </strong>
+            <dl>
+                <dt>Example:</dt>
+            <% params.regions.forEach(region => { %>
+                <dd><a href="http://odn-backend.herokuapp.com/related/v1/peer?id=<%= region.id %>&limit=10" target="_blank">Peers of <%= region.name %></a></dd>
+            <% }); %>
+                <dt>API Docs:</dt>
+                <dd><a href="http://docs.odn.apiary.io/#reference/0/relatives/find-the-relatives-of-an-entity" target="_blank">Find the relatives of an entity</a></dd>
+            </dl>
+        </div>
         <div class="add-region">
             <i class="fa fa-plus"></i><input class="add-region-input" type="text" placeholder="Add Location">
             <ul class="add-region-results" style="display: none;"></ul>
@@ -14,7 +31,7 @@
 
     <% if ((typeof peers != 'undefined') && peers && (peers.length > 0)) { %>
         <ul id="similar-regions">
-        <% peers.forEach(function(region) { %>
+        <% peers.forEach(region => { %>
             <li><a class="region-link" href=<%= region.addURL %><%- (params.regions.length >= 2) ? ' rel="nofollow"' : '' %>><%= region.name %> <i class="fa fa-plus"></i></a></li>
         <% }); %>
         </ul>
@@ -35,25 +52,57 @@
 
         <% if ((typeof siblings != 'undefined') && siblings && (siblings.length > 0)) { %>
             <h2 class="places-in-region-header">
+                <a id="related-sibling-info-box-button" class="small-api-link">API</a>
                 <%= PLURALS[params.regions[0].type] %> in
                 <a class="parent-link" href="<%= parentRegion.navigateURL %>"><%= parentRegion.name %></a>
             </h2>
-
+            <div id="related-sibling-info-box" class="api-info-box">
+                <a class="fa fa-close"></a>
+                <strong>
+                    <a href="http://docs.odn.apiary.io/#reference/0/relatives" target="_blank">/related</a> endpoint
+                </strong>
+                <dl>
+                    <dt>Example:</dt>
+                <% params.regions.forEach(region => { %>
+                    <dd><a href="http://odn-backend.herokuapp.com/related/v1/sibling?id=<%= region.id %>&limit=10" target="_blank">Siblings of <%= region.name %></a></dd>
+                <% }); %>
+                    <dt>API Docs:</dt>
+                    <dd><a href="http://docs.odn.apiary.io/#reference/0/relatives/find-the-relatives-of-an-entity" target="_blank">Find the relatives of an entity</a></dd>
+                </dl>
+            </div>
             <ul class="places-in-region-list">
-                <% siblings.forEach(function(region) { %>
+                <% siblings.forEach(region => { %>
                     <li><a class="region-link" href="<%= region.navigateURL %>"><%= region.name %></a></li>
                 <% }); %>
             </ul>
         <% } %>
 
         <% if ((typeof allChildren != 'undefined') && allChildren && (typeof allChildren.relatives != 'undefined')) { %>
-            <% allChildren.relatives.forEach(function(relative) { %>
+            <% allChildren.relatives.forEach(relative => { %>
+                <% var relativeType = relative.type.substring(relative.type.indexOf('.') + 1); %>
                 <% if (relative.entities.length > 0) { %>
                     <h2 class="places-in-region-header">
-                        <%= PLURALS[relative.type.substring(relative.type.indexOf('.') + 1)] %> in <%= params.regions[0].name %>
+                        <a id="related-child-<%= relativeType %>-info-box-button" class="small-api-link">API</a>
+                        <%= PLURALS[relativeType] %> in <%= params.regions[0].name %>
                     </h2>
+
+                    <div id="related-child-<%= relativeType %>-info-box" class="api-info-box">
+                        <a class="fa fa-close"></a>
+                        <strong>
+                            <a href="http://docs.odn.apiary.io/#reference/0/relatives" target="_blank">/related</a> endpoint
+                        </strong>
+                        <dl>
+                            <dt>Example:</dt>
+                        <% params.regions.forEach(region => { %>
+                            <dd><a href="http://odn-backend.herokuapp.com/related/v1/child?id=<%= region.id %>&limit=10" target="_blank">Children of <%= region.name %></a></dd>
+                        <% }); %>
+                            <dt>API Docs:</dt>
+                            <dd><a href="http://docs.odn.apiary.io/#reference/0/relatives/find-the-relatives-of-an-entity" target="_blank">Find the relatives of an entity</a></dd>
+                        </dl>
+                    </div>
+
                     <ul class="places-in-region-list">
-                        <% relative.entities.forEach(function(child) { %>
+                        <% relative.entities.forEach(child => { %>
                             <li><a class="region-link" href="<%= child.navigateURL %>"><%= child.name %></a></li>
                         <% }); %>
                     </ul>
