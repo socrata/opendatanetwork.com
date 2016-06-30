@@ -631,50 +631,34 @@ const MAP_SOURCES = {
     city_crime: {
         name: 'city_crime',
         domain: DOMAIN,
-        fxf: 'wehh-eh9p',
+        fxf: 'eds5-udzt',
         variables:
             _.flatten([
-             ['Theft', 'The taking or attempting to take anything of value from the care, custody, or control of a person.'],
-             ['Other', 'Other crimes or incidents not falling into another category.'],
-             ['Traffic', 'A violation of traffic law or code.'],
-             ['Breaking & Entering', 'The unlawful entry of a structure to commit a felony or a theft.'],
-             ['Assault', 'An unlawful attack by one person upon another.'],
-             ['Theft from Vehicle', 'The theft of articles from a motor vehicle, whether locked or unlocked.'],
-             ['Theft of Vehicle', 'Thefts of all classes of motor vehicles that serve the primary purpose of transporting people from one place to another.'],
-             ['Property Crime', 'General crimes committed on residential or commercial property.'],
-             ['Community Policing', 'The theory and practice of engaging criminals before they commit a crime.'],
-             ['Vehicle Stop', 'A temporary detention of a driver of a vehicle by police to investigate a possible crime or civil infraction.'],
-             ['Robbery', 'The taking or attempting to take anything of value from the care, custody, or control of a person by force, threat of violence, and/or by putting the victim in fear.'],
-             ['Disorder', 'Any behavior that tends to disturb the public peace or decorum, scandalize the community, or shock the public sense of morality.'],
-             ['Drugs', 'The violation of laws prohibiting the production, distribution, and/or use of certain controlled substances and the equipment or devices utilized in their preparation and/or use. The unlawful cultivation, manufacture, distribution, sale, purchase, use, possession, transportation, or importation of any controlled drug or narcotic substance.'],
-             ['Other Sexual Offense', 'Offenses that are sexual in nature and not immediately classified as a Sexual Offense or Sexual Assault.'],
-             ['Assault with Deadly Weapon', 'An unlawful attack by one person upon another for the purpose of inflicting severe or aggravated bodily injury.'],
-             ['Liquor', 'Driving or operating a motor vehicle or common carrier while mentally or physically impaired as the result of consuming an alcoholic beverage or using a drug or narcotic.'],
-             ['Family Offense', 'Unlawful nonviolent acts by a family member (or legal guardian) that threaten the physical, mental, or economic well-being or morals of another family member and that are not classifiable as other offenses, such as Assault or Sex Offenses.'],
-             ['Weapons Offense', 'The violation of laws or ordinances prohibiting the manufacture, sale, purchase, transportation, possession, concealment, or use of firearms, cutting instruments, explosives, incendiary devices, or other deadly weapons.'],
-             ['Death', 'Loss of life caused by negligence, suicide, and accidental death.'],
-             ['Sexual Assault', 'The carnal knowledge of an individual forcibly and against her or his will.'],
-             ['Alarm', 'A burglary alarm which was responded to by law enforcement.'],
-             ['Missing Person', 'A missing person is a person 18 years old or older whose disappearance is possibly not voluntary, or a child whose whereabouts are unknown to the child\'s legal custodian.'],
-             ['Arson', 'Any willful or malicious burning or attempt to burn, with or without intent to defraud, a dwelling, house, public building, motor vehicle or aircraft, personal property of another.'],
-             ['Quality of Life', 'Incidents related to drugs, liquor, and disorder.'],
-             ['Emergency', 'A natural or manmade disaster or emergency that public safety officers responded to.'],
-             ['Kidnapping', 'The crime of unlawfully seizing and carrying away a person by force or Fraud, or seizing and detaining a person against his or her will with an intent to carry that person away at a later time.'],
-             ['Proactive Policing', 'The theory and practice of engaging criminals or violators before they commit a crime.'],
-             ['Pedestrian Stop', 'A temporary detention of a pedestrian by police to investigate a possible crime or civil infraction.'],
-             ['Sexual Offense', 'This classification includes offenses against chastity, common decency, morals, and the like.'],
-             ['Vehicle Recovery', 'A vehicle, other than an antique or classic vehicle, which was reported stolen but subsequently recovered.'],
-             ['Homicide', 'The willful killing of one human being by another.'],
-             ['Fire', 'A fire that public safety officers responded to.']].map(tuple => {
+                ["Larceny -theft", 'foo'],
+                ["Robbery", 'foo'],
+                ["Larceny-theft", 'foo'],
+                ["Property crime", 'foo'],
+                ["Forcible rape", 'foo'],
+                ["Rape (revised definition)", 'foo'],
+                ["Motor vehicle theft", 'foo'],
+                ["Murder and nonnegligent manslaughter", 'foo'],
+                ["Rape (legacy definition)", 'foo'],
+                ["Burglary", 'foo'],
+                ["Violent crime", 'foo'],
+                ["Larceny- theft", 'foo'],
+                ["Arson", 'foo'],
+                ["Aggravated assault", 'foo']
+             ].map(tuple => {
             return [
                 {
                     name: `${tuple[0]} Rate`,
-                    column: 'crime_rate',
+                    column: 'value',
                     metric: nameToURL(`${tuple[0]} Rate`),
-                    years: [2015],
+                    years: [2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014],
                     params: {
-                        incident_parent_type: tuple[0],
-                        '$order': 'crime_rate ASC'
+                        crime_type: tuple[0],
+                        variable: 'rate',
+                        '$order': 'value ASC'
                     },
                     format: n => format.integer(n * 100000),
                     descriptionFormat: n => `${format.integer(n * 100000)} crimes per month per 100,000 people`,
@@ -685,12 +669,13 @@ const MAP_SOURCES = {
                 },
                 {
                     name: `${tuple[0]} Count`,
-                    column: 'crime_count',
+                    column: 'value',
                     metric: nameToURL(`${tuple[0]} Count`),
-                    years: [2015],
+                    years: [2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014],
                     params: {
-                        incident_parent_type: tuple[0],
-                        '$order': 'crime_count ASC',
+                        crime_type: tuple[0],
+                        variable: 'count',
+                        '$order': 'value ASC',
                     },
                     format: format.integer,
                     mapSummaryLinkDescription : tuple[1]
@@ -698,10 +683,11 @@ const MAP_SOURCES = {
             ];
         })),
         callback: (regions) => {
-            const baseURL = 'https://odn.data.socrata.com/resource/wehh-eh9p.json';
+            const baseURL = 'https://odn.data.socrata.com/resource/eds5-udzt.json';
             const params = {
                 '$where': `id in (${regions.map(region => `'${region.id}'`).join(',')})`,
-                '$select': 'id,incident_parent_type,crime_rate',
+                '$select': 'id,crime_type,value',
+                variable: 'rate',
                 year: 2015
             };
             const url = `${baseURL}?${$.param(params)}`;
