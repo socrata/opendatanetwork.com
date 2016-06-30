@@ -656,7 +656,7 @@ const MAP_SOURCES = {
                     metric: nameToURL(`${tuple[0]} Rate`),
                     years: [2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014],
                     params: {
-                        crime_type: tuple[0],
+                        crime_type: `'${tuple[0]}'`,
                         variable: 'rate',
                         '$order': 'value ASC'
                     },
@@ -673,7 +673,7 @@ const MAP_SOURCES = {
                     metric: nameToURL(`${tuple[0]} Count`),
                     years: [2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014],
                     params: {
-                        crime_type: tuple[0],
+                        crime_type: `'${tuple[0]}'`,
                         variable: 'count',
                         '$order': 'value ASC',
                     },

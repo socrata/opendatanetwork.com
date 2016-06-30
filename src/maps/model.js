@@ -82,8 +82,10 @@ class MapModel {
 
             const params = _.extend({}, baseParams, sortParams, variable.params);
             const url = `https://${source.domain}/resource/${source.fxf}.json?${$.param(params)}`;
+            console.log(url);
 
             $.getJSON(url).then(results => {
+                console.log(results);
                 const regions = results.map(region => {
                     const value = valueFunction(region[variable.column]);
 

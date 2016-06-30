@@ -1160,6 +1160,9 @@ const SOURCES = [
                                 column: 'crime_type'
                             }
                         ],
+                        params: {
+                            variable: 'rate'
+                        },
                         transform: rows => {
                             return _crimeTransform('crimerateovertime', 'value', 'rate')(rows).map(row => _.extend(row, {
                                 crime_rate: row.crime_rate * 100000
@@ -1198,6 +1201,9 @@ const SOURCES = [
                                 column: 'crime_type'
                             }
                         ],
+                        params: {
+                            variable: 'count'
+                        },
                         transform: _crimeTransform('crimeovertime', 'value', 'count'),
                         x: {
                             column: 'year',
