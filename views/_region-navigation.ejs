@@ -7,7 +7,9 @@
         </div>
         <% include _questions %>
         <h2>
+          <% if ((typeof peers != 'undefined') && peers && (peers.length > 0)) { %>
             <a id="related-peer-info-box-button" class="small-api-link">API</a>
+          <% } %>
             Compare this Data
         </h2>
         <div id="related-peer-info-box" class="api-info-box">
@@ -18,7 +20,7 @@
             <dl>
                 <dt>Example:</dt>
             <% params.regions.forEach(region => { %>
-                <dd><a href="http://odn-backend.herokuapp.com/related/v1/peer?id=<%= region.id %>&limit=10" target="_blank">Peers of <%= region.name %></a></dd>
+                <dd><a href="http://odn-backend.herokuapp.com/related/v1/peer?id=<%= region.id %>&limit=5" target="_blank">Peers of <%= region.name %></a></dd>
             <% }); %>
                 <dt>API Docs:</dt>
                 <dd><a href="http://docs.odn.apiary.io/#reference/0/relatives/find-the-relatives-of-an-entity" target="_blank">Find the relatives of an entity</a></dd>
@@ -64,7 +66,7 @@
                 <dl>
                     <dt>Example:</dt>
                 <% params.regions.forEach(region => { %>
-                    <dd><a href="http://odn-backend.herokuapp.com/related/v1/sibling?id=<%= region.id %>&limit=10" target="_blank">Siblings of <%= region.name %></a></dd>
+                    <dd><a href="http://odn-backend.herokuapp.com/related/v1/sibling?id=<%= region.id %>&limit=5" target="_blank">Siblings of <%= region.name %></a></dd>
                 <% }); %>
                     <dt>API Docs:</dt>
                     <dd><a href="http://docs.odn.apiary.io/#reference/0/relatives/find-the-relatives-of-an-entity" target="_blank">Find the relatives of an entity</a></dd>
@@ -94,7 +96,7 @@
                         <dl>
                             <dt>Example:</dt>
                         <% params.regions.forEach(region => { %>
-                            <dd><a href="http://odn-backend.herokuapp.com/related/v1/child?id=<%= region.id %>&limit=10" target="_blank">Children of <%= region.name %></a></dd>
+                            <dd><a href="http://odn-backend.herokuapp.com/related/v1/child?id=<%= region.id %>&limit=5" target="_blank">Children of <%= region.name %></a></dd>
                         <% }); %>
                             <dt>API Docs:</dt>
                             <dd><a href="http://docs.odn.apiary.io/#reference/0/relatives/find-the-relatives-of-an-entity" target="_blank">Find the relatives of an entity</a></dd>
