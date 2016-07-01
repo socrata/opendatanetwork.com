@@ -25,7 +25,9 @@ class SearchPageController {
             '#related-child-state-info-box', 
             '#related-child-county-info-box', 
             '#related-child-msa-info-box', 
-            '#related-child-place-info-box'
+            '#related-child-place-info-box',
+            '#data-availability-info-box',
+            '#data-constraint-info-box'
             ]);
 
         // Questions controls

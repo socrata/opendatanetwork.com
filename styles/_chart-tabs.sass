@@ -1,6 +1,7 @@
 .chart-tabs
     border-bottom: 1px solid $gray-border-color
-    line-height: 55px
+    height: 50px
+    line-height: 45px
     margin: 0
     padding: 0 15px
     list-style-type: none
@@ -26,10 +27,32 @@
 .chart-tabs li.selected a
     color: $black-text-color
 
+.chart-tabs-container
+
+    .small-api-link
+        margin: 16px 15px 0 0
+
+        @media (max-width: $mobile-width) // mobile
+            display: none
+
+    .api-info-box
+        margin: 15px
+
+.chart-sub-nav-container
+
+    .small-api-link
+        margin: 16px 15px 0 0
+
+        @media (max-width: $mobile-width) // mobile
+            display: none
+
+    .api-info-box
+        margin: 15px
 
 .chart-sub-nav
     background-color: $gray-background-color
-    line-height: 55px
+    height: 50px
+    line-height: 50px    
     list-style-type: none
     margin: 0
     padding: 0 15px
@@ -42,13 +65,13 @@
     color: $darker-gray-text-color
     font-size: 14px
     font-weight: 600
-    margin: 0 0 0 20px
+    margin: 0 20px
 
     .odn-caret
         float: right
         font-size: 16px
-        line-height: 55px
-        margin: 0 10px
+        line-height: 50px
+        margin: 0 20px 0 -10px
 
     .fa-caret-down
         color: $blue-text-color
@@ -86,7 +109,7 @@
             cursor: pointer
             display: block
             font-size: 14px
-            line-height: 32px
+            line-height: 40px
             padding: 0 16px
 
         a:hover

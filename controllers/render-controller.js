@@ -514,12 +514,12 @@ class RenderController {
         const locationsPromise = API.locations();
         const sourcesPromise = Sources.sourcesPromiseFromParams(params);
         const questionsPromise = Questions.forRegions(params.regions);
-        const parentPromise = forRegion(Relatives.parent);
+        const parentsPromise = forRegion(Relatives.parents);
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
                              categoriesPromise, tagsPromise, domainsPromise,
                              datasetsPromise, descriptionPromise, searchPromise,
                              locationsPromise, forecastDescriptionsPromise, sourcesPromise, 
-                             questionsPromise, parentPromise];
+                             questionsPromise, parentsPromise];
 
         const allPromise = awaitPromises(allPromises);
 
@@ -600,9 +600,9 @@ class RenderController {
                         templateParams.siblings = processRegions(siblingsResponse.relatives[0].entities);
                     }
 
-                    const parentResponse = data[13];
-                    if (parentResponse && parentResponse.relatives && (parentResponse.relatives.length > 0)) {
-                        templateParams.parentRegion = processRegions(parentResponse.relatives[0].entities)[0];
+                    const parentsResponse = data[13];
+                    if (parentsResponse && parentsResponse.relatives && (parentsResponse.relatives.length > 0)) {
+                        templateParams.parentRegion = processRegions(parentsResponse.relatives[0].entities)[0];
                     }
 
                     const childrenResponse = data[2];

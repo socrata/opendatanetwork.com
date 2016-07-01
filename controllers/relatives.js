@@ -18,7 +18,7 @@ class Relatives {
         });
     }
 
-    static parent(region) {
+    static parents(region) {
 
         return new Promise((resolve, reject) => {
             const url = Request.buildURL(Constants.RELATED_PARENT_URL, {
