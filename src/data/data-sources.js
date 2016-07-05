@@ -1165,7 +1165,7 @@ const SOURCES = [
                         },
                         transform: rows => {
                             return _crimeTransform('crimerateovertime', 'value', 'rate')(rows).map(row => _.extend(row, {
-                                crime_rate: row.crime_rate * 100000
+                                value: row.value * 100000
                             }));
                         },
                         x: {

@@ -656,9 +656,9 @@ const MAP_SOURCES = {
                     metric: nameToURL(`${tuple[0]} Rate`),
                     years: [2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014],
                     params: {
-                        crime_type: `'${tuple[0]}'`,
+                        crime_type: tuple[0],
                         variable: 'rate',
-                        '$order': 'value ASC'
+                        '$order': 'value DESC'
                     },
                     format: n => format.integer(n * 100000),
                     descriptionFormat: n => `${format.integer(n * 100000)} crimes per month per 100,000 people`,
@@ -673,9 +673,9 @@ const MAP_SOURCES = {
                     metric: nameToURL(`${tuple[0]} Count`),
                     years: [2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014],
                     params: {
-                        crime_type: `'${tuple[0]}'`,
+                        crime_type: tuple[0],
                         variable: 'count',
-                        '$order': 'value ASC',
+                        '$order': 'value DESC',
                     },
                     format: format.integer,
                     mapSummaryLinkDescription : tuple[1]
