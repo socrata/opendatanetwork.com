@@ -4,10 +4,10 @@
         <div class="chart-tabs-container">
             <a id="data-availability-info-box-button" class="small-api-link">API</a>
             <ul class="chart-tabs">
-                <% groups.forEach(function(_group) { %>
-                    <li class="<%= _group.selected ? 'selected' : '' %>">
-                        <a href="<%= getSearchPageUrl(_group.datasets[0]) %>"<%- (params.regions.length >= 3) ? ' rel="nofollow"' : '' %>>
-                            <%= _group.name %>
+                <% topics.forEach(topic => { %>
+                    <li class="<%= topic.selected ? 'selected' : '' %>">
+                        <a href="<%= getSearchPageUrl(topic) %>"<%- (params.regions.length >= 3) ? ' rel="nofollow"' : '' %>>
+                            <%= topic.name %>
                         </a>
                     </li>
                 <% }); %>
@@ -33,15 +33,15 @@
             <ul class="chart-sub-nav">
                 <li>
                     <span>
-                        <%= source.name %>
-                        <% if (sources.length > 1) { %>
+                        <%= dataset.name %>
+                        <% if (datasets.length > 1) { %>
                             <i class="fa fa-caret-down odn-caret"></i>
                         <% } %>
                     </span>
-                    <% if (sources.length > 1) { %>
+                    <% if (datasets.length > 1) { %>
                         <ul class="chart-sub-nav-menu">
-                            <% sources.forEach(function(source) { %>
-                                <li><a href="<%= source.url %>"><%= source.name %></a></li>
+                            <% datasets.forEach(dataset =>  { %>
+                                <li><a href="<%= dataset.navigateUrl %>"><%= dataset.name %></a></li>
                             <% }); %>
                         </ul>
                     <% } %>
@@ -147,7 +147,7 @@
         <div class="search-results-header">
             <h2>
                 <span class="result-count"><%= searchResults.resultSetSizeString %></span>
-                <%= group.name %> and <%= source.name %>
+                <%= topic.name %> and <%= dataset.name %>
                 Dataset<%= searchResults.resultSetSizeString > 1 ? 's' : '' %>
                 Involving
                 <%= regionNames %>
@@ -161,10 +161,8 @@
 </div>
 
 <%
-function getSearchPageUrl(source) {
+function getSearchPageUrl(topic) {
   
-    const vector = source.vector;
-
     var url;
 
     if (params.regions.length > 0) {
@@ -187,8 +185,12 @@ function getSearchPageUrl(source) {
 
         url += '/' + regionNames.join('-');
 
-        if (vector)
-            url += '/' + vector;
+        // Vector
+        //
+        const dataset = _.toArray(topic.datasets)[0];
+        const vector = dataset.id.split('.')[1];
+
+        url += '/' + vector;
     }
     else {
 

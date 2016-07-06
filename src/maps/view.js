@@ -40,7 +40,7 @@ class POIMapView {
             });
 
             this.variableControl.onAdd(map, this.regions, 'ul.chart-sub-nav');
-            this.variableControl.onAdd(map, this.regions, 'ul.data-source-menu-list-mobile');
+            this.variableControl.onAdd(map, this.regions, 'ul.refine-menu-list-mobile');
 
             this.expandCollapseControl = new ExpandCollapseControl();
 
@@ -142,7 +142,7 @@ class MapView {
             map.addControl(this.expandCollapseControl);
 
         this.variableControl.onAdd(map, this.regions, 'ul.chart-sub-nav');
-        this.variableControl.onAdd(map, this.regions, 'ul.data-source-menu-list-mobile');
+        this.variableControl.onAdd(map, this.regions, 'ul.refine-menu-list-mobile');
 
         map.whenReady(() => {
             const url = layerID => `https://api.mapbox.com/v4/${layerID}/{z}/{x}/{y}.png?access_token=${MapConstants.MAPBOX_TOKEN}`;

@@ -35,7 +35,7 @@ class SearchRefineControlsMobile {
 
         const self = this;
 
-        $('.search-refine-menu-list-mobile .data-source-menu-header-mobile').unbind('click').click(function() {
+        $('.search-refine-menu-list-mobile .refine-menu-header-mobile').unbind('click').click(function() {
 
             const selectedMenu = '.' + $(this).parent().attr('class');
             const menusToClose = _.filter(self.mobileSubMenus, s => s != selectedMenu);

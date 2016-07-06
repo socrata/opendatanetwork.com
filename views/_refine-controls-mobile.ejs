@@ -23,31 +23,31 @@
                     </div>
                 </div>
                 <% if (params.regions.length == 1) { %><% include _questions-mobile %><% } %>
-                <ul class="data-source-menu-list-mobile">
-                    <li class="data-source-menu-list-item-groups-mobile">
-                        <a class="data-source-menu-header-mobile">
-                            <%= group.name %>
+                <ul class="refine-menu-list-mobile">
+                    <li class="refine-menu-list-item-topics-mobile">
+                        <a class="refine-menu-header-mobile">
+                            <%= topic.name %> 
                             <i class="fa fa-caret-down odn-caret"></i>
                         </a>
                         <ul>
-                          <% groups.forEach(function(_group) { %>
+                          <% topics.forEach(topic => { %>
                             <li>
-                                <a href="<%= getSearchPageUrl(_group.datasets[0]) %>"<%- (params.regions.length >= 3) ? ' rel="nofollow"' : '' %>>
-                                    <%= _group.name %>
+                                <a href="<%= getSearchPageUrl(topic) %>"<%- (params.regions.length >= 3) ? ' rel="nofollow"' : '' %>>
+                                    <%= topic.name %>
                                 </a>
                             </li>
                           <% }); %>
                         </ul>
                     </li>
-                    <li class="data-source-menu-list-item-sources-mobile">
-                        <a class="data-source-menu-header-mobile">
-                            <%= source.name %>
+                    <li class="refine-menu-list-item-datasets-mobile">
+                        <a class="refine-menu-header-mobile">
+                            <%= dataset.name %>
                             <i class="fa fa-caret-down odn-caret"></i>
                         </a>
                         <ul>
-                          <% sources.forEach(function(source) { %>
+                          <% datasets.forEach(dataset => { %>
                             <li>
-                                <a href="<%= source.url %>"><%= source.name %></a>
+                                <a href="<%= dataset.navigateUrl %>"><%= dataset.name %></a>
                             </li>
                           <% }); %>
                         </ul>

@@ -1,6 +1,7 @@
 'use strict';
 
 const API = require('./api');
+const Data = require('./data');
 const Relatives = require('./relatives');
 const Constants = require('./constants');
 const Request = require('./request');
@@ -311,27 +312,33 @@ class RenderController {
         const vector = req.params.vector;
 
         function toDefaultVector() {
-            const vector = Sources.defaultVector().vector;
-            res.redirect(req.url.split('/').slice(0, 4).concat([vector]).join('/'));
+            const defaultVector = 'population';
+            const url = req.url.split('/').slice(0, 4).concat([defaultVector]).join('/');
+            res.redirect(url);
         }
 
-        if (vector === '' || Sources.has(vector)) {
-            RenderController._parameters(req, res).then(params => {
-                const regions = params.regions;
-
-                if (!Sources.supportsVector(vector, regions)) {
-                    toDefaultVector();
-                } else {
-                    try {
-                        RenderController._search(req, res, params);
-                    } catch (error) {
-                        RenderController.error(req, res)(error);
-                    }
-                }
-            }, RenderController.error(req, res));
-        } else {
-            toDefaultVector();
+        function containsDataset(data, vector) {
+            for (var topicKey in data.topics) {
+                var topic = data.topics[topicKey];
+                if (topic.datasets[vector])
+                    return true;
+            }
+            return false;
         }
+
+        RenderController._parameters(req, res).then(params => {
+
+            if ((vector === '') || !containsDataset(params.dataAvailability, vector)) {
+                toDefaultVector();
+                return;
+            }
+
+            try {
+                RenderController._search(req, res, params);
+            } catch (error) {
+                RenderController.error(req, res)(error);
+            }
+        }, RenderController.error(req, res));
     }
 
     static _search(req, res, params) {
@@ -491,6 +498,48 @@ class RenderController {
             });
         }
 
+        function getDataset(data, vector) {
+            for (var topicKey in data.topics) {
+                var topic = data.topics[topicKey];
+                if (topic.datasets[vector])
+                    return topic.datasets[vector];
+            }
+            return null;
+        }
+
+        // Topics (demographics, economy, education... top-level tabs)
+        //
+        const topics = _.toArray(params.dataAvailability.topics).sort((a, b) => {
+            return a.name.localeCompare(b.name);
+        });
+
+        topics.forEach(topic => {
+            topic.selected = !_.isUndefined(topic.datasets[vector]);
+        });
+
+        const selectedTopics = _.filter(topics, topic => topic.selected);
+        const topic = (selectedTopics.length > 0) ? selectedTopics[0] : topics[0];
+
+        // Datasets (cost of living, gdp, consumption... first dropdown)
+        //
+        const datasets = _.toArray(topic.datasets).sort((a, b) => {
+            return a.name.localeCompare(b.name);
+        });
+
+        datasets.forEach(dataset => {
+            dataset.navigateUrl = Navigate.url({
+                regions: params.regions,
+                vector: dataset.id.split('.')[1],
+            });
+        });
+
+        const dataset = topic.datasets[vector];
+
+        dataset.datasetURL = dataset.datalensFXF ?
+            `https://${dataset.domain}/view/${dataset.datalensFXF}` :
+            `https://${dataset.domain}/dataset/${dataset.fxf}`;
+        dataset.apiURL = `https://dev.socrata.com/foundry/${dataset.domain}/${dataset.fxf}`;
+
         const _source = Sources.source(vector);
         const source = _.extend({}, _source, {
             datasetURL: (_source.datalensFXF ?
@@ -499,6 +548,8 @@ class RenderController {
             apiURL: `https://dev.socrata.com/foundry/${_source.domain}/${_source.fxf}`
         });
 
+        // Promises
+        //
         const forecastDescriptions = new ForecastDescriptions(source);
         const forecastDescriptionsPromise = forecastDescriptions.getPromise(params.regions);
 
@@ -512,36 +563,18 @@ class RenderController {
         const descriptionPromise = MapDescription.summarizeFromParams(params);
         const searchPromise = API.searchDatasetsURL(params);
         const locationsPromise = API.locations();
-        const sourcesPromise = Sources.sourcesPromiseFromParams(params);
         const questionsPromise = Questions.forRegions(params.regions);
         const parentsPromise = forRegion(Relatives.parents);
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
                              categoriesPromise, tagsPromise, domainsPromise,
                              datasetsPromise, descriptionPromise, searchPromise,
-                             locationsPromise, forecastDescriptionsPromise, sourcesPromise, 
-                             questionsPromise, parentsPromise];
+                             locationsPromise, forecastDescriptionsPromise, questionsPromise, 
+                             parentsPromise];
 
         const allPromise = awaitPromises(allPromises);
 
         allPromise.then(data => {
             try {
-                const groups = Sources.groups(params.regions).slice(0).map(group => {
-                    return _.extend({}, group, {
-                        selected: _.contains(group.datasets.map(dataset => dataset.vector), vector),
-                        datasets: Sources.sources(group, params.regions)
-                    });
-                });
-                const group = Sources.group(vector);
-
-                const sources = data[11].map(source => {
-                    return _.extend({}, source, {
-                        url: Navigate.url({
-                            regions: params.regions,
-                            vector: source.vector
-                        })
-                    });
-                });
-
                 const mapSource = MapSources[vector] || {};
 
                 const metrics = mapSource.variables || [];
@@ -551,19 +584,20 @@ class RenderController {
                 const year = _.find(years, year => parseFloat(year) === parseFloat(params.year)) || years[0] || 2016;
 
                 const templateParams = {
+                    topics,
+                    topic,
+                    datasets,
+                    dataset,
                     params,
                     vector,
-                    sources,
                     source,
-                    groups,
-                    group,
                     year,
                     metric,
                     metrics,
                     years,
                     hasRegions: params.regions.length > 0,
                     regionNames: wordJoin(params.regions.map(region => region.name), 'or'),
-                    title: searchPageTitle(params, source, metric),
+                    title: searchPageTitle(params, dataset, metric),
                     css: [
                         '/styles/third-party/leaflet.min.css',
                         '/styles/third-party/leaflet-markercluster.min.css',
@@ -600,7 +634,7 @@ class RenderController {
                         templateParams.siblings = processRegions(siblingsResponse.relatives[0].entities);
                     }
 
-                    const parentsResponse = data[13];
+                    const parentsResponse = data[12];
                     if (parentsResponse && parentsResponse.relatives && (parentsResponse.relatives.length > 0)) {
                         templateParams.parentRegion = processRegions(parentsResponse.relatives[0].entities)[0];
                     }
@@ -639,7 +673,7 @@ class RenderController {
                     templateParams.forecastDescriptions = data[10];
                     templateParams.refinePopupCollapsed = (req.query.question === '1') || (req.cookies.refinePopupCollapsed === '1');
 
-                    templateParams.questions = data[12];
+                    templateParams.questions = data[11];
                 }
 
                 res.render('search.ejs', templateParams);
@@ -721,7 +755,10 @@ class RenderController {
                     if (params.regions.length === 0) {
                         RenderController.error(req, res, 404, `Region${regionIds.length > 1 ? 's' : ''} not found: ${regionIds.join(', ')}`)();
                     } else {
-                        resolve(params);
+                        Data.availability(params.regions).then(data => {
+                            params.dataAvailability = data;
+                            resolve(params);
+                        });
                     }
                 }, reject);
             } else {
@@ -737,7 +774,7 @@ function asArray(parameter) {
     return [];
 }
 
-function searchPageTitle(params, source, metric) {
+function searchPageTitle(params, dataset, metric) {
     const categories = params.categories.map(capitalize);
     const tags = params.tags.map(capitalize);
     const dataTypes = _.flatten((metric && metric.name ? [metric.name] : []).concat(categories, tags));
@@ -746,8 +783,8 @@ function searchPageTitle(params, source, metric) {
     const locationDescription = params.regions.length > 0 ?
         `for ${wordJoin(params.regions.map(region => region.name))}` : '';
 
-    if (source && source.name.length > 0)
-        return `${dataDescription} ${locationDescription} - ${source.name} on the Open Data Network`;
+    if (dataset && dataset.name.length > 0)
+        return `${dataDescription} ${locationDescription} - ${dataset.name} on the Open Data Network`;
     else if (dataDescription)
         return `${dataDescription} on the Open Data Network`;
     else

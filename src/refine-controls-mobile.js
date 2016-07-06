@@ -4,8 +4,8 @@ class RefineControlsMobile {
     constructor() {
 
         this.mobileSubMenus = [
-            '.data-source-menu-list-item-groups-mobile',
-            '.data-source-menu-list-item-sources-mobile',
+            '.refine-menu-list-item-topics-mobile',
+            '.refine-menu-list-item-datasets-mobile',
             '.map-variable-container',
             '.map-variable-year-container',
         ];
@@ -37,7 +37,7 @@ class RefineControlsMobile {
 
         const self = this;
         
-        $('.data-source-menu-list-mobile .data-source-menu-header-mobile').unbind('click').click(function() {
+        $('.refine-menu-list-mobile .refine-menu-header-mobile').unbind('click').click(function() {
 
             const selectedMenu = '.' + $(this).parent().attr('class');
             const menusToClose = _.filter(self.mobileSubMenus, s => s != selectedMenu);
@@ -47,7 +47,7 @@ class RefineControlsMobile {
             const carets = menusToClose.map(s => (s + ' .odn-caret'));
             $(carets.join(', ')).removeClass('fa-caret-up').addClass('fa-caret-down');
 
-            const subLists = menusToClose.map(s => ('.data-source-menu-list-mobile ' + s + ' > ul')); 
+            const subLists = menusToClose.map(s => ('.refine-menu-list-mobile ' + s + ' > ul')); 
             $(subLists.join(', ')).slideUp();
 
             // Caret to toggle
@@ -59,7 +59,7 @@ class RefineControlsMobile {
 
             // Menu to toggle
             //
-            $('.data-source-menu-list-mobile ' + selectedMenu + ' > ul').slideToggle(); 
+            $('.refine-menu-list-mobile ' + selectedMenu + ' > ul').slideToggle(); 
         });
     }
 }

@@ -117,7 +117,7 @@ class VariableControl {
 
         const variableLink = variableContainer
             .append('span')
-            .attr('class', 'data-source-menu-header-mobile');
+            .attr('class', 'refine-menu-header-mobile');
             
         variableLink.append('i').attr('class', 'fa fa-caret-down odn-caret');
         variableLink.append('span');
@@ -143,7 +143,7 @@ class VariableControl {
                 .on('click', variable => { 
                     this.updateVariable(variable);
                     $('.chart-sub-nav li').trigger('mouseleave');
-                    $('.data-source-menu-list-mobile .map-variable-container .data-source-menu-header-mobile').trigger('click');
+                    $('.refine-menu-list-mobile .map-variable-container .refine-menu-header-mobile').trigger('click');
                 });
 
                 this.update();
@@ -160,7 +160,7 @@ class VariableControl {
                 .append('li')
                 .attr('class', 'map-variable-year-container')
                 .append('span')
-                .attr('class', 'map-variable-year-link data-source-menu-header-mobile');
+                .attr('class', 'map-variable-year-link refine-menu-header-mobile');
         }
 
         this.updateSelectors();
@@ -201,7 +201,7 @@ class VariableControl {
                         this.updateYearSelectors(false);
                     }
                     $('.chart-sub-nav li').trigger('mouseleave');
-                    $('.data-source-menu-list-mobile .map-variable-year-container .data-source-menu-header-mobile').trigger('click');
+                    $('.refine-menu-list-mobile .map-variable-year-container .refine-menu-header-mobile').trigger('click');
                 });
         };
 

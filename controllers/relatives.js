@@ -1,7 +1,6 @@
 'use strict';
 
 const _ = require('lodash');
-
 const Constants = require('./constants');
 const Request = require('./request');
 
