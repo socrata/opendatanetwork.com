@@ -634,20 +634,18 @@ const MAP_SOURCES = {
         fxf: 'eds5-udzt',
         variables:
             _.flatten([
-                ["Larceny -theft", 'foo'],
-                ["Robbery", 'foo'],
-                ["Larceny-theft", 'foo'],
-                ["Property crime", 'foo'],
+                ["Aggravated assault", 'foo'],
+                ["Arson", 'foo'],
+                ["Burglary", 'foo'],
                 ["Forcible rape", 'foo'],
-                ["Rape (revised definition)", 'foo'],
+                ["Larceny", 'foo'],
                 ["Motor vehicle theft", 'foo'],
                 ["Murder and nonnegligent manslaughter", 'foo'],
+                ["Property crime", 'foo'],
                 ["Rape (legacy definition)", 'foo'],
-                ["Burglary", 'foo'],
-                ["Violent crime", 'foo'],
-                ["Larceny- theft", 'foo'],
-                ["Arson", 'foo'],
-                ["Aggravated assault", 'foo']
+                ["Rape (revised definition)", 'foo'],
+                ["Robbery", 'foo'],
+                ["Violent crime", 'foo']
              ].map(tuple => {
             return [
                 {
