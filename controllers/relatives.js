@@ -10,7 +10,7 @@ class Relatives {
     static peers(region) {
         return new Promise((resolve, reject) => {
             const url = Request.buildURL(Constants.RELATED_PEER_URL, {
-                id: region.id,
+                entity_id: region.id,
                 limit: Constants.N_RELATIVES * 4
             });
 
@@ -22,7 +22,7 @@ class Relatives {
 
         return new Promise((resolve, reject) => {
             const url = Request.buildURL(Constants.RELATED_PARENT_URL, {
-                id: region.id,
+                entity_id: region.id,
                 limit: Constants.N_RELATIVES * 4
             });
 
@@ -34,7 +34,7 @@ class Relatives {
 
         return new Promise((resolve, reject) => {
             const url = Request.buildURL(Constants.RELATED_CHILD_URL, {
-                id: region.id,
+                entity_id: region.id,
                 limit: Constants.N_RELATIVES * 4
             });
 
@@ -45,7 +45,7 @@ class Relatives {
     static siblings(region) {
         return new Promise((resolve, reject) => {
             const url = Request.buildURL(Constants.RELATED_SIBLING_URL, {
-                id: region.id,
+                entity_id: region.id,
                 limit: Constants.N_RELATIVES * 4
             });
 
