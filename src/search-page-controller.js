@@ -1,5 +1,6 @@
 
 class SearchPageController {
+
     constructor(params, searchResultsRegions) {
 
         this.maxMobileWidth = 800;
@@ -7,6 +8,7 @@ class SearchPageController {
         this.searchResultsRegions = searchResultsRegions;
         this.fetching = false;
         this.fetchedAll = false;
+
         const self = this;
 
         if (params.debug) {
@@ -154,29 +156,121 @@ class SearchPageController {
         const autosuggestMobile = new Autosuggest('.add-region-results-mobile', sources);
         autosuggestMobile.listen('.add-region-input-mobile');
 
-        // Chart column
+        // Menus
         //
         const regions = this.params.regions;
         const vector = this.params.vector || 'population';
+        const metric = this.params.metric || 'change';
 
         if (regions.length > 0) {
-            if (vector in MAP_SOURCES) {
-                const mapSource = MAP_SOURCES[vector];
-                if (mapSource.poi) {
-                    Geocode.regions(this.params.regions).then(regions => {
-                        new POIMapView(mapSource, regions, this.params).show('#map');
-                        this.subMenus();
-                    }, error => console.error(error));
-                } else {
-                    MapView.create(mapSource, regions, this.params).then(view => {
-                        view.show('#map');
-                        this.subMenus();
-                    }, error => console.warn(error));
+
+            const api = new OdnApi();
+
+            // Get data availability
+            //
+            api.getDataAvailability(this.params.regions).then(dataAvailability => {
+
+                function getDataset(data, vector) {
+                    for (var topicKey in data.topics) {
+                        var topic = data.topics[topicKey];
+                        if (topic.datasets[vector])
+                            return topic.datasets[vector];
+                    }
+                    return null;
                 }
 
-            } else {
-                console.warn(`no map source found for vector: ${vector}`);
-            }
+                const dataset = getDataset(dataAvailability, vector);
+
+                if (dataset != null) {
+
+                    console.log('vector: ' + vector);
+                    console.log('metric: ' + metric);
+
+                    const selectedVariable = dataset.variables[params.metric] || null;
+                    const constraint = dataset.constraints[0]; 
+
+                    // Get constraints for the dataset variable
+                    //
+                    api.getDataContraint(this.params.regions, selectedVariable, constraint).then(dataConstraints => {
+
+                        const selectedConstraint = (this.params.year.length > 0) ?
+                            _.find(dataConstraints.permutations, item => (item.constraint_value == this.params.year)) :
+                            dataConstraints.permutations[0];
+
+                        const datasetMenus = new DatasetMenus(
+                            dataset.variables, 
+                            selectedVariable, 
+                            dataConstraints, 
+                            selectedConstraint);
+
+                        // Draw the variable and constraint menus
+                        //
+                        datasetMenus.drawMenus();
+
+                    }, error => console.error(error));
+
+                    // Get chart data for the dataset variables
+                    //
+                    const variablesArray = _.values(dataset.variables);
+                    const chartPromises = variablesArray.map(variable => {
+                        return api.getDataValues(this.params.regions, variable);
+                    });
+                    
+                    const allPromise = Promise.all(chartPromises).then(data => {
+
+console.log('variables: ' + JSON.stringify(dataset.variables));
+console.log('variablesArray: ' + JSON.stringify(variablesArray));
+console.log('data: ' + JSON.stringify(data));
+
+                        // Render charts
+                        //
+                        const chart = new DatasetVariableChart();
+                        const container = d3.select('#google-charts-container');
+
+                        data.forEach((datum, index) => {
+
+                            // Replace the entity ids in the data with the region names
+                            //
+                            for (var i = 1; i < datum.data[0].length; i++) {
+                                var dataItem = datum.data[0][i];
+                                this.params.regions.forEach(region => {
+                                    if (dataItem == region.id)
+                                        datum.data[0][i] = region.name;
+                                });
+                            }
+
+                            // Build the chart HTML
+                            //
+                            const variable = variablesArray[index];
+                            const containerId = variable.id.replace(/\./g, '-');
+                            const chartId = 'chart-' + containerId;
+
+                            const outerDiv = container.append('div')
+                                .attr('id', containerId)
+                                .attr('class', 'chart');
+                        
+                            outerDiv.append('h1')
+                                .attr('class', 'chart-title')
+                                .text(variable.name);
+
+                            outerDiv.append('div')
+                                .attr('id', chartId)
+                                .attr('class', 'chart-container');
+
+                            // Render the chart
+                            //
+                            chart.render(variable, datum.data, chartId);
+                        })
+
+                    }, error => console.error(error));
+
+                }
+            }, error => console.error(error));
+        }
+
+        // Chart column
+        //
+        if (regions.length > 0) {
 
             if (vector in DATASETS_BY_VECTOR) {
                 const source = DATASETS_BY_VECTOR[vector];
@@ -198,14 +292,14 @@ class SearchPageController {
             $('.map-summary-more').text($('.map-summary-more').text() == 'More Information' ? 'Less Information' : 'More Information');
         });
 
-        this.subMenus();
-
         // Map should display above charts on the desktop, below charts on mobile.
         //
-        $(window).resize(() => this.moveMap());
-        this.moveMap();
+        $(window).resize(() => this.moveMapNode());
+        this.moveMapNode();
     }
 
+    // Api description boxes
+    //
     initApiBoxes(boxSelectors) {
 
         boxSelectors.forEach(boxSelector => {
@@ -224,7 +318,7 @@ class SearchPageController {
         });
     }
 
-    moveMap() {
+    moveMapNode() {
 
         if ($(document).width() > this.maxMobileWidth)
             $('#map-container-mobile #map-container').appendTo('#map-container-desktop');
@@ -325,6 +419,7 @@ class SearchPageController {
     }
 
     attachCategoriesClickHandlers() {
+
         const self = this;
 
         $('#refine-menu-categories li:not(.refine-view-more), .search-refine-menu-list-item-categories-mobile li').click(function() {
@@ -334,6 +429,7 @@ class SearchPageController {
     }
 
     attachDomainsClickHandlers() {
+
         const self = this;
 
         $('#refine-menu-domains li:not(.refine-view-more), .search-refine-menu-list-item-domains-mobile li').click(function() {
@@ -344,7 +440,9 @@ class SearchPageController {
     }
 
     fetchNextPage() {
+
         if (this.fetching || this.fetchedAll) return;
+
         this.fetching = true;
         this.params.page++;
 
@@ -421,11 +519,13 @@ class SearchPageController {
         this.params.page = 0;
     }
 
+/*
     subMenus() {
-        const self = this;
 
         $('.chart-sub-nav li').mouseenter(function() {
+
             if ($(this).children('ul').length) {
+
                 $(this).addClass('selected');
                 $(this).children('span').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
                 $(this).children('ul').show();
@@ -433,7 +533,9 @@ class SearchPageController {
         });
 
         $('.chart-sub-nav li').mouseleave(function() {
+
             if ($(this).children('ul').length) {
+
                 $(this).removeClass('selected');
                 $(this).children('span').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
                 $(this).children('ul').hide();
@@ -442,4 +544,5 @@ class SearchPageController {
 
         this.refineControlsMobile.bindHeaderClickHandlers();
     }
+*/
 }

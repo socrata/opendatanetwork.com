@@ -79,6 +79,13 @@
                 <% include _map-summary %>
             </div>
         </div>
+
+        <div id="google-charts-container">
+        </div>
+
+
+
+
       <% source.charts.forEach((chart, index) => { %>
         <div class="chart" id="<%= chart.name.toLowerCase().replace(/\W/g, '') %>">
             <h1 class="chart-title"><%= chart.name %></h1>

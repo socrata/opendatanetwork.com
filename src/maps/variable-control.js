@@ -47,33 +47,19 @@ class Navigate {
 }
 
 class VariableControl {
-    constructor(source, params, onUpdate) {
-        this.source = source;
-        this.variables = source.variables;
-        this.variableFilter = source.variableFilter || ((regions, source) => {
-            return new Promise((resolve, reject) => {
-                resolve(source.variables);
-            });
-        });
+
+    constructor(dataset, params, onUpdate) {
+        
+        this.dataset = dataset;
+        this.variables = dataset.variables;
         this.params = params;
         this.onUpdate = onUpdate;
-
-        this.variable = _.find(this.variables, variable => variable.metric === params.metric);
-        this.variable = this.variable || this.variables[0];
-
-        if (this.variable.years) {
-            params.year = parseInt(params.year);
-            this.year = _.contains(this.variable.years, params.year) ?
-                params.year : _.max(this.variable.years);
-            this.hasYear = true;
-        } else {
-            this.hasYear = false;
-        }
+        this.variable = dataset.variables[params.metric];
     }
 
     update() {
         const url = Navigate.url(_.extend(this.params, {
-            vector: Navigate.escapeName(this.source.name),
+            vector: Navigate.escapeName(this.dataset.name),
             year: this.year,
             metric: this.variable.metric
         }));
@@ -128,7 +114,7 @@ class VariableControl {
                 this.updateVariable(variables[0], false);
             }
 
-            if (variables.length === 0) variables = this.source.variables;
+            if (variables.length === 0) variables = this.dataset.variables;
 
             const variableList = variableContainer
                 .append('ul')
@@ -149,10 +135,7 @@ class VariableControl {
                 this.update();
         };
 
-        this.variableFilter(regions, this.source).then(drawVariableList, error => {
-            console.log(error);
-            drawVariableList(this.source.variables);
-        });
+        drawVariableList(this.dataset.variables);
 
         if (this.hasYear) {
 
@@ -206,7 +189,7 @@ class VariableControl {
         };
 
         if (this.hasYear && this.regions) {
-            const url = `https://${this.source.domain}/resource/${this.source.fxf}?
+            const url = `https://${this.source.domain}/resource/${this.dataset.fxf}?
                 $where=id+in+(${this.regions.map(region => `'${region.id}'`).join(',')})+AND+${this.variable.column}+IS+NOT+NULL&
                 $select=year&
                 $group=year&

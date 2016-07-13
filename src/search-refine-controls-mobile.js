@@ -28,10 +28,10 @@ class SearchRefineControlsMobile {
             Cookies.set('refinePopupCollapsed', '1');
         });
         
-        this.bindHeaderClickHandlers();
+        this.attachMenuEventHandlers();
     }
 
-    bindHeaderClickHandlers() {
+    attachMenuEventHandlers() {
 
         const self = this;
 

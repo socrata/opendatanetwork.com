@@ -85,7 +85,13 @@ gulp.task('home', js(homeScripts, 'home.min.js'));
 var searchScripts = baseScripts
     .concat(autosuggestScripts)
     .concat(mapScripts)
-    .concat(regionsScripts);
+    .concat(regionsScripts)
+    .concat([
+        'src/api/odn-api.js', 
+        'src/dataset-menus.js', 
+        'src/dataset-variable-chart.js',
+        'src/dataset-variable-chart-config.js',
+        'src/dataset-variable-chart-constants.js']);
 gulp.task('search', js(searchScripts, 'search.min.js'));
 
 var datasetScripts = baseScripts

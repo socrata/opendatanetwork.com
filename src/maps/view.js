@@ -96,9 +96,9 @@ class POIMapView {
 
 class MapView {
 
-    constructor(source, regionType, regions, features, params) {
+    constructor(dataset, regionType, regions, features, params) {
 
-        this.source = source;
+        this.dataset = dataset;
         this.regionType = regionType;
         this.regions = regions;
         this.regionIDs = new Set(regions.map(region => region.id));
@@ -108,7 +108,7 @@ class MapView {
         this.legend = new LegendControl();
         this.tooltip = new TooltipControl();
         this.expandCollapseControl = new ExpandCollapseControl();
-        this.variableControl = new VariableControl(source, params, (variable, year) => {
+        this.variableControl = new VariableControl(dataset, params, (variable, year) => {
             this.display(variable, year);
 
             if (_.isUndefined(year))
@@ -154,7 +154,7 @@ class MapView {
 
             this.zoomToSelected(this.map);
 
-            if (this.source.callback) this.source.callback(this.regions);
+            if (this.dataset.callback) this.dataset.callback(this.regions);
         });
 
         map.on('click', (e) => {
@@ -179,11 +179,11 @@ class MapView {
     }
 
     display(variable, year) {
-        MapModel.create(this.source, this.regionType, variable, year)
+        MapModel.create(this.dataset, this.regionType, variable, year)
             .then(model => this.update(model))
             .catch(error => { throw error; });
 
-        new MapSource(this.source).summarize(variable, year, this.regions).then(([summary, meta]) => {
+        new MapSource(this.dataset).summarize(variable, year, this.regions).then(([summary, meta]) => {
             d3.select('p#map-summary')
                 .text(summary)
                 .style('display', summary === '' ? 'none' : 'block');
@@ -361,7 +361,8 @@ class MapView {
         }
     }
 
-    static create(source, regions, params) {
+    static create(dataset, regions, params) {
+
         if (regions.length < 1) throw 'regions cannot be empty';
 
         return new Promise((resolve, reject) => {
@@ -379,7 +380,7 @@ class MapView {
 
                 TopoModel.get(regionType).then(topojson => {
                     const features = MapView._features(topojson, regionType.type == 'choropleth');
-                    resolve(new MapView(source, regionType, regionsOfType, features, params));
+                    resolve(new MapView(dataset, regionType, regionsOfType, features, params));
                 }, reject);
             }
         });
