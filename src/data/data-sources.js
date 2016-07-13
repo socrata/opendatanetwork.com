@@ -70,6 +70,12 @@ function _toMillions(column) {
     };
 }
 
+function _toPerCapita(column, base) {
+    return rows => {
+        return rows.map(row => _.extend(row, { [column]: parseFloat(row[column]) * base }));
+    };
+}
+
 function _rename(column, names) {
     return rows => {
         return rows.map(row => {
@@ -1144,8 +1150,7 @@ const SOURCES = [
                     {
                         name: 'Crime Rate over Time',
                         description: `
-                            Crimes reported per year per 100,000 people.
-                            Only crime types that are reported by every selected city are shown.`,
+                            Crimes reported per year per 100,000 people.`,
                         data: [
                             {
                                 column: 'year',
@@ -1163,11 +1168,7 @@ const SOURCES = [
                         params: {
                             variable: 'rate'
                         },
-                        transform: rows => {
-                            return _crimeTransform('crimerateovertime', 'value', 'rate')(rows).map(row => _.extend(row, {
-                                value: row.value * 100000
-                            }));
-                        },
+                        transform: _toPerCapita('value', 100000),
                         x: {
                             column: 'year',
                             label: 'Year',
@@ -1181,8 +1182,7 @@ const SOURCES = [
                     {
                         name: 'Crime over Time',
                         description: `
-                            Crimes reported per year.
-                            Only crime types that are reported by every selected city are shown.`,
+                            Crimes reported per year.`,
                         descriptionPromise: (regions) => {
                             return new Promise((resolve, reject) => {
                             });
@@ -1204,7 +1204,6 @@ const SOURCES = [
                         params: {
                             variable: 'count'
                         },
-                        transform: _crimeTransform('crimeovertime', 'value', 'count'),
                         x: {
                             column: 'year',
                             label: 'Year',
@@ -1397,48 +1396,6 @@ class Sources {
         });
     }
 }
-
-function _crimeTransform(div, column, variable) {
-    return rows => {
-        const availableTypes = _.chain(rows)
-            .groupBy(row => [row.id].join(','))
-            .values()
-            .map(rows => _.uniq(rows.map(row => row.crime_type)))
-            .value();
-        let availableForAll = _.intersection.apply({}, availableTypes);
-
-        const description = availableForAll.length > 1 ?
-            `For the selected regions, the following crime types are available:
-             ${availableForAll.join(', ')}.` :
-            `Since there are no crime types for which every selected region has data,
-             data for all crime types is shown.`;
-        var descriptionSel = d3.select(`div#${div} p.chart-description`);
-        descriptionSel.text(`${descriptionSel.text()} ${description}`);
-        if (availableForAll.length < 1) availableForAll = _.union.apply({}, availableTypes);
-
-        return _.chain(rows)
-            .groupBy(row => [row.id, row.year].join(','))
-            .values()
-            .map(values => {
-                return _.chain(values)
-                    .filter(value => _.contains(availableForAll, value.crime_type))
-                    .groupBy(value => value.crime_type)
-                    .values()
-                    .map(forType => _.max(forType, value => parseFloat(value[column])))
-                    .value();
-            })
-            .map(values => {
-                return _.extend({}, _.max(values, value => parseFloat(value[column])), {
-                    crime_type: 'all',
-                    [column]: _.reduce(values, (sum, row) => sum + parseFloat(row[column]), 0)
-                });
-            })
-            .sortBy(row => (row.year))
-            .filter(row => (row.year))
-            .value();
-    };
-}
-
 
 if (typeof module !== 'undefined') module.exports = Sources;
 
