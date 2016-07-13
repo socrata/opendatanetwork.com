@@ -135,7 +135,8 @@ gulp.task('test', function () {
               util.log('Successfully connected!');
 
               var casper = spawn('casperjs', ['test', './tests'], {
-                  stdio: 'inherit'
+                  stdio: 'inherit',
+                  waitTimeout: 30
               });
 
               casper.on('close', function(code) {
