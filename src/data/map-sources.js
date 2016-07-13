@@ -634,18 +634,19 @@ const MAP_SOURCES = {
         fxf: 'eds5-udzt',
         variables:
             _.flatten([
-                ["Aggravated assault", 'foo'],
-                ["Arson", 'foo'],
-                ["Burglary", 'foo'],
-                ["Forcible rape", 'foo'],
-                ["Larceny", 'foo'],
-                ["Motor vehicle theft", 'foo'],
-                ["Murder and nonnegligent manslaughter", 'foo'],
-                ["Property crime", 'foo'],
-                ["Rape (legacy definition)", 'foo'],
-                ["Rape (revised definition)", 'foo'],
-                ["Robbery", 'foo'],
-                ["Violent crime", 'foo']
+                ["All Crimes", "The aggregate of all reported crime types"],
+                ["Aggravated assault", 'An unlawful attack by one person upon another for the purpose of inflicting severe or aggravated bodily injury. This type of assault usually is accompanied by the use of a weapon or by means likely to produce death or great bodily harm. Simple assaults are excluded.'],
+                ["Arson", 'Any willful or malicious burning or attempt to burn, with or without intent to defraud, a dwelling house, public building, motor vehicle or aircraft, personal property of another, etc.'],
+                ["Burglary", 'The unlawful entry of a structure to commit a felony or a theft. Attempted forcible entry is included.'],
+                ["Forcible rape", 'The carnal knowledge of a female forcibly and against her will. Rapes by force and attempts or assaults to rape, regardless of the age of the victim, are included. Statutory offenses (no force used ―victim under age of consent) are excluded.'],
+                ["Larceny", 'The unlawful taking, carrying, leading, or riding away of property from the possession or constructive possession of another. Examples are thefts of bicycles or automobile accessories, shoplifting, pocket-picking, or the stealing of any property or article that is not taken by force and violence or by fraud. Attempted larcenies are included. Embezzlement, confidence games, forgery, worthless checks, etc., are excluded.'],
+                ["Motor vehicle theft", 'The theft or attempted theft of a motor vehicle. A motor vehicle is self-propelled and runs on land surface and not on rails. Motorboats, construction equipment, airplanes, and farming equipment are specifically excluded from this category.'],
+                ["Murder and nonnegligent manslaughter", 'The willful (nonnegligent) killing of one human being by another. Deaths caused by negligence, attempts to kill, assaults to kill, suicides, and accidental deaths are excluded. The Program classifies justifiable homicides separately and limits the definition to: (1) the killing of a felon by a law enforcement officer in the line of duty; or (2) the killing of a felon, during the commission of a felony, by a private citizen. '],
+                ["Property crime", 'The offenses of burglary, larceny-theft, motor vehicle theft, and arson. The object of the theft-type offenses is the taking of money or property, but there is no force or threat of force against the victims.'],
+                ["Rape (legacy definition)", 'In 2013, the FBI UCR Program initiated collection of rape data under a revised definition within the Summary Reporting System. Previously, offense data for forcible rape was collected under the legacy UCR definition: the carnal knowledge of a female forcibly and against her will.'],
+                ["Rape (revised definition)", 'In 2013, the FBI UCR Program initiated collection of rape data under a revised definition within the Summary Reporting System. Previously, offense data for forcible rape was collected under the legacy UCR definition: the carnal knowledge of a female forcibly and against her will.'],
+                ["Robbery", 'The taking or attempted taking of anything of value from the care, custody, or control of a person or persons by force or threat of force or violence and/or by putting the victim in fear.'],
+                ["Violent crime", 'Murder and nonnegligent manslaughter, forcible rape, robbery, and aggravated assault. Violent crimes are defined in the UCR Program as those offenses which involve force or threat of force.']
              ].map(tuple => {
             return [
                 {
