@@ -8,7 +8,7 @@ casper.test.begin('homepage-quicklinks', function checkHomepage(test) {
     });
 
     casper.then(function() {
-        self.wait(1000, function() {
+        casper.wait(1000, function() {
           test.assertUrlMatch(/search\?categories=infrastructure&ref=hp/);
           casper.back();
         });
@@ -19,7 +19,7 @@ casper.test.begin('homepage-quicklinks', function checkHomepage(test) {
     });
 
     casper.then(function() {
-        self.wait(1000, function() {
+        casper.wait(1000, function() {
           test.assertUrlMatch(/region\/0400000US06\/California\/population\/population\/2013/);
           casper.back();
         });
@@ -30,7 +30,7 @@ casper.test.begin('homepage-quicklinks', function checkHomepage(test) {
     });
 
     casper.then(function() {
-        self.wait(1000, function() {
+        casper.wait(1000, function() {
           test.assertUrlMatch(/search\?domains=2014bonds.cityofws.org&ref=hp/);
           casper.back();
         });
@@ -41,7 +41,7 @@ casper.test.begin('homepage-quicklinks', function checkHomepage(test) {
     });
 
     casper.then(function() {
-        self.wait(1000, function() {
+        casper.wait(1000, function() {
           test.assertUrlMatch(/search\?tags=blds&ref=hp/);
         });
     });
