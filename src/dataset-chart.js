@@ -1,16 +1,16 @@
 
-class DatasetVariableChart {
+class DatasetChart {
 
     constructor() {
     }
 
-    render(variable, data, containerId) {
+    render(dataset, variable, data, containerId) {
 
         const table = google.visualization.arrayToDataTable(data);
 
         // Format data
         //
-        const config = DatasetVariableChartConfig[variable.id];
+        const config = DATASET_CONFIG[dataset.id].charts[variable.id];
 
         const xFormatter = this.getFormatter(config.x.formatter, config.x.format);
         xFormatter.format(table, 0);
@@ -22,16 +22,16 @@ class DatasetVariableChart {
 
         // Render chart
         //
-        const chart = this.getGoogleChart(variable.id, containerId);
-        const chartOptions = this.getChartOptions(variable);
-        const options = _.extend({}, DatasetVariableChartConstants.CHART_OPTIONS, chartOptions);
+        const chart = this.getGoogleChart(dataset.id, variable.id, containerId);
+        const chartOptions = this.getChartOptions(dataset, variable);
+        const options = _.extend({}, DATASET_CONSTANTS.CHART_OPTIONS, chartOptions);
 
         chart.draw(table, options);
     }
 
-    getChartOptions(variable) {
+    getChartOptions(dataset, variable) {
 
-        const config = DatasetVariableChartConfig[variable.id];
+        const config = DATASET_CONFIG[dataset.id][variable.id];
         const options = _.isUndefined(config) ? {} : config.options;
 
         options.title = variable.name.capitalize();
@@ -39,9 +39,9 @@ class DatasetVariableChart {
         return options;
     }
 
-    getGoogleChart(variableId, containerId) {
+    getGoogleChart(datasetId, variableId, containerId) {
 
-        const config = DatasetVariableChartConfig[variableId];
+        const config = DATASET_CONFIG[datasetId][variableId];
         const container = document.getElementById(containerId);
 
         if (!_.isUndefined(config)) {

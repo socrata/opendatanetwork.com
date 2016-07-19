@@ -13,6 +13,7 @@ const MapDescription = require('../src/maps/description');
 const MapSources = require('../src/data/map-sources');
 const Sources = require('../src/data/data-sources');
 const SrcConstants = require('../src/constants');
+const DatasetConfig = require('../src/dataset-config');
 
 const _ = require('lodash');
 const htmlencode = require('htmlencode').htmlEncode;
@@ -583,11 +584,14 @@ class RenderController {
                 const years = metric.years || [];
                 const year = _.find(years, year => parseFloat(year) === parseFloat(params.year)) || years[0] || 2016;
 
+                const dataset = RenderController.getDataset(params.dataAvailability, vector);
+                const datasetConfig = DatasetConfig[dataset.id];
                 const templateParams = {
                     topics,
                     topic,
                     datasets,
                     dataset,
+                    datasetConfig,
                     params,
                     vector,
                     source,
@@ -681,6 +685,16 @@ class RenderController {
                 RenderController.error(req, res)(error);
             }
         }, RenderController.error(req, res));
+    }
+
+    static getDataset(dataAvailability, vector) {
+
+        for (var topicKey in dataAvailability.topics) {
+            var topic = dataAvailability.topics[topicKey];
+            if (topic.datasets[vector])
+                return topic.datasets[vector];
+        }
+        return null;
     }
 
     static searchResults(req, res) {

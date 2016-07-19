@@ -156,11 +156,10 @@ class SearchPageController {
         const autosuggestMobile = new Autosuggest('.add-region-results-mobile', sources);
         autosuggestMobile.listen('.add-region-input-mobile');
 
-        // Menus
+        // Menus and charts
         //
         const regions = this.params.regions;
         const vector = this.params.vector || 'population';
-        const metric = this.params.metric || 'change';
 
         if (regions.length > 0) {
 
@@ -169,62 +168,52 @@ class SearchPageController {
             // Get data availability
             //
             api.getDataAvailability(this.params.regions).then(dataAvailability => {
+        
+                const dataset = this.getDataset(dataAvailability, vector);
+                const variablesArray = _.values(dataset.variables);
+                const variable = this.getVariableByNameOrDefault(variablesArray, this.params.metric); // metric is variable name
+                const constraintName = dataset.constraints[0];
 
-                function getDataset(data, vector) {
-                    for (var topicKey in data.topics) {
-                        var topic = data.topics[topicKey];
-                        if (topic.datasets[vector])
-                            return topic.datasets[vector];
-                    }
-                    return null;
-                }
+                // Get the constraints
+                //
+                api.getDataContraint(this.params.regions, variable, constraintName).then(dataConstraints => {
 
-                const dataset = getDataset(dataAvailability, vector);
+                    const constraint = this.getContraintByValueOrDefault(dataConstraints.permutations, this.params.year); // year is the constraint value
 
-                if (dataset != null) {
-
-                    console.log('vector: ' + vector);
-                    console.log('metric: ' + metric);
-
-                    const selectedVariable = dataset.variables[params.metric] || null;
-                    const constraint = dataset.constraints[0]; 
-
-                    // Get constraints for the dataset variable
+                    // Update the URL
                     //
-                    api.getDataContraint(this.params.regions, selectedVariable, constraint).then(dataConstraints => {
+                    const url = Navigate.url(
+                        _.extend(
+                            this.params, 
+                            {
+                                vector: Navigate.escapeName(vector.toLowerCase()),
+                                metric: Navigate.escapeName(variable.name.replace(/ /g, '_').toLowerCase()),
+                                year: Navigate.escapeName(constraint.constraint_value.toLowerCase()),
+                            }));
 
-                        const selectedConstraint = (this.params.year.length > 0) ?
-                            _.find(dataConstraints.permutations, item => (item.constraint_value == this.params.year)) :
-                            dataConstraints.permutations[0];
+                    history.replaceState(null, null, url);
 
-                        const datasetMenus = new DatasetMenus(
-                            dataset.variables, 
-                            selectedVariable, 
-                            dataConstraints, 
-                            selectedConstraint);
+                    // Draw the variable and constraint menus
+                    //
+                    const datasetMenus = new DatasetMenus(
+                        dataset.variables, 
+                        variable, 
+                        dataConstraints, 
+                        constraint);
 
-                        // Draw the variable and constraint menus
-                        //
-                        datasetMenus.drawMenus();
-
-                    }, error => console.error(error));
+                    datasetMenus.drawMenus();
 
                     // Get chart data for the dataset variables
                     //
-                    const variablesArray = _.values(dataset.variables);
                     const chartPromises = variablesArray.map(variable => {
                         return api.getDataValues(this.params.regions, variable);
                     });
                     
                     const allPromise = Promise.all(chartPromises).then(data => {
 
-console.log('variables: ' + JSON.stringify(dataset.variables));
-console.log('variablesArray: ' + JSON.stringify(variablesArray));
-console.log('data: ' + JSON.stringify(data));
-
                         // Render charts
                         //
-                        const chart = new DatasetVariableChart();
+                        const chart = new DatasetChart();
                         const container = d3.select('#google-charts-container');
 
                         data.forEach((datum, index) => {
@@ -245,48 +234,20 @@ console.log('data: ' + JSON.stringify(data));
                             const containerId = variable.id.replace(/\./g, '-');
                             const chartId = 'chart-' + containerId;
 
-                            const outerDiv = container.append('div')
-                                .attr('id', containerId)
-                                .attr('class', 'chart');
-                        
-                            outerDiv.append('h1')
-                                .attr('class', 'chart-title')
-                                .text(variable.name);
-
-                            outerDiv.append('div')
-                                .attr('id', chartId)
-                                .attr('class', 'chart-container');
-
                             // Render the chart
                             //
-                            chart.render(variable, datum.data, chartId);
-                        })
+                            chart.render(dataset, variable, datum.data, chartId);
+                        });
 
                     }, error => console.error(error));
 
-                }
+                }, error => console.error(error));
+
             }, error => console.error(error));
         }
 
-        // Chart column
+        // Map summary links
         //
-        if (regions.length > 0) {
-
-            if (vector in DATASETS_BY_VECTOR) {
-                const source = DATASETS_BY_VECTOR[vector];
-                var tab = new Tab(source);
-
-                tab.render(d3.select('div.charts'), regions);
-
-                $(window).resize(() => {
-                    tab.clearCharts();
-                    tab.redrawCharts();
-                });
-            } else {
-                console.warn(`no source found for vector: ${vector}`);
-            }
-        }
-
         $('.map-summary-more').click(() => {
             $('.map-summary-links').toggle();
             $('.map-summary-more').text($('.map-summary-more').text() == 'More Information' ? 'Less Information' : 'More Information');
@@ -296,6 +257,55 @@ console.log('data: ' + JSON.stringify(data));
         //
         $(window).resize(() => this.moveMapNode());
         this.moveMapNode();
+    }
+
+    getContraintByValueOrDefault(permutations, year) {
+
+        const constraintValue = year.toLowerCase();
+
+        for (var i = 0; i < permutations.length; i++) {
+
+            var constraint = permutations[i];
+
+            if (constraint.constraint_value == constraintValue)
+                return constraint;
+        }
+
+        return permutations[permutations.length - 1];
+    }
+
+    getVariableByNameOrDefault(variablesArray, metric) {
+
+        // If metric is empty, use first variable
+        //
+        if (metric.length == 0)
+            return variablesArray[0];
+
+        // Find variable by name using the metic
+        //
+        const variableName = metric.replace(/_/g, ' ').toLowerCase();
+        
+        for (var i = 0; i < variablesArray.length; i++) {
+
+            var variable = variablesArray[i];
+
+            if (variable.name == variableName)
+                return variable;
+        }
+
+        // If not found, use first variable
+        //
+        return variablesArray[0];
+    }
+
+    getDataset(dataAvailability, vector) {
+
+        for (var topicKey in dataAvailability.topics) {
+            var topic = dataAvailability.topics[topicKey];
+            if (topic.datasets[vector])
+                return topic.datasets[vector];
+        }
+        return null;
     }
 
     // Api description boxes
@@ -518,31 +528,4 @@ console.log('data: ' + JSON.stringify(data));
 
         this.params.page = 0;
     }
-
-/*
-    subMenus() {
-
-        $('.chart-sub-nav li').mouseenter(function() {
-
-            if ($(this).children('ul').length) {
-
-                $(this).addClass('selected');
-                $(this).children('span').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
-                $(this).children('ul').show();
-            }
-        });
-
-        $('.chart-sub-nav li').mouseleave(function() {
-
-            if ($(this).children('ul').length) {
-
-                $(this).removeClass('selected');
-                $(this).children('span').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
-                $(this).children('ul').hide();
-            }
-        });
-
-        this.refineControlsMobile.bindHeaderClickHandlers();
-    }
-*/
 }

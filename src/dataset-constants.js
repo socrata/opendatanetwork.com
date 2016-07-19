@@ -1,5 +1,5 @@
 
-const DatasetVariableChartConstants = {
+const DATASET_CONSTANTS = {
     
     CHART_OPTIONS: {
         chartArea: { width: '100%' },

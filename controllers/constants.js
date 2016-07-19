@@ -4,10 +4,10 @@ const Constants = {
     SEARCH_RESULTS_REGIONS_URL: 'https://odn.data.socrata.com/resource/czuf-rtrf.json',
     CATALOG_URL: 'http://api.us.socrata.com/api/catalog/v1',
 
-    RELATED_PEER_URL: 'http://odn-backend.herokuapp.com/related/v1/peer',
-    RELATED_SIBLING_URL: 'http://odn-backend.herokuapp.com/related/v1/sibling',
-    RELATED_CHILD_URL: 'http://odn-backend.herokuapp.com/related/v1/child',
-    RELATED_PARENT_URL: 'http://odn-backend.herokuapp.com/related/v1/parent',
+    RELATED_PEER_URL: 'http://odn-backend.herokuapp.com/entity/v1/peer',
+    RELATED_SIBLING_URL: 'http://odn-backend.herokuapp.com/entity/v1/sibling',
+    RELATED_CHILD_URL: 'http://odn-backend.herokuapp.com/entity/v1/child',
+    RELATED_PARENT_URL: 'http://odn-backend.herokuapp.com/entity/v1/parent',
     N_RELATIVES: 5,
 
     DATA_AVAILABILITY_URL : 'http://odn-backend.herokuapp.com/data/v1/availability',

@@ -89,9 +89,9 @@ var searchScripts = baseScripts
     .concat([
         'src/api/odn-api.js', 
         'src/dataset-menus.js', 
-        'src/dataset-variable-chart.js',
-        'src/dataset-variable-chart-config.js',
-        'src/dataset-variable-chart-constants.js']);
+        'src/dataset-chart.js',
+        'src/dataset-config.js',
+        'src/dataset-constants.js']);
 gulp.task('search', js(searchScripts, 'search.min.js'));
 
 var datasetScripts = baseScripts
@@ -141,7 +141,8 @@ gulp.task('test', function () {
               util.log('Successfully connected!');
 
               var casper = spawn('casperjs', ['test', './tests'], {
-                  stdio: 'inherit'
+                  stdio: 'inherit',
+                  waitTimeout: 30
               });
 
               casper.on('close', function(code) {

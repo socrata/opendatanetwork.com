@@ -15,15 +15,15 @@
         <div id="related-peer-info-box" class="api-info-box">
             <a class="fa fa-close"></a>
             <strong>
-                <a href="http://docs.odn.apiary.io/#reference/0/relatives" target="_blank">/related/peer</a> Endpoint
+                <a href="http://docs.odn.apiary.io/#reference/0/entity-relationships" target="_blank">/entity/peer</a> Endpoint
             </strong>
             <dl>
                 <dt>Example:</dt>
             <% params.regions.forEach(region => { %>
-                <dd><a href="http://odn-backend.herokuapp.com/related/v1/peer?entity_id=<%= region.id %>&limit=5" target="_blank">Peers of <%= region.name %></a></dd>
+                <dd><a href="http://odn-backend.herokuapp.com/entity/v1/peer?entity_id=<%= region.id %>&limit=5" target="_blank">Peers of <%= region.name %></a></dd>
             <% }); %>
                 <dt>API Docs:</dt>
-                <dd><a href="http://docs.odn.apiary.io/#reference/0/relatives/find-the-relatives-of-an-entity" target="_blank">Find the relatives of an entity</a></dd>
+                <dd><a href="http://docs.odn.apiary.io/#reference/0/entity-relationships/find-the-relatives-of-an-entity" target="_blank">Find the relatives of an entity</a></dd>
             </dl>
         </div>
         <div class="add-region">
@@ -61,15 +61,15 @@
             <div id="related-sibling-info-box" class="api-info-box">
                 <a class="fa fa-close"></a>
                 <strong>
-                    <a href="http://docs.odn.apiary.io/#reference/0/relatives" target="_blank">/related/sibling</a> Endpoint
+                    <a href="http://docs.odn.apiary.io/#reference/0/entity-relationships" target="_blank">/entity/sibling</a> Endpoint
                 </strong>
                 <dl>
                     <dt>Example:</dt>
                 <% params.regions.forEach(region => { %>
-                    <dd><a href="http://odn-backend.herokuapp.com/related/v1/sibling?entity_id=<%= region.id %>&limit=5" target="_blank">Siblings of <%= region.name %></a></dd>
+                    <dd><a href="http://odn-backend.herokuapp.com/entity/v1/sibling?entity_id=<%= region.id %>&limit=5" target="_blank">Siblings of <%= region.name %></a></dd>
                 <% }); %>
                     <dt>API Docs:</dt>
-                    <dd><a href="http://docs.odn.apiary.io/#reference/0/relatives/find-the-relatives-of-an-entity" target="_blank">Find the relatives of an entity</a></dd>
+                    <dd><a href="http://docs.odn.apiary.io/#reference/0/entity-relationships/find-the-relatives-of-an-entity" target="_blank">Find the relatives of an entity</a></dd>
                 </dl>
             </div>
             <ul class="places-in-region-list">
@@ -91,15 +91,15 @@
                     <div id="related-child-<%= relativeType %>-info-box" class="api-info-box">
                         <a class="fa fa-close"></a>
                         <strong>
-                            <a href="http://docs.odn.apiary.io/#reference/0/relatives" target="_blank">/related/child</a> Endpoint
+                            <a href="http://docs.odn.apiary.io/#reference/0/entity-relationships" target="_blank">/entity/child</a> Endpoint
                         </strong>
                         <dl>
                             <dt>Example:</dt>
                         <% params.regions.forEach(region => { %>
-                            <dd><a href="http://odn-backend.herokuapp.com/related/v1/child?entity_id=<%= region.id %>&limit=5" target="_blank">Children of <%= region.name %></a></dd>
+                            <dd><a href="http://odn-backend.herokuapp.com/entity/v1/child?entity_id=<%= region.id %>&limit=5" target="_blank">Children of <%= region.name %></a></dd>
                         <% }); %>
                             <dt>API Docs:</dt>
-                            <dd><a href="http://docs.odn.apiary.io/#reference/0/relatives/find-the-relatives-of-an-entity" target="_blank">Find the relatives of an entity</a></dd>
+                            <dd><a href="http://docs.odn.apiary.io/#reference/0/entity-relationships/find-the-relatives-of-an-entity" target="_blank">Find the relatives of an entity</a></dd>
                         </dl>
                     </div>
 
