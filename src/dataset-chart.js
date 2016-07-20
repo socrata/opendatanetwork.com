@@ -4,44 +4,44 @@ class DatasetChart {
     constructor() {
     }
 
-    render(dataset, variable, data, containerId) {
+    render(datasetId, variableId, data, containerId) {
 
         const table = google.visualization.arrayToDataTable(data);
 
         // Format data
         //
-        const config = DATASET_CONFIG[dataset.id].charts[variable.id];
-
-        const xFormatter = this.getFormatter(config.x.formatter, config.x.format);
+        const chartConfig = this.getChartConfig(datasetId, variableId);
+        const xFormatter = this.getFormatter(chartConfig.x.formatter, chartConfig.x.format);
         xFormatter.format(table, 0);
 
-        const yFormatter = this.getFormatter(config.y.formatter, config.y.format);
+        const yFormatter = this.getFormatter(chartConfig.y.formatter, chartConfig.y.format);
         _.range(1, table.getNumberOfColumns()).forEach(columnIndex => {
             yFormatter.format(table, columnIndex);
         });
 
         // Render chart
         //
-        const chart = this.getGoogleChart(dataset.id, variable.id, containerId);
-        const chartOptions = this.getChartOptions(dataset, variable);
-        const options = _.extend({}, DATASET_CONSTANTS.CHART_OPTIONS, chartOptions);
+        const chart = this.getGoogleChart(datasetId, variableId, containerId);
+        const chartOptions = this.getChartOptions(datasetId, variableId);
 
-        chart.draw(table, options);
+        chart.draw(table, chartOptions);
     }
 
-    getChartOptions(dataset, variable) {
+    getChartConfig(datasetId, variableId) {
 
-        const config = DATASET_CONFIG[dataset.id][variable.id];
-        const options = _.isUndefined(config) ? {} : config.options;
+        return _.find(DATASET_CONFIG[datasetId].charts, chart => chart.variableId == variableId);
+    }
 
-        options.title = variable.name.capitalize();
+    getChartOptions(datasetId, variableId) {
 
-        return options;
+        const chartConfig = this.getChartConfig(datasetId, variableId);
+        const options = _.isUndefined(chartConfig) ? {} : chartConfig.options;
+        return _.extend({}, DATASET_CONSTANTS.CHART_OPTIONS, options);
     }
 
     getGoogleChart(datasetId, variableId, containerId) {
 
-        const config = DATASET_CONFIG[datasetId][variableId];
+        const config = this.getChartConfig(datasetId, d);
         const container = document.getElementById(containerId);
 
         if (!_.isUndefined(config)) {

@@ -87,8 +87,8 @@ var searchScripts = baseScripts
     .concat(mapScripts)
     .concat(regionsScripts)
     .concat([
-        'src/api/odn-api.js', 
-        'src/dataset-menus.js', 
+        'src/api/odn-api.js',
+        'src/dataset-menus.js',
         'src/dataset-chart.js',
         'src/dataset-config.js',
         'src/dataset-constants.js']);

@@ -2,6 +2,7 @@ class OdnApi {
 
     constructor() {
 
+        this.APP_TOKEN = 'CqcTvF7wVsI8IYAq7CdZszLbU';
         this.DATA_AVAILABILITY_URL = 'http://odn-backend.herokuapp.com/data/v1/availability';
         this.DATA_CONSTRAINT_URL = 'http://odn-backend.herokuapp.com/data/v1/constraint/{0}';
         this.DATA_VALUES_URL = 'http://odn-backend.herokuapp.com/data/v1/values';
@@ -12,6 +13,7 @@ class OdnApi {
         return new Promise((resolve, reject) => {
 
             const url = this.buildUrl(this.DATA_AVAILABILITY_URL, {
+                app_token: this.APP_TOKEN,
                 entity_id: regions.map(region => region.id).join(','),
             });
 
@@ -24,6 +26,7 @@ class OdnApi {
         return new Promise((resolve, reject) => {
 
             const url = this.buildUrl(this.DATA_CONSTRAINT_URL.format(variable.id), {
+                app_token: this.APP_TOKEN,
                 entity_id: regions.map(region => region.id).join(','),
                 constraint: constraint
             });
@@ -37,6 +40,7 @@ class OdnApi {
        return new Promise((resolve, reject) => {
 
             const url = this.buildUrl(this.DATA_VALUES_URL, {
+                app_token: this.APP_TOKEN,
                 entity_id: regions.map(region => region.id).join(','),
                 variable: variable.id
             });

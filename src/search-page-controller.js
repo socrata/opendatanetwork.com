@@ -236,7 +236,7 @@ class SearchPageController {
 
                             // Render the chart
                             //
-                            chart.render(dataset, variable, datum.data, chartId);
+                            chart.render(dataset.id, variable.id, datum.data, chartId);
                         });
 
                     }, error => console.error(error));

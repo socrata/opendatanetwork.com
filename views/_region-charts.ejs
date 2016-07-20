@@ -80,22 +80,36 @@
             </div>
         </div>
         <div id="google-charts-container">
+        <% if (datasetConfig) { %>
           <% datasetConfig.charts.forEach(chart => { %>
             <div id="<%= chart.variableId.replace(/\./g, '-') %>" class="chart">
                 <h1 class="chart-title"><%= chart.name %></h1>
                 <div id="chart-<%= chart.variableId.replace(/\./g, '-') %>" class="chart-container"></div>
+              <% if (chart.description) { %>
+                <div class="dataset-description">
+                    <p class="chart-description"><%- chart.description %></p>
+                </div>
+              <% } %>
             </div>
           <% }); %>
+        <% } %>
         </div>
+        <% if (dataset.description || (datasetConfig && datasetConfig.attribution)) { %>
         <div class="dataset-description">
-            <p class="attribution">
-                Above charts are based on data from the
-                <% datasetConfig.attribution.forEach((attributionItem, index) => { %>
-                    <%= (index > 0) ? ' | ' : '' %>
-                    <a href="<%= attributionItem.url %>"><%= attributionItem.name %></a>
-                <% }); %>
+            <% if (dataset.description) { %>
+            <p id="dataset-description"><%- dataset.description %></p>
+            <% } %>
+
+            <% if (datasetConfig && datasetConfig.attribution) { %>
+            <p class="attribution">Above charts are based on data from the
+              <% datasetConfig.attribution.forEach((attributionItem, index) => { %>
+                <%= (index > 0) ? ' | ' : '' %>
+                <a href="<%= attributionItem.url %>"><%= attributionItem.name %></a>
+              <% }); %>
             </p>
+            <% } %>
         </div>
+        <% } %>
         <div id="map-container-mobile"></div>
     </div>
 <% if (searchResults && searchResults.resultSetSize > 0) { %>
