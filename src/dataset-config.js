@@ -226,6 +226,38 @@ const DATASET_CONFIG = {
                     format: { pattern: '#,###'}
                 },
             }]
+    },
+
+    'jobs.earnings' : {
+        attribution: [DATASET_ATTRIBUTIONS.acs],
+        charts: [
+            {
+                chartId: 'jobs.earnings.gender.chart',
+                chartType: 'table',
+                constraint: {
+                    year: '2013'
+                },
+                name: 'Earnings and Gender',
+                options: {},
+                variables: [
+                    {
+                        variableId: 'jobs.earnings.median_earnings',
+                        label: 'All Workers',
+                    },
+                    {
+                        variableId: 'jobs.earnings.female_median_earnings',
+                        label: 'Female',
+                    },
+                    {
+                        variableId: 'jobs.earnings.male_median_earnings',
+                        label: 'Male',
+                    }
+                ],
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '$###,###'}
+                },
+            }]
     }
 };
 
