@@ -10,11 +10,11 @@ const LegendControl = L.Control.extend({
         return container;
     },
 
-    update: function(scale, variable, year) {
+    update: function(summaryStats, scaleRange) {
         this.container.selectAll('*').remove();
 
         const dimension = 10;
-        const range = scale.range.slice();
+        const range = scaleRange.slice();
         range.reverse();
         const height = range.length * dimension;
 
@@ -22,14 +22,8 @@ const LegendControl = L.Control.extend({
             .append('div')
             .attr('class', 'legend-container');
 
-        const values = _.filter(scale.values, value => !(isNaN(value)));
-        const [min, max] = d3.extent(values);
-        const lowerQuartile = d3.quantile(values, 0.25);
-        const median = d3.median(values);
-        const upperQuartile = d3.quantile(values, 0.75);
-
-        const tickLabels = ['maximum', 'upper quartile', 'median', 'lower quartile', 'minimum'];
-        const tickValues = [max, upperQuartile, median, lowerQuartile, min];
+        const tickLabels = ['maximum', 'average', 'minimum'];
+        const tickValues = tickLabels.map(label => summaryStats[`${label}_formatted`]);
         const tickStep = height / (tickValues.length - 1);
 
         const padding = 2;
@@ -87,7 +81,9 @@ const LegendControl = L.Control.extend({
             .attr('x1', -dimension).attr('y1', 0)
             .attr('x2', 0).attr('y2', 0);
 
-        const formatter = variable.legendFormat || variable.format || _.identity;
+        //const formatter = variable.legendFormat || variable.format || _.identity;
+        const formatter = _.identity;
+
         ticks
             .append('text')
             .attr('class', 'tick-value')

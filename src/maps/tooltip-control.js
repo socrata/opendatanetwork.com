@@ -24,25 +24,6 @@ class MapBounds {
     }
 }
 
-
-class Tooltip {
-    constructor(name, value) {
-        this.name = name;
-        this.value = value;
-    }
-
-    static fromRegion(region) {
-        const name = region.name;
-        const value = `${region.valueName} (${region.year}): ${region.valueFormatted}`;
-        return new Tooltip(name, value);
-    }
-
-    show() {
-
-    }
-}
-
-
 const TooltipControl = L.Control.extend({
     options: {
         position: 'bottomright'
