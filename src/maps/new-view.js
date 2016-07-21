@@ -48,29 +48,37 @@ class Map {
 
         map.fitBounds(this.initialBounds);
 
-/*
-        if (d3.select('body').node().getBoundingClientRect().width <= 800)
-            map.addControl(this.expandCollapseControl);
-        */
-
         map.whenReady(() => {
             this.showZoom();
             this.showLegend();
-
+            this.showExpand();
             this.showTileLayers();
         });
 
-        openSocket(MapConstants.MAP_VALUES_WS_URL).then(socket => {
-            this.socket = socket;
-
-            this.requestUpdate();
-            map.on('moveend', () => this.requestUpdate());
-
-            socket.onmessage = message => {
-                this.handleUpdate(JSON.parse(message.data));
-            };
+        this.getUpdater().then(updater => {
+            updater();
+            map.on('moveend', updater);
         });
+    }
 
+    /**
+     * We can get updates via websockets or HTTP.
+     * Websockets are preffered but not supported by all browsers.
+     */
+    getUpdater() {
+        return new Promise((resolve, reject) => {
+            if (supportsWebsockets()) {
+                openSocket(MapConstants.MAP_VALUES_WS_URL).then(socket => {
+                    socket.onmessage = message => {
+                        this.handleUpdate(JSON.parse(message.data));
+                    };
+
+                    resolve(() => this.requestUpdateWS(socket));
+                });
+            } else {
+                resolve(() => this.requestUpdateHTTP());
+            }
+        });
     }
 
     showTileLayers() {
@@ -92,6 +100,13 @@ class Map {
         this.legend = new LegendControl();
         this.map.addControl(this.legend);
         this.legend.update(this.summaryStats, this.scaleRange);
+    }
+
+    showExpand() {
+        if (d3.select('body').node().getBoundingClientRect().width <= 800) {
+            this.expandCollapseControl = new ExpandCollapseControl();
+            this.map.addControl(this.expandCollapseControl);
+        }
     }
 
     showInitialPopup(feature) {
@@ -217,20 +232,27 @@ class Map {
         this.map.addLayer(feature);
     }
 
+    requestUpdateHTTP() {
+        const message = this.getUpdateMessage();
+        message.bounds = message.bounds.join(',');
 
+        get(MapConstants.MAP_VALUES_URL, message).then(response => {
+            this.handleUpdate(_.assign(response, {message}));
+        }).catch(error => {
+            console.error(error);
+        });
+    }
 
-    requestUpdate() {
-        this.socket.send(this.getUpdateMessage());
+    requestUpdateWS(socket) {
+        socket.send(JSON.stringify(this.getUpdateMessage()));
     }
 
     getUpdateMessage() {
-        const message = {
+        return {
             bounds: this.getBounds(),
             zoom_level: this.map.getZoom(),
             session_id: this.sessionID
         };
-
-        return JSON.stringify(message);
     }
 
     getBounds() {
@@ -253,16 +275,6 @@ function newSession(entities, variable, constraints) {
         entity_id: entities.map(_.property('id')).join(','),
         app_token: MapConstants.APP_TOKEN
     }, constraints));
-}
-
-function openSocket(url) {
-    return new Promise((resolve, reject) => {
-        const socket = new WebSocket(url);
-
-        socket.onopen = () => {
-            resolve(socket);
-        };
-    });
 }
 
 function bound(max) {
@@ -294,11 +306,7 @@ function escapeName(string) {
         .replace(/[ \/]/g, '_');
 }
 
-const entities = [
-    {
-        id: '310M200US42660',
-        name: 'Seattle Metro Area (WA)',
-        type: 'region.msa'
-    }
-];
+function supportsWebsockets() {
+    return window.WebSocket;
+}
 

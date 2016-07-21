@@ -1,7 +1,7 @@
 
 const MapConstants = {
     MAP_NEW_URL: 'http://localhost:3001/data/v1/map/new',
-    MAP_VALUES_URL: 'http://odn-backend.herokuapp.com/data/v1/map/values',
+    MAP_VALUES_URL: 'http://localhost:3001/data/v1/map/values',
     MAP_VALUES_WS_URL: 'ws://localhost:3001/data/v1/map/values',
 
     APP_TOKEN: 'CqcTvF7wVsI8IYAq7CdZszLbU',
@@ -98,7 +98,7 @@ const MapConstants = {
 
     POPUP_OPTIONS: {
         closeButton: true,
-        closeOnClick: true
+        closeOnClick: false
     },
 
     TOPOJSON_DIRECTORY: '/geo/',

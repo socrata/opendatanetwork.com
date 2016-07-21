@@ -34,6 +34,7 @@ var mapScripts = [
     'src/maps/view.js',
     'src/maps/format.js',
     'src/data/map-sources.js',
+    'src/maps/persistent-websocket.js',
     'src/maps/new-view.js'
 ];
 
