@@ -212,6 +212,9 @@ class SearchPageController {
                     const datasetConfig = DATASET_CONFIG[dataset.id];
                     const dataValueParams = [];
 
+                    if (!datasetConfig)
+                        return;
+
                     datasetConfig.charts.forEach(chart => {
 
                         const params = {
