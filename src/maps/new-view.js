@@ -68,13 +68,10 @@ class Map {
     getUpdater() {
         return new Promise((resolve, reject) => {
             if (supportsWebsockets()) {
-                openSocket(MapConstants.MAP_VALUES_WS_URL).then(socket => {
-                    socket.onmessage = message => {
-                        this.handleUpdate(JSON.parse(message.data));
-                    };
+                const socket = new PersistentWebsocket(MapConstants.MAP_VALUES_WS_URL)
+                    .onmessage(message => this.handleUpdate(message));
 
-                    resolve(() => this.requestUpdateWS(socket));
-                });
+                resolve(() => this.requestUpdateWS(socket));
             } else {
                 resolve(() => this.requestUpdateHTTP());
             }
@@ -244,7 +241,7 @@ class Map {
     }
 
     requestUpdateWS(socket) {
-        socket.send(JSON.stringify(this.getUpdateMessage()));
+        socket.send(this.getUpdateMessage());
     }
 
     getUpdateMessage() {
