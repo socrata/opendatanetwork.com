@@ -28,7 +28,8 @@ const MapConstants = {
         maxZoom: 18.0,
         zoomControl: false,
         attributionControl: false,
-        scrollWheelZoom: false
+        scrollWheelZoom: false,
+        bounceAtZoomLimits: false
     },
 
     ZOOM_CONTROL: true,

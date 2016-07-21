@@ -185,7 +185,6 @@ class Map {
     }
 
     hidePopup() {
-        console.log(this.popup);
         if (this.popup) this.map.closePopup(this.popup);
     }
 
@@ -226,7 +225,8 @@ class Map {
         feature._id = id;
         feature._zoomLevel = zoomLevel;
         feature.on('click', () => this.showPopup(feature));
-        if (this.isSelected(feature.feature)) this.showInitialPopup(feature);
+        if (!(id in this.features) && this.isSelected(feature.feature))
+            this.showInitialPopup(feature);
 
         this.features[id] = feature;
         this.map.addLayer(feature);
