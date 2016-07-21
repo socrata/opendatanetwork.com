@@ -28,6 +28,10 @@ class Map {
     }
 
     static create(entities, variable, constraints, params) {
+        if (entities.length === 0) return Promise.reject('at least one entity required');
+        const entityType = entities[0].type;
+        entities = entities.filter(entity => entity.type === entityType);
+
         return newSession(entities, variable, constraints).then(session => {
             return Promise.resolve(new Map(entities, variable, params, session));
         });
