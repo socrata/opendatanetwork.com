@@ -258,6 +258,29 @@ const DATASET_CONFIG = {
                     format: { pattern: '$###,###'}
                 },
             }]
+    },
+
+    'jobs.occupations' : {
+        attribution: [DATASET_ATTRIBUTIONS.acs],
+        charts: [
+            {
+                chartId: 'jobs.occupations.chart',
+                chartType: 'table',
+                constraint: {
+                    year: '2013'
+                },
+                name: 'Occupations',
+                options: {},
+                variables: [
+                    {
+                        variableId: 'jobs.occupations.percent_employed',
+                    },
+                ],
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '#.#\'%\''}
+                },
+            }]
     }
 };
 
