@@ -252,12 +252,9 @@ class SearchPageController {
                                 });
                             }
 
-                            // Build the chart HTML
-                            //
-                            const params = dataValueParams[index];
-
                             // Render the chart
                             //
+                            const params = dataValueParams[index];
                             chart.render(dataset.id, params.chartId, datum.data);
                         });
 
