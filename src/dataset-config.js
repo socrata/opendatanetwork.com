@@ -39,6 +39,36 @@ const DATASET_ATTRIBUTIONS = {
 
 const DATASET_CONFIG = {
 
+    'crime.fbi_ucr' : {
+        attribution: [DATASET_ATTRIBUTIONS.crimeReports],
+        charts: [
+            {
+                chartId: 'crime.fbi_ucr.count.chart',
+                chartType: 'line',
+                name: 'Crime Incident Count',
+                options: {
+                    hAxis: { format:'####' },
+                    height: 300,
+                    title: 'Crime Incident Count',
+                    vAxis: { format: '###.#' }
+                },
+                variables: [
+                    {
+                        variableId: 'crime.fbi_ucr.count',
+                        label: 'Crime Incident Count',
+                    }
+                ],
+                x: {
+                    formatter: 'number',
+                    format: { pattern: '####'}
+                },
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '###.#'}
+                },
+            }]
+    },
+
     'economy.consumption' : {
         attribution: [DATASET_ATTRIBUTIONS.bea],
         charts: [
@@ -117,7 +147,7 @@ const DATASET_CONFIG = {
                 chartId: 'economy.cost_of_living.index.all.chart',
                 chartType: 'line',
                 constraint: {
-                    component: 'all'
+                    component: 'All'
                 },
                 name: 'Overall Cost of Living',
                 options: {
@@ -144,13 +174,67 @@ const DATASET_CONFIG = {
                 chartId: 'economy.cost_of_living.index.goods.chart',
                 chartType: 'line',
                 constraint: {
-                    component: 'goods'
+                    component: 'Goods'
                 },
                 name: 'Cost of Goods',
                 options: {
                     hAxis: { format:'####' },
                     height: 300,
                     title: 'Cost of Goods',
+                    vAxis: { format: '#.#' }
+                },
+                variables: [
+                    {
+                        variableId: 'economy.cost_of_living.index',
+                    }
+                ],
+                x: {
+                    formatter: 'number',
+                    format: { pattern: '####'}
+                },
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '#.#'}
+                },
+            },
+            {
+                chartId: 'economy.cost_of_living.index.rents.chart',
+                chartType: 'line',
+                constraint: {
+                    component: 'Rents'
+                },
+                name: 'Cost of Rents',
+                options: {
+                    hAxis: { format:'####' },
+                    height: 300,
+                    title: 'Cost of Rents',
+                    vAxis: { format: '#.#' }
+                },
+                variables: [
+                    {
+                        variableId: 'economy.cost_of_living.index',
+                    }
+                ],
+                x: {
+                    formatter: 'number',
+                    format: { pattern: '####'}
+                },
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '#.#'}
+                },
+            },
+            {
+                chartId: 'economy.cost_of_living.index.other.chart',
+                chartType: 'line',
+                constraint: {
+                    component: 'Other'
+                },
+                name: 'Other Costs',
+                options: {
+                    hAxis: { format:'####' },
+                    height: 300,
+                    title: 'Other Costs',
                     vAxis: { format: '#.#' }
                 },
                 variables: [
@@ -220,6 +304,36 @@ const DATASET_CONFIG = {
                 y: {
                     formatter: 'number',
                     format: { pattern: '#.##\'%\''}
+                },
+            }]
+    },
+
+    'education.classroom_statistics' : {
+        attribution: [DATASET_ATTRIBUTIONS.iesNces],
+        charts: [
+            {
+                chartId: 'education.classroom_statistics.chart',
+                chartType: 'line',
+                name: 'Student Teacher Ratio',
+                options: {
+                    hAxis: { format:'####' },
+                    height: 300,
+                    title: 'Student Teacher Ratio',
+                    vAxis: { format: '###.#' }
+                },
+                variables: [
+                    {
+                        variableId: 'education.classroom_statistics.student-teacher-ratio',
+                        label: 'Student Teacher Ratio',
+                    }
+                ],
+                x: {
+                    formatter: 'number',
+                    format: { pattern: '####'}
+                },
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '###.#'}
                 },
             }]
     },
@@ -301,6 +415,46 @@ const DATASET_CONFIG = {
                 y: {
                     formatter: 'number',
                     format: { pattern: '#,###'}
+                },
+            }]
+    },
+
+    'health.health' : {
+        attribution: [DATASET_ATTRIBUTIONS.rwjf],
+        charts: [
+            {
+                chartId: 'health.health.chart',
+                chartType: 'table',
+                constraint: {
+                    year: '2015'
+                },
+                name: 'Health Behaviors',
+                options: {},
+                variables: [
+                    {
+                        variableId: 'health.health.adult_obesity_value',
+                        label: 'Adult Obesity Rate',
+                    },
+                    {
+                        variableId: 'health.health.adult_smoking_value',
+                        label: 'Adult Smoking Rate',
+                    },
+                    {
+                        variableId: 'health.health.physical_inactivity_value',
+                        label: 'Physical Inactivity Rate',
+                    },
+                    {
+                        variableId: 'health.health.access_to_exercise_opportunities_value',
+                        label: 'Access to Exercise Opportunities Rate',
+                    },
+                    {
+                        variableId: 'health.health.excessive_drinking_value',
+                        label: 'Excessive Drinking Rate',
+                    }
+                ],
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '###.##%'}
                 },
             }]
     },
