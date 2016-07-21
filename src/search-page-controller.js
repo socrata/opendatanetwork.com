@@ -20,13 +20,13 @@ class SearchPageController {
         // API boxes
         //
         this.initApiBoxes([
-            '#related-peer-info-box', 
-            '#related-sibling-info-box', 
-            '#related-child-region-info-box', 
-            '#related-child-division-info-box', 
-            '#related-child-state-info-box', 
-            '#related-child-county-info-box', 
-            '#related-child-msa-info-box', 
+            '#related-peer-info-box',
+            '#related-sibling-info-box',
+            '#related-child-region-info-box',
+            '#related-child-division-info-box',
+            '#related-child-state-info-box',
+            '#related-child-county-info-box',
+            '#related-child-msa-info-box',
             '#related-child-place-info-box',
             '#data-availability-info-box',
             '#data-constraint-info-box'
@@ -168,7 +168,7 @@ class SearchPageController {
             // Get data availability
             //
             api.getDataAvailability(this.params.regions).then(dataAvailability => {
-        
+
                 const dataset = this.getDataset(dataAvailability, vector);
                 const variablesArray = _.values(dataset.variables);
                 const variable = this.getVariableByNameOrDefault(variablesArray, this.params.metric); // metric is variable name
@@ -184,7 +184,7 @@ class SearchPageController {
                     //
                     const url = Navigate.url(
                         _.extend(
-                            this.params, 
+                            this.params,
                             {
                                 vector: Navigate.escapeName(vector.toLowerCase()),
                                 metric: Navigate.escapeName(variable.name.replace(/ /g, '_').toLowerCase()),
@@ -196,16 +196,16 @@ class SearchPageController {
                     // Draw the variable and constraint menus
                     //
                     const datasetMenus = new DatasetMenus(
-                        dataset.variables, 
-                        variable, 
-                        dataConstraints, 
+                        dataset.variables,
+                        variable,
+                        dataConstraints,
                         constraint);
 
                     datasetMenus.drawMenus();
 
                     // Get the datasetConfig
                     // Get the charts for the datasetConfig
-                    // For each chart, 
+                    // For each chart,
                     //      Get the data we need to render item
                     //      Render it
                     //
@@ -263,6 +263,12 @@ class SearchPageController {
 
                     }, error => console.error(error));
 
+                    Map.create(this.params.regions, variable, {year: this.params.year}, this.params)
+                        .then(map => map.show('div#map'))
+                        .catch(error => {
+                            throw error;
+                        });
+
                 }, error => console.error(error));
 
             }, error => console.error(error));
@@ -306,7 +312,7 @@ class SearchPageController {
         // Find variable by name using the metic
         //
         const variableName = metric.replace(/_/g, ' ').toLowerCase();
-        
+
         for (var i = 0; i < variablesArray.length; i++) {
 
             var variable = variablesArray[i];

@@ -33,7 +33,8 @@ var mapScripts = [
     'src/maps/description.js',
     'src/maps/view.js',
     'src/maps/format.js',
-    'src/data/map-sources.js'
+    'src/data/map-sources.js',
+    'src/maps/new-view.js'
 ];
 
 var autosuggestScripts = [

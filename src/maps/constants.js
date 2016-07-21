@@ -1,5 +1,11 @@
 
 const MapConstants = {
+    MAP_NEW_URL: 'http://localhost:3001/data/v1/map/new',
+    MAP_VALUES_URL: 'http://odn-backend.herokuapp.com/data/v1/map/values',
+    MAP_VALUES_WS_URL: 'ws://localhost:3001/data/v1/map/values',
+
+    APP_TOKEN: 'CqcTvF7wVsI8IYAq7CdZszLbU',
+
     GEOCODE_URL: 'https://odn.data.socrata.com/resource/gm3u-gw57.json',
 
     // Maximum number of regions to display
@@ -48,16 +54,17 @@ const MapConstants = {
     POI_ZOOM: 11.0, // auto zoom for point of interest maps
     POI_WAIT_MS: 100, // amount of time to wait to debounce updates
 
-    POINT_RADIUS_SCALE: d3.scale.log,
+    POINT_RADIUS_SCALE: d3.scaleLog,
     POINT_RADIUS_RANGE_METERS: [500, 2000],
 
     // http://leafletjs.com/reference.html#path-options
     BASE_STYLE: {
+        fill: true,
+        fillOpacity: 0.35,
         stroke: true,
         color: '#2c3e50',
-        opacity: 1,
-        weight: 2,
-        fill: false
+        weight: 1,
+        opacity: 1
     },
 
     REFERENCE_STYLE: {
@@ -90,8 +97,8 @@ const MapConstants = {
     TOOLTIP_PADDING: 16,
 
     POPUP_OPTIONS: {
-        closeButton: false,
-        closeOnClick: false
+        closeButton: true,
+        closeOnClick: true
     },
 
     TOPOJSON_DIRECTORY: '/geo/',
