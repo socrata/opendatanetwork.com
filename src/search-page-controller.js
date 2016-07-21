@@ -203,12 +203,36 @@ class SearchPageController {
 
                     datasetMenus.drawMenus();
 
-                    // Get chart data for the dataset variables
+                    // Get the datasetConfig
+                    // Get the charts for the datasetConfig
+                    // For each chart, 
+                    //      Get the data we need to render item
+                    //      Render it
                     //
-                    const chartPromises = variablesArray.map(variable => {
-                        return api.getDataValues(this.params.regions, variable);
+                    const datasetConfig = DATASET_CONFIG[dataset.id];
+                    const dataValueParams = [];
+
+                    datasetConfig.charts.forEach(chart => {
+
+                        const params = {
+                            chartId: chart.chartId,
+                            variables: chart.variables
+                        };
+
+                        if (chart.constraint)
+                            params.constraint = chart.constraint;
+
+                        dataValueParams.push(params);
                     });
-                    
+
+                    const chartPromises = dataValueParams.map(params => {
+
+                        const variable = params.variables.map(variable => variable.variableId).join(',');
+                        return api.getDataValues(this.params.regions, variable, params.constraint);
+                    });
+
+                    // Get data values for each chart
+                    //
                     const allPromise = Promise.all(chartPromises).then(data => {
 
                         // Render charts
@@ -230,13 +254,11 @@ class SearchPageController {
 
                             // Build the chart HTML
                             //
-                            const variable = variablesArray[index];
-                            const containerId = variable.id.replace(/\./g, '-');
-                            const chartId = 'chart-' + containerId;
+                            const params = dataValueParams[index];
 
                             // Render the chart
                             //
-                            chart.render(dataset.id, variable.id, datum.data, chartId);
+                            chart.render(dataset.id, params.chartId, datum.data);
                         });
 
                     }, error => console.error(error));

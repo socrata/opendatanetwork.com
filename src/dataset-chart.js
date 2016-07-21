@@ -4,49 +4,90 @@ class DatasetChart {
     constructor() {
     }
 
-    render(datasetId, variableId, data, containerId) {
+    render(datasetId, chartId, data) {
 
+        const config = this.getChartConfig(datasetId, chartId);
+
+        // Format data labels
+        //
+        data = this.formatDataLabels(datasetId, config.variables, data);
+
+        // Get the data table
+        //
         const table = google.visualization.arrayToDataTable(data);
 
-        // Format data
+        // Format data using data formatters
         //
-        const chartConfig = this.getChartConfig(datasetId, variableId);
-        const xFormatter = this.getFormatter(chartConfig.x.formatter, chartConfig.x.format);
-        xFormatter.format(table, 0);
+        if (config.x) {
+            const xFormatter = this.getFormatter(config.x.formatter, config.x.format);
+            xFormatter.format(table, 0);
+        }
 
-        const yFormatter = this.getFormatter(chartConfig.y.formatter, chartConfig.y.format);
-        _.range(1, table.getNumberOfColumns()).forEach(columnIndex => {
-            yFormatter.format(table, columnIndex);
-        });
+        if (config.y) {
+            const yFormatter = this.getFormatter(config.y.formatter, config.y.format);
+            _.range(1, table.getNumberOfColumns()).forEach(columnIndex => {
+                yFormatter.format(table, columnIndex);
+            });
+        }
 
         // Render chart
         //
-        const chart = this.getGoogleChart(datasetId, variableId, containerId);
-        const chartOptions = this.getChartOptions(datasetId, variableId);
+        const containerId = 'chart-' + chartId;
+        const chart = this.getGoogleChart(config, containerId);
+        const options = this.getChartOptions(config);
 
-        chart.draw(table, chartOptions);
+        chart.draw(table, options);
     }
 
-    getChartConfig(datasetId, variableId) {
+    formatDataLabels(datasetId, chartVariables, data) {
 
-        return _.find(DATASET_CONFIG[datasetId].charts, chart => chart.variableId == variableId);
+        if (data.length == 0)
+            return;
+
+        if (data[0].length == 0)
+            return;
+
+        // Clear 'variable' label
+        //
+        data[0][0] = '';
+
+        // Replace the short variable names with the label specified in the config
+        //
+        data.forEach(row => {
+
+            for (var i = 0; i < chartVariables.length; i++) {
+
+                var chartVariable = chartVariables[i];
+
+                if (`${datasetId}.${row[0]}` == chartVariable.variableId) {
+                    row[0] = chartVariable.label;
+                    break;
+                }
+            }
+        });
+
+        return data;
     }
 
-    getChartOptions(datasetId, variableId) {
+    getChartConfig(datasetId, chartId) {
 
-        const chartConfig = this.getChartConfig(datasetId, variableId);
-        const options = _.isUndefined(chartConfig) ? {} : chartConfig.options;
+        return _.find(DATASET_CONFIG[datasetId].charts, chart => chart.chartId == chartId);
+    }
+
+    getChartOptions(config) {
+
+        const options = _.isUndefined(config) ? {} : config.options;
         return _.extend({}, DATASET_CONSTANTS.CHART_OPTIONS, options);
     }
 
-    getGoogleChart(datasetId, variableId, containerId) {
+    getGoogleChart(config, containerId) {
 
-        const config = this.getChartConfig(datasetId, d);
         const container = document.getElementById(containerId);
 
         if (!_.isUndefined(config)) {
             switch (config.chartType) {
                 case 'line': return new google.visualization.LineChart(container);
+                case 'table': return new google.visualization.Table(container);
             }
         }
 
@@ -63,7 +104,3 @@ class DatasetChart {
         return null;
     }
 }
-
-String.prototype.capitalize = function() {
-    return this.replace( /(^|\s)([a-z])/g , function(m,p1,p2){ return p1+p2.toUpperCase(); } );
-};

@@ -35,15 +35,20 @@ class OdnApi {
         });
     }
 
-    getDataValues(regions, variable) {
+    getDataValues(regions, variable, constraint) {
 
        return new Promise((resolve, reject) => {
 
-            const url = this.buildUrl(this.DATA_VALUES_URL, {
+            const params = {
                 app_token: this.APP_TOKEN,
                 entity_id: regions.map(region => region.id).join(','),
-                variable: variable.id
-            });
+                variable: variable
+            };
+
+            if (constraint)
+                _.extend(params, constraint);
+
+            const url = this.buildUrl(this.DATA_VALUES_URL, params);
 
             resolve(d3.promise.json(url));
         });

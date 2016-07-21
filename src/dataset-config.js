@@ -43,6 +43,7 @@ const DATASET_CONFIG = {
         attribution: [DATASET_ATTRIBUTIONS.bea],
         charts: [
             {
+                chartId: 'economy.consumption.personal_consumption_expenditures.chart',
                 chartType: 'line',
                 name: 'Personal Consumption Expenditures over Time (Millions of USD)',
                 options: {
@@ -51,7 +52,11 @@ const DATASET_CONFIG = {
                     title: 'Personal Consumption Expenditures over Time (Millions of USD)',
                     vAxis: { format: '#,###' }
                 },
-                variableId: 'economy.consumption.personal_consumption_expenditures', 
+                variables: [
+                    {
+                        variableId: 'economy.consumption.personal_consumption_expenditures'
+                    }
+                ],
                 x: {
                     formatter: 'number',
                     format: { pattern: '####'}
@@ -62,6 +67,7 @@ const DATASET_CONFIG = {
                 },
             },
             {
+                chartId: 'economy.consumption.expenditures_percent_change.chart',
                 chartType: 'line',
                 name: 'Change in Personal Consumption Expenditures over Time',
                 options: {
@@ -70,51 +76,11 @@ const DATASET_CONFIG = {
                     title: 'Change in Personal Consumption Expenditures over Time',
                     vAxis: { format: '#.##%' }
                 },
-                variableId: 'economy.consumption.expenditures_percent_change',
-                x: {
-                    formatter: 'number',
-                    format: { pattern: '####'}
-                },
-                y: {
-                    formatter: 'number',
-                    format: { pattern: '#.##\'%\''}
-                },
-            }]
-    },
-    'economy.gdp': {
-        attribution: [DATASET_ATTRIBUTIONS.bea],
-        charts: [
-            {
-                chartType: 'line',
-                description: 'Real (inflation adjusted) GDP per Capita over time.',
-                name: 'GDP',
-                options: {
-                    hAxis: { format:'####' },
-                    height: 300,
-                    title: 'GDP',
-                    vAxis: { format: '#,###' }
-                },
-                variableId: 'economy.gdp.per_capita_gdp', 
-                x: {
-                    formatter: 'number',
-                    format: { pattern: '####'}
-                },
-                y: {
-                    formatter: 'number',
-                    format: { pattern: '$###,###'}
-                },
-            },
-            {
-                chartType: 'line',
-                description: 'Annual change in real GDP.',
-                name: 'Change in GDP',
-                options: {
-                    hAxis: { format:'####' },
-                    height: 300,
-                    title: 'Change in GDP',
-                    vAxis: { format: '#.##%' }
-                },
-                variableId: 'economy.gdp.per_capita_gdp_percent_change',
+                variables: [
+                    {
+                        variableId: 'economy.consumption.expenditures_percent_change'
+                    }
+                ],
                 x: {
                     formatter: 'number',
                     format: { pattern: '####'}
@@ -126,10 +92,94 @@ const DATASET_CONFIG = {
             }]
     },
 
+    'economy.gdp': {
+        attribution: [DATASET_ATTRIBUTIONS.bea],
+        charts: [
+            {
+                chartId: 'economy.gdp.per_capita_gdp.chart',
+                chartType: 'line',
+                description: 'Real (inflation adjusted) GDP per Capita over time.',
+                name: 'GDP',
+                options: {
+                    hAxis: { format:'####' },
+                    height: 300,
+                    title: 'GDP',
+                    vAxis: { format: '#,###' }
+                },
+                variables: [
+                    {
+                        variableId: 'economy.gdp.per_capita_gdp'
+                    }
+                ],
+                x: {
+                    formatter: 'number',
+                    format: { pattern: '####'}
+                },
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '$###,###'}
+                },
+            },
+            {
+                chartId: 'economy.gdp.per_capita_gdp_percent_change.chart',
+                chartType: 'line',
+                description: 'Annual change in real GDP.',
+                name: 'Change in GDP',
+                options: {
+                    hAxis: { format:'####' },
+                    height: 300,
+                    title: 'Change in GDP',
+                    vAxis: { format: '#.##%' }
+                },
+                variables: [
+                    {
+                        variableId: 'economy.gdp.per_capita_gdp_percent_change'
+                    }
+                ],
+                x: {
+                    formatter: 'number',
+                    format: { pattern: '####'}
+                },
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '#.##\'%\''}
+                },
+            }]
+    },
+
+    'education.education' : {
+        attribution: [DATASET_ATTRIBUTIONS.acs],
+        charts: [
+            {
+                chartId: 'education.education.chart',
+                chartType: 'table',
+                constraint: {
+                    year: '2013'
+                },
+                name: 'Graduation Rates',
+                options: {},
+                variables: [
+                    {
+                        variableId: 'education.education.percent_high_school_graduate_or_higher',
+                        label: 'High School',
+                    },
+                    {
+                        variableId: 'education.education.percent_bachelors_degree_or_higher',
+                        label: 'College',
+                    }
+                ],
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '#.##\'%\''}
+                },
+            }]
+    },
+
     'demographics.population': {
         attribution: [DATASET_ATTRIBUTIONS.acs],
         charts: [
             {
+                chartId: 'demographics.population.change.chart',
                 chartType: 'line',
                 name: 'Population Change',
                 options: {
@@ -138,7 +188,11 @@ const DATASET_CONFIG = {
                     title: 'Population Change',
                     vAxis: { format: '#.##%' }
                 },
-                variableId: 'demographics.population.change',
+                variables: [
+                    {
+                        variableId: 'demographics.population.change'
+                    }
+                ],
                 x: {
                     formatter: 'number',
                     format: { pattern: '####'}
@@ -149,6 +203,7 @@ const DATASET_CONFIG = {
                 },
             },
             {
+                chartId: 'demographics.population.count.chart',
                 chartType: 'line',
                 name: 'Population',
                 options: {
@@ -157,7 +212,11 @@ const DATASET_CONFIG = {
                     title: 'Population',
                     vAxis: { format: '#,###' }
                 },
-                variableId: 'demographics.population.count',
+                variables: [
+                    {
+                        variableId: 'demographics.population.count'
+                    }
+                ],
                 x: {
                     formatter: 'number',
                     format: { pattern: '####'}

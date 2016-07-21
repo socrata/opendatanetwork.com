@@ -82,9 +82,9 @@
         <div id="google-charts-container">
         <% if (datasetConfig) { %>
           <% datasetConfig.charts.forEach(chart => { %>
-            <div id="<%= chart.variableId.replace(/\./g, '-') %>" class="chart">
+            <div id="<%= chart.chartId %>" class="chart">
                 <h1 class="chart-title"><%= chart.name %></h1>
-                <div id="chart-<%= chart.variableId.replace(/\./g, '-') %>" class="chart-container"></div>
+                <div id="chart-<%= chart.chartId %>" class="chart-container"></div>
               <% if (chart.description) { %>
                 <div class="dataset-description">
                     <p class="chart-description"><%- chart.description %></p>
