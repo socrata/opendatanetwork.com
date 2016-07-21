@@ -616,7 +616,7 @@ const SOURCES = [
                 searchTerms: ['job location', 'job opportunities', 'employment location', 'employment opportunities', 'commute', 'telecommute', 'transportation', 'traffic'],
                 charts: [
                     {
-                        name: 'Median Jobs Promiximity Index',
+                        name: 'Median Jobs Proximity Index',
                         params: { variable: 'jobs-prox-idx-median' },
                         data: [
                             {

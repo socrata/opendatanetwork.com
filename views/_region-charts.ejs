@@ -83,7 +83,7 @@
         <% if (datasetConfig) { %>
           <% datasetConfig.charts.forEach(chart => { %>
             <div id="<%= chart.chartId %>" class="chart">
-                <h1 class="chart-title"><%= chart.name %></h1>
+                <h1><%= chart.name %></h1>
                 <div id="chart-<%= chart.chartId %>" class="chart-container"></div>
               <% if (chart.description) { %>
                 <div class="dataset-description">

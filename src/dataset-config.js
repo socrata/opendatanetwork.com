@@ -39,7 +39,7 @@ const DATASET_ATTRIBUTIONS = {
 
 const DATASET_CONFIG = {
 
-    'crime.fbi_ucr' : {
+    'crime.fbi_ucr': {
         attribution: [DATASET_ATTRIBUTIONS.crimeReports],
         charts: [
             {
@@ -69,7 +69,60 @@ const DATASET_CONFIG = {
             }]
     },
 
-    'economy.consumption' : {
+    'demographics.population': {
+        attribution: [DATASET_ATTRIBUTIONS.acs],
+        charts: [
+            {
+                chartId: 'demographics.population.change.chart',
+                chartType: 'line',
+                name: 'Population Change',
+                options: {
+                    hAxis: { format:'####' },
+                    height: 300,
+                    title: 'Population Change',
+                    vAxis: { format: '#.##%' }
+                },
+                variables: [
+                    {
+                        variableId: 'demographics.population.change'
+                    }
+                ],
+                x: {
+                    formatter: 'number',
+                    format: { pattern: '####'}
+                },
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '#.##\'%\''}
+                },
+            },
+            {
+                chartId: 'demographics.population.count.chart',
+                chartType: 'line',
+                name: 'Population',
+                options: {
+                    hAxis: { format:'####' },
+                    height: 300,
+                    title: 'Population',
+                    vAxis: { format: '#,###' }
+                },
+                variables: [
+                    {
+                        variableId: 'demographics.population.count'
+                    }
+                ],
+                x: {
+                    formatter: 'number',
+                    format: { pattern: '####'}
+                },
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '#,###'}
+                },
+            }]
+    },
+
+    'economy.consumption': {
         attribution: [DATASET_ATTRIBUTIONS.bea],
         charts: [
             {
@@ -308,7 +361,7 @@ const DATASET_CONFIG = {
             }]
     },
 
-    'education.classroom_statistics' : {
+    'education.classroom_statistics': {
         attribution: [DATASET_ATTRIBUTIONS.iesNces],
         charts: [
             {
@@ -338,7 +391,7 @@ const DATASET_CONFIG = {
             }]
     },
 
-    'education.education' : {
+    'education.education': {
         attribution: [DATASET_ATTRIBUTIONS.acs],
         charts: [
             {
@@ -366,22 +419,22 @@ const DATASET_CONFIG = {
             }]
     },
 
-    'demographics.population': {
+    'education.education_expenditures': {
         attribution: [DATASET_ATTRIBUTIONS.acs],
         charts: [
             {
-                chartId: 'demographics.population.change.chart',
+                chartId: 'education.education_expenditures.capital-expenditures.chart',
                 chartType: 'line',
-                name: 'Population Change',
+                name: 'Capital Expenditures',
                 options: {
                     hAxis: { format:'####' },
                     height: 300,
-                    title: 'Population Change',
-                    vAxis: { format: '#.##%' }
+                    title: 'Capital Expenditures',
+                    vAxis: { format: '$###,###' }
                 },
                 variables: [
                     {
-                        variableId: 'demographics.population.change'
+                        variableId: 'education.education_expenditures.capital-expenditures'
                     }
                 ],
                 x: {
@@ -390,22 +443,22 @@ const DATASET_CONFIG = {
                 },
                 y: {
                     formatter: 'number',
-                    format: { pattern: '#.##\'%\''}
+                    format: { pattern: '$###,###'}
                 },
             },
             {
-                chartId: 'demographics.population.count.chart',
+                chartId: 'education.education_expenditures.capital-expenditures-per-student.chart',
                 chartType: 'line',
-                name: 'Population',
+                name: 'Capital Expenditures Per Student',
                 options: {
                     hAxis: { format:'####' },
                     height: 300,
-                    title: 'Population',
-                    vAxis: { format: '#,###' }
+                    title: 'Capital Expenditures Per Student',
+                    vAxis: { format: '$###,###' }
                 },
                 variables: [
                     {
-                        variableId: 'demographics.population.count'
+                        variableId: 'education.education_expenditures.capital-expenditures-per-student'
                     }
                 ],
                 x: {
@@ -414,12 +467,132 @@ const DATASET_CONFIG = {
                 },
                 y: {
                     formatter: 'number',
-                    format: { pattern: '#,###'}
+                    format: { pattern: '$###,###'}
+                },
+            },
+            {
+                chartId: 'education.education_expenditures.administration-salaries.chart',
+                chartType: 'line',
+                name: 'Administration Salaries',
+                options: {
+                    hAxis: { format:'####' },
+                    height: 300,
+                    title: 'Administration Salaries',
+                    vAxis: { format: '$###,###' }
+                },
+                variables: [
+                    {
+                        variableId: 'education.education_expenditures.administration-salaries'
+                    }
+                ],
+                x: {
+                    formatter: 'number',
+                    format: { pattern: '####'}
+                },
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '$###,###'}
+                },
+            },
+            {
+                chartId: 'education.education_expenditures.administration-salaries-per-student.chart',
+                chartType: 'line',
+                name: 'Administration Salaries Per Student',
+                options: {
+                    hAxis: { format:'####' },
+                    height: 300,
+                    title: 'Administration Salaries Per Student',
+                    vAxis: { format: '$###,###' }
+                },
+                variables: [
+                    {
+                        variableId: 'education.education_expenditures.administration-salaries-per-student'
+                    }
+                ],
+                x: {
+                    formatter: 'number',
+                    format: { pattern: '####'}
+                },
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '$###,###'}
+                },
+            },
+            {
+                chartId: 'education.education_expenditures.instruction-salaries.chart',
+                chartType: 'line',
+                name: 'Instruction Salaries',
+                options: {
+                    hAxis: { format:'####' },
+                    height: 300,
+                    title: 'Instruction Salaries',
+                    vAxis: { format: '$###,###' }
+                },
+                variables: [
+                    {
+                        variableId: 'education.education_expenditures.instruction-salaries'
+                    }
+                ],
+                x: {
+                    formatter: 'number',
+                    format: { pattern: '####'}
+                },
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '$###,###'}
+                },
+            },
+            {
+                chartId: 'education.education_expenditures.instruction-salaries-per-student.chart',
+                chartType: 'line',
+                name: 'Instruction Salaries Per Student',
+                options: {
+                    hAxis: { format:'####' },
+                    height: 300,
+                    title: 'Instruction Salaries Per Student',
+                    vAxis: { format: '$###,###' }
+                },
+                variables: [
+                    {
+                        variableId: 'education.education_expenditures.instruction-salaries-per-student'
+                    }
+                ],
+                x: {
+                    formatter: 'number',
+                    format: { pattern: '####'}
+                },
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '$###,###'}
                 },
             }]
     },
 
-    'health.health' : {
+    'health.environmental_health': {
+        attribution: [DATASET_ATTRIBUTIONS.hud],
+        charts: [
+            {
+                chartId: 'health.environmental_health.chart',
+                chartType: 'column',
+                constraint: {
+                    year: '2015'
+                },
+                name: 'Median Environmental Health Hazard Index',
+                options: {
+                    height: 300,
+                    title: 'Median Environmental Health Hazard Index',
+                    vAxis: { format: '###' }
+                },
+                variables: [
+                    {
+                        variableId: 'health.environmental_health.env-health-idx-median',
+                        label: 'Median Environmental Health Hazard Index'
+                    }
+                ]
+            }]
+    },
+
+    'health.health': {
         attribution: [DATASET_ATTRIBUTIONS.rwjf],
         charts: [
             {
@@ -459,7 +632,7 @@ const DATASET_CONFIG = {
             }]
     },
 
-    'jobs.earnings' : {
+    'jobs.earnings': {
         attribution: [DATASET_ATTRIBUTIONS.acs],
         charts: [
             {
@@ -488,10 +661,70 @@ const DATASET_CONFIG = {
                     formatter: 'number',
                     format: { pattern: '$###,###'}
                 },
+            },
+            {
+                chartId: 'jobs.earnings.education.chart',
+                chartType: 'stepped-area',
+                constraint: {
+                    year: '2013'
+                },
+                name: 'Earnings and Education',
+                options: {},
+                variables: [
+                    {
+                        variableId: 'jobs.earnings.median_earnings_less_than_high_school',
+                        label: 'Less than High School',
+                    },
+                    {
+                        variableId: 'jobs.earnings.median_earnings_high_school',
+                        label: 'High School',
+                    },
+                    {
+                        variableId: 'jobs.earnings.median_earnings_some_college_or_associates',
+                        label: 'Some College or Associates',
+                    },
+                    {
+                        variableId: 'jobs.earnings.median_earnings_bachelor_degree',
+                        label: 'Bachelor\'s Degree',
+                    },
+                    {
+                        variableId: 'jobs.earnings.median_earnings_graduate_or_professional_degree',
+                        label: 'Graduate or Professional Degree',
+                    }
+                ],
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '$###,###'}
+                },
+            },
+            ]
+    },
+
+    'jobs.job_proximity': {
+        attribution: [DATASET_ATTRIBUTIONS.hud],
+        charts: [
+            {
+                chartId: 'jobs.job_proximity',
+                chartType: 'column',
+                constraint: {
+                    year: '2015'
+                },
+                name: 'Median Jobs Proximity Index',
+                options: {
+                    height: 300,
+                    title: 'Median Jobs Proximity Index',
+                    vAxis: { format: '###' }
+                },
+                variables: [
+                    {
+                        variableId: 'jobs.job_proximity.jobs-prox-idx-median',
+                        label: 'Median Jobs Proximity Index'
+                    }
+                ]
             }]
     },
 
-    'jobs.occupations' : {
+    'jobs.occupations': {
         attribution: [DATASET_ATTRIBUTIONS.acs],
         charts: [
             {
