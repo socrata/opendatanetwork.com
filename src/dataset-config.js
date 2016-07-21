@@ -112,6 +112,60 @@ const DATASET_CONFIG = {
                     formatter: 'number',
                     format: { pattern: '###.#'}
                 },
+            },
+            {
+                chartId: 'economy.cost_of_living.index.all.chart',
+                chartType: 'line',
+                constraint: {
+                    component: 'all'
+                },
+                name: 'Overall Cost of Living',
+                options: {
+                    hAxis: { format:'####' },
+                    height: 300,
+                    title: 'Overall Cost of Living',
+                    vAxis: { format: '#.#' }
+                },
+                variables: [
+                    {
+                        variableId: 'economy.cost_of_living.index',
+                    }
+                ],
+                x: {
+                    formatter: 'number',
+                    format: { pattern: '####'}
+                },
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '#.#'}
+                },
+            },
+            {
+                chartId: 'economy.cost_of_living.index.goods.chart',
+                chartType: 'line',
+                constraint: {
+                    component: 'goods'
+                },
+                name: 'Cost of Goods',
+                options: {
+                    hAxis: { format:'####' },
+                    height: 300,
+                    title: 'Cost of Goods',
+                    vAxis: { format: '#.#' }
+                },
+                variables: [
+                    {
+                        variableId: 'economy.cost_of_living.index',
+                    }
+                ],
+                x: {
+                    formatter: 'number',
+                    format: { pattern: '####'}
+                },
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '#.#'}
+                },
             }]
     },
 
