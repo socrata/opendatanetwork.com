@@ -22,20 +22,14 @@ var baseScripts = [
 ];
 
 var mapScripts = [
-    'src/maps/geocode.js',
-    'src/maps/scales.js',
     'src/maps/constants.js',
-    'src/maps/model.js',
     'src/maps/expand-collapse-control.js',
     'src/maps/legend-control.js',
     'src/maps/tooltip-control.js',
-    'src/maps/variable-control.js',
+    'src/maps/navigate.js',
     'src/maps/description.js',
-    'src/maps/view.js',
-    'src/maps/format.js',
-    'src/data/map-sources.js',
     'src/maps/persistent-websocket.js',
-    'src/maps/new-view.js'
+    'src/maps/view.js'
 ];
 
 var autosuggestScripts = [

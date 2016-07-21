@@ -263,7 +263,7 @@ class SearchPageController {
 
                     }, error => console.error(error));
 
-                    Map.create(this.params.regions, variable, {year: this.params.year}, this.params)
+                    MapView.create(this.params.regions, variable, {year: this.params.year}, this.params)
                         .then(map => map.show('div#map'))
                         .catch(error => {
                             throw error;
