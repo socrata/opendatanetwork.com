@@ -56,6 +56,8 @@ class Map {
         });
 
         this.getUpdater().then(updater => {
+            updater = _.debounce(updater, MapConstants.UPDATE_WAIT);
+
             updater();
             map.on('moveend', updater);
         });

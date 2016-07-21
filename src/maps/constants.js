@@ -4,6 +4,9 @@ const MapConstants = {
     MAP_VALUES_URL: 'http://odn-backend.herokuapp.com/data/v1/map/values',
     MAP_VALUES_WS_URL: 'ws://odn-backend.herokuapp.com/data/v1/map/values',
 
+    // Milliseconds to wait before updating map after move or zoom.
+    UPDATE_WAIT: 200,
+
     APP_TOKEN: 'CqcTvF7wVsI8IYAq7CdZszLbU',
 
     GEOCODE_URL: 'https://odn.data.socrata.com/resource/gm3u-gw57.json',
