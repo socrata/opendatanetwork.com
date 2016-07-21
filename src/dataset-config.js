@@ -92,6 +92,29 @@ const DATASET_CONFIG = {
             }]
     },
 
+    'economy.cost_of_living': {
+        attribution: [DATASET_ATTRIBUTIONS.bea],
+        charts: [
+            {
+                chartId: 'economy.cost_of_living.index.chart',
+                chartType: 'table',
+                constraint: {
+                    year: '2013'
+                },
+                name: 'Cost of Living',
+                options: {},
+                variables: [
+                    {
+                        variableId: 'economy.cost_of_living.index',
+                    },
+                ],
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '###.#'}
+                },
+            }]
+    },
+
     'economy.gdp': {
         attribution: [DATASET_ATTRIBUTIONS.bea],
         charts: [
