@@ -71,11 +71,6 @@
         <div id="map-container-desktop">
             <div id="map-container">
                 <div id="map"></div>
-            <% if ('mapDescription' in source) { %>
-                <div class="dataset-description map-description">
-                    <p><%= source.mapDescription %></p>
-                </div>
-            <% } %>
                 <% include _map-summary %>
             </div>
         </div>
