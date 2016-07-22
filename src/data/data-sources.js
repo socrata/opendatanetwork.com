@@ -622,7 +622,7 @@ const SOURCES = [
                 sparse: false,
                 charts: [
                     {
-                        name: 'Median Jobs Promiximity Index',
+                        name: 'Median Jobs Proximity Index',
                         params: { variable: 'jobs-prox-idx-median' },
                         data: [
                             {

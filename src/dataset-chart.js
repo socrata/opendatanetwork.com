@@ -86,7 +86,10 @@ class DatasetChart {
 
         if (!_.isUndefined(config)) {
             switch (config.chartType) {
+                case 'bar': return new google.visualization.BarChart(container);
+                case 'column': return new google.visualization.ColumnChart(container);
                 case 'line': return new google.visualization.LineChart(container);
+                case 'stepped-area': return new google.visualization.SteppedAreaChart(container);
                 case 'table': return new google.visualization.Table(container);
             }
         }

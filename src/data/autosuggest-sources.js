@@ -2,7 +2,7 @@
 function regionsWithData(vector, regions, select) {
     vector = vector || 'population';
     const source = Sources.get(vector);
-    const hasAutosuggest = source.hasAutosuggest === undefined ? true : source.hasAutosuggest;
+    const hasAutosuggest = (source && source.hasAutosuggest) ? source.hasAutosuggest : false;
     const column = hasAutosuggest ?
         source.autosuggestColumn || vector :
         'population';

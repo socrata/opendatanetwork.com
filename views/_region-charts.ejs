@@ -71,11 +71,6 @@
         <div id="map-container-desktop">
             <div id="map-container">
                 <div id="map"></div>
-            <% if ('mapDescription' in source) { %>
-                <div class="dataset-description map-description">
-                    <p><%= source.mapDescription %></p>
-                </div>
-            <% } %>
                 <% include _map-summary %>
             </div>
         </div>
@@ -83,7 +78,7 @@
         <% if (datasetConfig) { %>
           <% datasetConfig.charts.forEach(chart => { %>
             <div id="<%= chart.chartId %>" class="chart">
-                <h1 class="chart-title"><%= chart.name %></h1>
+                <h1><%= chart.name %></h1>
                 <div id="chart-<%= chart.chartId %>" class="chart-container"></div>
               <% if (chart.description) { %>
                 <div class="dataset-description">

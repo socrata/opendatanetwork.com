@@ -11,7 +11,6 @@ const Questions = require('./questions');
 const ForecastDescriptions = require('../src/forecast-descriptions');
 const MapDescription = require('../src/maps/description');
 const MapSources = require('../src/data/map-sources');
-const Sources = require('../src/data/data-sources');
 const SrcConstants = require('../src/constants');
 const DatasetConfig = require('../src/dataset-config');
 
@@ -460,7 +459,7 @@ class RenderController {
         const uids = params.regions.map(region => region.id);
         const vector = ((params.vector || '') === '') ? 'population' : params.vector;
 
-        function forRegion(regionPromise, filterInvalid) {
+        function forRegion(regionPromise) {
             return new Promise(resolve => {
                 if (params.regions.length === 0) {
                     resolve([]);
@@ -469,18 +468,8 @@ class RenderController {
                         if (!result) {
                             resolve([]);
                         } else {
-                            if (filterInvalid) {
-                                const allEntities = _.flatten(result.relatives.map(relative => relative.entities));
-                                const source = Sources.source(vector);
-                                Sources.validRegions(source, allEntities).then(validRegions => {
-                                    resolve(validRegions);
-                                }, error => {
-                                    console.error(error);
-                                    resolve(result);
-                                });
-                            } else {
-                                resolve(result);
-                            }
+                            const regions = _.flatten(result.relatives.map(relative => relative.entities));
+                            resolve(regions);
                         }
                     }, error => {
                         resolve([]);
@@ -541,20 +530,9 @@ class RenderController {
             `https://${dataset.domain}/dataset/${dataset.fxf}`;
         dataset.apiURL = `https://dev.socrata.com/foundry/${dataset.domain}/${dataset.fxf}`;
 
-        const _source = Sources.source(vector);
-        const source = _.extend({}, _source, {
-            datasetURL: (_source.datalensFXF ?
-                `https://${_source.domain}/view/${_source.datalensFXF}` :
-                `https://${_source.domain}/dataset/${_source.fxf}`),
-            apiURL: `https://dev.socrata.com/foundry/${_source.domain}/${_source.fxf}`
-        });
-
         // Promises
         //
-        const forecastDescriptions = new ForecastDescriptions(source);
-        const forecastDescriptionsPromise = forecastDescriptions.getPromise(params.regions);
-
-        const peersPromise = forRegion(Relatives.peers, true);
+        const peersPromise = forRegion(Relatives.peers);
         const siblingsPromise = forRegion(Relatives.siblings);
         const childrenPromise = forRegion(Relatives.children);
         const categoriesPromise = API.categories(quickLinksCount);
@@ -569,8 +547,7 @@ class RenderController {
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
                              categoriesPromise, tagsPromise, domainsPromise,
                              datasetsPromise, descriptionPromise, searchPromise,
-                             locationsPromise, forecastDescriptionsPromise, questionsPromise, 
-                             parentsPromise];
+                             locationsPromise, questionsPromise, parentsPromise];
 
         const allPromise = awaitPromises(allPromises);
 
@@ -594,7 +571,6 @@ class RenderController {
                     datasetConfig,
                     params,
                     vector,
-                    source,
                     year,
                     metric,
                     metrics,
@@ -638,7 +614,7 @@ class RenderController {
                         templateParams.siblings = processRegions(siblingsResponse.relatives[0].entities);
                     }
 
-                    const parentsResponse = data[12];
+                    const parentsResponse = data[11];
                     if (parentsResponse && parentsResponse.relatives && (parentsResponse.relatives.length > 0)) {
                         templateParams.parentRegion = processRegions(parentsResponse.relatives[0].entities)[0];
                     }
@@ -674,10 +650,9 @@ class RenderController {
                         regions : data[9].slice(0, quickLinksCount),
                     };
 
-                    templateParams.forecastDescriptions = data[10];
                     templateParams.refinePopupCollapsed = (req.query.question === '1') || (req.cookies.refinePopupCollapsed === '1');
 
-                    templateParams.questions = data[11];
+                    templateParams.questions = data[10];
                 }
 
                 res.render('search.ejs', templateParams);
