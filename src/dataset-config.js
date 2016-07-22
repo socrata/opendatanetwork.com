@@ -50,7 +50,7 @@ const DATASET_CONFIG = {
                     hAxis: { format:'####' },
                     height: 300,
                     title: 'Crime Incident Count',
-                    vAxis: { format: '###.#' }
+                    vAxis: { format: '###,###' }
                 },
                 variables: [
                     {
@@ -64,7 +64,32 @@ const DATASET_CONFIG = {
                 },
                 y: {
                     formatter: 'number',
-                    format: { pattern: '###.#'}
+                    format: { pattern: '###,###'}
+                },
+            },
+            {
+                chartId: 'crime.fbi_ucr.rate.chart',
+                chartType: 'line',
+                name: 'Crime Incident Rate per 100,000 People',
+                options: {
+                    hAxis: { format:'####' },
+                    height: 300,
+                    title: 'Crime Incident Rate per 100,000 People',
+                    vAxis: { format: '#.###' }
+                },
+                variables: [
+                    {
+                        variableId: 'crime.fbi_ucr.rate',
+                        label: 'Crime Incident Rate per 100,000 People',
+                    }
+                ],
+                x: {
+                    formatter: 'number',
+                    format: { pattern: '####'}
+                },
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '#.###'}
                 },
             }]
     },
