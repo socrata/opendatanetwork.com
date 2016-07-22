@@ -284,8 +284,8 @@ const boundLat = bound(90);
 const boundLng = bound(180);
 
 function getScale(stats, range) {
-    return d3.scaleQuantize()
-        .domain([stats.minimum, stats.average, stats.maximum])
+    return d3.scaleThreshold()
+        .domain(stats.values)
         .range(range);
 }
 
@@ -310,12 +310,15 @@ function supportsWebsockets() {
 }
 
 function getColorScale(variable) {
-    console.log(variable);
-    let scale = variable.stoplight ?
+    const scale = variable.stoplight ?
         MapConstants.STOPLIGHT_COLOR_SCALE :
         MapConstants.COLOR_SCALE;
-    scale = scale.slice();
-    if (variable.reverse) scale.reverse();
-    return scale;
+    return variable.reverse ? reverse(scale) : scale;
+}
+
+function reverse(array) {
+    const temp = array.slice();
+    temp.reverse();
+    return temp;
 }
 

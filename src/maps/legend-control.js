@@ -22,8 +22,8 @@ const LegendControl = L.Control.extend({
             .append('div')
             .attr('class', 'legend-container');
 
-        const tickLabels = ['maximum', 'average', 'minimum'];
-        const tickValues = tickLabels.map(label => summaryStats[`${label}_formatted`]);
+        const tickLabels = reverse(summaryStats.names);
+        const tickValues = reverse(summaryStats.values_formatted);
         const tickStep = height / (tickValues.length - 1);
 
         const padding = 2;
@@ -114,3 +114,8 @@ const LegendControl = L.Control.extend({
     }
 });
 
+function reverse(array) {
+    const temp = array.slice();
+    temp.reverse();
+    return temp;
+}
