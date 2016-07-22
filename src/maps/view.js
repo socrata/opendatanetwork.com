@@ -19,7 +19,7 @@ class MapView {
         // Current entity popup.
         this.popup = null;
 
-        this.scaleRange = MapConstants.COLOR_SCALE;
+        this.scaleRange = getColorScale(variable);
         this.scale = getScale(this.summaryStats, this.scaleRange);
     }
 
@@ -307,5 +307,15 @@ function escapeName(string) {
 
 function supportsWebsockets() {
     return window.WebSocket;
+}
+
+function getColorScale(variable) {
+    console.log(variable);
+    let scale = variable.stoplight ?
+        MapConstants.STOPLIGHT_COLOR_SCALE :
+        MapConstants.COLOR_SCALE;
+    scale = scale.slice();
+    if (variable.reverse) scale.reverse();
+    return scale;
 }
 
