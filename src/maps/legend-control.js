@@ -22,8 +22,13 @@ const LegendControl = L.Control.extend({
             .append('div')
             .attr('class', 'legend-container');
 
+        const emptyIndexes = reverse(summaryStats.names)
+            .map((value, index) => _.isEmpty(value) ? index : null)
+            .filter(_.isNumber);
         const tickLabels = reverse(summaryStats.names);
+        _.pullAt(tickLabels, emptyIndexes);
         const tickValues = reverse(summaryStats.values_formatted);
+        _.pullAt(tickValues, emptyIndexes);
         const tickStep = height / (tickValues.length - 1);
 
         const padding = 2;

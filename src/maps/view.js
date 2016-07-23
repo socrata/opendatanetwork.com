@@ -285,7 +285,7 @@ const boundLng = bound(180);
 
 function getScale(stats, range) {
     return d3.scaleThreshold()
-        .domain(stats.values)
+        .domain(_.initial(_.tail(stats.values)))
         .range(range);
 }
 

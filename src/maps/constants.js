@@ -16,8 +16,8 @@ const MapConstants = {
     BASE_LAYER_ID: 'socrata-apps.af2cc4ed',
 
     // See http://bl.ocks.org/mbostock/5577023 for a visual index of Color Brewer colors
-    COLOR_SCALE: colorbrewer.Blues[9].slice(2),
-    STOPLIGHT_COLOR_SCALE: colorbrewer.RdYlGn[7],
+    COLOR_SCALE: colorbrewer.Blues[9].slice(1),
+    STOPLIGHT_COLOR_SCALE: colorbrewer.RdYlGn[8],
 
     // http://leafletjs.com/reference.html#map-options
     MAP_OPTIONS: {
