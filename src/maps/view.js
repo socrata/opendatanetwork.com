@@ -46,7 +46,7 @@ class MapView {
         const map = L.map(MapConstants.CSS_ID, MapConstants.MAP_OPTIONS);
         this.map = map;
 
-        map.fitBounds(this.initialBounds);
+        map.fitBounds(this.initialBounds, MapConstants.INITIAL_ZOOM_OPTIONS);
 
         map.whenReady(() => {
             this.showZoom();

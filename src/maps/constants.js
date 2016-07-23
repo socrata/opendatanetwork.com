@@ -34,6 +34,13 @@ const MapConstants = {
         position: 'topleft'
     },
 
+    // http://leafletjs.com/reference.html#map-fitboundsoptions
+    INITIAL_ZOOM_OPTIONS: {
+        animate: false,
+        maxZoom: 10.0,
+        padding: [50, 50]
+    },
+
     POI_ZOOM: 11.0, // auto zoom for point of interest maps
     POI_WAIT_MS: 100, // amount of time to wait to debounce updates
 
