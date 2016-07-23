@@ -1,9 +1,11 @@
 
 class MapView {
-    constructor(entities, variable, params, session) {
+    constructor(entities, variable, constraints, params, session) {
         this.entities = entities;
         this.entityIDs = entities.map(_.property('id'));
         this.variable = variable;
+        this.constraints = constraints;
+        this.constraintString = getConstraintString(constraints);
         this.sessionID = session.session_id;
         this.initialBounds = session.bounds;
         this.summaryStats = session.summary_statistics;
@@ -29,7 +31,7 @@ class MapView {
         entities = entities.filter(entity => entity.type === entityType);
 
         return newSession(entities, variable, constraints).then(session => {
-            return Promise.resolve(new MapView(entities, variable, params, session));
+            return Promise.resolve(new MapView(entities, variable, constraints, params, session));
         });
     }
 
@@ -130,7 +132,11 @@ class MapView {
         return `
             <div>
                 <div class="name">${entity.name}</div>
-                <div class="value">${this.variable.name}: ${entity.value_formatted}</div>
+                <div class="value">
+                    ${this.variable.name}
+                    ${this.constraintString}:
+                    ${entity.value_formatted}
+                </div>
                 <div class="tooltip-controls">
                     ${this.getCompareHTML(entity)}
                     ${this.getNavigateHTML(entity)}
@@ -320,5 +326,10 @@ function reverse(array) {
     const temp = array.slice();
     temp.reverse();
     return temp;
+}
+
+function getConstraintString(constraints) {
+    if (_.isEmpty(constraints)) return '';
+    return ` (${_.values(constraints).join(', ')})`;
 }
 
