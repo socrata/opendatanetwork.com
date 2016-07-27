@@ -30,9 +30,12 @@ class Request {
             if (!cache) {
                 console.log('WARNING: no cache found');
 
-                Request.timeout(request(url), timeout).then(body => {
-                    resolve(body);
-                }, reject);
+                Request.timeout(request({
+                        url: url,
+                        headers: { 'User-Agent' : Constants.USER_AGENT }
+                    }), timeout).then(body => {
+                        resolve(body);
+                    }, reject);
             } else {
                 const key = Request.key(_.isString(url) ? url : url.uri);
 
@@ -44,14 +47,17 @@ class Request {
 
                         resolve(value);
                     } else {
-                        Request.timeout(request(url), timeout).then(body => {
+                        Request.timeout(request({
+                                url: url,
+                                headers: { 'User-Agent' : Constants.USER_AGENT }
+                            }), timeout).then(body => {
 
-                            if (timersEnabled)
-                                console.log('Request (cache miss): ' + (new Date() - start) + 'ms URL: ' + url);
+                                if (timersEnabled)
+                                    console.log('Request (cache miss): ' + (new Date() - start) + 'ms URL: ' + url);
 
-                            resolve(body);
-                            if (!error) cache.set(key, body);
-                        }, reject);
+                                resolve(body);
+                                if (!error) cache.set(key, body);
+                            }, reject);
                     }
                 });
             }

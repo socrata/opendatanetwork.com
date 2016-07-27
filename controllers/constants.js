@@ -17,6 +17,8 @@ const Constants = {
     DATASET_MIGRATIONS_URL: 'https://{0}/api/migrations/{1}.json',
     ATHENA_URL: 'https://socrata-athena.herokuapp.com/schema/v1/applied/{0}',
 
+    USER_AGENT: 'OpenDataNetwork.com',
+
     TIMEOUT_MS: 5000,
     CACHE_OPTIONS: {
         expires: 43200, // 12 hours
