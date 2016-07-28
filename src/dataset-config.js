@@ -657,6 +657,32 @@ const DATASET_CONFIG = {
             }]
     },
 
+    'health.health_indicators' : {
+        attribution: [DATASET_ATTRIBUTIONS.rwjf],
+        charts: [
+            {
+                chartId: 'health.health_indicators.chart',
+                chartType: 'table',
+                constraint: {
+                    break_out: 'Overall',
+                    question_response: 'Yes',
+                    year: '2013'
+                },
+                name: 'Chronic Health Indicators',
+                options: {},
+                variables: [
+                    {
+                        variableId: 'health.health_indicators.data_value',
+                        label: 'Adult Obesity Rate',
+                    }
+                ],
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '#.#\'%\''}
+                },
+            }]
+    },
+
     'jobs.earnings': {
         attribution: [DATASET_ATTRIBUTIONS.acs],
         charts: [
