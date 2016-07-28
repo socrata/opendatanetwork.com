@@ -4,14 +4,12 @@ const _ = require('lodash');
 const Constants = require('./constants');
 const Request = require('./request');
 
-const APP_TOKEN = 'CqcTvF7wVsI8IYAq7CdZszLbU';
-
 class Data {
 
     static availability(regions) {
         return new Promise((resolve, reject) => {
             const url = Request.buildURL(Constants.DATA_AVAILABILITY_URL, {
-                app_token: APP_TOKEN,
+                app_token: Constants.APP_TOKEN,
                 entity_id: regions.map(region => region.id).join(','),
             });
 
@@ -22,7 +20,7 @@ class Data {
     static constraint(variable, regions, constraint) {
         return new Promise((resolve, reject) => {
             const url = Request.buildURL(Constants.DATA_AVAILABILITY_URL.format(variable), {
-                app_token: APP_TOKEN,
+                app_token: Constants.APP_TOKEN,
                 entity_id: regions.map(region => region.id).join(','),
                 constraint: constraint,
             });
