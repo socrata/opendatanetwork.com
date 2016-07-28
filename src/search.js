@@ -17,8 +17,8 @@ $(document).ready(function() {
 
     // Selected category (yellow box)
     //
-    $('.fa-close').click(() => {
-        $('.current-category').fadeOut();
+    $('.current-category-info-box .fa-close').click(() => {
+        $('.current-category-info-box').slideUp();
     });
 
     // Tooltip

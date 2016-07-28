@@ -13,79 +13,84 @@
         li
             border: 1px solid $dark-gray-border-color
 
-.refine-link
-    color: $blue-text-color
-    cursor: pointer
-    display: inline-block
-    font-size: 16px
-    float: right
-    @media (max-width: $mobile-width)
-        display: none
-  
-.refine-link span
-    padding: 0 30px
+    #catalog-info-box-button
+        position: relative
+        top: 16px
+        margin: 0 30px
 
-.refine-link-selected
-    background-color: $darker-gray-background-color
-    color: white
+    .refine-link
+        color: $blue-text-color
+        cursor: pointer
+        display: inline-block
+        font-size: 16px
+        float: right
 
-.refine-link .fa
-    color: $dark-gray-arrow-color
-    margin-left: 10px
+        @media (max-width: $mobile-width)
+            display: none
 
-.refine-link ul
-    background-color: $darker-gray-background-color
-    border-top: 1px solid $dark-gray-border-color
-    display: block
-    list-style-type: none
-    margin: 0
-    min-width: 145px
-    padding: 0
-    position: absolute
-    z-index: 1000
+        span
+            padding: 0 30px
 
-.refine-link li
-    border-top: 1px solid $darker-gray-border-color
-    color: white
-    font-size: 14px
-    line-height: 40px
-    margin: 0
-    padding: 0 20px
+        .fa
+            color: $dark-gray-arrow-color
+            margin-left: 10px
 
-.refine-link li:first-child
-    border-top: 0
+        ul
+            background-color: $darker-gray-background-color
+            border-top: 1px solid $dark-gray-border-color
+            display: block
+            list-style-type: none
+            margin: 0
+            min-width: 145px
+            padding: 0
+            position: absolute
+            z-index: 1000
 
-.refine-link li:hover
-    background-color: $orange-color
+            li
+                border-top: 1px solid $darker-gray-border-color
+                color: white
+                font-size: 14px
+                line-height: 40px
+                margin: 0
+                padding: 0 20px
 
-#refine-menu-categories li
-    padding-left: 34px
-    position: relative
-    text-transform: capitalize
+            li:first-child
+                border-top: 0
 
-#refine-menu-categories li .fa
-    color: white
-    left: 0
-    position: absolute
-    top: 13px
+            li:hover
+                background-color: $orange-color
 
-.refine-by-label
-    color: $black-text-color
-    float: right
-    font-size: 14px
-    margin-right: 25px
-    @media (max-width: $mobile-width)
-        display: none
+        .refine-view-more
+            background-color: $darker-gray-border-color
+            text-align: center
 
-#refine-menu-categories
-    min-width: 158px
-    right: 0
+    .refine-link-selected
+        background-color: $darker-gray-background-color
+        color: white
 
-#refine-menu-categories li
-    white-space: nowrap
+    #refine-menu-categories 
+        min-width: 158px
 
-.refine-view-more
-    background-color: $darker-gray-border-color
-    text-align: center
+        li
+            padding-left: 34px
+            position: relative
+            text-transform: capitalize
+            white-space: nowrap
 
+            .fa
+                color: white
+                left: 0
+                position: absolute
+                top: 13px
 
+    .refine-by-label
+        color: $black-text-color
+        float: right
+        font-size: 14px
+        margin-right: 25px
+
+        @media (max-width: $mobile-width)
+            display: none
+
+#catalog-info-box
+    margin: 30px
