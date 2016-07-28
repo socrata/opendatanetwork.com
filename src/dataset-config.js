@@ -102,7 +102,7 @@ const DATASET_CONFIG = {
                 chartType: 'line',
                 name: 'Population Change',
                 options: {
-                    hAxis: { format:'####' },
+                    hAxis: { format: '####' },
                     height: 300,
                     title: 'Population Change',
                     vAxis: { format: '#.##%' }
@@ -606,7 +606,6 @@ const DATASET_CONFIG = {
                 options: {
                     height: 300,
                     title: 'Median Environmental Health Hazard Index',
-                    vAxis: { format: '###' }
                 },
                 variables: [
                     {
@@ -692,7 +691,6 @@ const DATASET_CONFIG = {
                 options: {
                     height: 300,
                     title: 'Time of Last Checkup',
-                    vAxis: { format: '###' }
                 },
                 variables: [
                     {
@@ -716,7 +714,6 @@ const DATASET_CONFIG = {
                 options: {
                     height: 300,
                     title: 'Health Status',
-                    vAxis: { format: '###' }
                 },
                 variables: [
                     {
@@ -811,7 +808,6 @@ const DATASET_CONFIG = {
                 options: {
                     height: 300,
                     title: 'Median Jobs Proximity Index',
-                    vAxis: { format: '###' }
                 },
                 variables: [
                     {
