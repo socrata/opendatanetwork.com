@@ -98,30 +98,6 @@ const DATASET_CONFIG = {
         attribution: [DATASET_ATTRIBUTIONS.acs],
         charts: [
             {
-                chartId: 'demographics.population.change.chart',
-                chartType: 'line',
-                name: 'Population Change',
-                options: {
-                    hAxis: { format: '####' },
-                    height: 300,
-                    title: 'Population Change',
-                    vAxis: { format: '#.##%' }
-                },
-                variables: [
-                    {
-                        variableId: 'demographics.population.change'
-                    }
-                ],
-                x: {
-                    formatter: 'number',
-                    format: { pattern: '####'}
-                },
-                y: {
-                    formatter: 'number',
-                    format: { pattern: '#.##\'%\''}
-                },
-            },
-            {
                 chartId: 'demographics.population.count.chart',
                 chartType: 'line',
                 name: 'Population',
@@ -143,6 +119,30 @@ const DATASET_CONFIG = {
                 y: {
                     formatter: 'number',
                     format: { pattern: '#,###'}
+                },
+            },
+            {
+                chartId: 'demographics.population.change.chart',
+                chartType: 'line',
+                name: 'Population Change',
+                options: {
+                    hAxis: { format: '####' },
+                    height: 300,
+                    title: 'Population Change',
+                    vAxis: { format: '#.##\'%\'' }
+                },
+                variables: [
+                    {
+                        variableId: 'demographics.population.change'
+                    }
+                ],
+                x: {
+                    formatter: 'number',
+                    format: { pattern: '####'}
+                },
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '#.##\'%\''}
                 },
             }]
     },

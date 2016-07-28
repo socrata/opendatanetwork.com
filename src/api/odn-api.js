@@ -35,7 +35,7 @@ class OdnApi {
         });
     }
 
-    getDataValues(regions, variable, constraint) {
+    getDataValues(regions, variable, constraint, forecast) {
 
        return new Promise((resolve, reject) => {
 
@@ -47,6 +47,9 @@ class OdnApi {
 
             if (constraint)
                 _.extend(params, constraint);
+
+            if (forecast)
+                params.forecast = forecast;
 
             const url = this.buildUrl(this.DATA_VALUES_URL, params);
 

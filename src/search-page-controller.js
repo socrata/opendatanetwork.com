@@ -226,13 +226,16 @@ class SearchPageController {
                         if (chart.constraint)
                             params.constraint = chart.constraint;
 
+                        if (chart.forecast)
+                            params.forecast = chart.forecast;
+
                         dataValueParams.push(params);
                     });
 
                     const chartPromises = dataValueParams.map(params => {
 
                         const variable = params.variables.map(variable => variable.variableId).join(',');
-                        return api.getDataValues(this.params.regions, variable, params.constraint);
+                        return api.getDataValues(this.params.regions, variable, params.constraint, params.forecast);
                     });
 
                     // Get data values for each chart
@@ -256,9 +259,21 @@ class SearchPageController {
                                 });
                             }
 
+                            const params = dataValueParams[index];
+
+                            // Remove forecast column
+                            //
+                            if (params.forecast) {
+
+                                for (var i = 0; i < datum.data.length; i++) {
+
+                                    var dataItem = datum.data[i];
+                                    dataItem.pop();
+                                }
+                            }
+
                             // Render the chart
                             //
-                            const params = dataValueParams[index];
                             chart.render(dataset.id, params.chartId, datum.data);
                         });
 
