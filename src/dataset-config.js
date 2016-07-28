@@ -673,13 +673,60 @@ const DATASET_CONFIG = {
                 variables: [
                     {
                         variableId: 'health.health_indicators.data_value',
-                        label: 'Adult Obesity Rate',
                     }
                 ],
                 y: {
                     formatter: 'number',
                     format: { pattern: '#.#\'%\''}
                 },
+            },
+            {
+                chartId: 'health.health_indicators.last_checkup.chart',
+                chartType: 'column',
+                constraint: {
+                    break_out: 'Overall',
+                    question: 'About how long has it been since you last visited a doctor for a routine checkup?',
+                    year: '2013'
+                },
+                name: 'Time of Last Checkup',
+                options: {
+                    height: 300,
+                    title: 'Time of Last Checkup',
+                    vAxis: { format: '###' }
+                },
+                variables: [
+                    {
+                        variableId: 'health.health_indicators.data_value',
+                    }
+                ],
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '#.#\'%\''}
+                }
+            },
+            {
+                chartId: 'health.health_indicators.general_health.chart',
+                chartType: 'column',
+                constraint: {
+                    break_out: 'Overall',
+                    question: 'How is your general health?',
+                    year: '2013'
+                },
+                name: 'Health Status',
+                options: {
+                    height: 300,
+                    title: 'Health Status',
+                    vAxis: { format: '###' }
+                },
+                variables: [
+                    {
+                        variableId: 'health.health_indicators.data_value',
+                    }
+                ],
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '#.#\'%\''}
+                }
             }]
     },
 
