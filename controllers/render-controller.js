@@ -468,8 +468,7 @@ class RenderController {
                         if (!result) {
                             resolve([]);
                         } else {
-                            const regions = _.flatten(result.relatives.map(relative => relative.entities));
-                            resolve(regions);
+                            resolve(result);
                         }
                     }, error => {
                         resolve([]);
@@ -604,9 +603,9 @@ class RenderController {
 
                 if (data && (data.length == allPromises.length)) {
 
-                    const peersResponse = data[0]; // already flattened
-                    if (peersResponse) {
-                        templateParams.peers = processRegions(peersResponse);
+                    const peersResponse = data[0];
+                    if (peersResponse && peersResponse.relatives && (peersResponse.relatives.length > 0)) {
+                        templateParams.peers = processRegions(peersResponse.relatives[0].entities);
                     }
 
                     const siblingsResponse = data[1];
