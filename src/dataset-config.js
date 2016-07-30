@@ -100,6 +100,7 @@ const DATASET_CONFIG = {
             {
                 chartId: 'demographics.population.count.chart',
                 chartType: 'line',
+                forecast: 5,
                 name: 'Population',
                 options: {
                     hAxis: { format:'####' },
@@ -153,6 +154,7 @@ const DATASET_CONFIG = {
             {
                 chartId: 'economy.consumption.personal_consumption_expenditures.chart',
                 chartType: 'line',
+                forecast: 5,
                 name: 'Personal Consumption Expenditures over Time (Millions of USD)',
                 options: {
                     hAxis: { format:'####' },
@@ -209,6 +211,7 @@ const DATASET_CONFIG = {
                 constraint: {
                     year: '2013'
                 },
+                forecast: 5,
                 name: 'Cost of Living',
                 options: {},
                 variables: [
@@ -337,6 +340,7 @@ const DATASET_CONFIG = {
             {
                 chartId: 'economy.gdp.per_capita_gdp.chart',
                 chartType: 'line',
+                forecast: 5,
                 description: 'Real (inflation adjusted) GDP per Capita over time.',
                 name: 'GDP',
                 options: {
@@ -392,6 +396,7 @@ const DATASET_CONFIG = {
             {
                 chartId: 'education.classroom_statistics.chart',
                 chartType: 'line',
+                forecast: 7,
                 name: 'Student Teacher Ratio',
                 options: {
                     hAxis: { format:'####' },
@@ -450,6 +455,7 @@ const DATASET_CONFIG = {
             {
                 chartId: 'education.education_expenditures.capital-expenditures.chart',
                 chartType: 'line',
+                forecast: 7,
                 name: 'Capital Expenditures',
                 options: {
                     hAxis: { format:'####' },
@@ -474,6 +480,7 @@ const DATASET_CONFIG = {
             {
                 chartId: 'education.education_expenditures.capital-expenditures-per-student.chart',
                 chartType: 'line',
+                forecast: 7,
                 name: 'Capital Expenditures Per Student',
                 options: {
                     hAxis: { format:'####' },
@@ -498,6 +505,7 @@ const DATASET_CONFIG = {
             {
                 chartId: 'education.education_expenditures.administration-salaries.chart',
                 chartType: 'line',
+                forecast: 7,
                 name: 'Administration Salaries',
                 options: {
                     hAxis: { format:'####' },
@@ -522,6 +530,7 @@ const DATASET_CONFIG = {
             {
                 chartId: 'education.education_expenditures.administration-salaries-per-student.chart',
                 chartType: 'line',
+                forecast: 7,
                 name: 'Administration Salaries Per Student',
                 options: {
                     hAxis: { format:'####' },
@@ -546,6 +555,7 @@ const DATASET_CONFIG = {
             {
                 chartId: 'education.education_expenditures.instruction-salaries.chart',
                 chartType: 'line',
+                forecast: 7,
                 name: 'Instruction Salaries',
                 options: {
                     hAxis: { format:'####' },
@@ -570,6 +580,7 @@ const DATASET_CONFIG = {
             {
                 chartId: 'education.education_expenditures.instruction-salaries-per-student.chart',
                 chartType: 'line',
+                forecast: 7,
                 name: 'Instruction Salaries Per Student',
                 options: {
                     hAxis: { format:'####' },

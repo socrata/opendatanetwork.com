@@ -30,6 +30,44 @@ class DatasetChart {
             });
         }
 
+        // Format forecasted data
+        //
+        if (config.forecast) {
+
+            const columns = table.getNumberOfColumns();
+            const rows = table.getNumberOfRows();
+
+            // Set the (Measured) or (Forecasted) label
+            //
+            _.range(1, columns).forEach(columnIndex => {
+
+                _.range(0, rows).forEach(rowIndex => {
+
+                    const forecasted = (rows - rowIndex - 1) < config.forecast;
+                    const currentValue = table.getFormattedValue(rowIndex, columnIndex);
+                    const formatted = `${currentValue} (${forecasted ? 'Forecasted' : 'Measured'})`;
+
+                    table.setFormattedValue(rowIndex, columnIndex, formatted);
+                });
+            });
+
+            // Set the certainty role to true for measured data, false for forecasted data
+            // 
+            _.range(columns - 1).forEach((region, index) => {
+
+                const columnIndex = columns - index;
+
+                table.insertColumn(columnIndex, 'boolean');
+                table.setColumnProperty(columnIndex, 'role', 'certainty');
+
+                _.range(0, rows).forEach(rowIndex => {
+
+                    const certainty = (rows - rowIndex) > config.forecast;
+                    table.setCell(rowIndex, columnIndex, certainty);
+                });
+            });
+        }
+
         // Render chart
         //
         const containerId = 'chart-' + chartId;
