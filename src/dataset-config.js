@@ -125,7 +125,6 @@ const DATASET_CONFIG = {
             {
                 chartId: 'demographics.population.change.chart',
                 chartType: 'line',
-                forecast: 5,
                 name: 'Population Change',
                 options: {
                     hAxis: { format: '####' },
