@@ -188,7 +188,7 @@ class SearchPageController {
                             this.params,
                             {
                                 vector: Navigate.escapeName(vector.toLowerCase()),
-                                metric: Navigate.escapeName(variable.name.replace(/ /g, '_').toLowerCase()),
+                                metric: Navigate.escapeName(variable.id.toLowerCase()),
                                 year: Navigate.escapeName(constraint.constraint_value.toLowerCase()),
                             }));
 
