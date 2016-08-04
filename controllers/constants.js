@@ -10,8 +10,8 @@ const Constants = {
     RELATED_PARENT_URL: 'http://odn-backend.herokuapp.com/entity/v1/parent',
     N_RELATIVES: 5,
 
-    DATA_AVAILABILITY_URL : 'http://odn-backend.herokuapp.com/data/v1/availability',
-    DATA_CONSTRAINT_URL : 'http://odn-backend.herokuapp.com/data/v1/constraint/{0}',
+    DATA_AVAILABILITY_URL: 'http://odn-backend.herokuapp.com/data/v1/availability',
+    DATA_VALUES_URL: 'http://odn-backend.herokuapp.com/data/v1/values',
 
     DATASET_SUMMARY_URL: 'https://{0}/api/views/{1}.json',
     DATASET_MIGRATIONS_URL: 'https://{0}/api/migrations/{1}.json',

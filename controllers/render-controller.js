@@ -8,7 +8,6 @@ const Request = require('./request');
 const Navigate = require('./navigate');
 const Questions = require('./questions');
 
-const ForecastDescriptions = require('../src/forecast-descriptions');
 const MapDescription = require('../src/maps/description');
 const MapSources = require('../src/data/map-sources');
 const SrcConstants = require('../src/constants');
@@ -743,7 +742,7 @@ class RenderController {
                     if (params.regions.length === 0) {
                         RenderController.error(req, res, 404, `Region${regionIds.length > 1 ? 's' : ''} not found: ${regionIds.join(', ')}`)();
                     } else {
-                        Data.availability(params.regions).then(data => {
+                        Data.getDataAvailability(params.regions).then(data => {
                             params.dataAvailability = data;
                             resolve(params);
                         });

@@ -240,7 +240,7 @@ class SearchPageController {
 
                     // Get data values for each chart
                     //
-                    const allPromise = Promise.all(chartPromises).then(data => {
+                    Promise.all(chartPromises).then(data => {
 
                         // Render charts
                         //
@@ -249,31 +249,7 @@ class SearchPageController {
 
                         data.forEach((datum, index) => {
 
-                            // Replace the entity ids in the data with the region names
-                            //
-                            for (var i = 1; i < datum.data[0].length; i++) {
-                                var dataItem = datum.data[0][i];
-                                this.params.regions.forEach(region => {
-                                    if (dataItem == region.id)
-                                        datum.data[0][i] = region.name;
-                                });
-                            }
-
                             const params = dataValueParams[index];
-
-                            // Remove forecast column
-                            //
-                            if (params.forecast) {
-
-                                for (var i = 0; i < datum.data.length; i++) {
-
-                                    var dataItem = datum.data[i];
-                                    dataItem.pop();
-                                }
-                            }
-
-                            // Render the chart
-                            //
                             chart.render(dataset.id, params.chartId, datum.data);
                         });
 

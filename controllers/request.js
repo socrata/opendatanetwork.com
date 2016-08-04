@@ -8,7 +8,7 @@ const crypto = require('crypto');
 const Constants = require('./constants.js');
 
 const cache = memjs.Client.create(null, Constants.CACHE_OPTIONS);
-const timersEnabled = true;
+const timersEnabled = false;
 
 class Request {
     /**

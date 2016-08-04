@@ -42,7 +42,8 @@ class OdnApi {
             const params = {
                 app_token: this.APP_TOKEN,
                 entity_id: regions.map(region => region.id).join(','),
-                variable: variable
+                format: 'google',
+                variable: variable,
             };
 
             if (constraint)
