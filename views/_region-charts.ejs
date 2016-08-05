@@ -107,7 +107,7 @@
         <% } %>
         <div id="map-container-mobile"></div>
     </div>
-<% if (searchResults && searchResults.resultSetSize > 0) { %>
+<% if (searchResults && searchResults.datasets && searchResults.datasets.length > 0) { %>
     <div class="search-results-container">
         <div class="search-results-header">
             <h2>
@@ -119,7 +119,7 @@
             </h2>
         </div>
         <ul class="search-results">
-            <% include _search-results-items %>
+            <% include _search-dataset-items %>
         </ul>
     </div>
 <% } %>

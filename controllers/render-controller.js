@@ -536,7 +536,7 @@ class RenderController {
         const categoriesPromise = API.categories(quickLinksCount);
         const tagsPromise = API.tags();
         const domainsPromise = API.domains(quickLinksCount);
-        const datasetsPromise = API.datasets(params);
+        const searchDatasetPromise = API.searchDataset(params);
         const descriptionPromise = MapDescription.summarizeFromParams(params);
         const searchPromise = API.searchDatasetsURL(params);
         const locationsPromise = API.locations();
@@ -544,7 +544,7 @@ class RenderController {
         const parentsPromise = forRegion(Relatives.parents);
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
                              categoriesPromise, tagsPromise, domainsPromise,
-                             datasetsPromise, descriptionPromise, searchPromise,
+                             searchDatasetPromise, descriptionPromise, searchPromise,
                              locationsPromise, questionsPromise, parentsPromise];
 
         const allPromise = awaitPromises(allPromises);

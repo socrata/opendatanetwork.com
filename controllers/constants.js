@@ -1,8 +1,10 @@
 
 const Constants = {
+
+    CATALOG_URL: 'http://api.us.socrata.com/api/catalog/v1',
     ROSTER_URL: 'https://odn.data.socrata.com/resource/czuf-rtrf.json',
     SEARCH_RESULTS_REGIONS_URL: 'https://odn.data.socrata.com/resource/czuf-rtrf.json',
-    CATALOG_URL: 'http://api.us.socrata.com/api/catalog/v1',
+    SEARCH_DATASET_URL: 'http://api.opendatanetwork.com/search/v1/dataset',
 
     RELATED_PEER_URL: 'http://odn-backend.herokuapp.com/entity/v1/peer',
     RELATED_SIBLING_URL: 'http://odn-backend.herokuapp.com/entity/v1/sibling',

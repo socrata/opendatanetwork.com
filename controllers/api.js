@@ -44,6 +44,52 @@ class API {
         return Request.getJSON(url);
     }
 
+    static searchDataset(requestParams) {
+
+        return new Promise((resolve, reject) => {
+
+            const hasRegions = requestParams.regions.length > 0;
+            const limit = 10;
+            const page = requestParams.page || 0;
+            const offset = page * limit;
+            const timeout = hasRegions ? Constants.TIMEOUT_MS : Constants.TIMEOUT_MS * 10;
+
+            API.searchDatasetURL(requestParams, limit, offset).then(url => {
+
+                Request.getJSON(url, timeout).then(results => {
+
+                    annotateSearchDatasetResults(results);
+                    resolve(results);
+
+                }, error => resolve({results: []}));
+            }, error => resolve({results: []}));
+        });
+    }
+
+    static searchDatasetURL(requestParams, limit, offset) {
+
+        return new Promise((resolve, reject) => {
+
+            const params = { 
+                app_token: Constants.APP_TOKEN 
+            };
+
+            if (requestParams.regions)
+                params.entity_id = requestParams.regions.map(region => region.id).join(',');
+
+            if (requestParams.metric)
+                params.dataset_id = requestParams.metric;
+
+            if (limit) 
+                params.limit = limit;
+            
+            if (offset) 
+                params.offset = offset;
+
+            resolve(Request.buildURL(Constants.SEARCH_DATASET_URL, params));
+        });
+    }
+
     static datasets(requestParams) {
         return new Promise((resolve, reject) => {
             const hasRegions = requestParams.regions.length > 0;
@@ -262,6 +308,45 @@ function annotateData(data) {
 
 function annotateParams(data, params) {
     params.totalPages = Math.ceil(data.resultSetSize / 10);
+}
+
+function annotateSearchDatasetResults(data) {
+
+    data.resultSetSizeString = numeral(data.datasets.length).format('0,0');
+
+    data.datasets.forEach(dataset => {
+
+        dataset.categoryGlyphString = getCategoryGlyphForSearchDataset(dataset);
+        dataset.updatedAtString = moment(dataset.updated_at).format('D MMM YYYY');
+
+        if (dataset.description.length > 300) {
+            dataset.description = dataset.description.substring(0, 300);
+
+            const lastIndex = dataset.description.lastIndexOf(' ');
+            dataset.description = dataset.description.substring(0, lastIndex) + ' ... ';
+        }
+    });
+}
+
+function getCategoryGlyphForSearchDataset(dataset) {
+
+    if ((dataset.categories === null) || (dataset.categories.length == 0))
+        return 'fa-database';
+
+    switch (dataset.categories[0].toLowerCase()) {
+
+        case 'health': return 'fa-heart';
+        case 'transportation': return 'fa-car';
+        case 'finance': return 'fa-money';
+        case 'social services': return 'fa-child';
+        case 'environment': return 'fa-leaf';
+        case 'public safety': return 'fa-shield';
+        case 'housing and development': return 'fa-building';
+        case 'infrastructure': return 'fa-road';
+        case 'education': return 'fa-graduation-cap';
+        case 'recreation': return 'fa-ticket';
+        default: return 'fa-database';
+    }
 }
 
 function getCategoryGlyphString(result) {
