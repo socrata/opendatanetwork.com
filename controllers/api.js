@@ -258,10 +258,7 @@ class API {
     }
 
     static datasetMigrations(domain, fxf) {
-        return Request.getJSON({
-            uri: Constants.DATASET_MIGRATIONS_URL.format(domain, fxf),
-            simple: false
-        }, 1000);
+        return Request.getJSON(Constants.DATASET_MIGRATIONS_URL.format(domain, fxf), 1000);
     }
 
     static standardSchemas(fxf) {
