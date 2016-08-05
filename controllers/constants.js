@@ -6,14 +6,14 @@ const Constants = {
     SEARCH_RESULTS_REGIONS_URL: 'https://odn.data.socrata.com/resource/czuf-rtrf.json',
     SEARCH_DATASET_URL: 'http://api.opendatanetwork.com/search/v1/dataset',
 
-    RELATED_PEER_URL: 'http://odn-backend.herokuapp.com/entity/v1/peer',
-    RELATED_SIBLING_URL: 'http://odn-backend.herokuapp.com/entity/v1/sibling',
-    RELATED_CHILD_URL: 'http://odn-backend.herokuapp.com/entity/v1/child',
-    RELATED_PARENT_URL: 'http://odn-backend.herokuapp.com/entity/v1/parent',
+    RELATED_PEER_URL: 'http://api.opendatanetwork.com/entity/v1/peer',
+    RELATED_SIBLING_URL: 'http://api.opendatanetwork.com/entity/v1/sibling',
+    RELATED_CHILD_URL: 'http://api.opendatanetwork.com/entity/v1/child',
+    RELATED_PARENT_URL: 'http://api.opendatanetwork.com/entity/v1/parent',
     N_RELATIVES: 5,
 
-    DATA_AVAILABILITY_URL: 'http://odn-backend.herokuapp.com/data/v1/availability',
-    DATA_VALUES_URL: 'http://odn-backend.herokuapp.com/data/v1/values',
+    DATA_AVAILABILITY_URL: 'http://api.opendatanetwork.com/data/v1/availability',
+    DATA_VALUES_URL: 'http://api.opendatanetwork.com/data/v1/values',
 
     DATASET_SUMMARY_URL: 'https://{0}/api/views/{1}.json',
     DATASET_MIGRATIONS_URL: 'https://{0}/api/migrations/{1}.json',

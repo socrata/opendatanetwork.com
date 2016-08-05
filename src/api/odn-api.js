@@ -3,9 +3,9 @@ class OdnApi {
     constructor() {
 
         this.APP_TOKEN = 'CqcTvF7wVsI8IYAq7CdZszLbU';
-        this.DATA_AVAILABILITY_URL = 'http://odn-backend.herokuapp.com/data/v1/availability';
-        this.DATA_CONSTRAINT_URL = 'http://odn-backend.herokuapp.com/data/v1/constraint/{0}';
-        this.DATA_VALUES_URL = 'http://odn-backend.herokuapp.com/data/v1/values';
+        this.DATA_AVAILABILITY_URL = 'http://api.opendatanetwork.com/data/v1/availability';
+        this.DATA_CONSTRAINT_URL = 'http://api.opendatanetwork.com/data/v1/constraint/{0}';
+        this.DATA_VALUES_URL = 'http://api.opendatanetwork.com/data/v1/values';
     }
 
     getDataAvailability(regions) {
