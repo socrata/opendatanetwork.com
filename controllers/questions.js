@@ -1,8 +1,11 @@
 'use strict';
 
 const _ = require('lodash');
-
+const API = require('./api');
 const Autosuggest = require('./autosuggest');
+const Constants = require('./constants');
+const Data = require('./data');
+const Request = require('./request');
 
 const autosuggest = new Autosuggest({
     name: 'Questions',
@@ -22,52 +25,100 @@ const autosuggest = new Autosuggest({
 });
 
 class Questions {
-    static get(term) {
-        return Questions._extend(autosuggest.search(term));
-    }
 
-    static forRegions(regions) {
+    static getQuestionsForSearchTerm(term, dataAvailability) {
+
         return new Promise((resolve, reject) => {
-            autosuggest.get({
-                '$where': `regionid in(${regions.map(region => `'${region.id}'`).join(',')})`,
-                '$order': 'variableindex ASC'
-            }).then(questions => {
-                questions = _.groupBy(questions, question => question.vector + question.metric);
-                questions = _.values(questions);
-                questions = questions.map(questionGroup => {
-                    const question = questionGroup[0];
 
-                    return _.extend({}, question, {
-                        numRegions: questionGroup.length,
-                        url: path(['region',
-                            questionGroup.map(_.property('regionID')).join('-'),
-                            questionGroup.map(_.property('regionName')).join('-'),
-                            question.vector, question.metric]) + '?question=1',
-                        regionName: englishJoin(questionGroup.map(_.property('regionName')))
+            API.searchResultsRegions(term).then(regions => {
+
+                if (regions.length == 0) {
+                    resolve([]);
+                    return; 
+                }
+
+                // Use the first region returned for the questions
+                //
+                Data.getDataAvailability([regions[0]]).then(dataAvailability => {
+                    Questions.getQuestionsForRegionsAndDataAvailibility([regions[0]], dataAvailability).then(response => {
+                        resolve(response);
                     });
                 });
-                questions = questions.slice(0, 15);
-
-                resolve(questions);
             }, reject);
         });
     }
 
-    /**
-     * Adds url field to each question.
-     */
-    static _extend(promise) {
-        return new Promise((resolve, reject) => {
-            promise.then(questions => {
-                questions = questions.map(question => _.extend({}, question, {
-                    url: path(['region', question.regionID, question.regionName,
-                            question.vector, question.metric]) + '?question=1',
-                    numRegions: 1
-                }));
+    static getQuestionsForRegions(regions) {
 
-                resolve(questions);
+        return new Promise((resolve, reject) => {
+
+            Data.getDataAvailability(regions).then(dataAvailability => {
+                Questions.getQuestionsForRegionsAndDataAvailibility(regions, dataAvailability).then(response => {
+                    resolve(response);
+                });
             }, reject);
         });
+    }
+
+    // TODO: if we can restructure the URLs to remove the vector component and only use variable IDs, we can 
+    // remove this call to get dataAvailability.
+    // 
+    static getQuestionsForRegionsAndDataAvailibility(regions, dataAvailability) {
+
+        return new Promise((resolve, reject) => {
+
+            const url = Request.buildURL(Constants.SEARCH_QUESTION_URL, {
+                app_token: Constants.APP_TOKEN,
+                entity_id: regions.map(region => region.id).join(','),
+                limit: 15
+            });
+
+            Request.getJSON(url).then(response => { 
+
+                const questions = [];
+
+                response.questions.forEach(question => {
+
+                    const segments = question.variable_id.split('.');
+                    segments.pop();
+
+                    const datasetId = segments.join('.');
+                    const vector = getVectorForDatasetId(dataAvailability, datasetId);
+
+                    if (!vector || (vector.length == 0))
+                        return;
+
+                    const returnedQuestion = _.extend({}, question, {
+                        numRegions: regions.length,
+                        url: path([
+                            'region', 
+                            regions.map(region => region.id).join('-'),
+                            regions.map(region => region.name).join('-'),
+                            vector, 
+                            question.variable_id]) + '?question=1'
+                    });
+
+                    questions.push(returnedQuestion);
+                });
+
+                resolve(questions); 
+            },  reject);
+        });
+    }
+}
+
+function getVectorForDatasetId(dataAvailability, datasetId) {
+
+    for (var topicKey in dataAvailability.topics) {
+
+        var topic = dataAvailability.topics[topicKey];
+
+        for (var datasetKey in topic.datasets) {
+
+            var dataset = topic.datasets[datasetKey];
+            if (dataset.id == datasetId)
+                return dataset.name.toLowerCase();
+        }
     }
 }
 
@@ -79,18 +130,6 @@ function urlEscape(string) {
 
 function path(elements) {
     return `/${elements.map(urlEscape).join('/')}`;
-}
-
-function englishJoin(elements) {
-    if (elements.length === 0) {
-        return '';
-    } else if (elements.length === 1) {
-        return elements[0];
-    } else if (elements.length === 2) {
-        return elements.join(' and ');
-    } else {
-        return englishJoin([elements.slice(0, 2).join(', ')].concat(elements.slice(2)));
-    }
 }
 
 module.exports = Questions;

@@ -204,7 +204,7 @@ class RenderController {
                 const params = data[2];
 
                 const randomRegions = RenderController._getRandomMostPopulousRegionsFromEachState(locations, 100);
-                const questionsPromises = _.map(randomRegions, region => Questions.forRegions([region]));
+                const questionsPromises = _.map(randomRegions, region => Questions.getQuestionsForRegions([region]));
 
                 Promise.all(questionsPromises).then(questionsData => {
                     const randomQuestions = RenderController._getRandomQuestions(questionsData);
@@ -351,12 +351,12 @@ class RenderController {
             const searchPromise = API.searchDatasetsURL(params);
             const locationsPromise = API.locations();
             const searchResultsRegionsPromise = API.searchResultsRegions(params.q);
-            const questionsPromise = Questions.get(params.q);
-            const allPromises = [categoriesPromise, tagsPromise,
-                                 domainsPromise, datasetsPromise,
-                                 searchPromise, locationsPromise,
-                                 searchResultsRegionsPromise,
-                                 questionsPromise];
+            const questionsPromise = Questions.getQuestionsForSearchTerm(params.q, params.dataAvailability);
+
+            const allPromises = [categoriesPromise, tagsPromise, domainsPromise, 
+                                 datasetsPromise, searchPromise, locationsPromise,
+                                 searchResultsRegionsPromise, questionsPromise];
+
             const allPromise = awaitPromises(allPromises);
 
             allPromise.then(data => {
@@ -540,7 +540,7 @@ class RenderController {
         const descriptionPromise = MapDescription.summarizeFromParams(params);
         const searchPromise = API.searchDatasetsURL(params);
         const locationsPromise = API.locations();
-        const questionsPromise = Questions.forRegions(params.regions);
+        const questionsPromise = Questions.getQuestionsForRegionsAndDataAvailibility(params.regions, params.dataAvailability);
         const parentsPromise = forRegion(Relatives.parents);
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
                              categoriesPromise, tagsPromise, domainsPromise,

@@ -13,7 +13,7 @@
     <ul>
       <% for (var i = 0; i < questions.length; i++) { %>
         <li>
-            <a href="<%= questions[i].url %>">What is the <%= questions[i].variable %> of <%= questions[i].regionName %>?</a>
+            <a href="<%= questions[i].url %>">What is the <%= questions[i].variable_name %> of <%= questions[i].entity.name %>?</a>
         </li>
       <% } %>
     </ul>

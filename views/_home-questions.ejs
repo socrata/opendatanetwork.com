@@ -6,7 +6,7 @@
             <ul class="questions-list">
             <% questions.forEach(function(question, index) { %>
                 <li<% if (index >= 10) { %> class="hidable hidden<% if (index >= 20) { %> hidden-on-mobile<% } %>"<% } %>>
-                    <a href="<%= question.url %>">What is the <%= question.variable.toLowerCase() %> of <%= question.regionName %>?</a>
+                    <a href="<%= question.url %>">What is the <%= question.variable_name.toLowerCase() %> of <%= question.entity.name %>?</a>
                 </li>
             <% }); %>
             </ul>
