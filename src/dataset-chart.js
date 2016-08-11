@@ -1,13 +1,18 @@
 
 class DatasetChart {
 
-    constructor() {
+    constructor(datasetId, chartId, data) {
+
+        this.datasetId = datasetId;
+        this.chartId = chartId;
+        this.data = data;
+        this.containerId = 'chart-' + this.chartId;
     }
 
-    render(datasetId, chartId, data) {
+    render() {
 
-        const config = this.getChartConfig(datasetId, chartId);
-        const table = new google.visualization.DataTable(data);
+        const config = this.getChartConfig(this.datasetId, this.chartId);
+        const table = new google.visualization.DataTable(this.data);
 
         // Format data using data formatters
         //
@@ -25,11 +30,15 @@ class DatasetChart {
 
         // Render chart
         //
-        const containerId = 'chart-' + chartId;
-        const chart = this.getGoogleChart(config, containerId);
+        const chart = this.getGoogleChart(config, this.containerId);
         const options = this.getChartOptions(config);
 
         chart.draw(table, options);
+    }
+
+    clear() {
+
+        document.getElementById(this.containerId).innerHTML = '';
     }
 
     getChartConfig(datasetId, chartId) {

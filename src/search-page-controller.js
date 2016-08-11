@@ -163,6 +163,7 @@ class SearchPageController {
         //
         const regions = this.params.regions;
         const vector = this.params.vector || 'population';
+        const charts = [];
 
         if (regions.length > 0) {
 
@@ -246,13 +247,15 @@ class SearchPageController {
 
                         // Render charts
                         //
-                        const chart = new DatasetChart();
                         const container = d3.select('#google-charts-container');
 
                         data.forEach((datum, index) => {
 
                             const params = dataValueParams[index];
-                            chart.render(dataset.id, params.chartId, datum.data);
+                            const chart = new DatasetChart(dataset.id, params.chartId, datum.data);
+                            chart.render();
+
+                            charts.push(chart);
                         });
 
                     }, error => console.error(error));
@@ -277,7 +280,16 @@ class SearchPageController {
 
         // Map should display above charts on the desktop, below charts on mobile.
         //
-        $(window).resize(() => this.moveMapNode());
+        $(window).resize(() => { 
+
+            this.moveMapNode();
+
+            // Clear all charts first so that the browser can calculate the new available width.
+            //
+            charts.forEach(chart => chart.clear());
+            charts.forEach(chart => chart.render());
+        });
+
         this.moveMapNode();
     }
 

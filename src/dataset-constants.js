@@ -2,7 +2,7 @@
 const DATASET_CONSTANTS = {
     
     CHART_OPTIONS: {
-        chartArea: {},
+        chartArea: { left:80, width:'100%' },
         cssClassNames: {
             headerCell: 'header-cell',
             headerRow: 'header-row',
