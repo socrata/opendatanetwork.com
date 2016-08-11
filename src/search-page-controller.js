@@ -30,7 +30,9 @@ class SearchPageController {
             '#related-child-place-info-box',
             '#data-availability-info-box',
             '#data-constraint-info-box',
-            '#catalog-info-box'
+            '#catalog-info-box',
+            '#questions-info-box',
+            '#search-results-questions-info-box'
             ]);
 
         // Questions controls
