@@ -35,6 +35,17 @@ class SearchPageController {
             '#search-results-questions-info-box'
             ]);
 
+        // Chart API boxes (since they are generated from the dataset-config)
+        //
+        //
+        $('#google-charts-container .small-api-link').click(function() {
+            $(this).parent().parent().find('.api-info-box').slideToggle();
+        });
+
+        $('#google-charts-container .api-info-box .fa-close').click(function() {
+            $(this).parent().parent().find('.api-info-box').slideUp();
+        });
+
         // Questions controls
         //
         new Questions();
