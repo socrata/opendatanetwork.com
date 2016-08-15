@@ -96,7 +96,7 @@
                         <dl>
                             <dt>Example:</dt>
                         <% params.regions.forEach(region => { %>
-                            <dd><a href="http://api.opendatanetwork.com/entity/v1/child?entity_id=<%= region.id %>&limit=5" target="_blank">Children of <%= region.name %></a></dd>
+                            <dd><a href="http://api.opendatanetwork.com/entity/v1/child?entity_id=<%= region.id %>&limit=5&app_token=F8peHflRa0VP6f56bAXeL1WRc" target="_blank">Children of <%= region.name %></a></dd>
                         <% }); %>
                             <dt>API Docs:</dt>
                             <dd><a href="http://docs.odn.apiary.io/#reference/0/entity-relationships/find-the-relatives-of-an-entity" target="_blank">Find the relatives of an entity</a></dd>
