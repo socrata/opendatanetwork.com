@@ -216,8 +216,10 @@ class SearchPageController {
                     const datasetConfig = DATASET_CONFIG[dataset.id];
                     const dataValueParams = [];
 
-                    if (!datasetConfig)
+                    if (!datasetConfig){
+                        console.warn('No dataset config not found for ' + dataset.id);
                         return;
+                    }
 
                     datasetConfig.charts.forEach(chart => {
 
