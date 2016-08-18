@@ -193,6 +193,8 @@ class SearchPageController {
                 //
                 api.getDataContraint(this.params.regions, variable, constraintName).then(dataConstraints => {
 
+                    dataConstraints.permutations = _.sortByOrder(dataConstraints.permutations, ['constraint_value'], ['desc']);
+
                     const constraint = this.getContraintByValueOrDefault(dataConstraints.permutations, this.params.year); // year is the constraint value
 
                     // Update the URL
