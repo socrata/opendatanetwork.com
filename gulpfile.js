@@ -33,13 +33,10 @@ var mapScripts = [
 ];
 
 var autosuggestScripts = [
-    'src/autosuggest/base64.js',
     'src/autosuggest/stopwords.js',
     'src/autosuggest/autosuggest-source.js',
     'src/autosuggest/autosuggest-results.js',
     'src/autosuggest/autosuggest.js',
-    'src/data/autosuggest-multi.js',
-    'src/data/autosuggest-sources.js'
 ];
 
 var regionsScripts = [

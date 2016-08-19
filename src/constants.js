@@ -1,15 +1,14 @@
 'use strict';
 
 const Constants = {
-    ROSTER_URL: 'https://federal.demo.socrata.com/resource/bdeb-mf9k.json',
 
-    AUTOCOMPLETE_SEPARATOR: ':',
-    AUTOCOMPLETE_URL: (domain, fxf, column, term) => {
-        return `https://${domain}/views/${fxf}/columns/${column}/suggest/${term}`;
-    },
-    AUTOCOMPLETE_WAIT_MS: 150,
+    APP_TOKEN: 'cQovpGcdUT1CSzgYk0KPYdAI0',
+
     AUTOCOMPLETE_MAX_OPTIONS: 100,
+    AUTOCOMPLETE_SEPARATOR: ':',
     AUTOCOMPLETE_SHOWN_OPTIONS: 5,
+    AUTOCOMPLETE_URL: type => `http://api.opendatanetwork.com/suggest/v1/${type}`,
+    AUTOCOMPLETE_WAIT_MS: 150,
 
     PEER_REGIONS: 5,
     PEER_REGIONS_MAX: 10,
@@ -23,7 +22,9 @@ const Constants = {
         msa: 'Metropolitan Statistical Area',
         place: 'City',
         zip_code: 'ZIP Code'
-    }
+    },
+
+    ROSTER_URL: 'https://federal.demo.socrata.com/resource/bdeb-mf9k.json',
 };
 
 if (typeof module !== 'undefined') module.exports = Constants;

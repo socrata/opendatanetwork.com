@@ -149,16 +149,9 @@ class SearchPageController {
 
         }).scroll();
 
-        const sources = regionsWithData(this.params.vector, this.params.regions, option => {
-            RegionLookup.byID(option.id).then(region => {
-                this.params.regions.push(region);
-                this.navigate();
-            }, error => { throw error; });
-        });
-
         // Autosuggest
         //
-        const autosuggest = new Autosuggest('.add-region-results', sources);
+        const autosuggest = new Autosuggest('.add-region-results');
         autosuggest.listen('.add-region-input');
 
         $('.add-region .fa-plus').click(function() {
@@ -167,8 +160,8 @@ class SearchPageController {
 
         // Autosuggest mobile
         //
-        const autosuggestMobile = new Autosuggest('.add-region-results-mobile', sources);
-        autosuggestMobile.listen('.add-region-input-mobile');
+        const mobileAutosuggest = new Autosuggest('.add-region-results-mobile');
+        mobileAutosuggest.listen('.add-region-input-mobile');
 
         // Menus and charts
         //

@@ -133,13 +133,13 @@ class HomePageController {
             slidesToShow: 5,
         });
 
-        // Autocomplete
+        // Autosuggest
         //
-        const headerAutoSuggest = multiComplete('.search-bar-input', '.region-list');
-        headerAutoSuggest.listen();
+        const headerAutoSuggest = new Autosuggest('.region-list');
+        headerAutoSuggest.listen('.search-bar-input');
 
-        const heroAutoSuggest = multiComplete('.home-search-bar-controls .search-bar-input', '.home-search-bar-controls .region-list');
-        heroAutoSuggest.listen();
+        const heroAutoSuggest = new Autosuggest('.home-search-bar-controls .region-list');
+        heroAutoSuggest.listen('.home-search-bar-controls .search-bar-input');
 
         // QuickLinks
         //

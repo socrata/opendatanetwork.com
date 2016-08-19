@@ -5,10 +5,10 @@ $(document).ready(function() {
     //
     new SearchPageController(_params, _searchResultsRegions);
 
-    // Main search box
+    // Autosuggest
     //
-    const autosuggest = multiComplete('.search-bar-input', '.region-list');
-    autosuggest.listen();
+    const autosuggest = new Autosuggest('.region-list');
+    autosuggest.listen('.search-bar-input');
 
     // QuickLinks
     //
