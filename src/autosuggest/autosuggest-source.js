@@ -82,7 +82,7 @@ class AutosuggestSource {
             })
             .on('mouseout.source', function() {
                 d3.select(this).classed('selected hovered', false);
-            })[0];
+            })._groups[0];
     }
 
     static url(path, params) {
