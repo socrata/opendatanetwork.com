@@ -88,6 +88,20 @@ class DatasetMenus {
             .append('li')
             .append('a')
             .text(variable => variable.name)
+            .attr('href', function(d, i){
+                // TODO: Refactor to a better url generation logic, than blind replacement
+                // Stop gap measure for michigan demo. 
+                var queryParamsStr = location.href.split('?')[1] || '',
+                    path = location.pathname,
+                    pathPieces = path.split('/'),
+                    constraint_value = pathPieces.pop();
+                    
+                    pathPieces.pop(); //Getting rid of current filter variable.
+                    pathPieces.push(d.id);
+                    pathPieces.push(constraint_value);
+                    
+                return pathPieces.join('/') + '?' + queryParamsStr;
+            })
             .on('click', variable => {
                 $('.chart-sub-nav li').trigger('mouseleave');
                 $('.refine-menu-list-mobile .map-variable-container .refine-menu-header-mobile').trigger('click');
@@ -122,6 +136,18 @@ class DatasetMenus {
             .enter()
             .append('li')
             .append('a')
+            .attr('href', function(d, i){
+                // TODO: Refactor to a better url generation logic, than blind replacement
+                // Stop gap measure for michigan demo. 
+                var queryParamsStr = location.href.split('?')[1] || '',
+                    path = location.pathname,
+                    pathPieces = path.split('/');
+
+                    pathPieces.pop(); //Getting rid of current constraint value
+                    pathPieces.push(d.constraint_value);
+
+                return pathPieces.join('/') + '?' + queryParamsStr;
+            })
             .text(permutation => permutation.constraint_value)
             .on('click', year => {
                 $('.chart-sub-nav li').trigger('mouseleave');

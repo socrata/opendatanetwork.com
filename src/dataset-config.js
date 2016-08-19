@@ -38,7 +38,36 @@ const DATASET_ATTRIBUTIONS = {
 };
 
 const DATASET_CONFIG = {
-
+    'michigan.finance':{
+        attribution: [DATASET_ATTRIBUTIONS.crimeReports],
+        charts: [ 
+            {
+                chartId: 'michigan.finance.liquidity_ratio',
+                chartType: 'line',
+                name: 'Liquidity Ratio',
+                options: {
+                    hAxis: { format:'####' },
+                    height: 300,
+                    title: 'Liquidity Ratio',
+                    vAxis: { format: '###,###' }
+                },
+                variables: [
+                    {
+                        variableId: 'michigan.finance.liquidity_ratio',
+                        label: 'Liquidity Ratio',
+                    }
+                ],
+                x: {
+                    formatter: 'number',
+                    format: { pattern: '####'}
+                },
+                y: {
+                    formatter: 'number',
+                    format: { pattern: '###,###'}
+                },
+            }
+        ]
+    },
     'crime.fbi_ucr': {
         attribution: [DATASET_ATTRIBUTIONS.crimeReports],
         charts: [

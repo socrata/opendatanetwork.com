@@ -186,7 +186,7 @@ class SearchPageController {
 
                 const dataset = this.getDataset(dataAvailability, vector);
                 const variablesArray = _.values(dataset.variables);
-                const variable = this.getVariableByNameOrDefault(variablesArray, this.params.metric); // metric is variable name
+                const variable = this.getVariableByIdOrDefault(variablesArray, this.params.metric); // metric is variable id
                 const constraintName = dataset.constraints[0];
 
                 // Get the constraints
@@ -229,8 +229,10 @@ class SearchPageController {
                     const datasetConfig = DATASET_CONFIG[dataset.id];
                     const dataValueParams = [];
 
-                    if (!datasetConfig)
+                    if (!datasetConfig){
+                        console.warn('No dataset config not found for ' + dataset.id);
                         return;
+                    }
 
                     datasetConfig.charts.forEach(chart => {
 
@@ -321,22 +323,18 @@ class SearchPageController {
         return permutations[permutations.length - 1];
     }
 
-    getVariableByNameOrDefault(variablesArray, metric) {
+    getVariableByIdOrDefault(variablesArray, metric) {
 
         // If metric is empty, use first variable
         //
         if (metric.length == 0)
             return variablesArray[0];
 
-        // Find variable by name using the metic
-        //
-        const variableName = metric.replace(/_/g, ' ').toLowerCase();
-
         for (var i = 0; i < variablesArray.length; i++) {
 
             var variable = variablesArray[i];
 
-            if (variable.name == variableName)
+            if (variable.id == metric)
                 return variable;
         }
 
