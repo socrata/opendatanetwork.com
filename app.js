@@ -46,6 +46,25 @@ app.use('/error.html', express.static(__dirname + '/views/static/error.html'));
 app.use('/robots.txt', express.static(__dirname + '/views/static/robots.txt'));
 app.use('/sitemap.xml', express.static(__dirname + '/views/static/sitemap.xml'));
 
+// Ensure HTTP
+//
+app.get('*', function(req, res, next) {
+
+    if (req.headers['x-forwarded-proto'] === 'https')
+        res.redirect(301, 'http://' + req.hostname + req.url);
+    else
+        next();
+});
+
+// Strip all get parameters to avoid XSS attempts
+app.get('*', function(req, res, next) {
+  _.each(req.query, function(value, key) {
+    req.query[key] = value
+      .replace(/[^A-z0-9-_.+&]+/g, ' ');
+  });
+  next();
+});
+
 // Set up 301 redirects for old routes
 //
 app.get('/articles/*', function(req, res) { res.redirect(301, '/'); });
