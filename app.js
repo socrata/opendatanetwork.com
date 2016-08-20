@@ -59,6 +59,15 @@ app.get('*', function(req, res, next) {
         next();
 });
 
+// Strip all get parameters to avoid XSS attempts
+app.get('*', function(req, res, next) {
+  _.each(req.query, function(value, key) {
+    req.query[key] = value
+      .replace(/[^A-z0-9-_.+&]+/g, ' ');
+  });
+  next();
+});
+
 // Set up 301 redirects for old routes
 //
 app.get('/articles/*', function(req, res) { res.redirect(301, '/'); });
