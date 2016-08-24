@@ -20,6 +20,7 @@ class AutosuggestResults {
 
     hide() {
         this.results.style('display', 'none');
+        this.index = -1;
     }
 
     unhide() {
@@ -47,11 +48,18 @@ class AutosuggestResults {
     }
 
     show(sources, allOptions) {
+
         this.empty();
+
+        var allOptionsCount = 0;
+
+        allOptions.forEach(options => {
+            allOptionsCount += options.length
+        });
 
         const nestedSelections = sources.map((source, index) => {
             const options = allOptions[index];
-            return source.display(this.results, options);
+            return source.display(this.results, options, allOptionsCount);
         });
 
         this.updateOptions(_.flatten(nestedSelections));
