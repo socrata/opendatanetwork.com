@@ -3,7 +3,7 @@ class Autosuggest {
 
     constructor(resultSelector) {
 
-        const configs = [
+        const suggestConfigs = [
             { 
                 suggestType: 'entity', 
                 image: 'fa-globe', 
@@ -44,12 +44,21 @@ class Autosuggest {
                         this.path(['region', option.entity.id, option.entity.name, vector, option.variable_id]),
                         { question: 1 });
                 },
-            },
+            }, 
         ];
 
-        this.sources = configs.map(config => new AutosuggestSource(config));
-        this.results = new AutosuggestResults(resultSelector);
+        const apiConfig = { 
 
+            suggestType: 'api', 
+            image: 'fa-code', 
+            name: 'API',
+            select: option => this.navigate('http://docs.odn.apiary.io/#reference/0/suggestions/get-suggestions'),
+        };
+
+        this.sources = suggestConfigs.map(config => new AutosuggestSource(config));
+        this.sources.push(new AutosuggestApiSource(apiConfig));
+
+        this.results = new AutosuggestResults(resultSelector);
         this.currentTerm = '';
         this.time = Date.now();
     }

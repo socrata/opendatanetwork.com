@@ -1,8 +1,9 @@
 
 class AutosuggestResults {
-    constructor(resultSelector) {
-        this.results = d3.select(resultSelector);
 
+    constructor(resultSelector) {
+
+        this.results = d3.select(resultSelector);
         this.options = [];
         this.index = -1;
 
