@@ -24,7 +24,7 @@ class AutosuggestApiSource extends AutosuggestSource {
 
         const category = container
             .append('li')
-            .attr('class', 'autocomplete-category');
+            .attr('class', 'autocomplete-category autocomplete-category-api');
 
         category.append('a')
             .attr('class', 'small-api-link')
