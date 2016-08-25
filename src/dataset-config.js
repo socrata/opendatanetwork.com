@@ -932,13 +932,16 @@ class DatasetConfig {
         const datasetConfig = o.DATASET_CONFIG[id];
 
         if (datasetConfig.domain) {
-            if (datasetConfig.datalensFXF) {
-                datasetConfig.datasetURL = `https://${datasetConfig.domain}/dataset/${datasetConfig.fxf}`;
-            }
-            else if (datasetConfig.fxf) {
+
+            if (datasetConfig.fxf) {
                 datasetConfig.apiURL = `https://dev.socrata.com/foundry/${datasetConfig.domain}/${datasetConfig.fxf}`;
                 datasetConfig.datasetURL = `https://${datasetConfig.domain}/dataset/${datasetConfig.fxf}`;
             }
+
+            // If there is a datalens, use that instead for the datasetURL
+            //
+            if (datasetConfig.datalensFXF)
+                datasetConfig.datasetURL = `https://${datasetConfig.domain}/view/${datasetConfig.datalensFXF}`;
         }
 
         return datasetConfig;
