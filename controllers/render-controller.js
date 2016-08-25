@@ -556,11 +556,9 @@ class RenderController {
                 const metrics = mapSource.variables || [];
                 const metric = _.find(metrics, metric => metric.metric === params.metric) || metrics[0] || {};
 
-                const years = metric.years || [];
-                const year = _.find(years, year => parseFloat(year) === parseFloat(params.year)) || years[0] || 2016;
-
                 const dataset = RenderController.getDataset(params.dataAvailability, vector);
                 const datasetConfig = DatasetConfig[dataset.id];
+
                 const templateParams = {
                     topics,
                     topic,
@@ -568,11 +566,7 @@ class RenderController {
                     dataset,
                     datasetConfig,
                     params,
-                    vector,
-                    year,
                     metric,
-                    metrics,
-                    years,
                     hasRegions: params.regions.length > 0,
                     regionNames: wordJoin(params.regions.map(region => region.name), 'or'),
                     title: searchPageTitle(params, dataset, metric),
@@ -708,7 +702,9 @@ class RenderController {
     }
 
     static _parameters(req, res) {
+
         return new Promise((resolve, reject) => {
+
             const query = req.query;
             const page = isNaN(query.page) ? 0 : parseInt(query.page);
 
