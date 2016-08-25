@@ -8,6 +8,7 @@ const morgan = require('morgan');
 const favicon = require('serve-favicon');
 const helmet = require('helmet');
 const numeral = require('numeral');
+const querystring = require('querystring');
 const RenderController = require('./controllers/render-controller');
 
 const app = express();
@@ -103,4 +104,5 @@ console.log('app is listening on ' + port);
 
 app.locals._ = _;
 app.locals.numeral = numeral;
+app.locals.querystring = querystring;
 

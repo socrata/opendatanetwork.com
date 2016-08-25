@@ -85,21 +85,21 @@
                 <div id="<%= chart.chartId %>-info-box" class="api-info-box">
                     <a class="fa fa-close"></a>
                     <strong>
-                        <a href="http://docs.odn.apiary.io/#reference/0/data-availability/find-all-available-data-for-some-entities" target="_blank">/data/availability</a> Endpoint
+                        <a href="http://docs.odn.apiary.io/#reference/0/data-values/get-values-for-variables" target="_blank">/data/values</a> Endpoint
                     </strong>
                     <dl>
-                        <dt>Variable IDs:</dt>
+                        <dt>Example:</dt>
+                      <% chart.variables.forEach((variable, index) => { %>
                         <dd>
-                          <% chart.variables.forEach((variable, index) => { %><%= (index > 0) ? ', ' : '' %>
-                            <a href="http://api.opendatanetwork.com/data/v1/availability/?entity_id=<%= params.regions.map(region => region.id).join(',') %>" target="_blank"><%= variable.variableId %></a><% 
-                          }); %>
+                            <%= variable.variableId %>
                             for
                           <% params.regions.forEach((region, index) => { %><%= (index > 0) ? ', ' : '' %>
-                            <a href="http://api.opendatanetwork.com/data/v1/availability/?entity_id=<%= region.id %>" target="_blank"><%= region.name %></a><% 
+                            <a href="http://api.opendatanetwork.com/data/v1/values?variable=<%= variable.variableId %>&entity_id=<%= region.id %><%= getConstraintQueryString(chart) %>&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank"><%= region.name %></a><% 
                           }); %>
                         </dd>
+                      <% }); %>
                         <dt>API Docs:</dt>
-                        <dd><a href="http://docs.odn.apiary.io/#reference/0/data-availability/find-all-available-data-for-some-entities" target="_blank">Find all available data for some entities</a></dd>
+                        <dd><a href="http://docs.odn.apiary.io/#reference/0/data-values/get-values-for-variables" target="_blank">Get values for variables</a></dd>
                     </dl>
                 </div>
                 <div id="chart-<%= chart.chartId %>" class="chart-container"></div>
@@ -149,6 +149,14 @@
 </div>
 
 <%
+function getConstraintQueryString(chart) {
+
+    if (!chart.constraint)
+        return '';
+
+    return '&' + querystring.stringify(chart.constraint);
+}
+
 function getSearchPageUrl(topic) {
   
     var url;
