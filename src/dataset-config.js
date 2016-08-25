@@ -240,7 +240,6 @@ const DATASET_CONFIG = {
                 constraint: {
                     year: '2013'
                 },
-                forecast: 5,
                 name: 'Cost of Living',
                 options: {},
                 variables: [
@@ -259,6 +258,7 @@ const DATASET_CONFIG = {
                 constraint: {
                     component: 'All'
                 },
+                forecast: 5,
                 name: 'Overall Cost of Living',
                 options: {
                     hAxis: { format:'####' },
@@ -286,6 +286,7 @@ const DATASET_CONFIG = {
                 constraint: {
                     component: 'Goods'
                 },
+                forecast: 5,
                 name: 'Cost of Goods',
                 options: {
                     hAxis: { format:'####' },
@@ -313,6 +314,7 @@ const DATASET_CONFIG = {
                 constraint: {
                     component: 'Rents'
                 },
+                forecast: 5,
                 name: 'Cost of Rents',
                 options: {
                     hAxis: { format:'####' },
@@ -340,6 +342,7 @@ const DATASET_CONFIG = {
                 constraint: {
                     component: 'Other'
                 },
+                forecast: 5,
                 name: 'Other Costs',
                 options: {
                     hAxis: { format:'####' },
