@@ -521,13 +521,6 @@ class RenderController {
             });
         });
 
-        const dataset = topic.datasets[vector];
-
-        dataset.datasetURL = dataset.datalensFXF ?
-            `https://${dataset.domain}/view/${dataset.datalensFXF}` :
-            `https://${dataset.domain}/dataset/${dataset.fxf}`;
-        dataset.apiURL = `https://dev.socrata.com/foundry/${dataset.domain}/${dataset.fxf}`;
-
         // Promises
         //
         const peersPromise = forRegion(Relatives.peers);
@@ -557,7 +550,7 @@ class RenderController {
                 const metric = _.find(metrics, metric => metric.metric === params.metric) || metrics[0] || {};
 
                 const dataset = RenderController.getDataset(params.dataAvailability, vector);
-                const datasetConfig = DatasetConfig[dataset.id];
+                const datasetConfig = DatasetConfig.getConfig(dataset.id);
 
                 const templateParams = {
                     topics,

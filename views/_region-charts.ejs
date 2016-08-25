@@ -119,11 +119,38 @@
             <% } %>
 
             <% if (datasetConfig && datasetConfig.attribution) { %>
-            <p class="attribution">Above charts are based on data from the
-              <% datasetConfig.attribution.forEach((attributionItem, index) => { %>
-                <%= (index > 0) ? ' | ' : '' %>
-                <a href="<%= attributionItem.url %>"><%= attributionItem.name %></a>
-              <% }); %>
+            <p class="attribution">
+                Above charts are based on data from the
+                <% i = 0 %>
+                <% datasetConfig.attribution.forEach(attributionItem => { %>
+                    <% if (i == datasetConfig.attribution.length) { %>
+                        and
+                    <% } else if (i > 1) { %>
+                        ,
+                    <% } %>
+                    <a href="<%= attributionItem.url %>"><%= attributionItem.name %></a> |
+                    <% i = i + 1; %>
+                <% }); %>
+                <% if (datasetConfig.sourceURL) { %>
+                    <a href="<%= datasetConfig.sourceURL %>">Data Source</a> |
+                <% } %>
+                <% if (datasetConfig.datasetURL) { %>
+                    <a href="<%= datasetConfig.datasetURL %>">ODN Dataset</a> |
+                <% } %>
+                <% if (datasetConfig.apiURL) { %>
+                    <a href="<%= datasetConfig.apiURL %>">API</a> -
+                <% } %>
+                <span class="info-icon">
+                    <span class="info-tooltip">
+                        <strong>Notes:</strong>
+                        <br><br>
+                        1. ODN datasets and APIs are subject to change and may differ in format from the original source data in order to provide a user-friendly experience on this site.
+                        <br><br>
+                        2. To build your own apps using this data, see the ODN Dataset and API links.
+                        <br><br>
+                        3. If you use this derived data in an app, we ask that you provide a link somewhere in your applications to the Open Data Network with a citation that states: "Data for this application was provided by the Open Data Network" where "Open Data Network" links to http://opendatanetwork.com. Where an application has a region specific module, we ask that you add an additional line that states: "Data about REGIONX was provided by the Open Data Network." where REGIONX is an HREF with a name for a geographical region like "Seattle, WA" and the link points to this page URL, e.g. http://opendatanetwork.com/region/1600000US5363000/Seattle_WA
+                    </span>
+                </span>
             </p>
             <% } %>
         </div>
