@@ -313,7 +313,7 @@ class SearchPageController {
                 return constraint;
         }
 
-        return permutations[permutations.length - 1];
+        return permutations[0];
     }
 
     getVariableByIdOrDefault(variablesArray, metric) {
