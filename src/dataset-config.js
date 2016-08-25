@@ -842,7 +842,9 @@ class DatasetConfig {
                             year: '2013'
                         },
                         name: 'Earnings and Education',
-                        options: {},
+                        options: {
+                            areaOpacity: 0
+                        },
                         variables: [
                             {
                                 variableId: 'jobs.earnings.median_earnings_less_than_high_school',
