@@ -219,7 +219,7 @@ class SearchPageController {
                     //      Get the data we need to render item
                     //      Render it
                     //
-                    const datasetConfig = DATASET_CONFIG[dataset.id];
+                    const datasetConfig = DatasetConfig.getConfig(dataset.id);
                     const dataValueParams = [];
 
                     if (!datasetConfig){

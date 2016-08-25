@@ -43,7 +43,8 @@ class DatasetChart {
 
     getChartConfig(datasetId, chartId) {
 
-        return _.find(DATASET_CONFIG[datasetId].charts, chart => chart.chartId == chartId);
+        const config = DatasetConfig.getConfig(datasetId);
+        return _.find(config.charts, chart => chart.chartId == chartId);
     }
 
     getChartOptions(config) {
