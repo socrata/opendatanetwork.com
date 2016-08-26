@@ -59,6 +59,22 @@ app.get('*', function(req, res, next) {
         next();
 });
 
+// Strip all get parameters to avoid XSS attempts
+var strip = function(string) { return string.replace(/[^A-z0-9-_.+&]+/g, ' '); }
+app.get('*', function(req, res, next) {
+  _.each(req.query, function(value, key) {
+    if(_.isArray(value)) {
+      // Handle repeated parameters, which come back as arrays
+      _.each(value, function(aval, idx) {
+        req.query[key][idx] = strip(aval);
+      });
+    } else {
+      req.query[key] = strip(value)
+    }
+  });
+  next();
+});
+
 // Set up 301 redirects for old routes
 //
 app.get('/articles/*', function(req, res) { res.redirect(301, '/'); });
