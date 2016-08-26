@@ -550,7 +550,7 @@ class RenderController {
                 const metric = _.find(metrics, metric => metric.metric === params.metric) || metrics[0] || {};
 
                 const dataset = RenderController.getDataset(params.dataAvailability, vector);
-                const datasetConfig = DatasetConfig.getConfig(dataset.id);
+                const datasetConfig = DatasetConfig[dataset.id];
 
                 const variablesArray = _.values(dataset.variables);
                 const variable = RenderController.getVariableByIdOrDefault(variablesArray, params.metric); // metric is variable id
