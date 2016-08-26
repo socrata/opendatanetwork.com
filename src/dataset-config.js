@@ -38,12 +38,16 @@ class DatasetConfig {
             hhs: {
                 name: 'U.S. Department of Health and Human Services',
                 url: 'http://www.hhs.gov/'
+            },
+            michigan: {
+                name: 'MICommunity Financial Dashboard',
+                url: 'http://mi-treasury.data.socrata.com'
             }
         };
 
         this.DATASET_CONFIG = {
             'michigan.finance':{
-                attribution: [this.DATASET_ATTRIBUTIONS.crimeReports],
+                attribution: [this.DATASET_ATTRIBUTIONS.michigan],
                 charts: [ 
                     {
                         chartId: 'michigan.finance.liquidity_ratio',
