@@ -20,6 +20,20 @@ class Data {
         });
     }
 
+    static getDataConstraint(regions, variable, constraint) {
+
+        return new Promise((resolve, reject) => {
+
+            const url = Request.buildURL(Constants.DATA_CONSTRAINT_URL.format(variable.id), {
+                app_token: Constants.APP_TOKEN,
+                entity_id: regions.map(region => region.id).join(','),
+                constraint: constraint
+            });
+
+            Request.getJSON(url).then(json => resolve(json), reject);
+        });
+    }
+
     static getDataValues(regions, variable, constraint, forecast) {
 
        return new Promise((resolve, reject) => {

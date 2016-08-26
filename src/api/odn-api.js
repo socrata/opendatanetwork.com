@@ -21,7 +21,7 @@ class OdnApi {
         });
     }
 
-    getDataContraint(regions, variable, constraint) {
+    getDataConstraint(regions, variable, constraint) {
 
         return new Promise((resolve, reject) => {
 

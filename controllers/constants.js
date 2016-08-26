@@ -6,6 +6,7 @@ const Constants = {
     SEARCH_RESULTS_REGIONS_URL: 'https://odn.data.socrata.com/resource/czuf-rtrf.json',
 
     DATA_AVAILABILITY_URL: 'http://api.opendatanetwork.com/data/v1/availability',
+    DATA_CONSTRAINT_URL: 'http://api.opendatanetwork.com/data/v1/constraint/{0}',
     DATA_VALUES_URL: 'http://api.opendatanetwork.com/data/v1/values',
     RELATED_CHILD_URL: 'http://api.opendatanetwork.com/entity/v1/child',
     RELATED_PARENT_URL: 'http://api.opendatanetwork.com/entity/v1/parent',

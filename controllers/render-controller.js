@@ -552,95 +552,112 @@ class RenderController {
                 const dataset = RenderController.getDataset(params.dataAvailability, vector);
                 const datasetConfig = DatasetConfig.getConfig(dataset.id);
 
-                const templateParams = {
-                    topics,
-                    topic,
-                    datasets,
-                    dataset,
-                    datasetConfig,
-                    params,
-                    metric,
-                    hasRegions: params.regions.length > 0,
-                    regionNames: wordJoin(params.regions.map(region => region.name), 'or'),
-                    title: searchPageTitle(params, dataset, metric),
-                    css: [
-                        '/styles/third-party/leaflet.min.css',
-                        '/styles/third-party/leaflet-markercluster.min.css',
-                        '/styles/third-party/leaflet-markercluster-default.min.css',
-                        '/styles/search.css',
-                        '/styles/maps.css',
-                        '/styles/main.css'
-                    ],
-                    scripts: [
-                        '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
-                        '//www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart", "table"]}]}',
-                        '/lib/third-party/leaflet/leaflet.min.js',
-                        '/lib/third-party/leaflet/leaflet-omnivore.min.js',
-                        '/lib/third-party/leaflet/leaflet-markercluster.min.js',
-                        '/lib/third-party/colorbrewer.min.js',
-                        '/lib/third-party/d3.min.js',
-                        '/lib/third-party/d3.promise.min.js',
-                        '/lib/third-party/js.cookie-2.1.1.min.js',
-                        '/lib/third-party/leaflet-omnivore.min.js',
-                        '/lib/third-party/lodash.min.js',
-                        '/lib/search.min.js'
-                    ]
-                };
+                const variablesArray = _.values(dataset.variables);
+                const variable = RenderController.getVariableByIdOrDefault(variablesArray, params.metric); // metric is variable id
+                const constraintName = dataset.constraints[0];
 
-                if (data && (data.length == allPromises.length)) {
+                // Get the constraints
+                //
+                Data.getDataConstraint(params.regions, variable, constraintName).then(dataConstraints => {
 
-                    const peersResponse = data[0];
-                    if (peersResponse && peersResponse.relatives && (peersResponse.relatives.length > 0)) {
-                        templateParams.peers = processRegions(peersResponse.relatives[0].entities);
-                    }
+                    dataConstraints.permutations = _.sortByOrder(dataConstraints.permutations, ['constraint_value'], ['desc']);
 
-                    const siblingsResponse = data[1];
-                    if (siblingsResponse && siblingsResponse.relatives && (siblingsResponse.relatives.length > 0)) {
-                        templateParams.siblings = processRegions(siblingsResponse.relatives[0].entities);
-                    }
+                    const constraint = RenderController.getContraintByValueOrDefault(dataConstraints.permutations, params.year);
 
-                    const parentsResponse = data[11];
-                    if (parentsResponse && parentsResponse.relatives && (parentsResponse.relatives.length > 0)) {
-                        templateParams.parentRegion = processRegions(parentsResponse.relatives[0].entities)[0];
-                    }
-
-                    const childrenResponse = data[2];
-                    if (childrenResponse && childrenResponse.relatives) {
-                        childrenResponse.relatives.forEach(relative => {
-                            relative.entities = processRegions(relative.entities);
-                        });
-
-                        templateParams.allChildren = childrenResponse;
-                    }
-
-                    if (data[3].length > 0) {
-                        templateParams.categories = data[3];
-                        templateParams.currentCategory = API.currentCategory(params, data[3]);
-                    }
-
-                    if (data[4].length > 0) {
-                        templateParams.currentTag = API.currentTag(params, data[4]);
-                    }
-
-                    templateParams.searchResults = data[6];
-                    templateParams.mapSummary = data[7][0];
-                    templateParams.metaSummary = data[7][1];
-                    templateParams.mapVariables = MapDescription.variablesFromParams(params);
-                    templateParams.searchDatasetsURL = data[8];
-
-                    templateParams.quickLinks = {
-                        categories : data[3],
-                        domains : data[5].results,
-                        ref : 'rp',
-                        regions : data[9].slice(0, quickLinksCount),
+                    const templateParams = {
+                        topics,
+                        topic,
+                        datasets,
+                        dataset,
+                        datasetConfig,
+                        variable,
+                        constraint,
+                        params,
+                        metric,
+                        hasRegions: params.regions.length > 0,
+                        regionNames: wordJoin(params.regions.map(region => region.name), 'or'),
+                        title: searchPageTitle(params, dataset, metric),
+                        css: [
+                            '/styles/third-party/leaflet.min.css',
+                            '/styles/third-party/leaflet-markercluster.min.css',
+                            '/styles/third-party/leaflet-markercluster-default.min.css',
+                            '/styles/search.css',
+                            '/styles/maps.css',
+                            '/styles/main.css'
+                        ],
+                        scripts: [
+                            '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
+                            '//www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart", "table"]}]}',
+                            '/lib/third-party/leaflet/leaflet.min.js',
+                            '/lib/third-party/leaflet/leaflet-omnivore.min.js',
+                            '/lib/third-party/leaflet/leaflet-markercluster.min.js',
+                            '/lib/third-party/colorbrewer.min.js',
+                            '/lib/third-party/d3.min.js',
+                            '/lib/third-party/d3.promise.min.js',
+                            '/lib/third-party/js.cookie-2.1.1.min.js',
+                            '/lib/third-party/leaflet-omnivore.min.js',
+                            '/lib/third-party/lodash.min.js',
+                            '/lib/search.min.js'
+                        ]
                     };
 
-                    templateParams.refinePopupCollapsed = (req.query.question === '1') || (req.cookies.refinePopupCollapsed === '1');
+                    if (data && (data.length == allPromises.length)) {
 
-                    templateParams.questions = data[10];
-                }
+                        const peersResponse = data[0];
+                        if (peersResponse && peersResponse.relatives && (peersResponse.relatives.length > 0)) {
+                            templateParams.peers = processRegions(peersResponse.relatives[0].entities);
+                        }
 
-                res.render('search.ejs', templateParams);
+                        const siblingsResponse = data[1];
+                        if (siblingsResponse && siblingsResponse.relatives && (siblingsResponse.relatives.length > 0)) {
+                            templateParams.siblings = processRegions(siblingsResponse.relatives[0].entities);
+                        }
+
+                        const parentsResponse = data[11];
+                        if (parentsResponse && parentsResponse.relatives && (parentsResponse.relatives.length > 0)) {
+                            templateParams.parentRegion = processRegions(parentsResponse.relatives[0].entities)[0];
+                        }
+
+                        const childrenResponse = data[2];
+                        if (childrenResponse && childrenResponse.relatives) {
+                            childrenResponse.relatives.forEach(relative => {
+                                relative.entities = processRegions(relative.entities);
+                            });
+
+                            templateParams.allChildren = childrenResponse;
+                        }
+
+                        if (data[3].length > 0) {
+                            templateParams.categories = data[3];
+                            templateParams.currentCategory = API.currentCategory(params, data[3]);
+                        }
+
+                        if (data[4].length > 0) {
+                            templateParams.currentTag = API.currentTag(params, data[4]);
+                        }
+
+                        templateParams.searchResults = data[6];
+                        templateParams.mapSummary = data[7][0];
+                        templateParams.metaSummary = data[7][1];
+                        templateParams.mapVariables = MapDescription.variablesFromParams(params);
+                        templateParams.searchDatasetsURL = data[8];
+
+                        templateParams.quickLinks = {
+                            categories : data[3],
+                            domains : data[5].results,
+                            ref : 'rp',
+                            regions : data[9].slice(0, quickLinksCount),
+                        };
+
+                        templateParams.refinePopupCollapsed = (req.query.question === '1') || (req.cookies.refinePopupCollapsed === '1');
+
+                        templateParams.questions = data[10];
+                    }
+
+                    res.render('search.ejs', templateParams);
+
+                }, RenderController.error(req, res));
+
             } catch (error) {
                 RenderController.error(req, res)(error);
             }
@@ -655,6 +672,41 @@ class RenderController {
                 return topic.datasets[vector];
         }
         return null;
+    }
+
+    static getVariableByIdOrDefault(variablesArray, metric) {
+
+        // If metric is empty, use first variable
+        //
+        if (metric.length == 0)
+            return variablesArray[0];
+
+        for (var i = 0; i < variablesArray.length; i++) {
+
+            var variable = variablesArray[i];
+
+            if (variable.id == metric)
+                return variable;
+        }
+
+        // If not found, use first variable
+        //
+        return variablesArray[0];
+    }
+
+    static getContraintByValueOrDefault(permutations, year) {
+
+        const constraintValue = year.toLowerCase();
+
+        for (var i = 0; i < permutations.length; i++) {
+
+            var constraint = permutations[i];
+
+            if (constraint.constraint_value == constraintValue)
+                return constraint;
+        }
+
+        return permutations[0];
     }
 
     static searchResults(req, res) {

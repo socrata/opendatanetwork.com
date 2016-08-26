@@ -32,7 +32,8 @@ class SearchPageController {
             '#data-constraint-info-box',
             '#catalog-info-box',
             '#questions-info-box',
-            '#search-results-questions-info-box'
+            '#search-results-questions-info-box',
+            '#map-info-box'
             ]);
 
         // Chart API boxes (since they are generated from the dataset-config)
@@ -184,7 +185,7 @@ class SearchPageController {
 
                 // Get the constraints
                 //
-                api.getDataContraint(this.params.regions, variable, constraintName).then(dataConstraints => {
+                api.getDataConstraint(this.params.regions, variable, constraintName).then(dataConstraints => {
 
                     dataConstraints.permutations = _.sortByOrder(dataConstraints.permutations, ['constraint_value'], ['desc']);
 
