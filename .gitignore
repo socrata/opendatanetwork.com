@@ -16,4 +16,5 @@ lib/*.es6.js
 lib/*.js
 
 .vscode/
+.idea
 
