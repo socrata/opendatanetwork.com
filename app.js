@@ -9,7 +9,13 @@ const favicon = require('serve-favicon');
 const helmet = require('helmet');
 const numeral = require('numeral');
 const querystring = require('querystring');
-const RenderController = require('./controllers/render-controller');
+const RenderController = require('./app/controllers/render-controller');
+
+const HomeController = require('./app/controllers/home-controller')
+const CategoriesController = require('./app/controllers/categories-controller');
+const DatasetController = require('./app/controllers/dataset-controller');
+const PagesController = require('./app/controllers/pages-controller');
+const SearchController = require('./app/controllers/search-controller');
 
 const app = express();
 
@@ -88,24 +94,24 @@ app.get('/join', function(req, res) { res.redirect(301, '/join-open-data-network
 app.get('/join/complete', function(req, res) { res.redirect(301, '/join-open-data-network/complete'); });
 app.get('/v4', function(req, res) { res.redirect(301, '/'); });
 
-app.get('/', RenderController.home);
-app.get('/categories.json', RenderController.categories);
-app.get('/join-open-data-network', RenderController.join);
-app.get('/join-open-data-network/complete', RenderController.joinComplete);
-app.get('/search', RenderController.search);
-app.get('/search/search-results', RenderController.searchResults);
-app.get('/search/:vector', RenderController.search);
-app.get('/dataset/:domain/:id', RenderController.dataset);
-app.get('/region/:regionIds', RenderController.search);
-app.get('/region/:regionIds/:regionNames', RenderController.search);
-app.get('/region/:regionIds/:regionNames/search-results', RenderController.searchResults);
-app.get('/region/:regionIds/:regionNames/:vector/search-results', RenderController.searchResults);
-app.get('/region/:regionIds/:regionNames/:vector/:metric/search-results', RenderController.searchResults);
-app.get('/region/:regionIds/:regionNames/:vector/:metric/:year', RenderController.searchWithVector);
-app.get('/region/:regionIds/:regionNames/:vector/:metric/:year/search-results', RenderController.searchResults);
-app.get('/region/:regionIds/:regionNames/:vector/:metric', RenderController.searchWithVector);
-app.get('/region/:regionIds/:regionNames/:vector', RenderController.searchWithVector);
-app.get('/region/:regionIds/:regionNames', RenderController.search);
+app.get('/', HomeController.index);
+app.get('/categories.json', CategoriesController.categories);
+app.get('/join-open-data-network', PagesController.join);
+app.get('/join-open-data-network/complete', PagesController.joinComplete);
+app.get('/search', SearchController.search);
+app.get('/search/search-results', SearchController.searchResults);
+app.get('/search/:vector', SearchController.search);
+app.get('/dataset/:domain/:id', DatasetController.show);
+app.get('/region/:regionIds', SearchController.search);
+app.get('/region/:regionIds/:regionNames', SearchController.search);
+app.get('/region/:regionIds/:regionNames/search-results', SearchController.searchResults);
+app.get('/region/:regionIds/:regionNames/:vector/search-results', SearchController.searchResults);
+app.get('/region/:regionIds/:regionNames/:vector/:metric/search-results', SearchController.searchResults);
+app.get('/region/:regionIds/:regionNames/:vector/:metric/:year', SearchController.searchWithVector);
+app.get('/region/:regionIds/:regionNames/:vector/:metric/:year/search-results', SearchController.searchResults);
+app.get('/region/:regionIds/:regionNames/:vector/:metric', SearchController.searchWithVector);
+app.get('/region/:regionIds/:regionNames/:vector', SearchController.searchWithVector);
+app.get('/region/:regionIds/:regionNames', SearchController.search);
 
 app.use((error, req, res, next) => {
     RenderController.error(req, res)(error);
