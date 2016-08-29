@@ -5,7 +5,11 @@
         <a class="fa fa-search search-link"></a>
     </div>
     <span>
-        <input type="text" placeholder="Search Open Data Network" name="q" class="search-bar-input" value="<%= params.q %>" autocomplete="off">
+        <label class="search-bar-label" aria-label= "Search Open Data Network" for="search-input"></label>
+        <input class="search-bar-input" id="search-input"
+               type="text" placeholder="Search Open Data Network"
+               name="q"  value="<%= params.q %>" autocomplete="off">
+
         <% if (params.categories.length > 0) { %>
         <input type="hidden" name="categories" value="<%= params.categories.join(',') %>">
         <% } %>
