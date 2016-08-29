@@ -1,13 +1,25 @@
 'use strict';
 const API = require('./api');
 const HomeHelper = require('../lib/home-helper');
+const ParamsHelper = require('../lib/params-helper');
+const PagesController = require('./pages-controller');
+
+const _ = require('lodash');
+const htmlencode = require('htmlencode').htmlEncode;
+const moment = require('moment');
+const numeral = require('numeral');
+
+const quickLinksCount = 15;
+const Questions = require('../../controllers/questions');
+
+const defaultMetaSummary = 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.';
 
 class HomeController {
     static index(req, res) {
         const categoriesPromise = API.categories();
         const domainsPromise = API.domains(quickLinksCount);
         const locationsPromise = API.locations();
-        const paramsPromise = RenderController._parameters(req, res);
+        const paramsPromise = ParamsHelper.parameters(req, res);
         const allPromise = Promise.all([categoriesPromise, locationsPromise, paramsPromise, domainsPromise]);
 
         allPromise.then(data => {
@@ -57,9 +69,9 @@ class HomeController {
                     res.render('home.ejs', templateParams);
                 });
             } catch (error) {
-                RenderController.error(req, res)(error);
+                PagesController.error(req, res)(error);
             }
-        }, RenderController.error(req, res));
+        }, PagesController.error(req, res));
     }
 }
 

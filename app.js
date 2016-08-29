@@ -11,7 +11,7 @@ const numeral = require('numeral');
 const querystring = require('querystring');
 const RenderController = require('./app/controllers/render-controller');
 
-const HomeController = require('./app/controllers/home-controller')
+const HomeController = require('./app/controllers/home-controller');
 const CategoriesController = require('./app/controllers/categories-controller');
 const DatasetController = require('./app/controllers/dataset-controller');
 const PagesController = require('./app/controllers/pages-controller');
@@ -114,7 +114,7 @@ app.get('/region/:regionIds/:regionNames/:vector', SearchController.searchWithVe
 app.get('/region/:regionIds/:regionNames', SearchController.search);
 
 app.use((error, req, res, next) => {
-    RenderController.error(req, res)(error);
+    PagesController.error(req, res)(error);
 });
 
 // Start listening

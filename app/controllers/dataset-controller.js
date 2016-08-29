@@ -1,6 +1,19 @@
 'use strict';
 const API = require('./api');
+const Navigate = require('../../controllers/navigate');
+const Request = require('../../controllers/request');
+
 const DatasetHelper = require('../lib/dataset-helper');
+const ParamsHelper = require('../lib/params-helper');
+const PagesController = require('./pages-controller');
+const quickLinksCount = 15;
+
+const _ = require('lodash');
+const htmlencode = require('htmlencode').htmlEncode;
+const moment = require('moment');
+const numeral = require('numeral');
+
+
 
 class DatasetController {
     static show(req, res) {
@@ -36,7 +49,7 @@ class DatasetController {
             // Remaining promises
             //
             const schemasPromise = API.standardSchemas(id);
-            const paramsPromise = RenderController._parameters(req, res);
+            const paramsPromise = ParamsHelper.parameters(req, res);
             const categoriesPromise = API.categories(quickLinksCount);
             const domainsPromise = API.domains(quickLinksCount);
             const locationsPromise = API.locations();
@@ -156,10 +169,10 @@ class DatasetController {
 
                     res.render('dataset.ejs', templateParams);
                 } catch (error) {
-                    RenderController.error(req, res)(error);
+                    PagesController.error(req, res)(error);
                 }
-            }, RenderController.error(req, res, 404, 'Dataset not found'));
-        }, RenderController.error(req, res, 404, 'Dataset not found'));
+            }, PagesController.error(req, res, 404, 'Dataset not found'));
+        }, PagesController.error(req, res, 404, 'Dataset not found'));
     }
 
 }
