@@ -2,10 +2,17 @@
     <a class="logo-small" href="/" title="Open Data Network"><div></div></a>
     <div class="search-buttons">
         <% include _quick-links %>
-        <a class="fa fa-search search-link"></a>
+        <button type="submit" class="search-link">
+            <span class="fa fa-search" aria-hidden="true"></span>
+            <span class="sr-only">Search</span>
+        </button>
     </div>
     <span>
-        <input type="text" placeholder="Search Open Data Network" name="q" class="search-bar-input" value="<%= params.q %>" autocomplete="off">
+        <label class="search-bar-label" aria-label= "Search Open Data Network" for="search-input"></label>
+        <input class="search-bar-input" id="search-input"
+               type="text" placeholder="Search Open Data Network"
+               name="q"  value="<%= params.q %>" autocomplete="off">
+
         <% if (params.categories.length > 0) { %>
         <input type="hidden" name="categories" value="<%= params.categories.join(',') %>">
         <% } %>
