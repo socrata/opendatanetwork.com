@@ -20,14 +20,14 @@ class AutosuggestSource {
 
                 term = Stopwords.strip(term);
 
-                const path = Constants.AUTOCOMPLETE_URL(this.config.suggestType);
+                const path = GlobalConstants.AUTOCOMPLETE_URL(this.config.suggestType);
 
                 AutosuggestSource.request(
                     path, 
                     { 
                         limit: 5, 
                         query: term,
-                        app_token: Constants.APP_TOKEN
+                        app_token: GlobalConstants.APP_TOKEN
                     }).then(response => {
 
                     resolve(response.options);
@@ -39,7 +39,7 @@ class AutosuggestSource {
     display(container, options) {
         if (options.length === 0) return [];
 
-        if (this.sort) options = _.sortBy(options, this.sort).slice(0, Constants.AUTOCOMPLETE_SHOWN_OPTIONS);
+        if (this.sort) options = _.sortBy(options, this.sort).slice(0, GlobalConstants.AUTOCOMPLETE_SHOWN_OPTIONS);
         if (this.filter) options = options.filter(this.filter);
 
         const category = container

@@ -3,7 +3,8 @@
 const _ = require('lodash');
 const API = require('./api');
 const Autosuggest = require('./autosuggest');
-const Constants = require('./constants');
+const GlobalConstants = require("../src/constants"); 
+const ControllerConstants = require('./constants');
 const Data = require('./data');
 const Request = require('./request');
 
@@ -67,8 +68,8 @@ class Questions {
 
         return new Promise((resolve, reject) => {
 
-            const url = Request.buildURL(Constants.SEARCH_QUESTION_URL, {
-                app_token: Constants.APP_TOKEN,
+            const url = Request.buildURL(ControllerConstants.SEARCH_QUESTION_URL, {
+                app_token: GlobalConstants.APP_TOKEN,
                 entity_id: regions.map(region => region.id).join(','),
                 limit: 15
             });

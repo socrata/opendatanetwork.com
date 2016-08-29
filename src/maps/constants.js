@@ -1,13 +1,10 @@
-
 const MapConstants = {
-    MAP_NEW_URL: 'http://api.opendatanetwork.com/data/v1/map/new',
-    MAP_VALUES_URL: 'http://api.opendatanetwork.com/data/v1/map/values',
-    MAP_VALUES_WS_URL: 'ws://api.opendatanetwork.com/data/v1/map/values',
+    MAP_NEW_URL: GlobalConstants.ODN_API_BASE_URL + '/data/v1/map/new',
+    MAP_VALUES_URL: GlobalConstants.ODN_API_BASE_URL + '/data/v1/map/values',
+    MAP_VALUES_WS_URL: 'ws://'+GlobalConstants._ODN_API_HOST_AND_PORT+'/data/v1/map/values',
 
     // Milliseconds to wait before updating map after move or zoom.
     UPDATE_WAIT: 200,
-
-    APP_TOKEN: 'CqcTvF7wVsI8IYAq7CdZszLbU',
 
     CSS_ID: 'leaflet-map',
 

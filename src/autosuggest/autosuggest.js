@@ -88,7 +88,7 @@ class Autosuggest {
 
     throttledSuggest(term) {
 
-        this.delay(Constants.AUTOCOMPLETE_WAIT_MS).then(() => {
+        this.delay(GlobalConstants.AUTOCOMPLETE_WAIT_MS).then(() => {
             if (term === this.currentTerm) {
                 this.suggest(term);
             }

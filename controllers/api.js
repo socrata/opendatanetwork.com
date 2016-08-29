@@ -6,7 +6,8 @@ const numeral = require('numeral');
 const fs = require('fs');
 
 const Request = require('./request');
-const Constants = require('./constants');
+const ControllerConstants = require('./constants');
+const GlobalConstants = require("../src/constants"); 
 const Sources = require('../src/data/data-sources.js');
 
 const _fileCache = {};
@@ -34,13 +35,13 @@ class FileCache {
 class API {
     static regions(ids) {
         const params = {'$where': `id in(${ids.map(id => `'${id}'`).join(',')})`};
-        const url = Request.buildURL(Constants.ROSTER_URL, params);
+        const url = Request.buildURL(ControllerConstants.ROSTER_URL, params);
         return Request.getJSON(url);
     }
 
     static searchResultsRegions(q) {
         const params = { '$q': q, '$order': 'population desc', '$limit': 6 };
-        const url = Request.buildURL(Constants.SEARCH_RESULTS_REGIONS_URL, params);
+        const url = Request.buildURL(ControllerConstants.SEARCH_RESULTS_REGIONS_URL, params);
         return Request.getJSON(url);
     }
 
@@ -52,7 +53,7 @@ class API {
             const limit = 10;
             const page = requestParams.page || 0;
             const offset = page * limit;
-            const timeout = hasRegions ? Constants.TIMEOUT_MS : Constants.TIMEOUT_MS * 10;
+            const timeout = hasRegions ? ControllerConstants.TIMEOUT_MS : ControllerConstants.TIMEOUT_MS * 10;
 
             API.searchDatasetURL(requestParams, limit, offset).then(url => {
 
@@ -71,7 +72,7 @@ class API {
         return new Promise((resolve, reject) => {
 
             const params = { 
-                app_token: Constants.APP_TOKEN 
+                app_token: GlobalConstants.APP_TOKEN 
             };
 
             if (requestParams.regions)
@@ -86,7 +87,7 @@ class API {
             if (offset) 
                 params.offset = offset;
 
-            resolve(Request.buildURL(Constants.SEARCH_DATASET_URL, params));
+            resolve(Request.buildURL(ControllerConstants.SEARCH_DATASET_URL, params));
         });
     }
 
@@ -96,7 +97,7 @@ class API {
             const limit = 10;
             const page = requestParams.page || 0;
             const offset = page * limit;
-            const timeout = hasRegions ? Constants.TIMEOUT_MS : Constants.TIMEOUT_MS * 10;
+            const timeout = hasRegions ? ControllerConstants.TIMEOUT_MS : ControllerConstants.TIMEOUT_MS * 10;
 
             API.searchDatasetsURL(requestParams, limit, offset).then(url => {
                 Request.getJSON(url, timeout).then(results => {
@@ -169,7 +170,7 @@ class API {
                         categories.join(' ');
                 }
 
-                resolve(Request.buildURL(Constants.CATALOG_URL, params));
+                resolve(Request.buildURL(ControllerConstants.CATALOG_URL, params));
             }, reject);
         });
     }
@@ -178,7 +179,7 @@ class API {
         defaultResponse = defaultResponse || {results: []};
 
         return new Promise((resolve, reject) => {
-            Request.getJSON(`${Constants.CATALOG_URL}/${path}`).then(response => {
+            Request.getJSON(`${ControllerConstants.CATALOG_URL}/${path}`).then(response => {
                 if (response) {
                     if (n) response.results = response.results.slice(0, n);
                     resolve(response);
@@ -194,7 +195,7 @@ class API {
             API.catalog('categories', n).then(response => {
                 API.categoryMetadata().then(metadata => {
                     const categories = response.results.map(result => {
-                        result.metadata = metadata[result.category] || Constants.DEFAULT_METADATA;
+                        result.metadata = metadata[result.category] || ControllerConstants.DEFAULT_METADATA;
                         return result;
                     });
 
@@ -214,7 +215,7 @@ class API {
             API.catalog('tags', n).then(response => {
                 API.tagMetadata().then(metadata => {
                     const tags = response.results.map(result => {
-                        result.metadata = metadata[result.tag] || Constants.DEFAULT_METADATA;
+                        result.metadata = metadata[result.tag] || ControllerConstants.DEFAULT_METADATA;
                         return result;
                     });
 
@@ -232,7 +233,7 @@ class API {
     static domains(n) {
         const defaultResponse = { results: [] };
         return new Promise((resolve, reject) => {
-            Request.getJSON(`${Constants.CATALOG_URL}/domains`).then(response => {
+            Request.getJSON(`${ControllerConstants.CATALOG_URL}/domains`).then(response => {
                 if (response) {
 
                     // Filter out domains without datasets
@@ -254,16 +255,16 @@ class API {
     }
 
     static datasetSummary(domain, fxf) {
-        return Request.getJSON(Constants.DATASET_SUMMARY_URL.format(domain, fxf), 1000);
+        return Request.getJSON(ControllerConstants.DATASET_SUMMARY_URL.format(domain, fxf), 1000);
     }
 
     static datasetMigrations(domain, fxf) {
-        return Request.getJSON(Constants.DATASET_MIGRATIONS_URL.format(domain, fxf), 1000);
+        return Request.getJSON(ControllerConstants.DATASET_MIGRATIONS_URL.format(domain, fxf), 1000);
     }
 
     static standardSchemas(fxf) {
         return new Promise((resolve, reject) => {
-            Request.getJSON(Constants.ATHENA_URL.format(fxf)).then(json => {
+            Request.getJSON(ControllerConstants.ATHENA_URL.format(fxf)).then(json => {
                 if (json.applied_schemas === '[]') json.applied_schemas = [];
                 resolve(json.applied_schemas);
             });

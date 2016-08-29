@@ -5,9 +5,9 @@ const request = require('request-promise');
 const querystring = require('querystring');
 const memjs = require('memjs');
 const crypto = require('crypto');
-const Constants = require('./constants.js');
+const ControllerConstants = require('./constants.js');
 
-const cache = memjs.Client.create(null, Constants.CACHE_OPTIONS);
+const cache = memjs.Client.create(null, ControllerConstants.CACHE_OPTIONS);
 const timersEnabled = false;
 
 class Request {
@@ -32,7 +32,7 @@ class Request {
 
                 Request.timeout(request({
                         url: url,
-                        headers: { 'User-Agent' : Constants.USER_AGENT }
+                        headers: { 'User-Agent' : ControllerConstants.USER_AGENT }
                     }), timeout).then(body => {
                         resolve(body);
                     }, reject);
@@ -49,7 +49,7 @@ class Request {
                     } else {
                         Request.timeout(request({
                                 url: url,
-                                headers: { 'User-Agent' : Constants.USER_AGENT }
+                                headers: { 'User-Agent' : ControllerConstants.USER_AGENT }
                             }), timeout).then(body => {
 
                                 if (timersEnabled)
@@ -79,7 +79,7 @@ class Request {
     }
 
     static _timeout(milliseconds) {
-        milliseconds = milliseconds || Constants.TIMEOUT_MS;
+        milliseconds = milliseconds || ControllerConstants.TIMEOUT_MS;
 
         return new Promise((resolve, reject) => {
             setTimeout(reject, milliseconds);
