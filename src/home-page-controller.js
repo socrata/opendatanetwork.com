@@ -195,6 +195,7 @@ class HomePageController {
 
         const placeholder = sample.substring(0, self.sampleCharacterIndex);
         $('.home-search-bar-controls [name="q"], .home-search-bar .search-bar-input').attr('placeholder', placeholder);
+        $('.home-search-bar-controls label, .home-search-bar .search-bar-label').attr('aria-label', 'Search Open Data Network');
 
         window.setTimeout(self.printNextSampleQuestionCharacter, self.getRandomInt(), self);
         self.sampleCharacterIndex++;
