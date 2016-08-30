@@ -1,9 +1,11 @@
 'use strict';
-const Category = require('../models/category');
+
 const _ = require('lodash');
 const htmlencode = require('htmlencode').htmlEncode;
 const moment = require('moment');
 const numeral = require('numeral');
+
+const Category = require('../models/category');
 
 class CategoriesController {
     static categories(req, res) {

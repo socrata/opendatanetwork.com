@@ -16,6 +16,8 @@ const DatasetController = require('./app/controllers/dataset-controller');
 const PagesController = require('./app/controllers/pages-controller');
 const SearchController = require('./app/controllers/search-controller');
 
+const ErrorHandler = require('./app/lib/error-handler');
+
 const app = express();
 
 // Compression
@@ -110,15 +112,29 @@ app.get('/region/:regionIds/:regionNames/:vector/:metric/:year', SearchControlle
 app.get('/region/:regionIds/:regionNames/:vector/:metric/:year/search-results', SearchController.searchResults);
 app.get('/region/:regionIds/:regionNames/:vector/:metric', SearchController.searchWithVector);
 app.get('/region/:regionIds/:regionNames/:vector', SearchController.searchWithVector);
-app.get('/region/:regionIds/:regionNames', SearchController.search);
 
 app.use((error, req, res, next) => {
-    PagesController.error(req, res)(error);
+  ErrorHandler.error(req, res)(error);
 });
 
 // Start listening
 //
 var port = Number(process.env.PORT || 3000);
+
+process.on('SIGINT', function() {
+  console.log('Received sigint...');
+  app.close(function(){
+    process.exit();
+  });
+});
+
+String.prototype.format = function() {
+  var args = arguments;
+
+  return this.replace(/{(\d+)}/g, function(match, number) {
+    return typeof args[number] != 'undefined' ? args[number] : match;
+  });
+};
 
 app.listen(port);
 console.log('app is listening on ' + port);

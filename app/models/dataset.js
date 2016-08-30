@@ -1,8 +1,8 @@
 const _ = require('lodash');
 const moment = require('moment');
 const numeral = require('numeral');
-const Request = require('../../controllers/request');
-const Constants = require('../../controllers/constants');
+const Request = require('../lib/request');
+const Constants = require('../lib/constants');
 
 class Dataset {
   static datasetSummary(domain, fxf) {

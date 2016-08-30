@@ -1,12 +1,23 @@
 'use strict';
-const Questions = require('../../controllers/questions');
-const Data = require('../../controllers/data');
-const Navigate = require('../../controllers/navigate');
-const Constants = require('../../controllers/constants');
-const Relatives = require('../../controllers/relatives');
+
+const _ = require('lodash');
+const htmlencode = require('htmlencode').htmlEncode;
+const moment = require('moment');
+const numeral = require('numeral');
+
+const Questions = require('../lib/questions');
+const Data = require('../lib/data');
+const Navigate = require('../lib/navigate');
+const Constants = require('../lib/constants');
+const Relatives = require('../lib/relatives');
+const EntityFormatter = require('../lib/entity-formatter');
+const SearchHelper = require('../lib/search-helper');
+const DatasetHelper = require('../lib/dataset-helper');
+const DataHelper = require('../lib/data-helper');
+const ParamsHelper = require('../lib/params-helper');
+const ErrorHandler = require('../lib/error-handler');
 
 const Category = require('../models/category');
-const Dataset = require('../models/dataset');
 const Place = require('../models/place');
 const Search = require('../models/search');
 const Tag = require('../models/tag');
@@ -14,33 +25,26 @@ const Tag = require('../models/tag');
 const SrcConstants = require('../../src/constants');
 const MapSources = require('../../src/data/map-sources');
 const MapDescription = require('../../src/maps/description');
-
-const EntityFormatter = require('../lib/entity-formatter');
-const SearchHelper = require('../lib/search-helper');
-const DatasetHelper = require('../lib/dataset-helper');
-const DataHelper = require('../lib/data-helper');
-const ParamsHelper = require('../lib/params-helper');
-const PagesController = require('./pages-controller');
-
 const DatasetConfig = require('../../src/dataset-config');
-const quickLinksCount = 15;
-const refineByCount = 5;
 
+//TODO: Same var in dataset/home controller. Extract it out.
+const quickLinksCount = 15;
+//TODO: Same var in home controller as well.
 const defaultMetaSummary = 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.';
-const _ = require('lodash');
-const htmlencode = require('htmlencode').htmlEncode;
-const moment = require('moment');
-const numeral = require('numeral');
+const refineByCount = 5;
 
 class SearchController {
     static search(req, res) {
+      console.log('Handling request...'+ req);
         ParamsHelper.parameters(req, res).then(params => {
             try {
+              console.log('Completed Params');
+              console.log(params);
                 SearchController._search(req, res, params);
             } catch (error) {
-                PagesController.error(req, res)(error);
+                ErrorHandler.error(req, res)(error);
             }
-        }, PagesController.error(req, res));
+        }, ErrorHandler.error(req, res));
     }
 
     static searchResults(req, res) {
@@ -60,11 +64,11 @@ class SearchController {
 
                         res.render('_search-results-items.ejs', templateParams);
                     } catch (error) {
-                        PagesController.error(req, res)(error);
+                        ErrorHandler.error(req, res)(error);
                     }
                 }
-            }, PagesController.error(req, res));
-        }, PagesController.error(req, res));
+            }, ErrorHandler.error(req, res));
+        }, ErrorHandler.error(req, res));
     }
 
     static searchWithVector(req, res) {
@@ -95,9 +99,9 @@ class SearchController {
             try {
                 SearchController.search(req, res, params);
             } catch (error) {
-                PagesController.error(req, res)(error);
+                ErrorHandler.error(req, res)(error);
             }
-        }, PagesController.error(req, res));
+        }, ErrorHandler.error(req, res));
     }
 
     static _search(req, res, params) {
@@ -204,9 +208,9 @@ class SearchController {
 
                     res.render('search.ejs', templateParams);
                 } catch (error) {
-                    PagesController.error(req, res)(error);
+                    ErrorHandler.error(req, res)(error);
                 }
-            }, PagesController.error(req, res));
+            }, ErrorHandler.error(req, res));
         }
     }
 
@@ -412,12 +416,12 @@ class SearchController {
 
                     res.render('search.ejs', templateParams);
 
-                }, PagesController.error(req, res));
+                }, ErrorHandler.error(req, res));
 
             } catch (error) {
-                PagesController.error(req, res)(error);
+                ErrorHandler.error(req, res)(error);
             }
-        }, PagesController.error(req, res));
+        }, ErrorHandler.error(req, res));
     }
 
 }

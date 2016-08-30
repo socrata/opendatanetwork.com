@@ -3,7 +3,7 @@
 if (typeof require !== 'undefined') {
     var _ = require('lodash');
     var d3 = require('d3');
-    var Requests = require('../../controllers/request');
+    var Requests = require('../../app/lib/request');
 }
 
 /**

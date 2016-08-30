@@ -2,7 +2,7 @@ const _ = require('lodash');
 const moment = require('moment');
 const numeral = require('numeral');
 const Category = require('./category');
-const Constants = require('../../controllers/constants');
+const Constants = require('../lib/constants');
 const FileCache = require('../lib/fileCache');
 
 class Tag {
