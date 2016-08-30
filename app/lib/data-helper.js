@@ -1,5 +1,6 @@
 'use strict';
 
+//TODO: Better name.
 class DataHelper {
     static getConstraintByValueOrDefault(permutations, year) {
 

@@ -1,9 +1,9 @@
 const _ = require('lodash');
 const moment = require('moment');
 const numeral = require('numeral');
-const Request = require('../../controllers/request');
+const Request = require('../lib/request');
 const FileCache = require('../lib/fileCache');
-const Constants = require('../../controllers/constants');
+const Constants = require('../lib/constants');
 
 class Place {
   static regions(ids) {

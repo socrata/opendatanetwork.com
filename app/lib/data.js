@@ -1,9 +1,10 @@
 'use strict';
 
 const _ = require('lodash');
-const Constants = require('./constants');
 const Querystring = require('querystring');
+
 const Request = require('./request');
+const Constants = require('./constants');
 
 class Data {
 

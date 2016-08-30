@@ -35,8 +35,6 @@ class EntityFormatter {
         separator = separator || 'and';
         return `${list.slice(0, list.length - 1).join(', ')} ${separator} ${list[list.length - 1]}`;
     }
-
-
 }
 
 module.exports = EntityFormatter;

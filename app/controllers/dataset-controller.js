@@ -1,20 +1,20 @@
 'use strict';
-const Dataset = require('../models/dataset');
-const Category = require('../models/category');
-const Place = require('../models/place');
-
-const Navigate = require('../../controllers/navigate');
-const Request = require('../../controllers/request');
-
-const DatasetHelper = require('../lib/dataset-helper');
-const ParamsHelper = require('../lib/params-helper');
-const PagesController = require('./pages-controller');
-const quickLinksCount = 15;
 
 const _ = require('lodash');
 const htmlencode = require('htmlencode').htmlEncode;
 const moment = require('moment');
 const numeral = require('numeral');
+
+const Dataset = require('../models/dataset');
+const Category = require('../models/category');
+const Place = require('../models/place');
+
+const Request = require('../lib/request');
+const DatasetHelper = require('../lib/dataset-helper');
+const ParamsHelper = require('../lib/params-helper');
+
+//TODO: Same var in search/home controller. Extract it out.
+const quickLinksCount = 15;
 
 class DatasetController {
     static show(req, res) {
@@ -170,10 +170,10 @@ class DatasetController {
 
                     res.render('dataset.ejs', templateParams);
                 } catch (error) {
-                    PagesController.error(req, res)(error);
+                    ErrorHandler.error(req, res)(error);
                 }
-            }, PagesController.error(req, res, 404, 'Dataset not found'));
-        }, PagesController.error(req, res, 404, 'Dataset not found'));
+            }, ErrorHandler.error(req, res, 404, 'Dataset not found'));
+        }, ErrorHandler.error(req, res, 404, 'Dataset not found'));
     }
 
 }

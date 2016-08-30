@@ -1,9 +1,15 @@
 'use strict';
+
+const _ = require('lodash');
+
 const EntityFormatter = require('./entity-formatter');
-const Data = require('../../controllers/data');
-const defaultSearchResultCount = 10;
-const PagesController = require('../controllers/pages-controller');
+const ErrorHandler = require('./error-handler');
+const Data = require('./data');
+
 const Place = require('../models/place');
+
+// TODO: Should be extracted to constants
+const defaultSearchResultCount = 10;
 
 class ParamsHelper {
     static parameters(req, res) {
@@ -41,7 +47,7 @@ class ParamsHelper {
                         .map(id => regionsById[id]);
 
                     if (params.regions.length === 0) {
-                        PagesController.error(req, res, 404, `Region${regionIds.length > 1 ? 's' : ''} not found: ${regionIds.join(', ')}`)();
+                        ErrorHandler.error(req, res, 404, `Region${regionIds.length > 1 ? 's' : ''} not found: ${regionIds.join(', ')}`)();
                     } else {
                         Data.getDataAvailability(params.regions).then(data => {
                             params.dataAvailability = data;

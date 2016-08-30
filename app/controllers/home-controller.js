@@ -1,19 +1,20 @@
 'use strict';
-const Category = require('../models/category');
-const Place = require('../models/place');
-
-const HomeHelper = require('../lib/home-helper');
-const ParamsHelper = require('../lib/params-helper');
-const PagesController = require('./pages-controller');
 
 const _ = require('lodash');
 const htmlencode = require('htmlencode').htmlEncode;
 const moment = require('moment');
 const numeral = require('numeral');
 
-const quickLinksCount = 15;
-const Questions = require('../../controllers/questions');
+const Category = require('../models/category');
+const Place = require('../models/place');
 
+const HomeHelper = require('../lib/home-helper');
+const ParamsHelper = require('../lib/params-helper');
+const ErrorHandler = require('../lib/error-handler');
+const Questions = require('../lib/questions');
+
+//TODO: Same var in dataset controller as well. Extract it out.
+const quickLinksCount = 15;
 const defaultMetaSummary = 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.';
 
 class HomeController {
@@ -71,9 +72,9 @@ class HomeController {
                     res.render('home.ejs', templateParams);
                 });
             } catch (error) {
-                PagesController.error(req, res)(error);
+                ErrorHandler.error(req, res)(error);
             }
-        }, PagesController.error(req, res));
+        }, ErrorHandler.error(req, res));
     }
 }
 
