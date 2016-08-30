@@ -27,7 +27,7 @@ class Tag {
   }
 
   static tagMetadata() {
-    return FileCache.get('../../data/tag-metadata.json');
+    return FileCache.get('../data/tag-metadata.json');
   }
 }
 module.exports = Tag;

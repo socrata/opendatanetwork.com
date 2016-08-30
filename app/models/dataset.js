@@ -5,6 +5,7 @@ const Request = require('../../controllers/request');
 const Sources = require('../../src/data/data-sources.js');
 const Constants = require('../../controllers/constants');
 const Place = require('./place');
+const Search = require('./search');
 
 class Dataset {
   static datasets(requestParams) {
@@ -15,7 +16,7 @@ class Dataset {
       const offset = page * limit;
       const timeout = hasRegions ? Constants.TIMEOUT_MS : Constants.TIMEOUT_MS * 10;
 
-      Dataset.searchDatasetsURL(requestParams, limit, offset).then(url => {
+      Search.searchDatasetsURL(requestParams, limit, offset).then(url => {
         Request.getJSON(url, timeout).then(results => {
           annotateData(results);
           annotateParams(results, requestParams);

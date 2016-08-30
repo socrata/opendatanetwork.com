@@ -22,7 +22,7 @@ class Search {
       const offset = page * limit;
       const timeout = hasRegions ? Constants.TIMEOUT_MS : Constants.TIMEOUT_MS * 10;
 
-      Search.searchDatasetURL(requestParams, limit, offset).then(url => {
+      Dataset.searchDatasetURL(requestParams, limit, offset).then(url => {
 
         Request.getJSON(url, timeout).then(results => {
 

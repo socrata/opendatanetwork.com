@@ -108,7 +108,7 @@ class SearchController {
             const tagsPromise = Tag.tags();
             const domainsPromise = Category.domains();
             const datasetsPromise = Dataset.datasets(params);
-            const searchPromise = Dataset.searchDatasetsURL(params);
+            const searchPromise = Search.searchDatasetsURL(params);
             const locationsPromise = Place.locations();
             const searchResultsRegionsPromise = Search.searchResultsRegions(params.q);
             const questionsPromise = Questions.getQuestionsForSearchTerm(params.q, params.dataAvailability);
@@ -287,7 +287,7 @@ class SearchController {
         const domainsPromise = Category.domains(quickLinksCount);
         const searchDatasetPromise = Dataset.searchDataset(params);
         const descriptionPromise = MapDescription.summarizeFromParams(params);
-        const searchPromise = Dataset.searchDatasetsURL(params);
+        const searchPromise = Search.searchDatasetsURL(params);
         const locationsPromise = Place.locations();
         const questionsPromise = Questions.getQuestionsForRegionsAndDataAvailibility(params.regions, params.dataAvailability);
         const parentsPromise = forRegion(Relatives.parents);
@@ -440,6 +440,7 @@ function awaitPromises(promises, timeoutMS) {
                 resolved++;
                 if (resolved === promises.length) resolve(results);
             }, error => {
+                console.log(error);
                 console.log(index);
             });
         });
