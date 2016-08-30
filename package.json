@@ -31,6 +31,7 @@
     "moment": "^2.10.2",
     "morgan": "^1.7.0",
     "numeral": "^1.5.3",
+    "node-sass": "^3.8.0",
     "orchestrator": "^0.3.7",
     "path": "^0.12.7",
     "query-string": "^3.0.2",

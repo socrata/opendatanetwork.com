@@ -255,7 +255,7 @@ function newSession(entities, variable, constraints) {
     return get(MapConstants.MAP_NEW_URL, _.assign({
         variable: variable.id,
         entity_id: entities.map(_.property('id')).join(','),
-        app_token: MapConstants.APP_TOKEN
+        app_token: GlobalConstants.APP_TOKEN
     }, constraints));
 }
 

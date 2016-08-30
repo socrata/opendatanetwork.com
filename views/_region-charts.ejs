@@ -20,7 +20,7 @@
                 <p>
                     Header information including available variables with pointers to populate charts for 
                     <%= params.regions.map(region => region.name).join(', ') %> is available 
-                    <a href="http://api.opendatanetwork.com/data/v1/availability/?entity_id=<%= params.regions.map(region => region.id).join(',') %>&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank">HERE</a>.
+                    <a href="<%= GlobalConstants.ODN_API_BASE_URL %>/data/v1/availability/?entity_id=<%= params.regions.map(region => region.id).join(',') %>&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank">HERE</a>.
                 </p>
                 <dl>
                     <dt>API Docs:</dt>
@@ -55,7 +55,7 @@
                 <p>
                     Constraint information for year permutations for 
                     <%= params.regions.map(region => region.name).join(', ') %> is available 
-                    <a href="http://api.opendatanetwork.com/data/v1/constraint/demographics.population.count?entity_id=<%= params.regions.map(region => region.id).join(',') %>&constraint=year&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank">HERE</a>.
+                    <a href="<%= GlobalConstants.ODN_API_BASE_URL %>/data/v1/constraint/demographics.population.count?entity_id=<%= params.regions.map(region => region.id).join(',') %>&constraint=year&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank">HERE</a>.
                 </p>
                 <dl>
                     <dt>API Docs:</dt>
@@ -78,7 +78,7 @@
                 <p>
                     Create a new map for
                     <% params.regions.forEach((region, index) => { %><%= (index > 0) ? ', ' : '' %>
-                        <a href="http://api.opendatanetwork.com/data/v1/map/new?variable=<%= variable.id %>&year=<%= constraint.constraint_value %>&entity_id=<%= region.id %>&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank"><%= region.name %></a><%
+                        <a href="<%= GlobalConstants.ODN_API_BASE_URL %>/data/v1/map/new?variable=<%= variable.id %>&year=<%= constraint.constraint_value %>&entity_id=<%= region.id %>&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank"><%= region.name %></a><%
                     }); %>
                 </p>
                 <dl>
@@ -95,7 +95,7 @@
                 </p>
                     Get data for a map for
                     <% params.regions.forEach((region, index) => { %><%= (index > 0) ? ', ' : '' %>
-                        <a href="http://api.opendatanetwork.com/data/v1/map/values?session_id=[SESSION_ID_FROM_MAP_NEW_CALL]&zoom_level=2&bounds=47.5998951,-122.33707,47.5942794,-122.3270522&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank"><%= region.name %></a><%
+                        <a href="<%= GlobalConstants.ODN_API_BASE_URL %>/data/v1/map/values?session_id=[SESSION_ID_FROM_MAP_NEW_CALL]&zoom_level=2&bounds=47.5998951,-122.33707,47.5942794,-122.3270522&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank"><%= region.name %></a><%
                     }); %>
                 </p>
                 <dl>
@@ -134,7 +134,7 @@
                             <%= variable.variableId %>
                             for
                           <% params.regions.forEach((region, index) => { %><%= (index > 0) ? ', ' : '' %>
-                            <a href="http://api.opendatanetwork.com/data/v1/values?variable=<%= variable.variableId %>&entity_id=<%= region.id %><%= getConstraintQueryString(chart) %>&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank"><%= region.name %></a><% 
+                            <a href="<%= GlobalConstants.ODN_API_BASE_URL %>/data/v1/values?variable=<%= variable.variableId %>&entity_id=<%= region.id %><%= getConstraintQueryString(chart) %>&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank"><%= region.name %></a><% 
                           }); %>
                         </dd>
                       <% }); %>

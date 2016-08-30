@@ -3,7 +3,8 @@
 const API = require('./api');
 const Data = require('./data');
 const Relatives = require('./relatives');
-const Constants = require('./constants');
+const GlobalConstants = require('../src/constants');
+const ControllerConstants = require('./constants');
 const Request = require('./request');
 const Navigate = require('./navigate');
 const Questions = require('./questions');
@@ -141,6 +142,7 @@ class RenderController {
                     const hasSampleValues = (columnsWithSampleValues.length > 0);
 
                     const templateParams = {
+                        GlobalConstants,
                         params,
                         schemas,
                         title : originalDataset.name,
@@ -210,6 +212,7 @@ class RenderController {
                     const randomQuestions = RenderController._getRandomQuestions(questionsData);
 
                     const templateParams = {
+                        GlobalConstants,
                         categories,
                         locations,
                         params,
@@ -374,6 +377,7 @@ class RenderController {
                     }
 
                     const templateParams = {
+                        GlobalConstants,
                         params,
                         hasRegions: params.regions.length > 0,
                         title: searchPageTitle(params),
@@ -480,7 +484,7 @@ class RenderController {
         function processRegions(regions) {
             return regions.filter(region => {
                 return !_.contains(uids, region.id);
-            }).slice(0, Constants.N_RELATIVES).map(region => {
+            }).slice(0, ControllerConstants.N_RELATIVES).map(region => {
                 const navigateURL = Navigate.url(_.extend({}, params, {regions: [region]}));
                 const addURL = Navigate.url(_.extend({}, params, {regions: params.regions.concat([region])}));
                 return _.extend({}, region, {addURL, navigateURL});
@@ -566,6 +570,7 @@ class RenderController {
                     const constraint = RenderController.getContraintByValueOrDefault(dataConstraints.permutations, params.year);
 
                     const templateParams = {
+                        GlobalConstants,
                         topics,
                         topic,
                         datasets,

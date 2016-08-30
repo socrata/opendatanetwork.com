@@ -1,4 +1,6 @@
 
+// TODO change this to use GlobalConstants.ODN_API_BASE_URL
+// currently this does not work due to SSL issues.
 function apiPath(path, protocol) {
     return `${protocol || 'https'}://odn-backend.herokuapp.com${path || ''}`;
 }
@@ -9,8 +11,6 @@ const MapConstants = {
 
     // Milliseconds to wait before updating map after move or zoom.
     UPDATE_WAIT: 200,
-
-    APP_TOKEN: 'CqcTvF7wVsI8IYAq7CdZszLbU',
 
     CSS_ID: 'leaflet-map',
 
