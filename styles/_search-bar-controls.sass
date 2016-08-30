@@ -1,8 +1,29 @@
+@import "lib/utils"
+
 *::-webkit-input-placeholder,
 *:-moz-placeholder,
 *::-moz-placeholder,
 *:-ms-input-placeholder
     color: $gray-text-color
+
+.search-wrapper
+    .search-bar-input
+        @include calc(width, "100% - 234px")
+        @media (max-width: $mobile-width)
+            @include calc(width, "100% - 64px")
+    .search-buttons
+        float: right
+        width: 234px
+        @media (max-width: $mobile-width)
+            width: 64px
+        .quick-links-container
+            width: 144px
+        .search-link
+            position: relative
+            float: left
+            overflow: hidden
+            &:focus
+                background-color: darken(#ee3b3b, 10%)
 
 .search-bar-form
     display: block
@@ -12,7 +33,6 @@
 
     span
         display: block
-        overflow: hidden
 
     input
         box-sizing: border-box
@@ -36,6 +56,7 @@
         margin: 0
         padding: 0 35px
         text-align: center
+        width: 90px
         @media (max-width: $mobile-width)
             padding: 0
             width: 64px
