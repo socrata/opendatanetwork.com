@@ -28,6 +28,13 @@ The build process is automated using `gulp` and configured with `gulpfile.js`.
  - `gulp start`: run local webserver at [localhost:3000](http://localhost:3000)
  - `gulp test`: run [casperjs](http://casperjs.org/) tests
 
+### Developing
+
+ - Open 1 terminal with `gulp` running
+ - Open another terminal with `gulp start` running
+
+The `gulp` command will rebuild src as needed so you can just save in your editor and refresh for the latest changes in your browser.
+
 ### Testing
 
 A suite of [casperjs](http://casperjs.org/) tests has been made available in `tests/*`. To create a new test suite, copy one of the files in that directory and add tests for your own page. To run the tests, run `gulp test` from the command line.

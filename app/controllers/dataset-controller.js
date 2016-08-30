@@ -12,6 +12,9 @@ const Place = require('../models/place');
 const Request = require('../lib/request');
 const DatasetHelper = require('../lib/dataset-helper');
 const ParamsHelper = require('../lib/params-helper');
+const ErrorHandler = require('../lib/error-handler');
+
+const GlobalConstants = require('../../src/constants');
 
 //TODO: Same var in search/home controller. Extract it out.
 const quickLinksCount = 15;
@@ -127,6 +130,7 @@ class DatasetController {
                     const hasSampleValues = (columnsWithSampleValues.length > 0);
 
                     const templateParams = {
+                        GlobalConstants,
                         params,
                         schemas,
                         title: originalDataset.name,
