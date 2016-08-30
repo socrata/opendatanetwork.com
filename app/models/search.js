@@ -3,6 +3,8 @@ const moment = require('moment');
 const numeral = require('numeral');
 const Request = require('../../controllers/request');
 const Constants = require('../../controllers/constants');
+const Place = require('./place');
+const Sources = require('../../src/data/data-sources.js');
 
 class Search {
   static searchResultsRegions(q) {
