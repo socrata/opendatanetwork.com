@@ -5,7 +5,8 @@ class Questions {
 
         this.expanded = false;
 
-        $('a.more#questions').click(function() {
+        $('a.more#questions').click(function (event) {
+            event.preventDefault();
 
             var $this = $(this);
             var $container = $this.parent();
