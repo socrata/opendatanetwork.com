@@ -1,20 +1,22 @@
 <div class="quick-links-container">
-    <div class="quick-links-button-wide">Quick Links<i class="fa fa-caret-down"></i></div>
-    <i class="quick-links-button-narrow fa fa-bars"></i>
+    <a href class="quick-links-button-wide" role="button" tabindex="0" aria-owns="quick_links_dd_menu_dkp" aria-haspopup="true" aria-expanded="false">Quick Links<em class="fa fa-caret-down" aria-hidden="true"></em></a>
+
+    <a href class="quick-links-button-narrow" role="button" tabindex="0" aria-owns="quick_links_dd_menu_mobile" aria-haspopup="true" aria-expanded="false"><em class="fa fa-bars" aria-hidden="true"></em><span class="sr-only">Quick Links menu</span></a>
 
     <div class="quick-links-menu-container-mobile">
         <div class="quick-links-menu-inner-container-mobile">
-            <ul class="quick-links-menu-list-mobile">
+            <ul class="quick-links-menu-list-mobile" id="quick_links_dd_menu_mobile">
                 <li id="quick-link-menu-list-item-categories-mobile">
-                    <a class="quick-links-menu-header-mobile">
-                        <i class="quick-links-expand-caret-mobile fa fa-caret-down"></i>Categories
+                    <a href class="quick-links-menu-header-mobile" aria-owns="quick_links_categories_menu" aria-haspopup="true" aria-expanded="false">
+                        Categories
+                        <em class="quick-links-expand-caret-mobile fa fa-caret-down" aria-hidden="true"></em>
                     </a>
-                    <ul class="quick-links-menu-sub-list-mobile">
+                    <ul class="quick-links-menu-sub-list-mobile" id="quick_links_categories_menu" role="menu">
                         <% quickLinks.categories.forEach(function(category, index) { %>
-                            <li>
+                            <li role="option">
                                 <a href="/search?categories=<%- encodeURIComponent(category.category) %>&ref=<%= quickLinks.ref %>">
                                     <div>
-                                        <i class="fa <%- category.metadata.icon %>"></i>
+                                        <em class="fa <%- category.metadata.icon %>"></em>
                                         <%= category.category %>
                                     </div>
                                 </a>
@@ -23,13 +25,13 @@
                     </ul>
                 </li>
                 <li id="quick-link-menu-list-item-regions-mobile">
-                    <a class="quick-links-menu-header-mobile">
+                    <a href class="quick-links-menu-header-mobile" aria-owns="quick_links_regions_menu" aria-haspopup="true" aria-expanded="false">
                         Regions
-                        <i class="quick-links-expand-caret-mobile fa fa-caret-down"></i>
+                        <em class="quick-links-expand-caret-mobile fa fa-caret-down" aria-hidden="true"></em>
                     </a>
-                    <ul class="quick-links-menu-sub-list-mobile">
+                    <ul class="quick-links-menu-sub-list-mobile" id="quick_links_regions_menu" role="menu">
                         <% quickLinks.regions.forEach(function(region, index) { %>
-                            <li>
+                            <li role="option">
                                 <a href="/region/<%= region.id %>/<%= region.name %>&ref=<%= quickLinks.ref %>">
                                     <%= region.name %>
                                 </a>
@@ -38,13 +40,13 @@
                     </ul>
                 </li>
                 <li id="quick-link-menu-list-item-publishers-mobile">
-                    <a class="quick-links-menu-header-mobile">
+                    <a href class="quick-links-menu-header-mobile" aria-owns="quick_links_publishers_menu" aria-haspopup="true" aria-expanded="false">
                         Publishers
-                        <i class="quick-links-expand-caret-mobile fa fa-caret-down"></i>
+                        <em class="quick-links-expand-caret-mobile fa fa-caret-down" aria-hidden="true"></em>
                     </a>
-                    <ul class="quick-links-menu-sub-list-mobile">
+                    <ul class="quick-links-menu-sub-list-mobile" id="quick_links_publishers_menu" role="menu">
                     <% quickLinks.domains.forEach(function(domain, index) { %>
-                        <li>
+                        <li role="option">
                             <a href="/search?domains=<%- encodeURIComponent(domain.domain) %>&ref=<%= quickLinks.ref %>">
                                 <%= domain.domain %>
                             </a>
@@ -53,13 +55,13 @@
                     </ul>
                 </li>
                 <li id="quick-link-menu-list-item-standards-mobile">
-                    <a class="quick-links-menu-header-mobile">
+                    <a href class="quick-links-menu-header-mobile" aria-owns="quick_links_standards_menu" aria-haspopup="true" aria-expanded="false">
                         Standards
-                        <i class="quick-links-expand-caret-mobile fa fa-caret-down"></i>
+                        <em class="quick-links-expand-caret-mobile fa fa-caret-down" aria-hidden="true"></em>
                     </a>
-                    <ul class="quick-links-menu-sub-list-mobile">
-                        <li><a href="/search?tags=blds&ref=<%= quickLinks.ref %>">BLDS</a></li>
-                        <li><a href="/search?tags=lives&ref=<%= quickLinks.ref %>">LIVES</a></li>
+                    <ul class="quick-links-menu-sub-list-mobile" id="quick_links_standards_menu" role="menu">
+                        <li role="option"><a href="/search?tags=blds&ref=<%= quickLinks.ref %>">BLDS</a></li>
+                        <li role="option"><a href="/search?tags=lives&ref=<%= quickLinks.ref %>">LIVES</a></li>
                     </ul>
                 </li>
             </ul>
@@ -68,12 +70,12 @@
 
     <div class="quick-links-menu-container">
         <div class="quick-links-menu-inner-container">
-            <div class="quick-links-menu">
+            <div class="quick-links-menu" id="quick_links_dd_menu_dkp">
                 <div>
                     <ul class="quick-links-sub-menu quick-links-categories">
                         <li>Categories</li>
                     <% quickLinks.categories.forEach(function(category, index) { %>
-                        <li<%- (index > 4) ? ' class="quick-links-hidden"' : '' %>><a href="/search?categories=<%- encodeURIComponent(category.category) %>&ref=<%= quickLinks.ref %>"><i class="fa <%- category.metadata.icon %>"></i><%= category.category %></a></li>
+                        <li<%- (index > 4) ? ' class="quick-links-hidden"' : '' %>><a href="/search?categories=<%- encodeURIComponent(category.category) %>&ref=<%= quickLinks.ref %>"><em class="fa <%- category.metadata.icon %>"></em><%= category.category %></a></li>
                     <% }); %>
                     </ul>
                 </div>
@@ -101,7 +103,7 @@
                     </ul>
                 </div>
             </div>
-            <a class="quick-links-more">More</a>
+            <a class="quick-links-more" href tabindex="0" aria-label="Show more quick links">More</a>
         </div>
     </div>
 </div>
