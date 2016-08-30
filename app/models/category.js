@@ -67,7 +67,7 @@ class Category {
   }
 
   static categoryMetadata() {
-    return FileCache.get('data/category-metadata.json');
+    return FileCache.get('../data/category-metadata.json');
   }
 
 }

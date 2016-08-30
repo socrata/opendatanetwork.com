@@ -13,11 +13,11 @@ class Place {
   }
 
   static locations() {
-    return FileCache.get('../../data/locations.json');
+    return FileCache.get('../data/locations.json');
   }
 
   static stateNames() {
-    return FileCache.get('../../data/state-names.json');
+    return FileCache.get('../data/state-names.json');
   }
 }
 
