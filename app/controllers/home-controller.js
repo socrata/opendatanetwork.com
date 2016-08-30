@@ -13,7 +13,7 @@ const ParamsHelper = require('../lib/params-helper');
 const ErrorHandler = require('../lib/error-handler');
 const Questions = require('../lib/questions');
 
-const GlobalConstants = require('../src/constants');
+const GlobalConstants = require('../../src/constants');
 
 //TODO: Same var in dataset controller as well. Extract it out.
 const quickLinksCount = 15;
