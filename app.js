@@ -9,7 +9,6 @@ const favicon = require('serve-favicon');
 const helmet = require('helmet');
 const numeral = require('numeral');
 const querystring = require('querystring');
-const RenderController = require('./app/controllers/render-controller');
 
 const HomeController = require('./app/controllers/home-controller');
 const CategoriesController = require('./app/controllers/categories-controller');
