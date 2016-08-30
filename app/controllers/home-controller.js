@@ -13,6 +13,8 @@ const ParamsHelper = require('../lib/params-helper');
 const ErrorHandler = require('../lib/error-handler');
 const Questions = require('../lib/questions');
 
+const GlobalConstants = require('../src/constants');
+
 //TODO: Same var in dataset controller as well. Extract it out.
 const quickLinksCount = 15;
 const defaultMetaSummary = 'Find the data you need to power your business, app, or analysis from across the open data ecosystem.';
@@ -38,6 +40,7 @@ class HomeController {
                     const randomQuestions = HomeHelper.getRandomQuestions(questionsData);
 
                     const templateParams = {
+                        GlobalConstants,
                         categories,
                         locations,
                         params,

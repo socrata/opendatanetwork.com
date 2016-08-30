@@ -8,7 +8,7 @@ const numeral = require('numeral');
 const Questions = require('../lib/questions');
 const Data = require('../lib/data');
 const Navigate = require('../lib/navigate');
-const Constants = require('../lib/constants');
+const ControllerConstants = require('../lib/constants');
 const Relatives = require('../lib/relatives');
 const EntityFormatter = require('../lib/entity-formatter');
 const SearchHelper = require('../lib/search-helper');
@@ -22,7 +22,7 @@ const Place = require('../models/place');
 const Search = require('../models/search');
 const Tag = require('../models/tag');
 
-const SrcConstants = require('../../src/constants');
+const GlobalConstants = require('../../src/constants');
 const MapSources = require('../../src/data/map-sources');
 const MapDescription = require('../../src/maps/description');
 const DatasetConfig = require('../../src/dataset-config');
@@ -133,11 +133,12 @@ class SearchController {
                     else {
                         searchResultsRegions = data[6];
                         searchResultsRegions.forEach(region => {
-                            region.regionType = SrcConstants.REGION_NAMES[region.type] || '';
+                            region.regionType = GlobalConstants.REGION_NAMES[region.type] || '';
                         });
                     }
 
                     const templateParams = {
+                      GlobalConstants,
                         params,
                         hasRegions: params.regions.length > 0,
                         title: EntityFormatter.searchPageTitle(params),
@@ -150,6 +151,7 @@ class SearchController {
                         scripts: [
                             '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
                             '//www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart", "table"]}]}',
+                            '//cdn.socket.io/socket.io-1.4.5.js',
                             '/lib/third-party/leaflet/leaflet.min.js',
                             '/lib/third-party/leaflet/leaflet-omnivore.min.js',
                             '/lib/third-party/colorbrewer.min.js',
@@ -239,7 +241,7 @@ class SearchController {
         function processRegions(regions) {
             return regions.filter(region => {
                 return !_.contains(uids, region.id);
-            }).slice(0, Constants.N_RELATIVES).map(region => {
+            }).slice(0, ControllerConstants.N_RELATIVES).map(region => {
                 const navigateURL = Navigate.url(_.extend({}, params, {regions: [region]}));
                 const addURL = Navigate.url(_.extend({}, params, {regions: params.regions.concat([region])}));
                 return _.extend({}, region, {addURL, navigateURL});
@@ -325,6 +327,7 @@ class SearchController {
                     const constraint = DataHelper.getConstraintByValueOrDefault(dataConstraints.permutations, params.year);
 
                     const templateParams = {
+                        GlobalConstants,
                         topics,
                         topic,
                         datasets,
@@ -348,6 +351,7 @@ class SearchController {
                         scripts: [
                             '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
                             '//www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart", "table"]}]}',
+                            '//cdn.socket.io/socket.io-1.4.5.js',
                             '/lib/third-party/leaflet/leaflet.min.js',
                             '/lib/third-party/leaflet/leaflet-omnivore.min.js',
                             '/lib/third-party/leaflet/leaflet-markercluster.min.js',
