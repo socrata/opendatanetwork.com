@@ -53,11 +53,15 @@ class HomePageController {
 
         // API boxes
         //
-        $('.small-api-link').click(function() {
-            $(this).parent().parent().find('.api-info-box').slideToggle();
+        $('.small-api-link').click(function (event) {
+            event.preventDefault();
+            var $infobox = $(this).parent().parent().find('.api-info-box');
+            $infobox.toggleClass('open').slideToggle();
+            $(this).attr('aria-expanded', $infobox.hasClass('open'));
         });
 
-        $('.api-info-box .fa-close').click(function() {
+        $('.api-info-box .fa-close').click(function (event) {
+            event.preventDefault();
             $(this).parent().parent().find('.api-info-box').slideUp();
         });
 
@@ -158,19 +162,19 @@ class HomePageController {
 
         // Locations by state
         //
-        $('.more-subregions-link').click(function() {
-
+        $('.more-subregions-link').click(function (event) {
+            event.preventDefault();
             $(this).parent().removeClass('state-collapsed');
             $(this).hide();
         });
 
-        $('.more-regions-link').click(function() {
-
+        $('.more-regions-link').click(function (event) {
+            event.preventDefault();
             $('.states-list').removeClass('states-list-collapsed');
             $(this).hide();
         });
     }
-    
+
     beginSampleQuestions() {
 
         window.setTimeout(this.printNextSampleQuestionCharacter, this.getRandomInt(), this);
@@ -200,11 +204,11 @@ class HomePageController {
         window.setTimeout(self.printNextSampleQuestionCharacter, self.getRandomInt(), self);
         self.sampleCharacterIndex++;
     }
-    
+
     getRandomSampleIndex(max) {
         return Math.floor(Math.random() * max);
     }
- 
+
     getRandomInt() {
         const max = 150;
         const min = 50;
