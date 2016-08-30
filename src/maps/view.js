@@ -57,28 +57,16 @@ class MapView {
             this.showTileLayers();
         });
 
-        this.getUpdater().then(updater => {
+        openSocket(MapConstants.MAP_VALUES_URL).then(socket => {
+            socket.on('message', message => this.handleUpdate(JSON.parse(message)));
+
+            let updater = () => this.requestUpdate(socket);
             updater = _.debounce(updater, MapConstants.UPDATE_WAIT);
 
             updater();
             map.on('moveend', updater);
-        });
-    }
-
-    /**
-     * We can get updates via websockets or HTTP.
-     * Websockets are preffered but not supported by all browsers.
-     */
-    getUpdater() {
-        return new Promise((resolve, reject) => {
-            if (supportsWebsockets()) {
-                const socket = new PersistentWebsocket(MapConstants.MAP_VALUES_WS_URL)
-                    .onmessage(message => this.handleUpdate(message));
-
-                resolve(() => this.requestUpdateWS(socket));
-            } else {
-                resolve(() => this.requestUpdateHTTP());
-            }
+        }).catch(error => {
+            console.error(error);
         });
     }
 
@@ -237,19 +225,8 @@ class MapView {
         this.map.addLayer(feature);
     }
 
-    requestUpdateHTTP() {
-        const message = this.getUpdateMessage();
-        message.bounds = message.bounds.join(',');
-
-        get(MapConstants.MAP_VALUES_URL, message).then(response => {
-            this.handleUpdate(_.assign(response, {message}));
-        }).catch(error => {
-            console.error(error);
-        });
-    }
-
-    requestUpdateWS(socket) {
-        socket.send(this.getUpdateMessage());
+    requestUpdate(socket) {
+        socket.send(JSON.stringify(this.getUpdateMessage()));
     }
 
     getUpdateMessage() {
@@ -331,5 +308,13 @@ function reverse(array) {
 function getConstraintString(constraints) {
     if (_.isEmpty(constraints)) return '';
     return ` (${_.values(constraints).join(', ')})`;
+}
+
+function openSocket(url) {
+    return new Promise((resolve, reject) => {
+        const socket = io.connect(url, {transports: ['websocket']});
+        socket.on('connect', () => resolve(socket));
+        socket.on('error', error => reject(error));
+    });
 }
 

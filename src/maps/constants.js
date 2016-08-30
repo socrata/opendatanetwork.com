@@ -1,8 +1,11 @@
 
+function apiPath(path, protocol) {
+    return `${protocol || 'https'}://odn-backend.herokuapp.com${path || ''}`;
+}
+
 const MapConstants = {
-    MAP_NEW_URL: 'http://api.opendatanetwork.com/data/v1/map/new',
-    MAP_VALUES_URL: 'http://api.opendatanetwork.com/data/v1/map/values',
-    MAP_VALUES_WS_URL: 'ws://api.opendatanetwork.com/data/v1/map/values',
+    MAP_NEW_URL: apiPath('/data/v1/map/new'),
+    MAP_VALUES_URL: apiPath(),
 
     // Milliseconds to wait before updating map after move or zoom.
     UPDATE_WAIT: 200,
