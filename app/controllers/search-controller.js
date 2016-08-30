@@ -1,14 +1,19 @@
 'use strict';
-const API = require('./api');
 const Questions = require('../../controllers/questions');
 const Data = require('../../controllers/data');
 const Navigate = require('../../controllers/navigate');
 const Constants = require('../../controllers/constants');
 const Relatives = require('../../controllers/relatives');
 
-const SrcConstants = require('../src/constants');
-const MapSources = require('../src/data/map-sources');
-const MapDescription = require('../src/maps/description');
+const Category = require('../models/category');
+const Dataset = require('../models/dataset');
+const Place = require('../models/place');
+const Search = require('../models/search');
+const Tag = require('../models/tag');
+
+const SrcConstants = require('../../src/constants');
+const MapSources = require('../../src/data/map-sources');
+const MapDescription = require('../../src/maps/description');
 
 const EntityFormatter = require('../lib/entity-formatter');
 const SearchHelper = require('../lib/search-helper');
@@ -17,7 +22,7 @@ const DataHelper = require('../lib/data-helper');
 const ParamsHelper = require('../lib/params-helper');
 const PagesController = require('./pages-controller');
 
-const DatasetConfig = require('../src/dataset-config');
+const DatasetConfig = require('../../src/dataset-config');
 const quickLinksCount = 15;
 const refineByCount = 5;
 
@@ -40,7 +45,7 @@ class SearchController {
 
     static searchResults(req, res) {
         ParamsHelper.parameters(req, res).then(params => {
-            API.datasets(params).then(searchResults => {
+            Dataset.datasets(params).then(searchResults => {
                 if (searchResults.results.length === 0) {
                     res.status(204);
                     res.end();
@@ -88,7 +93,7 @@ class SearchController {
             }
 
             try {
-                RenderController._search(req, res, params);
+                SearchController.search(req, res, params);
             } catch (error) {
                 PagesController.error(req, res)(error);
             }
@@ -99,13 +104,13 @@ class SearchController {
         if (params.regions.length > 0) {
             SearchController._regions(req, res, params);
         } else {
-            const categoriesPromise = API.categories();
-            const tagsPromise = API.tags();
-            const domainsPromise = API.domains();
-            const datasetsPromise = API.datasets(params);
-            const searchPromise = API.searchDatasetsURL(params);
-            const locationsPromise = API.locations();
-            const searchResultsRegionsPromise = API.searchResultsRegions(params.q);
+            const categoriesPromise = Category.categories();
+            const tagsPromise = Tag.tags();
+            const domainsPromise = Category.domains();
+            const datasetsPromise = Dataset.datasets(params);
+            const searchPromise = Dataset.searchDatasetsURL(params);
+            const locationsPromise = Place.locations();
+            const searchResultsRegionsPromise = Search.searchResultsRegions(params.q);
             const questionsPromise = Questions.getQuestionsForSearchTerm(params.q, params.dataAvailability);
 
             const allPromises = [categoriesPromise, tagsPromise, domainsPromise,
@@ -154,8 +159,8 @@ class SearchController {
                     };
 
                     if (data && data.length == allPromises.length) {
-                        templateParams.currentCategory = API.currentCategory(params, data[0]);
-                        templateParams.currentTag = API.currentTag(params, data[1]);
+                        templateParams.currentCategory = Category.currentCategory(params, data[0]);
+                        templateParams.currentTag = Tag.currentTag(params, data[1]);
                         templateParams.searchResults = data[3];
                         templateParams.searchDatasetsURL = data[4];
 
@@ -277,13 +282,13 @@ class SearchController {
         const peersPromise = forRegion(Relatives.peers);
         const siblingsPromise = forRegion(Relatives.siblings);
         const childrenPromise = forRegion(Relatives.children);
-        const categoriesPromise = API.categories(quickLinksCount);
-        const tagsPromise = API.tags();
-        const domainsPromise = API.domains(quickLinksCount);
-        const searchDatasetPromise = API.searchDataset(params);
+        const categoriesPromise = Category.categories(quickLinksCount);
+        const tagsPromise = Tag.tags();
+        const domainsPromise = Category.domains(quickLinksCount);
+        const searchDatasetPromise = Dataset.searchDataset(params);
         const descriptionPromise = MapDescription.summarizeFromParams(params);
-        const searchPromise = API.searchDatasetsURL(params);
-        const locationsPromise = API.locations();
+        const searchPromise = Dataset.searchDatasetsURL(params);
+        const locationsPromise = Place.locations();
         const questionsPromise = Questions.getQuestionsForRegionsAndDataAvailibility(params.regions, params.dataAvailability);
         const parentsPromise = forRegion(Relatives.parents);
         const allPromises = [peersPromise, siblingsPromise, childrenPromise,
@@ -380,11 +385,11 @@ class SearchController {
 
                         if (data[3].length > 0) {
                             templateParams.categories = data[3];
-                            templateParams.currentCategory = API.currentCategory(params, data[3]);
+                            templateParams.currentCategory = Category.currentCategory(params, data[3]);
                         }
 
                         if (data[4].length > 0) {
-                            templateParams.currentTag = API.currentTag(params, data[4]);
+                            templateParams.currentTag = Tag.currentTag(params, data[4]);
                         }
 
                         templateParams.searchResults = data[6];

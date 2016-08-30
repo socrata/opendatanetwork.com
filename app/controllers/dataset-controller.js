@@ -1,5 +1,8 @@
 'use strict';
-const API = require('./api');
+const Dataset = require('../models/dataset');
+const Category = require('../models/category');
+const Place = require('../models/place');
+
 const Navigate = require('../../controllers/navigate');
 const Request = require('../../controllers/request');
 
@@ -13,8 +16,6 @@ const htmlencode = require('htmlencode').htmlEncode;
 const moment = require('moment');
 const numeral = require('numeral');
 
-
-
 class DatasetController {
     static show(req, res) {
         const domain = req.params.domain;
@@ -24,8 +25,8 @@ class DatasetController {
         // exist in the cachedContents nodes of the old backend dataset JSON.  Also we want the "view top 100" link to use the
         // new dataset.
         //
-        const originalDatasetPromise = API.datasetSummary(domain, id);
-        const datasetMigrationsPromise = API.datasetMigrations(domain, id);
+        const originalDatasetPromise = Dataset.datasetSummary(domain, id);
+        const datasetMigrationsPromise = Dataset.datasetMigrations(domain, id);
         const promises = Promise.all([originalDatasetPromise, datasetMigrationsPromise]);
 
         promises.then(data => {
@@ -48,18 +49,18 @@ class DatasetController {
 
             // Remaining promises
             //
-            const schemasPromise = API.standardSchemas(id);
+            const schemasPromise = Dataset.standardSchemas(id);
             const paramsPromise = ParamsHelper.parameters(req, res);
-            const categoriesPromise = API.categories(quickLinksCount);
-            const domainsPromise = API.domains(quickLinksCount);
-            const locationsPromise = API.locations();
+            const categoriesPromise = Category.categories(quickLinksCount);
+            const domainsPromise = Category.domains(quickLinksCount);
+            const locationsPromise = Place.locations();
 
             var rg = [schemasPromise, paramsPromise, categoriesPromise, domainsPromise, locationsPromise];
 
             // If we have a new backend dataset, fetch the old backend dataset to get cachedContents "sample values".
             //
             if ((originalDataset.newBackend) && obeId) {
-                rg.push(API.datasetSummary(domain, obeId)); // old dataset
+                rg.push(Dataset.datasetSummary(domain, obeId)); // old dataset
             }
 
             // Execute remaining promises

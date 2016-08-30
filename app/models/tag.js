@@ -2,7 +2,7 @@ const _ = require('lodash');
 const moment = require('moment');
 const numeral = require('numeral');
 const Category = require('./category');
-const Constants = require('../controllers/constants');
+const Constants = require('../../controllers/constants');
 const FileCache = require('../lib/fileCache');
 
 class Tag {
@@ -27,7 +27,7 @@ class Tag {
   }
 
   static tagMetadata() {
-    return FileCache.get('data/tag-metadata.json');
+    return FileCache.get('../../data/tag-metadata.json');
   }
 }
 module.exports = Tag;

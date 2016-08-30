@@ -1,9 +1,9 @@
 const _ = require('lodash');
 const moment = require('moment');
 const numeral = require('numeral');
-const Request = require('../controllers/request');
-const Sources = require('../src/data/data-sources.js');
-const Constants = require('../controllers/constants');
+const Request = require('../../controllers/request');
+const Sources = require('../../src/data/data-sources.js');
+const Constants = require('../../controllers/constants');
 const Place = require('./place');
 
 class Dataset {

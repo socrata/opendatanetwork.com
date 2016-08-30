@@ -2,8 +2,8 @@ const _ = require('lodash');
 const moment = require('moment');
 const numeral = require('numeral');
 const Dataset = require('./dataset');
-const Request = require('../controllers/request');
-const Constants = require('../controllers/constants');
+const Request = require('../../controllers/request');
+const Constants = require('../../controllers/constants');
 
 class Search {
   static searchResultsRegions(q) {

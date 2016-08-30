@@ -1,5 +1,7 @@
 'use strict';
-const API = require('./api');
+const Category = require('../models/category');
+const Place = require('../models/place');
+
 const HomeHelper = require('../lib/home-helper');
 const ParamsHelper = require('../lib/params-helper');
 const PagesController = require('./pages-controller');
@@ -16,9 +18,9 @@ const defaultMetaSummary = 'Find the data you need to power your business, app, 
 
 class HomeController {
     static index(req, res) {
-        const categoriesPromise = API.categories();
-        const domainsPromise = API.domains(quickLinksCount);
-        const locationsPromise = API.locations();
+        const categoriesPromise = Category.categories();
+        const domainsPromise = Category.domains(quickLinksCount);
+        const locationsPromise = Place.locations();
         const paramsPromise = ParamsHelper.parameters(req, res);
         const allPromise = Promise.all([categoriesPromise, locationsPromise, paramsPromise, domainsPromise]);
 

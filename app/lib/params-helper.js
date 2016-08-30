@@ -3,6 +3,7 @@ const EntityFormatter = require('./entity-formatter');
 const Data = require('../../controllers/data');
 const defaultSearchResultCount = 10;
 const PagesController = require('../controllers/pages-controller');
+const Place = require('../models/place');
 
 class ParamsHelper {
     static parameters(req, res) {
@@ -33,7 +34,7 @@ class ParamsHelper {
             if (req.params.regionIds && req.params.regionIds !== '') {
                 const regionIds = req.params.regionIds.split('-');
 
-                API.regions(regionIds).then(regions => {
+                Place.regions(regionIds).then(regions => {
                     const regionsById = _.object(regions.map(region => [region.id, region]));
                     params.regions = regionIds
                         .filter(id => id in regionsById)

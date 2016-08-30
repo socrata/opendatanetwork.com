@@ -1,9 +1,9 @@
 const _ = require('lodash');
 const moment = require('moment');
 const numeral = require('numeral');
-const Request = require('../controllers/request');
+const Request = require('../../controllers/request');
 const FileCache = require('../lib/fileCache');
-const Constants = require('../controllers/constants');
+const Constants = require('../../controllers/constants');
 
 class Place {
   static regions(ids) {
@@ -13,11 +13,11 @@ class Place {
   }
 
   static locations() {
-    return FileCache.get('data/locations.json');
+    return FileCache.get('../../data/locations.json');
   }
 
   static stateNames() {
-    return FileCache.get('data/state-names.json');
+    return FileCache.get('../../data/state-names.json');
   }
 }
 
