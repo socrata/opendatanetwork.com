@@ -4,8 +4,12 @@
         <ul>
           <% categories.forEach(function(result) { %>
             <li>
-                <a class="icon" href="/search?categories=<%= encodeURIComponent(result.category) %>"><i class="fa <%= result.metadata.icon %>"></i></a>
-                <a href="/search?categories=<%= encodeURIComponent(result.category) %>"><h3><%= result.category %></h3></a>
+                <a href="/search?categories=<%= encodeURIComponent(result.category) %>">
+                  <span class="icon" role="presentation">
+                    <em class="fa <%= result.metadata.icon %>"></em>
+                  </span>
+                  <strong><%= result.category %></strong>
+                </a>
             </li>
           <% }); %>
         </ul>
