@@ -45,7 +45,7 @@ class SearchController {
 
     static searchResults(req, res) {
         ParamsHelper.parameters(req, res).then(params => {
-            Dataset.datasets(params).then(searchResults => {
+            Search.datasets(params).then(searchResults => {
                 if (searchResults.results.length === 0) {
                     res.status(204);
                     res.end();
@@ -107,7 +107,7 @@ class SearchController {
             const categoriesPromise = Category.categories();
             const tagsPromise = Tag.tags();
             const domainsPromise = Category.domains();
-            const datasetsPromise = Dataset.datasets(params);
+            const datasetsPromise = Search.datasets(params);
             const searchPromise = Search.searchDatasetsURL(params);
             const locationsPromise = Place.locations();
             const searchResultsRegionsPromise = Search.searchResultsRegions(params.q);
@@ -285,7 +285,7 @@ class SearchController {
         const categoriesPromise = Category.categories(quickLinksCount);
         const tagsPromise = Tag.tags();
         const domainsPromise = Category.domains(quickLinksCount);
-        const searchDatasetPromise = Dataset.searchDataset(params);
+        const searchDatasetPromise = Search.searchDataset(params);
         const descriptionPromise = MapDescription.summarizeFromParams(params);
         const searchPromise = Search.searchDatasetsURL(params);
         const locationsPromise = Place.locations();

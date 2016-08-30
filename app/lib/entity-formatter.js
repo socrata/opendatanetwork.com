@@ -1,4 +1,5 @@
 'use strict';
+const _ = require('lodash');
 
 class EntityFormatter {
     static asArray(parameter) {
