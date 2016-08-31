@@ -79,12 +79,17 @@ class HomePageController {
 
         // Questions section
         //
-        $('.questions-dropdown').click(() => {
-
-            if ($('.questions-list-container').is(':visible'))
-                $('.questions-dropdown .fa').removeClass('fa-caret-up').addClass('fa-caret-down');
-            else
-                $('.questions-dropdown .fa').removeClass('fa-caret-down').addClass('fa-caret-up');
+        $('.questions-dropdown').click((event) => {
+            event.preventDefault();
+            if ($('.questions-list-container').is(':visible')) {
+                $('.questions-dropdown').attr('aria-expanded', false)
+                                        .find('.fa').removeClass('fa-caret-up')
+                                        .addClass('fa-caret-down');
+            } else {
+                $('.questions-dropdown').attr('aria-expanded', true)
+                                        .find('.fa').removeClass('fa-caret-down')
+                                        .addClass('fa-caret-up');
+            }
 
             $('.questions-list-container').slideToggle();
         });
@@ -103,26 +108,37 @@ class HomePageController {
 
         // Mobile categories
         //
-        $('.categories-dropdown-mobile').click(() => {
-
-            if ($('.categories-list-mobile').is(':visible'))
-                $('.categories-dropdown-mobile .fa').removeClass('fa-caret-up').addClass('fa-caret-down');
-            else
-                $('.categories-dropdown-mobile .fa').removeClass('fa-caret-down').addClass('fa-caret-up');
+        $('.categories-dropdown-mobile').click((event) => {
+            event.preventDefault();
+            if ($('.categories-list-mobile').is(':visible')) {
+                $('.categories-dropdown-mobile').attr('aria-expanded', false)
+                                                .find('.fa').removeClass('fa-caret-up')
+                                                .addClass('fa-caret-down');
+            } else {
+                $('.categories-dropdown-mobile').attr('aria-expanded', true)
+                                                .find('.fa').removeClass('fa-caret-down')
+                                                .addClass('fa-caret-up');
+            }
 
             $('.categories-list-mobile').slideToggle();
         });
 
         // Mobile regions
         //
-        $('.state-expand-mobile').click(function() {
-
+        $('.state-expand-mobile').click(function(event) {
+            event.preventDefault();
             const regionId = $(this).attr('region-id');
 
-            if ($('.sub-regions-container-' + regionId + '-mobile').is(':visible'))
-                $(this).removeClass('fa-minus').addClass('fa-plus');
-            else
-                $(this).removeClass('fa-plus').addClass('fa-minus');
+            if ($('.sub-regions-container-' + regionId + '-mobile').is(':visible')) {
+                $(this).attr('aria-expanded', false)
+                       .find('.fa').removeClass('fa-minus')
+                       .addClass('fa-plus');
+
+            } else {
+                $(this).attr('aria-expanded', true)
+                       .find('.fa').removeClass('fa-plus')
+                       .addClass('fa-minus');
+            }
 
             $('.sub-regions-container-' + regionId + '-mobile').slideToggle();
         });

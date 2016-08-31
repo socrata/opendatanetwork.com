@@ -6,7 +6,7 @@
             <li>
                 <a href="/search?categories=<%= encodeURIComponent(result.category) %>">
                   <span class="icon" role="presentation">
-                    <em class="fa <%= result.metadata.icon %>"></em>
+                    <em class="fa <%= result.metadata.icon %>" aria-hidden="true"></em>
                   </span>
                   <strong><%= result.category %></strong>
                 </a>
@@ -19,13 +19,13 @@
 
 <section class="categories-section-mobile">
     <h4>Data Categories</h4>
-    <a class="categories-dropdown-mobile">Select a Category<i class="fa fa-caret-down"></i></a>
-    <ul class="categories-list-mobile">
+    <a href class="categories-dropdown-mobile" aria-controls="dataCategoriesList" aria-expanded="false">Select a Category<em class="fa fa-caret-down" aria-hidden="true"></em></a>
+    <ul class="categories-list-mobile" id="dataCategoriesList">
         <% categories.forEach(function(result) { %>
         <li>
             <h3>
                 <a href="/search?categories=<%= encodeURIComponent(result.category) %>">
-                    <i class="fa <%= result.metadata.icon %>"></i>
+                    <em class="fa <%= result.metadata.icon %>" aria-hidden="true"></em>
                     <%= result.category %>
                 </a>
             </h3>
