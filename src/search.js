@@ -3,7 +3,7 @@ $(document).ready(function() {
 
     // Search page controller
     //
-    new SearchPageController(_params, _searchResultsRegions);
+    new SearchPageController(_params, _searchResultsRegions, _query);
 
     // Autosuggest
     //

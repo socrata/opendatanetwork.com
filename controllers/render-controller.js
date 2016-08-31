@@ -580,6 +580,7 @@ class RenderController {
                         constraint,
                         params,
                         metric,
+                        query: req.query,
                         hasRegions: params.regions.length > 0,
                         regionNames: wordJoin(params.regions.map(region => region.name), 'or'),
                         title: searchPageTitle(params, dataset, metric),
@@ -775,7 +776,8 @@ class RenderController {
                 tags: asArray(query.tags),
                 vector: req.params.vector || '',
                 year: req.params.year || '',
-                debug: query.debug && query.debug == 'true'
+                debug: query.debug && query.debug == 'true',
+                query: req.query
             };
 
             if (req.params.regionIds && req.params.regionIds !== '') {

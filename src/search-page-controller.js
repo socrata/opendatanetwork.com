@@ -1,10 +1,11 @@
 
 class SearchPageController {
 
-    constructor(params, searchResultsRegions) {
+    constructor(params, searchResultsRegions, query) {
 
         this.maxMobileWidth = 800;
         this.params = params;
+        this.query = query;
         this.searchResultsRegions = searchResultsRegions;
         this.fetching = false;
         this.fetchedAll = false;
@@ -177,11 +178,15 @@ class SearchPageController {
             // Get data availability
             //
             api.getDataAvailability(this.params.regions).then(dataAvailability => {
-
                 const dataset = this.getDataset(dataAvailability, vector);
                 const variablesArray = _.values(dataset.variables);
                 const variable = this.getVariableByIdOrDefault(variablesArray, this.params.metric); // metric is variable id
                 const constraintName = dataset.constraints[0];
+
+                const a = new ConstraintSelector(dataset, variable, regions, this.query);
+                a.init()
+                    .then(() => a.draw())
+                    .catch(error => console.error(error));
 
                 // Get the constraints
                 //
@@ -289,7 +294,7 @@ class SearchPageController {
 
         // Map should display above charts on the desktop, below charts on mobile.
         //
-        $(window).resize(() => { 
+        $(window).resize(() => {
 
             this.moveMapNode();
 

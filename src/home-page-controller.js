@@ -170,7 +170,7 @@ class HomePageController {
             $(this).hide();
         });
     }
-    
+
     beginSampleQuestions() {
 
         window.setTimeout(this.printNextSampleQuestionCharacter, this.getRandomInt(), this);
@@ -199,11 +199,11 @@ class HomePageController {
         window.setTimeout(self.printNextSampleQuestionCharacter, self.getRandomInt(), self);
         self.sampleCharacterIndex++;
     }
-    
+
     getRandomSampleIndex(max) {
         return Math.floor(Math.random() * max);
     }
- 
+
     getRandomInt() {
         const max = 150;
         const min = 50;

@@ -4,33 +4,33 @@ class Autosuggest {
     constructor(resultSelector) {
 
         const suggestConfigs = [
-            { 
-                suggestType: 'entity', 
-                image: 'fa-globe', 
+            {
+                suggestType: 'entity',
+                image: 'fa-globe',
                 name: 'Regions',
                 select: option => this.navigate(this.path(['region', option.id, option.name])),
-            }, 
-            { 
-                suggestType: 'category', 
-                image: 'fa-tags', 
+            },
+            {
+                suggestType: 'category',
+                image: 'fa-tags',
                 name: 'Categories',
                 select: option => this.navigate('/search', { categories: option.name }),
             },
-            { 
-                suggestType: 'publisher', 
-                image: 'fa-newspaper-o', 
+            {
+                suggestType: 'publisher',
+                image: 'fa-newspaper-o',
                 name: 'Publishers',
                 select: option => this.navigate('/search', { domains: option.name })
             },
-            { 
-                suggestType: 'dataset', 
-                image: 'fa-bar-chart', 
+            {
+                suggestType: 'dataset',
+                image: 'fa-bar-chart',
                 name: 'Datasets',
                 select: option => this.navigate(this.path(['dataset', option.domain, option.fxf]))
             },
-            { 
-                suggestType: 'question', 
-                image: 'fa-question-circle', 
+            {
+                suggestType: 'question',
+                image: 'fa-question-circle',
                 name: 'Questions',
                 select: option => {
 
@@ -44,13 +44,13 @@ class Autosuggest {
                         this.path(['region', option.entity.id, option.entity.name, vector, option.variable_id]),
                         { question: 1 });
                 },
-            }, 
+            },
         ];
 
-        const apiConfig = { 
+        const apiConfig = {
 
-            suggestType: 'api', 
-            image: 'fa-code', 
+            suggestType: 'api',
+            image: 'fa-code',
             name: 'API',
             select: option => this.navigate('http://docs.odn.apiary.io/#reference/0/suggestions/get-suggestions'),
         };
@@ -109,16 +109,16 @@ class Autosuggest {
         if (term === '') {
 
             this.results.hide();
-        } 
+        }
         else {
-        
+
             const time = Date.now();
             const promises = this.sources.map(source => source.get(term));
 
             Promise.all(promises).then(allOptions => {
-                
+
                 if (time > this.time) {
-                
+
                     this.time = time;
                     this.results.show(this.sources, allOptions);
                 }
@@ -139,7 +139,7 @@ class Autosuggest {
 
             const path = `/search?${$.param({q: this.currentTerm})}`;
             window.location.href = path;
-        } 
+        }
         else {
 
             this.results.enter();

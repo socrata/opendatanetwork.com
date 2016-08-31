@@ -1,11 +1,8 @@
 'use strict';
 
 class OdnApi {
-
     getDataAvailability(regions) {
-
         return new Promise((resolve, reject) => {
-
             const url = this.buildUrl(GlobalConstants.DATA_AVAILABILITY_URL, {
                 app_token: GlobalConstants.APP_TOKEN,
                 entity_id: regions.map(region => region.id).join(','),
@@ -15,24 +12,23 @@ class OdnApi {
         });
     }
 
-    getDataConstraint(regions, variable, constraint) {
+    getDataConstraint(regions, variable, constraint, constraints) {
+        const path = GlobalConstants.DATA_CONSTRAINT_URL.format(variable.id);
+        const params = _.extend({
+            app_token: GlobalConstants.APP_TOKEN,
+            entity_id: regions.map(region => region.id).join(','),
+            constraint: constraint
+        }, constraints || {});
 
-        return new Promise((resolve, reject) => {
+        return this.get(path, params);
+    }
 
-            const url = this.buildUrl(GlobalConstants.DATA_CONSTRAINT_URL.format(variable.id), {
-                app_token: GlobalConstants.APP_TOKEN,
-                entity_id: regions.map(region => region.id).join(','),
-                constraint: constraint
-            });
-
-            resolve(d3.promise.json(url));
-        });
+    get(path, params) {
+        return d3.promise.json(this.buildUrl(path, params));
     }
 
     getDataValues(regions, variable, constraint, forecast) {
-
        return new Promise((resolve, reject) => {
-
             const params = {
                 app_token: GlobalConstants.APP_TOKEN,
                 entity_id: regions.map(region => region.id).join(','),
@@ -53,13 +49,13 @@ class OdnApi {
     };
 
     buildUrl(path, params) {
-
         const validParams = _.omit(params, param => param == []);
         const paramString = $.param(validParams);
         const url = `${path}${path[path.length - 1] == '?' ? '' : '?'}${paramString}`;
 
-        console.log(url);
-        
         return url;
     }
 }
+
+const ODN = new OdnApi();
+
