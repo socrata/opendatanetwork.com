@@ -65,10 +65,10 @@
                     <em class="fa fa-map-marker" aria-hidden="true"></em>
                     <%= location.name %>
                 </a>
-                <a href class="state-expand-mobile" region-id="<%= location.id %>" aria-controls="region_<%=location.id %>" aria-expanded="false"><em class="fa fa-plus"></em><span class="sr-only">Show all regions in <%= location.name %></span></a>
+                <a href class="state-expand-mobile" region-id="<%= location.id %>" aria-controls="region_<%=location.id %>" aria-expanded="false" role="tab"><em class="fa fa-plus"></em><span class="sr-only">Show all regions in <%= location.name %></span></a>
             </h3>
 
-            <div class="sub-regions-container-<%=location.id %>-mobile sub-regions-container-mobile" id="region_<%=location.id %>">
+            <div class="sub-regions-container-<%=location.id %>-mobile sub-regions-container-mobile" id="region_<%=location.id %>" aria-hidden="false" role="tabpanel" aria-label="All regions in <%= location.name %>">
                 <ul class="sub-regions-list-mobile">
                     <% for (var i = 0; i < location.msas.length; i++) { %>
                     <li>
