@@ -30,12 +30,20 @@ class Data {
             constraint.options = constraint.options.map(option => {
                 return {
                     name: option,
-                    url: Navigate.url(params, _.extend({}, query, {[constraint.constraint]: option}))
+                    url: Navigate.url(params, _.extend({}, query, {[constraint.name]: option}))
                 };
             });
         });
 
         return constraintData;
+    }
+
+    static addVariableURLs(params, query, variables) {
+        return _.values(variables).map(variable => {
+            return _.extend(variable, {
+                url: Navigate.url(_.extend({}, params, {metric: variable.id}), query)
+            });
+        });
     }
 
     static getConstraints(entities, variable, constraints, fixed, results) {
@@ -49,7 +57,7 @@ class Data {
             fixed[constraint] = selected;
 
             results.push({
-                constraint,
+                name: constraint,
                 options,
                 selected
             });

@@ -1,0 +1,20 @@
+
+<li id="map-variable-text" class="map-variable-container">
+    <span class="refine-menu-header-mobile">
+        <i class="fa odn-caret fa-caret-down"></i>
+        <span>
+            cost of living rank
+        </span>
+    </span>
+
+    <ul class="chart-sub-nav-menu" id="map-variable-list" style="display: none;">
+        <% variables.forEach(option => { %>
+            <li>
+                <a href="<%= option.url %>">
+                    <%= option.name %>
+                </a>
+            </li>
+        <% }); %>
+    </ul>
+</li>
+
