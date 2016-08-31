@@ -1,5 +1,7 @@
 'use strict';
 
+const _ = require('lodash');
+
 class Navigate {
     constructor(params) {
         this.regions = params.regions;
@@ -33,7 +35,7 @@ class Navigate {
         return name.replace(/,/g, '').replace(/[ \/]/g, '_');
     }
 
-    static url(params) {
+    static url(params, query) {
         const ids = params.regions
             .map(region => region.id)
             .join('-');
@@ -49,8 +51,14 @@ class Navigate {
             if (params.year) navigate.push(params.year);
         }
 
-        return `/region/${ids}/${names}/${navigate.join('/')}`;
+        return `/region/${ids}/${names}/${navigate.join('/')}?${param(query)}`;
     }
+}
+
+function param(params) {
+    return _.pairs(params || {})
+        .map(pair => pair.join('='))
+        .join('&');
 }
 
 module.exports = Navigate;

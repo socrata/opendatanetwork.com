@@ -561,16 +561,15 @@ class RenderController {
                 const variable = RenderController.getVariableByIdOrDefault(variablesArray, params.metric); // metric is variable id
                 const constraintName = dataset.constraints[0];
 
-                // Get the constraints
-                //
-                Data.getDataConstraint(params.regions, variable, constraintName).then(dataConstraints => {
+                const constraints = dataset.constraints;
+                const fixed = _.pick(req.query, constraints);
+                Data.getConstraints(params.regions, variable, constraints, fixed).then(constraintData => {
+                    constraintData = Data.addConstraintURLs(params, req.query, constraintData);
 
-                    dataConstraints.permutations = _.sortByOrder(dataConstraints.permutations, ['constraint_value'], ['desc']);
-
-                    const constraint = RenderController.getContraintByValueOrDefault(dataConstraints.permutations, params.year);
-
+                    const constraint = _.first(constraintData);
                     const templateParams = {
                         GlobalConstants,
+                        constraintData,
                         topics,
                         topic,
                         datasets,

@@ -183,10 +183,19 @@ class SearchPageController {
                 const variable = this.getVariableByIdOrDefault(variablesArray, this.params.metric); // metric is variable id
                 const constraintName = dataset.constraints[0];
 
-                const a = new ConstraintSelector(dataset, variable, regions, this.query);
-                a.init()
-                    .then(() => a.draw())
-                    .catch(error => console.error(error));
+                d3.select('ul.chart-sub-nav')
+                    .on('mouseenter', () => {
+                        if (this.options.length === 0) return;
+                        this.container.classed('selected', true);
+                        this.optionContainer.style('display', 'block');
+                        this.selectedCaret.classed('fa-caret-down', false).classed('fa-caret-up', true);
+                    })
+                    .on('mouseleave', () => {
+                        this.container.classed('selected', false);
+                        this.optionContainer.style('display', 'none');
+                        this.selectedCaret.classed('fa-caret-down', true).classed('fa-caret-up', false);
+                    });
+
 
                 // Get the constraints
                 //

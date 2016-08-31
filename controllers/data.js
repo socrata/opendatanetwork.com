@@ -1,23 +1,75 @@
 'use strict';
 
 const _ = require('lodash');
-const GlobalConstants = require("../src/constants"); 
+const GlobalConstants = require("../src/constants");
 const Querystring = require('querystring');
 const Request = require('./request');
+const Navigate = require('./navigate');
+
+
+class ConstraintOptions {
+    constructor(name, options, selected) {
+        this.name = name;
+        this.options = options;
+        this.selected = selected;
+    }
+}
 
 class Data {
-
     static getDataAvailability(regions) {
+        const url = Request.buildURL(GlobalConstants.DATA_AVAILABILITY_URL, {
+            app_token: GlobalConstants.APP_TOKEN,
+            entity_id: regions.map(region => region.id).join(','),
+        });
 
-        return new Promise((resolve, reject) => {
+        return Request.getJSON(url);
+    }
 
-            const url = Request.buildURL(GlobalConstants.DATA_AVAILABILITY_URL, {
-                app_token: GlobalConstants.APP_TOKEN,
-                entity_id: regions.map(region => region.id).join(','),
+    static addConstraintURLs(params, query, constraintData) {
+        constraintData.forEach(constraint => {
+            constraint.options = constraint.options.map(option => {
+                return {
+                    name: option,
+                    url: Navigate.url(params, _.extend({}, query, {[constraint.constraint]: option}))
+                };
+            });
+        });
+
+        return constraintData;
+    }
+
+    static getConstraints(entities, variable, constraints, fixed, results) {
+        fixed = fixed || {};
+        results = results || [];
+
+        const constraint = _.first(constraints);
+        return Data.constraints(entities, variable, constraint, fixed).then(options => {
+            const selected = (constraint in fixed && _.includes(options, fixed[constraint])) ?
+                fixed[constraint] : _.first(options);
+            fixed[constraint] = selected;
+
+            results.push({
+                constraint,
+                options,
+                selected
             });
 
-            Request.getJSON(url).then(json => resolve(json), reject);
+            if (constraints.length === 1)
+                return Promise.resolve(results);
+            return Data.getConstraints(entities, variable, _.tail(constraints), fixed, results);
         });
+    }
+
+    static constraints(entities, variable, constraint, fixed) {
+        const path = GlobalConstants.DATA_CONSTRAINT_URL.format(variable.id);
+        const params = _.extend({
+            constraint,
+            app_token: GlobalConstants.APP_TOKEN,
+            entity_id: entities.map(_.property('id')).join(',')
+        }, _.omit(fixed, constraint) || {});
+        const url = Request.buildURL(path, params);
+        return Request.getJSON(url)
+            .then(json => json.permutations.map(_.property('constraint_value')));
     }
 
     static getDataConstraint(regions, variable, constraint) {
@@ -61,8 +113,6 @@ class Data {
         const paramString = Querystring.stringify(validParams);
         const url = `${path}${path[path.length - 1] == '?' ? '' : '?'}${paramString}`;
 
-        console.log(url);
-        
         return url;
     }
 }
