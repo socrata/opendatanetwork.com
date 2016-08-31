@@ -29,111 +29,103 @@ const Search = require('../models/search');
 // });
 
 class Questions {
+    static getQuestionsForSearchTerm(term, dataAvailability) {
+        return new Promise((resolve, reject) => {
+            Search.searchResultsRegions(term).then(regions => {
+                if (regions.length === 0) {
+                    resolve([]);
+                    return;
+                }
 
-  static getQuestionsForSearchTerm(term, dataAvailability) {
-
-    return new Promise((resolve, reject) => {
-
-      Search.searchResultsRegions(term).then(regions => {
-
-        if (regions.length == 0) {
-          resolve([]);
-          return;
-        }
-
-        // Use the first region returned for the questions
-        //
-        Data.getDataAvailability([regions[0]]).then(dataAvailability => {
-          Questions.getQuestionsForRegionsAndDataAvailibility([regions[0]], dataAvailability).then(response => {
-            resolve(response);
-          });
+                // Use the first region returned for the questions
+                //
+                Data.getDataAvailability([regions[0]]).then(dataAvailability => {
+                    Questions.getQuestionsForRegionsAndDataAvailibility([regions[0]], dataAvailability).then(response => {
+                        resolve(response);
+                    });
+                });
+            }, reject);
         });
-      }, reject);
-    });
-  }
+    }
 
-  static getQuestionsForRegions(regions) {
-
-    return new Promise((resolve, reject) => {
-
-      Data.getDataAvailability(regions).then(dataAvailability => {
-        Questions.getQuestionsForRegionsAndDataAvailibility(regions, dataAvailability).then(response => {
-          resolve(response);
+    static getQuestionsForRegions(regions) {
+        return new Promise((resolve, reject) => {
+            Data.getDataAvailability(regions).then(dataAvailability => {
+                Questions.getQuestionsForRegionsAndDataAvailibility(regions, dataAvailability).then(response => {
+                    resolve(response);
+                });
+            }, reject);
         });
-      }, reject);
-    });
-  }
+    }
 
-  // TODO: if we can restructure the URLs to remove the vector component and only use variable IDs, we can
-  // remove this call to get dataAvailability.
-  //
-  static getQuestionsForRegionsAndDataAvailibility(regions, dataAvailability) {
+    // TODO: if we can restructure the URLs to remove the vector component and only use variable IDs, we can
+    // remove this call to get dataAvailability.
+    //
+    static getQuestionsForRegionsAndDataAvailibility(regions, dataAvailability) {
+        return new Promise((resolve, reject) => {
+            const url = Request.buildURL(ControllerConstants.SEARCH_QUESTION_URL, {
+                app_token: GlobalConstants.APP_TOKEN,
+                entity_id: regions.map(region => region.id).join(','),
+                limit: 15
+            });
 
-    return new Promise((resolve, reject) => {
+            Request.getJSON(url).then(response => {
 
-      const url = Request.buildURL(ControllerConstants.SEARCH_QUESTION_URL, {
-        app_token: GlobalConstants.APP_TOKEN,
-        entity_id: regions.map(region => region.id).join(','),
-        limit: 15
-      });
+                const questions = [];
 
-      Request.getJSON(url).then(response => {
+                response.questions.forEach(question => {
 
-        const questions = [];
+                    const segments = question.variable_id.split('.');
+                    segments.pop();
 
-        response.questions.forEach(question => {
+                    const datasetId = segments.join('.');
+                    const vector = getVectorForDatasetId(dataAvailability, datasetId);
 
-          const segments = question.variable_id.split('.');
-          segments.pop();
+                    if (!vector || (vector.length == 0))
+                        return;
 
-          const datasetId = segments.join('.');
-          const vector = getVectorForDatasetId(dataAvailability, datasetId);
+                    const returnedQuestion = _.extend({}, question, {
+                        numRegions: regions.length,
+                        url: path([
+                                'region',
+                                regions.map(region => region.id).join('-'),
+                                regions.map(region => region.name).join('-'),
+                                vector,
+                                question.variable_id]) + '?question=1'
+                    });
 
-          if (!vector || (vector.length == 0))
-            return;
+                    questions.push(returnedQuestion);
+                });
 
-          const returnedQuestion = _.extend({}, question, {
-            numRegions: regions.length,
-            url: path([
-              'region',
-              regions.map(region => region.id).join('-'),
-              regions.map(region => region.name).join('-'),
-              vector,
-              question.variable_id]) + '?question=1'
-          });
-
-          questions.push(returnedQuestion);
+                resolve(questions);
+            },  reject);
         });
-
-        resolve(questions);
-      },  reject);
-    });
-  }
+    }
 }
 
 function getVectorForDatasetId(dataAvailability, datasetId) {
 
-  for (var topicKey in dataAvailability.topics) {
+    for (var topicKey in dataAvailability.topics) {
 
-    var topic = dataAvailability.topics[topicKey];
+        var topic = dataAvailability.topics[topicKey];
 
-    for (var datasetKey in topic.datasets) {
+        for (var datasetKey in topic.datasets) {
 
-      var dataset = topic.datasets[datasetKey];
-      if (dataset.id == datasetId)
-        return dataset.name.toLowerCase();
+            var dataset = topic.datasets[datasetKey];
+            if (dataset.id == datasetId)
+                return dataset.name.toLowerCase();
+        }
     }
-  }
 }
 
 function urlEscape(string) {
-  return string
-    .replace(/,/g, '')
-    .replace(/[ \/]/g, '_');
+    return string
+        .replace(/,/g, '')
+        .replace(/[ \/]/g, '_');
 }
 
 function path(elements) {
-  return `/${elements.map(urlEscape).join('/')}`;
+    return `/${elements.map(urlEscape).join('/')}`;
 }
 
 module.exports = Questions;
