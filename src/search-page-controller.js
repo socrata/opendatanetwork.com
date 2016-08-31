@@ -216,7 +216,7 @@ class SearchPageController {
                                 year: Navigate.escapeName(constraint.constraint_value.toLowerCase()),
                             }));
 
-                    history.replaceState(null, null, url);
+                    // history.replaceState(null, null, url);
 
                     // Draw the variable and constraint menus
                     //
@@ -283,7 +283,7 @@ class SearchPageController {
 
                     }, error => console.error(error));
 
-                    MapView.create(this.params.regions, variable, {year: this.params.year}, this.params)
+                    MapView.create(this.params.regions, variable, this.params.constraints, this.params)
                         .then(map => map.show('div#map'))
                         .catch(error => {
                             throw error;
