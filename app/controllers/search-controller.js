@@ -35,11 +35,8 @@ const refineByCount = 5;
 
 class SearchController {
     static search(req, res) {
-      console.log('Handling request...'+ req);
         ParamsHelper.parameters(req, res).then(params => {
             try {
-              console.log('Completed Params');
-              console.log(params);
                 SearchController._search(req, res, params);
             } catch (error) {
                 ErrorHandler.error(req, res)(error);
