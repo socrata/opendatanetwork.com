@@ -1,3 +1,4 @@
+'use strict';
 
 // TODO change this to use GlobalConstants.ODN_API_BASE_URL
 // currently this does not work due to SSL issues.

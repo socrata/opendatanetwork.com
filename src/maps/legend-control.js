@@ -1,3 +1,4 @@
+'use strict';
 
 const LegendControl = L.Control.extend({
     options: {

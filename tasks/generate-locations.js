@@ -1,3 +1,5 @@
+'use strict';
+
 // Needs to be in client-side script until we get promises on the server
 //
 $(document).ready(function() {

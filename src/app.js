@@ -1,3 +1,5 @@
+'use strict';
+
 $(document).ready(function() {
 
     // Attach handler to the search button
