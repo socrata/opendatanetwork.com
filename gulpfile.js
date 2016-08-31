@@ -158,7 +158,7 @@ gulp.task('test', function () {
 gulp.task('start', function() {
     return nodemon({
         script: 'app.js',
-        watch: ['lib/', 'styles/compressed/', 'controllers/', 'data/'],
+        watch: ['lib/', 'styles/compressed/', 'controllers/', 'data/', 'app/'],
         harmony_destructuring: true
     });
 });
