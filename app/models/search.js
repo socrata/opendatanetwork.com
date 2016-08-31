@@ -5,6 +5,7 @@ const Request = require('../lib/request');
 const Constants = require('../lib/constants');
 const Place = require('./place');
 const Sources = require('../../src/data/data-sources.js');
+const GlobalConstants = require('../../src/constants');
 
 class Search {
   static searchResultsRegions(q) {
@@ -103,7 +104,7 @@ class Search {
   static _searchDatasetURL(requestParams, limit, offset) {
     return new Promise((resolve, reject) => {
       const params = {
-        app_token: Constants.APP_TOKEN
+        app_token: GlobalConstants.APP_TOKEN
       };
 
       if (requestParams.regions)

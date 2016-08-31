@@ -121,13 +121,6 @@ app.use((error, req, res, next) => {
 //
 var port = Number(process.env.PORT || 3000);
 
-process.on('SIGINT', function() {
-  console.log('Received sigint...');
-  app.close(function(){
-    process.exit();
-  });
-});
-
 process.on('unhandledRejection', function(reason, p){
     console.log("Possibly Unhandled Rejection at: Promise ", p, " reason: ", reason);
     // application specific logging here
