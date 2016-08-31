@@ -1,7 +1,4 @@
 <header role="banner">
     <a class="logo" href="/" title="Open Data Network"></a>
-    <% if (session_inbound_url) { %>
-        <a class="btn return-btn" href="<%= session_inbound_url%>"><%= session_inbound_url_description%></a>
-    <% } %>
     <% include _search-bar-controls %>
 </header>

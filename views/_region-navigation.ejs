@@ -1,6 +1,11 @@
 
 <div class="controls-column">
     <div class="controls">
+        <% if (session_inbound_url) { %>
+            <p class="redirect-to-inbound-url" title="<%= session_inbound_url_description %>">
+                <a class="btn return-btn" href="<%= session_inbound_url%>"><em class="fa fa-reply" aria-hidden="true"></em> <%= session_inbound_url_description %></a>
+            </p>
+        <% } %>
         <h2>Data for</h2>
         <div class="region-tokens">
             <% include _search-tokens %>
