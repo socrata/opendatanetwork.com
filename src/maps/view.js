@@ -1,3 +1,4 @@
+'use strict';
 
 class MapView {
     constructor(entities, variable, constraints, params, session) {
