@@ -17,6 +17,7 @@ const PagesController = require('./app/controllers/pages-controller');
 const SearchController = require('./app/controllers/search-controller');
 
 const ErrorHandler = require('./app/lib/error-handler');
+const UrlUtil = require('./app/lib/url-util');
 
 const app = express();
 
@@ -34,6 +35,18 @@ app.use(helmet.xframe('deny'));
 
 // Set up apache common log format output
 app.use(morgan('combined'));
+
+app.use((req, res, next) => {
+  const query_inbound_url = req.query['inbound_url'];
+  const query_inbound_url_description = req.query['inbound_url_description'];
+  if (!_.isUndefined(query_inbound_url)) {
+    res.cookie('inbound_url', query_inbound_url, {});
+    res.cookie('inbound_url_description', query_inbound_url_description || 'Back', {});
+  }
+  res.locals.session_inbound_url = UrlUtil.addHttp(query_inbound_url || req.cookies.inbound_url || null);
+  res.locals.session_inbound_url_description = (query_inbound_url_description || req.cookies.inbound_url_description || 'Back');
+  next();
+});
 
 // Set up static folders
 //
