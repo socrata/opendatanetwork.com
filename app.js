@@ -73,8 +73,8 @@ app.use('/sitemap.xml', express.static(__dirname + '/views/static/sitemap.xml'))
 //
 app.get('*', function(req, res, next) {
 
-    if (req.headers['x-forwarded-proto'] === 'https')
-        res.redirect(301, 'http://' + req.hostname + req.url);
+    if (req.headers['x-forwarded-proto'] === 'http')
+        res.redirect(301, 'https://' + req.hostname + req.url);
     else
         next();
 });
