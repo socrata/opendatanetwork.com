@@ -1,3 +1,4 @@
+@import "lib/utils"
 
 .controls-column
     background-color: $dark-gray-background-color
@@ -6,11 +7,19 @@
     min-width: 300px
     text-align: left
     vertical-align: top
-    width: 300px
+    max-width: 300px
 
     @media (max-width: $mobile-width)
         display: none
 
+    .redirect-to-inbound-url
+        margin: 0 0 20px
+        font-weight: 600
+        font-size: 16px
+        a
+            display: block
+            color: #2980b9
+            @include text-ellipsis()
     .controls
         background-color: $gray-background-color
         padding: 30px

@@ -1,8 +1,9 @@
 'use strict';
 
 const _ = require('lodash');
-const GlobalConstants = require("../src/constants"); 
+
 const ControllerConstants = require('./constants');
+const GlobalConstants = require('../../src/constants');
 const Request = require('./request');
 
 class Relatives {

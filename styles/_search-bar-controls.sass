@@ -1,8 +1,55 @@
+@import "lib/utils"
+
 *::-webkit-input-placeholder,
 *:-moz-placeholder,
 *::-moz-placeholder,
 *:-ms-input-placeholder
     color: $gray-text-color
+
+.home-search-bar,
+.home-search-bar-controls
+    .search-wrapper
+        .search-bar-input
+            @include calc(width, "100% - 235px")
+            @media (max-width: $mobile-width)
+                @include calc(width, "100% - 65px")
+        .search-buttons
+            float: right
+            width: 235px
+            @media (max-width: $mobile-width)
+                width: 65px
+            .quick-links-container
+                width: 145px
+            .search-link
+                position: relative
+                float: left
+                overflow: hidden
+                &:focus
+                    background-color: darken(#ee3b3b, 10%)
+
+header
+    .search-wrapper
+        float: right
+        @include calc(width, "100% - 300px")
+        .search-bar-input
+            @include calc(width, "100% - 235px")
+        .search-buttons
+            float: right
+            width: 235px
+        .search-link
+            float: left
+        .quick-links-container
+            width: 145px
+        @media (max-width: $mobile-width)
+            @include calc(width, "100% - 50px")
+            .search-bar-input
+                @include calc(width, "100% - 129px")
+            .quick-links-container
+                width: 64px
+            .search-buttons
+                width: 129px
+    .region-list
+        clear: both
 
 .search-bar-form
     display: block
@@ -10,9 +57,8 @@
     margin: 0 auto
     position: relative
 
-    span
+    .search-wrapper
         display: block
-        overflow: hidden
 
     input
         box-sizing: border-box
@@ -21,13 +67,13 @@
         height: 50px
         line-height: 50px
         margin: 0
-        outline: none
         padding: 0 0 0 20px
         width: 100%
 
     .search-link
         background-color: $orange-color
         color: white
+        border: 0 none
         cursor: pointer
         float: right
         font-size: 20px
@@ -36,9 +82,10 @@
         margin: 0
         padding: 0 35px
         text-align: center
+        width: 90px
         @media (max-width: $mobile-width)
             padding: 0
-            width: 64px;
+            width: 65px
 
     .search-link:hover
         background-color: $orange-color
@@ -62,3 +109,5 @@ header
             top: 11px
             width: 28px
 
+    .return-btn
+        color: white

@@ -1,3 +1,5 @@
+@import "lib/utils"
+
 $black-text-color: #222222
 $darker-gray-background-color: #545454
 $darker-but-less-so-gray-background-color: #585858
@@ -7,7 +9,7 @@ $darker-gray-border-color: #5e5e5e
 //
 .quick-links-menu-container-mobile
     display: none
-    
+
     .quick-links-menu-inner-container-mobile
         @media (min-width: $mobile-width)
             display: none
@@ -31,6 +33,7 @@ $darker-gray-border-color: #5e5e5e
             list-style-type: none
 
             a
+                color: #fff
                 cursor: pointer
                 display: block
                 font-size: 20px
@@ -40,7 +43,7 @@ $darker-gray-border-color: #5e5e5e
                 margin: 0
                 padding: 0 27px 0 30px
 
-                .fa 
+                .fa
                     float: right
                     line-height: 50px
 
@@ -67,7 +70,7 @@ $darker-gray-border-color: #5e5e5e
                         margin: 0
                         padding: 0 0 0 60px
                         text-transform: capitalize
-                        
+
                         div
                             position: relative
 
@@ -83,19 +86,17 @@ $darker-gray-border-color: #5e5e5e
                     a
                         div
                             padding: 0 0 0 30px
-        
-        
+
+
 // Desktop
 //
 .quick-links-container
     background-color: $black-text-color
     color: white
-    cursor: pointer
     display: inline-block
     float: right
     height: 50px
     line-height: 50px
-    padding: 0 20px
 
     @media (min-width: 1200px)
         width: 300px
@@ -107,16 +108,30 @@ $darker-gray-border-color: #5e5e5e
         margin-left: 10px
 
 .quick-links-container-selected
-    background-color: $darker-gray-background-color        
+    background-color: $darker-gray-background-color
 
 .quick-links-button-wide
+    padding: 0 30px 0 20px
+    height: 50px
+    color: #fff
+    display: block
+    position: relative
+    @include text-ellipsis()
+    .fa
+        position: absolute
+        right: 20px
+        line-height: 50px
     @media (max-width: $mobile-width)
+        padding: 0 20px
         display: none
 
 .quick-links-button-narrow
     display: block
     font-size: 28px
     line-height: 50px
+    height: 50px
+    color: #fff
+    padding: 0 20px
     @media (min-width: $mobile-width)
         display: none
 
@@ -146,7 +161,7 @@ $darker-gray-border-color: #5e5e5e
     padding: 0 0 10px
 
 .quick-links-menu > div:last-child .quick-links-sub-menu > li
-    border-right: none 
+    border-right: none
 
 .quick-links-sub-menu
     margin: 0
@@ -162,7 +177,7 @@ $darker-gray-border-color: #5e5e5e
 
 .quick-links-sub-menu li:first-child
     border-right: none
-    font-weight: 600
+    font-weight: 700
     padding: 10px 20px
 
 .quick-links-sub-menu li a
@@ -171,7 +186,8 @@ $darker-gray-border-color: #5e5e5e
     display: block
     padding: 10px 20px
 
-.quick-links-sub-menu li a:hover
+.quick-links-sub-menu li a:hover,
+.quick-links-sub-menu li a:focus
     background-color: $orange-color
 
 .quick-links-categories li
@@ -180,12 +196,12 @@ $darker-gray-border-color: #5e5e5e
     a
         position: relative
         padding: 10px 20px 10px 45px
-        
+
         .fa
             left: 20px
             position: absolute
             top: 12px
-            
+
 
 .quick-links-more
     background: $darker-gray-border-color
@@ -195,9 +211,11 @@ $darker-gray-border-color: #5e5e5e
     line-height: normal
     padding: 10px 0
     text-align: center
+    color: #fff
 
-.quick-links-more:hover
+.quick-links-more:hover,
+.quick-links-more:focus
     background: $orange-color
-    
+
 .quick-links-hidden
     display: none;

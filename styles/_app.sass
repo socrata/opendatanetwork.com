@@ -13,7 +13,7 @@ $fonts: 'Open Sans', Arial, Helvetica, sans-serif
 $gray-background-color: #ecf0f1
 $gray-border-color: #d1d1d1
 $gray-text-color: #bdc3c7
-$green-color: #27ae60
+$green-color: #1e874a
 $light-gray-background-color: #f7f7f7
 $medium-gray-background-color: #d2d6d7
 $mobile-width: 800px
@@ -42,6 +42,25 @@ a
 a:hover
   text-decoration: none
 
+.sr-only
+  position: absolute
+  width: 1px
+  height: 1px
+  padding: 0
+  margin: -1px
+  overflow: hidden
+  clip: rect(0, 0, 0, 0)
+  border: 0
+
+.sr-only-focusable:active,
+.sr-only-focusable:focus
+  position: static
+  width: auto
+  height: auto
+  margin: 0
+  overflow: visible
+  clip: auto
+
 code
     font-family: $fonts
 
@@ -55,9 +74,9 @@ input[type=text]
 
 .fa
   transform: none
-  
+
 /* Fixes #371 */
-.leaflet-tile-container 
+.leaflet-tile-container
     height: 0 !important
     width: 0 !important
 
@@ -85,3 +104,20 @@ header
         top: 11px
         width: 200px
         z-index: inherit
+
+//Home Page
+.home-page
+  height: 100%
+
+// clearfix
+.clearfix:before,
+.clearfix:after
+  content: ""
+  display: table
+
+.clearfix:after
+  clear: both
+
+.clearfix
+  // For IE 6/7 (trigger hasLayout)
+  zoom: 1

@@ -1,5 +1,6 @@
+'use strict';
 
-const GlobalConstants = require("../src/constants"); 
+const GlobalConstants = require("../../src/constants");
 
 /**
  * Constants used in the controller module only. All GlobalConstants are available in ../src/constants
@@ -10,12 +11,12 @@ const ControllerConstants = {
     ROSTER_URL: 'https://odn.data.socrata.com/resource/czuf-rtrf.json',
     SEARCH_RESULTS_REGIONS_URL: 'https://odn.data.socrata.com/resource/czuf-rtrf.json',
 
-    RELATED_CHILD_URL: GlobalConstants.ODN_API_BASE_URL+'/entity/v1/child',
-    RELATED_PARENT_URL: GlobalConstants.ODN_API_BASE_URL+'/entity/v1/parent',
-    RELATED_PEER_URL: GlobalConstants.ODN_API_BASE_URL+'/entity/v1/peer',
-    RELATED_SIBLING_URL: GlobalConstants.ODN_API_BASE_URL+'/entity/v1/sibling',
-    SEARCH_DATASET_URL: GlobalConstants.ODN_API_BASE_URL+'/search/v1/dataset',
-    SEARCH_QUESTION_URL: GlobalConstants.ODN_API_BASE_URL+'/search/v1/question',
+    RELATED_CHILD_URL: GlobalConstants.ODN_API_BASE_URL + '/entity/v1/child',
+    RELATED_PARENT_URL: GlobalConstants.ODN_API_BASE_URL + '/entity/v1/parent',
+    RELATED_PEER_URL: GlobalConstants.ODN_API_BASE_URL + '/entity/v1/peer',
+    RELATED_SIBLING_URL: GlobalConstants.ODN_API_BASE_URL + '/entity/v1/sibling',
+    SEARCH_DATASET_URL: GlobalConstants.ODN_API_BASE_URL + '/search/v1/dataset',
+    SEARCH_QUESTION_URL: GlobalConstants.ODN_API_BASE_URL + '/search/v1/question',
 
     N_RELATIVES: 5,
 
@@ -37,4 +38,3 @@ const ControllerConstants = {
 };
 
 module.exports = ControllerConstants;
-

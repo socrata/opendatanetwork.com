@@ -1,3 +1,6 @@
+branches:
+  except:
+  - michigan_wip
 language: node_js
 node_js:
 - 5.1.1

@@ -3,8 +3,10 @@
 if (typeof require !== 'undefined') {
     var _ = require('lodash');
 
-    var Navigate = require('../../controllers/navigate');
-    var Requests = require('../../controllers/request');
+    //TODO: Check and move navigate and request if they are used both in server and client.
+    // If so move to a commons folder.
+    var Navigate = require('../../app/lib/navigate');
+    var Requests = require('../../app/lib/request');
 
     var MAP_SOURCES = require('../data/map-sources');
 }

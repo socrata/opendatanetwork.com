@@ -1,8 +1,9 @@
 <section class="questions-section">
     <div class="container">
         <h4>Questions</h4>
-        <a class="questions-dropdown">Show Sample Questions<i class="fa fa-caret-down"></i></a>
-        <div class="questions-list-container">
+        <a href class="questions-dropdown" aria-controls="questionsList" aria-expanded="false">Show Sample Questions<em class="fa fa-caret-down" aria-hidden="true"></em></a>
+
+        <div class="questions-list-container" id="questionsList">
             <ul class="questions-list">
             <% questions.forEach(function(question, index) { %>
                 <li<% if (index >= 10) { %> class="hidable hidden<% if (index >= 20) { %> hidden-on-mobile<% } %>"<% } %>>
@@ -10,7 +11,7 @@
                 </li>
             <% }); %>
             </ul>
-            <a class="more-questions-link">Show More</a>
+            <a href="javascript:void(0)" class="more-questions-link">Show More</a>
         </div>
     </div>
 </section>

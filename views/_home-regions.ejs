@@ -6,12 +6,12 @@
           <% if (locations) locations.forEach(location => { %>
             <li class="state state-collapsed">
                 <h3>
-                    <a class="small-api-link">API</a>
-                    <i class="fa fa-map-marker"></i>
+                    <em class="fa fa-map-marker" aria-hidden="true"></em>
                     <a href="/region/<%= location.id %>/<%= location.name %>"><%= location.name %></a>
+                    <a href class="small-api-link" tabindex="0" aria-owns="api_info_box_<%= location.id %>" aria-haspopup="true" aria-expanded="false" aria-label="Get API for <%= location.name %>">API</a>
                 </h3>
-                <div class="api-info-box">
-                    <a class="fa fa-close"></a>
+                <div class="api-info-box" id="api_info_box_<%= location.id %>">
+                    <a href class="fa fa-close" autofocus aria-label="Close API info box"></a>
                     <strong>
                         <a href="http://docs.odn.apiary.io/#reference/0/entity-relationships" target="_blank">/entity/v1/child</a>
                     </strong>
@@ -45,13 +45,13 @@
                     </li>
                   <% } %>
                 </ul>
-                <a class="more-subregions-link">Show More</a>
+                <a href class="more-subregions-link" aria-label="Show more regions in <%= location.name %>">Show More</a>
              </li>
           <% }) %>
 
         </ul>
         <div class="cb"></div>
-        <a class="more-regions-link">Show More</a>
+        <a href class="more-regions-link" aria-label="View More Regions">Show More</a>
     </div>
 </section>
 
@@ -61,13 +61,14 @@
       <% if (locations) locations.forEach(function(location) { %>
         <li>
             <h3>
-                <a class="state-expand-mobile fa fa-plus" region-id="<%= location.id %>"></a>
                 <a class="state-link-mobile" href="/region/<%= location.id %>/<%= location.name %>">
-                    <i class="fa fa-map-marker"></i>
+                    <em class="fa fa-map-marker" aria-hidden="true"></em>
                     <%= location.name %>
                 </a>
+                <a href class="state-expand-mobile" region-id="<%= location.id %>" aria-controls="region_<%=location.id %>" aria-expanded="false" role="tab"><em class="fa fa-plus"></em><span class="sr-only">Show all regions in <%= location.name %></span></a>
             </h3>
-            <div class="sub-regions-container-<%=location.id %>-mobile sub-regions-container-mobile">
+
+            <div class="sub-regions-container-<%=location.id %>-mobile sub-regions-container-mobile" id="region_<%=location.id %>" aria-hidden="false" role="tabpanel" aria-label="All regions in <%= location.name %>">
                 <ul class="sub-regions-list-mobile">
                     <% for (var i = 0; i < location.msas.length; i++) { %>
                     <li>

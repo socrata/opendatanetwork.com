@@ -53,11 +53,15 @@ class HomePageController {
 
         // API boxes
         //
-        $('.small-api-link').click(function() {
-            $(this).parent().parent().find('.api-info-box').slideToggle();
+        $('.small-api-link').click(function (event) {
+            event.preventDefault();
+            var $infobox = $(this).parent().parent().find('.api-info-box');
+            $infobox.toggleClass('open').slideToggle();
+            $(this).attr('aria-expanded', $infobox.hasClass('open'));
         });
 
-        $('.api-info-box .fa-close').click(function() {
+        $('.api-info-box .fa-close').click(function (event) {
+            event.preventDefault();
             $(this).parent().parent().find('.api-info-box').slideUp();
         });
 
@@ -75,12 +79,17 @@ class HomePageController {
 
         // Questions section
         //
-        $('.questions-dropdown').click(() => {
-
-            if ($('.questions-list-container').is(':visible'))
-                $('.questions-dropdown .fa').removeClass('fa-caret-up').addClass('fa-caret-down');
-            else
-                $('.questions-dropdown .fa').removeClass('fa-caret-down').addClass('fa-caret-up');
+        $('.questions-dropdown').click((event) => {
+            event.preventDefault();
+            if ($('.questions-list-container').is(':visible')) {
+                $('.questions-dropdown').attr('aria-expanded', false)
+                                        .find('.fa').removeClass('fa-caret-up')
+                                        .addClass('fa-caret-down');
+            } else {
+                $('.questions-dropdown').attr('aria-expanded', true)
+                                        .find('.fa').removeClass('fa-caret-down')
+                                        .addClass('fa-caret-up');
+            }
 
             $('.questions-list-container').slideToggle();
         });
@@ -99,26 +108,37 @@ class HomePageController {
 
         // Mobile categories
         //
-        $('.categories-dropdown-mobile').click(() => {
-
-            if ($('.categories-list-mobile').is(':visible'))
-                $('.categories-dropdown-mobile .fa').removeClass('fa-caret-up').addClass('fa-caret-down');
-            else
-                $('.categories-dropdown-mobile .fa').removeClass('fa-caret-down').addClass('fa-caret-up');
+        $('.categories-dropdown-mobile').click((event) => {
+            event.preventDefault();
+            if ($('.categories-list-mobile').is(':visible')) {
+                $('.categories-dropdown-mobile').attr('aria-expanded', false)
+                                                .find('.fa').removeClass('fa-caret-up')
+                                                .addClass('fa-caret-down');
+            } else {
+                $('.categories-dropdown-mobile').attr('aria-expanded', true)
+                                                .find('.fa').removeClass('fa-caret-down')
+                                                .addClass('fa-caret-up');
+            }
 
             $('.categories-list-mobile').slideToggle();
         });
 
         // Mobile regions
         //
-        $('.state-expand-mobile').click(function() {
-
+        $('.state-expand-mobile').click(function(event) {
+            event.preventDefault();
             const regionId = $(this).attr('region-id');
 
-            if ($('.sub-regions-container-' + regionId + '-mobile').is(':visible'))
-                $(this).removeClass('fa-minus').addClass('fa-plus');
-            else
-                $(this).removeClass('fa-plus').addClass('fa-minus');
+            if ($('.sub-regions-container-' + regionId + '-mobile').is(':visible')) {
+                $(this).attr('aria-expanded', false)
+                       .find('.fa').removeClass('fa-minus')
+                       .addClass('fa-plus');
+
+            } else {
+                $(this).attr('aria-expanded', true)
+                       .find('.fa').removeClass('fa-plus')
+                       .addClass('fa-minus');
+            }
 
             $('.sub-regions-container-' + regionId + '-mobile').slideToggle();
         });
@@ -158,14 +178,14 @@ class HomePageController {
 
         // Locations by state
         //
-        $('.more-subregions-link').click(function() {
-
+        $('.more-subregions-link').click(function (event) {
+            event.preventDefault();
             $(this).parent().removeClass('state-collapsed');
             $(this).hide();
         });
 
-        $('.more-regions-link').click(function() {
-
+        $('.more-regions-link').click(function (event) {
+            event.preventDefault();
             $('.states-list').removeClass('states-list-collapsed');
             $(this).hide();
         });
@@ -195,6 +215,7 @@ class HomePageController {
 
         const placeholder = sample.substring(0, self.sampleCharacterIndex);
         $('.home-search-bar-controls [name="q"], .home-search-bar .search-bar-input').attr('placeholder', placeholder);
+        $('.home-search-bar-controls label, .home-search-bar .search-bar-label').attr('aria-label', 'Search Open Data Network');
 
         window.setTimeout(self.printNextSampleQuestionCharacter, self.getRandomInt(), self);
         self.sampleCharacterIndex++;

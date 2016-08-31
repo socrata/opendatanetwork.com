@@ -6,7 +6,8 @@ if (typeof require !== 'undefined') {
     var forecast = require('./forecast');
     var numeral = require('numeral');
     var queryString = require('query-string');
-    var Request = require('../controllers/request');
+
+    var Request = require('../app/lib/request');
 }
 
 class ForecastDescriptions {

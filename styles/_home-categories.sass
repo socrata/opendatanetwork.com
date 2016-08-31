@@ -1,3 +1,5 @@
+@import "lib/utils"
+
 $container-width: 990px
 $category-item-width: 245px
 
@@ -43,8 +45,7 @@ $category-item-width: 245px
         li
             border-top: 1px solid $gray-border-color
             margin: 0
-            padding: 0 0 0 55px
-            position: relative
+            padding: 0
 
             h3
                 margin: 0
@@ -59,7 +60,8 @@ $category-item-width: 245px
                     line-height: 50px
                     margin: 0
                     overflow: hidden
-                    padding: 0
+                    padding: 0 0 0 55px
+                    position: relative
                     text-overflow: ellipsis
                     text-transform: capitalize
                     white-space: nowrap
@@ -103,12 +105,16 @@ $category-item-width: 245px
             padding: 0
             width: $category-item-width
 
-            h3
-                color: $blue-text-color
-                font-size: 24px
-                font-weight: 300
-                margin: 0 0 15px
-                text-transform: capitalize
+            a
+                display: block
+
+                strong
+                    display: block
+                    color: $blue-text-color
+                    font-size: 24px
+                    font-weight: 300
+                    margin: 0 0 15px
+                    text-transform: capitalize
 
             .fa
                 color: $blue-text-color
@@ -119,9 +125,10 @@ $category-item-width: 245px
                 width: 100%
 
             .icon
-                background-image: url("/images/v3-category-background.png")
+                background-color: #fff
                 display: inline-block
                 height: 130px
                 margin-bottom: 25px
                 width: 130px
+                @include prefixer(border-radius, "65px")
 

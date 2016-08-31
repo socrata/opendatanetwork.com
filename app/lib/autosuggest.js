@@ -1,9 +1,11 @@
 'use strict';
 
 const _ = require('lodash');
-const Constants = require('../src/constants');
-const Stopwords = require('../src/autosuggest/stopwords');
+
 const Request = require('./request');
+
+const Constants = require('../../src/constants');
+const Stopwords = require('../../src/autosuggest/stopwords');
 
 class Base64 {
     static decode(encoded) {

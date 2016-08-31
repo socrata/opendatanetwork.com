@@ -1,19 +1,11 @@
 'use strict';
 
 const _ = require('lodash');
-const GlobalConstants = require("../src/constants");
+const GlobalConstants = require('../../src/constants');
 const Querystring = require('querystring');
 const Request = require('./request');
 const Navigate = require('./navigate');
-
-
-class ConstraintOptions {
-    constructor(name, options, selected) {
-        this.name = name;
-        this.options = options;
-        this.selected = selected;
-    }
-}
+const Constants = require('./constants');
 
 class Data {
     static getDataAvailability(regions) {

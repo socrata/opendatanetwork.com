@@ -1,0 +1,22 @@
+@mixin prefixer($key, $value)
+  -webkit-#{$key}: #{$value}
+  -moz-#{$key}: #{$value}
+  -ms-#{$key}: #{$value}
+  -o-#{$key}: #{$value}
+  #{$key}: #{$value}
+
+@mixin text-ellipsis()
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+
+@mixin opacity ($value)
+  -moz-opacity: $value
+  filter: alpha(opacity= $value * 100)
+  opacity: $value
+
+@mixin calc ($key, $value)
+  #{$key}: -moz-calc( #{$value} )
+  #{$key}: -webkit-calc( #{$value} )
+  #{$key}: -o-calc( #{$value} )
+  #{$key}: calc( #{$value} )
