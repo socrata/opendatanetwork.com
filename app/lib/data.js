@@ -5,6 +5,7 @@ const Querystring = require('querystring');
 
 const Request = require('./request');
 const Constants = require('./constants');
+const GlobalConstants = require("../../src/constants");
 
 class Data {
 
@@ -26,7 +27,7 @@ class Data {
         return new Promise((resolve, reject) => {
 
             const url = Request.buildURL(GlobalConstants.DATA_CONSTRAINT_URL.format(variable.id), {
-                app_token: Constants.APP_TOKEN,
+                app_token: GlobalConstants.APP_TOKEN,
                 entity_id: regions.map(region => region.id).join(','),
                 constraint: constraint
             });
@@ -40,7 +41,7 @@ class Data {
        return new Promise((resolve, reject) => {
 
             const params = {
-                app_token: Constants.APP_TOKEN,
+                app_token: GlobalConstants.APP_TOKEN,
                 entity_id: regions.map(region => region.id).join(','),
                 variable: variable
             };

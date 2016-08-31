@@ -128,6 +128,11 @@ process.on('SIGINT', function() {
   });
 });
 
+process.on('unhandledRejection', function(reason, p){
+    console.log("Possibly Unhandled Rejection at: Promise ", p, " reason: ", reason);
+    // application specific logging here
+});
+
 String.prototype.format = function() {
   var args = arguments;
 
