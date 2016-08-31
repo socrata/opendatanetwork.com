@@ -6,24 +6,50 @@
 *:-ms-input-placeholder
     color: $gray-text-color
 
-.search-wrapper
-    .search-bar-input
-        @include calc(width, "100% - 234px")
-        @media (max-width: $mobile-width)
-            @include calc(width, "100% - 64px")
-    .search-buttons
+.home-search-bar,
+.home-search-bar-controls
+    .search-wrapper
+        .search-bar-input
+            @include calc(width, "100% - 235px")
+            @media (max-width: $mobile-width)
+                @include calc(width, "100% - 65px")
+        .search-buttons
+            float: right
+            width: 235px
+            @media (max-width: $mobile-width)
+                width: 65px
+            .quick-links-container
+                width: 145px
+            .search-link
+                position: relative
+                float: left
+                overflow: hidden
+                &:focus
+                    background-color: darken(#ee3b3b, 10%)
+
+header
+    .search-wrapper
         float: right
-        width: 234px
-        @media (max-width: $mobile-width)
-            width: 64px
-        .quick-links-container
-            width: 144px
+        @include calc(width, "100% - 300px")
+        .search-bar-input
+            @include calc(width, "100% - 235px")
+        .search-buttons
+            float: right
+            width: 235px
         .search-link
-            position: relative
             float: left
-            overflow: hidden
-            &:focus
-                background-color: darken(#ee3b3b, 10%)
+        .quick-links-container
+            width: 145px
+        @media (max-width: $mobile-width)
+            @include calc(width, "100% - 50px")
+            .search-bar-input
+                @include calc(width, "100% - 129px")
+            .quick-links-container
+                width: 64px
+            .search-buttons
+                width: 129px
+    .region-list
+        clear: both
 
 .search-bar-form
     display: block
@@ -31,7 +57,7 @@
     margin: 0 auto
     position: relative
 
-    span
+    .search-wrapper
         display: block
 
     input
@@ -59,7 +85,7 @@
         width: 90px
         @media (max-width: $mobile-width)
             padding: 0
-            width: 64px
+            width: 65px
 
     .search-link:hover
         background-color: $orange-color

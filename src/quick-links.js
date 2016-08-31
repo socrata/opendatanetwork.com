@@ -88,7 +88,7 @@ class QuickLinks {
 
         // Desktop
         //
-        $('.home-search-bar-controls').on('click', '.quick-links-button-wide', function (event) {
+        $('.search-wrapper').on('click', '.quick-links-button-wide', function (event) {
             event.preventDefault();
 
             var $this = $(this),
@@ -117,7 +117,8 @@ class QuickLinks {
         //
         $(document).on('click touch', function (event) {
           if (!$(event.target).parents().addBack().is('.quick-links-container')) {
-            $('.home-search-bar-controls .quick-links-button-wide.active').click();
+            $('.search-wrapper .quick-links-button-wide.active').click();
+            $('header .quick-links-button-narrow.active').click();
           }
         });
     }
