@@ -1,3 +1,5 @@
+@import "lib/utils"
+
 $black-text-color: #222222
 $darker-gray-background-color: #545454
 $darker-but-less-so-gray-background-color: #585858
@@ -109,11 +111,16 @@ $darker-gray-border-color: #5e5e5e
     background-color: $darker-gray-background-color
 
 .quick-links-button-wide
-    padding: 0 20px
+    padding: 0 30px 0 20px
     height: 50px
     color: #fff
     display: block
     position: relative
+    @include text-ellipsis()
+    .fa
+        position: absolute
+        right: 20px
+        line-height: 50px
     @media (max-width: $mobile-width)
         padding: 0 20px
         display: none
@@ -122,6 +129,7 @@ $darker-gray-border-color: #5e5e5e
     display: block
     font-size: 28px
     line-height: 50px
+    height: 50px
     color: #fff
     padding: 0 20px
     @media (min-width: $mobile-width)
