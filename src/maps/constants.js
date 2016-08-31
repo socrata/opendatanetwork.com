@@ -1,14 +1,8 @@
 'use strict';
 
-// TODO change this to use GlobalConstants.ODN_API_BASE_URL
-// currently this does not work due to SSL issues.
-function apiPath(path, protocol) {
-    return `${protocol || 'https'}://odn-backend.herokuapp.com${path || ''}`;
-}
-
 const MapConstants = {
-    MAP_NEW_URL: apiPath('/data/v1/map/new'),
-    MAP_VALUES_URL: apiPath(),
+    MAP_NEW_URL: `${GlobalConstants.ODN_API_BASE_URL}/data/v1/map/new`,
+    MAP_VALUES_URL: GlobalConstants.ODN_API_BASE_URL,
 
     // Milliseconds to wait before updating map after move or zoom.
     UPDATE_WAIT: 200,

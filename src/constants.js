@@ -1,13 +1,13 @@
 'use strict';
 
 const _ODN_API_HOST_AND_PORT = 'api.opendatanetwork.com';
-const _ODN_API_BASE_URL = 'http://'+_ODN_API_HOST_AND_PORT;
+const _ODN_API_BASE_URL = 'https://'+_ODN_API_HOST_AND_PORT;
 
 const GlobalConstants = {
     ODN_API_HOST_AND_PORT: _ODN_API_HOST_AND_PORT,
     ODN_API_BASE_URL: _ODN_API_BASE_URL,
     APP_TOKEN: 'cQovpGcdUT1CSzgYk0KPYdAI0',
-    
+
     DATA_AVAILABILITY_URL: _ODN_API_BASE_URL + '/data/v1/availability',
     DATA_CONSTRAINT_URL:  _ODN_API_BASE_URL + '/data/v1/constraint/{0}',
     DATA_VALUES_URL:  _ODN_API_BASE_URL + '/data/v1/values',
