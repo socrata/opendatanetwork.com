@@ -183,113 +183,83 @@ class SearchPageController {
                 const variable = this.getVariableByIdOrDefault(variablesArray, this.params.metric); // metric is variable id
                 const constraintName = dataset.constraints[0];
 
-                d3.select('ul.chart-sub-nav')
-                    .on('mouseenter', () => {
-                        if (this.options.length === 0) return;
-                        this.container.classed('selected', true);
-                        this.optionContainer.style('display', 'block');
-                        this.selectedCaret.classed('fa-caret-down', false).classed('fa-caret-up', true);
+                const variableContainer = d3.select('ul.chart-sub-nav')
+                    .selectAll('li')
+                    .on('mouseenter', function() {
+                        if ($(this).children('ul').length) {
+                            $(this).addClass('selected');
+                            $(this).children('span').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
+                            $(this).children('ul').show();
+                        }
                     })
-                    .on('mouseleave', () => {
-                        this.container.classed('selected', false);
-                        this.optionContainer.style('display', 'none');
-                        this.selectedCaret.classed('fa-caret-down', true).classed('fa-caret-up', false);
+                    .on('mouseleave', function() {
+                        if ($(this).children('ul').length) {
+                            $(this).removeClass('selected');
+                            $(this).children('span').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
+                            $(this).children('ul').hide();
+                        }
                     });
 
-
-                // Get the constraints
+                // Get the datasetConfig
+                // Get the charts for the datasetConfig
+                // For each chart,
+                //      Get the data we need to render item
+                //      Render it
                 //
-                api.getDataConstraint(this.params.regions, variable, constraintName).then(dataConstraints => {
+                const datasetConfig = DATASET_CONFIG[dataset.id];
+                const dataValueParams = [];
 
-                    dataConstraints.permutations = _.sortByOrder(dataConstraints.permutations, ['constraint_value'], ['desc']);
+                if (!datasetConfig){
+                    console.warn('No dataset config not found for ' + dataset.id);
+                    return;
+                }
 
-                    const constraint = this.getContraintByValueOrDefault(dataConstraints.permutations, this.params.year); // year is the constraint value
+                datasetConfig.charts.forEach(chart => {
 
-                    // Update the URL
+                    const params = {
+                        chartId: chart.chartId,
+                        variables: chart.variables
+                    };
+
+                    if (chart.constraint)
+                        params.constraint = chart.constraint;
+
+                    if (chart.forecast)
+                        params.forecast = chart.forecast;
+
+                    dataValueParams.push(params);
+                });
+
+                const chartPromises = dataValueParams.map(params => {
+
+                    const variable = params.variables.map(variable => variable.variableId).join(',');
+                    return api.getDataValues(this.params.regions, variable, params.constraint, params.forecast);
+                });
+
+                // Get data values for each chart
+                //
+                Promise.all(chartPromises).then(data => {
+
+                    // Render charts
                     //
-                    const url = Navigate.url(
-                        _.extend(
-                            this.params,
-                            {
-                                vector: Navigate.escapeName(vector.toLowerCase()),
-                                metric: Navigate.escapeName(variable.id.toLowerCase()),
-                                year: Navigate.escapeName(constraint.constraint_value.toLowerCase()),
-                            }));
+                    const container = d3.select('#google-charts-container');
 
-                    // history.replaceState(null, null, url);
+                    data.forEach((datum, index) => {
 
-                    // Draw the variable and constraint menus
-                    //
-                    const datasetMenus = new DatasetMenus(
-                        dataset.variables,
-                        variable,
-                        dataConstraints,
-                        constraint);
+                        const params = dataValueParams[index];
+                        const chart = new DatasetChart(dataset.id, params.chartId, datum.data);
+                        chart.render();
 
-                    datasetMenus.drawMenus();
-
-                    // Get the datasetConfig
-                    // Get the charts for the datasetConfig
-                    // For each chart,
-                    //      Get the data we need to render item
-                    //      Render it
-                    //
-                    const datasetConfig = DATASET_CONFIG[dataset.id];
-                    const dataValueParams = [];
-
-                    if (!datasetConfig){
-                        console.warn('No dataset config not found for ' + dataset.id);
-                        return;
-                    }
-
-                    datasetConfig.charts.forEach(chart => {
-
-                        const params = {
-                            chartId: chart.chartId,
-                            variables: chart.variables
-                        };
-
-                        if (chart.constraint)
-                            params.constraint = chart.constraint;
-
-                        if (chart.forecast)
-                            params.forecast = chart.forecast;
-
-                        dataValueParams.push(params);
+                        charts.push(chart);
                     });
-
-                    const chartPromises = dataValueParams.map(params => {
-
-                        const variable = params.variables.map(variable => variable.variableId).join(',');
-                        return api.getDataValues(this.params.regions, variable, params.constraint, params.forecast);
-                    });
-
-                    // Get data values for each chart
-                    //
-                    Promise.all(chartPromises).then(data => {
-
-                        // Render charts
-                        //
-                        const container = d3.select('#google-charts-container');
-
-                        data.forEach((datum, index) => {
-
-                            const params = dataValueParams[index];
-                            const chart = new DatasetChart(dataset.id, params.chartId, datum.data);
-                            chart.render();
-
-                            charts.push(chart);
-                        });
-
-                    }, error => console.error(error));
-
-                    MapView.create(this.params.regions, variable, this.params.constraints, this.params)
-                        .then(map => map.show('div#map'))
-                        .catch(error => {
-                            throw error;
-                        });
 
                 }, error => console.error(error));
+
+                MapView.create(this.params.regions, variable, this.params.constraints, this.params)
+                    .then(map => map.show('div#map'))
+                    .catch(error => {
+                        throw error;
+                    });
 
             }, error => console.error(error));
         }
