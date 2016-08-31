@@ -37,8 +37,8 @@ app.use(helmet.xframe('deny'));
 //app.use(morgan('combined'));
 
 app.use((req, res, next) => {
-  const query_inbound_url = req.query['inbound_url'];
-  const query_inbound_url_description = req.query['inbound_url_description'];
+  const query_inbound_url = req.query['x-return-url'];
+  const query_inbound_url_description = req.query['x-return-description'];
   if (!_.isUndefined(query_inbound_url)) {
     res.cookie('inbound_url', query_inbound_url, {});
     res.cookie('inbound_url_description', query_inbound_url_description || 'Back', {});
