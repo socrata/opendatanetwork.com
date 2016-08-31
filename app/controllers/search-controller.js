@@ -141,6 +141,7 @@ class SearchController {
                         title: EntityFormatter.searchPageTitle(params),
                         metaSummary : defaultMetaSummary,
                         searchResultsRegions : searchResultsRegions,
+                        query: req.query,
                         css: [
                             '/styles/search.css',
                             '/styles/main.css'
