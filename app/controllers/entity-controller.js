@@ -47,7 +47,7 @@ class Navigate {
     }
 
     variable(variableID) {
-        return new Navigate(this.entityIDs, variableID, this.query);
+        return new Navigate(this.entityIDs, variableID, {});
     }
 
     constraint(name, value) {
@@ -86,10 +86,10 @@ module.exports = (request, response) => {
             Promise.all([
                 ODNClient.searchDatasets(entityIDs, dataset.id),
                 ODNClient.searchQuestions(entityIDs, dataset.id),
-                getConstraints(entityIDs, variableID, dataset.constraints, fixed),
+                getConstraints(entityIDs, variable.id, dataset.constraints, fixed),
                 EntityFormatter.entityPageTitle(entities, dataset, variable),
             ]).then(([datasets, questions, constraints, title]) => {
-                getDescription(entityIDs, variableID, constraints).then(description => {
+                getDescription(entityIDs, variable.id, constraints).then(description => {
                     const templateData = {
                         _,
                         page: 'entity',
@@ -152,23 +152,25 @@ function getFixedConstraints(request, dataset) {
 
 function getVariable(availableData, fullVariableID) {
     const idParts = fullVariableID.split('.');
-    if (idParts.length !== 3)
+    if (idParts.length < 1 || idParts.length > 3)
         return Promise.reject(invalid(`invalid variable id: '${fullVariableID}'`));
-
     const [topicID, datasetID, variableID] = idParts;
-    if (!(topicID in availableData))
-        return Promise.reject(notFound(`topic not found: '${topicID}'`));
-    const topic = availableData[topicID];
 
-    if (!(datasetID in topic.datasets))
-        return Promise.reject(notFound(`no '${datasetID}' dataset found in '${topicID}'`));
-    const dataset = topic.datasets[datasetID];
+    return getNode(availableData, topicID).then(topic => {
+        return getNode(topic.datasets, datasetID).then(dataset => {
+            return getNode(dataset.variables, variableID).then(variable => {
+                return Promise.resolve([topic, dataset, variable]);
+            });
+        });
+    });
+}
 
-    if (!(variableID in dataset.variables))
-        return Promise.reject(notFound(`no '${variableID}' variable found in '${topicID}.${datasetID}'`));
-    const variable = dataset.variables[variableID];
-
-    return Promise.resolve([topic, dataset, variable]);
+function getNode(nodes, name) {
+    if (_.isUndefined(name))
+        return Promise.resolve(_.first(_.values(nodes)));
+    if (name in nodes)
+        return Promise.resolve(nodes[name]);
+    return Promise.reject(notFound(`variable not found: ${name}`));
 }
 
 function getConstraints(entityIDs, variableID, constraints, fixed, results) {
