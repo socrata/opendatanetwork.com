@@ -9,7 +9,7 @@ const ODNClient = require('../lib/odn-client');
 const EntityFormatter = require('../lib/entity-formatter');
 const GlobalConstants = require('../../src/constants');
 const DatasetConfig = require('../../src/dataset-config');
-const Navigate = require('../lib/navigate/entity');
+const Navigate = require('../../src/navigate/entity');
 
 const Exception = require('../lib/exception');
 const notFound = Exception.notFound;

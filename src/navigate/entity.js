@@ -4,8 +4,10 @@
  * Navigate to entity pages.
  */
 
-const _ = require('lodash');
-const querystring = require('querystring');
+if (typeof require !== 'undefined') {
+    var _ = require('lodash');
+    var buildURL = require('./build-url');
+}
 
 class Navigate {
     constructor(entityIDs, variableID, query) {
@@ -46,10 +48,9 @@ class Navigate {
 
     url() {
         const path = `/entity/${this.entityIDs.join('-')}/${this.variableID}`;
-        const query = querystring.stringify(this.query);
-        return `${path}?${query}`;
+        return buildURL(path, this.query);
     }
 }
 
-module.exports = Navigate;
+if (typeof module !== 'undefined') module.exports = Navigate;
 

@@ -4,10 +4,10 @@
  * Navigate to search pages.
  */
 
-const _ = require('lodash');
-const querystring = require('querystring');
-
-const Request = require('../request');
+if (typeof require !== 'undefined') {
+    var _ = require('lodash');
+    var buildURL = require('./build-url');
+}
 
 class Navigate {
     constructor(query, categories, domains, tags) {
@@ -53,7 +53,7 @@ class Navigate {
 
     removeTag(tag) {
         const domains = this.tags.filter(id => id !== tag);
-        return new Navigate(this.query, this.categories, this.domains, tags);
+        return new Navigate(this.query, this.categories, this.domains, this.tags);
     }
 
     tag(tag) {
@@ -69,9 +69,9 @@ class Navigate {
             tags: this.tags
         };
 
-        return Request.buildURL(path, query);
+        return buildURL(path, query);
     }
 }
 
-module.exports = Navigate;
+if (typeof module !== 'undefined') module.exports = Navigate;
 

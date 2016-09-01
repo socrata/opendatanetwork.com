@@ -16,7 +16,7 @@ class AutosuggestSource {
             if (term === '') {
 
                 resolve([]);
-            } 
+            }
             else {
 
                 term = Stopwords.strip(term);
@@ -24,9 +24,9 @@ class AutosuggestSource {
                 const path = GlobalConstants.AUTOCOMPLETE_URL(this.config.suggestType);
 
                 AutosuggestSource.request(
-                    path, 
-                    { 
-                        limit: 5, 
+                    path,
+                    {
+                        limit: 5,
                         query: term,
                         app_token: GlobalConstants.APP_TOKEN
                     }).then(response => {

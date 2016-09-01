@@ -4,7 +4,6 @@ $(document).ready(function() {
     autosuggest();
     tooltip();
     refineMenus();
-//    refineControls();
 
     // Selected category (yellow box)
     $('.current-category-info-box .fa-close').click(() => {

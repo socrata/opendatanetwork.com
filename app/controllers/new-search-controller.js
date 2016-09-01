@@ -8,8 +8,8 @@ const _ = require('lodash');
 const ODNClient = require('../lib/odn-client');
 const CeteraClient = require('../lib/cetera-client');
 const Exception = require('../lib/exception');
-const EntityNavigate = require('../lib/navigate/entity');
-const SearchNavigate = require('../lib/navigate/search');
+const EntityNavigate = require('../../src/navigate/entity');
+const SearchNavigate = require('../../src/navigate/search');
 const Constants = require('../../src/constants');
 
 const Category = require('../models/category');

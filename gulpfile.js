@@ -19,7 +19,10 @@ var baseScripts = [
     'src/app.js',
     'src/api-controller.js',
     'src/constants.js',
-    'src/region-lookup.js'
+    'src/region-lookup.js',
+    'src/navigate/build-url.js',
+    'src/navigate/entity.js',
+    'src/navigate/search.js'
 ];
 
 var mapScripts = [
