@@ -1,7 +1,7 @@
 
 <% questions.forEach((question, index) => { %>
     <li class="question <%= index > 1 ? 'collapsible collapsed' : '' %>">
-        <a href="<%= question.url %>">
+        <a href="<%= navigate.to(question.entity).variable(question.variable_id).url() %>">
             What is the
             <span class="question-variable"><%= question.variable_name %></span>
             of

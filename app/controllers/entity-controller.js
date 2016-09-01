@@ -9,6 +9,48 @@ const ODNClient = require('../lib/odn-client');
 const EntityFormatter = require('../lib/entity-formatter');
 const GlobalConstants = require('../../src/constants');
 
+// TODO move this to another file
+const querystring = require('querystring');
+
+class Navigate {
+    constructor(entityIDs, variableID, query) {
+        this.entityIDs = entityIDs;
+        this.variableID = variableID;
+        this.query = query || {};
+    }
+
+    to(entity) {
+        return new Navigate([entity.id], this.variableID, this.query);
+    }
+
+    add(entity) {
+        if (_.includes(this.entityIDs, entity.id)) return this;
+        return new Navigate([entity.id].concat(this.entityIDs), this.variableID, this.query);
+    }
+
+    remove(entity) {
+        const entities = this.entityIDs.filter(id => id !== entity.id);
+        return new Navigate(entities, this.variableID, this.query);
+    }
+
+    variable(variableID) {
+        return new Navigate(this.entityIDs, variableID, this.query);
+    }
+
+    url() {
+        const path = `/entity/${this.entityIDs.join('-')}/${this.variableID}`;
+        const query = querystring.stringify(this.query);
+        return `${path}?${query}`;
+    }
+
+    static fromRequest(request) {
+        const entityIDs = getEntityIDs(request);
+        const variableID = getVariableID(request);
+        const query = _.clone(request.query);
+        return new Navigate(entityIDs, variableID, query);
+    }
+}
+
 module.exports = (request, response) => {
     // TODO what if no entityIDs
     const entityIDs = getEntityIDs(request);
@@ -41,6 +83,7 @@ module.exports = (request, response) => {
                         variable,
                         constraints,
                         description,
+                        navigate: Navigate.fromRequest(request),
                         css: [
                             '/styles/third-party/leaflet.min.css',
                             '/styles/third-party/leaflet-markercluster.min.css',
@@ -148,7 +191,7 @@ function getRelated(entityID) {
 }
 
 function getEntityIDs(request) {
-    return request.params.entityIDs.split(',');
+    return request.params.entityIDs.split('-');
 }
 
 function getVariableID(request) {

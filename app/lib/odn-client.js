@@ -25,11 +25,18 @@ class ODNClient {
      * Get a list of entities given a list of entity IDs.
      */
     entities(entityIDs) {
-        return this.get('entity/v1', forEntities(entityIDs)).then(response => {
+        return Promise.all(entityIDs.map(entityID => this.entity(entityID)));
+    }
+
+    /**
+     * Find an entity from its ID.
+     */
+    entity(entityID) {
+        return this.get('entity/v1', {entity_id: entityID}).then(response => {
             const entities = response.entities;
-            if (entities.length !== entityIDs.length)
-                return Promise.reject(`entities not found: ${entityIDs.join(', ')}`);
-           return Promise.resolve(entities);
+            if (entities.length !== 1)
+                return Promise.reject(`entity not found with id: '${entityID}'`);
+           return Promise.resolve(entities[0]);
         });
     }
 
