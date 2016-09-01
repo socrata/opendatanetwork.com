@@ -72,7 +72,6 @@ var searchScripts = baseScripts
         'src/quick-links.js',
         'src/refine-controls-mobile.js',
         'src/search-refine-controls-mobile.js',
-        'src/search-page-controller.js',
         'src/search.js',
         'src/api/odn-api.js']);
 gulp.task('search', js(searchScripts, 'search.min.js'));
