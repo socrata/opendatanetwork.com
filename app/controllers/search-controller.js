@@ -126,8 +126,7 @@ class SearchController {
 
                     if (params.q == '') {
                         searchResultsRegions = [];
-                    }
-                    else {
+                    } else {
                         searchResultsRegions = data[6];
                         searchResultsRegions.forEach(region => {
                             region.regionType = GlobalConstants.REGION_NAMES[region.type] || '';
@@ -319,7 +318,10 @@ class SearchController {
                 const constraints = dataset.constraints;
                 const fixed = _.pick(req.query, constraints);
                 Data.getConstraints(params.regions, variable, constraints, fixed).then(constraintData => {
-                    params.constraints = _.object(constraintData.map(a => [a.name, a.selected]));
+                    params.constraints = _.object(constraintData.map(constraint => {
+                        return [constraint.name, constraint.selected];
+                    }));
+
                     constraintData = Data.addConstraintURLs(params, req.query, constraintData);
                     const variables = Data.addVariableURLs(params, req.query, dataset.variables);
                     const constraint = _.first(constraintData);
