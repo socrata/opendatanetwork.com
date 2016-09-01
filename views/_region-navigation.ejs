@@ -12,7 +12,7 @@
         </div>
         <% include _questions %>
         <h2>
-          <% if ((typeof peers != 'undefined') && peers && (peers.length > 0)) { %>
+          <% if (related.peer.length > 0) { %>
             <a id="related-peer-info-box-button" class="small-api-link">API</a>
           <% } %>
             Compare this Data
@@ -24,7 +24,7 @@
             </strong>
             <dl>
                 <dt>Example:</dt>
-            <% params.regions.forEach(region => { %>
+            <% entities.forEach(region => { %>
                 <dd><a href="<%= GlobalConstants.ODN_API_BASE_URL %>/entity/v1/peer?entity_id=<%= region.id %>&limit=5&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank">Peers of <%= region.name %></a></dd>
             <% }); %>
                 <dt>API Docs:</dt>
@@ -36,10 +36,10 @@
             <ul class="add-region-results" style="display: none;"></ul>
         </div>
 
-    <% if ((typeof peers != 'undefined') && peers && (peers.length > 0)) { %>
+    <% if (related.peer.length > 0) { %>
         <ul id="similar-regions">
-        <% peers.forEach(region => { %>
-            <li><a class="region-link" href=<%= region.addURL %><%- (params.regions.length >= 2) ? ' rel="nofollow"' : '' %>><%= region.name %> <i class="fa fa-plus"></i></a></li>
+        <% related.peer[0].entities.forEach(region => { %>
+            <li><a class="region-link" href=<%= region.addURL %><%- (entities.length >= 2) ? ' rel="nofollow"' : '' %>><%= region.name %> <i class="fa fa-plus"></i></a></li>
         <% }); %>
         </ul>
     <% } %>
@@ -57,10 +57,11 @@
         };
         %>
 
-        <% if ((typeof siblings != 'undefined') && siblings && (siblings.length > 0)) { %>
+        <% if (related.sibling.length > 0) { %>
             <h2 class="places-in-region-header">
                 <a id="related-sibling-info-box-button" class="small-api-link">API</a>
-                <%= PLURALS[params.regions[0].type] %> in
+                Others in
+                <% const parentRegion = related.parent[0].entities[0]; %>
                 <a class="parent-link" href="<%= parentRegion.navigateURL %>"><%= parentRegion.name %></a>
             </h2>
             <div id="related-sibling-info-box" class="api-info-box">
@@ -70,7 +71,7 @@
                 </strong>
                 <dl>
                     <dt>Example:</dt>
-                <% params.regions.forEach(region => { %>
+                <% entities.forEach(region => { %>
                     <dd><a href="<%= GlobalConstants.ODN_API_BASE_URL %>/entity/v1/sibling?entity_id=<%= region.id %>&limit=5&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank">Siblings of <%= region.name %></a></dd>
                 <% }); %>
                     <dt>API Docs:</dt>
@@ -78,19 +79,19 @@
                 </dl>
             </div>
             <ul class="places-in-region-list">
-                <% siblings.forEach(region => { %>
+                <% related.sibling[0].entities.forEach(region => { %>
                     <li><a class="region-link" href="<%= region.navigateURL %>"><%= region.name %></a></li>
                 <% }); %>
             </ul>
         <% } %>
 
-        <% if ((typeof allChildren != 'undefined') && allChildren && (typeof allChildren.relatives != 'undefined')) { %>
-            <% allChildren.relatives.forEach(relative => { %>
+        <% if (related.child.length > 0) { %>
+            <% related.child.forEach(relative => { %>
                 <% var relativeType = relative.type.substring(relative.type.indexOf('.') + 1); %>
                 <% if (relative.entities.length > 0) { %>
                     <h2 class="places-in-region-header">
                         <a id="related-child-<%= relativeType %>-info-box-button" class="small-api-link">API</a>
-                        <%= PLURALS[relativeType] %> in <%= params.regions[0].name %>
+                        <%= PLURALS[relativeType] %> in <%= entities[0].name %>
                     </h2>
 
                     <div id="related-child-<%= relativeType %>-info-box" class="api-info-box">
@@ -100,7 +101,7 @@
                         </strong>
                         <dl>
                             <dt>Example:</dt>
-                        <% params.regions.forEach(region => { %>
+                        <% entities.forEach(region => { %>
                             <dd><a href="<%= GlobalConstants.ODN_API_BASE_URL %>/entity/v1/child?entity_id=<%= region.id %>&limit=5&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank">Children of <%= region.name %></a></dd>
                         <% }); %>
                             <dt>API Docs:</dt>

@@ -5,16 +5,18 @@
         <label class="search-bar-label" aria-label= "Search Open Data Network" for="search-input"></label>
         <input class="search-bar-input" id="search-input"
                type="text" placeholder="Search Open Data Network"
-               name="q"  value="<%= params.q %>" autocomplete="off" tabindex="0">
+               name="q"  value="<%= typeof params === 'undefined' ? '' : params.q %>" autocomplete="off" tabindex="0">
 
-        <% if (params.categories.length > 0) { %>
-            <input type="hidden" name="categories" value="<%= params.categories.join(',') %>" tabindex="-1">
-        <% } %>
-        <% if (params.domains.length > 0) { %>
-            <input type="hidden" name="domains" value="<%= params.domains.join(',') %>" tabindex="-1">
-        <% } %>
-        <% if (params.tags.length > 0) { %>
-            <input type="hidden" name="tags" value="<%= params.tags.join(',') %>" tabindex="-1">
+        <% if (typeof params !== 'undefined') { %>
+            <% if (params.categories.length > 0) { %>
+                <input type="hidden" name="categories" value="<%= params.categories.join(',') %>" tabindex="-1">
+            <% } %>
+            <% if (params.domains.length > 0) { %>
+                <input type="hidden" name="domains" value="<%= params.domains.join(',') %>" tabindex="-1">
+            <% } %>
+            <% if (params.tags.length > 0) { %>
+                <input type="hidden" name="tags" value="<%= params.tags.join(',') %>" tabindex="-1">
+            <% } %>
         <% } %>
 
         <div class="search-buttons">
@@ -22,7 +24,6 @@
                 <span class="fa fa-search" aria-hidden="true"></span>
                 <span class="sr-only">Search</span>
             </button>
-            <% include _quick-links %>
         </div>
     </span>
     <ul class="region-list" style="display:none"></ul>

@@ -7,6 +7,7 @@ const _ = require('lodash');
 
 const ODNClient = require('../lib/odn-client');
 const EntityFormatter = require('../lib/entity-formatter');
+const GlobalConstants = require('../../src/constants');
 
 module.exports = (request, response) => {
     // TODO what if no entityIDs
@@ -29,6 +30,7 @@ module.exports = (request, response) => {
             ]).then(([datasets, questions, constraints, title]) => {
                 getDescription(entityIDs, variableID, constraints).then(description => {
                     const templateData = {
+                        GlobalConstants,
                         title,
                         questions,
                         datasets,
