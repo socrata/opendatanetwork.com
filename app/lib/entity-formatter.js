@@ -1,4 +1,5 @@
 'use strict';
+
 const _ = require('lodash');
 
 class EntityFormatter {
@@ -27,6 +28,14 @@ class EntityFormatter {
             return `${dataDescription} on the Open Data Network`;
         else
             return `Open Data Network`;
+    }
+
+    static entityPageTitle(entities, dataset, variable) {
+        const dataDescription = `${variable.name} Data`;
+        const locationDescription = entities.length > 0 ?
+            `for ${this.wordJoin(entities.map(region => region.name))}` : '';
+
+        return `${dataDescription} ${locationDescription} - ${dataset.name} on the Open Data Network`;
     }
 
     static wordJoin(list, separator) {
