@@ -9,19 +9,19 @@ class Autosuggest {
                 suggestType: 'entity',
                 image: 'fa-globe',
                 name: 'Regions',
-                select: option => this.navigate(this.path(['region', option.id, option.name])),
+                select: option => this.navigate(new EntityNavigate([option]).url())
             },
             {
                 suggestType: 'category',
                 image: 'fa-tags',
                 name: 'Categories',
-                select: option => this.navigate('/search', { categories: option.name }),
+                select: option => this.navigate(new SearchNavigate(null, [option.name]).url())
             },
             {
                 suggestType: 'publisher',
                 image: 'fa-newspaper-o',
                 name: 'Publishers',
-                select: option => this.navigate('/search', { domains: option.name })
+                select: option => this.navigate(new SearchNavigate(null, null, [option.name]).url())
             },
             {
                 suggestType: 'dataset',
@@ -33,23 +33,11 @@ class Autosuggest {
                 suggestType: 'question',
                 image: 'fa-question-circle',
                 name: 'Questions',
-                select: option => {
-
-                    // Get the vector segment from the middle component of the variable_id
-                    //
-                    const rg = option.variable_id.split('.');
-                    rg.pop();
-                    const vector = rg.pop();
-
-                    this.navigate(
-                        this.path(['region', option.entity.id, option.entity.name, vector, option.variable_id]),
-                        { question: 1 });
-                },
-            },
+                select: option => this.navigate(new EntityNavigate([option.entity], option.variable_id).url())
+            }
         ];
 
         const apiConfig = {
-
             suggestType: 'api',
             image: 'fa-code',
             name: 'API',

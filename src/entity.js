@@ -1,4 +1,4 @@
-'use strict';
+
 
 $(document).ready(function() {
     menuMouseHandlers();
@@ -34,7 +34,7 @@ function drawMap() {
 }
 
 function drawCharts() {
-    [_data.chartConfig.charts[0]].forEach(config => {
+    _data.chartConfig.charts.forEach(config => {
         const chart = new DatasetChart(config);
         chart.getData().then(data => chart.render(data)).catch(error => {
             throw error;

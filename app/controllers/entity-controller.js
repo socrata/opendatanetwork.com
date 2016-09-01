@@ -54,6 +54,7 @@ module.exports = (request, response) => {
                         constraints,
                         constraintMenus,
                         description,
+                        fixedConstraints: fixed,
                         topics: _.values(availableData),
                         navigate: new Navigate(entities, variableID, _.clone(request.query)),
                         chartConfig: DatasetConfig[dataset.id],

@@ -287,12 +287,11 @@ const DATASET_CONFIG = {
                     year: '2015'
                 },
                 name: 'Health Behaviors',
+                options: {
+                    height: 400
+                },
                 variables: [
-                    'health.health.adult_obesity_value',
-                    'health.health.adult_smoking_value',
-                    'health.health.physical_inactivity_value',
-                    'health.health.access_to_exercise_opportunities_value',
-                    'health.health.excessive_drinking_value'
+                    'health.health'
                 ],
             }
         ]

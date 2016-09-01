@@ -6,8 +6,14 @@ class DatasetChart {
     }
 
     getData() {
-        const url = 'https://api.opendatanetwork.com/data/v1/values?app_token=cQovpGcdUT1CSzgYk0KPYdAI0&entity_id=0400000US53&format=google&variable=demographics.population.count&forecast=5&describe=true';
-        return d3.promise.json(url);
+        const entityIDs = _data.entities.map(_.property('id'));
+        const variableID = this.config.variables.join(',');
+        const constraints = this.config.constraint;
+        const describe = true;
+        const forecast = this.config.forecast;
+        const format = 'google';
+
+        return odn.values(entityIDs, variableID, constraints, describe, forecast, format);
     }
 
     render(data) {
@@ -26,7 +32,7 @@ class DatasetChart {
     }
 
     renderDescription(data) {
-        if (!('forecast_descriptions')) return;
+        if (!('forecast_descriptions' in data)) return;
 
         d3.select(document.getElementById(`dataset-description-${this.config.id}`))
             .select('div')
