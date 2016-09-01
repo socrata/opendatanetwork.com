@@ -28,7 +28,6 @@ var mapScripts = [
     'src/maps/legend-control.js',
     'src/maps/tooltip-control.js',
     'src/maps/navigate.js',
-    'src/maps/description.js',
     'src/maps/view.js'
 ];
 
@@ -91,7 +90,6 @@ var entityScripts = baseScripts
     .concat(autosuggestScripts)
     .concat(mapScripts)
     .concat([
-        'src/entity-page-controller.js',
         'src/dataset-constants.js',
         'src/dataset-chart.js',
         'src/entity.js']);
