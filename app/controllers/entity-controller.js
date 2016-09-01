@@ -20,10 +20,21 @@ module.exports = (request, response) => {
         getVariable(availableData, variableID).then(([topic, dataset, variable]) => {
             const fixed = getFixedConstraints(request, dataset);
 
-            getConstraints(entityIDs, variableID, dataset.constraints, fixed).then(constraintData => {
-                getDescription(entityIDs, variableID, constraintData).then(description => {
-                    response.json({related, entities, topic, dataset, variable, constraintData, description});
-                    console.log(description);
+            Promise.all([
+                ODNClient.searchDatasets(entityIDs, dataset.id),
+                getConstraints(entityIDs, variableID, dataset.constraints, fixed)
+            ]).then(([datasets, constraints]) => {
+                getDescription(entityIDs, variableID, constraints).then(description => {
+                    response.json({
+                        datasets,
+                        related,
+                        entities,
+                        topic,
+                        dataset,
+                        variable,
+                        constraints,
+                        description
+                    });
                 }).catch(error => {
                     console.log(error);
                     response.json({error});

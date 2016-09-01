@@ -34,6 +34,17 @@ class ODNClient {
     }
 
     /**
+     * Get entities related to the given entity.
+     *
+     * Relation must be one of parent, child, sibling, or peer.
+     */
+    related(entityID, relation) {
+        return this.get(`entity/v1/${relation}`, {entity_id: entityID})
+            .then(response => Promise.resolve({[relation]: response.relatives}));
+    }
+
+
+    /**
      * Get available data for the given entities.
      */
     availableData(entityIDs) {
@@ -59,18 +70,10 @@ class ODNClient {
     }
 
     /**
-     * Get entities related to the given entity.
-     *
-     * Relation must be one of parent, child, sibling, or peer.
+     * Get values for the given variable and entities.
      */
-    related(entityID, relation) {
-        return this.get(`entity/v1/${relation}`, {entity_id: entityID})
-            .then(response => Promise.resolve({[relation]: response.relatives}));
-    }
-
     values(entityIDs, variableID, constraints, describe, forecast, format) {
         constraints = constraints || {};
-        console.log(describe);
 
         return this.get('data/v1/values', _.extend({
             describe,
@@ -80,11 +83,27 @@ class ODNClient {
         }, forEntities(entityIDs), constraints));
     }
 
+    /**
+     * Search for datasets relating to the given entities and dataset.
+     */
+    searchDatasets(entityIDs, datasetID, limit, offset) {
+        limit = limit || 10;
+        offset = offset || 0;
+
+        const params = _.extend({
+            limit,
+            offset,
+            dataset_id: datasetID
+        }, forEntities(entityIDs));
+
+        return this.get('search/v1/dataset', params)
+            .then(response => Promise.resolve(response.datasets));
+    }
+
     get(relativePath, clientParams) {
         const path = `${this.url}/${relativePath}`;
         const params = _.extend({app_token: this.appToken}, clientParams);
         const url = Request.buildURL(path, params);
-        console.log(url);
         return Request.getJSON(url);
     }
 }
