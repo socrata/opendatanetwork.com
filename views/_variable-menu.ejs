@@ -10,7 +10,7 @@
     <ul class="chart-sub-nav-menu" id="map-variable-list" style="display: none;">
         <% _.values(dataset.variables).forEach(option => { %>
             <li>
-                <a href="<%= option.url %>">
+                <a href="<%= navigate.variable(option.id).url() %>">
                     <%= option.name %>
                 </a>
             </li>

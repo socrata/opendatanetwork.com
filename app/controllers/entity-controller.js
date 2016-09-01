@@ -50,6 +50,10 @@ class Navigate {
         return new Navigate(this.entityIDs, variableID, this.query);
     }
 
+    constraint(name, value) {
+        return new Navigate(this.entityIDs, this.variableID, _.extend({[name]: value}, this.query));
+    }
+
     url() {
         const path = `/entity/${this.entityIDs.join('-')}/${this.variableID}`;
         const query = querystring.stringify(this.query);

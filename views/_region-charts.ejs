@@ -22,21 +22,7 @@
         <div class="chart-sub-nav-container">
             <a id="data-constraint-info-box-button" class="small-api-link">API</a>
             <ul class="chart-sub-nav">
-                <li>
-                    <span>
-                        <%= dataset.name %>
-                        <% if (datasets.length > 1) { %>
-                            <i class="fa fa-caret-down odn-caret"></i>
-                        <% } %>
-                    </span>
-                    <% if (datasets.length > 1) { %>
-                        <ul class="chart-sub-nav-menu">
-                            <% datasets.forEach(dataset =>  { %>
-                                <li><a href="<%= dataset.navigateUrl %>"><%= dataset.name %></a></li>
-                            <% }); %>
-                        </ul>
-                    <% } %>
-                </li>
+                <% include _dataset-menu %>
                 <% include _variable-menu %>
                 <% include _constraint-menu %>
             </ul>

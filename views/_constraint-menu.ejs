@@ -11,8 +11,8 @@
         <ul class="chart-sub-nav-menu" style="display: none;">
             <% constraint.options.forEach(option => { %>
                 <li>
-                    <a href="<%= option.url %>">
-                        <%= option.name %>
+                    <a href="<%= navigate.constraint(constraint.name, option).url() %>">
+                        <%= option %>
                     </a>
                 </li>
             <% }); %>
