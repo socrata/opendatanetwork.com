@@ -1,9 +1,7 @@
 'use strict';
 
 class DatasetChart {
-
     constructor(datasetId, chartId, data) {
-
         this.datasetId = datasetId;
         this.chartId = chartId;
         this.data = data;
@@ -11,23 +9,8 @@ class DatasetChart {
     }
 
     render() {
-
         const config = this.getChartConfig(this.datasetId, this.chartId);
         const table = new google.visualization.DataTable(this.data);
-
-        // Format data using data formatters
-        //
-        if (config.x) {
-            const xFormatter = this.getFormatter(config.x.formatter, config.x.format);
-            xFormatter.format(table, 0);
-        }
-
-        if (config.y) {
-            const yFormatter = this.getFormatter(config.y.formatter, config.y.format);
-            _.range(1, table.getNumberOfColumns()).forEach(columnIndex => {
-                yFormatter.format(table, columnIndex);
-            });
-        }
 
         // Render chart
         //
@@ -38,24 +21,20 @@ class DatasetChart {
     }
 
     clear() {
-
         document.getElementById(this.containerId).innerHTML = '';
     }
 
     getChartConfig(datasetId, chartId) {
-
         const config = DATASET_CONFIG[datasetId];
         return _.find(config.charts, chart => chart.chartId == chartId);
     }
 
     getChartOptions(config) {
-
         const options = _.isUndefined(config) ? {} : config.options;
         return _.extend({}, DATASET_CONSTANTS.CHART_OPTIONS, options);
     }
 
     getGoogleChart(config, containerId) {
-
         const container = document.getElementById(containerId);
 
         if (!_.isUndefined(config)) {

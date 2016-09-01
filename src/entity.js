@@ -1,6 +1,14 @@
 'use strict';
 
 $(document).ready(function() {
+    menuMouseHandlers();
+    autosuggest();
+    drawMap();
+
+//    new EntityPageController();
+});
+
+function autosuggest() {
     // Main search bar autosuggest
     new Autosuggest('.region-list')
         .listen('.search-bar-input');
@@ -13,9 +21,23 @@ $(document).ready(function() {
     // Mobile autosuggest
     new Autosuggest('.add-region-results-mobile')
         .listen('.add-region-input-mobile');
+}
 
-    drawMap();
+function drawMap() {
+    const constraints = _(_data.constraints)
+        .map(constraint => [constraint.name, constraint.selected])
+        .object()
+        .value();
 
+    MapView.create(_data.entities, _data.variable, constraints, {})
+        .then(map => map.show('div#map'))
+        .catch(error => {
+            console.error('error rendering map');
+            console.error(error);
+        });
+}
+
+function menuMouseHandlers() {
     d3.select('ul.chart-sub-nav')
         .selectAll('li')
         .on('mouseenter', function() {
@@ -31,20 +53,6 @@ $(document).ready(function() {
                 $(this).children('span').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
                 $(this).children('ul').hide();
             }
-        });
-});
-
-function drawMap() {
-    const constraints = _(_data.constraints)
-        .map(constraint => [constraint.name, constraint.selected])
-        .object()
-        .value();
-
-    MapView.create(_data.entities, _data.variable, constraints, {})
-        .then(map => map.show('div#map'))
-        .catch(error => {
-            console.error('error rendering map');
-            console.error(error);
         });
 }
 
