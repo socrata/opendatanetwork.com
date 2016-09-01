@@ -52,11 +52,7 @@ class Exception {
     static respond(error, request, response, next, statusCode) {
         statusCode = error.statusCode || statusCode || 500;
 
-        if (statusCode >= 500) {
-            console.log(error);
-        } else {
-            console.log(error);
-        }
+        if (statusCode >= 500) console.log(error);
 
         const errorJSON = {
             error: {

@@ -69,6 +69,8 @@ class Navigate {
 }
 
 module.exports = (request, response) => {
+    const errorHandler = Exception.getHandler(request, response);
+
     // TODO what if no entityIDs
     const entityIDs = getEntityIDs(request);
     const variableID = getVariableID(request);
@@ -138,22 +140,10 @@ module.exports = (request, response) => {
                             response.send(html);
                         }
                     });
-                }).catch(error => {
-                    console.log(error);
-                    response.json({error});
-                });
-            }).catch(error => {
-                console.log(error);
-                response.json({error});
-            });
-        }).catch(error => {
-            console.log(error);
-            response.json({error});
-        });
-    }).catch(error => {
-        console.log(error);
-        response.json({error});
-    });
+                }).catch(errorHandler);
+            }).catch(errorHandler);
+        }).catch(errorHandler);
+    }).catch(errorHandler);
 };
 
 function getFixedConstraints(request, dataset) {
