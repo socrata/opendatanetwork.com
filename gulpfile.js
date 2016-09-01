@@ -17,9 +17,7 @@ var net = require('net');
 
 var baseScripts = [
     'src/app.js',
-    'src/api-controller.js',
     'src/constants.js',
-    'src/region-lookup.js',
     'src/odn-client/build-url.js',
     'src/odn-client/get-json.js',
     'src/odn-client/odn-client.js',
@@ -32,7 +30,6 @@ var mapScripts = [
     'src/maps/expand-collapse-control.js',
     'src/maps/legend-control.js',
     'src/maps/tooltip-control.js',
-    'src/maps/navigate.js',
     'src/maps/view.js'
 ];
 
