@@ -28,7 +28,7 @@ class SearchRefineControlsMobile {
 
             Cookies.set('refinePopupCollapsed', '1');
         });
-        
+
         this.attachMenuEventHandlers();
     }
 
@@ -46,7 +46,7 @@ class SearchRefineControlsMobile {
             const carets = menusToClose.map(s => (s + ' .odn-caret'));
             $(carets.join(', ')).removeClass('fa-caret-up').addClass('fa-caret-down');
 
-            const subLists = menusToClose.map(s => ('.search-refine-menu-list-mobile ' + s + ' > ul')); 
+            const subLists = menusToClose.map(s => ('.search-refine-menu-list-mobile ' + s + ' > ul'));
             $(subLists.join(', ')).slideUp();
 
             // Caret to toggle
@@ -58,7 +58,7 @@ class SearchRefineControlsMobile {
 
             // Menu to toggle
             //
-            $('.search-refine-menu-list-mobile ' + selectedMenu + ' > ul').slideToggle(); 
+            $('.search-refine-menu-list-mobile ' + selectedMenu + ' > ul').slideToggle();
         });
     }
 }

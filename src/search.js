@@ -4,7 +4,7 @@ $(document).ready(function() {
     autosuggest();
     tooltip();
     refineMenus();
-    refineControls();
+//    refineControls();
 
     // Selected category (yellow box)
     $('.current-category-info-box .fa-close').click(() => {
@@ -35,6 +35,7 @@ function refineMenus() {
         $(this).addClass('refine-link-selected');
         $(this).children('span').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
         $(this).children('ul').show();
+
     });
 
     $('.refine-link').mouseleave(function() {

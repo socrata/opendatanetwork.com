@@ -1,32 +1,32 @@
 <section class="refine-bar search-header-bar">
     <a id="catalog-info-box-button" class="small-api-link">API</a>
 
-    <a class="refine-link">
+    <div class="refine-link">
         <span>Categories<i class="fa fa-caret-down"></i></span>
         <ul id="refine-menu-categories" style="display:none">
             <% refineBy.categories.forEach(category => { %>
                 <li>
-                    <a href="<%= searchNavigate.addCategory(category.category).url() %>">
+                    <a href="<%- searchNavigate.addCategory(category.category).url() %>">
                         <i class="fa <%= category.metadata.icon %>"></i>
                         <%= category.category %>
                     </a>
                 </li>
             <% }); %>
         </ul>
-    </a>
+    </div>
 
-    <a class="refine-link">
+    <div class="refine-link">
         <span>Publishers<i class="fa fa-caret-down"></i></span>
         <ul id="refine-menu-domains" style="display:none">
             <% refineBy.domains.forEach(domain => { %>
                 <li>
-                    <a href="<%= searchNavigate.addDomain(domain.domain).url() %>">
+                    <a href="<%- searchNavigate.addDomain(domain.domain).url() %>">
                         <%= domain.domain %>
                     </a>
                 </li>
             <% }); %>
         </ul>
-    </a>
+    </div>
 
     <label class="refine-by-label">Refine by:</label>
     <i class="fa fa-bar-chart search-results-header-icon"></i>
