@@ -43,20 +43,6 @@
         <% }); %>
         </ul>
     <% } %>
-
-        <%
-        const PLURALS = {
-            nation: 'Nations',
-            region: 'Regions',
-            division: 'Divisions',
-            state: 'States',
-            county: 'Counties',
-            place: 'Places',
-            msa: 'Metro Areas',
-            zip_code: 'ZIP Codes'
-        };
-        %>
-
         <% if (related.sibling.length > 0) { %>
             <h2 class="places-in-region-header">
                 <a id="related-sibling-info-box-button" class="small-api-link">API</a>
@@ -87,14 +73,13 @@
 
         <% if (related.child.length > 0) { %>
             <% related.child.forEach(relative => { %>
-                <% var relativeType = relative.type.substring(relative.type.indexOf('.') + 1); %>
                 <% if (relative.entities.length > 0) { %>
                     <h2 class="places-in-region-header">
-                        <a id="related-child-<%= relativeType %>-info-box-button" class="small-api-link">API</a>
-                        <%= PLURALS[relativeType] %> in <%= entities[0].name %>
+                        <a id="related-child-<%= relative.type %>-info-box-button" class="small-api-link">API</a>
+                        <%= GlobalConstants.PLURAL_REGION_NAMES[relative.type] || 'Regions' %> in <%= entities[0].name %>
                     </h2>
 
-                    <div id="related-child-<%= relativeType %>-info-box" class="api-info-box">
+                    <div id="related-child-<%= relative.type %>-info-box" class="api-info-box">
                         <a class="fa fa-close"></a>
                         <strong>
                             <a href="http://docs.odn.apiary.io/#reference/0/entity-relationships" target="_blank">/entity/v1/child</a>
