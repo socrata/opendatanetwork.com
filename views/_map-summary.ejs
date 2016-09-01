@@ -1,6 +1,6 @@
 <div class="map-summary-container">
     <a class="map-summary-more">More Information</a>
-    <ul class="map-summary-links hidden">
+    <ul class="map-summary-links">
         <% mapVariables.forEach(variable => { %>
             <li>
                 <a href="<%= variable.url %>"<%- (params.regions.length >= 3) ? ' rel="nofollow"' : '' %>><%= variable.name %></a>

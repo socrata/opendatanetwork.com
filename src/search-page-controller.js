@@ -225,8 +225,10 @@ class SearchPageController {
                     if (chart.constraint)
                         params.constraint = chart.constraint;
 
-                    if (chart.forecast)
+                    if (chart.forecast) {
                         params.forecast = chart.forecast;
+                        params.describe = true;
+                    }
 
                     dataValueParams.push(params);
                 });
@@ -234,7 +236,7 @@ class SearchPageController {
                 const chartPromises = dataValueParams.map(params => {
 
                     const variable = params.variables.map(variable => variable.variableId).join(',');
-                    return api.getDataValues(this.params.regions, variable, params.constraint, params.forecast);
+                    return api.getDataValues(this.params.regions, variable, params.constraint, params.forecast, params.describe);
                 });
 
                 // Get data values for each chart
@@ -247,11 +249,31 @@ class SearchPageController {
 
                     data.forEach((datum, index) => {
 
+                        // Render chart
+                        //
                         const params = dataValueParams[index];
                         const chart = new DatasetChart(dataset.id, params.chartId, datum.data);
                         chart.render();
 
                         charts.push(chart);
+
+                        // Render forecast description
+                        //
+                        if (params.describe) {
+
+                            const container = d3.select(`div[id='dataset-description-${params.chartId}'] .forecast-descriptions`);
+
+                            container
+                                .selectAll('p')
+                                .data(datum.forecast_descriptions)
+                                .enter()
+                                .append('p')
+                                .text(s => s);
+
+                            container
+                                .append('p')
+                                .html('Forecasted data uses a linear extrapolation algorithm which uses only available measured data.  Algorithm details are available <a href="https://en.wikipedia.org/wiki/Extrapolation#Linear_extrapolation">HERE</a>.');
+                        }
                     });
 
                 }, error => console.error(error));
