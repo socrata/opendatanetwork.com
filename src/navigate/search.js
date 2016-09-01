@@ -9,7 +9,7 @@ if (typeof require !== 'undefined') {
     var buildURL = require('./build-url');
 }
 
-class Navigate {
+class SearchNavigate {
     constructor(query, categories, domains, tags) {
         this.query = query || '';
         this.categories = categories || [];
@@ -18,46 +18,46 @@ class Navigate {
     }
 
     query(query) {
-        return new Navigate(query);
+        return new SearchNavigate(query);
     }
 
     addCategory(category) {
-        return new Navigate(this.query, [category].concat(this.categories), this.domains, this.tags);
+        return new SearchNavigate(this.query, [category].concat(this.categories), this.domains, this.tags);
     }
 
     removeCategory(category) {
         const categories = this.categories.filter(id => id !== category);
-        return new Navigate(this.query, categories, this.domains, this.tags);
+        return new SearchNavigate(this.query, categories, this.domains, this.tags);
     }
 
     category(category) {
-        return new Navigate(null, [category]);
+        return new SearchNavigate(null, [category]);
     }
 
     addDomain(domain) {
-        return new Navigate(this.query, this.categories, [domain].concat(this.domains), this.tags);
+        return new SearchNavigate(this.query, this.categories, [domain].concat(this.domains), this.tags);
     }
 
     removeDomain(domain) {
         const domains = this.domains.filter(id => id !== domain);
-        return new Navigate(this.query, this.categories, domains, this.tags);
+        return new SearchNavigate(this.query, this.categories, domains, this.tags);
     }
 
     domain(domain) {
-        return new Navigate(null, null, [domain]);
+        return new SearchNavigate(null, null, [domain]);
     }
 
     addTag(tag) {
-        return new Navigate(this.query, this.categories, this.domains, [tag].concat(this.tags));
+        return new SearchNavigate(this.query, this.categories, this.domains, [tag].concat(this.tags));
     }
 
     removeTag(tag) {
         const domains = this.tags.filter(id => id !== tag);
-        return new Navigate(this.query, this.categories, this.domains, this.tags);
+        return new SearchNavigate(this.query, this.categories, this.domains, this.tags);
     }
 
     tag(tag) {
-        return new Navigate(null, null, null, [tag]);
+        return new SearchNavigate(null, null, null, [tag]);
     }
 
     url() {
@@ -73,5 +73,5 @@ class Navigate {
     }
 }
 
-if (typeof module !== 'undefined') module.exports = Navigate;
+if (typeof module !== 'undefined') module.exports = SearchNavigate;
 

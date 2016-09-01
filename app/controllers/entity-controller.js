@@ -33,9 +33,11 @@ module.exports = (request, response) => {
             Promise.all([
                 ODNClient.searchDatasets(entityIDs, dataset.id),
                 ODNClient.searchQuestions(entityIDs, dataset.id),
-                getConstraints(entityIDs, variable.id, dataset.constraints, fixed),
+                getConstraintMenus(entityIDs, variable.id, dataset.constraints, fixed),
                 EntityFormatter.entityPageTitle(entities, dataset, variable),
-            ]).then(([datasets, questions, constraints, title]) => {
+            ]).then(([datasets, questions, constraintMenus, title]) => {
+                const constraints = getConstraints(constraintMenus);
+
                 getDescription(entityIDs, variable.id, constraints).then(description => {
                     const templateData = {
                         _,
@@ -50,9 +52,10 @@ module.exports = (request, response) => {
                         dataset,
                         variable,
                         constraints,
+                        constraintMenus,
                         description,
                         topics: _.values(availableData),
-                        navigate: getNavigate(request),
+                        navigate: new Navigate(entities, variableID, _.clone(request.query)),
                         chartConfig: DatasetConfig[dataset.id],
                         css: [
                             '/styles/third-party/leaflet.min.css',
@@ -93,13 +96,6 @@ module.exports = (request, response) => {
     }).catch(errorHandler);
 };
 
-function getNavigate(request) {
-    const entityIDs = getEntityIDs(request);
-    const variableID = getVariableID(request);
-    const query = _.clone(request.query);
-    return new Navigate(entityIDs, variableID, query);
-}
-
 function getFixedConstraints(request, dataset) {
     return _.pick(request.query, dataset.constraints);
 }
@@ -127,7 +123,7 @@ function getNode(nodes, name) {
     return Promise.reject(notFound(`variable not found: ${name}`));
 }
 
-function getConstraints(entityIDs, variableID, constraints, fixed, results) {
+function getConstraintMenus(entityIDs, variableID, constraints, fixed, results) {
     fixed = fixed || {};
     results = results || [];
 
@@ -145,8 +141,15 @@ function getConstraints(entityIDs, variableID, constraints, fixed, results) {
 
         if (constraints.length === 1)
             return Promise.resolve(results);
-        return getConstraints(entityIDs, variableID, _.tail(constraints), fixed, results);
+        return getConstraintMenus(entityIDs, variableID, _.tail(constraints), fixed, results);
     });
+}
+
+function getConstraints(constraintMenus) {
+    return _(constraintMenus)
+        .map(constraint => [constraint.name, constraint.selected])
+        .object()
+        .value();
 }
 
 function getRelated(entityID) {
@@ -165,12 +168,7 @@ function getVariableID(request) {
     return request.params.variableID;
 }
 
-function getDescription(entityIDs, variableID, constraintData) {
-    const constraints = _(constraintData)
-        .map(constraint => [constraint.name, constraint.selected])
-        .object()
-        .value();
-
+function getDescription(entityIDs, variableID, constraints) {
     return ODNClient.values(entityIDs, variableID, constraints, true)
         .then(response => Promise.resolve(response.description));
 }

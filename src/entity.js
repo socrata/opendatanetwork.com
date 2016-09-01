@@ -5,6 +5,9 @@ $(document).ready(function() {
     autosuggest();
     drawMap();
     drawCharts();
+
+    window.entityNavigate =
+        new EntityNavigate(_data.entities, _data.variable.id, _data.constraints);
 });
 
 function autosuggest() {
@@ -23,12 +26,7 @@ function autosuggest() {
 }
 
 function drawMap() {
-    const constraints = _(_data.constraints)
-        .map(constraint => [constraint.name, constraint.selected])
-        .object()
-        .value();
-
-    MapView.create(_data.entities, _data.variable, constraints, {})
+    MapView.create(_data.entities, _data.variable, _data.constraints, {})
         .then(map => map.show('div#map'))
         .catch(error => {
             throw error;

@@ -9,25 +9,26 @@ if (typeof require !== 'undefined') {
     var buildURL = require('./build-url');
 }
 
-class Navigate {
-    constructor(entityIDs, variableID, query) {
-        this.entityIDs = entityIDs || [];
+class EntityNavigate {
+    constructor(entities, variableID, query) {
+        this.entities = entities;
+        this.entityIDs = (entities || []).map(_.property('id'));
         this.variableID = variableID || 'demographics';
         this.query = query || {};
     }
 
     to(entity) {
-        return new Navigate([entity.id], this.variableID, this.query);
+        return new EntityNavigate([entity], this.variableID, this.query);
     }
 
     add(entity) {
         if (_.includes(this.entityIDs, entity.id)) return this;
-        return new Navigate([entity.id].concat(this.entityIDs), this.variableID, this.query);
+        return new EntityNavigate([entity].concat(this.entities), this.variableID, this.query);
     }
 
     remove(entity) {
-        const entities = this.entityIDs.filter(id => id !== entity.id);
-        return new Navigate(entities, this.variableID, this.query);
+        const entities = this.entities.filter(other => other.id !== entity.id);
+        return new EntityNavigate(entities, this.variableID, this.query);
     }
 
     topic(topicID) {
@@ -39,11 +40,11 @@ class Navigate {
     }
 
     variable(variableID) {
-        return new Navigate(this.entityIDs, variableID, {});
+        return new EntityNavigate(this.entities, variableID, {});
     }
 
     constraint(name, value) {
-        return new Navigate(this.entityIDs, this.variableID, _.extend({}, this.query, {[name]: value}));
+        return new EntityNavigate(this.entities, this.variableID, _.extend({}, this.query, {[name]: value}));
     }
 
     url() {
@@ -52,5 +53,5 @@ class Navigate {
     }
 }
 
-if (typeof module !== 'undefined') module.exports = Navigate;
+if (typeof module !== 'undefined') module.exports = EntityNavigate;
 

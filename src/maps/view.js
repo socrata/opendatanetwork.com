@@ -134,42 +134,22 @@ class MapView {
         if (_.includes(this.entityIDs, entity.id)) return '';
 
         return `
-            <a href="${this.getCompareURL(entity)}">
+            <a href="${window.entityNavigate.add(entity).url()}">
                 <i class="fa fa-plus"></i>
                 <span>Compare</span>
             </a>
         `;
     }
 
-    // Link to compare the given entity to the selected entities.
-    getCompareURL(entity) {
-        const entities = this.entities.concat([entity]);
-        const ids = entities.map(_.property('id')).join('-');
-        const names = entities.map(_.property('name')).map(escapeName).join('-');
-
-        return `/region/${ids}/${names}/${this.getParamsURL()}`;
-    }
-
     getNavigateHTML(entity) {
         if (this.entityIDs.length === 1 && _.includes(this.entityIDs, entity.id)) return '';
 
         return `
-            <a href="${this.getEntityURL(entity)}">
+            <a href="${window.entityNavigate.to(entity).url()}">
                 <i class="fa fa-location-arrow"></i>
                 <span>Go To</span>
             </a>
         `;
-    }
-
-    getEntityURL(entity) {
-        const id = entity.id;
-        const name = escapeName(entity.name);
-
-        return `/region/${id}/${name}/${this.getParamsURL()}`;
-    }
-
-    getParamsURL() {
-        return 'placeholder';
     }
 
     hidePopup() {
