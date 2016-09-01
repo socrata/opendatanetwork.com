@@ -58,10 +58,33 @@ class ODNClient {
         });
     }
 
+    /**
+     * Get entities related to the given entity.
+     *
+     * Relation must be one of parent, child, sibling, or peer.
+     */
+    related(entityID, relation) {
+        return this.get(`entity/v1/${relation}`, {entity_id: entityID})
+            .then(response => Promise.resolve({[relation]: response.relatives}));
+    }
+
+    values(entityIDs, variableID, constraints, describe, forecast, format) {
+        constraints = constraints || {};
+        console.log(describe);
+
+        return this.get('data/v1/values', _.extend({
+            describe,
+            forecast,
+            format,
+            variable: variableID
+        }, forEntities(entityIDs), constraints));
+    }
+
     get(relativePath, clientParams) {
         const path = `${this.url}/${relativePath}`;
         const params = _.extend({app_token: this.appToken}, clientParams);
         const url = Request.buildURL(path, params);
+        console.log(url);
         return Request.getJSON(url);
     }
 }
@@ -69,7 +92,6 @@ class ODNClient {
 function forEntities(entityIDs) {
     return {entity_id: entityIDs.join(',')};
 }
-
 
 module.exports = new ODNClient(Constants.ODN_API_BASE_URL, Constants.APP_TOKEN);
 

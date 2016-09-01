@@ -8,18 +8,26 @@ const _ = require('lodash');
 const ODNClient = require('../lib/odn-client');
 
 module.exports = (request, response) => {
+    // TODO what if no entityIDs
     const entityIDs = getEntityIDs(request);
     const variableID = getVariableID(request);
 
     Promise.all([
         ODNClient.entities(entityIDs),
-        ODNClient.availableData(entityIDs)
-    ]).then(([entities, availableData]) => {
+        ODNClient.availableData(entityIDs),
+        getRelated(entityIDs[0])
+    ]).then(([entities, availableData, related]) => {
         getVariable(availableData, variableID).then(([topic, dataset, variable]) => {
             const fixed = getFixedConstraints(request, dataset);
 
             getConstraints(entityIDs, variableID, dataset.constraints, fixed).then(constraintData => {
-                response.json({entities, topic, dataset, variable, constraintData});
+                getDescription(entityIDs, variableID, constraintData).then(description => {
+                    response.json({related, entities, topic, dataset, variable, constraintData, description});
+                    console.log(description);
+                }).catch(error => {
+                    console.log(error);
+                    response.json({error});
+                });
             }).catch(error => {
                 console.log(error);
                 response.json({error});
@@ -81,11 +89,29 @@ function getConstraints(entityIDs, variableID, constraints, fixed, results) {
     });
 }
 
+function getRelated(entityID) {
+    const promises = ['parent', 'child', 'sibling', 'peer']
+        .map(relation => ODNClient.related(entityID, relation));
+
+    return Promise.all(promises)
+        .then(result => Promise.resolve(_.merge.apply(_, result)));
+}
+
 function getEntityIDs(request) {
     return request.params.entityIDs.split(',');
 }
 
 function getVariableID(request) {
     return request.params.variableID;
+}
+
+function getDescription(entityIDs, variableID, constraintData) {
+    const constraints = _(constraintData)
+        .map(constraint => [constraint.name, constraint.selected])
+        .object()
+        .value();
+
+    return ODNClient.values(entityIDs, variableID, constraints, true)
+        .then(response => Promise.resolve(response.description));
 }
 

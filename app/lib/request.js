@@ -87,10 +87,18 @@ class Request {
     }
 
     static buildURL(path, params) {
-        const validParams = _.omit(params, param => param == []);
+        const validParams = _.omit(params, invalid);
         const paramString = querystring.stringify(validParams);
         return `${path}${path[path.length - 1] == '?' ? '' : '?'}${paramString}`;
     }
 }
 
+function invalid(param) {
+    return (_.isNull(param) ||
+            _.isNaN(param) ||
+            _.isUndefined(param) ||
+            ((_.isArray(param) || _.isString(param)) && _.isEmpty(param)));
+}
+
 module.exports = Request;
+

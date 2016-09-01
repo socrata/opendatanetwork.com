@@ -393,6 +393,7 @@ class SearchController {
 
                             templateParams.allChildren = childrenResponse;
                         }
+                        console.log(templateParams.allChildren);
 
                         if (data[3].length > 0) {
                             templateParams.categories = data[3];

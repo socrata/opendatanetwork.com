@@ -622,6 +622,7 @@ class RenderController {
                         if (siblingsResponse && siblingsResponse.relatives && (siblingsResponse.relatives.length > 0)) {
                             templateParams.siblings = processRegions(siblingsResponse.relatives[0].entities);
                         }
+                        console.log(templateParams.siblings);
 
                         const parentsResponse = data[11];
                         if (parentsResponse && parentsResponse.relatives && (parentsResponse.relatives.length > 0)) {
