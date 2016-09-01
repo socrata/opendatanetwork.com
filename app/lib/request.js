@@ -5,10 +5,11 @@ const request = require('request-promise');
 const querystring = require('querystring');
 const memjs = require('memjs');
 const crypto = require('crypto');
-const ControllerConstants = require('./constants.js');
 
-const cache = memjs.Client.create(null, ControllerConstants.CACHE_OPTIONS);
-const timersEnabled = false;
+const Exception = require('./exception');
+const Constants = require('./constants');
+const Cache = require('./cache');
+const cache = new Cache(null, Constants.CACHE_OPTIONS);
 
 class Request {
     /**
@@ -21,75 +22,47 @@ class Request {
         return crypto.createHash('sha512').update(url).digest('base64');
     }
 
-    static get(url, timeout) {
+    static get(optionsOrURL, timeout) {
+        const options = _.isString(optionsOrURL) ? {url: optionsOrURL} : optionsOrURL;
+        const url = _.isString(optionsOrURL) ? optionsOrURL : optionsOrURL.url;
+        const key = Request.key(url);
 
-        if (timersEnabled)
-            var start = new Date();
-
-        return new Promise((resolve, reject) => {
-            if (!cache) {
-                console.log('WARNING: no cache found');
-
-                Request.timeout(request({
-                        url: url,
-                        headers: { 'User-Agent' : ControllerConstants.USER_AGENT }
-                    }), timeout).then(body => {
-                        resolve(body);
-                    }, reject);
-            } else {
-                const key = Request.key(_.isString(url) ? url : url.uri);
-
-                cache.get(key, (error, value) => {
-                    if (value) {
-
-                        if (timersEnabled)
-                            console.log('Request (cache hit): ' + (new Date() - start) + 'ms URL: ' + url);
-
-                        resolve(value);
-                    } else {
-                        Request.timeout(request({
-                                url: url,
-                                headers: { 'User-Agent' : ControllerConstants.USER_AGENT }
-                        }), timeout).then(body => {
-
-                            if (timersEnabled)
-                                console.log('Request (cache miss): ' + (new Date() - start) + 'ms URL: ' + url);
-
-                            resolve(body);
-                            if (!error) cache.set(key, body);
-                        }, reject);
-                    }
-                });
-            }
+        return cache.get(key).catch(error => {
+            return Request.timeout(request(options), timeout).then(value => {
+                cache.set(key, value);
+                return Promise.resolve(value);
+            }).catch(error => {
+                const exception = new Exception(`error fetching ${url}`, error.statusCode || 500);
+                exception.error = error;
+                return Promise.reject(exception);
+            });
         });
     }
 
-    static getJSON(url, timeout) {
-        return new Promise((resolve, reject) => {
-            Request.get(url, timeout).then(value => {
-                resolve(JSON.parse(value.toString()));
-            }, reject);
+    static getJSON(optionsOrURL, timeout) {
+        return Request.get(optionsOrURL, timeout).then(value => {
+            return Promise.resolve(JSON.parse(value.toString()));
         });
     }
 
     static timeout(promise, milliseconds) {
-        return new Promise((resolve, reject) => {
-            Promise.race([Request._timeout(milliseconds), promise]).then(resolve, reject);
-        });
+        return Promise.race([Request._timeout(milliseconds), promise]);
     }
 
     static _timeout(milliseconds) {
-        milliseconds = milliseconds || ControllerConstants.TIMEOUT_MS;
+        milliseconds = milliseconds || Constants.TIMEOUT_MS;
 
         return new Promise((resolve, reject) => {
-            setTimeout(reject, milliseconds);
+            setTimeout(() => {
+                reject(Exception.timeout('request timed out'));
+            }, milliseconds);
         });
     }
 
     static buildURL(path, params) {
         const validParams = _.omit(params, invalid);
         const paramString = querystring.stringify(validParams);
-        return `${path}${path[path.length - 1] == '?' ? '' : '?'}${paramString}`;
+        return `${path}${path[path.length - 1] === '?' ? '' : '?'}${paramString}`;
     }
 }
 
@@ -101,4 +74,3 @@ function invalid(param) {
 }
 
 module.exports = Request;
-

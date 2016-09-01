@@ -11,6 +11,9 @@ const _ = require('lodash');
 const Constants = require('../../src/constants');
 const Request = require('./request');
 
+const Exception = require('./exception');
+const notFound = Exception.notFound;
+
 class ODNClient {
     /**
      * url - base url including protocol and port with no path
@@ -35,7 +38,7 @@ class ODNClient {
         return this.get('entity/v1', {entity_id: entityID}).then(response => {
             const entities = response.entities;
             if (entities.length !== 1)
-                return Promise.reject(`entity not found with id: '${entityID}'`);
+                return Promise.reject(notFound(`entity not found with id: '${entityID}'`));
            return Promise.resolve(entities[0]);
         });
     }

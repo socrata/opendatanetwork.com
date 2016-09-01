@@ -9,6 +9,10 @@ const ODNClient = require('../lib/odn-client');
 const EntityFormatter = require('../lib/entity-formatter');
 const GlobalConstants = require('../../src/constants');
 
+const Exception = require('../lib/exception');
+const notFound = Exception.notFound;
+const invalid = Exception.invalidParam;
+
 // TODO move this to another file
 const querystring = require('querystring');
 
@@ -142,19 +146,19 @@ function getFixedConstraints(request, dataset) {
 function getVariable(availableData, fullVariableID) {
     const idParts = fullVariableID.split('.');
     if (idParts.length !== 3)
-        return Promise.reject(`invalid variable id: '${fullVariableID}'`);
+        return Promise.reject(invalid(`invalid variable id: '${fullVariableID}'`));
 
     const [topicID, datasetID, variableID] = idParts;
     if (!(topicID in availableData))
-        return Promise.reject(`topic not found: '${topicID}'`);
+        return Promise.reject(notFound(`topic not found: '${topicID}'`));
     const topic = availableData[topicID];
 
     if (!(datasetID in topic.datasets))
-        return Promise.reject(`no '${datasetID}' dataset found in '${topicID}'`);
+        return Promise.reject(notFound(`no '${datasetID}' dataset found in '${topicID}'`));
     const dataset = topic.datasets[datasetID];
 
     if (!(variableID in dataset.variables))
-        return Promise.reject(`no '${variableID}' variable found in '${topicID}.${datasetID}'`);
+        return Promise.reject(notFound(`no '${variableID}' variable found in '${topicID}.${datasetID}'`));
     const variable = dataset.variables[variableID];
 
     return Promise.resolve([topic, dataset, variable]);
