@@ -6,7 +6,7 @@
 
 if (typeof require !== 'undefined') {
     var _ = require('lodash');
-    var buildURL = require('./build-url');
+    var buildURL = require('../odn-client/build-url');
 }
 
 class SearchNavigate {

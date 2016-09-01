@@ -5,8 +5,8 @@
 
 const _ = require('lodash');
 
-const ODNClient = require('../lib/odn-client');
 const EntityFormatter = require('../lib/entity-formatter');
+const ODNClient = require('../../src/odn-client/odn-client');
 const GlobalConstants = require('../../src/constants');
 const DatasetConfig = require('../../src/dataset-config');
 const Navigate = require('../../src/navigate/entity');

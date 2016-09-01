@@ -20,7 +20,9 @@ var baseScripts = [
     'src/api-controller.js',
     'src/constants.js',
     'src/region-lookup.js',
-    'src/navigate/build-url.js',
+    'src/odn-client/build-url.js',
+    'src/odn-client/get-json.js',
+    'src/odn-client/odn-client.js',
     'src/navigate/entity.js',
     'src/navigate/search.js'
 ];

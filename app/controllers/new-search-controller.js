@@ -5,9 +5,9 @@
 
 const _ = require('lodash');
 
-const ODNClient = require('../lib/odn-client');
 const CeteraClient = require('../lib/cetera-client');
 const Exception = require('../lib/exception');
+const ODNClient = require('../../src/odn-client/odn-client');
 const EntityNavigate = require('../../src/navigate/entity');
 const SearchNavigate = require('../../src/navigate/search');
 const Constants = require('../../src/constants');

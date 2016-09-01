@@ -10,7 +10,7 @@ const Exception = require('./exception');
 const Constants = require('./constants');
 const Cache = require('./cache');
 const cache = new Cache(null, Constants.CACHE_OPTIONS);
-const buildURL = require('../../src/navigate/build-url');
+const buildURL = require('../../src/odn-client/build-url');
 
 class Request {
     /**

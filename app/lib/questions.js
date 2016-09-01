@@ -8,7 +8,7 @@ const ControllerConstants = require('./constants');
 const Data = require('./data');
 const Request = require('./request');
 
-const ODNClient = require('./odn-client');
+const ODNClient = require('../../src/odn-client/odn-client');
 
 // TODO: What is this for? Used anywhere?
 // const autosuggest = new Autosuggest({

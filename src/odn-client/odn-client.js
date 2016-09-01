@@ -6,13 +6,12 @@
  * API documentation available here: http://docs.odn.apiary.io/
  */
 
-const _ = require('lodash');
-
-const Constants = require('../../src/constants');
-const Request = require('./request');
-
-const Exception = require('./exception');
-const notFound = Exception.notFound;
+if (typeof require !== 'undefined') {
+    var _ = require('lodash');
+    var buildURL = require('./build-url');
+    var getJSON = require('./get-json');
+    var Constants = require('../constants');
+}
 
 class ODNClient {
     /**
@@ -38,7 +37,7 @@ class ODNClient {
         return this.get('entity/v1', {entity_id: entityID}).then(response => {
             const entities = response.entities;
             if (entities.length !== 1)
-                return Promise.reject(notFound(`entity not found with id: '${entityID}'`));
+                return Promise.reject(new Error(`entity not found with id: '${entityID}'`));
            return Promise.resolve(entities[0]);
         });
     }
@@ -120,8 +119,8 @@ class ODNClient {
     get(relativePath, clientParams) {
         const path = `${this.url}/${relativePath}`;
         const params = _.extend({app_token: this.appToken}, clientParams);
-        const url = Request.buildURL(path, params);
-        return Request.getJSON(url);
+        const url = buildURL(path, params);
+        return getJSON(url);
     }
 
     search(path, entityIDs, datasetID, limit, offset) {
@@ -142,5 +141,6 @@ function forEntities(entityIDs) {
     return {entity_id: entityIDs.join(',')};
 }
 
-module.exports = new ODNClient(Constants.ODN_API_BASE_URL, Constants.APP_TOKEN);
+if (typeof module !== 'undefined')
+    module.exports = new ODNClient(Constants.ODN_API_BASE_URL, Constants.APP_TOKEN);
 
