@@ -122,7 +122,7 @@ module.exports = (request, response) => {
                             '/lib/third-party/js.cookie-2.1.1.min.js',
                             '/lib/third-party/leaflet-omnivore.min.js',
                             '/lib/third-party/lodash.min.js',
-                            '/lib/search.min.js'
+                            '/lib/entity.min.js'
                         ]
                     };
 

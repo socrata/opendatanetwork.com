@@ -1,7 +1,7 @@
 'use strict';
 
 class MapView {
-    constructor(entities, variable, constraints, params, session) {
+    constructor(entities, variable, constraints, session) {
         this.entities = entities;
         this.entityIDs = entities.map(_.property('id'));
         this.variable = variable;
@@ -10,10 +10,6 @@ class MapView {
         this.sessionID = session.session_id;
         this.initialBounds = session.bounds;
         this.summaryStats = session.summary_statistics;
-
-        // This should not be required by the map.
-        // Only for mapping variables to ODN links.
-        this.params = params;
 
         // Mapping from entity ID to highest quality GeoJSON feature
         // that we currenty have. This is the feature that will be displayed.
@@ -26,13 +22,13 @@ class MapView {
         this.scale = getScale(this.summaryStats, this.scaleRange);
     }
 
-    static create(entities, variable, constraints, params) {
+    static create(entities, variable, constraints) {
         if (entities.length === 0) return Promise.reject('at least one entity required');
         const entityType = entities[0].type;
         entities = entities.filter(entity => entity.type === entityType);
 
         return newSession(entities, variable, constraints).then(session => {
-            return Promise.resolve(new MapView(entities, variable, constraints, params, session));
+            return Promise.resolve(new MapView(entities, variable, constraints, session));
         });
     }
 
@@ -173,9 +169,7 @@ class MapView {
     }
 
     getParamsURL() {
-        return ['vector', 'metric', 'year']
-            .map(_.propertyOf(this.params))
-            .join('/');
+        return 'placeholder';
     }
 
     hidePopup() {

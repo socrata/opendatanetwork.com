@@ -29,7 +29,6 @@ var mapScripts = [
     'src/maps/tooltip-control.js',
     'src/maps/navigate.js',
     'src/maps/description.js',
-    'src/maps/persistent-websocket.js',
     'src/maps/view.js'
 ];
 
@@ -88,15 +87,22 @@ var searchScripts = baseScripts
         'src/dataset-constants.js']);
 gulp.task('search', js(searchScripts, 'search.min.js'));
 
+var entityScripts = baseScripts
+    .concat(autosuggestScripts)
+    .concat(mapScripts)
+    .concat([
+        'src/entity-page-controller.js',
+        'src/entity.js']);
+gulp.task('entity', js(entityScripts, 'entity.min.js'));
+
 var datasetScripts = baseScripts
     .concat(autosuggestScripts)
     .concat([
         'src/quick-links.js',
-        'src/dataset.js'
-        ]);
+        'src/dataset.js']);
 gulp.task('dataset', js(datasetScripts, 'dataset.min.js'));
 
-gulp.task('js', ['home', 'search', 'dataset']);
+gulp.task('js', ['home', 'search', 'dataset', 'entity']);
 
 gulp.task('css', function() {
     return gulp.src(['styles/**/*.scss', 'styles/**/*.sass'])
