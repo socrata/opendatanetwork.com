@@ -27,7 +27,7 @@ class OdnApi {
         return d3.promise.json(this.buildUrl(path, params));
     }
 
-    getDataValues(regions, variable, constraint, forecast) {
+    getDataValues(regions, variable, constraint, forecast, describe) {
        return new Promise((resolve, reject) => {
             const params = {
                 app_token: GlobalConstants.APP_TOKEN,
@@ -41,6 +41,9 @@ class OdnApi {
 
             if (forecast)
                 params.forecast = forecast;
+
+            if (describe)
+                params.describe = describe;
 
             const url = this.buildUrl(GlobalConstants.DATA_VALUES_URL, params);
 

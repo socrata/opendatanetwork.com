@@ -145,9 +145,16 @@
                     </dl>
                 </div>
                 <div id="chart-<%= chart.chartId %>" class="chart-container"></div>
-              <% if (chart.description) { %>
-                <div class="dataset-description">
-                    <p class="chart-description"><%- chart.description %></p>
+              <% if (chart.description || chart.forecast) { %>
+                <div id="dataset-description-<%= chart.chartId %>" class="dataset-description">
+                  <% if (chart.description) { %>
+                    <div class="chart-descriptions">
+                        <p><%- chart.description %></p>
+                    </div>
+                  <% } %>
+                  <% if (chart.forecast) { %>
+                    <div class="forecast-descriptions"></div>
+                  <% } %>
                 </div>
               <% } %>
             </div>
