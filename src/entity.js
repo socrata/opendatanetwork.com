@@ -4,8 +4,7 @@ $(document).ready(function() {
     menuMouseHandlers();
     autosuggest();
     drawMap();
-
-//    new EntityPageController();
+    drawCharts();
 });
 
 function autosuggest() {
@@ -35,6 +34,12 @@ function drawMap() {
             console.error('error rendering map');
             console.error(error);
         });
+}
+
+function drawCharts() {
+    console.log(chartConfig);
+
+    const container = d3.select('#google-charts-container');
 }
 
 function menuMouseHandlers() {

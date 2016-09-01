@@ -1,0 +1,14 @@
+<% if (datasets.length > 0) { %>
+    <div class="search-results-container">
+        <div class="search-results-header">
+            <h2>
+                <%= topic.name %> and <%= dataset.name %>
+                Datasets Involving
+                <%= entities.map(_.property('name')).join(' or ') %>
+            </h2>
+        </div>
+        <ul class="search-results">
+            <% include _search-dataset-items %>
+        </ul>
+    </div>
+<% } %>

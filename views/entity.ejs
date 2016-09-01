@@ -4,13 +4,25 @@
 <script>
 
     // This data will be passed along to the client side scripts.
-    const _data = <%- JSON.stringify({entities, variable, constraints}) %>;
+    const _data = <%- JSON.stringify({entities, variable, constraints, chartConfig}) %>;
 
 </script>
 
 <section class="main-section" role="main">
     <% include _region-navigation %>
-    <% include _region-charts %>
+
+    <div class="charts-column">
+        <% include _menus %>
+        <% include _map %>
+        <div class="charts-container">
+            <% include _charts %>
+            <% include _citation %>
+
+            <div id="map-container-mobile"></div>
+        </div>
+
+        <% include _search-datasets %>
+    </div>
 </section>
 
 <% include _google-analytics %>

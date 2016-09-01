@@ -1,0 +1,41 @@
+<% if (dataset.description || dataset.sources) { %>
+    <div class="dataset-description">
+        <% if (dataset.description) { %>
+            <p id="dataset-description"><%- dataset.description %></p>
+        <% } %>
+
+        <% if (dataset.sources) { %>
+            <p class="attribution">
+            Above charts are based on data from the
+            <% i = 0 %>
+            <% dataset.sources.forEach(source => { %>
+                <% if (i == dataset.sources.length) { %>
+                    and
+                <% } else if (i > 1) { %>
+                    ,
+                <% } %>
+                <a href="<%= source.url %>"><%= source.name %></a> |
+                <% if (source.source_url) { %>
+                    <a href="<%= source.source_url %>">Data Source</a> |
+                <% } %>
+                <% i = i + 1; %>
+            <% }); %>
+            <% if (dataset.fxf) { %>
+                <a href="https://odn.data.socrata.com/dataset/<%= dataset.fxf %>">ODN Dataset</a> |
+                <a href="https://dev.socrata.com/foundry/odn.data.socrata.com/<%= dataset.fxf %>">API</a> -
+            <% } %>
+            <span class="info-icon">
+                <span class="info-tooltip">
+                    <strong>Notes:</strong>
+                    <br><br>
+                    1. ODN datasets and APIs are subject to change and may differ in format from the original source data in order to provide a user-friendly experience on this site.
+                    <br><br>
+                    2. To build your own apps using this data, see the ODN Dataset and API links.
+                    <br><br>
+                    3. If you use this derived data in an app, we ask that you provide a link somewhere in your applications to the Open Data Network with a citation that states: "Data for this application was provided by the Open Data Network" where "Open Data Network" links to http://opendatanetwork.com. Where an application has a region specific module, we ask that you add an additional line that states: "Data about REGIONX was provided by the Open Data Network." where REGIONX is an HREF with a name for a geographical region like "Seattle, WA" and the link points to this page URL, e.g. http://opendatanetwork.com/region/1600000US5363000/Seattle_WA
+                </span>
+            </span>
+            </p>
+        <% } %>
+    </div>
+<% } %>

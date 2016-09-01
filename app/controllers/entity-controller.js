@@ -106,7 +106,7 @@ module.exports = (request, response) => {
                         description,
                         topics: _.values(availableData),
                         navigate: Navigate.fromRequest(request),
-                        datasetConfig: DatasetConfig[dataset.id],
+                        chartConfig: DatasetConfig[dataset.id],
                         css: [
                             '/styles/third-party/leaflet.min.css',
                             '/styles/third-party/leaflet-markercluster.min.css',
