@@ -14,6 +14,7 @@ geo/*/
 # grunt build process
 lib/*.es6.js
 lib/*.js
+styles/compressed
 
 .vscode/
 .idea
