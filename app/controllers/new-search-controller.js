@@ -8,7 +8,8 @@ const _ = require('lodash');
 const ODNClient = require('../lib/odn-client');
 const CeteraClient = require('../lib/cetera-client');
 const Exception = require('../lib/exception');
-const Navigate = require('../lib/navigate');
+const EntityNavigate = require('../lib/navigate/entity');
+const SearchNavigate = require('../lib/navigate/search');
 const Constants = require('../../src/constants');
 
 const Category = require('../models/category');
@@ -19,9 +20,9 @@ module.exports = (request, response) => {
     const errorHandler = Exception.getHandler(request, response);
 
     const query = request.query.q || '';
-    const categories = request.query.categories || [];
-    const domains = request.query.domains || [];
-    const tags = request.query.tags || [];
+    const categories = asList(request.query.categories);
+    const domains = asList(request.query.domains);
+    const tags = asList(request.query.tags);
 
     const cetera = new CeteraClient(categories, domains, tags);
 
@@ -42,7 +43,8 @@ module.exports = (request, response) => {
             tags,
             entities,
             datasets,
-            navigate: new Navigate(),
+            navigate: new EntityNavigate(),
+            searchNavigate: new SearchNavigate(query, categories, domains, tags),
             title: 'Data on the Open Data Network',
             currentCategory: currentCategory(categories, allCategories),
             currentTag: currentTag(tags, allTags),
@@ -105,12 +107,18 @@ function getQuery(request) {
 function currentCategory(categories, allCategories) {
     if (categories.length !== 1) return null;
     return _.find(allCategories, category => {
-        return category.category === params.categories[0].toLowerCase()
+        return category.category === categories[0].toLowerCase();
     });
 }
 
 function currentTag(tags, allTags) {
     if (tags.length !== 1) return null;
     return _.find(allTags, tag => tag.tag === params.tags[0].toLowerCase());
+}
+
+function asList(value) {
+    if (_.isNull(value) || _.isUndefined(value)) return [];
+    if (_.isArray(value)) return value;
+    return [value];
 }
 

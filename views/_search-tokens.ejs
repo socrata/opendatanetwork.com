@@ -1,13 +1,22 @@
 
 <ul class="tokens">
     <% categories.forEach(function(category) { %>
-        <li class="category-token"><%= category %> <a class="fa fa-times-circle"></a></li>
+        <li class="category-token">
+            <%= category %>
+            <a class="fa fa-times-circle" href="<%= searchNavigate.removeCategory(category).url() %>"></a>
+        </li>
     <% }); %>
     <% domains.forEach(function(domain) { %>
-        <li class="domain-token"><%= domain %> <a class="fa fa-times-circle"></a></li>
+        <li class="domain-token">
+            <%= domain %>
+            <a class="fa fa-times-circle" href="<%= searchNavigate.removeDomain(domain).url() %>"></a>
+        </li>
     <% }); %>
     <% tags.forEach(function(tag) { %>
-        <li class="standard-token"><%= tag %> <a class="fa fa-times-circle"></a></li>
+        <li class="tag-token">
+            <%= tag %>
+            <a class="fa fa-times-circle" href="<%= searchNavigate.removeTag(tag).url() %>"></a>
+        </li>
     <% }); %>
 </ul>
 
