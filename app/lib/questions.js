@@ -8,7 +8,7 @@ const ControllerConstants = require('./constants');
 const Data = require('./data');
 const Request = require('./request');
 
-const Search = require('../models/search');
+const ODNClient = require('./odn-client');
 
 // TODO: What is this for? Used anywhere?
 // const autosuggest = new Autosuggest({
@@ -31,7 +31,7 @@ const Search = require('../models/search');
 class Questions {
     static getQuestionsForSearchTerm(term, dataAvailability) {
         return new Promise((resolve, reject) => {
-            Search.searchResultsRegions(term).then(regions => {
+            ODNClient.searchEntities(term).then(regions => {
                 if (regions.length === 0) {
                     resolve([]);
                     return;

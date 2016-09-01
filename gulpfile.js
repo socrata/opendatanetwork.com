@@ -43,7 +43,6 @@ var regionsScripts = [
     'src/quick-links.js',
     'src/forecast.js',
     'src/chart-constants.js',
-    'src/data/data-sources.js',
     'src/questions.js',
     'src/questions-mobile.js',
     'src/refine-controls-mobile.js',

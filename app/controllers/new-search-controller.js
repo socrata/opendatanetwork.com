@@ -12,7 +12,6 @@ const Navigate = require('../lib/navigate');
 
 const Category = require('../models/category');
 const Place = require('../models/place');
-const Search = require('../models/search');
 const Tag = require('../models/tag');
 
 module.exports = (request, response) => {
