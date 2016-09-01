@@ -87,6 +87,26 @@ class ODNClient {
      * Search for datasets relating to the given entities and dataset.
      */
     searchDatasets(entityIDs, datasetID, limit, offset) {
+        return this.search('search/v1/dataset', entityIDs, datasetID, limit, offset)
+            .then(response => Promise.resolve(response.datasets));
+    }
+
+    /**
+     * Search for questions relating to the given entities and dataset.
+     */
+    searchQuestions(entityIDs, datasetID, limit, offset) {
+        return this.search('search/v1/question', entityIDs, datasetID, limit, offset)
+            .then(response => Promise.resolve(response.questions));
+    }
+
+    get(relativePath, clientParams) {
+        const path = `${this.url}/${relativePath}`;
+        const params = _.extend({app_token: this.appToken}, clientParams);
+        const url = Request.buildURL(path, params);
+        return Request.getJSON(url);
+    }
+
+    search(path, entityIDs, datasetID, limit, offset) {
         limit = limit || 10;
         offset = offset || 0;
 
@@ -96,15 +116,7 @@ class ODNClient {
             dataset_id: datasetID
         }, forEntities(entityIDs));
 
-        return this.get('search/v1/dataset', params)
-            .then(response => Promise.resolve(response.datasets));
-    }
-
-    get(relativePath, clientParams) {
-        const path = `${this.url}/${relativePath}`;
-        const params = _.extend({app_token: this.appToken}, clientParams);
-        const url = Request.buildURL(path, params);
-        return Request.getJSON(url);
+        return this.get(path, params);
     }
 }
 

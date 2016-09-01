@@ -22,10 +22,12 @@ module.exports = (request, response) => {
 
             Promise.all([
                 ODNClient.searchDatasets(entityIDs, dataset.id),
+                ODNClient.searchQuestions(entityIDs, dataset.id),
                 getConstraints(entityIDs, variableID, dataset.constraints, fixed)
-            ]).then(([datasets, constraints]) => {
+            ]).then(([datasets, questions, constraints]) => {
                 getDescription(entityIDs, variableID, constraints).then(description => {
                     response.json({
+                        questions,
                         datasets,
                         related,
                         entities,
