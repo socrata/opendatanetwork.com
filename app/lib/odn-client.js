@@ -109,6 +109,14 @@ class ODNClient {
             .then(response => Promise.resolve(response.questions));
     }
 
+    /**
+     * Search for entities with the given name.
+     */
+    searchEntities(name) {
+        return this.get('entity/v1', {entity_name: name})
+            .then(response => Promise.resolve(response.entities));
+    }
+
     get(relativePath, clientParams) {
         const path = `${this.url}/${relativePath}`;
         const params = _.extend({app_token: this.appToken}, clientParams);

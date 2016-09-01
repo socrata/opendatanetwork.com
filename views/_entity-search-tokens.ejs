@@ -1,0 +1,12 @@
+
+<ul class="tokens">
+<% entities.forEach(region => { %>
+    <li class="region-token">
+        <div><%= region.name %></div>
+        <% if (entities.length > 1) { %>
+        <a class="fa fa-times-circle" href="<%= navigate.remove(region).url() %>"></a>
+        <% } %>
+    </li>
+<% }); %>
+</ul>
+

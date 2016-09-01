@@ -1,64 +1,50 @@
 'use strict';
 
 const _ = require('lodash');
+const querystring = require('querystring');
 
 class Navigate {
-    constructor(params) {
-        this.regions = params.regions;
-        this.vector = params.vector;
+    constructor(entityIDs, variableID, query) {
+        this.entityIDs = entityIDs || [];
+        this.variableID = variableID || 'demographics';
+        this.query = query || {};
     }
 
-    current() {
-        return Navigate.regions(this.regions);
+    to(entity) {
+        return new Navigate([entity.id], this.variableID, this.query);
     }
 
-    add(region) {
-        return Navigate.regions(this.regions.concat(region));
+    add(entity) {
+        if (_.includes(this.entityIDs, entity.id)) return this;
+        return new Navigate([entity.id].concat(this.entityIDs), this.variableID, this.query);
     }
 
-    static region(region) {
-        return `/region/${region.id}/${Navigate.escapeName(region.name)}`;
+    remove(entity) {
+        const entities = this.entityIDs.filter(id => id !== entity.id);
+        return new Navigate(entities, this.variableID, this.query);
     }
 
-    static regions(regions) {
-        const vector = this.vector || '/';
-
-        const ids = regions.map(region => region.id);
-        const names =  regions
-            .map(region => region.name)
-            .map(Navigate.escapeName);
-
-        return `/region/${ids.join('-')}/${names.join('-')}${vector}`;
+    topic(topicID) {
+        return this.variable(topicID);
     }
 
-    static escapeName(name) {
-        return name.replace(/,/g, '').replace(/[ \/]/g, '_');
+    dataset(datasetID) {
+        return this.variable(datasetID);
     }
 
-    static url(params, query) {
-        const ids = params.regions
-            .map(region => region.id)
-            .join('-');
-        const names = params.regions
-            .map(region => region.name)
-            .map(Navigate.escapeName)
-            .join('-');
-
-        let navigate = [];
-        if (params.vector && params.vector !== '') {
-            navigate.push(params.vector);
-            if (params.metric) navigate.push(params.metric);
-            if (params.year) navigate.push(params.year);
-        }
-
-        return `/region/${ids}/${names}/${navigate.join('/')}?${param(query)}`;
+    variable(variableID) {
+        return new Navigate(this.entityIDs, variableID, {});
     }
-}
 
-function param(params) {
-    return _.pairs(params || {})
-        .map(pair => pair.join('='))
-        .join('&');
+    constraint(name, value) {
+        return new Navigate(this.entityIDs, this.variableID, _.extend({[name]: value}, this.query));
+    }
+
+    url() {
+        const path = `/entity/${this.entityIDs.join('-')}/${this.variableID}`;
+        const query = querystring.stringify(this.query);
+        return `${path}?${query}`;
+    }
 }
 
 module.exports = Navigate;

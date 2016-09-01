@@ -9,64 +9,11 @@ const ODNClient = require('../lib/odn-client');
 const EntityFormatter = require('../lib/entity-formatter');
 const GlobalConstants = require('../../src/constants');
 const DatasetConfig = require('../../src/dataset-config');
+const Navigate = require('../lib/navigate');
 
 const Exception = require('../lib/exception');
 const notFound = Exception.notFound;
 const invalid = Exception.invalidParam;
-
-// TODO move this to another file
-const querystring = require('querystring');
-
-class Navigate {
-    constructor(entityIDs, variableID, query) {
-        this.entityIDs = entityIDs;
-        this.variableID = variableID;
-        this.query = query || {};
-    }
-
-    to(entity) {
-        return new Navigate([entity.id], this.variableID, this.query);
-    }
-
-    add(entity) {
-        if (_.includes(this.entityIDs, entity.id)) return this;
-        return new Navigate([entity.id].concat(this.entityIDs), this.variableID, this.query);
-    }
-
-    remove(entity) {
-        const entities = this.entityIDs.filter(id => id !== entity.id);
-        return new Navigate(entities, this.variableID, this.query);
-    }
-
-    topic(topicID) {
-        return this.variable(topicID);
-    }
-
-    dataset(datasetID) {
-        return this.variable(datasetID);
-    }
-
-    variable(variableID) {
-        return new Navigate(this.entityIDs, variableID, {});
-    }
-
-    constraint(name, value) {
-        return new Navigate(this.entityIDs, this.variableID, _.extend({[name]: value}, this.query));
-    }
-
-    url() {
-        const path = `/entity/${this.entityIDs.join('-')}/${this.variableID}`;
-        const query = querystring.stringify(this.query);
-        return `${path}?${query}`;
-    }
-
-    static fromRequest(request) {
-        const entityIDs = getEntityIDs(request);
-        const variableID = getVariableID(request);
-        const query = _.clone(request.query);
-        return new Navigate(entityIDs, variableID, query);
-    }
-}
 
 module.exports = (request, response) => {
     const errorHandler = Exception.getHandler(request, response);
@@ -105,7 +52,7 @@ module.exports = (request, response) => {
                         constraints,
                         description,
                         topics: _.values(availableData),
-                        navigate: Navigate.fromRequest(request),
+                        navigate: getNavigate(request),
                         chartConfig: DatasetConfig[dataset.id],
                         css: [
                             '/styles/third-party/leaflet.min.css',
@@ -145,6 +92,13 @@ module.exports = (request, response) => {
         }).catch(errorHandler);
     }).catch(errorHandler);
 };
+
+function getNavigate(request) {
+    const entityIDs = getEntityIDs(request);
+    const variableID = getVariableID(request);
+    const query = _.clone(request.query);
+    return new Navigate(entityIDs, variableID, query);
+}
 
 function getFixedConstraints(request, dataset) {
     return _.pick(request.query, dataset.constraints);

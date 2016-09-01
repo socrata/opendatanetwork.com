@@ -1,7 +1,16 @@
 <div class="search-results">
     <div class="search-results-regions">
-        <div class="search-results-bots-only">
-            <% searchResultsRegions.forEach(function(region) { %><a href="/region/<%= region.id %>/<%= regionToUrlSegment(region.name) %>"><%= region.name %></a>
+        <div class="search-results-regions-row">
+            <% _.chunk(entities, 2).forEach(group => { %>
+                <% group.forEach(entity => { %>
+                    <div class="search-results-regions-cell w50">
+                        <h2>
+                            <a href="<%= navigate.to(entity).url() %>">
+                                <%= entity.name %>
+                            </a>
+                        </h2>
+                    </div>
+                <% }); %>
             <% }); %>
         </div>
     </div>

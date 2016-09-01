@@ -23,11 +23,6 @@ class Tag {
         });
     }
 
-    static currentTag(params, tags) {
-        if (params.tags.length != 1) return null;
-        return _.find(tags, tag => tag.tag === params.tags[0].toLowerCase());
-    }
-
     static tagMetadata() {
         return FileCache.get('../data/tag-metadata.json');
     }

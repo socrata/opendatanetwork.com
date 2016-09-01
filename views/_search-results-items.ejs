@@ -1,15 +1,15 @@
-<% searchResults.results.forEach(function(result) { %>
+<% datasets.forEach(function(result) { %>
     <li>
-        <a class="api-link" href="http://dev.socrata.com/foundry/<%= result.metadata.domain %>/<%= result.resource.id %>">API</a>
+        <a class="api-link" href="http://dev.socrata.com/foundry/<%= result.domain %>/<%= result.id %>">API</a>
         <i class="fa <%= result.classification.categoryGlyphString %>"></i>
         <h2>
-            <a href="/dataset/<%= result.metadata.domain %>/<%= result.resource.id %><%= (params.debug != null) ? '?debug=1' : '' %>">
-                <%= result.resource.name %>
+            <a href="/dataset/<%= result.domain %>/<%= result.id %>">
+                <%= result.name %>
             </a>
         </h2>
-        <a href="http://<%= result.metadata.domain %>"><%= result.metadata.domain %></a>
-        <span>| Last Updated <%= result.resource.updatedAtString.toUpperCase() %></span>
-        <p><%= result.resource.description %></p>
+        <a href="http://<%= result.domain %>"><%= result.domain %></a>
+        <span>| Last Updated <%= result.updated_at %></span>
+        <p><%= result.description %></p>
     <% if (result.classification.tags.length > 0) { %>
         <span class="tagLabel">Tags:</span>
         <% result.classification.tags.forEach(function(tag, i) {
@@ -22,9 +22,7 @@
 
 <%
 function getTag(tag) {
-
     switch (tag.toLowerCase()) {
-
         case 'blds': return 'BLDS';
         case 'lives': return 'LIVES';
         default: return tag;

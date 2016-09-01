@@ -1,23 +1,13 @@
 
 <ul class="tokens">
-<% entities.forEach(region => { %>
-    <li class="region-token">
-        <div><%= region.name %></div>
-        <% if (entities.length > 1) { %>
-        <a class="fa fa-times-circle" href="<%= navigate.remove(region).url() %>"></a>
-        <% } %>
-    </li>
-<% }); %>
-<% if (typeof params !== 'undefined') { %>
-    <% params.categories.forEach(function(category) { %>
+    <% categories.forEach(function(category) { %>
         <li class="category-token"><%= category %> <a class="fa fa-times-circle"></a></li>
     <% }); %>
-    <% params.domains.forEach(function(domain) { %>
+    <% domains.forEach(function(domain) { %>
         <li class="domain-token"><%= domain %> <a class="fa fa-times-circle"></a></li>
     <% }); %>
-    <% params.tags.forEach(function(tag) { %>
+    <% tags.forEach(function(tag) { %>
         <li class="standard-token"><%= tag %> <a class="fa fa-times-circle"></a></li>
     <% }); %>
-<% } %>
 </ul>
 
