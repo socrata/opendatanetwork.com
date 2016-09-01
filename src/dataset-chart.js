@@ -3,8 +3,6 @@
 class DatasetChart {
     constructor(config) {
         this.config = config;
-        this.selector = `chart-${config.id}`;
-        this.selection = document.getElementById(this.selector);
     }
 
     getData() {
@@ -13,12 +11,30 @@ class DatasetChart {
     }
 
     render(data) {
+        this.renderChart(data);
+        this.renderDescription(data);
+    }
+
+    renderChart(data) {
         const table = new google.visualization.DataTable(data.data);
 
-        const chart = createChart(this.config.type, this.selection);
+        const selection = document.getElementById(`chart-${this.config.id}`);
+        const chart = createChart(this.config.type, selection);
         const options = this.getOptions();
 
         chart.draw(table, options);
+    }
+
+    renderDescription(data) {
+        if (!('forecast_descriptions')) return;
+
+        d3.select(document.getElementById(`dataset-description-${this.config.id}`))
+            .select('div')
+            .selectAll('p')
+            .data(data.forecast_descriptions)
+            .enter()
+            .append('p')
+            .text(_.identity);
     }
 
     getOptions() {
