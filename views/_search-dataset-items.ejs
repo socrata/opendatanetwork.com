@@ -1,14 +1,14 @@
-<% searchResults.datasets.forEach(dataset => { %>
+<% datasets.forEach(dataset => { %>
     <li>
         <a class="api-link" href="<%= dataset.dev_docs_url %>">API</a>
         <i class="fa <%= dataset.categoryGlyphString %>"></i>
         <h2>
-            <a href="/dataset/<%= dataset.domain %>/<%= dataset.fxf %><%= (params.debug != null) ? '?debug=1' : '' %>">
+            <a href="/dataset/<%= dataset.domain %>/<%= dataset.fxf %>">
                 <%= dataset.name %>
             </a>
         </h2>
         <a href="http://<%= dataset.domain %>"><%= dataset.domain %></a>
-        <span>| Last Updated <%= dataset.updatedAtString.toUpperCase() %></span>
+        <span>| Last Updated <%= dataset.updated_at %></span>
         <p><%= dataset.description %></p>
     </li>
 <% }); %>

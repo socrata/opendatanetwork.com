@@ -3,7 +3,7 @@
     <ul class="map-summary-links">
         <% mapVariables.forEach(variable => { %>
             <li>
-                <a href="<%= variable.url %>"<%- (params.regions.length >= 3) ? ' rel="nofollow"' : '' %>><%= variable.name %></a>
+                <a href="<%= variable.url %>"<%- (entities.length >= 3) ? ' rel="nofollow"' : '' %>><%= variable.name %></a>
                 <% if (variable.mapSummaryLinkDescription) { %>
                    <p><%= variable.mapSummaryLinkDescription %></p>
                 <% } %>

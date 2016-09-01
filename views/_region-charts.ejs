@@ -1,17 +1,8 @@
 <div class="charts-column">
-    <% include _refine-controls-mobile %>
     <div class="refine-controls">
         <div class="chart-tabs-container">
             <a id="data-availability-info-box-button" class="small-api-link">API</a>
-            <ul class="chart-tabs">
-                <% topics.forEach(topic => { %>
-                    <li class="<%= topic.selected ? 'selected' : '' %>">
-                        <a href="<%= getSearchPageUrl(topic) %>"<%- (params.regions.length >= 3) ? ' rel="nofollow"' : '' %>>
-                            <%= topic.name %>
-                        </a>
-                    </li>
-                <% }); %>
-            </ul>
+            <% include _topic-menu %>
             <div id="data-availability-info-box" class="api-info-box">
                 <a class="fa fa-close"></a>
                 <strong>
@@ -19,8 +10,8 @@
                 </strong>
                 <p>
                     Header information including available variables with pointers to populate charts for
-                    <%= params.regions.map(region => region.name).join(', ') %> is available
-                    <a href="<%= GlobalConstants.ODN_API_BASE_URL %>/data/v1/availability/?entity_id=<%= params.regions.map(region => region.id).join(',') %>&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank">HERE</a>.
+                    <%= entities.map(region => region.name).join(', ') %> is available
+                    <a href="<%= GlobalConstants.ODN_API_BASE_URL %>/data/v1/availability/?entity_id=<%= entities.map(region => region.id).join(',') %>&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank">HERE</a>.
                 </p>
                 <dl>
                     <dt>API Docs:</dt>
@@ -56,8 +47,8 @@
                 </strong>
                 <p>
                     Constraint information for year permutations for
-                    <%= params.regions.map(region => region.name).join(', ') %> is available
-                    <a href="<%= GlobalConstants.ODN_API_BASE_URL %>/data/v1/constraint/demographics.population.count?entity_id=<%= params.regions.map(region => region.id).join(',') %>&constraint=year&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank">HERE</a>.
+                    <%= entities.map(region => region.name).join(', ') %> is available
+                    <a href="<%= GlobalConstants.ODN_API_BASE_URL %>/data/v1/constraint/demographics.population.count?entity_id=<%= entities.map(region => region.id).join(',') %>&constraint=year&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank">HERE</a>.
                 </p>
                 <dl>
                     <dt>API Docs:</dt>
@@ -67,9 +58,9 @@
         </div>
     </div>
     <div class="map-container">
-        <p id="map-summary" style="display: <%= mapSummary === '' ? 'none' : 'block' %>">
+        <p id="map-summary" style="display: <%= description === '' ? 'none' : 'block' %>">
             <a id="map-info-box-button" class="small-api-link">API</a>
-            <%= mapSummary %>
+            <%= description %>
         </p>
         <div id="map-info-box" class="api-info-box">
             <a class="fa fa-close"></a>
@@ -79,8 +70,8 @@
                 </strong>
                 <p>
                     Create a new map for
-                    <% params.regions.forEach((region, index) => { %><%= (index > 0) ? ', ' : '' %>
-                        <a href="<%= GlobalConstants.ODN_API_BASE_URL %>/data/v1/map/new?variable=<%= variable.id %>&year=<%= constraint.constraint_value %>&entity_id=<%= region.id %>&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank"><%= region.name %></a><%
+                    <% entities.forEach((region, index) => { %><%= (index > 0) ? ', ' : '' %>
+                        <a href="<%= GlobalConstants.ODN_API_BASE_URL %>/data/v1/map/new?variable=<%= variable.id %>&entity_id=<%= region.id %>&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank"><%= region.name %></a><%
                     }); %>
                 </p>
                 <dl>
@@ -96,7 +87,7 @@
                 </strong>
                 </p>
                     Get data for a map for
-                    <% params.regions.forEach((region, index) => { %><%= (index > 0) ? ', ' : '' %>
+                    <% entities.forEach((region, index) => { %><%= (index > 0) ? ', ' : '' %>
                         <a href="<%= GlobalConstants.ODN_API_BASE_URL %>/data/v1/map/values?session_id=[SESSION_ID_FROM_MAP_NEW_CALL]&zoom_level=2&bounds=47.5998951,-122.33707,47.5942794,-122.3270522&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank"><%= region.name %></a><%
                     }); %>
                 </p>
@@ -111,7 +102,6 @@
         <div id="map-container-desktop">
             <div id="map-container">
                 <div id="map"></div>
-                <% include _map-summary %>
             </div>
         </div>
     </div>
@@ -135,7 +125,7 @@
                         <dd>
                             <%= variable.variableId %>
                             for
-                          <% params.regions.forEach((region, index) => { %><%= (index > 0) ? ', ' : '' %>
+                          <% entities.forEach((region, index) => { %><%= (index > 0) ? ', ' : '' %>
                             <a href="<%= GlobalConstants.ODN_API_BASE_URL %>/data/v1/values?variable=<%= variable.variableId %>&entity_id=<%= region.id %><%= getConstraintQueryString(chart) %>&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank"><%= region.name %></a><%
                           }); %>
                         </dd>
@@ -204,22 +194,20 @@
         <% } %>
         <div id="map-container-mobile"></div>
     </div>
-<% if (searchResults && searchResults.datasets && searchResults.datasets.length > 0) { %>
+    <% if (datasets.length > 0) { %>
     <div class="search-results-container">
         <div class="search-results-header">
             <h2>
-                <span class="result-count"><%= searchResults.resultSetSizeString %></span>
                 <%= topic.name %> and <%= dataset.name %>
-                Dataset<%= searchResults.resultSetSizeString > 1 ? 's' : '' %>
-                Involving
-                <%= regionNames %>
+                Datasets Involving
+                <%= entities.map(_.property('name')).join(' or ') %>
             </h2>
         </div>
         <ul class="search-results">
             <% include _search-dataset-items %>
         </ul>
     </div>
-<% } %>
+    <% } %>
 </div>
 
 <%
@@ -230,67 +218,4 @@ function getConstraintQueryString(chart) {
 
     return '&' + querystring.stringify(chart.constraint);
 }
-
-function getSearchPageUrl(topic) {
-
-    var url;
-
-    if (params.regions.length > 0) {
-
-        url = '/region';
-
-        // Region ids
-        //
-        var regionIds = params.regions.map(function(region) {
-            return region.id;
-        });
-
-        url += '/' + regionIds.join('-');
-
-        // Region names
-        //
-        var regionNames = params.regions.map(function(region) {
-            return regionToUrlSegment(region.name);
-        });
-
-        url += '/' + regionNames.join('-');
-
-        // Vector
-        //
-        const dataset = _.toArray(topic.datasets)[0];
-        const vector = dataset.id.split('.')[1];
-
-        url += '/' + vector;
-    }
-    else {
-
-        url = '/search';
-    }
-
-    url += getSearchQueryString();
-
-    return url;
-}
-
-function getSearchQueryString() {
-
-    var parts = [];
-
-    if (params.q.length > 0)
-        parts.push('q=' + encodeURIComponent(params.q));
-
-    if (params.page > 1)
-        parts.push('page=' + params.page);
-
-    if (params.categories.length > 0)
-        params.categories.forEach(category => parts.push('categories=' + encodeURIComponent(category)));
-
-    if (params.domains.length > 0)
-        params.domains.forEach(domain => parts.push('domains=' + encodeURIComponent(domain)));
-
-    if (params.tags.length > 0)
-        params.tags.forEach(tag => parts.push('tags=' + encodeURIComponent(tag)));
-
-    return (parts.length > 0) ? '?' + parts.join('&') : '';
-};
 %>

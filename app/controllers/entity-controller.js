@@ -8,6 +8,7 @@ const _ = require('lodash');
 const ODNClient = require('../lib/odn-client');
 const EntityFormatter = require('../lib/entity-formatter');
 const GlobalConstants = require('../../src/constants');
+const DatasetConfig = require('../../src/dataset-config');
 
 const Exception = require('../lib/exception');
 const notFound = Exception.notFound;
@@ -35,6 +36,14 @@ class Navigate {
     remove(entity) {
         const entities = this.entityIDs.filter(id => id !== entity.id);
         return new Navigate(entities, this.variableID, this.query);
+    }
+
+    topic(topicID) {
+        return this.variable(topicID);
+    }
+
+    dataset(datasetID) {
+        return this.variable(datasetID);
     }
 
     variable(variableID) {
@@ -76,6 +85,8 @@ module.exports = (request, response) => {
             ]).then(([datasets, questions, constraints, title]) => {
                 getDescription(entityIDs, variableID, constraints).then(description => {
                     const templateData = {
+                        _,
+                        page: 'entity',
                         GlobalConstants,
                         title,
                         questions,
@@ -87,7 +98,9 @@ module.exports = (request, response) => {
                         variable,
                         constraints,
                         description,
+                        topics: _.values(availableData),
                         navigate: Navigate.fromRequest(request),
+                        datasetConfig: DatasetConfig[dataset.id],
                         css: [
                             '/styles/third-party/leaflet.min.css',
                             '/styles/third-party/leaflet-markercluster.min.css',
