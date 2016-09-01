@@ -3,7 +3,7 @@
 class DatasetChart {
     constructor(config) {
         this.config = config;
-        this.selector = `chart-${config.chartId}`;
+        this.selector = `chart-${config.id}`;
         this.selection = document.getElementById(this.selector);
     }
 
@@ -15,10 +15,16 @@ class DatasetChart {
     render(data) {
         const table = new google.visualization.DataTable(data.data);
 
-        const chart = createChart(this.config.chartType, this.selection);
-        const options = _.extend({}, DATASET_CONSTANTS.CHART_OPTIONS, this.config.options);
+        const chart = createChart(this.config.type, this.selection);
+        const options = this.getOptions();
 
         chart.draw(table, options);
+    }
+
+    getOptions() {
+        return _.extend({
+            title: this.config.name || 'Chart'
+        }, DATASET_CONSTANTS.CHART_OPTIONS, this.config.options || {});
     }
 
     clear() {
