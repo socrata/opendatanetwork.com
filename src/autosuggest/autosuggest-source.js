@@ -75,9 +75,12 @@ class AutosuggestSource {
             .append('li')
             .attr('class', 'autocomplete-option')
             .each(function(option) {
-                d3.select(this).append('span').text(option.name || option.text);
+                d3.select(this)
+                    .append('a')
+                    .attr('class', 'autocomplete-link')
+                    .attr('href', self.config.select(option))
+                    .text(option.name || option.text);
             })
-            .on('click', option => this.config.select(option))
             .on('mouseover.source', function() {
                 d3.select(this).classed('selected hovered', true);
             })

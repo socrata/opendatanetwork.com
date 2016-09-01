@@ -9,31 +9,31 @@ class Autosuggest {
                 suggestType: 'entity',
                 image: 'fa-globe',
                 name: 'Regions',
-                select: option => this.navigate(new EntityNavigate([option]).url())
+                select: option => new EntityNavigate([option]).url()
             },
             {
                 suggestType: 'category',
                 image: 'fa-tags',
                 name: 'Categories',
-                select: option => this.navigate(new SearchNavigate(null, [option.name]).url())
+                select: option => new SearchNavigate(null, [option.name]).url()
             },
             {
                 suggestType: 'publisher',
                 image: 'fa-newspaper-o',
                 name: 'Publishers',
-                select: option => this.navigate(new SearchNavigate(null, null, [option.name]).url())
+                select: option => new SearchNavigate(null, null, [option.name]).url()
             },
             {
                 suggestType: 'dataset',
                 image: 'fa-bar-chart',
                 name: 'Datasets',
-                select: option => this.navigate(this.path(['dataset', option.domain, option.fxf]))
+                select: option => this.path(['dataset', option.domain, option.fxf])
             },
             {
                 suggestType: 'question',
                 image: 'fa-question-circle',
                 name: 'Questions',
-                select: option => this.navigate(new EntityNavigate([option.entity], option.variable_id).url())
+                select: option => new EntityNavigate([option.entity], option.variable_id).url()
             }
         ];
 
@@ -41,7 +41,7 @@ class Autosuggest {
             suggestType: 'api',
             image: 'fa-code',
             name: 'API',
-            select: option => this.navigate('http://docs.odn.apiary.io/#reference/0/suggestions/get-suggestions'),
+            select: option => 'http://docs.odn.apiary.io/#reference/0/suggestions/get-suggestions'
         };
 
         this.sources = suggestConfigs.map(config => new AutosuggestSource(config));
