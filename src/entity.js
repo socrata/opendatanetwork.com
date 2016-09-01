@@ -31,13 +31,17 @@ function drawMap() {
     MapView.create(_data.entities, _data.variable, constraints, {})
         .then(map => map.show('div#map'))
         .catch(error => {
-            console.error('error rendering map');
-            console.error(error);
+            throw error;
         });
 }
 
 function drawCharts() {
-    console.log(chartConfig);
+    [_data.chartConfig.charts[0]].forEach(config => {
+        const chart = new DatasetChart(config);
+        chart.getData().then(data => chart.render(data)).catch(error => {
+            throw error;
+        });
+    });
 
     const container = d3.select('#google-charts-container');
 }

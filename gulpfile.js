@@ -92,6 +92,8 @@ var entityScripts = baseScripts
     .concat(mapScripts)
     .concat([
         'src/entity-page-controller.js',
+        'src/dataset-constants.js',
+        'src/dataset-chart.js',
         'src/entity.js']);
 gulp.task('entity', js(entityScripts, 'entity.min.js'));
 
