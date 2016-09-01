@@ -15,7 +15,7 @@ function stringify(params) {
     if (typeof querystring !== 'undefined')
         return querystring.stringify(params);
     if (typeof $ !== 'undefined')
-        return $.param(params);
+        return $.param(params, true);
     throw new Error('no stringify function available in buildURL');
 }
 
