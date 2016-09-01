@@ -39,18 +39,6 @@ var autosuggestScripts = [
     'src/autosuggest/autosuggest.js',
 ];
 
-var regionsScripts = [
-    'src/quick-links.js',
-    'src/forecast.js',
-    'src/chart-constants.js',
-    'src/questions.js',
-    'src/questions-mobile.js',
-    'src/refine-controls-mobile.js',
-    'src/search-refine-controls-mobile.js',
-    'src/search-page-controller.js',
-    'src/search.js'
-];
-
 function js(src, dest) {
     return function() {
         return gulp.src(src)
@@ -75,14 +63,13 @@ gulp.task('home', js(homeScripts, 'home.min.js'));
 
 var searchScripts = baseScripts
     .concat(autosuggestScripts)
-    .concat(mapScripts)
-    .concat(regionsScripts)
     .concat([
-        'src/api/odn-api.js',
-        'src/dataset-menus.js',
-        'src/dataset-chart.js',
-        'src/dataset-config.js',
-        'src/dataset-constants.js']);
+        'src/quick-links.js',
+        'src/refine-controls-mobile.js',
+        'src/search-refine-controls-mobile.js',
+        'src/search-page-controller.js',
+        'src/search.js',
+        'src/api/odn-api.js']);
 gulp.task('search', js(searchScripts, 'search.min.js'));
 
 var entityScripts = baseScripts

@@ -8,6 +8,9 @@
                             <a href="<%= navigate.to(entity).url() %>">
                                 <%= entity.name %>
                             </a>
+                            <div class="regionType">
+                                <%= Constants.REGION_NAMES[entity.type] || '' %>
+                            </div>
                         </h2>
                     </div>
                 <% }); %>

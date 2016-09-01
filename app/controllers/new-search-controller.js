@@ -9,6 +9,7 @@ const ODNClient = require('../lib/odn-client');
 const CeteraClient = require('../lib/cetera-client');
 const Exception = require('../lib/exception');
 const Navigate = require('../lib/navigate');
+const Constants = require('../../src/constants');
 
 const Category = require('../models/category');
 const Place = require('../models/place');
@@ -33,6 +34,7 @@ module.exports = (request, response) => {
         Tag.tags()
     ]).then(([entities, datasets, allCategories, allDomains, allTags]) => {
         const templateData = {
+            Constants,
             page: 'search',
             query,
             categories,
@@ -57,6 +59,7 @@ module.exports = (request, response) => {
                 '/lib/third-party/d3.promise.min.js',
                 '/lib/third-party/js.cookie-2.1.1.min.js',
                 '/lib/third-party/lodash.min.js',
+                '/lib/third-party/colorbrewer.min.js',
                 '/lib/search.min.js'
             ]
         };
