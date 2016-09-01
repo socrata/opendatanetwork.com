@@ -34,7 +34,10 @@ const DATASET_CONFIG = {
         charts: [
             {
                 chartId: 'crime.fbi_ucr.count.chart',
-                chartType: 'line',
+                chartType: 'column',
+                constraint: {
+                    year: '2014'
+                },
                 name: 'Crime Incident Count',
                 options: {
                     hAxis: { format:'####' },
@@ -59,7 +62,10 @@ const DATASET_CONFIG = {
             },
             {
                 chartId: 'crime.fbi_ucr.rate.chart',
-                chartType: 'line',
+                chartType: 'column',
+                constraint: {
+                    year: '2014'
+                },
                 name: 'Crime Incident Rate per 100,000 People',
                 options: {
                     hAxis: { format:'####' },
