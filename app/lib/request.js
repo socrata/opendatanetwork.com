@@ -42,7 +42,7 @@ class Request {
                 cache.get(key, (error, value) => {
                     if (value) {
 
-                        if (timersEnabled) 
+                        if (timersEnabled)
                             console.log('Request (cache hit): ' + (new Date() - start) + 'ms URL: ' + url);
 
                         resolve(value);
@@ -50,14 +50,14 @@ class Request {
                         Request.timeout(request({
                                 url: url,
                                 headers: { 'User-Agent' : ControllerConstants.USER_AGENT }
-                            }), timeout).then(body => {
+                        }), timeout).then(body => {
 
-                                if (timersEnabled)
-                                    console.log('Request (cache miss): ' + (new Date() - start) + 'ms URL: ' + url);
+                            if (timersEnabled)
+                                console.log('Request (cache miss): ' + (new Date() - start) + 'ms URL: ' + url);
 
-                                resolve(body);
-                                if (!error) cache.set(key, body);
-                            }, reject);
+                            resolve(body);
+                            if (!error) cache.set(key, body);
+                        }, reject);
                     }
                 });
             }

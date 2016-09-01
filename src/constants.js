@@ -8,6 +8,7 @@ const GlobalConstants = {
     ODN_API_BASE_URL: _ODN_API_BASE_URL,
     APP_TOKEN: 'cQovpGcdUT1CSzgYk0KPYdAI0',
 
+    ENTITY_LOOKUP_URL: _ODN_API_BASE_URL + '/entity/v1',
     DATA_AVAILABILITY_URL: _ODN_API_BASE_URL + '/data/v1/availability',
     DATA_CONSTRAINT_URL:  _ODN_API_BASE_URL + '/data/v1/constraint/{0}',
     DATA_VALUES_URL:  _ODN_API_BASE_URL + '/data/v1/values',

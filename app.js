@@ -116,6 +116,10 @@ app.get('/search', SearchController.search);
 app.get('/search/search-results', SearchController.searchResults);
 app.get('/search/:vector', SearchController.search);
 app.get('/dataset/:domain/:id', DatasetController.show);
+
+// new URL format
+app.get('/entity/:entityIDs/:variableID', require('./app/controllers/entity-controller'));
+
 app.get('/region/:regionIds', SearchController.search);
 app.get('/region/:regionIds/:regionNames', SearchController.search);
 app.get('/region/:regionIds/:regionNames/search-results', SearchController.searchResults);
