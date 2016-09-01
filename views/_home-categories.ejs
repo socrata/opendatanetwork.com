@@ -4,7 +4,7 @@
         <ul>
           <% categories.forEach(function(result) { %>
             <li>
-                <a href="/search?categories=<%= encodeURIComponent(result.category) %>">
+                <a href="/search?categories=<%= encodeURIComponent(result.category) %>&ref=hp">
                   <span class="icon" role="presentation">
                     <em class="fa <%= result.metadata.icon %>" aria-hidden="true"></em>
                   </span>
@@ -24,7 +24,7 @@
         <% categories.forEach(function(result) { %>
         <li>
             <h3>
-                <a href="/search?categories=<%= encodeURIComponent(result.category) %>">
+                <a href="/search?categories=<%= encodeURIComponent(result.category) %>&ref=hp">
                     <em class="fa <%= result.metadata.icon %>" aria-hidden="true"></em>
                     <%= result.category %>
                 </a>

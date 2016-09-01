@@ -3,7 +3,7 @@ casper.test.begin('homepage-quicklinks', function checkHomepage(test) {
 
     casper.start('http://localhost:3002');
 
-    /** @TODO TEST FAILS, FIX OR DELETE IT casper.then(function() {
+    casper.then(function() {
         casper.clickLabel('infrastructure');
     });
 
@@ -12,7 +12,7 @@ casper.test.begin('homepage-quicklinks', function checkHomepage(test) {
           test.assertUrlMatch(/search\?categories=infrastructure&ref=hp/, 'Verifies that a click on infrastructure from the homepage lands on this URL structure');
           casper.back();
         });
-    });*/
+    });
 
     /** @TODO TEST FAILS, FIX OR DELETE IT casper.then(function() {
         casper.clickLabel('California');
