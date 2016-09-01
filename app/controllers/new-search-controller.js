@@ -28,7 +28,7 @@ module.exports = (request, response) => {
 
     // TODO questions
     Promise.all([
-        ODNClient.searchEntities(query),
+        getEntities(query),
         cetera.datasets(categories, domains, tags),
         Category.categories(),
         Category.domains(),
@@ -79,6 +79,13 @@ module.exports = (request, response) => {
     }).catch(errorHandler);
 };
 
+function getEntities(query) {
+    if (query === '') return Promise.resolve([]);
+    return ODNClient.searchEntities(query)
+        .then(entities => Promise.resolve(entities.slice(0, 9)));
+}
+
+// TODO refactor out somewhere
 const refineByCount = 5;
 
 function getRefineBy(categories, domains) {

@@ -10,10 +10,13 @@ $(document).ready(function() {
         $('.current-category-info-box').slideUp();
     });
 
-    $(window).resize(() => {
-        renderEntities(entities);
-    });
+    $(window).resize(onResize);
+    onResize();
 });
+
+function onResize() {
+    renderEntities(_data.entities);
+}
 
 function autosuggest() {
     new Autosuggest('.entity-list').listen('.search-bar-input');
@@ -56,6 +59,7 @@ function renderEntities(entities) {
     container.html('');
 
     const columns = getColumnCount(entities.length);
+    console.log(columns);
     _.chunk(entities, columns).forEach(dataRow => {
         const row = container
             .append('div')
@@ -66,7 +70,7 @@ function renderEntities(entities) {
 
             cell.append('h2')
                 .append('a')
-                .attr('href', navigate.to(entity).url())
+                .attr('href', new EntityNavigate().to(entity).url())
                 .text(entity.name);
 
             if (columns == 3)

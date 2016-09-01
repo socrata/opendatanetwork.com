@@ -1,6 +1,13 @@
 <% include _header %>
 <% include _search-bar %>
 
+<script>
+
+    // This data will be passed along to the client side scripts.
+    const _data = <%- JSON.stringify({entities}) %>;
+
+</script>
+
 <section class="main-section" role="main">
     <% include _search-results %>
 </section>
