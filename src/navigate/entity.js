@@ -11,8 +11,9 @@ if (typeof require !== 'undefined') {
 
 class EntityNavigate {
     constructor(entities, variableID, query) {
-        this.entities = entities;
-        this.entityIDs = (entities || []).map(_.property('id'));
+        this.entities = entities || [];
+        this.entityIDs = this.entities.map(_.property('id'));
+        this.entityNames = this.entities.map(_.property('name'));
         this.variableID = variableID || 'demographics';
         this.query = query || {};
     }
@@ -48,9 +49,17 @@ class EntityNavigate {
     }
 
     url() {
-        const path = `/entity/${this.entityIDs.join('-')}/${this.variableID}`;
+        const ids = this.entityIDs.join('-');
+        const names = this.entityNames.map(clean).join('-');
+        const path = `/entity/${ids}/${names}/${this.variableID}`;
         return buildURL(path, this.query);
     }
+}
+
+function clean(string) {
+    return string
+        .replace(/[\s-\/]/g, '_')
+        .replace(/\W/g, '');
 }
 
 if (typeof module !== 'undefined') module.exports = EntityNavigate;
