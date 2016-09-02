@@ -35,7 +35,6 @@ var mapScripts = [
 
 var autosuggestScripts = [
     'src/autosuggest/autosuggest-source.js',
-    'src/autosuggest/autosuggest-api-source.js',
     'src/autosuggest/autosuggest-results.js',
     'src/autosuggest/autosuggest.js',
 ];

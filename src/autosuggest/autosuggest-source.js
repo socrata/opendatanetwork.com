@@ -9,6 +9,10 @@ class AutosuggestSource {
      * Searches for the given term using the autosuggest API.
      */
     get(term) {
+        console.log(this.config);
+        if (this.config.options)
+            return Promise.resolve(this.config.options);
+
         if (term === '') {
             return Promise.resolve([]);
         } else {
@@ -31,6 +35,9 @@ class AutosuggestSource {
         const category = container
             .append('li')
             .attr('class', 'autocomplete-category');
+
+        if (this.config.onCategorySelection)
+            this.config.onCategorySelection(category);
 
         if (this.config.image) {
             const name = category

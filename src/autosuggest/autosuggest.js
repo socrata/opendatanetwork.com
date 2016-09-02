@@ -32,19 +32,27 @@ class Autosuggest {
                 image: 'fa-question-circle',
                 name: 'Questions',
                 select: option => new EntityNavigate([option.entity], option.variable_id).url()
+            },
+            {
+                options: [
+                    {
+                        text: 'Suggestions API Documentation',
+                        url: 'http://docs.odn.apiary.io/#reference/0/suggestions/get-suggestions',
+                    }
+                ],
+                suggestType: 'api',
+                name: 'API',
+                select: option => 'http://docs.odn.apiary.io/#reference/0/suggestions/get-suggestions',
+                onCategorySelection: category => {
+                    category.classed('autocomplete-category-api', true);
+                    category.append('a')
+                        .attr('class', 'small-api-link')
+                        .text('API');
+                }
             }
         ];
 
-        const apiConfig = {
-            suggestType: 'api',
-            image: 'fa-code',
-            name: 'API',
-            select: option => 'http://docs.odn.apiary.io/#reference/0/suggestions/get-suggestions'
-        };
-
         this.sources = suggestConfigs.map(config => new AutosuggestSource(config));
-        this.sources.push(new AutosuggestApiSource(apiConfig));
-
         this.results = new AutosuggestResults(resultSelector);
         this.currentTerm = '';
         this.time = Date.now();
