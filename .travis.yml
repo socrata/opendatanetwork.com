@@ -10,6 +10,9 @@ before_install:
 script: gulp build test
 services:
 - memcached
+cache:
+  directories:
+  - node_modules
 notifications:
   email:
   - deep.dhillon@socrata.com
