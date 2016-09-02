@@ -34,6 +34,18 @@
             "percent_earning_$75000_to_$99999": "percent_with_earnings_75000_to_99999",
             "percent_earning_over_$100000": "percent_with_earnings_over_100000"
         }
+    },
+
+    "economy": {
+        "gdp": {
+            "gdp_per_capita": "per_capita_gdp",
+            "annual_change_in_gdp": "per_capita_gdp_percent_change"
+        },
+
+        "consumption": {
+            "personal_consumption_expenditure": "personal_consumption_expenditures",
+            "annual_change_in_pce": "expenditures_percent_change"
+        }
     }
 }
 

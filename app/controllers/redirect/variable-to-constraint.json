@@ -5,6 +5,13 @@
             "constraint": "occupation",
             "variable": "employed"
         }
+    },
+
+    "economy": {
+        "cost_of_living": {
+            "constraint": "component",
+            "variable": "index"
+        }
     }
 }
 
