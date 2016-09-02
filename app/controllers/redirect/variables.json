@@ -1,0 +1,10 @@
+
+{
+    "demographics" : {
+        "population": {
+            "population": "count",
+            "annual_population_change": "change"
+        }
+    }
+}
+

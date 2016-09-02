@@ -1,0 +1,10 @@
+
+{
+    "demographics": ["population"],
+    "education": ["education_places", "education", "education_expenditures", "classroom_statistics"],
+    "jobs": ["earnings", "occupations", "job_proximity"],
+    "economy": ["gdp", "cost_of_living", "consumption"],
+    "health": ["health", "health_indicators", "environmental_health"],
+    "crime": ["city_crime"]
+}
+

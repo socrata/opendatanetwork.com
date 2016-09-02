@@ -79,7 +79,7 @@ app.get('*', function(req, res, next) {
 });
 
 // Strip all get parameters to avoid XSS attempts
-var strip = function(string) { return string.replace(/[^A-z0-9-_.+&]+/g, ' '); }
+var strip = function(string) { return string.replace(/[^A-z0-9-_.+&]+/g, ' '); };
 app.get('*', function(req, res, next) {
   _.each(req.query, function(value, key) {
     if(_.isArray(value)) {
@@ -88,7 +88,7 @@ app.get('*', function(req, res, next) {
         req.query[key][idx] = strip(aval);
       });
     } else {
-      req.query[key] = strip(value)
+      req.query[key] = strip(value);
     }
   });
   next();
@@ -119,20 +119,17 @@ app.get('/search/:vector', SearchController.search);
 app.get('/dataset/:domain/:id', DatasetController.show);
 
 // new URL format
-app.get('/entity/:entityIDs', require('./app/controllers/entity-controller'));
-app.get('/entity/:entityIDs/:entityNames/:variableID', require('./app/controllers/entity-controller'));
+const entityController = require('./app/controllers/entity-controller');
+app.get('/entity/:entityIDs', entityController);
+app.get('/entity/:entityIDs/:entityNames', entityController);
+app.get('/entity/:entityIDs/:entityNames/:variableID', entityController);
 
-/*
-app.get('/region/:regionIds', SearchController.search);
-app.get('/region/:regionIds/:regionNames', SearchController.search);
-app.get('/region/:regionIds/:regionNames/search-results', SearchController.searchResults);
-app.get('/region/:regionIds/:regionNames/:vector/search-results', SearchController.searchResults);
-app.get('/region/:regionIds/:regionNames/:vector/:metric/search-results', SearchController.searchResults);
-app.get('/region/:regionIds/:regionNames/:vector/:metric/:year', SearchController.searchWithVector);
-app.get('/region/:regionIds/:regionNames/:vector/:metric/:year/search-results', SearchController.searchResults);
-app.get('/region/:regionIds/:regionNames/:vector/:metric', SearchController.searchWithVector);
-app.get('/region/:regionIds/:regionNames/:vector', SearchController.searchWithVector);
-*/
+const redirectRegion = require('./app/controllers/redirect/region');
+app.get('/region/:regionIDs', redirectRegion);
+app.get('/region/:regionIDs/:regionNames', redirectRegion);
+app.get('/region/:regionIDs/:regionNames/:vector', redirectRegion);
+app.get('/region/:regionIDs/:regionNames/:vector/:metric', redirectRegion);
+app.get('/region/:regionIDs/:regionNames/:vector/:metric/:year', redirectRegion);
 
 app.use((error, req, res, next) => {
   ErrorHandler.error(req, res)(error);

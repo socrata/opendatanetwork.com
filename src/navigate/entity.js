@@ -12,9 +12,12 @@ if (typeof require !== 'undefined') {
 class EntityNavigate {
     constructor(entities, variableID, query) {
         this.entities = entities || [];
-        this.entityIDs = this.entities.map(_.property('id'));
-        this.entityNames = this.entities.map(_.property('name'));
-        this.variableID = variableID || 'demographics';
+        this.entityIDs = this.entities
+            .map(_.property('id'));
+        this.entityNames = this.entities
+            .map(_.property('name'))
+            .filter(_.negate(_.isEmpty));
+        this.variableID = variableID;
         this.query = query || {};
     }
 
@@ -51,7 +54,9 @@ class EntityNavigate {
     url() {
         const ids = this.entityIDs.join('-');
         const names = this.entityNames.map(clean).join('-');
-        const path = `/entity/${ids}/${names}/${this.variableID}`;
+        const path = ['/entity', ids, names, this.variableID]
+            .filter(_.negate(_.isEmpty))
+            .join('/');
         return buildURL(path, this.query);
     }
 }
