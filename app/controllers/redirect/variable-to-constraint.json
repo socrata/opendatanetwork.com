@@ -1,0 +1,10 @@
+
+{
+    "jobs": {
+        "occupations": {
+            "constraint": "occupation",
+            "variable": "employed"
+        }
+    }
+}
+

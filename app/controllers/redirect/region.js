@@ -9,24 +9,21 @@ const fs = require('fs-promise');
 
 const EntityNavigate = require('../../../src/navigate/entity');
 
-const topicToVectorPromise = readJSON(pathTo('topic-to-vector.json'));
-const vectorToTopicPromise = topicToVectorPromise.then(getVectorToTopicPromise);
-
-const topicChangesPromise = readJSON(pathTo('topics.json'));
-const datasetChangesPromise = readJSON(pathTo('datasets.json'));
-const variableChangesPromise = readJSON(pathTo('variables.json'));
+const data = Promise.all([
+    readJSON(pathTo('topic-to-vector.json')).then(getVectorToTopicPromise),
+    readJSON(pathTo('topics.json')),
+    readJSON(pathTo('datasets.json')),
+    readJSON(pathTo('variables.json')),
+    readJSON(pathTo('variable-to-constraint.json'))
+]);
 
 module.exports = (request, response) => {
-    Promise.all([
-        topicChangesPromise,
-        datasetChangesPromise,
-        variableChangesPromise,
-        vectorToTopicPromise
-    ]).then(([
+    data.then(([
+        vectorToTopic,
         topicChanges,
         datasetChanges,
         variableChanges,
-        vectorToTopic
+        variableToConstraint
     ]) => {
         const metric = request.params.metric;
         const vector = request.params.vector;
@@ -34,7 +31,14 @@ module.exports = (request, response) => {
 
         const topic = _.get(topicChanges, oldTopic, oldTopic);
         const dataset = _.get(datasetChanges, [oldTopic, vector], vector);
-        const variable = _.get(variableChanges, [oldTopic, vector, metric], metric);
+
+        const toConstraint = _.get(variableToConstraint, [oldTopic, vector]);
+        const variable = toConstraint ?
+            toConstraint.variable :
+            _.get(variableChanges, [oldTopic, vector, metric], metric);
+        let constraints = {};
+        if ('year' in request.params) constraints.year = request.params.year;
+        if (toConstraint) constraints[toConstraint.constraint] = metric;
 
         const variableID = [topic, dataset, variable].filter(_.negate(_.isEmpty)).join('.');
         const entityIDs = request.params.regionIDs.split('-');
@@ -42,7 +46,6 @@ module.exports = (request, response) => {
         const entities = _.zip(entityIDs, entityNames)
             .map(pair => _.object(['id', 'name'], pair))
             .filter(entity => !_.isEmpty(entity.id));
-        const constraints = 'year' in request.params ? {year: request.params.year} : {};
 
         const url = new EntityNavigate(entities, variableID, constraints).url();
 

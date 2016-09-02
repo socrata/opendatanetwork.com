@@ -163,7 +163,8 @@ function clean(string) {
     return string
         .replace(/[\s-\/]/g, '_')
         .replace(/_+/g, '_')
-        .replace(/\W/g, '');
+        .replace(/\W/g, '')
+        .toLowerCase();
 }
 
 function getRelated(entityID) {
