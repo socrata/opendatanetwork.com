@@ -47,8 +47,8 @@ class ODNClient {
      *
      * Relation must be one of parent, child, sibling, or peer.
      */
-    related(entityID, relation) {
-        return this.get(`entity/v1/${relation}`, {entity_id: entityID})
+    related(entityID, relation, limit) {
+        return this.get(`entity/v1/${relation}`, {entity_id: entityID, limit})
             .then(response => Promise.resolve({[relation]: response.relatives}));
     }
 

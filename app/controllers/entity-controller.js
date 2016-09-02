@@ -155,7 +155,7 @@ function getConstraints(constraintMenus) {
 
 function getRelated(entityID) {
     const promises = ['parent', 'child', 'sibling', 'peer']
-        .map(relation => ODNClient.related(entityID, relation));
+        .map(relation => ODNClient.related(entityID, relation, GlobalConstants.PEER_REGIONS));
 
     return Promise.all(promises)
         .then(result => Promise.resolve(_.merge.apply(_, result)));
