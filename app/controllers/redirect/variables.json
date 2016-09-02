@@ -15,6 +15,15 @@
 
         "classroom_statistics": {
             "student_teacher_ratio": "student-teacher-ratio"
+        },
+
+        "education_expenditures": {
+            "instruction_salaries_per_student": "instruction-salaries-per-student",
+            "instruction_salaries": "instruction-salaries",
+            "administration_salaries_per_student": "administration-salaries-per-student",
+            "administration_salaries": "administration-salaries",
+            "capital_expenditures_per_student": "capital-expenditures-per-student",
+            "capital_expenditures": "capital-expenditures"
         }
     },
 
