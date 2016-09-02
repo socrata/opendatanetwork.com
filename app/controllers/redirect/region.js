@@ -48,7 +48,7 @@ module.exports = (request, response) => {
 
         const url = new EntityNavigate(entities, variableID, constraints).url();
 
-        response.redirect(300, url);
+        response.redirect(301, url);
     }).catch(error => {
         console.log(error);
     });
