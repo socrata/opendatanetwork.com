@@ -5,6 +5,35 @@
             "population": "count",
             "annual_population_change": "change"
         }
+    },
+
+    "education": {
+        "education": {
+            "high_school_graduation_rate": "percent_high_school_graduate_or_higher",
+            "college_graduation_rate": "percent_bachelors_degree_or_higher"
+        },
+
+        "classroom_statistics": {
+            "student_teacher_ratio": "student-teacher-ratio"
+        }
+    },
+
+    "jobs": {
+        "earnings": {
+            "median_female_earnings": "female_median_earnings",
+            "median_male_earnings": "male_median_earnings",
+            "median_female_earnings_(full_time)": "female_full_time_median_earnings",
+            "median_male_earnings_(full_time)": "male_full_time_median_earnings",
+            "percent_earning_less_than_$10000": "percent_with_earnings_1_to_9999",
+            "percent_earning_$10000_to_$14999": "percent_with_earnings_10000_to_14999",
+            "percent_earning_$15000_to_$24999": "percent_with_earnings_15000_to_24999",
+            "percent_earning_$25000_to_$34999": "percent_with_earnings_25000_to_34999",
+            "percent_earning_$35000_to_$49999": "percent_with_earnings_35000_to_49999",
+            "percent_earning_$50000_to_$64999": "percent_with_earnings_50000_to_64999",
+            "percent_earning_$65000_to_$74999": "percent_with_earnings_65000_to_74999",
+            "percent_earning_$75000_to_$99999": "percent_with_earnings_75000_to_99999",
+            "percent_earning_over_$100000": "percent_with_earnings_over_100000"
+        }
     }
 }
 

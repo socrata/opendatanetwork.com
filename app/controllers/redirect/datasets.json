@@ -1,3 +1,7 @@
 
-{}
+{
+    "crime": {
+        "city_crime": "fbi_ucr"
+    }
+}
 
