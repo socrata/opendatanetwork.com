@@ -45,7 +45,7 @@ class EntityNavigate {
     }
 
     constraint(name, value) {
-        return new EntityNavigate(this.entities, this.variableID, _.extend({}, this.query, {[name]: value}));
+        return new EntityNavigate(this.entities, this.variableID, _.extend({}, this.query, {[name]: clean(value)}));
     }
 
     url() {
@@ -57,8 +57,11 @@ class EntityNavigate {
 }
 
 function clean(string) {
+    if (_.isEmpty(string)) return '';
+
     return string
         .replace(/[\s-\/]/g, '_')
+        .replace(/_+/g, '_')
         .replace(/\W/g, '');
 }
 

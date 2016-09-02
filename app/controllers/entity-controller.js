@@ -127,12 +127,15 @@ function getNode(nodes, name) {
 function getConstraintMenus(entityIDs, variableID, constraints, fixed, results) {
     results = results || [];
     fixed = fixed || {};
-    fixed = _.pick(fixed, results.map(_.property('name')));
-
     const constraint = _.first(constraints);
-    return ODNClient.constraints(entityIDs, variableID, constraint, fixed).then(options => {
-        const selected = (constraint in fixed && _.includes(options, fixed[constraint])) ?
-            fixed[constraint] : _.first(options);
+    const parents = results.map(_.property('name')).concat([constraint]);
+    const fixedParents = _.pick(fixed, parents);
+
+    return ODNClient.constraints(entityIDs, variableID, constraint, fixedParents).then(options => {
+        const defaultOption = _.first(options);
+        const selected = constraint in fixed ?
+            _.find(options, option => clean(option) === clean(fixed[constraint])) || defaultOption:
+            defaultOption;
         fixed[constraint] = selected;
 
         results.push({
@@ -152,6 +155,15 @@ function getConstraints(constraintMenus) {
         .map(constraint => [constraint.name, constraint.selected])
         .object()
         .value();
+}
+
+function clean(string) {
+    if (_.isEmpty(string)) return '';
+
+    return string
+        .replace(/[\s-\/]/g, '_')
+        .replace(/_+/g, '_')
+        .replace(/\W/g, '');
 }
 
 function getRelated(entityID) {
