@@ -60,6 +60,7 @@ class Questions {
                 const questions = [];
 
                 response.questions.forEach(question => {
+                    console.log(question);
 
                     const segments = question.variable_id.split('.');
                     segments.pop();

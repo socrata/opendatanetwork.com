@@ -40,8 +40,8 @@ module.exports = (request, response) => {
         if (toConstraint) variable = toConstraint.variable;
 
         const variableID = [topic, dataset, variable].filter(_.negate(_.isEmpty)).join('.');
-        const entityIDs = request.params.regionIDs.split('-');
-        const entityNames = request.params.regionNames.split('-');
+        const entityIDs = (request.params.regionIDs || '').split('-');
+        const entityNames = (request.params.regionNames || '').split('-');
         const entities = _.zip(entityIDs, entityNames)
             .map(pair => _.object(['id', 'name'], pair))
             .filter(entity => !_.isEmpty(entity.id));
