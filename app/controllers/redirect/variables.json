@@ -3,7 +3,7 @@
     "demographics" : {
         "population": {
             "population": "count",
-            "annual_population_change": "change"
+            "population_change": "change"
         }
     },
 

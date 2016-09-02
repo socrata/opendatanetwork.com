@@ -48,7 +48,8 @@ class EntityNavigate {
     }
 
     constraint(name, value) {
-        return new EntityNavigate(this.entities, this.variableID, _.extend({}, this.query, {[name]: clean(value)}));
+        return new EntityNavigate(this.entities, this.variableID,
+            _.extend({}, this.query, {[name]: clean(value).toLowerCase()}));
     }
 
     url() {
@@ -67,8 +68,7 @@ function clean(string) {
     return string
         .replace(/[\s-\/]/g, '_')
         .replace(/_+/g, '_')
-        .replace(/\W/g, '')
-        .toLowerCase();
+        .replace(/\W/g, '');
 }
 
 if (typeof module !== 'undefined') module.exports = EntityNavigate;
