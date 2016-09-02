@@ -6,12 +6,17 @@ const GlobalConstants = require("../../src/constants");
 const ControllerConstants = require('./constants');
 const Data = require('./data');
 const Request = require('./request');
-
 const ODNClient = require('../../src/odn-client/odn-client');
 
 class Questions {
+
     static getQuestionsForSearchTerm(term, dataAvailability) {
         return new Promise((resolve, reject) => {
+            if (_.isEmpty(term)) {
+                resolve([]);
+                return;
+            }
+
             ODNClient.searchEntities(term).then(regions => {
                 if (regions.length === 0) {
                     resolve([]);
