@@ -125,8 +125,9 @@ function getNode(nodes, name) {
 }
 
 function getConstraintMenus(entityIDs, variableID, constraints, fixed, results) {
-    fixed = fixed || {};
     results = results || [];
+    fixed = fixed || {};
+    fixed = _.pick(fixed, results.map(_.property('name')));
 
     const constraint = _.first(constraints);
     return ODNClient.constraints(entityIDs, variableID, constraint, fixed).then(options => {
