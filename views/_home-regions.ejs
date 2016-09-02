@@ -1,15 +1,15 @@
 <section class="regions-section">
     <div class="container">
-        <h4>Geographical Regions</h4>
+        <strong class="section-heading">Geographical Regions</strong>
         <ul class="states-list states-list-collapsed">
 
           <% if (locations) locations.forEach(location => { %>
             <li class="state state-collapsed">
-                <h3>
+                <strong>
                     <em class="fa fa-map-marker" aria-hidden="true"></em>
                     <a href="/region/<%= location.id %>/<%= location.name %>"><%= location.name %></a>
                     <a href class="small-api-link" tabindex="0" aria-owns="api_info_box_<%= location.id %>" aria-haspopup="true" aria-expanded="false" aria-label="Get API for <%= location.name %>">API</a>
-                </h3>
+                </strong>
                 <div class="api-info-box" id="api_info_box_<%= location.id %>">
                     <a href class="fa fa-close" autofocus aria-label="Close API info box"></a>
                     <strong>
@@ -56,17 +56,17 @@
 </section>
 
 <section class="regions-section-mobile">
-    <h4>Geographical Regions</h4>
+    <strong class="section-heading">Geographical Regions</strong>
     <ul class="states-list-mobile">
       <% if (locations) locations.forEach(function(location) { %>
         <li>
-            <h3>
+            <strong>
                 <a class="state-link-mobile" href="/region/<%= location.id %>/<%= location.name %>">
                     <em class="fa fa-map-marker" aria-hidden="true"></em>
                     <%= location.name %>
                 </a>
                 <a href class="state-expand-mobile" region-id="<%= location.id %>" aria-controls="region_<%=location.id %>" aria-expanded="false" role="tab"><em class="fa fa-plus"></em><span class="sr-only">Show all regions in <%= location.name %></span></a>
-            </h3>
+            </strong>
 
             <div class="sub-regions-container-<%=location.id %>-mobile sub-regions-container-mobile" id="region_<%=location.id %>" aria-hidden="false" role="tabpanel" aria-label="All regions in <%= location.name %>">
                 <ul class="sub-regions-list-mobile">

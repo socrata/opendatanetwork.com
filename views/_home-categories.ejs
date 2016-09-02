@@ -1,7 +1,7 @@
 <section class="categories-section">
-    <div class="container">
-        <h4>Data Categories</h4>
-        <ul>
+    <div class="container" role="navigation">
+        <strong class="section-heading">Data Categories</strong>
+        <ul class="clearfix">
           <% categories.forEach(function(result) { %>
             <li>
                 <a href="/search?categories=<%= encodeURIComponent(result.category) %>">
@@ -13,23 +13,22 @@
             </li>
           <% }); %>
         </ul>
-        <div class="cb"></div>
     </div>
 </section>
 
 <section class="categories-section-mobile">
-    <h4>Data Categories</h4>
+    <strong class="section-heading">Data Categories</strong>
     <a href class="categories-dropdown-mobile" aria-controls="dataCategoriesList" aria-expanded="false">Select a Category<em class="fa fa-caret-down" aria-hidden="true"></em></a>
-    <ul class="categories-list-mobile" id="dataCategoriesList">
-        <% categories.forEach(function(result) { %>
-        <li>
-            <h3>
+    <div role="navigation">
+        <ul class="categories-list-mobile" id="dataCategoriesList">
+            <% categories.forEach(function(result) { %>
+            <li>
                 <a href="/search?categories=<%= encodeURIComponent(result.category) %>">
                     <em class="fa <%= result.metadata.icon %>" aria-hidden="true"></em>
                     <%= result.category %>
                 </a>
-            </h3>
-        </li>
-        <% }); %>
-    </ul>
+            </li>
+            <% }); %>
+        </ul>
+    </div>
 </section>
