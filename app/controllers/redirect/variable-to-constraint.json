@@ -12,6 +12,13 @@
             "constraint": "component",
             "variable": "index"
         }
+    },
+
+    "health": {
+        "health_indicators": {
+            "constraint": "question",
+            "variable": "data_value"
+        }
     }
 }
 

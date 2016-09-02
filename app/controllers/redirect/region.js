@@ -31,14 +31,13 @@ module.exports = (request, response) => {
 
         const topic = _.get(topicChanges, oldTopic, oldTopic);
         const dataset = _.get(datasetChanges, [oldTopic, vector], vector);
+        let variable = _.get(variableChanges, [oldTopic, vector, metric], metric);
 
-        const toConstraint = _.get(variableToConstraint, [oldTopic, vector]);
-        const variable = toConstraint ?
-            toConstraint.variable :
-            _.get(variableChanges, [oldTopic, vector, metric], metric);
         let constraints = {};
         if ('year' in request.params) constraints.year = request.params.year;
-        if (toConstraint) constraints[toConstraint.constraint] = metric;
+        const toConstraint = _.get(variableToConstraint, [oldTopic, vector]);
+        if (toConstraint) constraints[toConstraint.constraint] = variable;
+        if (toConstraint) variable = toConstraint.variable;
 
         const variableID = [topic, dataset, variable].filter(_.negate(_.isEmpty)).join('.');
         const entityIDs = request.params.regionIDs.split('-');

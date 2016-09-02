@@ -55,6 +55,34 @@
             "personal_consumption_expenditure": "personal_consumption_expenditures",
             "annual_change_in_pce": "expenditures_percent_change"
         }
+    },
+
+    "health": {
+        "health": {
+            "adult_obesity_rate": "adult_obesity_value",
+            "adult_smoking_rate": "adult_smoking_value",
+            "physical_inactivity_rate": "physical_inactivity_value",
+            "excessive_drinking_rate": "excessive_drinking_value",
+            "access_to_exercise_opportunities_rate": "access_to_exercise_opportunities_value"
+        },
+
+        "health_indicators": {
+            "asthma_rate": "adults_who_have_been_told_they_currently_have_asthma",
+            "arthritis_rate": "adults_who_have_been_told_they_have_arthritis",
+            "heart_attack_rate": "ever_told_you_had_a_heart_attack_myocardial_infarction",
+            "heart_disease_rate": "ever_told_you_had_angina_or_coronary_heart_disease",
+            "skin_cancer_rate": "ever_told_you_had_skin_cancer",
+            "other_cancer_rate": "ever_told_you_had_any_other_types_of_cancer",
+            "copd_rate": "ever_told_you_have_copd",
+            "kidney_disease_rate": "ever_told_you_have_kidney_disease",
+            "depression_rate": "ever_told_you_that_you_have_a_form_of_depression",
+            "diabetes_rate": "have_you_ever_been_told_by_a_doctor_that_you_have_diabetes"
+        },
+
+        "environmental_health": {
+            "median_environmental_health_hazard_index": "env-health-idx-median",
+            "mean_environmental_health_hazard_index": "env-health-idx-mean"
+        }
     }
 }
 
