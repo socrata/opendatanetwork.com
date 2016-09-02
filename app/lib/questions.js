@@ -1,36 +1,23 @@
 'use strict';
 
 const _ = require('lodash');
-
 const Autosuggest = require('./autosuggest');
 const GlobalConstants = require("../../src/constants");
 const ControllerConstants = require('./constants');
 const Data = require('./data');
 const Request = require('./request');
-
 const Search = require('../models/search');
 
-// TODO: What is this for? Used anywhere?
-// const autosuggest = new Autosuggest({
-//   name: 'Questions',
-//   image: 'fa-question-circle',
-//   domain: 'odn.data.socrata.com',
-//   fxf: '234x-8y9w',
-//   column: 'question',
-//   encoded: ['regionName', 'regionID', 'regionPopulation',
-//     'vector', 'source', 'variable', 'metric', 'index'],
-//   sort: option => {
-//     const population = parseFloat(option.regionPopulation);
-//     const index = parseFloat(option.index);
-//     return -(population - index);
-//   },
-//   max: 100,
-//   shown: 100
-// });
-
 class Questions {
+
     static getQuestionsForSearchTerm(term, dataAvailability) {
         return new Promise((resolve, reject) => {
+
+            if ((term == null) || (term.length == 0)) {
+                resolve([]);
+                return;
+            }
+
             Search.searchResultsRegions(term).then(regions => {
                 if (regions.length === 0) {
                     resolve([]);
