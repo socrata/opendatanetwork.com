@@ -119,6 +119,7 @@ app.get('/search/:vector', SearchController.search);
 app.get('/dataset/:domain/:id', DatasetController.show);
 
 // new URL format
+app.get('/entity/:entityIDs', require('./app/controllers/entity-controller'));
 app.get('/entity/:entityIDs/:entityNames/:variableID', require('./app/controllers/entity-controller'));
 
 /*

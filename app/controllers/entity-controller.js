@@ -102,8 +102,8 @@ function getFixedConstraints(request, dataset) {
 }
 
 function getVariable(availableData, fullVariableID) {
-    const idParts = fullVariableID.split('.');
-    if (idParts.length < 1 || idParts.length > 3)
+    const idParts = _.isEmpty(fullVariableID) ? [] : fullVariableID.split('.');
+    if (idParts.length > 3)
         return Promise.reject(invalid(`invalid variable id: '${fullVariableID}'`));
     const [topicID, datasetID, variableID] = idParts;
 
