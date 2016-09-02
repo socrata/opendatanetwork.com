@@ -1,24 +1,23 @@
 'use strict';
 
 const _ = require('lodash');
-const Autosuggest = require('./autosuggest');
+
 const GlobalConstants = require("../../src/constants");
 const ControllerConstants = require('./constants');
 const Data = require('./data');
 const Request = require('./request');
-const Search = require('../models/search');
+const ODNClient = require('../../src/odn-client/odn-client');
 
 class Questions {
 
     static getQuestionsForSearchTerm(term, dataAvailability) {
         return new Promise((resolve, reject) => {
-
-            if ((term == null) || (term.length == 0)) {
+            if (_.isEmpty(term)) {
                 resolve([]);
                 return;
             }
 
-            Search.searchResultsRegions(term).then(regions => {
+            ODNClient.searchEntities(term).then(regions => {
                 if (regions.length === 0) {
                     resolve([]);
                     return;

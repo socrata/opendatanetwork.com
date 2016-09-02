@@ -2,19 +2,14 @@
 <% include _search-bar %>
 
 <script>
-var _params = <%- JSON.stringify(params) %>;
-var _query = <%- JSON.stringify(query) %>;
-var _searchResultsRegions = <%- (typeof searchResultsRegions === 'undefined') ? '[]' : JSON.stringify(searchResultsRegions) %>;
-var _searchURL = "<%- searchDatasetsURL %>";
+
+    // This data will be passed along to the client side scripts.
+    const _data = <%- JSON.stringify({entities}) %>;
+
 </script>
 
 <section class="main-section" role="main">
-    <% if (hasRegions) { %>
-        <% include _region-navigation %>
-        <% include _region-charts %>
-    <% } else { %>
-        <% include _search-results %>
-    <% } %>
+    <% include _search-results %>
 </section>
 
 <% include _google-analytics %>
@@ -22,8 +17,3 @@ var _searchURL = "<%- searchDatasetsURL %>";
 
 </body>
 </html>
-<%
-function regionToUrlSegment(name) {
-    return name.replace(/ /g, '_').replace(/\//g, '_').replace(/,/g, '');
-}
-%>

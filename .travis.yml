@@ -3,13 +3,16 @@ branches:
   - michigan_wip
 language: node_js
 node_js:
-- 5.1.1
+- 6.2.2
 before_install:
 - npm install -g casperjs
 - npm install -g gulp
 script: gulp build test
 services:
 - memcached
+cache:
+  directories:
+  - node_modules
 notifications:
   email:
   - deep.dhillon@socrata.com

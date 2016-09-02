@@ -5,70 +5,19 @@
 
 const _ = require('lodash');
 
-const ODNClient = require('../lib/odn-client');
 const EntityFormatter = require('../lib/entity-formatter');
+const ODNClient = require('../../src/odn-client/odn-client');
 const GlobalConstants = require('../../src/constants');
 const DatasetConfig = require('../../src/dataset-config');
+const Navigate = require('../../src/navigate/entity');
 
 const Exception = require('../lib/exception');
 const notFound = Exception.notFound;
 const invalid = Exception.invalidParam;
 
-// TODO move this to another file
-const querystring = require('querystring');
-
-class Navigate {
-    constructor(entityIDs, variableID, query) {
-        this.entityIDs = entityIDs;
-        this.variableID = variableID;
-        this.query = query || {};
-    }
-
-    to(entity) {
-        return new Navigate([entity.id], this.variableID, this.query);
-    }
-
-    add(entity) {
-        if (_.includes(this.entityIDs, entity.id)) return this;
-        return new Navigate([entity.id].concat(this.entityIDs), this.variableID, this.query);
-    }
-
-    remove(entity) {
-        const entities = this.entityIDs.filter(id => id !== entity.id);
-        return new Navigate(entities, this.variableID, this.query);
-    }
-
-    topic(topicID) {
-        return this.variable(topicID);
-    }
-
-    dataset(datasetID) {
-        return this.variable(datasetID);
-    }
-
-    variable(variableID) {
-        return new Navigate(this.entityIDs, variableID, this.query);
-    }
-
-    constraint(name, value) {
-        return new Navigate(this.entityIDs, this.variableID, _.extend({[name]: value}, this.query));
-    }
-
-    url() {
-        const path = `/entity/${this.entityIDs.join('-')}/${this.variableID}`;
-        const query = querystring.stringify(this.query);
-        return `${path}?${query}`;
-    }
-
-    static fromRequest(request) {
-        const entityIDs = getEntityIDs(request);
-        const variableID = getVariableID(request);
-        const query = _.clone(request.query);
-        return new Navigate(entityIDs, variableID, query);
-    }
-}
-
 module.exports = (request, response) => {
+    const errorHandler = Exception.getHandler(request, response);
+
     // TODO what if no entityIDs
     const entityIDs = getEntityIDs(request);
     const variableID = getVariableID(request);
@@ -84,10 +33,12 @@ module.exports = (request, response) => {
             Promise.all([
                 ODNClient.searchDatasets(entityIDs, dataset.id),
                 ODNClient.searchQuestions(entityIDs, dataset.id),
-                getConstraints(entityIDs, variableID, dataset.constraints, fixed),
+                getConstraintMenus(entityIDs, variable.id, dataset.constraints, fixed),
                 EntityFormatter.entityPageTitle(entities, dataset, variable),
-            ]).then(([datasets, questions, constraints, title]) => {
-                getDescription(entityIDs, variableID, constraints).then(description => {
+            ]).then(([datasets, questions, constraintMenus, title]) => {
+                const constraints = getConstraints(constraintMenus);
+
+                getDescription(entityIDs, variable.id, constraints).then(description => {
                     const templateData = {
                         _,
                         page: 'entity',
@@ -101,10 +52,12 @@ module.exports = (request, response) => {
                         dataset,
                         variable,
                         constraints,
+                        constraintMenus,
                         description,
+                        fixedConstraints: fixed,
                         topics: _.values(availableData),
-                        navigate: Navigate.fromRequest(request),
-                        datasetConfig: DatasetConfig[dataset.id],
+                        navigate: new Navigate(entities, variableID, _.clone(request.query)),
+                        chartConfig: DatasetConfig[dataset.id],
                         css: [
                             '/styles/third-party/leaflet.min.css',
                             '/styles/third-party/leaflet-markercluster.min.css',
@@ -138,22 +91,10 @@ module.exports = (request, response) => {
                             response.send(html);
                         }
                     });
-                }).catch(error => {
-                    console.log(error);
-                    response.json({error});
-                });
-            }).catch(error => {
-                console.log(error);
-                response.json({error});
-            });
-        }).catch(error => {
-            console.log(error);
-            response.json({error});
-        });
-    }).catch(error => {
-        console.log(error);
-        response.json({error});
-    });
+                }).catch(errorHandler);
+            }).catch(errorHandler);
+        }).catch(errorHandler);
+    }).catch(errorHandler);
 };
 
 function getFixedConstraints(request, dataset) {
@@ -161,34 +102,40 @@ function getFixedConstraints(request, dataset) {
 }
 
 function getVariable(availableData, fullVariableID) {
-    const idParts = fullVariableID.split('.');
-    if (idParts.length !== 3)
+    const idParts = _.isEmpty(fullVariableID) ? [] : fullVariableID.split('.');
+    if (idParts.length > 3)
         return Promise.reject(invalid(`invalid variable id: '${fullVariableID}'`));
-
     const [topicID, datasetID, variableID] = idParts;
-    if (!(topicID in availableData))
-        return Promise.reject(notFound(`topic not found: '${topicID}'`));
-    const topic = availableData[topicID];
 
-    if (!(datasetID in topic.datasets))
-        return Promise.reject(notFound(`no '${datasetID}' dataset found in '${topicID}'`));
-    const dataset = topic.datasets[datasetID];
-
-    if (!(variableID in dataset.variables))
-        return Promise.reject(notFound(`no '${variableID}' variable found in '${topicID}.${datasetID}'`));
-    const variable = dataset.variables[variableID];
-
-    return Promise.resolve([topic, dataset, variable]);
+    return getNode(availableData, topicID).then(topic => {
+        return getNode(topic.datasets, datasetID).then(dataset => {
+            return getNode(dataset.variables, variableID).then(variable => {
+                return Promise.resolve([topic, dataset, variable]);
+            });
+        });
+    });
 }
 
-function getConstraints(entityIDs, variableID, constraints, fixed, results) {
-    fixed = fixed || {};
-    results = results || [];
+function getNode(nodes, name) {
+    if (_.isUndefined(name))
+        return Promise.resolve(_.first(_.values(nodes)));
+    if (name in nodes)
+        return Promise.resolve(nodes[name]);
+    return Promise.reject(notFound(`variable not found: ${name}`));
+}
 
+function getConstraintMenus(entityIDs, variableID, constraints, fixed, results) {
+    results = results || [];
+    fixed = fixed || {};
     const constraint = _.first(constraints);
-    return ODNClient.constraints(entityIDs, variableID, constraint, fixed).then(options => {
-        const selected = (constraint in fixed && _.includes(options, fixed[constraint])) ?
-            fixed[constraint] : _.first(options);
+    const parents = results.map(_.property('name')).concat([constraint]);
+    const fixedParents = _.pick(fixed, parents);
+
+    return ODNClient.constraints(entityIDs, variableID, constraint, fixedParents).then(options => {
+        const defaultOption = _.first(options);
+        const selected = constraint in fixed ?
+            _.find(options, option => clean(option) === clean(fixed[constraint])) || defaultOption:
+            defaultOption;
         fixed[constraint] = selected;
 
         results.push({
@@ -199,13 +146,29 @@ function getConstraints(entityIDs, variableID, constraints, fixed, results) {
 
         if (constraints.length === 1)
             return Promise.resolve(results);
-        return getConstraints(entityIDs, variableID, _.tail(constraints), fixed, results);
+        return getConstraintMenus(entityIDs, variableID, _.tail(constraints), fixed, results);
     });
+}
+
+function getConstraints(constraintMenus) {
+    return _(constraintMenus)
+        .map(constraint => [constraint.name, constraint.selected])
+        .object()
+        .value();
+}
+
+function clean(string) {
+    if (_.isEmpty(string)) return '';
+
+    return string
+        .replace(/[\s-\/]/g, '_')
+        .replace(/_+/g, '_')
+        .replace(/\W/g, '');
 }
 
 function getRelated(entityID) {
     const promises = ['parent', 'child', 'sibling', 'peer']
-        .map(relation => ODNClient.related(entityID, relation));
+        .map(relation => ODNClient.related(entityID, relation, GlobalConstants.PEER_REGIONS));
 
     return Promise.all(promises)
         .then(result => Promise.resolve(_.merge.apply(_, result)));
@@ -219,12 +182,7 @@ function getVariableID(request) {
     return request.params.variableID;
 }
 
-function getDescription(entityIDs, variableID, constraintData) {
-    const constraints = _(constraintData)
-        .map(constraint => [constraint.name, constraint.selected])
-        .object()
-        .value();
-
+function getDescription(entityIDs, variableID, constraints) {
     return ODNClient.values(entityIDs, variableID, constraints, true)
         .then(response => Promise.resolve(response.description));
 }

@@ -1,0 +1,48 @@
+<div class="map-container">
+    <p id="map-summary" style="display: <%= description === '' ? 'none' : 'block' %>">
+    <a id="map-info-box-button" class="small-api-link">API</a>
+    <%= description %>
+    </p>
+    <div id="map-info-box" class="api-info-box">
+        <a class="fa fa-close"></a>
+        <section class="api-info-box-section">
+            <strong>
+                <a href="http://docs.odn.apiary.io/#reference/0/map-creation" target="_blank">/data/map/new</a>
+            </strong>
+            <p>
+            Create a new map for
+            <% entities.forEach((region, index) => { %><%= (index > 0) ? ', ' : '' %>
+                <a href="<%= GlobalConstants.ODN_API_BASE_URL %>/data/v1/map/new?variable=<%= variable.id %>&entity_id=<%= region.id %>&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank"><%= region.name %></a><%
+}); %>
+        </p>
+        <dl>
+            <dt>API Docs:</dt>
+            <dd>
+            <a href="http://docs.odn.apiary.io/#reference/0/map-creation/create-a-map" target="_blank">Create a new map</a>
+            </dd>
+        </dl>
+        </section>
+        <section class="api-info-box-section">
+            <strong>
+                <a href="http://docs.odn.apiary.io/#reference/0/map-data" target="_blank">/data/map/values</a>
+            </strong>
+            </p>
+            Get data for a map for
+            <% entities.forEach((region, index) => { %><%= (index > 0) ? ', ' : '' %>
+                <a href="<%= GlobalConstants.ODN_API_BASE_URL %>/data/v1/map/values?session_id=[SESSION_ID_FROM_MAP_NEW_CALL]&zoom_level=2&bounds=47.5998951,-122.33707,47.5942794,-122.3270522&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank"><%= region.name %></a><%
+}); %>
+                </p>
+                <dl>
+                    <dt>API Docs:</dt>
+                    <dd>
+                    <a href="http://docs.odn.apiary.io/#reference/0/map-data/get-map-data" target="_blank">Get data for a map</a>
+                    </dd>
+                </dl>
+        </section>
+    </div>
+    <div id="map-container-desktop">
+        <div id="map-container">
+            <div id="map"></div>
+        </div>
+    </div>
+</div>

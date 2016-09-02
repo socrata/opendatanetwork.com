@@ -6,13 +6,12 @@
  * API documentation available here: http://docs.odn.apiary.io/
  */
 
-const _ = require('lodash');
-
-const Constants = require('../../src/constants');
-const Request = require('./request');
-
-const Exception = require('./exception');
-const notFound = Exception.notFound;
+if (typeof require !== 'undefined') {
+    var _ = require('lodash');
+    var buildURL = require('./build-url');
+    var getJSON = require('./get-json');
+    var GlobalConstants = require('../constants');
+}
 
 class ODNClient {
     /**
@@ -38,7 +37,7 @@ class ODNClient {
         return this.get('entity/v1', {entity_id: entityID}).then(response => {
             const entities = response.entities;
             if (entities.length !== 1)
-                return Promise.reject(notFound(`entity not found with id: '${entityID}'`));
+                return Promise.reject(new Error(`entity not found with id: '${entityID}'`));
            return Promise.resolve(entities[0]);
         });
     }
@@ -48,8 +47,8 @@ class ODNClient {
      *
      * Relation must be one of parent, child, sibling, or peer.
      */
-    related(entityID, relation) {
-        return this.get(`entity/v1/${relation}`, {entity_id: entityID})
+    related(entityID, relation, limit) {
+        return this.get(`entity/v1/${relation}`, {entity_id: entityID, limit})
             .then(response => Promise.resolve({[relation]: response.relatives}));
     }
 
@@ -109,11 +108,19 @@ class ODNClient {
             .then(response => Promise.resolve(response.questions));
     }
 
+    /**
+     * Search for entities with the given name.
+     */
+    searchEntities(name) {
+        return this.get('entity/v1', {entity_name: name})
+            .then(response => Promise.resolve(response.entities));
+    }
+
     get(relativePath, clientParams) {
         const path = `${this.url}/${relativePath}`;
         const params = _.extend({app_token: this.appToken}, clientParams);
-        const url = Request.buildURL(path, params);
-        return Request.getJSON(url);
+        const url = buildURL(path, params);
+        return getJSON(url);
     }
 
     search(path, entityIDs, datasetID, limit, offset) {
@@ -134,5 +141,7 @@ function forEntities(entityIDs) {
     return {entity_id: entityIDs.join(',')};
 }
 
-module.exports = new ODNClient(Constants.ODN_API_BASE_URL, Constants.APP_TOKEN);
+var odn = new ODNClient(GlobalConstants.ODN_API_BASE_URL, GlobalConstants.APP_TOKEN);
+
+if (typeof module !== 'undefined') module.exports = odn;
 

@@ -17,9 +17,12 @@ var net = require('net');
 
 var baseScripts = [
     'src/app.js',
-    'src/api-controller.js',
     'src/constants.js',
-    'src/region-lookup.js'
+    'src/odn-client/build-url.js',
+    'src/odn-client/get-json.js',
+    'src/odn-client/odn-client.js',
+    'src/navigate/entity.js',
+    'src/navigate/search.js'
 ];
 
 var mapScripts = [
@@ -27,30 +30,14 @@ var mapScripts = [
     'src/maps/expand-collapse-control.js',
     'src/maps/legend-control.js',
     'src/maps/tooltip-control.js',
-    'src/maps/navigate.js',
-    'src/maps/description.js',
     'src/maps/view.js'
 ];
 
 var autosuggestScripts = [
-    'src/autosuggest/stopwords.js',
+    'src/autosuggest/autosuggest-sources.js',
     'src/autosuggest/autosuggest-source.js',
-    'src/autosuggest/autosuggest-api-source.js',
     'src/autosuggest/autosuggest-results.js',
     'src/autosuggest/autosuggest.js',
-];
-
-var regionsScripts = [
-    'src/quick-links.js',
-    'src/forecast.js',
-    'src/chart-constants.js',
-    'src/data/data-sources.js',
-    'src/questions.js',
-    'src/questions-mobile.js',
-    'src/refine-controls-mobile.js',
-    'src/search-refine-controls-mobile.js',
-    'src/search-page-controller.js',
-    'src/search.js'
 ];
 
 function js(src, dest) {
@@ -77,21 +64,20 @@ gulp.task('home', js(homeScripts, 'home.min.js'));
 
 var searchScripts = baseScripts
     .concat(autosuggestScripts)
-    .concat(mapScripts)
-    .concat(regionsScripts)
     .concat([
-        'src/api/odn-api.js',
-        'src/dataset-menus.js',
-        'src/dataset-chart.js',
-        'src/dataset-config.js',
-        'src/dataset-constants.js']);
+        'src/quick-links.js',
+        'src/refine-controls-mobile.js',
+        'src/search-refine-controls-mobile.js',
+        'src/search.js',
+        'src/api/odn-api.js']);
 gulp.task('search', js(searchScripts, 'search.min.js'));
 
 var entityScripts = baseScripts
     .concat(autosuggestScripts)
     .concat(mapScripts)
     .concat([
-        'src/entity-page-controller.js',
+        'src/dataset-constants.js',
+        'src/dataset-chart.js',
         'src/entity.js']);
 gulp.task('entity', js(entityScripts, 'entity.min.js'));
 

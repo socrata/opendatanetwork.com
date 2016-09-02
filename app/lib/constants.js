@@ -6,7 +6,6 @@ const GlobalConstants = require("../../src/constants");
  * Constants used in the controller module only. All GlobalConstants are available in ../src/constants
  */
 const ControllerConstants = {
-
     CATALOG_URL: 'http://api.us.socrata.com/api/catalog/v1',
     ROSTER_URL: 'https://odn.data.socrata.com/resource/czuf-rtrf.json',
     SEARCH_RESULTS_REGIONS_URL: 'https://odn.data.socrata.com/resource/czuf-rtrf.json',

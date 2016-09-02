@@ -38,11 +38,6 @@ class Category {
         });
     }
 
-    static currentCategory(params, categories) {
-        if (params.q !== '' || params.categories.length != 1) return null;
-        return _.find(categories, category => category.category === params.categories[0].toLowerCase());
-    }
-
     static domains(n) {
         const defaultResponse = { results: [] };
         return new Promise((resolve, reject) => {

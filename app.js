@@ -14,7 +14,6 @@ const HomeController = require('./app/controllers/home-controller');
 const CategoriesController = require('./app/controllers/categories-controller');
 const DatasetController = require('./app/controllers/dataset-controller');
 const PagesController = require('./app/controllers/pages-controller');
-const SearchController = require('./app/controllers/search-controller');
 
 const ErrorHandler = require('./app/lib/error-handler');
 const UrlUtil = require('./app/lib/url-util');
@@ -112,14 +111,18 @@ app.get('/', HomeController.index);
 app.get('/categories.json', CategoriesController.categories);
 app.get('/join-open-data-network', PagesController.join);
 app.get('/join-open-data-network/complete', PagesController.joinComplete);
-app.get('/search', SearchController.search);
+app.get('/search', require('./app/controllers/new-search-controller'));
+/*
 app.get('/search/search-results', SearchController.searchResults);
 app.get('/search/:vector', SearchController.search);
+*/
 app.get('/dataset/:domain/:id', DatasetController.show);
 
 // new URL format
-app.get('/entity/:entityIDs/:variableID', require('./app/controllers/entity-controller'));
+app.get('/entity/:entityIDs', require('./app/controllers/entity-controller'));
+app.get('/entity/:entityIDs/:entityNames/:variableID', require('./app/controllers/entity-controller'));
 
+/*
 app.get('/region/:regionIds', SearchController.search);
 app.get('/region/:regionIds/:regionNames', SearchController.search);
 app.get('/region/:regionIds/:regionNames/search-results', SearchController.searchResults);
@@ -129,6 +132,7 @@ app.get('/region/:regionIds/:regionNames/:vector/:metric/:year', SearchControlle
 app.get('/region/:regionIds/:regionNames/:vector/:metric/:year/search-results', SearchController.searchResults);
 app.get('/region/:regionIds/:regionNames/:vector/:metric', SearchController.searchWithVector);
 app.get('/region/:regionIds/:regionNames/:vector', SearchController.searchWithVector);
+*/
 
 app.use((error, req, res, next) => {
   ErrorHandler.error(req, res)(error);

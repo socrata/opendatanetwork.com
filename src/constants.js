@@ -23,14 +23,25 @@ const GlobalConstants = {
     PEER_REGIONS_MAX: 10,
 
     REGION_NAMES: {
-        nation: 'Nation',
-        region: 'US Census Region',
-        division: 'US Census Division',
-        state: 'US State',
-        county: 'US County',
-        msa: 'Metropolitan Statistical Area',
-        place: 'City',
-        zip_code: 'ZIP Code'
+        'region.nation': 'Nation',
+        'region.region': 'Region',
+        'region.division': 'Division',
+        'region.state': 'State',
+        'region.county': 'County',
+        'region.msa': 'Metro Area',
+        'region.place': 'Place',
+        'region.zip_code': 'ZIP Code'
+    },
+
+    PLURAL_REGION_NAMES: {
+        'region.nation': 'Nations',
+        'region.region': 'Regions',
+        'region.division': 'Divisions',
+        'region.state': 'States',
+        'region.county': 'Counties',
+        'region.msa': 'Metro Areas',
+        'region.place': 'Places',
+        'region.zip_code': 'ZIP Codes'
     },
 
     ROSTER_URL: 'https://federal.demo.socrata.com/resource/bdeb-mf9k.json',

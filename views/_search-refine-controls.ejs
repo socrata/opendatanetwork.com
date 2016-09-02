@@ -1,47 +1,45 @@
 <section class="refine-bar search-header-bar">
-
     <a id="catalog-info-box-button" class="small-api-link">API</a>
 
-    <a class="refine-link">
+    <div class="refine-link">
         <span>Categories<i class="fa fa-caret-down"></i></span>
         <ul id="refine-menu-categories" style="display:none">
-          <% refineBy.categories.forEach(category => { %>
-            <li><i class="fa <%= category.metadata.icon %>"></i><%= category.category %></li>
-          <% }); %>
-            <li id="refine-menu-categories-view-more" class="refine-view-more">More</li>
+            <% refineBy.categories.forEach(category => { %>
+                <li>
+                    <a href="<%- searchNavigate.addCategory(category.category).url() %>">
+                        <i class="fa <%= category.metadata.icon %>"></i>
+                        <%= category.category %>
+                    </a>
+                </li>
+            <% }); %>
         </ul>
-    </a>
+    </div>
 
-    <a class="refine-link">
+    <div class="refine-link">
         <span>Publishers<i class="fa fa-caret-down"></i></span>
         <ul id="refine-menu-domains" style="display:none">
-          <% refineBy.domains.forEach(domain => { %>
-            <li><%= domain.domain %></li>
-          <% }); %>
-            <li id="refine-menu-domains-view-more" class="refine-view-more">More</li>
+            <% refineBy.domains.forEach(domain => { %>
+                <li>
+                    <a href="<%- searchNavigate.addDomain(domain.domain).url() %>">
+                        <%= domain.domain %>
+                    </a>
+                </li>
+            <% }); %>
         </ul>
-    </a>
+    </div>
 
     <label class="refine-by-label">Refine by:</label>
     <i class="fa fa-bar-chart search-results-header-icon"></i>
     <label class="search-results-header-label">
-    <% if (params.q.length > 0) { %>
-          <% if (searchResults.results.length > 0) { %>
-            Found <%= searchResults.resultSetSizeString %> datasets for "<%= params.q %>"
-          <% } else { %>
-            No datasets for "<%= params.q %>"
-          <% } %>
-    <% } else { %>
-        <% if (searchResults.results.length > 0) { %>
-          <% if (params.regions.length > 0) { %>
-            Found <%= searchResults.resultSetSizeString %> datasets for <%= dataset.name %>
-          <% } else { %>
-            Found <%= searchResults.resultSetSizeString %> results
-          <% } %>
+        <% if (query.length > 0) { %>
+            <% if (datasets.length > 0) { %>
+                Datasets for "<%= query %>"
+            <% } else { %>
+                No datasets for "<%= query %>"
+            <% } %>
         <% } else { %>
-            Found 0 results
+            Datasets
         <% } %>
-    <% } %>
     </label>
 
     <% include _search-tokens %>
@@ -53,18 +51,18 @@
         <a href="http://docs.cetera.apiary.io/#reference/0/full-text-search" target="_blank">/catalog/v1</a>
     </strong>
     <dl>
-      <% if (params.q.length > 0) { %>
-        <dt>Example:</dt>
-        <dd><a href="http://api.us.socrata.com/api/catalog/v1?q=<%= params.q %>" target="_blank">Search for <%= params.q %></a></dd>
-      <% } %>
+        <% if (query.length > 0) { %>
+            <dt>Example:</dt>
+            <dd><a href="http://api.us.socrata.com/api/catalog/v1?q=<%= query %>" target="_blank">Search for <%= query %></a></dd>
+        <% } %>
         <dt>API Docs:</dt>
         <dd>
-          <a href="http://docs.cetera.apiary.io/#reference/0/full-text-search" target="_blank">Full text search</a>
-        <% if (params.domains.length > 0) { %>
-          or <a href="http://docs.cetera.apiary.io/#reference/0/searching-particular-domains" target="_blank">Search particular domains</a>
+        <a href="http://docs.cetera.apiary.io/#reference/0/full-text-search" target="_blank">Full text search</a>
+        <% if (domains.length > 0) { %>
+            or <a href="http://docs.cetera.apiary.io/#reference/0/searching-particular-domains" target="_blank">Search particular domains</a>
         <% } %>
-        <% if (params.categories.length > 0) { %>
-          or <a href="http://docs.cetera.apiary.io/#reference/0/searching-particular-categories" target="_blank">Search particular categories</a>
+        <% if (categories.length > 0) { %>
+            or <a href="http://docs.cetera.apiary.io/#reference/0/searching-particular-categories" target="_blank">Search particular categories</a>
         <% } %>
         </dd>
     </dl>

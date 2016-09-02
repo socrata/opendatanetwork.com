@@ -1,9 +1,7 @@
 'use strict';
 
 class AutosuggestSource {
-
     constructor(config) {
-
         this.config = config;
     }
 
@@ -11,30 +9,20 @@ class AutosuggestSource {
      * Searches for the given term using the autosuggest API.
      */
     get(term) {
-        return new Promise((resolve, reject) => {
+        if (this.config.options)
+            return Promise.resolve(this.config.options);
 
-            if (term === '') {
+        if (term === '') {
+            return Promise.resolve([]);
+        } else {
+            const path = GlobalConstants.AUTOCOMPLETE_URL(this.config.suggestType);
 
-                resolve([]);
-            } 
-            else {
-
-                term = Stopwords.strip(term);
-
-                const path = GlobalConstants.AUTOCOMPLETE_URL(this.config.suggestType);
-
-                AutosuggestSource.request(
-                    path, 
-                    { 
-                        limit: 5, 
-                        query: term,
-                        app_token: GlobalConstants.APP_TOKEN
-                    }).then(response => {
-
-                    resolve(response.options);
-                }, reject);
-            }
-        });
+            return AutosuggestSource.request(path, {
+                limit: GlobalConstants.AUTOCOMPLETE_SHOWN_OPTIONS,
+                query: term,
+                app_token: GlobalConstants.APP_TOKEN
+            }).then(response => Promise.resolve(response.options));
+        }
     }
 
     display(container, options) {
@@ -47,8 +35,10 @@ class AutosuggestSource {
             .append('li')
             .attr('class', 'autocomplete-category');
 
-        if (this.config.image) {
+        if (this.config.onCategorySelection)
+            this.config.onCategorySelection(category);
 
+        if (this.config.image) {
             const name = category
                 .append('label')
                 .attr('class', 'autocomplete-title')
@@ -75,9 +65,15 @@ class AutosuggestSource {
             .append('li')
             .attr('class', 'autocomplete-option')
             .each(function(option) {
-                d3.select(this).append('span').text(option.name || option.text);
+                d3.select(this)
+                    .append('a')
+                    .attr('class', 'autocomplete-link')
+                    .attr('href', self.config.select(option))
+                    .text(option.name || option.text);
             })
-            .on('click', option => this.config.select(option))
+            .on('click', option => {
+                window.location.href = this.config.select(option);
+            })
             .on('mouseover.source', function() {
                 d3.select(this).classed('selected hovered', true);
             })

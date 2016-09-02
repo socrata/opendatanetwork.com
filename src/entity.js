@@ -1,6 +1,16 @@
-'use strict';
+
 
 $(document).ready(function() {
+    menuMouseHandlers();
+    autosuggest();
+    drawMap();
+    drawCharts();
+
+    window.entityNavigate =
+        new EntityNavigate(_data.entities, _data.variable.id, _data.constraints);
+});
+
+function autosuggest() {
     // Main search bar autosuggest
     new Autosuggest('.region-list')
         .listen('.search-bar-input');
@@ -13,9 +23,28 @@ $(document).ready(function() {
     // Mobile autosuggest
     new Autosuggest('.add-region-results-mobile')
         .listen('.add-region-input-mobile');
+}
 
-    drawMap();
+function drawMap() {
+    MapView.create(_data.entities, _data.variable, _data.constraints, {})
+        .then(map => map.show('div#map'))
+        .catch(error => {
+            throw error;
+        });
+}
 
+function drawCharts() {
+    _data.chartConfig.charts.forEach(config => {
+        const chart = new DatasetChart(config);
+        chart.getData().then(data => chart.render(data)).catch(error => {
+            throw error;
+        });
+    });
+
+    const container = d3.select('#google-charts-container');
+}
+
+function menuMouseHandlers() {
     d3.select('ul.chart-sub-nav')
         .selectAll('li')
         .on('mouseenter', function() {
@@ -31,20 +60,6 @@ $(document).ready(function() {
                 $(this).children('span').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
                 $(this).children('ul').hide();
             }
-        });
-});
-
-function drawMap() {
-    const constraints = _(_data.constraints)
-        .map(constraint => [constraint.name, constraint.selected])
-        .object()
-        .value();
-
-    MapView.create(_data.entities, _data.variable, constraints, {})
-        .then(map => map.show('div#map'))
-        .catch(error => {
-            console.error('error rendering map');
-            console.error(error);
         });
 }
 

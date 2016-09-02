@@ -1,0 +1,45 @@
+<div id="google-charts-container">
+    <% if (chartConfig) { %>
+        <% chartConfig.charts.forEach(chart => { %>
+            <div id="<%= chart.id %>" class="chart">
+                <h1>
+                    <%= chart.name %>
+                    <a id="<%= chart.id %>-info-box-button" class="small-api-link">API</a>
+                </h1>
+                <div id="<%= chart.id %>-info-box" class="api-info-box">
+                    <a class="fa fa-close"></a>
+                    <strong>
+                        <a href="http://docs.odn.apiary.io/#reference/0/data-values/get-values-for-variables" target="_blank">/data/values</a> Endpoint
+                    </strong>
+                    <dl>
+                        <dt>Example:</dt>
+                        <% chart.variables.forEach((variable, index) => { %>
+                            <dd>
+                            <%= variable.variableId %>
+                            for
+                            <% entities.forEach((region, index) => { %><%= (index > 0) ? ', ' : '' %>
+                                <a href="<%= GlobalConstants.ODN_API_BASE_URL %>/data/v1/values?variable=<%= variable.variableId %>&entity_id=<%= region.id %>&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank"><%= region.name %></a>
+                            <% }); %>
+                            </dd>
+                        <% }); %>
+                        <dt>API Docs:</dt>
+                        <dd><a href="http://docs.odn.apiary.io/#reference/0/data-values/get-values-for-variables" target="_blank">Get values for variables</a></dd>
+                    </dl>
+                </div>
+                <div id="chart-<%= chart.id %>" class="chart-container"></div>
+                <% if (chart.description || chart.forecast) { %>
+                    <div id="dataset-description-<%= chart.id %>" class="dataset-description">
+                        <% if (chart.description) { %>
+                            <div class="chart-descriptions">
+                                <p><%- chart.description %></p>
+                            </div>
+                        <% } %>
+                        <% if (chart.forecast) { %>
+                            <div class="forecast-descriptions"></div>
+                        <% } %>
+                    </div>
+                <% } %>
+            </div>
+        <% }); %>
+    <% } %>
+</div>
