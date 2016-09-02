@@ -9,7 +9,6 @@ class AutosuggestSource {
      * Searches for the given term using the autosuggest API.
      */
     get(term) {
-        console.log(this.config);
         if (this.config.options)
             return Promise.resolve(this.config.options);
 
