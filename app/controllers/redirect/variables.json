@@ -42,6 +42,11 @@
             "percent_earning_$65000_to_$74999": "percent_with_earnings_65000_to_74999",
             "percent_earning_$75000_to_$99999": "percent_with_earnings_75000_to_99999",
             "percent_earning_over_$100000": "percent_with_earnings_over_100000"
+        },
+
+        "job_proximity": {
+            "median_jobs_proximity_index": "jobs-prox-idx-median",
+            "mean_jobs_proximity_index": "jobs-prox-idx-mean"
         }
     },
 
