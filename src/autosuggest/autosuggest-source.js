@@ -71,6 +71,9 @@ class AutosuggestSource {
                     .attr('href', self.config.select(option))
                     .text(option.name || option.text);
             })
+            .on('click', option => {
+                window.location.href = this.config.select(option);
+            })
             .on('mouseover.source', function() {
                 d3.select(this).classed('selected hovered', true);
             })

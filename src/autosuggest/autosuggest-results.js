@@ -49,7 +49,6 @@ class AutosuggestResults {
     }
 
     show(sources, allOptions) {
-
         this.empty();
 
         var allOptionsCount = 0;
