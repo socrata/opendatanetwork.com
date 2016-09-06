@@ -6,6 +6,7 @@ $(document).ready(function() {
     drawMap();
     drawCharts();
     apiBadges();
+    showMoreQuestions();
 
     window.entityNavigate =
         new EntityNavigate(_data.entities, _data.variable.id, _data.constraints);
@@ -146,5 +147,20 @@ function peerBadge(entityID) {
     const selection = d3.select('div#peers');
     popup.insertAt(selection, ':nth-child(2)');
     badge.insertAt(selection.select('h2'));
+}
+
+function showMoreQuestions() {
+    let more = true;
+
+    const collapsible = d3.selectAll('li.question.collapsible');
+
+    const link = d3.select('a#questions');
+
+    link.on('click', () => {
+        more = !more;
+        collapsible.classed('collapsed', more);
+
+        link.text(`show ${more ? 'more' : 'less'}`);
+    });
 }
 
