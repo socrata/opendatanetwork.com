@@ -144,6 +144,16 @@ class ODNClient {
         return this.url('entity/v1', {entity_name: name});
     }
 
+    newMap(entityIDs, variableID, constraints) {
+        return getJSON(this.newMapURL.apply(this, arguments));
+    }
+
+    newMapURL(entityIDs, variableID, constraints) {
+        return this.url('data/v1/map/new', _.assign({
+            variable: variableID,
+        }, forEntities(entityIDs), constraints));
+    }
+
     url(relativePath, clientParams) {
         const path = `${this.baseURL}/${relativePath}`;
         const params = _.extend({app_token: this.appToken}, clientParams);

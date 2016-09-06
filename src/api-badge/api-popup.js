@@ -10,8 +10,17 @@ class APIPopup {
     }
 
     appendTo(selection) {
-        this.container = selection
-            .append('div')
+        this.container = selection.append('div');
+        this.render();
+    }
+
+    insertAt(selection, before) {
+        this.container = selection.insert('div', before);
+        this.render();
+    }
+
+    render() {
+        this.container
             .attr('class', 'api-info-box');
 
         this.container

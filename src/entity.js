@@ -68,9 +68,11 @@ function apiBadges() {
     const entityIDs = _data.entities.map(_.property('id'));
     const variableID = _data.variable.id;
     const constraint = _.first(_data.dataset.constraints);
+    const constraints = _data.fixedConstraints;
 
     availableDataBadge(entityIDs);
     constraintBadge(entityIDs, variableID, constraint);
+    newMapBadge(entityIDs, variableID, constraints);
 }
 
 function availableDataBadge(entityIDs) {
@@ -93,5 +95,16 @@ function constraintBadge(entityIDs, variableID, constraint) {
     const selection = d3.select('div.chart-sub-nav-container');
     popup.appendTo(selection);
     badge.insertAt(selection);
+}
+
+function newMapBadge(entityIDs, variableID, constraints) {
+    const url = odn.newMapURL(entityIDs, variableID, constraints);
+    const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/map-creation';
+    const popup = new APIPopup('Create a new map', '/data/map/new', url, apiaryURL);
+    const badge = new APIBadge(popup);
+
+    const selection = d3.select('div.map-container');
+    popup.insertAt(selection, ':nth-last-child(1)');
+    badge.insertAt(d3.select('p#map-summary'));
 }
 

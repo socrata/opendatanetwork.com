@@ -227,11 +227,8 @@ function get(path, params) {
 }
 
 function newSession(entities, variable, constraints) {
-    return get(MapConstants.MAP_NEW_URL, _.assign({
-        variable: variable.id,
-        entity_id: entities.map(_.property('id')).join(','),
-        app_token: GlobalConstants.APP_TOKEN
-    }, constraints));
+    const entityIDs = entities.map(_.property('id'));
+    return odn.newMap(entityIDs, variable.id, constraints);
 }
 
 function bound(max) {
