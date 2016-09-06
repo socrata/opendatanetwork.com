@@ -1,6 +1,6 @@
 
 <div class="controls-column">
-    <div class="controls">
+    <div class="controls" role="navigation">
         <% if (session_inbound_url) { %>
             <p class="redirect-to-inbound-url" title="<%= session_inbound_url_description %>">
                 <a class="btn return-btn" href="<%= session_inbound_url%>"><em class="fa fa-reply" aria-hidden="true"></em> <%= session_inbound_url_description %></a>
