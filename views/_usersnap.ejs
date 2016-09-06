@@ -1,10 +1,17 @@
 <script type="text/javascript">
-(function() {
-var s = document.createElement("script");
-s.type = "text/javascript";
-s.async = true;
-s.src = '//api.usersnap.com/load/62eb5973-90ec-4b0c-b925-21f5dbea5355.js';
-var x = document.getElementsByTagName('script')[0];
-x.parentNode.insertBefore(s, x);
-})();
+  (function() {
+    var s = document.createElement("script");
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = '//api.usersnap.com/load/62eb5973-90ec-4b0c-b925-21f5dbea5355.js';
+    var x = document.getElementsByTagName('script')[0];
+    x.parentNode.insertBefore(s, x);
+  })();
+
+  var _usersnapconfig = {
+     loadHandler: function() {
+        $("#us_report_button").attr('role', 'button');
+     }
+  };
+
 </script>
