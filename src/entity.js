@@ -65,15 +65,32 @@ function menuMouseHandlers() {
 }
 
 function apiBadges() {
-    availableDataBadge();
+    const entityIDs = _data.entities.map(_.property('id'));
+    const variableID = _data.variable.id;
+    const constraint = _.first(_data.dataset.constraints);
+
+    availableDataBadge(entityIDs);
+    constraintBadge(entityIDs, variableID, constraint);
 }
 
-function availableDataBadge() {
-    const url = odn.availableDataURL(_data.entities.map(_.property('id')));
-    const popup = new APIPopup('Available data', url, 'http://docs.odn.apiary.io/#reference/0/data-availability/find-all-available-data-for-some-entities');
+function availableDataBadge(entityIDs) {
+    const url = odn.availableDataURL(entityIDs);
+    const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/data-availability/find-all-available-data-for-some-entities';
+    const popup = new APIPopup('Available data', '/data/availability', url, apiaryURL);
     const badge = new APIBadge(popup);
 
     const selection = d3.select('div.chart-tabs-container');
+    popup.appendTo(selection);
+    badge.insertAt(selection);
+}
+
+function constraintBadge(entityIDs, variableID, constraint) {
+    const url = odn.constraintsURL(entityIDs, variableID, constraint);
+    const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/data-constraints/get-constraint-permutations-for-entities';
+    const popup = new APIPopup('Constraint permutations', '/data/constraint', url, apiaryURL);
+    const badge = new APIBadge(popup);
+
+    const selection = d3.select('div.chart-sub-nav-container');
     popup.appendTo(selection);
     badge.insertAt(selection);
 }

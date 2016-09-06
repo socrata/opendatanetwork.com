@@ -1,9 +1,9 @@
 
 class APIPopup {
-    constructor(description, backendURL, apiaryURL) {
+    constructor(description, endpoint, backendURL, apiaryURL) {
         this.description = description;
+        this.endpoint = endpoint;
         this.backendURL = backendURL;
-        this.endpoint = getEndpoint(backendURL);
         this.apiaryURL = apiaryURL;
         this.entities = _data.entities;
         this.entityNames = this.entities.map(_.property('name'));
@@ -64,9 +64,5 @@ class APIPopup {
         if (this.shown) this.close();
         else this.open();
     }
-}
-
-function getEndpoint(url) {
-    return '/' + url.split('/').slice(3).join('/').split('?')[0];
 }
 

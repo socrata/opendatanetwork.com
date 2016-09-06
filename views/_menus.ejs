@@ -3,28 +3,10 @@
         <% include _topic-menu %>
     </div>
     <div class="chart-sub-nav-container">
-        <a id="data-constraint-info-box-button" class="small-api-link">API</a>
         <ul class="chart-sub-nav">
             <% include _dataset-menu %>
             <% include _variable-menu %>
             <% include _constraint-menu %>
         </ul>
-        <div id="data-constraint-info-box" class="api-info-box">
-            <a class="fa fa-close"></a>
-            <strong>
-                <a href="http://docs.odn.apiary.io/#reference/0/data-constraints/get-constraint-permutations-for-entities" target="_blank">/data/v1/constraint</a>
-            </strong>
-            <p>
-                Constraint information for year permutations for
-                <%= entities.map(region => region.name).join(', ') %> is available
-                <a href="<%= GlobalConstants.ODN_API_BASE_URL %>/data/v1/constraint/demographics.population.count?entity_id=<%= entities.map(region => region.id).join(',') %>&constraint=year&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank">
-                    HERE
-                </a>.
-            </p>
-            <dl>
-                <dt>API Docs:</dt>
-                <dd><a href="http://docs.odn.apiary.io/#reference/0/data-constraints/get-constraint-permutations-for-entities" target="_blank">Get constraint permutations for entities</a></dd>
-            </dl>
-        </div>
     </div>
 </div>
