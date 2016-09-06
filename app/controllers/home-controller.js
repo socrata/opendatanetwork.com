@@ -11,7 +11,7 @@ const Place = require('../models/place');
 const HomeHelper = require('../lib/home-helper');
 const ParamsHelper = require('../lib/params-helper');
 const ErrorHandler = require('../lib/error-handler');
-const Questions = require('../lib/questions');
+const ODNClient = require('../../src/odn-client/odn-client');
 
 const GlobalConstants = require('../../src/constants');
 
@@ -34,7 +34,9 @@ class HomeController {
                 const params = data[2];
 
                 const randomRegions = HomeHelper.getRandomMostPopulousRegionsFromEachState(locations, 100);
-                const questionsPromises = _.map(randomRegions, region => Questions.getQuestionsForRegions([region]));
+                const questionsPromises = _.map(randomRegions, region => {
+                    return ODNClient.searchQuestions([region.id], null, 15);
+                });
 
                 Promise.all(questionsPromises).then(questionsData => {
                     const randomQuestions = HomeHelper.getRandomQuestions(questionsData);

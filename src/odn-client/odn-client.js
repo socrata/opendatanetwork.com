@@ -11,6 +11,7 @@ if (typeof require !== 'undefined') {
     var buildURL = require('./build-url');
     var getJSON = require('./get-json');
     var GlobalConstants = require('../constants');
+    var EntityNavigate = require('../navigate/entity');
 }
 
 class ODNClient {
@@ -124,8 +125,9 @@ class ODNClient {
      * Search for questions relating to the given entities and dataset.
      */
     searchQuestions(entityIDs, datasetID, limit, offset) {
-        return getJSON(this.searchQuestionsURL.apply(this, arguments))
-            .then(response => Promise.resolve(response.questions));
+        return getJSON(this.searchQuestionsURL.apply(this, arguments)).then(response => {
+            return Promise.resolve(response.questions.map(questionURL));
+        });
     }
 
     searchQuestionsURL(entityIDs, datasetID, limit, offset) {
@@ -154,6 +156,27 @@ class ODNClient {
         }, forEntities(entityIDs), constraints));
     }
 
+    suggest(type, query, limit) {
+        if (query === '') return Promise.resolve([]);
+
+        return getJSON(this.suggestURL.apply(this, arguments)).then(response => {
+            const options = response.options;
+
+            if (type === 'question')
+                return Promise.resolve(options.map(questionURL));
+            return Promise.resolve(options);
+        });
+    }
+
+    suggestURL(type, query, limit) {
+        limit = limit || 10;
+
+        return this.url(`suggest/v1/${type}`, {
+            query,
+            limit
+        });
+    }
+
     url(relativePath, clientParams) {
         const path = `${this.baseURL}/${relativePath}`;
         const params = _.extend({app_token: this.appToken}, clientParams);
@@ -176,6 +199,18 @@ class ODNClient {
 
 function forEntities(entityIDs) {
     return {entity_id: entityIDs.join(',')};
+}
+
+/**
+ * Question variables are old variables so we must use to /region
+ * which will map the questions to new variables and redirect to /entity.
+ */
+function questionURL(question) {
+    const [topic, dataset, variable] = question.variable_id.split('.');
+    const entityURL = new EntityNavigate([question.entity]).url()
+    const baseRegionURL = entityURL.replace(/entity/, 'region').replace(/\?/, '');
+    question.url = `${baseRegionURL}/${dataset}/${variable}`;
+    return question;
 }
 
 var odn = new ODNClient(GlobalConstants.ODN_API_BASE_URL, GlobalConstants.APP_TOKEN);

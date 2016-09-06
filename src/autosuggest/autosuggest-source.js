@@ -12,17 +12,7 @@ class AutosuggestSource {
         if (this.config.options)
             return Promise.resolve(this.config.options);
 
-        if (term === '') {
-            return Promise.resolve([]);
-        } else {
-            const path = GlobalConstants.AUTOCOMPLETE_URL(this.config.suggestType);
-
-            return AutosuggestSource.request(path, {
-                limit: GlobalConstants.AUTOCOMPLETE_SHOWN_OPTIONS,
-                query: term,
-                app_token: GlobalConstants.APP_TOKEN
-            }).then(response => Promise.resolve(response.options));
-        }
+        return odn.suggest(this.config.suggestType, term, GlobalConstants.AUTOCOMPLETE_SHOWN_OPTIONS);
     }
 
     display(container, options) {
