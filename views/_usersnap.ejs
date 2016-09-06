@@ -10,7 +10,9 @@
 
   var _usersnapconfig = {
      loadHandler: function() {
-        $("#us_report_button").attr('role', 'button');
+        var $us_report_button = $("#us_report_button").detach();
+        $us_report_button.attr('role', 'button');
+        $('.footer').append($us_report_button);
      }
   };
 
