@@ -112,6 +112,6 @@ function apiBadges() {
     const badge = new APIBadge(popup);
 
     popup.appendTo(d3.select('#catalog-info-box'));
-    badge.insertAt(d3.select('.search-header-bar'));
+    badge.insertAt(d3.select('.refine-bar.search-header-bar'));
 }
 

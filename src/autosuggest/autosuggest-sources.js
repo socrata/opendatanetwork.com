@@ -29,7 +29,12 @@ const AUTOSUGGEST_SOURCES = [
         suggestType: 'question',
         image: 'fa-question-circle',
         name: 'Questions',
-        select: option => new EntityNavigate([option.entity], option.variable_id).url()
+        select: option => {
+            const [topic, dataset, variable] = option.variable_id.split('.');
+            const entityURL = new EntityNavigate([option.entity]).url()
+            const baseRegionURL = entityURL.replace(/entity/, 'region').replace(/\?/, '');
+            return `${baseRegionURL}/${dataset}/${variable}`;
+        }
     },
     {
         options: [
