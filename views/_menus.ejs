@@ -1,22 +1,6 @@
 <div class="refine-controls">
     <div class="chart-tabs-container">
-        <a id="data-availability-info-box-button" class="small-api-link">API</a>
         <% include _topic-menu %>
-        <div id="data-availability-info-box" class="api-info-box">
-            <a class="fa fa-close"></a>
-            <strong>
-                <a href="http://docs.odn.apiary.io/#reference/0/data-availability/find-all-available-data-for-some-entities" target="_blank">/data/v1/availability</a>
-            </strong>
-            <p>
-            Header information including available variables with pointers to populate charts for
-            <%= entities.map(region => region.name).join(', ') %> is available
-            <a href="<%= GlobalConstants.ODN_API_BASE_URL %>/data/v1/availability/?entity_id=<%= entities.map(region => region.id).join(',') %>&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank">HERE</a>.
-            </p>
-            <dl>
-                <dt>API Docs:</dt>
-                <dd><a href="http://docs.odn.apiary.io/#reference/0/data-availability/find-all-available-data-for-some-entities" target="_blank">Find all available data for some entities</a></dd>
-            </dl>
-        </div>
     </div>
     <div class="chart-sub-nav-container">
         <a id="data-constraint-info-box-button" class="small-api-link">API</a>

@@ -22,7 +22,9 @@ var baseScripts = [
     'src/odn-client/get-json.js',
     'src/odn-client/odn-client.js',
     'src/navigate/entity.js',
-    'src/navigate/search.js'
+    'src/navigate/search.js',
+    'src/api-badge/api-badge.js',
+    'src/api-badge/api-popup.js'
 ];
 
 var mapScripts = [

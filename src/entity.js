@@ -5,6 +5,7 @@ $(document).ready(function() {
     autosuggest();
     drawMap();
     drawCharts();
+    apiBadges();
 
     window.entityNavigate =
         new EntityNavigate(_data.entities, _data.variable.id, _data.constraints);
@@ -61,5 +62,19 @@ function menuMouseHandlers() {
                 $(this).children('ul').hide();
             }
         });
+}
+
+function apiBadges() {
+    availableDataBadge();
+}
+
+function availableDataBadge() {
+    const url = odn.availableDataURL(_data.entities.map(_.property('id')));
+    const popup = new APIPopup('Available data', url, 'http://docs.odn.apiary.io/#reference/0/data-availability/find-all-available-data-for-some-entities');
+    const badge = new APIBadge(popup);
+
+    const selection = d3.select('div.chart-tabs-container');
+    popup.appendTo(selection);
+    badge.insertAt(selection);
 }
 

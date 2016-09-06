@@ -59,7 +59,6 @@ function renderEntities(entities) {
     container.html('');
 
     const columns = getColumnCount(entities.length);
-    console.log(columns);
     _.chunk(entities, columns).forEach(dataRow => {
         const row = container
             .append('div')
