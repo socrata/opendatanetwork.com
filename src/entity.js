@@ -37,6 +37,9 @@ function drawMap() {
 function drawCharts() {
     _data.chartConfig.charts.forEach(config => {
         const chart = new DatasetChart(config);
+
+        chartBadge(chart);
+
         chart.getData().then(data => chart.render(data)).catch(error => {
             throw error;
         });
@@ -106,5 +109,16 @@ function newMapBadge(entityIDs, variableID, constraints) {
     const selection = d3.select('div.map-container');
     popup.insertAt(selection, ':nth-last-child(1)');
     badge.insertAt(d3.select('p#map-summary'));
+}
+
+function chartBadge(chart) {
+    const url = chart.getDataURL();
+    const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/data-values/get-values-for-variables';
+    const popup = new APIPopup('Get chart data', '/data/values', url, apiaryURL);
+    const badge = new APIBadge(popup);
+
+    const selection = d3.select(`div#${chart.config.id}`);
+    popup.insertAt(selection, ':nth-child(2)');
+    badge.appendTo(selection.select('h1'));
 }
 

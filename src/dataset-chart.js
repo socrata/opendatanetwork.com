@@ -6,6 +6,10 @@ class DatasetChart {
     }
 
     getData() {
+        return getJSON(this.getDataURL());
+    }
+
+    getDataURL() {
         const entityIDs = _data.entities.map(_.property('id'));
         const variableID = this.config.variables.join(',');
         const constraints = this.config.constraint;
@@ -13,7 +17,7 @@ class DatasetChart {
         const forecast = this.config.forecast;
         const format = 'google';
 
-        return odn.values(entityIDs, variableID, constraints, describe, forecast, format);
+        return odn.valuesURL(entityIDs, variableID, constraints, describe, forecast, format);
     }
 
     render(data) {

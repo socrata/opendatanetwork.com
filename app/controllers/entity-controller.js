@@ -38,6 +38,7 @@ module.exports = (request, response) => {
             ]).then(([datasets, questions, constraintMenus, title]) => {
                 const constraints = getConstraints(constraintMenus);
 
+
                 getDescription(entityIDs, variable.id, constraints).then(description => {
                     const templateData = {
                         _,
@@ -57,7 +58,7 @@ module.exports = (request, response) => {
                         fixedConstraints: fixed,
                         topics: _.values(availableData),
                         navigate: new Navigate(entities, variableID, _.clone(request.query)),
-                        chartConfig: DatasetConfig[dataset.id],
+                        chartConfig: getChartConfig(dataset),
                         css: [
                             '/styles/third-party/leaflet.min.css',
                             '/styles/third-party/leaflet-markercluster.min.css',
@@ -96,6 +97,26 @@ module.exports = (request, response) => {
         }).catch(errorHandler);
     }).catch(errorHandler);
 };
+
+function getChartConfig(dataset) {
+    if (!(dataset.id in DatasetConfig)) return null;
+
+    const config = DatasetConfig[dataset.id];
+    /*
+    config = charts = config.charts.map(chart => {
+        _.assign(chart, {
+            id,
+
+        }
+
+    });
+    */
+    config.charts.forEach(chart => {
+        chart.id = chart.id.replace(/[\._]/g, '-');
+    });
+
+    return config;
+}
 
 function getFixedConstraints(request, dataset) {
     return _.pick(request.query, dataset.constraints);
