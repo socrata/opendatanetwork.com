@@ -263,6 +263,9 @@ class SearchPageController {
                     });
 
             }, error => console.error(error));
+
+            // ARIA required for ADA
+            $('#map .leaflet-tile').attr('role', 'presentation');
         }
 
         // Map summary links
