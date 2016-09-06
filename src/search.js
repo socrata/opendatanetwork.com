@@ -20,7 +20,7 @@ function onResize() {
 }
 
 function autosuggest() {
-    new Autosuggest('.entity-list').listen('.search-bar-input');
+    new Autosuggest('.region-list').listen('.search-bar-input');
 }
 
 function tooltip() {
