@@ -71,12 +71,9 @@ $darker-gray-border-color: #5e5e5e
                         padding: 0 0 0 60px
                         text-transform: capitalize
 
-                        div
-                            position: relative
-
                         .fa
                             height: 50px
-                            left: 0;
+                            left: 60px;
                             line-height: 50px
                             position: absolute
 
@@ -84,8 +81,8 @@ $darker-gray-border-color: #5e5e5e
             >ul
                 >li
                     a
-                        div
-                            padding: 0 0 0 30px
+                        position: relative
+                        padding: 0 0 0 90px
 
 
 // Desktop
@@ -154,18 +151,14 @@ $darker-gray-border-color: #5e5e5e
     margin: 0
     padding: 0
 
-.quick-links-menu div
+.quick-links-menu > .quick-links-sub-menu:last-child > li
+    border-right: none
+
+.quick-links-sub-menu
     border-right: 1px solid $darker-gray-border-color
     display: table-cell
     margin: 0
     padding: 0 0 10px
-
-.quick-links-menu > div:last-child .quick-links-sub-menu > li
-    border-right: none
-
-.quick-links-sub-menu
-    margin: 0
-    padding: 0
 
 .quick-links-sub-menu li
     font-size: 14px

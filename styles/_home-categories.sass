@@ -12,7 +12,8 @@ $category-item-width: 245px
     @media (min-width: $mobile-width)
         display: none
 
-    h4
+    .section-heading
+        display: block
         color: $black-text-color
         font-size: 20px
         font-weight: 700
@@ -47,29 +48,26 @@ $category-item-width: 245px
             margin: 0
             padding: 0
 
-            h3
+            a
+                display: block
+                color: $blue-text-color
+                display: block
+                font-size: 20px
+                font-weight: 600
+                height: 50px
+                line-height: 50px
                 margin: 0
-                padding: 0
+                overflow: hidden
+                padding: 0 0 0 55px
+                position: relative
+                text-overflow: ellipsis
+                text-transform: capitalize
+                white-space: nowrap
 
-                a
-                    color: $blue-text-color
-                    display: block
-                    font-size: 20px
-                    font-weight: 600
-                    height: 50px
-                    line-height: 50px
-                    margin: 0
-                    overflow: hidden
-                    padding: 0 0 0 55px
-                    position: relative
-                    text-overflow: ellipsis
-                    text-transform: capitalize
-                    white-space: nowrap
-
-                    .fa
-                        left: 15px
-                        top: 14px
-                        position: absolute
+                .fa
+                    left: 15px
+                    top: 14px
+                    position: absolute
 
 // Desktop
 //
@@ -85,7 +83,8 @@ $category-item-width: 245px
         padding: 60px 0
         width: $container-width
 
-    h4
+    .section-heading
+        display: block
         color: $black-text-color
         font-size: 32px
         font-weight: 700
