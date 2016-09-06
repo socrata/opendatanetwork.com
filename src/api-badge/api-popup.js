@@ -5,7 +5,7 @@ class APIPopup {
         this.endpoint = endpoint;
         this.backendURL = backendURL;
         this.apiaryURL = apiaryURL;
-        this.entities = _data.entities;
+        this.entities = _data.entities || [];
         this.entityNames = this.entities.map(_.property('name'));
     }
 
@@ -39,7 +39,9 @@ class APIPopup {
             .append('p')
             .append('a')
             .attr('href', this.backendURL)
-            .text(`${this.description} for ${this.entityNames.join(', ')}`);
+            .text(this.entityNames.length ?
+                `${this.description} for ${this.entityNames.join(', ')}` :
+                this.description);
 
         this.docsContainer = this.container
             .append('dl');

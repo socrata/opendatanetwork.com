@@ -147,3 +147,4 @@ function peerBadge(entityID) {
     popup.insertAt(selection, ':nth-child(2)');
     badge.insertAt(selection.select('h2'));
 }
+

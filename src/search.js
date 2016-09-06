@@ -4,6 +4,7 @@ $(document).ready(function() {
     autosuggest();
     tooltip();
     refineMenus();
+    apiBadges();
 
     // Selected category (yellow box)
     $('.current-category-info-box .fa-close').click(() => {
@@ -100,5 +101,17 @@ function getColumnCount(count) {
     if (count >= 2) return width >= widthForTwo ? 2 : 1;
 
     return 1;
+}
+
+function apiBadges() {
+    const query = _data.query;
+    const url = `http://api.us.socrata.com/api/catalog/v1?q=${query}`;
+    const apiaryURL = 'http://docs.socratadiscovery.apiary.io/#';
+    const description = `Full text search for ${query}`;
+    const popup = new APIPopup(description, '/catalog', url, apiaryURL);
+    const badge = new APIBadge(popup);
+
+    popup.appendTo(d3.select('#catalog-info-box'));
+    badge.insertAt(d3.select('.search-header-bar'));
 }
 
