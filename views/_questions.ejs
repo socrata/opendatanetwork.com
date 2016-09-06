@@ -1,32 +1,20 @@
 
-<% if (typeof questions != 'undefined' && questions && questions.length > 0) {
+<div id="questions">
+    <% if (typeof questions != 'undefined' && questions && questions.length > 0) {
 
-    const question = questions[0];
-    const rg = question.variable_id.split('.');
-    rg.pop();
+        const question = questions[0];
+        const rg = question.variable_id.split('.');
+        rg.pop();
 
-    const datasetId = rg.join('.');
-%>
-    <h2>
-        <a id="questions-info-box-button" class="small-api-link">API</a>
-        Questions
-    </h2>
-    <div id="questions-info-box" class="api-info-box">
-        <a class="fa fa-close"></a>
-        <strong>
-            <a href="http://docs.odn.apiary.io/#reference/0/search-questions/get-questions" target="_blank">/search/v1/question</a>
-        </strong>
-        <dl>
-            <dt>Example:</dt>
-            <dd><a href="<%= GlobalConstants.ODN_API_BASE_URL %>/search/v1/question?entity_id=<%= question.entity.id %>&dataset_id=<%= datasetId %>&limit=10&offset=0&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank">Questions for <%= question.entity.name %></a></dd>
-            <dt>API Docs:</dt>
-            <dd>
-            <a href="http://docs.odn.apiary.io/#reference/0/search-questions/get-questions" target="_blank">Get questions</a>
-            </dd>
-        </dl>
-    </div>
-    <div id="sidebar-questions">
-        <% include _question-list %>
-    </div>
-<% } %>
+        const datasetId = rg.join('.');
+    %>
+        <h2>
+            Questions
+        </h2>
+
+        <div id="sidebar-questions">
+            <% include _question-list %>
+        </div>
+    <% } %>
+</div>
 

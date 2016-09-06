@@ -70,12 +70,14 @@ function menuMouseHandlers() {
 function apiBadges() {
     const entityIDs = _data.entities.map(_.property('id'));
     const variableID = _data.variable.id;
+    const datasetID = _data.dataset.id;
     const constraint = _.first(_data.dataset.constraints);
     const constraints = _data.fixedConstraints;
 
     availableDataBadge(entityIDs);
     constraintBadge(entityIDs, variableID, constraint);
     newMapBadge(entityIDs, variableID, constraints);
+    questionBadge(entityIDs, datasetID);
 }
 
 function availableDataBadge(entityIDs) {
@@ -120,5 +122,16 @@ function chartBadge(chart) {
     const selection = d3.select(`div#${chart.config.id}`);
     popup.insertAt(selection, ':nth-child(2)');
     badge.appendTo(selection.select('h1'));
+}
+
+function questionBadge(entityIDs, datasetID) {
+    const url = odn.searchQuestionsURL(entityIDs, datasetID);
+    const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/search-questions/get-questions';
+    const popup = new APIPopup('Get questions', '/search/question', url, apiaryURL);
+    const badge = new APIBadge(popup);
+
+    const selection = d3.select('div#questions');
+    popup.insertAt(selection, ':nth-child(2)');
+    badge.insertAt(selection.select('h2'));
 }
 
