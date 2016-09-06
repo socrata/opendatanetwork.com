@@ -69,6 +69,7 @@ function menuMouseHandlers() {
 
 function apiBadges() {
     const entityIDs = _data.entities.map(_.property('id'));
+    const entityID = _.first(entityIDs);
     const variableID = _data.variable.id;
     const datasetID = _data.dataset.id;
     const constraint = _.first(_data.dataset.constraints);
@@ -78,6 +79,7 @@ function apiBadges() {
     constraintBadge(entityIDs, variableID, constraint);
     newMapBadge(entityIDs, variableID, constraints);
     questionBadge(entityIDs, datasetID);
+    peerBadge(entityID);
 }
 
 function availableDataBadge(entityIDs) {
@@ -135,3 +137,13 @@ function questionBadge(entityIDs, datasetID) {
     badge.insertAt(selection.select('h2'));
 }
 
+function peerBadge(entityID) {
+    const url = odn.relatedURL(entityID, 'peer');
+    const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/entity-relationships';
+    const popup = new APIPopup('Get peers', '/entity/peer', url, apiaryURL);
+    const badge = new APIBadge(popup);
+
+    const selection = d3.select('div#peers');
+    popup.insertAt(selection, ':nth-child(2)');
+    badge.insertAt(selection.select('h2'));
+}

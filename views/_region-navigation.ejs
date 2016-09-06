@@ -11,38 +11,25 @@
             <% include _entity-search-tokens %>
         </div>
         <% include _questions %>
-        <h2>
-          <% if (related.peer.length > 0) { %>
-            <a id="related-peer-info-box-button" class="small-api-link">API</a>
-          <% } %>
-            Compare this Data
-        </h2>
-        <div id="related-peer-info-box" class="api-info-box">
-            <a class="fa fa-close"></a>
-            <strong>
-                <a href="http://docs.odn.apiary.io/#reference/0/entity-relationships" target="_blank">/entity/v1/peer</a>
-            </strong>
-            <dl>
-                <dt>Example:</dt>
-            <% entities.forEach(region => { %>
-                <dd><a href="<%= GlobalConstants.ODN_API_BASE_URL %>/entity/v1/peer?entity_id=<%= region.id %>&limit=5&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank">Peers of <%= region.name %></a></dd>
-            <% }); %>
-                <dt>API Docs:</dt>
-                <dd><a href="http://docs.odn.apiary.io/#reference/0/entity-relationships/find-the-relatives-of-an-entity" target="_blank">Find the relatives of an entity</a></dd>
-            </dl>
-        </div>
-        <div class="add-region">
-            <i class="fa fa-plus"></i><input class="add-region-input" type="text" placeholder="Add Location">
-            <ul class="add-region-results" style="display: none;"></ul>
-        </div>
 
-    <% if (related.peer.length > 0) { %>
-        <ul id="similar-regions">
-        <% related.peer[0].entities.forEach(region => { %>
-            <li><a class="region-link" href=<%= navigate.add(region).url() %><%- (entities.length >= 2) ? ' rel="nofollow"' : '' %>><%= region.name %> <i class="fa fa-plus"></i></a></li>
-        <% }); %>
-        </ul>
-    <% } %>
+        <div id="peers">
+            <h2>
+                Compare this Data
+            </h2>
+
+            <div class="add-region">
+                <i class="fa fa-plus"></i><input class="add-region-input" type="text" placeholder="Add Location">
+                <ul class="add-region-results" style="display: none;"></ul>
+            </div>
+
+            <% if (related.peer.length > 0) { %>
+                <ul id="similar-regions">
+                <% related.peer[0].entities.forEach(region => { %>
+                    <li><a class="region-link" href=<%= navigate.add(region).url() %><%- (entities.length >= 2) ? ' rel="nofollow"' : '' %>><%= region.name %> <i class="fa fa-plus"></i></a></li>
+                <% }); %>
+                </ul>
+            <% } %>
+        </div>
         <% if (related.sibling.length > 0) { %>
             <h2 class="places-in-region-header">
                 <a id="related-sibling-info-box-button" class="small-api-link">API</a>
