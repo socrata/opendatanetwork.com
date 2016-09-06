@@ -111,7 +111,7 @@ app.get('/', HomeController.index);
 app.get('/categories.json', CategoriesController.categories);
 app.get('/join-open-data-network', PagesController.join);
 app.get('/join-open-data-network/complete', PagesController.joinComplete);
-app.get('/search', require('./app/controllers/new-search-controller'));
+app.get('/search', require('./app/controllers/search-controller'));
 /*
 app.get('/search/search-results', SearchController.searchResults);
 app.get('/search/:vector', SearchController.search);
