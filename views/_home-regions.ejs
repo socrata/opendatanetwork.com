@@ -8,22 +8,7 @@
                 <h3>
                     <em class="fa fa-map-marker" aria-hidden="true"></em>
                     <a href="/region/<%= location.id %>/<%= location.name %>"><%= location.name %></a>
-                    <a href class="small-api-link" tabindex="0" aria-owns="api_info_box_<%= location.id %>" aria-haspopup="true" aria-expanded="false" aria-label="Get API for <%= location.name %>">API</a>
                 </h3>
-                <div class="api-info-box" id="api_info_box_<%= location.id %>">
-                    <a href class="fa fa-close" autofocus aria-label="Close API info box"></a>
-                    <strong>
-                        <a href="http://docs.odn.apiary.io/#reference/0/entity-relationships" target="_blank">/entity/v1/child</a>
-                    </strong>
-                    <dl>
-                        <dt>Examples:</dt>
-                        <dd><a href="<%= GlobalConstants.ODN_API_BASE_URL %>/entity/v1/child?entity_id=<%= location.id %>&limit=5&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank">Metros in <%= location.name %></a></dd>
-                        <dd><a href="<%= GlobalConstants.ODN_API_BASE_URL %>/entity/v1/child?entity_id=<%= location.id %>&limit=5&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank">Counties in <%= location.name %></a></dd>
-                        <dd><a href="<%= GlobalConstants.ODN_API_BASE_URL %>/entity/v1/child?entity_id=<%= location.id %>&limit=5&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank">Cities in <%= location.name %></a></dd>
-                        <dt>API Docs:</dt>
-                        <dd><a href="http://docs.odn.apiary.io/#reference/0/relatives/find-the-relatives-of-an-entity" target="_blank">Find the relatives of an entity</a></dd>
-                    </dl>
-                </div>
                 <ul class="regions-list">
                   <% for (var i = 0; i < location.msas.length; i++) { %>
                     <li class="region">

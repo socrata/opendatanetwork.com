@@ -9,25 +9,9 @@
 %>
 
     <section id="search-results-questions-bar" class="search-results-regions-bar search-header-bar">
-        <a id="search-results-questions-info-box-button" class="small-api-link">API</a>
         <i class="fa fa-question-circle search-results-header-icon"></i>
         <label class="search-results-header-label">Questions for "<%= params.q %>"</label>
     </section>
-
-    <div id="search-results-questions-info-box" class="api-info-box">
-        <a class="fa fa-close"></a>
-        <strong>
-            <a href="http://docs.odn.apiary.io/#reference/0/search-questions/get-questions" target="_blank">/search/v1/question</a>
-        </strong>
-        <dl>
-            <dt>Example:</dt>
-            <dd><a href="<%= GlobalConstants.ODN_API_BASE_URL %>/search/v1/question?entity_id=<%= question.entity.id %>&dataset_id=<%= datasetId %>&limit=10&offset=0&app_token=cQovpGcdUT1CSzgYk0KPYdAI0" target="_blank">Questions for <%= question.entity.name %></a></dd>
-            <dt>API Docs:</dt>
-            <dd>
-            <a href="http://docs.odn.apiary.io/#reference/0/search-questions/get-questions" target="_blank">Get questions</a>
-            </dd>
-        </dl>
-    </div>
 
     <div class="search-results" id="search-questions">
         <% include _question-list %>
