@@ -19,7 +19,7 @@ class ODNClient {
      *  e.g. https://api.opendatanetwork.com or http://localhost:3001
      */
     constructor(url, appToken) {
-        this.url = url;
+        this.baseURL = url;
         this.appToken = appToken;
     }
 
@@ -34,7 +34,7 @@ class ODNClient {
      * Find an entity from its ID.
      */
     entity(entityID) {
-        return this.get('entity/v1', {entity_id: entityID}).then(response => {
+        return getJSON(this.url('entity/v1', {entity_id: entityID})).then(response => {
             const entities = response.entities;
             if (entities.length !== 1)
                 return Promise.reject(new Error(`entity not found with id: '${entityID}'`));
@@ -48,17 +48,24 @@ class ODNClient {
      * Relation must be one of parent, child, sibling, or peer.
      */
     related(entityID, relation, limit) {
-        return this.get(`entity/v1/${relation}`, {entity_id: entityID, limit})
+        return getJSON(this.relatedURL.apply(this, arguments))
             .then(response => Promise.resolve({[relation]: response.relatives}));
     }
 
+    relatedURL(entityID, relation, limit) {
+        return this.url(`entity/v1/${relation}`, {entity_id: entityID, limit});
+    }
 
     /**
      * Get available data for the given entities.
      */
     availableData(entityIDs) {
-        return this.get('data/v1/availability', forEntities(entityIDs))
+        return getJSON(this.availableDataURL.apply(this, arguments))
             .then(response => Promise.resolve(response.topics));
+    }
+
+    availableDataURL(entityIDs) {
+        return this.url('data/v1/availability', forEntities(entityIDs));
     }
 
     /**
@@ -71,20 +78,28 @@ class ODNClient {
      * Returns: list of constraint options e.g. ['2010', '2011']
      */
     constraints(entityIDs, variableID, constraint, fixed) {
-        return this.get(`data/v1/constraint/${variableID}`, _.extend({
-            constraint
-        }, forEntities(entityIDs), _.omit(fixed, constraint))).then(response => {
+        return getJSON(this.constraintsURL.apply(this, arguments)).then(response => {
             return response.permutations.map(_.property('constraint_value'));
         });
+    }
+
+    constraintsURL(entityIDs, variableID, constraint, fixed) {
+        return this.url(`data/v1/constraint/${variableID}`, _.extend({
+            constraint
+        }, forEntities(entityIDs), _.omit(fixed, constraint)));
     }
 
     /**
      * Get values for the given variable and entities.
      */
     values(entityIDs, variableID, constraints, describe, forecast, format) {
+        return getJSON(this.valuesURL.apply(this, arguments));
+    }
+
+    valuesURL(entityIDs, variableID, constraints, describe, forecast, format) {
         constraints = constraints || {};
 
-        return this.get('data/v1/values', _.extend({
+        return this.url('data/v1/values', _.extend({
             describe,
             forecast,
             format,
@@ -96,34 +111,46 @@ class ODNClient {
      * Search for datasets relating to the given entities and dataset.
      */
     searchDatasets(entityIDs, datasetID, limit, offset) {
-        return this.search('search/v1/dataset', entityIDs, datasetID, limit, offset)
+        return getJSON(this.searchDatasetsURL.apply(this, arguments))
             .then(response => Promise.resolve(response.datasets));
+    }
+
+
+    searchDatasetsURL(entityIDs, datasetID, limit, offset) {
+        return this.searchURL('search/v1/dataset', entityIDs, datasetID, limit, offset);
     }
 
     /**
      * Search for questions relating to the given entities and dataset.
      */
     searchQuestions(entityIDs, datasetID, limit, offset) {
-        return this.search('search/v1/question', entityIDs, datasetID, limit, offset)
+        return getJSON(this.searchQuestionsURL.apply(this, arguments))
             .then(response => Promise.resolve(response.questions));
+    }
+
+    searchQuestionsURL(entityIDs, datasetID, limit, offset) {
+        return this.searchURL('search/v1/question', entityIDs, datasetID, limit, offset);
     }
 
     /**
      * Search for entities with the given name.
      */
     searchEntities(name) {
-        return this.get('entity/v1', {entity_name: name})
+        return getJSON(this.searchEntitiesURL.apply(this, arguments))
             .then(response => Promise.resolve(response.entities));
     }
 
-    get(relativePath, clientParams) {
-        const path = `${this.url}/${relativePath}`;
-        const params = _.extend({app_token: this.appToken}, clientParams);
-        const url = buildURL(path, params);
-        return getJSON(url);
+    searchEntitiesURL(name) {
+        return this.url('entity/v1', {entity_name: name});
     }
 
-    search(path, entityIDs, datasetID, limit, offset) {
+    url(relativePath, clientParams) {
+        const path = `${this.baseURL}/${relativePath}`;
+        const params = _.extend({app_token: this.appToken}, clientParams);
+        return buildURL(path, params);
+    }
+
+    searchURL(path, entityIDs, datasetID, limit, offset) {
         limit = limit || 10;
         offset = offset || 0;
 
@@ -133,7 +160,7 @@ class ODNClient {
             dataset_id: datasetID
         }, forEntities(entityIDs));
 
-        return this.get(path, params);
+        return this.url(path, params);
     }
 }
 
