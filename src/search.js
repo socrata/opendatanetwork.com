@@ -5,6 +5,7 @@ $(document).ready(function() {
     tooltip();
     refineMenus();
     apiBadges();
+    infiniteScroll();
 
     // Selected category (yellow box)
     $('.current-category-info-box .fa-close').click(() => {
@@ -114,4 +115,59 @@ function apiBadges() {
     popup.appendTo(d3.select('#catalog-info-box'));
     badge.insertAt(d3.select('.refine-bar.search-header-bar'));
 }
+
+function infiniteScroll() {
+    let working = false;
+    const datasetIterator = getDatasetIterator();
+    const $datasets = $('.datasets');
+
+    $(window).on('scroll', () => {
+        if (shouldScroll() && !working) {
+            working = true;
+
+            datasetIterator.next().then(datasets => {
+                $datasets.append(datasets);
+                working = false;
+            });
+        }
+    }).scroll();
+}
+
+function getDatasetIterator() {
+    const query = _data.query;
+    const categories = _data.categories;
+    const domains = _data.domains;
+    const tags = _data.tags;
+
+    return new DatasetIterator(query, categories, domains, tags);
+}
+
+class DatasetIterator {
+    constructor(query, categories, domains, tags) {
+        this.page = 0;
+        this.limit = 10;
+    }
+
+    next() {
+        this.page++;
+        return d3.promise.html(this.nextURL());
+    }
+
+    nextURL() {
+        return buildURL('/search-results', {
+            q: this.query,
+            categories: this.categories,
+            domains: this.domains,
+            tags: this.tags,
+            limit: this.limit,
+            offset: this.page * this.limit
+        });
+    }
+}
+
+function shouldScroll() {
+    return ($(window).scrollTop() >=
+            $(document).height() - $(window).height() - GlobalConstants.SCROLL_THRESHOLD);
+}
+
 
