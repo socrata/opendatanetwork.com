@@ -5,6 +5,8 @@
  * infinite scroll on entity pages (/entity).
  */
 
+const _ = require('lodash');
+
 const SearchRequestParser = require('./search-request-parser');
 const ODNClient = require('../../src/odn-client/odn-client');
 const Exception = require('../lib/exception');
@@ -20,6 +22,7 @@ module.exports = (request, response) => {
     const datasetID = request.query.dataset_id;
 
     ODNClient.searchDatasets(entityIDs, datasetID, limit, offset).then(datasets => {
+        if (_.isEmpty(datasets)) return response.status(204).send();
         response.render('_search-dataset-items.ejs', {datasets});
     }).catch(errorHandler);
 };

@@ -2,15 +2,17 @@
 
 function infiniteScroll(paginator, onScroll) {
     let working = false;
+    let done = false;
 
     $(window).on('scroll', () => {
-        if (shouldScroll() && !working) {
+        if (!done && shouldScroll() && !working) {
             working = true;
 
             paginator.next().then(results => {
-                console.log(results);
                 onScroll(results);
                 working = false;
+            }).catch(error => {
+                done = true;
             });
         }
     }).scroll();
@@ -30,7 +32,11 @@ class Paginator {
 
     next() {
         this.page++;
-        return d3.promise.html(this.nextURL(this.limit, this.page * this.limit));
+        const url = this.nextURL(this.limit, this.page * this.limit);
+        return d3.promise.html(url).then(response => {
+            if (_.isEmpty(response)) return Promise.reject();
+            return Promise.resolve(response);
+        });
     }
 }
 

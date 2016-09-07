@@ -5,6 +5,8 @@
  * infinite scroll on the keyword search page (/search).
  */
 
+const _ = require('lodash');
+
 const SearchRequestParser = require('./search-request-parser');
 const CeteraClient = require('../lib/cetera-client');
 const Exception = require('../lib/exception');
@@ -23,6 +25,7 @@ module.exports = (request, response) => {
     const cetera = new CeteraClient(query, categories, domains, tags);
 
     cetera.datasets(limit, offset).then(datasets => {
+        if (_.isEmpty(datasets)) return response.status(204).send();
         response.render('_search-results-items.ejs', {datasets});
     }).catch(errorHandler);
 };
