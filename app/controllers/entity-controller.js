@@ -38,7 +38,6 @@ module.exports = (request, response) => {
             ]).then(([datasets, questions, constraintMenus, title]) => {
                 const constraints = getConstraints(constraintMenus);
 
-
                 getDescription(entityIDs, variable.id, constraints).then(description => {
                     const templateData = {
                         _,
