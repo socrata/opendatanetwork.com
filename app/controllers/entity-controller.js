@@ -18,7 +18,6 @@ const invalid = Exception.invalidParam;
 module.exports = (request, response) => {
     const errorHandler = Exception.getHandler(request, response);
 
-    // TODO what if no entityIDs
     const entityIDs = getEntityIDs(request);
     const variableID = getVariableID(request);
 
@@ -101,15 +100,7 @@ function getChartConfig(dataset) {
     if (!(dataset.id in DatasetConfig)) return null;
 
     const config = DatasetConfig[dataset.id];
-    /*
-    config = charts = config.charts.map(chart => {
-        _.assign(chart, {
-            id,
 
-        }
-
-    });
-    */
     config.charts.forEach(chart => {
         chart.id = chart.id.replace(/[\._]/g, '-');
     });
@@ -206,9 +197,5 @@ function getVariableID(request) {
 function getDescription(entityIDs, variableID, constraints) {
     return ODNClient.values(entityIDs, variableID, constraints, true)
         .then(response => Promise.resolve(response.description));
-}
-
-function getTitle(entities, dataset, variable) {
-    return 'ODN';
 }
 

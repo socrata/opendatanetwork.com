@@ -8,6 +8,7 @@ function infiniteScroll(paginator, onScroll) {
             working = true;
 
             paginator.next().then(results => {
+                console.log(results);
                 onScroll(results);
                 working = false;
             });

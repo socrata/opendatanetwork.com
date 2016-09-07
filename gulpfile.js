@@ -81,6 +81,7 @@ var entityScripts = baseScripts
     .concat([
         'src/dataset-constants.js',
         'src/dataset-chart.js',
+        'src/infinite-scroll.js',
         'src/entity.js']);
 gulp.task('entity', js(entityScripts, 'entity.min.js'));
 

@@ -2,28 +2,25 @@
 
 /**
  * Controller for rendering partial search result pages for use with
- * infinite scroll on the keyword search page (/search).
+ * infinite scroll on entity pages (/entity).
  */
 
 const SearchRequestParser = require('./search-request-parser');
-const CeteraClient = require('../lib/cetera-client');
+const ODNClient = require('../../src/odn-client/odn-client');
 const Exception = require('../lib/exception');
 
 module.exports = (request, response) => {
     const errorHandler = Exception.getHandler(request, response);
 
     const requestParser = new SearchRequestParser(request);
-    const query = requestParser.getQuery();
-    const categories = requestParser.getCategories();
-    const domains = requestParser.getDomains();
-    const tags = requestParser.getTags();
+
     const offset = requestParser.getOffset();
     const limit = requestParser.getLimit();
+    const entityIDs = [request.query.entity_id];
+    const datasetID = request.query.dataset_id;
 
-    const cetera = new CeteraClient(query, categories, domains, tags);
-
-    cetera.datasets(limit, offset).then(datasets => {
-        response.render('_search-results-items.ejs', {datasets});
+    ODNClient.searchDatasets(entityIDs, datasetID, limit, offset).then(datasets => {
+        response.render('_search-dataset-items.ejs', {datasets});
     }).catch(errorHandler);
 };
 
