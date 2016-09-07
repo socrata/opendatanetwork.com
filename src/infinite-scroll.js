@@ -33,7 +33,7 @@ class Paginator {
     next() {
         this.page++;
         const url = this.nextURL(this.limit, this.page * this.limit);
-        return d3.promise.html(url).then(response => {
+        return d3.promise.text(url).then(response => {
             if (_.isEmpty(response)) return Promise.reject();
             return Promise.resolve(response);
         });
