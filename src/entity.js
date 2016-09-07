@@ -17,11 +17,6 @@ function autosuggest() {
     new Autosuggest('.region-list')
         .listen('.search-bar-input');
 
-    // Compare this data autosuggest
-    // TODO this is using the same autosuggest as the main search bar
-    new Autosuggest('.add-region-results')
-        .listen('.add-region-input');
-
     // Mobile autosuggest
     new Autosuggest('.add-region-results-mobile')
         .listen('.add-region-input-mobile');

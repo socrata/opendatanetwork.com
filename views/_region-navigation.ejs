@@ -17,11 +17,6 @@
                 Compare this Data
             </h2>
 
-            <div class="add-region">
-                <i class="fa fa-plus" role="presentation" aria-hidden="true"></i><input class="add-region-input" type="text" placeholder="Add Location" aria-label="Add Location">
-                <ul class="add-region-results" style="display: none;"></ul>
-            </div>
-
             <% if (related.peer.length > 0) { %>
                 <ul id="similar-regions">
                 <% related.peer[0].entities.forEach(region => { %>
