@@ -130,7 +130,7 @@ class ODNClient {
      */
     searchQuestions(entityIDs, datasetID, limit, offset) {
         return getJSON(this.searchQuestionsURL.apply(this, arguments)).then(response => {
-            return Promise.resolve(response.questions.map(questionURL));
+            return Promise.resolve(response.questions);
         });
     }
 
@@ -164,11 +164,7 @@ class ODNClient {
         if (query === '') return Promise.resolve([]);
 
         return getJSON(this.suggestURL.apply(this, arguments)).then(response => {
-            const options = response.options;
-
-            if (type === 'question')
-                return Promise.resolve(options.map(questionURL));
-            return Promise.resolve(options);
+            return Promise.resolve(response.options);
         });
     }
 
@@ -203,18 +199,6 @@ class ODNClient {
 
 function forEntities(entityIDs) {
     return {entity_id: entityIDs.join(',')};
-}
-
-/**
- * Question variables are old variables so we must use to /region
- * which will map the questions to new variables and redirect to /entity.
- */
-function questionURL(question) {
-    const [topic, dataset, variable] = question.variable_id.split('.');
-    const entityURL = new EntityNavigate([question.entity]).url()
-    const baseRegionURL = entityURL.replace(/entity/, 'region').replace(/\?/, '');
-    question.url = `${baseRegionURL}/${dataset}/${variable}`;
-    return question;
 }
 
 var odn = new ODNClient(GlobalConstants.ODN_API_BASE_URL, GlobalConstants.APP_TOKEN);
