@@ -15,6 +15,31 @@ const Exception = require('../lib/exception');
 const notFound = Exception.notFound;
 const invalid = Exception.invalidParam;
 
+const css = [
+    '/styles/third-party/leaflet.min.css',
+    '/styles/third-party/leaflet-markercluster.min.css',
+    '/styles/third-party/leaflet-markercluster-default.min.css',
+    '/styles/search.css',
+    '/styles/maps.css',
+    '/styles/main.css'
+];
+
+const scripts = [
+    '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
+    '//www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart", "table"]}]}',
+    '//cdn.socket.io/socket.io-1.4.5.js',
+    '/lib/third-party/leaflet/leaflet.min.js',
+    '/lib/third-party/leaflet/leaflet-omnivore.min.js',
+    '/lib/third-party/leaflet/leaflet-markercluster.min.js',
+    '/lib/third-party/colorbrewer.min.js',
+    '/lib/third-party/d3.min.js',
+    '/lib/third-party/d3.promise.min.js',
+    '/lib/third-party/js.cookie-2.1.1.min.js',
+    '/lib/third-party/leaflet-omnivore.min.js',
+    '/lib/third-party/lodash.min.js',
+    '/lib/entity.min.js'
+];
+
 module.exports = (request, response) => {
     const errorHandler = Exception.getHandler(request, response);
 
@@ -23,24 +48,29 @@ module.exports = (request, response) => {
 
     Promise.all([
         ODNClient.entities(entityIDs),
-        ODNClient.availableData(entityIDs),
-        getRelated(entityIDs[0])
-    ]).then(([entities, availableData, related]) => {
+        ODNClient.availableData(entityIDs)
+    ]).then(([entities, availableData]) => {
         getVariable(availableData, variableID).then(([topic, dataset, variable]) => {
             const fixed = getFixedConstraints(request, dataset);
 
-            Promise.all([
-                ODNClient.searchDatasets(entityIDs, dataset.id),
-                ODNClient.searchQuestions(entityIDs, dataset.id),
-                getConstraintMenus(entityIDs, variable.id, dataset.constraints, fixed),
-                EntityFormatter.entityPageTitle(entities, dataset, variable),
-            ]).then(([datasets, questions, constraintMenus, title]) => {
+            getConstraintMenus(entityIDs, variable.id, dataset.constraints, fixed).then(constraintMenus => {
                 const constraints = getConstraints(constraintMenus);
+                const url = new Navigate(entities, variable.id, constraints).url();
 
-                getDescription(entityIDs, variable.id, constraints).then(description => {
+                if (url !== request.url) return response.redirect(307, url);
+
+                Promise.all([
+                    getRelated(entities[0].id),
+                    ODNClient.searchDatasets(entityIDs, dataset.id),
+                    ODNClient.searchQuestions(entityIDs, dataset.id),
+                    EntityFormatter.entityPageTitle(entities, dataset, variable),
+                    getDescription(entityIDs, variable.id, constraints)
+                ]).then(([related, datasets, questions, title, description]) => {
                     const templateData = {
                         _,
                         page: 'entity',
+                        css,
+                        scripts,
                         GlobalConstants,
                         title,
                         questions,
@@ -57,29 +87,6 @@ module.exports = (request, response) => {
                         topics: _.values(availableData),
                         navigate: new Navigate(entities, variableID, _.clone(request.query)),
                         chartConfig: getChartConfig(dataset),
-                        css: [
-                            '/styles/third-party/leaflet.min.css',
-                            '/styles/third-party/leaflet-markercluster.min.css',
-                            '/styles/third-party/leaflet-markercluster-default.min.css',
-                            '/styles/search.css',
-                            '/styles/maps.css',
-                            '/styles/main.css'
-                        ],
-                        scripts: [
-                            '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
-                            '//www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart", "table"]}]}',
-                            '//cdn.socket.io/socket.io-1.4.5.js',
-                            '/lib/third-party/leaflet/leaflet.min.js',
-                            '/lib/third-party/leaflet/leaflet-omnivore.min.js',
-                            '/lib/third-party/leaflet/leaflet-markercluster.min.js',
-                            '/lib/third-party/colorbrewer.min.js',
-                            '/lib/third-party/d3.min.js',
-                            '/lib/third-party/d3.promise.min.js',
-                            '/lib/third-party/js.cookie-2.1.1.min.js',
-                            '/lib/third-party/leaflet-omnivore.min.js',
-                            '/lib/third-party/lodash.min.js',
-                            '/lib/entity.min.js'
-                        ]
                     };
 
                     response.render('entity.ejs', templateData, (error, html) => {
