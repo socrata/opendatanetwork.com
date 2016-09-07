@@ -39,7 +39,7 @@ class DatasetChart {
         if (!('forecast_descriptions' in data)) return;
 
         d3.select(document.getElementById(`dataset-description-${this.config.id}`))
-            .select('div')
+            .select('div.forecast-descriptions')
             .selectAll('p')
             .data(data.forecast_descriptions)
             .enter()
