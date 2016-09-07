@@ -131,6 +131,8 @@ app.get('/region/:regionIDs/:regionNames/:vector', redirectRegion);
 app.get('/region/:regionIDs/:regionNames/:vector/:metric', redirectRegion);
 app.get('/region/:regionIDs/:regionNames/:vector/:metric/:year', redirectRegion);
 
+app.get('/search-results', require('./app/controllers/search-results-controller'));
+
 app.use((error, req, res, next) => {
   ErrorHandler.error(req, res)(error);
 });

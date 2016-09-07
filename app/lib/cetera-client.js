@@ -9,15 +9,16 @@ const Request = require('./request');
 const _ = require('lodash');
 
 class CeteraClient {
-    constructor(categories, domains, tags) {
+    constructor(query, categories, domains, tags) {
+        this.query = query;
         this.categories = categories;
         this.domains = domains;
         this.tags = tags;
     }
 
-    datasetsURL(query, tags, limit, offset) {
+    datasetsURL(limit, offset) {
         return Request.buildURL(Constants.CATALOG_URL, {
-            q: query,
+            q: this.query,
             categories: this.categories,
             domains: this.domains,
             tags: this.tags,
@@ -27,8 +28,8 @@ class CeteraClient {
         });
     }
 
-    datasets(query, tags, limit, offset) {
-        return Request.getJSON(this.datasetsURL(query, tags, limit, offset)).then(response => {
+    datasets(limit, offset) {
+        return Request.getJSON(this.datasetsURL(limit, offset)).then(response => {
             return Promise.resolve(response.results.map(getDataset));
         });
     }
