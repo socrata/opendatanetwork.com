@@ -1,5 +1,4 @@
 
-
 $(document).ready(function() {
     menuMouseHandlers();
     autosuggest();
@@ -7,6 +6,7 @@ $(document).ready(function() {
     drawCharts();
     apiBadges();
     showMoreQuestions();
+    infiniteDatasetScroll();
 
     window.entityNavigate =
         new EntityNavigate(_data.entities, _data.variable.id, _data.constraints);
@@ -161,6 +161,25 @@ function showMoreQuestions() {
         collapsible.classed('collapsed', more);
 
         link.text(`show ${more ? 'more' : 'less'}`);
+    });
+}
+
+function infiniteDatasetScroll() {
+    const $datasets = $('.search-results');
+
+    infiniteScroll(getDatasetPaginator(), datasets => {
+        $datasets.append(datasets);
+    });
+}
+
+function getDatasetPaginator() {
+    return new Paginator((limit, offset) => {
+        return buildURL('/search-results/entity', {
+            limit,
+            offset,
+            entity_id: _data.entities.map(_.property('id')).join('-'),
+            dataset_id: _data.dataset.id
+        });
     });
 }
 

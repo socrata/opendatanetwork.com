@@ -37,8 +37,12 @@ class ODNClient {
     entity(entityID) {
         return getJSON(this.url('entity/v1', {entity_id: entityID})).then(response => {
             const entities = response.entities;
-            if (entities.length !== 1)
-                return Promise.reject(new Error(`entity not found with id: '${entityID}'`));
+            if (entities.length !== 1) {
+                const error = new Error(`entity not found with id: '${entityID}'`);
+                error.statusCode = 404;
+                return Promise.reject(error);
+            }
+
            return Promise.resolve(entities[0]);
         });
     }

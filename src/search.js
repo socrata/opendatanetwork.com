@@ -1,10 +1,10 @@
-'use strict';
 
 $(document).ready(function() {
     autosuggest();
     tooltip();
     refineMenus();
     apiBadges();
+    infiniteDatasetScroll();
 
     // Selected category (yellow box)
     $('.current-category-info-box .fa-close').click(() => {
@@ -113,5 +113,26 @@ function apiBadges() {
 
     popup.appendTo(d3.select('#catalog-info-box'));
     badge.insertAt(d3.select('.refine-bar.search-header-bar'));
+}
+
+function infiniteDatasetScroll() {
+    const $datasets = $('.datasets');
+
+    infiniteScroll(getDatasetPaginator(), datasets => {
+        $datasets.append(datasets);
+    });
+}
+
+function getDatasetPaginator() {
+    return new Paginator((limit, offset) => {
+        return buildURL('/search-results', {
+            limit,
+            offset,
+            q: _data.query,
+            categories: _data.categories,
+            domains: _data.domains,
+            tags: _data.tags
+        });
+    });
 }
 

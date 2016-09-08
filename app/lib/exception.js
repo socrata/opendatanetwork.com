@@ -62,7 +62,9 @@ class Exception {
             url: request.url
         };
 
-        response.status(statusCode).json(errorJSON);
+        response
+            .status(statusCode)
+            .render('error.ejs', {statusCode, title: error.message});
     }
 }
 

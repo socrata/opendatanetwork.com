@@ -5,6 +5,7 @@
 
 const _ = require('lodash');
 
+const SearchRequestParser = require('./search-request-parser');
 const CeteraClient = require('../lib/cetera-client');
 const Exception = require('../lib/exception');
 const ODNClient = require('../../src/odn-client/odn-client');
@@ -19,17 +20,18 @@ const Tag = require('../models/tag');
 module.exports = (request, response) => {
     const errorHandler = Exception.getHandler(request, response);
 
-    const query = request.query.q || '';
-    const categories = asList(request.query.categories);
-    const domains = asList(request.query.domains);
-    const tags = asList(request.query.tags);
+    const requestParser = new SearchRequestParser(request);
+    const query = requestParser.getQuery();
+    const categories = requestParser.getCategories();
+    const domains = requestParser.getDomains();
+    const tags = requestParser.getTags();
 
-    const cetera = new CeteraClient(categories, domains, tags);
+    const cetera = new CeteraClient(query, categories, domains, tags);
 
     // TODO questions
     Promise.all([
         getEntities(query),
-        cetera.datasets(categories, domains, tags),
+        cetera.datasets(),
         Category.categories(),
         Category.domains(),
         Tag.tags()
@@ -121,11 +123,5 @@ function currentCategory(categories, allCategories) {
 function currentTag(tags, allTags) {
     if (tags.length !== 1) return null;
     return _.find(allTags, tag => tag.tag === params.tags[0].toLowerCase());
-}
-
-function asList(value) {
-    if (_.isNull(value) || _.isUndefined(value)) return [];
-    if (_.isArray(value)) return value;
-    return [value];
 }
 

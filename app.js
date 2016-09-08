@@ -111,7 +111,7 @@ app.get('/', HomeController.index);
 app.get('/categories.json', CategoriesController.categories);
 app.get('/join-open-data-network', PagesController.join);
 app.get('/join-open-data-network/complete', PagesController.joinComplete);
-app.get('/search', require('./app/controllers/new-search-controller'));
+app.get('/search', require('./app/controllers/search-controller'));
 /*
 app.get('/search/search-results', SearchController.searchResults);
 app.get('/search/:vector', SearchController.search);
@@ -130,6 +130,9 @@ app.get('/region/:regionIDs/:regionNames', redirectRegion);
 app.get('/region/:regionIDs/:regionNames/:vector', redirectRegion);
 app.get('/region/:regionIDs/:regionNames/:vector/:metric', redirectRegion);
 app.get('/region/:regionIDs/:regionNames/:vector/:metric/:year', redirectRegion);
+
+app.get('/search-results', require('./app/controllers/search-results-controller'));
+app.get('/search-results/entity', require('./app/controllers/entity-search-results-controller'));
 
 app.use((error, req, res, next) => {
   ErrorHandler.error(req, res)(error);

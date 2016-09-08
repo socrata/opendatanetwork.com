@@ -45,6 +45,8 @@ const GlobalConstants = {
     },
 
     ROSTER_URL: 'https://federal.demo.socrata.com/resource/bdeb-mf9k.json',
+
+    SCROLL_THRESHOLD: 1000
 };
 
 /**
