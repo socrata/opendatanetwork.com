@@ -1,0 +1,16 @@
+
+<% if (questions.length > 0 && entities.length === 1) { %>
+    <div class="questions-mobile">
+        <div class="question-list-header-mobile">
+            <div id="question-mobile">
+                Questions about <%= entities[0].name %>
+            </div>
+            <i class="fa fa-caret-down odn-caret"></i>
+        </div>
+
+        <ul>
+            <% include _question-list %>
+        </ul>
+    </div>
+<% } %>
+

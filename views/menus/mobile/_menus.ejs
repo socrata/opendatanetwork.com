@@ -15,6 +15,10 @@
                     </ul>
                 </div>
 
+                <% if (entities.length === 1) { %>
+                    <% include ../../questions/_questions-mobile %>
+                <% } %>
+
                 <ul class="refine-menu-list-mobile">
                     <% include _topic-menu %>
                     <% include _dataset-menu %>

@@ -1,0 +1,10 @@
+
+<li class="question <%= index > 1 ? 'collapsible collapsed' : '' %>">
+    <a href="<%= navigate.regionURL(question.vector, question.metric) %>">
+        What is the
+        <span class="question-variable"><%= question.variable_name %></span>
+        of
+        <span class="question-region-name"><%= question.entity.name %></span>?
+    </a>
+</li>
+

@@ -150,7 +150,7 @@ function showMoreQuestions() {
 
     const collapsible = d3.selectAll('li.question.collapsible');
 
-    const link = d3.select('a#questions');
+    const link = d3.selectAll('a#questions');
 
     link.on('click', () => {
         more = !more;
@@ -193,8 +193,12 @@ function refineControlsMobile() {
     $refineLink.click(toggle);
     $refinePopupClose.click(toggle);
 
-    d3.selectAll('.refine-menu-header-mobile').on('click', function() {
+    d3.selectAll('.refine-menu-header-mobile, .question-list-header-mobile').on('click', function() {
         $(this.nextElementSibling).toggle();
     });
+
+    d3.select('.questions-mobile')
+        .selectAll('.question.collapsed')
+        .classed('collapsed', false);
 }
 
