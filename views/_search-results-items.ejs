@@ -1,7 +1,7 @@
 <% datasets.forEach(function(dataset) { %>
     <li>
         <a class="api-link" href="http://dev.socrata.com/foundry/<%= dataset.domain %>/<%= dataset.fxf %>">API</a>
-        <i class="fa <%= dataset.classification.categoryGlyphString %>"></i>
+        <em class="fa <%= dataset.classification.categoryGlyphString %>"></em>
         <h2>
             <a href="/dataset/<%= dataset.domain %>/<%= dataset.fxf %>">
                 <%= dataset.name %>

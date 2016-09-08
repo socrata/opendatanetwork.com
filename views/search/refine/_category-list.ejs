@@ -3,7 +3,7 @@
     <% refineBy.categories.forEach(category => { %>
         <li>
             <a href="<%- searchNavigate.addCategory(category.category).url() %>">
-                <i class="fa <%= category.metadata.icon %>"></i>
+                <em class="fa <%= category.metadata.icon %>"></em>
                 <%= category.category %>
             </a>
         </li>

@@ -1,16 +1,17 @@
+
 <section class="refine-bar search-header-bar">
-    <div class="refine-link">
-        <span>Categories<i class="fa fa-caret-down"></i></span>
+    <div class="refine-link" role="navigation">
+        <span>Categories<em class="fa fa-caret-down"></em></span>
         <% include _category-list %>
     </div>
 
     <div class="refine-link">
-        <span>Publishers<i class="fa fa-caret-down"></i></span>
+        <span>Publishers<em class="fa fa-caret-down"></em></span>
         <% include _publisher-list %>
     </div>
 
     <label class="refine-by-label">Refine by:</label>
-    <i class="fa fa-bar-chart search-results-header-icon"></i>
+    <em class="fa fa-bar-chart search-results-header-icon"></em>
     <label class="search-results-header-label">
         <% if (query.length > 0) { %>
             <% if (datasets.length > 0) { %>
