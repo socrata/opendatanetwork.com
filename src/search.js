@@ -2,8 +2,8 @@
 $(document).ready(function() {
     autosuggest();
     tooltip();
-    refineMenus();
-    refineControlsMobile();
+    attachMenuHandlers();
+    attachMobileMenuHandlers('search-');
     apiBadges();
     infiniteDatasetScroll();
 
@@ -34,7 +34,7 @@ function tooltip() {
     });
 }
 
-function refineMenus() {
+function attachMenuHandlers() {
     $('.refine-link').mouseenter(function() {
         $(this).addClass('refine-link-selected');
         $(this).children('span').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
@@ -135,28 +135,5 @@ function getDatasetPaginator() {
             tags: _data.tags
         });
     });
-}
-
-function refineControlsMobile() {
-    const $refineLink = $('.search-refine-results-link-mobile');
-    const $refineLinkContainer = $('.search-refine-results-link-container-mobile');
-    const $refinePopup = $('.search-refine-popup-mobile');
-    const $refinePopupClose = $('#search-refine-close-mobile');
-
-    function toggle() {
-        $refineLinkContainer.toggle();
-        $refinePopup.toggle();
-    }
-
-    $refineLink.click(toggle);
-    $refinePopupClose.click(toggle);
-
-    d3.selectAll('.refine-menu-header-mobile, .question-list-header-mobile').on('click', function() {
-        $(this.nextElementSibling).toggle();
-    });
-
-    d3.select('.questions-mobile')
-        .selectAll('.question.collapsed')
-        .classed('collapsed', false);
 }
 

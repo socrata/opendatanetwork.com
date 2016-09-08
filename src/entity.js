@@ -7,7 +7,8 @@ $(document).ready(function() {
     apiBadges();
     showMoreQuestions();
     infiniteDatasetScroll();
-    refineControlsMobile();
+    attachMobileMenuHandlers();
+    expandMobileQuestions();
 
     window.entityNavigate =
         new EntityNavigate(_data.entities, _data.variable.id, _data.constraints);
@@ -179,24 +180,7 @@ function getDatasetPaginator() {
     });
 }
 
-function refineControlsMobile() {
-    const $refineLink = $('.refine-results-link-mobile');
-    const $refineLinkContainer = $('.refine-results-link-container-mobile');
-    const $refinePopup = $('.refine-popup-mobile');
-    const $refinePopupClose = $('#refine-close-mobile');
-
-    function toggle() {
-        $refineLinkContainer.toggle();
-        $refinePopup.toggle();
-    }
-
-    $refineLink.click(toggle);
-    $refinePopupClose.click(toggle);
-
-    d3.selectAll('.refine-menu-header-mobile, .question-list-header-mobile').on('click', function() {
-        $(this.nextElementSibling).toggle();
-    });
-
+function expandMobileQuestions() {
     d3.select('.questions-mobile')
         .selectAll('.question.collapsed')
         .classed('collapsed', false);

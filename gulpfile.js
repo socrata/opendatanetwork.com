@@ -68,6 +68,7 @@ var searchScripts = baseScripts
     .concat([
         'src/search-refine-controls-mobile.js',
         'src/infinite-scroll.js',
+        'src/mobile-menus.js',
         'src/search.js',
         'src/api/odn-api.js']);
 gulp.task('search', js(searchScripts, 'search.min.js'));
@@ -79,6 +80,7 @@ var entityScripts = baseScripts
         'src/dataset-constants.js',
         'src/dataset-chart.js',
         'src/infinite-scroll.js',
+        'src/mobile-menus.js',
         'src/entity.js']);
 gulp.task('entity', js(entityScripts, 'entity.min.js'));
 
