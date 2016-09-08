@@ -66,7 +66,6 @@ gulp.task('home', js(homeScripts, 'home.min.js'));
 var searchScripts = baseScripts
     .concat(autosuggestScripts)
     .concat([
-        'src/search-refine-controls-mobile.js',
         'src/infinite-scroll.js',
         'src/mobile-menus.js',
         'src/search.js',
