@@ -1,14 +1,151 @@
 'use strict';
 
 const DATASET_CONFIG = {
-    'michigan.finance': {
+    'finance.michigan_debt': {
         charts: [
             {
-                id: 'michigan.finance.liquidity_ratio',
+                id: 'finance.michigan_debt.debt_service.chart',
+                type: 'line',
+                name: 'Debt Service',
+                variables: [
+                    'finance.michigan_debt.debt_service'
+                ],
+            },
+            {
+                id: 'finance.michigan_debt.long_term_debt_revenue.chart',
+                type: 'line',
+                name: 'Long Term Debt Revenue',
+                variables: [
+                    'finance.michigan_debt.long_term_debt_revenue'
+                ],
+            },
+            {
+                id: 'finance.michigan_debt.long_term_debt_revenue.chart',
+                type: 'line',
+                name: 'Debt Health',
+                variables: [
+                    'finance.michigan_debt.long_term_debt_revenue'
+                ],
+            }
+        ]
+    },
+
+    'finance.michigan_expenditures': {
+        charts: [
+            {
+                id: 'finance.michigan_expenditures.public_safety_expenditures.chart',
+                type: 'line',
+                name: 'Total Public Safety Fund Expenditures',
+                variables: [
+                    'finance.michigan_expenditures.public_safety_expenditures'
+                ],
+            },
+            {
+                id: 'finance.michigan_expenditures.total_general_fund_expenditures.chart',
+                type: 'line',
+                name: 'Total General Fund Expenditures',
+                variables: [
+                    'finance.michigan_expenditures.total_general_fund_expenditures'
+                ],
+            }
+        ]
+    },
+
+    'finance.michigan_general_fund': {
+        charts: [
+            {
+                id: 'finance.michigan_general_fund.general_fund_balance.chart',
+                type: 'line',
+                name: 'General Fund Balance',
+                variables: [
+                    'finance.michigan_general_fund.general_fund_balance'
+                ],
+            },
+            {
+                id: 'finance.michigan_general_fund.general_fund_health.chart',
+                type: 'line',
+                name: 'General Fund Health',
+                variables: [
+                    'finance.michigan_general_fund.general_fund_health'
+                ],
+            },
+            {
+                id: 'finance.michigan_general_fund.liquidity_ratio.chart',
                 type: 'line',
                 name: 'Liquidity Ratio',
                 variables: [
-                    'michigan.finance.liquidity_ratio'
+                    'finance.michigan_general_fund.liquidity_ratio'
+                ],
+            }
+        ]
+    },
+
+    'finance.michigan_pensions': {
+        charts: [
+            {
+                id: 'finance.michigan_pensions.pension_health.chart',
+                type: 'line',
+                name: 'Pension Health',
+                variables: [
+                    'finance.michigan_pensions.pension_health'
+                ],
+            },
+            {
+                id: 'finance.michigan_pensions.unfunded_pension_liability.chart',
+                type: 'line',
+                name: 'Unfunded Pension Liability',
+                variables: [
+                    'finance.michigan_pensions.unfunded_pension_liability'
+                ],
+            }
+        ]
+    },
+
+    'finance.michigan_property_tax': {
+        charts: [
+            {
+                id: 'finance.michigan_property_tax.debt_taxable_value.chart',
+                type: 'line',
+                name: 'Debt as % of Taxable Value',
+                variables: [
+                    'finance.michigan_property_tax.debt_taxable_value'
+                ],
+            },
+            {
+                id: 'finance.michigan_property_tax.property_tax_health.chart',
+                type: 'line',
+                name: 'Property Tax Health',
+                variables: [
+                    'finance.michigan_property_tax.property_tax_health'
+                ],
+            },
+            {
+                id: 'finance.michigan_property_tax.total_taxable_value.chart',
+                type: 'line',
+                name: 'Total Taxable Value',
+                variables: [
+                    'finance.michigan_property_tax.total_taxable_value'
+                ],
+            }
+        ]
+    },
+
+    'finance.michigan_revenues': {
+        charts: [
+            {
+                id: 'finance.michigan_revenues.total_general_fund_revenue.chart',
+                type: 'line',
+                name: 'Total General Fund Revenue',
+                variables: [
+                    'finance.michigan_revenues.total_general_fund_revenue'
+                ],
+            },
+            {
+                id: 'finance.michigan_revenues.unrestricted_revenue.chart',
+                type: 'line',
+                name: 'Unrestricted Revenue',
+                variables: [
+                    'finance.michigan_revenues.unrestricted_revenue'
                 ],
             }
         ]
