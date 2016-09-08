@@ -13,6 +13,7 @@ const DATASET_CONFIG = {
             }
         ]
     },
+
     'crime.fbi_ucr': {
         charts: [
             {
@@ -186,7 +187,7 @@ const DATASET_CONFIG = {
         ]
     },
 
-    'education.education': {
+    'education.graduation_rates': {
         charts: [
             {
                 id: 'education.education.chart',
@@ -196,8 +197,8 @@ const DATASET_CONFIG = {
                 },
                 name: 'Graduation Rates',
                 variables: [
-                    'education.education.percent_high_school_graduate_or_higher',
-                    'education.education.percent_bachelors_degree_or_higher'
+                    'education.graduation_rates.percent_high_school_graduate_or_higher',
+                    'education.graduation_rates.percent_bachelors_degree_or_higher'
                 ],
             }
         ]
@@ -278,10 +279,10 @@ const DATASET_CONFIG = {
         ]
     },
 
-    'health.health': {
+    'health.health_behaviors': {
         charts: [
             {
-                id: 'health.health.chart',
+                id: 'health.health_behaviors.chart',
                 type: 'table',
                 constraint: {
                     year: '2015'
@@ -291,51 +292,7 @@ const DATASET_CONFIG = {
                     height: 400
                 },
                 variables: [
-                    'health.health'
-                ],
-            }
-        ]
-    },
-
-    'health.health_indicators' : {
-        charts: [
-            {
-                id: 'health.health_indicators.chart',
-                type: 'table',
-                constraint: {
-                    break_out: 'Overall',
-                    question_response: 'Yes',
-                    year: '2013'
-                },
-                name: 'Chronic Health Indicators',
-                variables: [
-                    'health.health_indicators.data_value'
-                ],
-            },
-            {
-                id: 'health.health_indicators.last_checkup.chart',
-                type: 'column',
-                constraint: {
-                    break_out: 'Overall',
-                    question: 'About how long has it been since you last visited a doctor for a routine checkup?',
-                    year: '2013'
-                },
-                name: 'Time of Last Checkup',
-                variables: [
-                    'health.health_indicators.data_value'
-                ],
-            },
-            {
-                id: 'health.health_indicators.general_health.chart',
-                type: 'column',
-                constraint: {
-                    break_out: 'Overall',
-                    question: 'How is your general health?',
-                    year: '2013'
-                },
-                name: 'Health Status',
-                variables: [
-                    'health.health_indicators.data_value'
+                    'health.health_behaviors'
                 ],
             }
         ]
