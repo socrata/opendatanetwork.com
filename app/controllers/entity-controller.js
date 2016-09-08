@@ -86,6 +86,7 @@ module.exports = (request, response) => {
                         fixedConstraints: fixed,
                         topics: _.values(availableData),
                         navigate: new Navigate(entities, variableID, _.clone(request.query)),
+                        questions: generateQuestions(availableData, dataset, variable),
                         chartConfig: getChartConfig(dataset),
                     };
 
@@ -187,7 +188,7 @@ function clean(string) {
 
 function getRelated(entityID) {
     const promises = ['parent', 'child', 'sibling', 'peer']
-        .map(relation => ODNClient.related(entityID, relation, GlobalConstants.PEER_REGIONS));
+        .map(relation => ODNClient.related(entityID, relation, GlobalConstants.RELATED_ENTITY_COUNT));
 
     return Promise.all(promises)
         .then(result => Promise.resolve(_.merge.apply(_, result)));
@@ -204,5 +205,38 @@ function getVariableID(request) {
 function getDescription(entityIDs, variableID, constraints) {
     return ODNClient.values(entityIDs, variableID, constraints, true)
         .then(response => Promise.resolve(response.description));
+}
+
+/**
+ * Generate a list of variables for which we have data. These variables
+ * are used to formulate questions.
+ *
+ * The current variable is not included.
+ *
+ * Variables from the current dataset are listed first.
+ * Subsequent variables are ordered by their index within their parent
+ * dataset so that questions range many datasets.
+ */
+function generateQuestions(topics, dataset, variable) {
+    const datasetVariables = _(dataset.variables)
+        .values()
+        .without(variable)
+        .value();
+
+    const otherVariables = _(topics)
+        .values()
+        .map(_.property('datasets'))
+        .map(_.values)
+        .flatten()
+        .map(dataset => {
+            return _.values(dataset.variables)
+                .map((variable, index) => _.assign(variable, {index}))
+        })
+        .flatten()
+        .sortBy('index')
+        .value();
+
+    return datasetVariables.concat(otherVariables)
+        .slice(0, GlobalConstants.QUESTION_COUNT);
 }
 
