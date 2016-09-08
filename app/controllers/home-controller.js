@@ -12,6 +12,7 @@ const HomeHelper = require('../lib/home-helper');
 const ParamsHelper = require('../lib/params-helper');
 const ErrorHandler = require('../lib/error-handler');
 const ODNClient = require('../../src/odn-client/odn-client');
+const Navigate = require('../../src/navigate/entity');
 
 const GlobalConstants = require('../../src/constants');
 
@@ -43,6 +44,7 @@ class HomeController {
 
                     const templateParams = {
                         GlobalConstants,
+                        Navigate,
                         categories,
                         locations,
                         params,

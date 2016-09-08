@@ -53,12 +53,20 @@ class EntityNavigate {
     }
 
     url() {
-        const ids = this.entityIDs.join('-');
-        const names = this.entityNames.map(clean).join('-');
-        const path = ['/entity', ids, names, this.variableID]
-            .filter(_.negate(_.isEmpty))
-            .join('/');
+        const path = buildPath(['/entity', this.getIDs(), this.getNames(), this.variableID])
         return buildURL(path, this.query);
+    }
+
+    regionURL(vector, metric) {
+        return buildPath(['/region', this.getIDs(), this.getNames(), vector, metric]);
+    }
+
+    getIDs() {
+        return this.entityIDs.join('-');
+    }
+
+    getNames() {
+        return this.entityNames.map(clean).join('-');
     }
 }
 
@@ -69,6 +77,12 @@ function clean(string) {
         .replace(/[\s-\/]/g, '_')
         .replace(/_+/g, '_')
         .replace(/\W/g, '');
+}
+
+function buildPath(parts) {
+    return parts
+        .filter(_.negate(_.isEmpty))
+        .join('/');
 }
 
 if (typeof module !== 'undefined') module.exports = EntityNavigate;

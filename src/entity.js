@@ -7,6 +7,7 @@ $(document).ready(function() {
     apiBadges();
     showMoreQuestions();
     infiniteDatasetScroll();
+    refineControlsMobile();
 
     window.entityNavigate =
         new EntityNavigate(_data.entities, _data.variable.id, _data.constraints);
@@ -16,11 +17,6 @@ function autosuggest() {
     // Main search bar autosuggest
     new Autosuggest('.region-list')
         .listen('.search-bar-input');
-
-    // Compare this data autosuggest
-    // TODO this is using the same autosuggest as the main search bar
-    new Autosuggest('.add-region-results')
-        .listen('.add-region-input');
 
     // Mobile autosuggest
     new Autosuggest('.add-region-results-mobile')
@@ -154,7 +150,7 @@ function showMoreQuestions() {
 
     const collapsible = d3.selectAll('li.question.collapsible');
 
-    const link = d3.select('a#questions');
+    const link = d3.selectAll('a#questions');
 
     link.on('click', () => {
         more = !more;
@@ -181,5 +177,28 @@ function getDatasetPaginator() {
             dataset_id: _data.dataset.id
         });
     });
+}
+
+function refineControlsMobile() {
+    const $refineLink = $('.refine-results-link-mobile');
+    const $refineLinkContainer = $('.refine-results-link-container-mobile');
+    const $refinePopup = $('.refine-popup-mobile');
+    const $refinePopupClose = $('#refine-close-mobile');
+
+    function toggle() {
+        $refineLinkContainer.toggle();
+        $refinePopup.toggle();
+    }
+
+    $refineLink.click(toggle);
+    $refinePopupClose.click(toggle);
+
+    d3.selectAll('.refine-menu-header-mobile, .question-list-header-mobile').on('click', function() {
+        $(this.nextElementSibling).toggle();
+    });
+
+    d3.select('.questions-mobile')
+        .selectAll('.question.collapsed')
+        .classed('collapsed', false);
 }
 

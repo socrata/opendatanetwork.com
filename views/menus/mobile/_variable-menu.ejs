@@ -1,0 +1,21 @@
+
+<% const variables = _.values(dataset.variables); %>
+
+<li class="refine-menu-list-item-datasets-mobile">
+    <a class="refine-menu-header-mobile">
+        <%= variable.name %>
+        <% if (variables.length > 1) { %>
+            <i class="fa fa-caret-down odn-caret"></i>
+        <% } %>
+    </a>
+    <ul>
+        <% variables.forEach(variable => { %>
+            <li>
+                <a href="<%= navigate.variable(variable.id).url() %>">
+                    <%= variable.name %>
+                </a>
+            </li>
+        <% }); %>
+    </ul>
+</li>
+

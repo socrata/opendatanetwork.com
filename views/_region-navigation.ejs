@@ -8,20 +8,16 @@
         <% } %>
         <h2>Data for</h2>
         <div class="region-tokens">
-            <% include _entity-search-tokens %>
+            <ul class="tokens">
+                <% include _entity-search-tokens %>
+            </ul>
         </div>
-        <% include _questions %>
+        <% include questions/_questions %>
 
         <div id="peers">
             <h2>
                 Compare this Data
             </h2>
-
-            <div class="add-region">
-                <em class="fa fa-plus" role="presentation" aria-hidden="true"></em><input class="add-region-input" type="text" placeholder="Add Location" aria-label="Add Location">
-                <ul class="add-region-results" style="display: none;"></ul>
-            </div>
-
             <% if (related.peer.length > 0) { %>
                 <ul id="similar-regions">
                 <% related.peer[0].entities.forEach(region => { %>

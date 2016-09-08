@@ -59,7 +59,6 @@ function js(src, dest) {
 var homeScripts = baseScripts
     .concat(autosuggestScripts)
     .concat([
-        'src/quick-links.js',
         'src/home-page-controller.js',
         'src/home.js']);
 gulp.task('home', js(homeScripts, 'home.min.js'));
@@ -67,8 +66,6 @@ gulp.task('home', js(homeScripts, 'home.min.js'));
 var searchScripts = baseScripts
     .concat(autosuggestScripts)
     .concat([
-        'src/quick-links.js',
-        'src/refine-controls-mobile.js',
         'src/search-refine-controls-mobile.js',
         'src/infinite-scroll.js',
         'src/search.js',
@@ -88,7 +85,6 @@ gulp.task('entity', js(entityScripts, 'entity.min.js'));
 var datasetScripts = baseScripts
     .concat(autosuggestScripts)
     .concat([
-        'src/quick-links.js',
         'src/dataset.js']);
 gulp.task('dataset', js(datasetScripts, 'dataset.min.js'));
 

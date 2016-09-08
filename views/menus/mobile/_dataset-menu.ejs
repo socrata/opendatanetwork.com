@@ -1,0 +1,21 @@
+
+<% const datasets = _.values(topic.datasets); %>
+
+<li class="refine-menu-list-item-datasets-mobile">
+    <a class="refine-menu-header-mobile">
+        <%= dataset.name %>
+        <% if (datasets.length > 1) { %>
+            <i class="fa fa-caret-down odn-caret"></i>
+        <% } %>
+    </a>
+    <ul>
+        <% datasets.forEach(dataset => { %>
+            <li>
+                <a href="<%= navigate.dataset(dataset.id).url() %>">
+                    <%= dataset.name %>
+                </a>
+            </li>
+        <% }); %>
+    </ul>
+</li>
+

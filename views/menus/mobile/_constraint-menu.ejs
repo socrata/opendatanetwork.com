@@ -1,0 +1,22 @@
+
+<% constraintMenus.forEach(constraint => { %>
+    <li class="refine-menu-list-item-datasets-mobile">
+        <a class="refine-menu-header-mobile">
+            <%= constraint.selected %>
+            <% if (constraint.options.length > 1) { %>
+                <i class="fa fa-caret-down odn-caret"></i>
+            <% } %>
+        </a>
+
+        <ul>
+            <% constraint.options.forEach(option => { %>
+                <li>
+                    <a href="<%= navigate.constraint(constraint.name, option).url() %>">
+                        <%= option %>
+                    </a>
+                </li>
+            <% }); %>
+        </ul>
+    </li>
+<% }); %>
+
