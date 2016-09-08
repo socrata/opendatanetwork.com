@@ -1,0 +1,17 @@
+
+<li class="refine-menu-list-item-topics-mobile">
+    <a class="refine-menu-header-mobile">
+        <%= topic.name %>
+        <i class="fa fa-caret-down odn-caret"></i>
+    </a>
+    <ul>
+      <% topics.forEach(otherTopic => { %>
+        <li>
+            <a href="<%= navigate.topic(otherTopic.id).url() %>"<%- (entities.length >= 3) ? ' rel="nofollow"' : '' %>>
+                <%= otherTopic.name %>
+            </a>
+        </li>
+      <% }); %>
+    </ul>
+</li>
+

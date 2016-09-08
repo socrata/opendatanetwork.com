@@ -7,6 +7,7 @@ $(document).ready(function() {
     apiBadges();
     showMoreQuestions();
     infiniteDatasetScroll();
+    refineControlsMobile();
 
     window.entityNavigate =
         new EntityNavigate(_data.entities, _data.variable.id, _data.constraints);
@@ -175,6 +176,25 @@ function getDatasetPaginator() {
             entity_id: _data.entities.map(_.property('id')).join('-'),
             dataset_id: _data.dataset.id
         });
+    });
+}
+
+function refineControlsMobile() {
+    const $refineLink = $('.refine-results-link-mobile');
+    const $refineLinkContainer = $('.refine-results-link-container-mobile');
+    const $refinePopup = $('.refine-popup-mobile');
+    const $refinePopupClose = $('#refine-close-mobile');
+
+    function toggle() {
+        $refineLinkContainer.toggle();
+        $refinePopup.toggle();
+    }
+
+    $refineLink.click(toggle);
+    $refinePopupClose.click(toggle);
+
+    d3.selectAll('.refine-menu-header-mobile').on('click', function() {
+        $(this.nextElementSibling).toggle();
     });
 }
 

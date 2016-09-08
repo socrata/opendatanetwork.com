@@ -1,0 +1,28 @@
+
+<div class="refine-controls-mobile">
+    <div class="refine-results-link-container-mobile">
+        <a class="refine-results-link-mobile">Refine Results</a>
+    </div>
+
+    <div class="refine-popup-mobile" style="display: none">
+        <div class="refine-popup-mobile-container">
+            <div class="refine-popup-inner-container-mobile">
+                <div class="refine-similar-regions-mobile">
+                    <a id="refine-close-mobile" class="fa fa-caret-up"></a>
+                    <label>Data for</label>
+                    <ul class="displayed-regions-list-mobile">
+                        <% include ../../_entity-search-tokens %>
+                    </ul>
+                </div>
+
+                <ul class="refine-menu-list-mobile">
+                    <% include _topic-menu %>
+                    <% include _dataset-menu %>
+                    <% include _variable-menu %>
+                    <% include _constraint-menu %>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+

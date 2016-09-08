@@ -68,7 +68,6 @@ var searchScripts = baseScripts
     .concat(autosuggestScripts)
     .concat([
         'src/quick-links.js',
-        'src/refine-controls-mobile.js',
         'src/search-refine-controls-mobile.js',
         'src/infinite-scroll.js',
         'src/search.js',
