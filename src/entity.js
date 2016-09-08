@@ -80,6 +80,7 @@ function apiBadges() {
     questionBadge(entityIDs, datasetID);
     peerBadge(entityID);
     siblingBadge(entityID);
+    childBadge(entityID);
 }
 
 function availableDataBadge(entityIDs) {
@@ -154,9 +155,23 @@ function siblingBadge(entityID) {
     const popup = new APIPopup('Get siblings', '/entity/sibling', url, apiaryURL);
     const badge = new APIBadge(popup);
 
-    const selector = 'h2.places-in-region-header';
-    popup.insertAt(d3.select('div.controls'), `${selector} + *`);
-    badge.appendTo(d3.select(selector));
+    const selection = d3.select('div#siblings');
+    popup.insertAt(selection, ':nth-child(2)');
+    badge.insertAt(selection.select('h2'));
+}
+
+function childBadge(entityID) {
+    const url = odn.relatedURL(entityID, 'child');
+    const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/entity-relationships';
+
+    d3.selectAll('div.children').each(function() {
+        const popup = new APIPopup('Get children', '/entity/child', url, apiaryURL);
+        const badge = new APIBadge(popup);
+
+        const selection = d3.select(this);
+        popup.insertAt(selection, ':nth-child(2)');
+        badge.insertAt(selection.select('h2'));
+    });
 }
 
 function showMoreQuestions() {

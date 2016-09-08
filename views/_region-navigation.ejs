@@ -26,32 +26,37 @@
                 </ul>
             <% } %>
         </div>
-        <% if (related.sibling.length > 0) { %>
-            <h2 class="places-in-region-header">
-                Others in
-                <% const parentRegion = related.parent[0].entities[0]; %>
-                <a class="parent-link" href="<%= navigate.to(parentRegion).url() %>"><%= parentRegion.name %></a>
-            </h2>
 
-            <ul class="places-in-region-list">
-                <% related.sibling[0].entities.forEach(region => { %>
-                    <li><a class="region-link" href="<%= navigate.to(region).url() %>"><%= region.name %></a></li>
-                <% }); %>
-            </ul>
+        <% if (related.sibling.length > 0) { %>
+            <div id="siblings">
+                <h2 class="places-in-region-header">
+                    Others in
+                    <% const parentRegion = related.parent[0].entities[0]; %>
+                    <a class="parent-link" href="<%= navigate.to(parentRegion).url() %>"><%= parentRegion.name %></a>
+                </h2>
+
+                <ul class="places-in-region-list">
+                    <% related.sibling[0].entities.forEach(region => { %>
+                        <li><a class="region-link" href="<%= navigate.to(region).url() %>"><%= region.name %></a></li>
+                    <% }); %>
+                </ul>
+            </div>
         <% } %>
 
         <% if (related.child.length > 0) { %>
             <% related.child.forEach(relative => { %>
                 <% if (relative.entities.length > 0) { %>
-                    <h2 class="places-in-region-header">
-                        <%= GlobalConstants.PLURAL_REGION_NAMES[relative.type] || 'Regions' %> in <%= entities[0].name %>
-                    </h2>
+                    <div class="children" id="<%= relative.type %>">
+                        <h2 class="places-in-region-header">
+                            <%= GlobalConstants.PLURAL_REGION_NAMES[relative.type] || 'Regions' %> in <%= entities[0].name %>
+                        </h2>
 
-                    <ul class="places-in-region-list">
-                        <% relative.entities.forEach(child => { %>
-                            <li><a class="region-link" href="<%= navigate.to(child).url() %>"><%= child.name %></a></li>
-                        <% }); %>
-                    </ul>
+                        <ul class="places-in-region-list">
+                            <% relative.entities.forEach(child => { %>
+                                <li><a class="region-link" href="<%= navigate.to(child).url() %>"><%= child.name %></a></li>
+                            <% }); %>
+                        </ul>
+                    </div>
                 <% } %>
             <% }); %>
         <% } %>
