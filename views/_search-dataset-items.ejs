@@ -1,7 +1,7 @@
 <% datasets.forEach(dataset => { %>
     <li>
         <a class="api-link" href="<%= dataset.dev_docs_url %>">API</a>
-        <i class="fa <%= dataset.categoryGlyphString %>"></i>
+        <em class="fa <%= dataset.categoryGlyphString %>"></em>
         <h2>
             <a href="/dataset/<%= dataset.domain %>/<%= dataset.fxf %>">
                 <%= dataset.name %>

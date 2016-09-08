@@ -1,21 +1,20 @@
-
 <ul class="tokens">
     <% categories.forEach(function(category) { %>
         <li class="category-token">
             <%= category %>
-            <a class="fa fa-times-circle" href="<%= searchNavigate.removeCategory(category).url() %>"></a>
+            <a class="fa fa-times-circle" href="<%= searchNavigate.removeCategory(category).url() %>"><span class="sr-only">Close</span></a>
         </li>
     <% }); %>
     <% domains.forEach(function(domain) { %>
         <li class="domain-token">
             <%= domain %>
-            <a class="fa fa-times-circle" href="<%= searchNavigate.removeDomain(domain).url() %>"></a>
+            <a class="fa fa-times-circle" href="<%= searchNavigate.removeDomain(domain).url() %>"><span class="sr-only">Close</span></a>
         </li>
     <% }); %>
     <% tags.forEach(function(tag) { %>
         <li class="tag-token">
             <%= tag %>
-            <a class="fa fa-times-circle" href="<%= searchNavigate.removeTag(tag).url() %>"></a>
+            <a class="fa fa-times-circle" href="<%= searchNavigate.removeTag(tag).url() %>"><span class="sr-only">Close</span></a>
         </li>
     <% }); %>
 </ul>
