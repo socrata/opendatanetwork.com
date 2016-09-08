@@ -79,6 +79,7 @@ function apiBadges() {
     newMapBadge(entityIDs, variableID, constraints);
     questionBadge(entityIDs, datasetID);
     peerBadge(entityID);
+    siblingBadge(entityID);
 }
 
 function availableDataBadge(entityIDs) {
@@ -145,6 +146,17 @@ function peerBadge(entityID) {
     const selection = d3.select('div#peers');
     popup.insertAt(selection, ':nth-child(2)');
     badge.insertAt(selection.select('h2'));
+}
+
+function siblingBadge(entityID) {
+    const url = odn.relatedURL(entityID, 'sibling');
+    const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/entity-relationships';
+    const popup = new APIPopup('Get siblings', '/entity/sibling', url, apiaryURL);
+    const badge = new APIBadge(popup);
+
+    const selector = 'h2.places-in-region-header';
+    popup.insertAt(d3.select('div.controls'), `${selector} + *`);
+    badge.appendTo(d3.select(selector));
 }
 
 function showMoreQuestions() {
