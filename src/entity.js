@@ -9,6 +9,7 @@ $(document).ready(function() {
     infiniteDatasetScroll();
     attachMobileMenuHandlers();
     expandMobileQuestions();
+    citationTooltip();
 
     window.entityNavigate =
         new EntityNavigate(_data.entities, _data.variable.id, _data.constraints);
@@ -184,5 +185,15 @@ function expandMobileQuestions() {
     d3.select('.questions-mobile')
         .selectAll('.question.collapsed')
         .classed('collapsed', false);
+}
+
+function citationTooltip() {
+    $('.info-icon').mouseenter(() => {
+        $('.info-tooltip').fadeIn();
+    });
+
+    $('.info-icon').mouseleave(() => {
+        $('.info-tooltip').fadeOut();
+    });
 }
 
