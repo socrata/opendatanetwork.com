@@ -1,0 +1,30 @@
+<section class="refine-bar search-header-bar">
+    <div class="refine-link">
+        <span>Categories<i class="fa fa-caret-down"></i></span>
+        <% include _category-list %>
+    </div>
+
+    <div class="refine-link">
+        <span>Publishers<i class="fa fa-caret-down"></i></span>
+        <% include _publisher-list %>
+    </div>
+
+    <label class="refine-by-label">Refine by:</label>
+    <i class="fa fa-bar-chart search-results-header-icon"></i>
+    <label class="search-results-header-label">
+        <% if (query.length > 0) { %>
+            <% if (datasets.length > 0) { %>
+                Datasets for "<%= query %>"
+            <% } else { %>
+                No datasets for "<%= query %>"
+            <% } %>
+        <% } else { %>
+            Datasets
+        <% } %>
+    </label>
+
+    <% include ../../_search-tokens %>
+</section>
+
+<div id="catalog-info-box"></div>
+

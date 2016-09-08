@@ -1,0 +1,11 @@
+
+<ul id="refine-menu-domains" style="display:none">
+    <% refineBy.domains.forEach(domain => { %>
+        <li>
+            <a href="<%- searchNavigate.addDomain(domain.domain).url() %>">
+                <%= domain.domain %>
+            </a>
+        </li>
+    <% }); %>
+</ul>
+

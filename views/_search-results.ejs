@@ -1,14 +1,14 @@
 
 <div class="search-results-regular-column">
 
-<% include _search-refine-controls-mobile %>
+<% include search/refine/_search-refine-controls-mobile %>
 
 <% if (entities.length > 0) { %>
     <% include _search-results-regions-bar %>
     <% include _search-results-regions %>
 <% } %>
 
-    <% include _search-refine-controls %>
+    <% include search/refine/_search-refine-controls %>
 
 <% if (datasets.length > 0) { %>
     <% if (typeof currentCategory != 'undefined' && currentCategory && currentCategory.metadata && currentCategory.metadata.description) { %>

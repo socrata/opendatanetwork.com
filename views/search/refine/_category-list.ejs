@@ -1,0 +1,12 @@
+
+<ul id="refine-menu-categories" style="display:none">
+    <% refineBy.categories.forEach(category => { %>
+        <li>
+            <a href="<%- searchNavigate.addCategory(category.category).url() %>">
+                <i class="fa <%= category.metadata.icon %>"></i>
+                <%= category.category %>
+            </a>
+        </li>
+    <% }); %>
+</ul>
+

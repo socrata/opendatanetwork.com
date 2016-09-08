@@ -8,7 +8,7 @@
                 <div class="search-refine-similar-regions-mobile">
                     <a id="search-refine-close-mobile" class="fa fa-caret-up"></a>
                     <label>Refine by</label>
-                    <% include _search-tokens %>
+                    <% include ../../_search-tokens %>
                 </div>
                 <ul class="search-refine-menu-list-mobile">
                     <li class="search-refine-menu-list-item-categories-mobile">
@@ -16,22 +16,14 @@
                             Categories
                             <i class="fa fa-caret-down odn-caret"></i>
                         </a>
-                        <ul>
-                          <% refineByMobile.categories.forEach(category => { %>
-                            <li><%= category.category %></li>
-                          <% }); %>
-                        </ul>
+                        <% include _category-list %>
                     </li>
                     <li class="search-refine-menu-list-item-domains-mobile">
                         <a class="refine-menu-header-mobile">
                             Domains
                             <i class="fa fa-caret-down odn-caret"></i>
                         </a>
-                        <ul>
-                          <% refineByMobile.domains.forEach(domain => { %>
-                            <li><%= domain.domain %></li>
-                          <% }); %>
-                        </ul>
+                        <% include _publisher-list %>
                     </li>
                 </ul>
             </div>
