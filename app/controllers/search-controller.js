@@ -42,7 +42,9 @@ module.exports = (request, response) => {
             page: 'search',
             query,
             categories,
+            allCategories,
             domains,
+            allDomains: allDomains.results,
             tags,
             entities,
             questions,
@@ -71,8 +73,6 @@ module.exports = (request, response) => {
                 '/lib/search.min.js'
             ]
         };
-
-        // response.json(templateData);
 
         response.render('search.ejs', templateData, (error, html) => {
             if (error) {

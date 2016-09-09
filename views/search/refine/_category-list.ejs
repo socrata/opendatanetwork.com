@@ -1,12 +1,14 @@
 
 <ul id="refine-menu-categories" style="display:none">
-    <% refineBy.categories.forEach(category => { %>
-        <li>
+    <% allCategories.forEach((category, index) => { %>
+        <li style="display: <%= index > 5 ? 'none' : 'list-item' %>">
             <a href="<%- searchNavigate.addCategory(category.category).url() %>">
                 <em class="fa <%= category.metadata.icon %>"></em>
                 <%= category.category %>
             </a>
         </li>
     <% }); %>
+
+    <li id="refine-menu-categories-view-more" class="refine-view-more">More</li>
 </ul>
 

@@ -5,6 +5,8 @@ $(document).ready(function() {
     attachMenuHandlers();
     attachMobileMenuHandlers('search-');
     showMoreQuestions();
+    showMore('.refine-link #refine-menu-domains-view-more');
+    showMore('.refine-link #refine-menu-categories-view-more');
     apiBadges();
     infiniteDatasetScroll();
 
@@ -153,5 +155,17 @@ function getDatasetPaginator() {
             tags: _data.tags
         });
     });
+}
+
+function showMore(selector) {
+    const selection = d3.select(selector);
+
+    selection.on('click', () => {
+        d3.select(selection.node().parentNode)
+            .selectAll('li')
+            .style('display', 'list-item');
+    });
+
+    selection.attr('display', 'none');
 }
 
