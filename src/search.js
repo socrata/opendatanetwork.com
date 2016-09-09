@@ -107,10 +107,27 @@ function getColumnCount(count) {
 
 function apiBadges() {
     const query = _data.query;
+
+    questionBadge(query);
+    datasetBadge(query);
+}
+
+function questionBadge(query) {
+    const url = odn.searchQuestionsURL(query);
+    const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/search-questions/get-questions';
+    const description = `Questions for ${query}`;
+    const popup = new APIPopup(description, '/search/question', url, apiaryURL, true);
+    const badge = new APIBadge(popup);
+
+    popup.appendTo(d3.select('#question-api-popup'));
+    badge.appendTo(d3.select('#search-results-questions-bar'));
+}
+
+function datasetBadge(query) {
     const url = `http://api.us.socrata.com/api/catalog/v1?q=${query}`;
     const apiaryURL = 'http://docs.socratadiscovery.apiary.io/#';
     const description = `Full text search for ${query}`;
-    const popup = new APIPopup(description, '/catalog', url, apiaryURL);
+    const popup = new APIPopup(description, '/catalog', url, apiaryURL, true);
     const badge = new APIBadge(popup);
 
     popup.appendTo(d3.select('#catalog-info-box'));

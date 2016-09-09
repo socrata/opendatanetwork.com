@@ -1,11 +1,11 @@
 
 class APIPopup {
-    constructor(description, endpoint, backendURL, apiaryURL) {
+    constructor(description, endpoint, backendURL, apiaryURL, hideEntities) {
         this.description = description;
         this.endpoint = endpoint;
         this.backendURL = backendURL;
         this.apiaryURL = apiaryURL;
-        this.entities = _data.entities || [];
+        this.entities = hideEntities ? [] : _data.entities || [];
         this.entityNames = this.entities.map(_.property('name'));
     }
 
