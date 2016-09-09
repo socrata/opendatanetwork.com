@@ -4,6 +4,7 @@ $(document).ready(function() {
     tooltip();
     attachMenuHandlers();
     attachMobileMenuHandlers('search-');
+    showMoreQuestions();
     apiBadges();
     infiniteDatasetScroll();
 

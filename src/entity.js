@@ -77,7 +77,6 @@ function apiBadges() {
     availableDataBadge(entityIDs);
     constraintBadge(entityIDs, variableID, constraint);
     newMapBadge(entityIDs, variableID, constraints);
-    questionBadge(entityIDs, datasetID);
     peerBadge(entityID);
     siblingBadge(entityID);
     childBadge(entityID);
@@ -127,17 +126,6 @@ function chartBadge(chart) {
     badge.appendTo(selection.select('h1'));
 }
 
-function questionBadge(entityIDs, datasetID) {
-    const url = odn.searchQuestionsURL(entityIDs, datasetID);
-    const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/search-questions/get-questions';
-    const popup = new APIPopup('Get questions', '/search/question', url, apiaryURL);
-    const badge = new APIBadge(popup);
-
-    const selection = d3.select('div#questions');
-    popup.insertAt(selection, ':nth-child(2)');
-    badge.insertAt(selection.select('h2'));
-}
-
 function peerBadge(entityID) {
     const url = odn.relatedURL(entityID, 'peer');
     const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/entity-relationships';
@@ -171,21 +159,6 @@ function childBadge(entityID) {
         const selection = d3.select(this);
         popup.insertAt(selection, ':nth-child(2)');
         badge.insertAt(selection.select('h2'));
-    });
-}
-
-function showMoreQuestions() {
-    let more = true;
-
-    const collapsible = d3.selectAll('li.question.collapsible');
-
-    const link = d3.selectAll('a#questions');
-
-    link.on('click', () => {
-        more = !more;
-        collapsible.classed('collapsed', more);
-
-        link.text(`show ${more ? 'more' : 'less'}`);
     });
 }
 

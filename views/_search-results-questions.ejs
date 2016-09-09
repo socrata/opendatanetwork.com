@@ -1,20 +1,20 @@
 
-<% if (typeof questions != 'undefined' && questions && questions.length > 0) {
-
-    const question = questions[0];
-    const rg = question.variable_id.split('.');
-    rg.pop();
-
-    const datasetId = rg.join('.');
-%>
-
+<% if (questions.length) { %>
     <section id="search-results-questions-bar" class="search-results-regions-bar search-header-bar">
         <em class="fa fa-question-circle search-results-header-icon"></em>
-        <label class="search-results-header-label">Questions for "<%= params.q %>"</label>
+        <label class="search-results-header-label">Questions for "<%= query %>"</label>
     </section>
 
     <div class="search-results" id="search-questions">
-        <% include _question-list %>
+        <% questions.forEach((question, index) => { %>
+            <li class="question <%= index > 1 ? 'collapsible collapsed' : '' %>">
+                <a href="<%= navigate.to(question.entity).regionURL(question.vector, question.metric) %>">
+                    <%= question.text %>
+                </a>
+            </li>
+        <% }); %>
+
+        <% include questions/_show-more %>
     </div>
 <% } %>
 
