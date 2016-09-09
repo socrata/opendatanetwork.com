@@ -109,7 +109,7 @@ function apiBadges() {
     const query = _data.query;
 
     questionBadge(query);
-    datasetBadge(query);
+    datasetBadge();
 }
 
 function questionBadge(query) {
@@ -123,10 +123,10 @@ function questionBadge(query) {
     badge.appendTo(d3.select('#search-results-questions-bar'));
 }
 
-function datasetBadge(query) {
-    const url = `http://api.us.socrata.com/api/catalog/v1?q=${query}`;
+function datasetBadge() {
+    const url = _data.ceteraURL;
     const apiaryURL = 'http://docs.socratadiscovery.apiary.io/#';
-    const description = `Full text search for ${query}`;
+    const description = 'Search for datasets';
     const popup = new APIPopup(description, '/catalog', url, apiaryURL, true);
     const badge = new APIBadge(popup);
 

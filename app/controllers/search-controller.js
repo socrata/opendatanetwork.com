@@ -48,6 +48,7 @@ module.exports = (request, response) => {
             questions,
             datasets: ceteraResponse.datasets,
             datasetCount: ceteraResponse.size,
+            ceteraURL: cetera.datasetsURL(),
             navigate: new EntityNavigate(),
             searchNavigate: new SearchNavigate(query, categories, domains, tags),
             title: 'Data on the Open Data Network',

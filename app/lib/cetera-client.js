@@ -29,7 +29,8 @@ class CeteraClient {
     }
 
     datasets(limit, offset) {
-        return Request.getJSON(this.datasetsURL(limit, offset)).then(response => {
+        const url = this.datasetsURL(limit, offset);
+        return Request.getJSON(url).then(response => {
             return Promise.resolve({
                 size: response.resultSetSize,
                 datasets: response.results.map(getDataset)
