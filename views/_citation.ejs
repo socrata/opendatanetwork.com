@@ -20,9 +20,9 @@
                 <% } %>
                 <% i = i + 1; %>
             <% }); %>
-            <% if (dataset.fxf) { %>
-                <a href="https://odn.data.socrata.com/dataset/<%= dataset.fxf %>">ODN Dataset</a> |
-                <a href="https://dev.socrata.com/foundry/odn.data.socrata.com/<%= dataset.fxf %>">API</a> -
+            <% if (dataset.fxf && dataset.domain) { %>
+                <a href="https://<%= dataset.domain %>/dataset/<%= dataset.fxf %>">ODN Dataset</a> |
+                <a href="https://dev.socrata.com/foundry/<%= dataset.domain %>/<%= dataset.fxf %>">API</a> -
             <% } %>
             <span class="info-icon">
                 <span class="info-tooltip">
