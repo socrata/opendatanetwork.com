@@ -13,14 +13,19 @@
     <label class="refine-by-label">Refine by:</label>
     <em class="fa fa-bar-chart search-results-header-icon"></em>
     <label class="search-results-header-label">
-        <% if (query.length > 0) { %>
-            <% if (datasets.length > 0) { %>
-                Datasets for "<%= query %>"
+        <% const datasetCountString = datasetCount.toLocaleString(); %>
+        <% if (query.length) { %>
+            <% if (datasetCount) { %>
+                Found <%= datasetCountString %> datasets for "<%= query %>"
             <% } else { %>
                 No datasets for "<%= query %>"
             <% } %>
         <% } else { %>
-            Datasets
+            <% if (datasetCount) { %>
+                Found <%= datasetCountString %> results
+            <% } else { %>
+                Found 0 results
+            <% } %>
         <% } %>
     </label>
 
