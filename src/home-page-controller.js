@@ -162,15 +162,6 @@ class HomePageController {
         const heroAutoSuggest = new Autosuggest('.home-search-bar-controls .region-list');
         heroAutoSuggest.listen('.home-search-bar-controls .search-bar-input');
 
-        // QuickLinks
-        //
-        const quickLinks = new QuickLinks();
-
-        quickLinks.onShow = () => {
-            headerAutoSuggest.results.hide();
-            heroAutoSuggest.results.hide();
-        };
-
         // Search button
         //
         $('#search-button').click(() => {
