@@ -62,10 +62,9 @@ module.exports = (request, response) => {
                 Promise.all([
                     getRelated(entities[0].id),
                     ODNClient.searchDatasets(entityIDs, dataset.id),
-                    ODNClient.searchQuestions(entityIDs, dataset.id),
                     EntityFormatter.entityPageTitle(entities, dataset, variable),
                     getDescription(entityIDs, variable.id, constraints)
-                ]).then(([related, datasets, questions, title, description]) => {
+                ]).then(([related, datasets, title, description]) => {
                     const templateData = {
                         _,
                         page: 'entity',
@@ -73,7 +72,6 @@ module.exports = (request, response) => {
                         scripts,
                         GlobalConstants,
                         title,
-                        questions,
                         datasets,
                         related,
                         entities,
@@ -220,7 +218,7 @@ function getDescription(entityIDs, variableID, constraints) {
 function generateQuestions(topics, dataset, variable) {
     const datasetVariables = _(dataset.variables)
         .values()
-        .without(variable)
+        .filter(other => other.id !== variable.id)
         .value();
 
     const otherVariables = _(topics)
@@ -228,9 +226,10 @@ function generateQuestions(topics, dataset, variable) {
         .map(_.property('datasets'))
         .map(_.values)
         .flatten()
+        .filter(other => other.id !== dataset.id)
         .map(dataset => {
             return _.values(dataset.variables)
-                .map((variable, index) => _.assign(variable, {index}))
+                .map((variable, index) => _.assign(variable, {index}));
         })
         .flatten()
         .sortBy('index')
