@@ -24,7 +24,8 @@ module.exports = (request, response) => {
 
     const cetera = new CeteraClient(query, categories, domains, tags);
 
-    cetera.datasets(limit, offset).then(datasets => {
+    cetera.datasets(limit, offset).then(results => {
+        const datasets = results.datasets;
         if (_.isEmpty(datasets)) return response.status(204).send();
         response.render('_search-results-items.ejs', {datasets});
     }).catch(errorHandler);

@@ -14,7 +14,6 @@ const DATASET_CONSTANTS = {
         legend : { position : 'top' },
         pointShape : 'square',
         pointSize : 8,
-        height: 300,
         colors: ['#2980b9', '#ee3b3b', '#3bdbee', '#ff9900', '#109618', '#0099c6', '#dd4477', '#66aa00', '#b82e2e', '#316395']
     },
 

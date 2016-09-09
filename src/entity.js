@@ -77,8 +77,9 @@ function apiBadges() {
     availableDataBadge(entityIDs);
     constraintBadge(entityIDs, variableID, constraint);
     newMapBadge(entityIDs, variableID, constraints);
-    questionBadge(entityIDs, datasetID);
     peerBadge(entityID);
+    siblingBadge(entityID);
+    childBadge(entityID);
 }
 
 function availableDataBadge(entityIDs) {
@@ -125,17 +126,6 @@ function chartBadge(chart) {
     badge.appendTo(selection.select('h1'));
 }
 
-function questionBadge(entityIDs, datasetID) {
-    const url = odn.searchQuestionsURL(entityIDs, datasetID);
-    const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/search-questions/get-questions';
-    const popup = new APIPopup('Get questions', '/search/question', url, apiaryURL);
-    const badge = new APIBadge(popup);
-
-    const selection = d3.select('div#questions');
-    popup.insertAt(selection, ':nth-child(2)');
-    badge.insertAt(selection.select('h2'));
-}
-
 function peerBadge(entityID) {
     const url = odn.relatedURL(entityID, 'peer');
     const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/entity-relationships';
@@ -147,18 +137,28 @@ function peerBadge(entityID) {
     badge.insertAt(selection.select('h2'));
 }
 
-function showMoreQuestions() {
-    let more = true;
+function siblingBadge(entityID) {
+    const url = odn.relatedURL(entityID, 'sibling');
+    const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/entity-relationships';
+    const popup = new APIPopup('Get siblings', '/entity/sibling', url, apiaryURL);
+    const badge = new APIBadge(popup);
 
-    const collapsible = d3.selectAll('li.question.collapsible');
+    const selection = d3.select('div#siblings');
+    popup.insertAt(selection, ':nth-child(2)');
+    badge.insertAt(selection.select('h2'));
+}
 
-    const link = d3.selectAll('a#questions');
+function childBadge(entityID) {
+    const url = odn.relatedURL(entityID, 'child');
+    const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/entity-relationships';
 
-    link.on('click', () => {
-        more = !more;
-        collapsible.classed('collapsed', more);
+    d3.selectAll('div.children').each(function() {
+        const popup = new APIPopup('Get children', '/entity/child', url, apiaryURL);
+        const badge = new APIBadge(popup);
 
-        link.text(`show ${more ? 'more' : 'less'}`);
+        const selection = d3.select(this);
+        popup.insertAt(selection, ':nth-child(2)');
+        badge.insertAt(selection.select('h2'));
     });
 }
 

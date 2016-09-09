@@ -36,7 +36,7 @@ class HomeController {
 
                 const randomRegions = HomeHelper.getRandomMostPopulousRegionsFromEachState(locations, 100);
                 const questionsPromises = _.map(randomRegions, region => {
-                    return ODNClient.searchQuestions([region.id], null, 15);
+                    return ODNClient.searchQuestions(region.name, 15);
                 });
 
                 Promise.all(questionsPromises).then(questionsData => {

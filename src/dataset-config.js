@@ -332,11 +332,7 @@ const DATASET_CONFIG = {
                 constraint: {
                     year: '2013'
                 },
-                name: 'Graduation Rates',
-                variables: [
-                    'education.graduation_rates.percent_high_school_graduate_or_higher',
-                    'education.graduation_rates.percent_bachelors_degree_or_higher'
-                ],
+                name: 'Graduation Rates'
             }
         ]
     },
@@ -498,7 +494,7 @@ const DATASET_CONFIG = {
                 name: 'Occupations',
                 variables: [
                     'jobs.occupations.percent_employed'
-                ],
+                ]
             }
         ]
     }

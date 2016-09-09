@@ -34,8 +34,9 @@ module.exports = (request, response) => {
         cetera.datasets(),
         Category.categories(),
         Category.domains(),
-        Tag.tags()
-    ]).then(([entities, datasets, allCategories, allDomains, allTags]) => {
+        Tag.tags(),
+        ODNClient.searchQuestions(query)
+    ]).then(([entities, ceteraResponse, allCategories, allDomains, allTags, questions]) => {
         const templateData = {
             Constants,
             page: 'search',
@@ -44,7 +45,10 @@ module.exports = (request, response) => {
             domains,
             tags,
             entities,
-            datasets,
+            questions,
+            datasets: ceteraResponse.datasets,
+            datasetCount: ceteraResponse.size,
+            ceteraURL: cetera.datasetsURL(),
             navigate: new EntityNavigate(),
             searchNavigate: new SearchNavigate(query, categories, domains, tags),
             title: 'Data on the Open Data Network',

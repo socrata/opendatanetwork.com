@@ -62,10 +62,9 @@ module.exports = (request, response) => {
                 Promise.all([
                     getRelated(entities[0].id),
                     ODNClient.searchDatasets(entityIDs, dataset.id),
-                    ODNClient.searchQuestions(entityIDs, dataset.id),
                     EntityFormatter.entityPageTitle(entities, dataset, variable),
                     getDescription(entityIDs, variable.id, constraints)
-                ]).then(([related, datasets, questions, title, description]) => {
+                ]).then(([related, datasets, title, description]) => {
                     const templateData = {
                         _,
                         page: 'entity',
@@ -73,7 +72,6 @@ module.exports = (request, response) => {
                         scripts,
                         GlobalConstants,
                         title,
-                        questions,
                         datasets,
                         related,
                         entities,
@@ -86,6 +84,7 @@ module.exports = (request, response) => {
                         fixedConstraints: fixed,
                         topics: _.values(availableData),
                         navigate: new Navigate(entities, variableID, _.clone(request.query)),
+                        questions: generateQuestions(availableData, dataset, variable),
                         chartConfig: getChartConfig(dataset),
                     };
 
@@ -110,6 +109,7 @@ function getChartConfig(dataset) {
 
     config.charts.forEach(chart => {
         chart.id = chart.id.replace(/[\._]/g, '-');
+        chart.dataset_id = dataset.id;
     });
 
     return config;
@@ -187,7 +187,7 @@ function clean(string) {
 
 function getRelated(entityID) {
     const promises = ['parent', 'child', 'sibling', 'peer']
-        .map(relation => ODNClient.related(entityID, relation, GlobalConstants.PEER_REGIONS));
+        .map(relation => ODNClient.related(entityID, relation, GlobalConstants.RELATED_ENTITY_COUNT));
 
     return Promise.all(promises)
         .then(result => Promise.resolve(_.merge.apply(_, result)));
@@ -204,5 +204,39 @@ function getVariableID(request) {
 function getDescription(entityIDs, variableID, constraints) {
     return ODNClient.values(entityIDs, variableID, constraints, true)
         .then(response => Promise.resolve(response.description));
+}
+
+/**
+ * Generate a list of variables for which we have data. These variables
+ * are used to formulate questions.
+ *
+ * The current variable is not included.
+ *
+ * Variables from the current dataset are listed first.
+ * Subsequent variables are ordered by their index within their parent
+ * dataset so that questions range many datasets.
+ */
+function generateQuestions(topics, dataset, variable) {
+    const datasetVariables = _(dataset.variables)
+        .values()
+        .filter(other => other.id !== variable.id)
+        .value();
+
+    const otherVariables = _(topics)
+        .values()
+        .map(_.property('datasets'))
+        .map(_.values)
+        .flatten()
+        .filter(other => other.id !== dataset.id)
+        .map(dataset => {
+            return _.values(dataset.variables)
+                .map((variable, index) => _.assign(variable, {index}));
+        })
+        .flatten()
+        .sortBy('index')
+        .value();
+
+    return datasetVariables.concat(otherVariables)
+        .slice(0, GlobalConstants.QUESTION_COUNT);
 }
 

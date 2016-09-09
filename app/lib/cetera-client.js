@@ -29,8 +29,12 @@ class CeteraClient {
     }
 
     datasets(limit, offset) {
-        return Request.getJSON(this.datasetsURL(limit, offset)).then(response => {
-            return Promise.resolve(response.results.map(getDataset));
+        const url = this.datasetsURL(limit, offset);
+        return Request.getJSON(url).then(response => {
+            return Promise.resolve({
+                size: response.resultSetSize,
+                datasets: response.results.map(getDataset)
+            });
         });
     }
 }

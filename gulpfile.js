@@ -67,6 +67,7 @@ var searchScripts = baseScripts
     .concat(autosuggestScripts)
     .concat([
         'src/infinite-scroll.js',
+        'src/show-more-questions.js',
         'src/mobile-menus.js',
         'src/search.js',
         'src/api/odn-api.js']);
@@ -79,6 +80,7 @@ var entityScripts = baseScripts
         'src/dataset-constants.js',
         'src/dataset-chart.js',
         'src/infinite-scroll.js',
+        'src/show-more-questions.js',
         'src/mobile-menus.js',
         'src/entity.js']);
 gulp.task('entity', js(entityScripts, 'entity.min.js'));

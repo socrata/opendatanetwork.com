@@ -126,16 +126,22 @@ class ODNClient {
     }
 
     /**
-     * Search for questions relating to the given entities and dataset.
+     * Search for questions relating to the given query.
      */
-    searchQuestions(entityIDs, datasetID, limit, offset) {
+    searchQuestions(query, limit, offset) {
+        if (_.isEmpty(query)) return Promise.resolve([]);
+
         return getJSON(this.searchQuestionsURL.apply(this, arguments)).then(response => {
             return Promise.resolve(response.questions);
         });
     }
 
-    searchQuestionsURL(entityIDs, datasetID, limit, offset) {
-        return this.searchURL('search/v1/question', entityIDs, datasetID, limit, offset);
+    searchQuestionsURL(query, limit, offset) {
+        return this.url('search/v1/question', {
+            query,
+            limit,
+            offset
+        });
     }
 
     /**

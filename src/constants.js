@@ -19,8 +19,10 @@ const GlobalConstants = {
     AUTOCOMPLETE_URL: type => `${_ODN_API_BASE_URL}/suggest/v1/${type}`,
     AUTOCOMPLETE_WAIT_MS: 150,
 
-    PEER_REGIONS: 5,
-    PEER_REGIONS_MAX: 10,
+    // Number of related entities to show on navigation sidebar
+    RELATED_ENTITY_COUNT: 5,
+    // Number of questions to generate on region pages
+    QUESTION_COUNT: 10,
 
     REGION_NAMES: {
         'region.nation': 'Nation',
