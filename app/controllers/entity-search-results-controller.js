@@ -18,7 +18,7 @@ module.exports = (request, response) => {
 
     const offset = requestParser.getOffset();
     const limit = requestParser.getLimit();
-    const entityIDs = [request.query.entity_id];
+    const entityIDs = request.query.entity_id.split('-');
     const datasetID = request.query.dataset_id;
 
     ODNClient.searchDatasets(entityIDs, datasetID, limit, offset).then(datasets => {
