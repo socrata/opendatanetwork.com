@@ -129,6 +129,8 @@ class ODNClient {
      * Search for questions relating to the given query.
      */
     searchQuestions(query, limit, offset) {
+        if (_.isEmpty(query)) return Promise.resolve([]);
+
         return getJSON(this.searchQuestionsURL.apply(this, arguments)).then(response => {
             return Promise.resolve(response.questions);
         });
