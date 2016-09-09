@@ -11,7 +11,9 @@ class DatasetChart {
 
     getDataURL() {
         const entityIDs = _data.entities.map(_.property('id'));
-        const variableID = this.config.variables.join(',');
+        const variableID = this.config.variables ?
+            this.config.variables.join(',') :
+            this.config.dataset_id;
         const constraints = this.config.constraint;
         const describe = true;
         const forecast = this.config.forecast;

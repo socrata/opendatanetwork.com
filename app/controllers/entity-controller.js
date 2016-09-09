@@ -109,6 +109,7 @@ function getChartConfig(dataset) {
 
     config.charts.forEach(chart => {
         chart.id = chart.id.replace(/[\._]/g, '-');
+        chart.dataset_id = dataset.id;
     });
 
     return config;
