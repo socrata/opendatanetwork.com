@@ -20,11 +20,11 @@ const DATASET_CONFIG = {
                 ],
             },
             {
-                id: 'finance.michigan_debt.long_term_debt_revenue.chart',
+                id: 'finance.michigan_debt.debt_health.chart',
                 type: 'line',
                 name: 'Debt Health',
                 variables: [
-                    'finance.michigan_debt.long_term_debt_revenue'
+                    'finance.michigan_debt.debt_health'
                 ],
             }
         ]
