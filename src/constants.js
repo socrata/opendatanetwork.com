@@ -32,7 +32,8 @@ const GlobalConstants = {
         'region.county': 'County',
         'region.msa': 'Metro Area',
         'region.place': 'Place',
-        'region.zip_code': 'ZIP Code'
+        'region.zip_code': 'ZIP Code',
+        'region.township': 'Township'
     },
 
     PLURAL_REGION_NAMES: {
@@ -43,7 +44,8 @@ const GlobalConstants = {
         'region.county': 'Counties',
         'region.msa': 'Metro Areas',
         'region.place': 'Places',
-        'region.zip_code': 'ZIP Codes'
+        'region.zip_code': 'ZIP Codes',
+        'region.township': 'Townships'
     },
 
     ROSTER_URL: 'https://federal.demo.socrata.com/resource/bdeb-mf9k.json',
