@@ -164,7 +164,7 @@ const DATASET_CONFIG = {
                     chartArea: {
                         left: 270
                     },
-                    height: 450,
+                    height: 450
                 },
                 mobileOptions: {
                     chartArea: {
