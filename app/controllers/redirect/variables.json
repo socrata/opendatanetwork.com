@@ -88,6 +88,13 @@
             "median_environmental_health_hazard_index": "env-health-idx-median",
             "mean_environmental_health_hazard_index": "env-health-idx-mean"
         }
+    },
+
+    "crime": {
+        "fbi_ucr": {
+            "all_crimes_rate": "rate",
+            "all_crimes_count": "count"
+        }
     }
 }
 

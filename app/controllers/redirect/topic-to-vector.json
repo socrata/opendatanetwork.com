@@ -5,6 +5,6 @@
     "jobs": ["earnings", "occupations", "job_proximity"],
     "economy": ["gdp", "cost_of_living", "consumption"],
     "health": ["health", "health_indicators", "environmental_health"],
-    "crime": ["city_crime"]
+    "crime": ["city_crime", "fbi_ucr"]
 }
 
