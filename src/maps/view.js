@@ -36,7 +36,7 @@ class MapView {
      * Shows the map on the given div.
      */
     show(selector) {
-        const isMobile = d3.select('body').node().getBoundingClientRect().width < 800;
+        const isMobile = d3.select('body').node().getBoundingClientRect().width <= GlobalConstants.MOBILE_WIDTH;
         const container = d3.select(selector)
             .append('div')
             .attr('class', isMobile ? 'map-container map-container-collapsed' : 'map-container map-container-expanded')
@@ -89,7 +89,7 @@ class MapView {
     }
 
     showExpand() {
-        if (d3.select('body').node().getBoundingClientRect().width <= 800) {
+        if (d3.select('body').node().getBoundingClientRect().width <= GlobalConstants.MOBILE_WIDTH) {
             this.expandCollapseControl = new ExpandCollapseControl();
             this.map.addControl(this.expandCollapseControl);
         }

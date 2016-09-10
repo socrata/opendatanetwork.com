@@ -50,9 +50,24 @@ class DatasetChart {
     }
 
     getOptions() {
-        return _.extend({
-            title: this.config.name || 'Chart'
-        }, DATASET_CONSTANTS.CHART_OPTIONS, this.config.options || {});
+
+        if (d3.select("body").node().getBoundingClientRect().width > GlobalConstants.MOBILE_WIDTH) {
+
+            return _.extend({
+                    title: this.config.name || 'Chart'
+                }, 
+                DATASET_CONSTANTS.CHART_OPTIONS, 
+                this.config.options || {});
+        }
+        else {
+
+            return _.extend({
+                    title: this.config.name || 'Chart'
+                }, 
+                DATASET_CONSTANTS.CHART_OPTIONS, 
+                this.config.options || {},
+                this.config.mobileOptions || {});
+        }
     }
 
     clear() {

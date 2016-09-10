@@ -155,22 +155,44 @@ const DATASET_CONFIG = {
         charts: [
             {
                 id: 'crime.fbi_ucr.count.chart',
-                type: 'column',
+                type: 'bar',
                 constraint: {
                     year: '2014'
                 },
                 name: 'Crime Incident Count',
+                options: {
+                    chartArea: { 
+                        left: 270 
+                    },
+                    height: 450,
+                },
+                mobileOptions: {
+                    chartArea: { 
+                        left: 100 
+                    }
+                },
                 variables: [
                     'crime.fbi_ucr.count'
                 ],
             },
             {
                 id: 'crime.fbi_ucr.rate.chart',
-                type: 'column',
+                type: 'bar',
                 constraint: {
                     year: '2014'
                 },
                 name: 'Crime Incident Rate per 100,000 People',
+                options: {
+                    chartArea: {
+                        left: 270
+                    },
+                    height: 450
+                },
+                mobileOptions: {
+                    chartArea: { 
+                        left: 100 
+                    }
+                },
                 variables: [
                     'crime.fbi_ucr.rate'
                 ],

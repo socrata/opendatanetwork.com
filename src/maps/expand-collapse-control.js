@@ -8,7 +8,7 @@ const ExpandCollapseControl = L.Control.extend({
 
         const containerDiv = L.DomUtil.create('div', 'leaflet-bar map-expand-collapse');
 
-        this.expanded = (d3.select("body").node().getBoundingClientRect().width >= 800);
+        this.expanded = (d3.select("body").node().getBoundingClientRect().width > GlobalConstants.MOBILE_WIDTH);
 
         if (this.expanded)
             this.enableControls(map);
