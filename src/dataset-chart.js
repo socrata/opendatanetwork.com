@@ -23,6 +23,8 @@ class DatasetChart {
     }
 
     render(data) {
+        this.excludeColumns(data);
+
         this.renderChart(data);
         this.renderDescription(data);
     }
@@ -55,16 +57,16 @@ class DatasetChart {
 
             return _.extend({
                     title: this.config.name || 'Chart'
-                }, 
-                DATASET_CONSTANTS.CHART_OPTIONS, 
+                },
+                DATASET_CONSTANTS.CHART_OPTIONS,
                 this.config.options || {});
         }
         else {
 
             return _.extend({
                     title: this.config.name || 'Chart'
-                }, 
-                DATASET_CONSTANTS.CHART_OPTIONS, 
+                },
+                DATASET_CONSTANTS.CHART_OPTIONS,
                 this.config.options || {},
                 this.config.mobileOptions || {});
         }
@@ -72,6 +74,15 @@ class DatasetChart {
 
     clear() {
         document.getElementById(this.containerId).innerHTML = '';
+    }
+
+    excludeColumns(data) {
+        if (!('exclude' in this.config)) return;
+
+        const excluded = new Set(this.config.exclude);
+        data.data.rows = data.data.rows.filter(row => {
+            return !excluded.has(row.c[0].v);
+        });
     }
 }
 

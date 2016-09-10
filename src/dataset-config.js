@@ -161,19 +161,21 @@ const DATASET_CONFIG = {
                 },
                 name: 'Crime Incident Count',
                 options: {
-                    chartArea: { 
-                        left: 270 
+                    chartArea: {
+                        left: 270
                     },
                     height: 450,
                 },
                 mobileOptions: {
-                    chartArea: { 
-                        left: 100 
+                    chartArea: {
+                        left: 100
                     }
                 },
                 variables: [
                     'crime.fbi_ucr.count'
                 ],
+                // Variables or constraint values to be excluded from the chart.
+                exclude: ['All Crimes']
             },
             {
                 id: 'crime.fbi_ucr.rate.chart',
@@ -189,13 +191,15 @@ const DATASET_CONFIG = {
                     height: 450
                 },
                 mobileOptions: {
-                    chartArea: { 
-                        left: 100 
+                    chartArea: {
+                        left: 100
                     }
                 },
                 variables: [
                     'crime.fbi_ucr.rate'
                 ],
+                // Variables or constraint values to be excluded from the chart.
+                exclude: ['All Crimes']
             }
         ]
     },
