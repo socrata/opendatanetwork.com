@@ -9,7 +9,7 @@ const DATASET_CONFIG = {
                 name: 'Debt Service',
                 variables: [
                     'finance.michigan_debt.debt_service'
-                ],
+                ]
             },
             {
                 id: 'finance.michigan_debt.long_term_debt_revenue.chart',
@@ -17,7 +17,7 @@ const DATASET_CONFIG = {
                 name: 'Long Term Debt Revenue',
                 variables: [
                     'finance.michigan_debt.long_term_debt_revenue'
-                ],
+                ]
             },
             {
                 id: 'finance.michigan_debt.debt_health.chart',
@@ -25,7 +25,7 @@ const DATASET_CONFIG = {
                 name: 'Debt Health',
                 variables: [
                     'finance.michigan_debt.debt_health'
-                ],
+                ]
             }
         ]
     },
@@ -38,7 +38,7 @@ const DATASET_CONFIG = {
                 name: 'Total Public Safety Fund Expenditures',
                 variables: [
                     'finance.michigan_expenditures.public_safety_expenditures'
-                ],
+                ]
             },
             {
                 id: 'finance.michigan_expenditures.total_general_fund_expenditures.chart',
@@ -46,7 +46,7 @@ const DATASET_CONFIG = {
                 name: 'Total General Fund Expenditures',
                 variables: [
                     'finance.michigan_expenditures.total_general_fund_expenditures'
-                ],
+                ]
             }
         ]
     },
@@ -59,7 +59,7 @@ const DATASET_CONFIG = {
                 name: 'General Fund Balance',
                 variables: [
                     'finance.michigan_general_fund.general_fund_balance'
-                ],
+                ]
             },
             {
                 id: 'finance.michigan_general_fund.general_fund_health.chart',
@@ -67,7 +67,7 @@ const DATASET_CONFIG = {
                 name: 'General Fund Health',
                 variables: [
                     'finance.michigan_general_fund.general_fund_health'
-                ],
+                ]
             },
             {
                 id: 'finance.michigan_general_fund.liquidity_ratio.chart',
@@ -75,7 +75,7 @@ const DATASET_CONFIG = {
                 name: 'Liquidity Ratio',
                 variables: [
                     'finance.michigan_general_fund.liquidity_ratio'
-                ],
+                ]
             }
         ]
     },
@@ -88,7 +88,7 @@ const DATASET_CONFIG = {
                 name: 'Pension Health',
                 variables: [
                     'finance.michigan_pensions.pension_health'
-                ],
+                ]
             },
             {
                 id: 'finance.michigan_pensions.unfunded_pension_liability.chart',
@@ -96,7 +96,7 @@ const DATASET_CONFIG = {
                 name: 'Unfunded Pension Liability',
                 variables: [
                     'finance.michigan_pensions.unfunded_pension_liability'
-                ],
+                ]
             }
         ]
     },
@@ -109,7 +109,7 @@ const DATASET_CONFIG = {
                 name: 'Debt as % of Taxable Value',
                 variables: [
                     'finance.michigan_property_tax.debt_taxable_value'
-                ],
+                ]
             },
             {
                 id: 'finance.michigan_property_tax.property_tax_health.chart',
@@ -117,7 +117,7 @@ const DATASET_CONFIG = {
                 name: 'Property Tax Health',
                 variables: [
                     'finance.michigan_property_tax.property_tax_health'
-                ],
+                ]
             },
             {
                 id: 'finance.michigan_property_tax.total_taxable_value.chart',
@@ -125,7 +125,7 @@ const DATASET_CONFIG = {
                 name: 'Total Taxable Value',
                 variables: [
                     'finance.michigan_property_tax.total_taxable_value'
-                ],
+                ]
             }
         ]
     },
@@ -138,7 +138,7 @@ const DATASET_CONFIG = {
                 name: 'Total General Fund Revenue',
                 variables: [
                     'finance.michigan_revenues.total_general_fund_revenue'
-                ],
+                ]
             },
             {
                 id: 'finance.michigan_revenues.unrestricted_revenue.chart',
@@ -146,7 +146,7 @@ const DATASET_CONFIG = {
                 name: 'Unrestricted Revenue',
                 variables: [
                     'finance.michigan_revenues.unrestricted_revenue'
-                ],
+                ]
             }
         ]
     },
@@ -213,7 +213,7 @@ const DATASET_CONFIG = {
                 name: 'Population',
                 variables: [
                     'demographics.population.count'
-                ],
+                ]
             },
             {
                 id: 'demographics.population.change.chart',
@@ -221,7 +221,7 @@ const DATASET_CONFIG = {
                 name: 'Population Change',
                 variables: [
                     'demographics.population.change'
-                ],
+                ]
             }
         ]
     },
@@ -235,7 +235,7 @@ const DATASET_CONFIG = {
                 name: 'Personal Consumption Expenditures over Time (Millions of USD)',
                 variables: [
                     'economy.consumption.personal_consumption_expenditures'
-                ],
+                ]
             },
             {
                 id: 'economy.consumption.expenditures_percent_change.chart',
@@ -243,7 +243,7 @@ const DATASET_CONFIG = {
                 name: 'Change in Personal Consumption Expenditures over Time',
                 variables: [
                     'economy.consumption.expenditures_percent_change'
-                ],
+                ]
             }
         ]
     },
@@ -259,7 +259,7 @@ const DATASET_CONFIG = {
                 name: 'Cost of Living',
                 variables: [
                     'economy.cost_of_living.index'
-                ],
+                ]
             },
             {
                 id: 'economy.cost_of_living.index.all.chart',
@@ -271,7 +271,7 @@ const DATASET_CONFIG = {
                 name: 'Overall Cost of Living',
                 variables: [
                     'economy.cost_of_living.index'
-                ],
+                ]
             },
             {
                 id: 'economy.cost_of_living.index.goods.chart',
@@ -283,7 +283,7 @@ const DATASET_CONFIG = {
                 name: 'Cost of Goods',
                 variables: [
                     'economy.cost_of_living.index'
-                ],
+                ]
             },
             {
                 id: 'economy.cost_of_living.index.rents.chart',
@@ -295,7 +295,7 @@ const DATASET_CONFIG = {
                 name: 'Cost of Rents',
                 variables: [
                     'economy.cost_of_living.index'
-                ],
+                ]
             },
             {
                 id: 'economy.cost_of_living.index.other.chart',
@@ -307,7 +307,7 @@ const DATASET_CONFIG = {
                 name: 'Other Costs',
                 variables: [
                     'economy.cost_of_living.index'
-                ],
+                ]
             }
         ]
     },
@@ -322,7 +322,7 @@ const DATASET_CONFIG = {
                 name: 'GDP',
                 variables: [
                     'economy.gdp.per_capita_gdp'
-                ],
+                ]
             },
             {
                 id: 'economy.gdp.per_capita_gdp_percent_change.chart',
@@ -331,7 +331,7 @@ const DATASET_CONFIG = {
                 name: 'Change in GDP',
                 variables: [
                     'economy.gdp.per_capita_gdp_percent_change'
-                ],
+                ]
             }
         ]
     },
@@ -345,7 +345,7 @@ const DATASET_CONFIG = {
                 name: 'Student Teacher Ratio',
                 variables: [
                     'education.classroom_statistics.student-teacher-ratio'
-                ],
+                ]
             }
         ]
     },
@@ -372,7 +372,7 @@ const DATASET_CONFIG = {
                 name: 'Capital Expenditures',
                 variables: [
                     'education.education_expenditures.capital-expenditures'
-                ],
+                ]
             },
             {
                 id: 'education.education_expenditures.capital-expenditures-per-student.chart',
@@ -381,7 +381,7 @@ const DATASET_CONFIG = {
                 name: 'Capital Expenditures Per Student',
                 variables: [
                     'education.education_expenditures.capital-expenditures-per-student'
-                ],
+                ]
             },
             {
                 id: 'education.education_expenditures.administration-salaries.chart',
@@ -390,7 +390,7 @@ const DATASET_CONFIG = {
                 name: 'Administration Salaries',
                 variables: [
                     'education.education_expenditures.administration-salaries'
-                ],
+                ]
             },
             {
                 id: 'education.education_expenditures.administration-salaries-per-student.chart',
@@ -399,7 +399,7 @@ const DATASET_CONFIG = {
                 name: 'Administration Salaries Per Student',
                 variables: [
                     'education.education_expenditures.administration-salaries-per-student'
-                ],
+                ]
             },
             {
                 id: 'education.education_expenditures.instruction-salaries.chart',
@@ -408,7 +408,7 @@ const DATASET_CONFIG = {
                 name: 'Instruction Salaries',
                 variables: [
                     'education.education_expenditures.instruction-salaries'
-                ],
+                ]
             },
             {
                 id: 'education.education_expenditures.instruction-salaries-per-student.chart',
@@ -417,7 +417,7 @@ const DATASET_CONFIG = {
                 name: 'Instruction Salaries Per Student',
                 variables: [
                     'education.education_expenditures.instruction-salaries-per-student'
-                ],
+                ]
             }
         ]
     },
@@ -452,7 +452,7 @@ const DATASET_CONFIG = {
                 },
                 variables: [
                     'health.health_behaviors'
-                ],
+                ]
             }
         ]
     },
@@ -470,7 +470,7 @@ const DATASET_CONFIG = {
                     'jobs.earnings.median_earnings',
                     'jobs.earnings.female_median_earnings',
                     'jobs.earnings.male_median_earnings'
-                ],
+                ]
             },
             {
                 id: 'jobs.earnings.education.chart',
@@ -488,7 +488,7 @@ const DATASET_CONFIG = {
                     'jobs.earnings.median_earnings_some_college_or_associates',
                     'jobs.earnings.median_earnings_bachelor_degree',
                     'jobs.earnings.median_earnings_graduate_or_professional_degree'
-                ],
+                ]
             }
         ]
     },
@@ -527,3 +527,4 @@ const DATASET_CONFIG = {
 };
 
 if (typeof module !== 'undefined') module.exports = DATASET_CONFIG;
+
