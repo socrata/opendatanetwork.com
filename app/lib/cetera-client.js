@@ -23,8 +23,7 @@ class CeteraClient {
             domains: this.domains,
             tags: this.tags,
             offset: offset || 0,
-            limit: limit || 10,
-            only: 'datasets'
+            limit: limit || 10
         });
     }
 
