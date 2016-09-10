@@ -50,6 +50,8 @@ module.exports = (request, response) => {
         ODNClient.entities(entityIDs),
         ODNClient.availableData(entityIDs)
     ]).then(([entities, availableData]) => {
+        if (_.isEmpty(availableData)) return noDataForEntities(entities);
+
         getVariable(availableData, variableID).then(([topic, dataset, variable]) => {
             const fixed = getFixedConstraints(request, dataset);
 
@@ -119,6 +121,10 @@ function getFixedConstraints(request, dataset) {
     return _.pick(request.query, dataset.constraints);
 }
 
+function noDataForEntities(entities) {
+    return Promise.reject(notFound(`no data found for ${entities.map(_.property('name')).join(' or ')}`));
+}
+
 function getVariable(availableData, fullVariableID) {
     const idParts = _.isEmpty(fullVariableID) ? [] : fullVariableID.split('.');
     if (idParts.length > 3)
@@ -135,6 +141,8 @@ function getVariable(availableData, fullVariableID) {
 }
 
 function getNode(nodes, name) {
+    if (_.isEmpty(nodes))
+        return Promise.reject(notFound(`no data available`));
     if (_.isUndefined(name))
         return Promise.resolve(_.first(_.values(nodes)));
     if (name in nodes)
