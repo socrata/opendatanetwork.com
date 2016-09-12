@@ -6,18 +6,21 @@
 *:-ms-input-placeholder
     color: $gray-text-color
 
+$search-button-width: 90px
+$search-button-width-mobile: 65px
+
 .home-search-bar,
 .home-search-bar-controls
     .search-wrapper
         .search-bar-input
-            @include calc(width, "100% - 235px")
+            @include calc(width, "100% - #{$search-button-width}")
             @media (max-width: $mobile-width)
-                @include calc(width, "100% - 65px")
+                @include calc(width, "100% - #{$search-button-width-mobile}")
         .search-buttons
             float: right
-            width: 235px
+            width: $search-button-width
             @media (max-width: $mobile-width)
-                width: 65px
+                width: $search-button-width-mobile
             .search-link
                 position: relative
                 float: left
@@ -30,18 +33,18 @@ header
         float: right
         @include calc(width, "100% - 300px")
         .search-bar-input
-            @include calc(width, "100% - 235px")
+            @include calc(width, "100% - #{$search-button-width}")
         .search-buttons
             float: right
-            width: 235px
+            width: $search-button-width
         .search-link
             float: left
         @media (max-width: $mobile-width)
             @include calc(width, "100% - 50px")
             .search-bar-input
-                @include calc(width, "100% - 129px")
+                @include calc(width, "100% - #{$search-button-width-mobile}")
             .search-buttons
-                width: 129px
+                width: $search-button-width-mobile
     .region-list
         clear: both
 
