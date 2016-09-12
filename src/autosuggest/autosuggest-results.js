@@ -54,7 +54,7 @@ class AutosuggestResults {
         var allOptionsCount = 0;
 
         allOptions.forEach(options => {
-            allOptionsCount += options.length
+            allOptionsCount += options.length;
         });
 
         const nestedSelections = sources.map((source, index) => {

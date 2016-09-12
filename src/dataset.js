@@ -7,11 +7,6 @@ $(document).ready(function() {
     const autosuggest = new Autosuggest('.region-list');
     autosuggest.listen('.search-bar-input');
 
-    // QuickLinks
-    //
-    const quickLinks = new QuickLinks();
-    quickLinks.onShow = () => autosuggest.results.hide();
-
     // Truncate on word boundaries and add ellipsis using jquery.dotdotdot
     //
     $('.dotdotdot').dotdotdot({

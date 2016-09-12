@@ -39,6 +39,7 @@ const AUTOSUGGEST_SOURCES = [
             {
                 text: 'Suggestions API Documentation',
                 url: 'http://docs.odn.apiary.io/#reference/0/suggestions/get-suggestions',
+                type: 'api'
             }
         ],
         suggestType: 'api',

@@ -63,7 +63,9 @@ class Autosuggest {
 
     enter() {
         if (this.results.index < 0) {
-            if (this.results.options.length == 1) {
+            if (this.results.options.length === 1 &&
+                !isSuggestAPI(this.results.options[0])) {
+
                 this.results.index = 0;
                 this.results.enter();
                 return;
@@ -75,5 +77,11 @@ class Autosuggest {
             this.results.enter();
         }
     }
+}
+
+function isSuggestAPI(option) {
+    let data = option.data();
+    data = _.isArray(data) ? _.first(data) : data;
+    return 'type' in data && data.type === 'api';
 }
 
