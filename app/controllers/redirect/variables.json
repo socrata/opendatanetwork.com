@@ -94,6 +94,11 @@
         "fbi_ucr": {
             "all_crimes_rate": "rate",
             "all_crimes_count": "count"
+        },
+
+        "city_crime": {
+            "all_crimes_rate": "rate",
+            "all_crimes_count": "count"
         }
     }
 }
