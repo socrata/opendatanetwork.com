@@ -40,14 +40,14 @@ function tooltip() {
 function attachMenuHandlers() {
     $('.refine-link').mouseenter(function() {
         $(this).addClass('refine-link-selected');
-        $(this).children('span').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
+        $(this).children('span').children('em').removeClass('fa-caret-down').addClass('fa-caret-up');
         $(this).children('ul').show();
 
     });
 
     $('.refine-link').mouseleave(function() {
         $(this).removeClass('refine-link-selected');
-        $(this).children('span').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
+        $(this).children('span').children('em').removeClass('fa-caret-up').addClass('fa-caret-down');
         $(this).children('ul').hide();
     });
 }

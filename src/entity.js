@@ -53,14 +53,14 @@ function menuMouseHandlers() {
         .on('mouseenter', function() {
             if ($(this).children('ul').length) {
                 $(this).addClass('selected');
-                $(this).children('span').children('i').removeClass('fa-caret-down').addClass('fa-caret-up');
+                $(this).children('span').children('em').removeClass('fa-caret-down').addClass('fa-caret-up');
                 $(this).children('ul').show();
             }
         })
         .on('mouseleave', function() {
             if ($(this).children('ul').length) {
                 $(this).removeClass('selected');
-                $(this).children('span').children('i').removeClass('fa-caret-up').addClass('fa-caret-down');
+                $(this).children('span').children('em').removeClass('fa-caret-up').addClass('fa-caret-down');
                 $(this).children('ul').hide();
             }
         });
