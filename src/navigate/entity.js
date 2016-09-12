@@ -35,6 +35,10 @@ class EntityNavigate {
         return new EntityNavigate(entities, this.variableID, this.query);
     }
 
+    clearVariable() {
+        return new EntityNavigate(this.entities);
+    }
+
     topic(topicID) {
         return this.variable(topicID);
     }

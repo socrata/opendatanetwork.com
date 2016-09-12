@@ -52,13 +52,17 @@ class ODNClient {
      *
      * Relation must be one of parent, child, sibling, or peer.
      */
-    related(entityID, relation, limit) {
+    related(entityID, relation, limit, variableID) {
         return getJSON(this.relatedURL.apply(this, arguments))
             .then(response => Promise.resolve({[relation]: response.relatives}));
     }
 
-    relatedURL(entityID, relation, limit) {
-        return this.url(`entity/v1/${relation}`, {entity_id: entityID, limit});
+    relatedURL(entityID, relation, limit, variableID) {
+        return this.url(`entity/v1/${relation}`, {
+            limit,
+            entity_id: entityID,
+            variable_id: variableID
+        });
     }
 
     /**

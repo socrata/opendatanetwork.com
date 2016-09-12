@@ -62,7 +62,7 @@ module.exports = (request, response) => {
                 if (url !== request.url) return response.redirect(307, url);
 
                 Promise.all([
-                    getRelated(entities[0].id),
+                    getRelated(entities[0].id, variable.id),
                     ODNClient.searchDatasets(entityIDs, dataset.id),
                     EntityFormatter.entityPageTitle(entities, dataset, variable),
                     getDescription(entityIDs, variable.id, constraints)
@@ -193,9 +193,17 @@ function clean(string) {
         .toLowerCase();
 }
 
-function getRelated(entityID) {
-    const promises = ['parent', 'child', 'sibling', 'peer']
-        .map(relation => ODNClient.related(entityID, relation, GlobalConstants.RELATED_ENTITY_COUNT));
+
+
+function getRelated(entityID, variableID) {
+    const limit = GlobalConstants.RELATED_ENTITY_COUNT;
+    const promises = ['parent', 'child', 'sibling', 'peer'].map(relation => {
+        // Only constrain related entities to those with data for
+        // the current variable with entities of the same type.
+        const onlyWithData = relation === 'sibling' || relation === 'peer';
+        const variable = onlyWithData ? variableID : null;
+        return ODNClient.related(entityID, relation, limit, variable);
+    });
 
     return Promise.all(promises)
         .then(result => Promise.resolve(_.merge.apply(_, result)));
