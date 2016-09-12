@@ -166,7 +166,7 @@ class ODNClient {
         }, forEntities(entityIDs), constraints));
     }
 
-    suggest(type, query, limit) {
+    suggest(type, query, limit, params) {
         if (query === '') return Promise.resolve([]);
 
         return getJSON(this.suggestURL.apply(this, arguments)).then(response => {
@@ -174,13 +174,14 @@ class ODNClient {
         });
     }
 
-    suggestURL(type, query, limit) {
+    suggestURL(type, query, limit, params) {
         limit = limit || 10;
+        params = params || {};
 
-        return this.url(`suggest/v1/${type}`, {
+        return this.url(`suggest/v1/${type}`, _.extend({
             query,
             limit
-        });
+        }, params));
     }
 
     url(relativePath, clientParams) {

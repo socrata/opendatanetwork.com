@@ -1,7 +1,11 @@
 
 $(document).ready(function() {
+    const navigate = new EntityNavigate(_data.entities, _data.variable.id, _data.constraints);
+    window.entityNavigate = navigate;
+
     menuMouseHandlers();
     autosuggest();
+    compareAutosuggest(navigate);
     drawMap();
     drawCharts();
     apiBadges();
@@ -10,19 +14,31 @@ $(document).ready(function() {
     attachMobileMenuHandlers();
     expandMobileQuestions();
     citationTooltip();
-
-    window.entityNavigate =
-        new EntityNavigate(_data.entities, _data.variable.id, _data.constraints);
 });
 
+// Main search bar autosuggest.
 function autosuggest() {
-    // Main search bar autosuggest
     new Autosuggest('.region-list')
         .listen('.search-bar-input');
 
-    // Mobile autosuggest
     new Autosuggest('.add-region-results-mobile')
         .listen('.add-region-input-mobile');
+}
+
+// Compare this data autosuggest that shows only entities
+// with data for the current variable.
+function compareAutosuggest(navigate) {
+    const entitySource = _.find(AUTOSUGGEST_SOURCES, {suggestType: 'entity'});
+    const entityIDSet = new Set(_data.entities.map(_.property('id')));
+    const source = _.extend({}, entitySource, {
+        select: entity => navigate.add(entity).url(),
+        params: {variable_id: _data.variable.id},
+        filter: entity => !entityIDSet.has(entity.id)
+    });
+
+    new Autosuggest('.add-region-results', [source])
+        .listen('.add-region-input');
+
 }
 
 function drawMap() {

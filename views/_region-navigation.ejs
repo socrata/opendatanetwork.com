@@ -14,16 +14,22 @@
         </div>
         <% include questions/_questions %>
 
-        <% if (related.peer.length > 0 && topic.id !== 'finance') { %>
-            <div id="peers">
-                <h2>Compare this Data</h2>
-                <ul id="similar-regions">
-                <% related.peer[0].entities.forEach(region => { %>
-                    <li><a class="region-link" href=<%= navigate.add(region).url() %><%- (entities.length >= 2) ? ' rel="nofollow"' : '' %>><%= region.name %> <em class="fa fa-plus"></em></a></li>
-                <% }); %>
-                </ul>
+        <div id="peers">
+            <h2>Compare this Data</h2>
+
+            <div class="add-region">
+                <i class="fa fa-plus"></i><input class="add-region-input" type="text" placeholder="Add Location">
+                <ul class="add-region-results" style="display: none;"></ul>
             </div>
-        <% } %>
+
+            <% if (related.peer.length > 0 && topic.id !== 'finance') { %>
+                <ul id="similar-regions">
+                    <% related.peer[0].entities.forEach(region => { %>
+                        <li><a class="region-link" href=<%= navigate.add(region).url() %><%- (entities.length >= 2) ? ' rel="nofollow"' : '' %>><%= region.name %> <em class="fa fa-plus"></em></a></li>
+                    <% }); %>
+                </ul>
+            <% } %>
+        </div>
 
         <% if (related.sibling.length > 0) { %>
             <div id="siblings">

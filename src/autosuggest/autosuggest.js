@@ -1,8 +1,9 @@
 'use strict';
 
 class Autosuggest {
-    constructor(resultSelector) {
-        this.sources = AUTOSUGGEST_SOURCES.map(config => new AutosuggestSource(config));
+    constructor(resultSelector, sources) {
+        sources = sources || AUTOSUGGEST_SOURCES;
+        this.sources = sources.map(config => new AutosuggestSource(config));
         this.results = new AutosuggestResults(resultSelector);
         this.currentTerm = '';
         this.time = Date.now();
@@ -21,8 +22,6 @@ class Autosuggest {
                 } else {
                     self.results.keydown(keyCode);
                 }
-
-                Cookies.remove('refinePopupCollapsed');
             })
             .on('input', function() {
                 self.throttledSuggest(this.value);
