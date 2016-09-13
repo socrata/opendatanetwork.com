@@ -124,6 +124,6 @@ function currentCategory(categories, allCategories) {
 
 function currentTag(tags, allTags) {
     if (tags.length !== 1) return null;
-    return _.find(allTags, tag => tag.tag === params.tags[0].toLowerCase());
+    return _.find(allTags, tag => tag.tag === tags[0].toLowerCase());
 }
 
