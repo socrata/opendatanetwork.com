@@ -102,6 +102,7 @@ function apiBadges() {
     peerBadge(entityID);
     siblingBadge(entityID);
     childBadge(entityID);
+    datasetSearchBadge(entityIDs, datasetID);
 }
 
 function availableDataBadge(entityIDs) {
@@ -182,6 +183,17 @@ function childBadge(entityID) {
         popup.insertAt(selection, ':nth-child(2)');
         badge.insertAt(selection.select('h2'));
     });
+}
+
+function datasetSearchBadge(entityIDs, datasetID) {
+    const url = odn.searchDatasetsURL(entityIDs, datasetID);
+    const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/search-datasets/get-datasets';
+    const popup = new APIPopup('Search for datasets', '/search/dataset', url, apiaryURL);
+    const badge = new APIBadge(popup);
+
+    const selection = d3.select('div.search-results-header');
+    popup.appendTo(selection);
+    badge.appendTo(selection.select('h2'));
 }
 
 function infiniteDatasetScroll() {
