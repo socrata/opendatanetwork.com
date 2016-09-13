@@ -31,7 +31,7 @@ function compareAutosuggest(navigate) {
     const entitySource = _.find(AUTOSUGGEST_SOURCES, {suggestType: 'entity'});
     const entityIDSet = new Set(_data.entities.map(_.property('id')));
     const source = _.extend({}, entitySource, {
-        select: entity => navigate.add(entity).url(),
+        select: entity => navigate.add(entity).ref('compare-entity').url(),
         params: {variable_id: _data.variable.id},
         filter: entity => !entityIDSet.has(entity.id)
     });

@@ -74,7 +74,7 @@ function renderEntities(entities) {
 
             cell.append('h2')
                 .append('a')
-                .attr('href', new EntityNavigate().to(entity).url())
+                .attr('href', new EntityNavigate().to(entity).ref('search-entity').url())
                 .text(entity.name);
 
             if (columns == 3)
