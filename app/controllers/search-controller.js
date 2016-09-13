@@ -86,7 +86,7 @@ module.exports = (request, response) => {
 function getEntities(query) {
     if (query === '') return Promise.resolve([]);
     return ODNClient.searchEntities(query)
-        .then(entities => Promise.resolve(entities.slice(0, 9)));
+        .then(entities => Promise.resolve(entities.slice(0, 6)));
 }
 
 // TODO refactor out somewhere
