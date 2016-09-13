@@ -37,6 +37,7 @@ class MapView {
      */
     show(selector) {
         const isMobile = d3.select('body').node().getBoundingClientRect().width <= GlobalConstants.MOBILE_WIDTH;
+
         const container = d3.select(selector)
             .append('div')
             .attr('class', isMobile ? 'map-container map-container-collapsed' : 'map-container map-container-expanded')

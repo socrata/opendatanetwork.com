@@ -89,15 +89,14 @@ class DatasetChart {
 function createChart(type, container) {
     if (!(type in CHART_TYPES))
         throw new Error(`chart type not found: ${type}`);
-
-    return new CHART_TYPES[type](container);
+    return new google.visualization[CHART_TYPES[type]](container);
 }
 
 const CHART_TYPES = {
-    'bar': google.visualization.BarChart,
-    'column': google.visualization.ColumnChart,
-    'line': google.visualization.LineChart,
-    'stepped-area': google.visualization.SteppedAreaChart,
-    'table': google.visualization.Table,
+    'bar': 'BarChart',
+    'column': 'ColumnChart',
+    'line': 'LineChart',
+    'stepped-area': 'SteppedAreaChart',
+    'table': 'Table',
 };
 

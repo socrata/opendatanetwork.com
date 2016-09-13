@@ -1,5 +1,5 @@
 
-$(document).ready(function() {
+$(() => {
     const navigate = new EntityNavigate(_data.entities, _data.variable.id, _data.constraints);
     window.entityNavigate = navigate;
 
@@ -38,7 +38,6 @@ function compareAutosuggest(navigate) {
 
     new Autosuggest('.add-region-results', [source])
         .listen('.add-region-input');
-
 }
 
 function drawMap() {
@@ -50,17 +49,24 @@ function drawMap() {
 }
 
 function drawCharts() {
-    _data.chartConfig.charts.forEach(config => {
-        const chart = new DatasetChart(config);
+    loadGoogleCharts(['corechart', 'table']).then(() => {
+        _data.chartConfig.charts.forEach(config => {
+            const chart = new DatasetChart(config);
 
-        chartBadge(chart);
+            chartBadge(chart);
 
-        chart.getData().then(data => chart.render(data)).catch(error => {
-            throw error;
+            chart.getData().then(data => chart.render(data)).catch(error => {
+                throw error;
+            });
         });
     });
+}
 
-    const container = d3.select('#google-charts-container');
+function loadGoogleCharts(packages) {
+    return new Promise(resolve => {
+        google.charts.load('current', {packages});
+        google.charts.setOnLoadCallback(resolve);
+    });
 }
 
 function menuMouseHandlers() {

@@ -21,11 +21,6 @@ const DATASET_CONSTANTS = {
         pointShape : 'square',
         pointSize : 8,
         focusTarget: 'category'
-    },
-
-    FORMAT_TYPES: {
-        'number': google.visualization.NumberFormat,
-        'date': google.visualization.DateFormat
     }
 };
 
