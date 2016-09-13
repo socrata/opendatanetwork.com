@@ -70,7 +70,6 @@ class HomeController {
                             },
                             '/lib/third-party/d3.min.js',
                             '/lib/third-party/d3.promise.min.js',
-                            '/lib/third-party/js.cookie-2.1.1.min.js',
                             '/lib/third-party/lodash.min.js',
                             '/lib/home.min.js'
                         ]

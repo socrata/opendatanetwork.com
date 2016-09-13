@@ -16,10 +16,13 @@ const notFound = Exception.notFound;
 const invalid = Exception.invalidParam;
 
 const css = [
-    '/styles/third-party/leaflet.min.css',
     '/styles/search.css',
-    '/styles/maps.css',
     '/styles/main.css'
+];
+
+const asyncCSS = [
+    '/styles/third-party/leaflet.min.css',
+    '/styles/maps.css'
 ];
 
 const scripts = [
@@ -64,6 +67,7 @@ module.exports = (request, response) => {
                         _,
                         page: 'entity',
                         css,
+                        asyncCSS,
                         scripts,
                         GlobalConstants,
                         title,

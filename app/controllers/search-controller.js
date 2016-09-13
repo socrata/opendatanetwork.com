@@ -64,10 +64,8 @@ module.exports = (request, response) => {
                 '/styles/main.css'
             ],
             scripts: [
-                '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js',
                 '/lib/third-party/d3.min.js',
                 '/lib/third-party/d3.promise.min.js',
-                '/lib/third-party/js.cookie-2.1.1.min.js',
                 '/lib/third-party/lodash.min.js',
                 '/lib/third-party/colorbrewer.min.js',
                 '/lib/search.min.js'
