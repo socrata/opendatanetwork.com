@@ -4,6 +4,7 @@ const _ = require('lodash');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const express = require('express');
+const minifyHTML = require('express-minify-html');
 const morgan = require('morgan');
 const favicon = require('serve-favicon');
 const helmet = require('helmet');
@@ -21,15 +22,25 @@ const UrlUtil = require('./app/lib/url-util');
 const app = express();
 
 // Compression
-//
 app.use(compression());
 
+// HTML Minification
+app.use(minifyHTML({
+    override: true,
+    htmlMinifier: {
+        removeComments: true,
+        collapseWhitespace: true,
+        collapseBooleanAttributes: true,
+        removeAttributeQuotes: true,
+        removeEmptyAttributes: true,
+        minifyJS: false
+    }
+}));
+
 // Cookie parser
-//
 app.use(cookieParser());
 
 // Set X-Frame-Options header
-//
 app.use(helmet.xframe('deny'));
 
 // Set up apache common log format output

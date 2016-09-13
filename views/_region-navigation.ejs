@@ -25,7 +25,7 @@
             <% if (related.peer.length > 0) { %>
                 <ul id="similar-regions">
                     <% related.peer[0].entities.forEach(region => { %>
-                        <li><a class="region-link" href=<%= navigate.add(region).url() %><%- (entities.length >= 2) ? ' rel="nofollow"' : '' %>><%= region.name %> <em class="fa fa-plus"></em></a></li>
+                        <li><a class="region-link" href="<%= navigate.add(region).url() %><%- (entities.length >= 2) ? ' rel="nofollow"' : '' %>"><%= region.name %> <em class="fa fa-plus"></em></a></li>
                     <% }); %>
                 </ul>
             <% } %>
