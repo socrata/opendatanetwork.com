@@ -24,11 +24,25 @@ casper.test.begin('entity', function(test) {
         testCompareSuggest(test);
         testCompareLinks(test);
 
+        testParentLink(test);
+        testSiblingLinks(test);
+
         testMainSuggest(test);
     }).run(function() {
         test.done();
     });
 });
+
+function testParentLink(test) {
+    var assertLinksToParent = assertLinksTo(test, 'a.parent-link');
+    assertLinksToParent('Washington', '/entity/0400000US53/Washington?ref=related-parent');
+}
+
+function testSiblingLinks(test) {
+    var assertLinksToSibling = assertLinksTo(test, '#siblings .places-in-region-list li a');
+    assertLinksToSibling('Spokane, WA', '/entity/1600000US5367000/Spokane_WA/demographics.population.count?year=2013&ref=related-sibling');
+    assertLinksToSibling('Tacoma, WA', '/entity/1600000US5370000/Tacoma_WA/demographics.population.count?year=2013&ref=related-sibling');
+}
 
 function testCompareLinks(test) {
     var assertLinksToPeer = assertLinksTo(test, '#similar-regions li a');
