@@ -2,6 +2,7 @@
 var _ = require('lodash');
 var testSuggest = require('./lib/test-suggest');
 var testMainSuggest = require('./lib/test-main-suggest');
+var testQuestions = require('./lib/test-questions');
 var assertLinksTo = require('./lib/assert-links-to');
 var dump = require('utils').dump;
 
@@ -19,7 +20,6 @@ casper.test.begin('entity', function(test) {
 
         testMapSummary(test);
 
-        testQuestions(test);
 
         testCompareSuggest(test);
         testCompareLinks(test);
@@ -38,6 +38,19 @@ casper.test.begin('entity', function(test) {
         test.done();
     });
 });
+
+function testSidebarQuestions(test) {
+    testQuestions(test, '#sidebar-questions li a', [
+        {
+            name: 'What is the Population Rate of Change?',
+            href: questionURL('demographics.population.change')
+        },
+        {
+            name: 'What is the Percent who did not finish the 9th grade?',
+            href: questionURL('education.graduation_rates.percent_less_than_9th_grade')
+        }
+    ]);
+}
 
 function testDatasetSearch(test) {
     test.assertSelectorHasText('.search-results-header h2', 'Demographics and Population Datasets Involving Seattle, WA');
@@ -128,25 +141,6 @@ function testCompareSuggestSeattle(compareSuggest) {
 
 function testEntityTokens(test) {
     test.assertSelectorHasText('.region-token', 'Seattle, WA');
-}
-
-function testQuestions(test) {
-    var assertLinksToQuestion = assertLinksTo(test, '#sidebar-questions li a', function(variable) {
-    });
-
-    assertLinksToQuestion('What is the Population Rate of Change?',
-            questionURL('demographics.population.change'));
-    assertLinksToQuestion('What is the Percent who did not finish the 9th grade?',
-            questionURL('education.graduation_rates.percent_less_than_9th_grade'));
-
-    test.assertSelectorHasText('a.more', 'show more');
-    test.assertExists('.question.collapsed');
-    casper.click('a.more');
-
-    casper.waitWhileSelector('.question.collapsed', function () {
-        test.assertDoesntExist('.question.collapsed');
-        test.assertSelectorHasText('a.more', 'show less');
-    });
 }
 
 function testMapSummary(test) {

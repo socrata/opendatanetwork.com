@@ -6,6 +6,7 @@ var _ = require('lodash');
  * with the given name and href exist in the selection.
  */
 function assertLinksTo(test, linkSelector) {
+    test.assertExists(linkSelector);
     var links = getLinks(linkSelector);
 
     return function(name, href) {
