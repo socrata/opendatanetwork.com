@@ -21,13 +21,20 @@ casper.test.begin('entity', function(test) {
 
         testQuestions(test);
 
-        testMainSuggest(test);
         testCompareSuggest(test);
+        testCompareLinks(test);
+
+        testMainSuggest(test);
     }).run(function() {
         test.done();
     });
 });
 
+function testCompareLinks(test) {
+    var assertLinksToPeer = assertLinksTo(test, '#similar-regions li a');
+    assertLinksToPeer('Anchorage, AK', '/entity/1600000US0203000-1600000US5363000/Anchorage_AK-Seattle_WA/demographics.population.count?year=2013&ref=related-peer');
+    assertLinksToPeer('Denver, CO', '/entity/1600000US0820000-1600000US5363000/Denver_CO-Seattle_WA/demographics.population.count?year=2013&ref=related-peer');
+}
 
 function testCompareSuggest(test) {
     var compareSuggest = testSuggest(test, '.add-region-input', '.add-region-results', '.autocomplete-option');
