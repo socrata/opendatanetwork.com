@@ -20,6 +20,8 @@ function testSuggest(test, input, results, result) {
             expectedOptions.forEach(function(option) {
                 assertLinksToOption(option.name, option.href);
             });
+
+            casper.sendKeys(input, '', {reset: true});
         });
     };
 }
