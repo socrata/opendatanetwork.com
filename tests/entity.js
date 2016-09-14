@@ -31,11 +31,18 @@ casper.test.begin('entity', function(test) {
 
         testMap(test);
 
+        testDatasetSearch(test);
+
         testMainSuggest(test);
     }).run(function() {
         test.done();
     });
 });
+
+function testDatasetSearch(test) {
+    test.assertSelectorHasText('.search-results-header h2', 'Demographics and Population Datasets Involving Seattle, WA');
+    test.assertSelectorHasText('.search-results li h2 a', 'Directory Of Unsheltered Street Homeless To General Population Ratio 2010');
+}
 
 function testMap(test) {
     casper.waitForSelector('.leaflet-container', function() {
