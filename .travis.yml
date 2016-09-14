@@ -3,9 +3,12 @@ node_js:
 - 6.2.2
 before_install:
 - npm install -g casperjs
-- npm install -g gulp
+- phantomjs --version
+- casperjs --version
 install:
 - npm install
+before_script:
+- gulp build
 script:
 - node app.js & travis_retry npm test
 services:
