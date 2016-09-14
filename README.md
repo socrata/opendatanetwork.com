@@ -1,3 +1,4 @@
+
 [![Build Status](https://travis-ci.org/socrata/opendatanetwork.com.svg?branch=master)](https://travis-ci.org/socrata/opendatanetwork.com)
 
 # OpenDataNetwork.com
@@ -59,6 +60,10 @@ The ODN uses [casperjs](http://casperjs.org/) for functional testing.
 To install `casperjs` globally, run `npm install -g casperjs`.
 Tests are stored in the [/tests](/tests) directory
 and can be run using `npm test`.
+
+Sometimes, running tests will trigger a webserver restart which
+will then cause many tests to fail.
+If this happens, start the server using `node app.js`.
 
 #### Integration Tests
 

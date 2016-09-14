@@ -29,11 +29,33 @@ casper.test.begin('entity', function(test) {
 
         testCharts(test);
 
+        testMap(test);
+
         testMainSuggest(test);
     }).run(function() {
         test.done();
     });
 });
+
+function testMap(test) {
+    casper.waitForSelector('.leaflet-container', function() {
+        test.assertSelectorHasText('.leaflet-popup-content .name', 'Seattle, WA');
+        test.assertSelectorHasText('.leaflet-popup-content .value', 'Population Count');
+        test.assertSelectorHasText('.leaflet-popup-content .value', '(2013)');
+        test.assertSelectorHasText('.leaflet-popup-content .value', '624,681');
+
+        test.assertSelectorHasText('.legend-container .tick-label', 'maximum');
+        test.assertSelectorHasText('.legend-container .tick-value', '8,268,999');
+        test.assertSelectorHasText('.legend-container .tick-label', 'upper quartile');
+        test.assertSelectorHasText('.legend-container .tick-value', '4,082');
+        test.assertSelectorHasText('.legend-container .tick-label', 'median');
+        test.assertSelectorHasText('.legend-container .tick-value', '1,106');
+        test.assertSelectorHasText('.legend-container .tick-label', 'lower quartile');
+        test.assertSelectorHasText('.legend-container .tick-value', '338');
+        test.assertSelectorHasText('.legend-container .tick-label', 'minimum');
+        test.assertSelectorHasText('.legend-container .tick-value', '0');
+    });
+}
 
 function testCharts(test) {
     testPopulationCountChart(test);
