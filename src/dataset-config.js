@@ -9,7 +9,12 @@ const DATASET_CONFIG = {
                 name: 'Debt Service',
                 variables: [
                     'finance.michigan_debt.debt_service'
-                ]
+                ],
+                options: {
+                    vAxis: {
+                        format: "#,###.##%"
+                    }
+                }
             },
             {
                 id: 'finance.michigan_debt.long_term_debt_revenue.chart',
@@ -17,7 +22,12 @@ const DATASET_CONFIG = {
                 name: 'Long Term Debt Revenue',
                 variables: [
                     'finance.michigan_debt.long_term_debt_revenue'
-                ]
+                ],
+                options: {
+                    vAxis: {
+                        format: "#,###.##%"
+                    }
+                }
             },
             {
                 id: 'finance.michigan_debt.debt_health.chart',
@@ -109,7 +119,12 @@ const DATASET_CONFIG = {
                 name: 'Debt as % of Taxable Value',
                 variables: [
                     'finance.michigan_property_tax.debt_taxable_value'
-                ]
+                ],
+                options: {
+                    vAxis: {
+                        format: "#,###.##%"
+                    }
+                }
             },
             {
                 id: 'finance.michigan_property_tax.total_taxable_value.chart',
