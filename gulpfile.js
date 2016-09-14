@@ -108,49 +108,6 @@ gulp.task('watch', ['build'], function() {
     gulp.watch(['styles/*.sass', 'styles/*.scss'], ['css']);
 });
 
-gulp.task('test', function () {
-    var server = nodemon({
-        script: 'app.js',
-        ignore: '*', // HACK: Prevent restarting
-        env: { 'PORT' : 3002 }
-    });
-
-    var checkServer = function() {
-      util.log('Confirming that the server is up on port 3002...');
-      net.connect({ port: 3002 })
-          .on('error', function() {
-              util.log('Error connecting, waiting longer...');
-              setTimeout(checkServer, 1000);
-          })
-          .on('timeout', function() {
-              util.log('Timeout connecting, waiting longer...');
-              setTimeout(checkServer, 1000);
-          })
-          .on('connect', function() {
-              util.log('Successfully connected!');
-
-              var casper = spawn('casperjs', ['test', './tests'], {
-                  stdio: 'inherit',
-                  waitTimeout: 30
-              });
-
-              casper.on('close', function(code) {
-                  util.log("code: " + code);
-                  if(code === 0) {
-                      util.log('Tests succeeded!');
-                      process.exit(0);
-                  } else {
-                      util.log('Tests FAILED!');
-                      process.exit(1);
-                  }
-              });
-          });
-    };
-
-    checkServer();
-});
-
-
 gulp.task('start', function() {
     return nodemon({
         script: 'app.js',
