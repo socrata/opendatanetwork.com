@@ -2,15 +2,12 @@ language: node_js
 node_js:
 - 6.2.2
 before_install:
-- npm install -g casperjs
-- phantomjs --version
-- casperjs --version
+- npm install -g phantomjs@2.1.1
+- npm install -g casperjs@1.1.3
 install:
 - npm install
-before_script:
-- gulp build
 script:
-- node app.js & travis_retry npm test
+- npm start & travis_retry npm test
 services:
 - memcached
 cache:
