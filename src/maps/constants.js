@@ -36,7 +36,7 @@ const MapConstants = {
     INITIAL_ZOOM_OPTIONS: {
         animate: false,
         maxZoom: 10.0,
-        padding: [100, 100]
+        padding: [140, 140]
     },
 
     POI_ZOOM: 11.0, // auto zoom for point of interest maps
