@@ -1,7 +1,7 @@
 
 var title = 'Open Data Network';
 
-var testSuggest = require('./lib/suggest');
+var testMainSuggest = require('./lib/test-main-suggest');
 var assertToggles = require('./lib/assert-toggles');
 var assertLinksTo = require('./lib/assert-links-to');
 
@@ -15,7 +15,7 @@ casper.test.begin('homepage mobile', function(test) {
         testQuestionsList(test);
         testCategoryList(test);
 
-        testSuggest(test);
+        testMainSuggest(test);
     }).run(function() {
         test.done();
     });
@@ -28,12 +28,13 @@ function testQuestionsList(test) {
 function testCategoryList(test) {
     assertToggles(test, '.categories-dropdown-mobile', '.categories-list-mobile');
 
-    var assertLinksToCategory = assertLinksTo(test, '.categories-list-mobile li a', function(category) {
-        return '/search?categories=' + category;
-    });
+    var assertLinksToCategory = assertLinksTo(test, '.categories-list-mobile li a');
+    assertLinksToCategory('Finance', categoryURL('finance'));
+    assertLinksToCategory('Infrastructure', categoryURL('infrastructure'));
+    assertLinksToCategory('Demographics', categoryURL('demographics'));
+}
 
-    assertLinksToCategory('Finance');
-    assertLinksToCategory('Infrastructure');
-    assertLinksToCategory('Demographics');
+function categoryURL(category) {
+    return '/search?categories=' + category;
 }
 

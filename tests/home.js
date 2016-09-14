@@ -1,7 +1,7 @@
 
 var title = 'Open Data Network';
 
-var testSuggest = require('./lib/suggest');
+var testMainSuggest = require('./lib/test-main-suggest');
 
 casper.options.viewportSize = {width: 1600, height: 900};
 
@@ -11,7 +11,7 @@ casper.test.begin('homepage', function(test) {
         test.assertSelectorHasText('.logo', title);
         test.assertSelectorHasText('.hero-section', title);
 
-        testSuggest(test, '.home-search-bar-controls .search-bar-input', '.home-search-bar-controls .region-list');
+        testMainSuggest(test, '.home-search-bar-controls .search-bar-input', '.home-search-bar-controls .region-list');
     }).run(function() {
         test.done();
     });

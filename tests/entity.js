@@ -1,6 +1,7 @@
 
 var _ = require('lodash');
-var testSuggest = require('./lib/suggest');
+var testSuggest = require('./lib/test-suggest');
+var testMainSuggest = require('./lib/test-main-suggest');
 var assertLinksTo = require('./lib/assert-links-to');
 var dump = require('utils').dump;
 
@@ -20,11 +21,28 @@ casper.test.begin('entity', function(test) {
 
         testQuestions(test);
 
-        testSuggest(test);
+        testMainSuggest(test);
+        testCompareSuggest(test);
     }).run(function() {
         test.done();
     });
 });
+
+
+function testCompareSuggest(test) {
+    var compareSuggest = testSuggest(test, '.add-region-input', '.add-region-results', '.autocomplete-option');
+
+    testCompareSuggestSeattle(compareSuggest);
+}
+
+function testCompareSuggestSeattle(compareSuggest) {
+    compareSuggest('seattle', [
+        {
+            name: 'Seattle Metro Area (WA)',
+            href: '/entity/310M200US42660-1600000US5363000/Seattle_Metro_Area_WA-Seattle_WA/demographics.population.count?year=2013&ref=compare-entity'
+        }
+    ]);
+}
 
 function testEntityTokens(test) {
     test.assertSelectorHasText('.region-token', 'Seattle, WA');
@@ -32,11 +50,12 @@ function testEntityTokens(test) {
 
 function testQuestions(test) {
     var assertLinksToQuestion = assertLinksTo(test, '#sidebar-questions li a', function(variable) {
-        return topicURL(variable) + 'ref=entity-question';
     });
 
-    assertLinksToQuestion('What is the Population Rate of Change?', 'demographics.population.change');
-    assertLinksToQuestion('What is the Percent who did not finish the 9th grade?', 'education.graduation_rates.percent_less_than_9th_grade');
+    assertLinksToQuestion('What is the Population Rate of Change?',
+            questionURL('demographics.population.change'));
+    assertLinksToQuestion('What is the Percent who did not finish the 9th grade?',
+            questionURL('education.graduation_rates.percent_less_than_9th_grade'));
 
     test.assertSelectorHasText('a.more', 'show more');
     test.assertExists('.question.collapsed');
@@ -55,28 +74,28 @@ function testMapSummary(test) {
 function testTopicMenu(test) {
     test.assertSelectorHasText('.chart-tabs li.selected', 'Demographics');
 
-    var assertLinksToTopic = assertLinksTo(test, '.chart-tabs li a', topicURL);
-    assertLinksToTopic('Demographics');
-    assertLinksToTopic('Education');
-    assertLinksToTopic('Jobs');
-    assertLinksToTopic('Public Safety', 'crime');
+    var assertLinksToTopic = assertLinksTo(test, '.chart-tabs li a');
+    assertLinksToTopic('Demographics', topicURL('demographics'));
+    assertLinksToTopic('Education', topicURL('education'));
+    assertLinksToTopic('Jobs', topicURL('jobs'));
+    assertLinksToTopic('Public Safety', topicURL('crime'));
 }
 
 function testVariableMenu(test) {
     test.assertSelectorHasText('#map-variable-text .refine-menu-header-mobile', 'Population Count');
 
-    var assertLinksToVariable = assertLinksTo(test, '#map-variable-list li a', variableURL);
-    assertLinksToVariable('Population Count', 'count');
-    assertLinksToVariable('Population Rate of Change', 'change');
+    var assertLinksToVariable = assertLinksTo(test, '#map-variable-list li a');
+    assertLinksToVariable('Population Count', variableURL('count'));
+    assertLinksToVariable('Population Rate of Change', variableURL('change'));
 }
 
 function testConstraintMenu(test) {
     test.assertSelectorHasText('.map-variable-year-link', '2013');
 
     var selector = '.map-variable-year-container .chart-sub-nav-menu li a';
-    var assertLinksToYear = assertLinksTo(test, selector, yearURL);
+    var assertLinksToYear = assertLinksTo(test, selector);
     _.range(2009, 2014).forEach(function (year) {
-        assertLinksToYear(year);
+        assertLinksToYear(year, yearURL(year));
     });
 }
 
@@ -90,5 +109,9 @@ function variableURL(variable) {
 
 function yearURL(year) {
     return variableURL('count') + 'year=' + year;
+}
+
+function questionURL(variable) {
+    return topicURL(variable) + 'ref=entity-question';
 }
 

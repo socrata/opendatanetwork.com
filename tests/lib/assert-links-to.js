@@ -5,11 +5,10 @@ var _ = require('lodash');
  * Factory for creating a function that will test whether links
  * with the given name and href exist in the selection.
  */
-function assertLinksTo(test, linkSelector, idToURL) {
+function assertLinksTo(test, linkSelector) {
     var links = getLinks(linkSelector);
 
-    return function(name, id) {
-        var href = idToURL(id || name.toString().toLowerCase());
+    return function(name, href) {
         var description = 'Find link named "' + name + '" with href "' + href + '" in "' + linkSelector + '"';
         test.assert(contains(links, {name: name, href: href}), description);
     };
