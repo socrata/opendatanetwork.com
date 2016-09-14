@@ -1,6 +1,7 @@
 
 var _ = require('lodash');
 var testSuggest = require('./lib/suggest');
+var assertLinksTo = require('./lib/assert-links-to');
 var dump = require('utils').dump;
 
 casper.options.viewportSize = {width: 1600, height: 950};
@@ -89,33 +90,5 @@ function variableURL(variable) {
 
 function yearURL(year) {
     return variableURL('count') + 'year=' + year;
-}
-
-function assertLinksTo(test, linkSelector, idToURL) {
-    var links = getLinks(linkSelector);
-
-    return function(name, id) {
-        console.log(name);
-        var href = idToURL(id || name.toString().toLowerCase());
-        var description = 'Find link named "' + name + '" with href "' + href + '" in "' + linkSelector + '"';
-        test.assert(contains(links, {name: name, href: href}), description);
-    };
-}
-
-function contains(objects, object) {
-    return _.any(objects, function(other) {
-        return _.all(_.keys(object), function(key) {
-            return key in other && object[key] == other[key];
-        });
-    });
-}
-
-function getLinks(selector) {
-    return casper.getElementsInfo(selector).map(function(link) {
-        return {
-            href: link.attributes.href,
-            name: link.text
-        };
-    });
 }
 
