@@ -1,15 +1,15 @@
 
-var suggestInput = '.search-bar-input';
-var suggestResults = '.region-list';
-var suggestResult = '.region-list .autocomplete-option';
+function testAutosuggest(test, suggestInput, suggestResults, suggestResult) {
+    suggestInput = suggestInput || '.search-bar-input';
+    suggestResults = suggestResults || '.region-list';
+    suggestResult = suggestResults + ' ' + (suggestResult || '.autocomplete-option');
 
-function testAutosuggest(test) {
-    test.assertExists(suggestInput);
+    test.assertVisible(suggestInput);
     test.assertExists(suggestResults);
 
     casper.sendKeys(suggestInput, 'seattle', {keepFocus: true});
 
-    casper.waitForSelectorTextChange(suggestResults, function () {
+    casper.waitUntilVisible(suggestResults, function () {
         test.assertVisible(suggestResults);
 
         // entities

@@ -44,7 +44,7 @@
   "scripts": {
     "postinstall": "gulp build",
     "start": "node app.js",
-    "test": "casperjs test tests/*"
+    "test": "casperjs test tests/*.js"
   },
   "version": "1.0.0",
   "main": "app.js",

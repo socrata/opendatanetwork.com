@@ -1,6 +1,6 @@
 
 var _ = require('lodash');
-var testSuggest = require('./autosuggest');
+var testSuggest = require('./lib/suggest');
 var dump = require('utils').dump;
 
 casper.options.viewportSize = {width: 1600, height: 950};
