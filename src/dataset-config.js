@@ -9,7 +9,12 @@ const DATASET_CONFIG = {
                 name: 'Debt Service',
                 variables: [
                     'finance.michigan_debt.debt_service'
-                ]
+                ],
+                options: {
+                    vAxis: { 
+                        format:'percent'
+                    }
+                }
             },
             {
                 id: 'finance.michigan_debt.long_term_debt_revenue.chart',
