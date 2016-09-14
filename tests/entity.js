@@ -27,11 +27,39 @@ casper.test.begin('entity', function(test) {
         testParentLink(test);
         testSiblingLinks(test);
 
+        testCharts(test);
+
         testMainSuggest(test);
     }).run(function() {
         test.done();
     });
 });
+
+function testCharts(test) {
+    testPopulationCountChart(test);
+    testPopulationChangeChart(test);
+}
+
+function testPopulationCountChart(test) {
+    test.assertSelectorHasText('#demographics-population-count-chart h1', 'Population');
+    test.assertExists('#chart-demographics-population-count-chart');
+
+    casper.waitForSelector('#chart-demographics-population-count-chart svg', function() {
+        test.assertExists('#chart-demographics-population-count-chart svg');
+        test.assertSelectorHasText('#dataset-description-demographics-population-count-chart .forecast-descriptions p',
+            'The last measured population count for Seattle, WA was 624,681 in 2013. Seattle, WA experienced an average growth rate of 1.29% from our first statistic recorded in 2009. If past trends continue, we forecast the population count to be 663,026 by 2018.');
+    });
+}
+
+function testPopulationChangeChart(test) {
+    test.assertSelectorHasText('#demographics-population-change-chart h1', 'Population');
+    test.assertExists('#chart-demographics-population-change-chart');
+
+    casper.waitForSelector('#chart-demographics-population-change-chart svg', function() {
+        test.assertExists('#chart-demographics-population-change-chart svg');
+    });
+
+}
 
 function testParentLink(test) {
     var assertLinksToParent = assertLinksTo(test, 'a.parent-link');
