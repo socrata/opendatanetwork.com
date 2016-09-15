@@ -78,7 +78,9 @@ app.use('/googlec2f723ab6cc99ce1.html', express.static(__dirname + '/views/stati
 app.use('/robots.txt', express.static(__dirname + '/views/static/robots.txt'));
 app.use('/error.html', express.static(__dirname + '/views/static/error.html'));
 app.use('/robots.txt', express.static(__dirname + '/views/static/robots.txt'));
+
 app.use('/sitemap.xml', express.static(__dirname + '/views/static/sitemap.xml'));
+app.use('/sitemap', express.static(__dirname + '/views/static/sitemap'));
 
 // Ensure HTTP
 //

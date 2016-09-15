@@ -47,6 +47,11 @@ class ODNClient {
         });
     }
 
+    entitiesByType(entityType) {
+        return getJSON(this.url('entity/v1', {entity_type: entityType}))
+            .then(response => Promise.resolve(response.entities));
+    }
+
     /**
      * Get entities related to the given entity.
      *
