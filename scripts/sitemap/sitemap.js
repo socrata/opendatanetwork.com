@@ -4,7 +4,8 @@ const sitemap = require('sitemap');
 const fs = require('fs-promise');
 const mkdirp = require('mkdirp');
 
-const odn = require('../../src/odn-client/odn-client');
+const buildURL = require('../../src/odn-client/build-url');
+const getJSON = require('../../src/odn-client/get-json');
 const EntityNavigate = require('../../src/navigate/entity');
 
 const entityTypes = require('./entity-types.json');
@@ -16,7 +17,7 @@ mkdirp(sitemapDirectory);
 const hostname = 'https://www.opendatanetwork.com';
 
 return Promise.all(entityTypes.map(entityType => {
-    return odn.entitiesByType(entityType).then(entities => {
+    return entitiesOfType(entityType).then(entities => {
         const sitemaps = variableIDs.map(variableID => {
             return {
                 entityType,
@@ -46,8 +47,15 @@ return Promise.all(entityTypes.map(entityType => {
     console.log(error);
 });
 
-function dump(object) {
-    console.log(require('util').inspect(object));
+function entitiesOfType(entityType) {
+    const url = buildURL('https://odn.data.socrata.com/resource/pvug-y23y.json', {
+        $select: 'id,name',
+        $order: 'rank desc',
+        $limit: 50000,
+        type: entityType
+    });
+
+    return getJSON(url);
 }
 
 function generateSitemap(entities, variableID) {
