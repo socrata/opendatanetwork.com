@@ -49,7 +49,10 @@
   },
   "version": "1.0.0",
   "main": "app.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "mkdirp": "0.5.1",
+    "sitemap": "1.8.1"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/socrata/opendatanetwork.com.git"
