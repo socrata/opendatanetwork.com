@@ -18,4 +18,5 @@ styles/compressed
 
 .vscode/
 .idea
+jsconfig.json
 
