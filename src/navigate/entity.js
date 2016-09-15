@@ -53,11 +53,16 @@ class EntityNavigate {
 
     constraint(name, value) {
         return new EntityNavigate(this.entities, this.variableID,
-            _.extend({}, this.query, {[name]: clean(value).toLowerCase()}));
+            _.extend(_.omit(this.query, 'ref'), {[name]: clean(value).toLowerCase()}));
+    }
+
+    ref(ref) {
+        return new EntityNavigate(this.entities, this.variableID,
+            _.extend({}, this.query, {ref}));
     }
 
     url() {
-        const path = buildPath(['/entity', this.getIDs(), this.getNames(), this.variableID])
+        const path = buildPath(['/entity', this.getIDs(), this.getNames(), this.variableID]);
         return buildURL(path, this.query);
     }
 

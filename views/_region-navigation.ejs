@@ -25,7 +25,11 @@
             <% if (related.peer.length > 0) { %>
                 <ul id="similar-regions">
                     <% related.peer[0].entities.forEach(region => { %>
-                        <li><a class="region-link" href="<%= navigate.add(region).url() %><%- (entities.length >= 2) ? ' rel="nofollow"' : '' %>"><%= region.name %> <em class="fa fa-plus"></em></a></li>
+                        <li>
+                            <a class="region-link" href="<%= navigate.add(region).ref('related-peer').url() %>" <%- (entities.length >= 2) ? ' rel="nofollow"' : '' %>>
+                                <%= region.name %> <em class="fa fa-plus"></em>
+                            </a>
+                        </li>
                     <% }); %>
                 </ul>
             <% } %>
@@ -36,12 +40,12 @@
                 <h2 class="places-in-region-header">
                     Others in
                     <% const parentRegion = related.parent[0].entities[0]; %>
-                    <a class="parent-link" href="<%= navigate.to(parentRegion).clearVariable().url() %>"><%= parentRegion.name %></a>
+                    <a class="parent-link" href="<%= navigate.to(parentRegion).clearVariable().ref('related-parent').url() %>"><%= parentRegion.name %></a>
                 </h2>
 
                 <ul class="places-in-region-list">
                     <% related.sibling[0].entities.forEach(region => { %>
-                        <li><a class="region-link" href="<%= navigate.to(region).url() %>"><%= region.name %></a></li>
+                        <li><a class="region-link" href="<%= navigate.to(region).ref('related-sibling').url() %>"><%= region.name %></a></li>
                     <% }); %>
                 </ul>
             </div>

@@ -9,7 +9,12 @@ const DATASET_CONFIG = {
                 name: 'Debt Service',
                 variables: [
                     'finance.michigan_debt.debt_service'
-                ]
+                ],
+                options: {
+                    vAxis: {
+                        format: "#,###.##%"
+                    }
+                }
             },
             {
                 id: 'finance.michigan_debt.long_term_debt_revenue.chart',
@@ -17,12 +22,17 @@ const DATASET_CONFIG = {
                 name: 'Long Term Debt Revenue',
                 variables: [
                     'finance.michigan_debt.long_term_debt_revenue'
-                ]
+                ],
+                options: {
+                    vAxis: {
+                        format: "#,###.##%"
+                    }
+                }
             },
             {
                 id: 'finance.michigan_debt.debt_health.chart',
                 type: 'line',
-                name: 'Debt Health',
+                name: 'Debt Per Capita',
                 variables: [
                     'finance.michigan_debt.debt_health'
                 ]
@@ -62,19 +72,19 @@ const DATASET_CONFIG = {
                 ]
             },
             {
-                id: 'finance.michigan_general_fund.general_fund_health.chart',
-                type: 'line',
-                name: 'General Fund Health',
-                variables: [
-                    'finance.michigan_general_fund.general_fund_health'
-                ]
-            },
-            {
                 id: 'finance.michigan_general_fund.liquidity_ratio.chart',
                 type: 'line',
                 name: 'Liquidity Ratio',
                 variables: [
                     'finance.michigan_general_fund.liquidity_ratio'
+                ]
+            },
+            {
+                id: 'finance.michigan_general_fund.general_fund_health.chart',
+                type: 'line',
+                name: 'General Fund Balance Per Capita',
+                variables: [
+                    'finance.michigan_general_fund.general_fund_health'
                 ]
             }
         ]
@@ -83,19 +93,19 @@ const DATASET_CONFIG = {
     'finance.michigan_pensions': {
         charts: [
             {
-                id: 'finance.michigan_pensions.pension_health.chart',
-                type: 'line',
-                name: 'Pension Health',
-                variables: [
-                    'finance.michigan_pensions.pension_health'
-                ]
-            },
-            {
                 id: 'finance.michigan_pensions.unfunded_pension_liability.chart',
                 type: 'line',
                 name: 'Unfunded Pension Liability',
                 variables: [
                     'finance.michigan_pensions.unfunded_pension_liability'
+                ]
+            },
+            {
+                id: 'finance.michigan_pensions.pension_health.chart',
+                type: 'line',
+                name: 'Unfunded Pension Liability Per Capita',
+                variables: [
+                    'finance.michigan_pensions.pension_health'
                 ]
             }
         ]
@@ -109,15 +119,12 @@ const DATASET_CONFIG = {
                 name: 'Debt as % of Taxable Value',
                 variables: [
                     'finance.michigan_property_tax.debt_taxable_value'
-                ]
-            },
-            {
-                id: 'finance.michigan_property_tax.property_tax_health.chart',
-                type: 'line',
-                name: 'Property Tax Health',
-                variables: [
-                    'finance.michigan_property_tax.property_tax_health'
-                ]
+                ],
+                options: {
+                    vAxis: {
+                        format: "#,###.##%"
+                    }
+                }
             },
             {
                 id: 'finance.michigan_property_tax.total_taxable_value.chart',
@@ -125,6 +132,14 @@ const DATASET_CONFIG = {
                 name: 'Total Taxable Value',
                 variables: [
                     'finance.michigan_property_tax.total_taxable_value'
+                ]
+            },
+            {
+                id: 'finance.michigan_property_tax.property_tax_health.chart',
+                type: 'line',
+                name: 'Total Taxable Value Per Capita',
+                variables: [
+                    'finance.michigan_property_tax.property_tax_health'
                 ]
             }
         ]

@@ -5,7 +5,7 @@
                 <% group.forEach(entity => { %>
                     <div class="search-results-regions-cell w50">
                         <h2>
-                            <a href="<%= navigate.to(entity).url() %>">
+                            <a href="<%= navigate.to(entity).ref('search-entity').url() %>">
                                 <%= entity.name %>
                             </a>
                             <div class="regionType">
