@@ -60,7 +60,7 @@ class AutosuggestSource {
                     .append('a')
                     .attr('class', 'autocomplete-link')
                     .attr('href', self.config.select(option))
-                    .text(option.name || option.text);
+                    .text(option.name || option.text || self.config.text(option));
             })
             .on('click', option => {
                 window.location.href = this.config.select(option);

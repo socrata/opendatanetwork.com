@@ -29,8 +29,8 @@ function testSeattle(mainSuggest) {
             href: '/dataset/data.seattle.gov/brq5-i26y'
         },
         {
-            name: 'What is the business and finance employment rate of Seattle Metro Area (WA)?',
-            href: '/region/310M200US42660/Seattle_Metro_Area_WA/occupations/business_and_finance'
+            name: 'What is the population count of Seattle Metro Area (WA)?',
+            href: '/entity/310M200US42660/Seattle_Metro_Area_WA/demographics.population.count?'
         },
         {
             name: 'Suggestions API Documentation',

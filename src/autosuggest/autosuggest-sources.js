@@ -30,8 +30,10 @@ const AUTOSUGGEST_SOURCES = [
         image: 'fa-question-circle',
         name: 'Questions',
         select: option => {
-            return new EntityNavigate([option.entity])
-                .regionURL(option.vector, option.metric);
+            return new EntityNavigate([option.entity], option.variable.id).url();
+        },
+        text: option => {
+            return `What is the ${option.variable.name} of ${option.entity.name}?`;
         }
     },
     {

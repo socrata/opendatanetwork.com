@@ -1,6 +1,6 @@
 'use strict';
 
-const _ODN_API_HOST_AND_PORT = 'api.opendatanetwork.com';
+const _ODN_API_HOST_AND_PORT = 'odn-backend-staging.herokuapp.com';
 const _ODN_API_BASE_URL = 'https://'+_ODN_API_HOST_AND_PORT;
 
 const GlobalConstants = {
