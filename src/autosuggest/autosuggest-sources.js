@@ -5,7 +5,7 @@ const AUTOSUGGEST_SOURCES = [
         suggestType: 'entity',
         image: 'fa-globe',
         name: 'Regions',
-        select: option => new EntityNavigate([option]).url()
+        select: option => new EntityNavigate([option]).ref('suggest-entity').url()
     },
     {
         suggestType: 'category',

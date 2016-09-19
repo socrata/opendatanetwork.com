@@ -53,7 +53,8 @@ module.exports = (request, response) => {
 
             getConstraintMenus(entityIDs, variable.id, dataset.constraints, fixed).then(constraintMenus => {
                 const constraints = getConstraints(constraintMenus);
-                const url = new Navigate(entities, variable.id, constraints).url();
+                const query = _.extend({}, request.query, constraints);
+                const url = new Navigate(entities, variable.id, query).url();
 
                 if (url !== request.url) return response.redirect(307, url);
 
@@ -81,6 +82,7 @@ module.exports = (request, response) => {
                         constraintMenus,
                         description,
                         fixedConstraints: fixed,
+                        showRefineMenu: showRefineMenu(request),
                         topics: _.values(availableData),
                         navigate: new Navigate(entities, variableID, _.clone(request.query)),
                         questions: generateQuestions(availableData, dataset, variable),
@@ -251,5 +253,13 @@ function generateQuestions(topics, dataset, variable) {
 
     return datasetVariables.concat(otherVariables)
         .slice(0, GlobalConstants.QUESTION_COUNT);
+}
+
+/**
+ * Refine popup on mobile should be open when navigating from search page.
+ */
+function showRefineMenu(request) {
+    const ref = request.query.ref;
+    return !_.isEmpty(ref) && (ref === 'search-entity' || ref === 'suggest-entity');
 }
 
