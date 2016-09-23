@@ -29,11 +29,11 @@ function testSearchQuestions(test) {
     testQuestions(test, '#search-questions li a', [
         {
             name: 'What is the population count of Seattle Metro Area (WA)?',
-            href: '/region/310M200US42660/Seattle_Metro_Area_WA/population/population'
+            href: '/entity/310M200US42660/Seattle_Metro_Area_WA/demographics.population.count?'
         },
         {
-            name: 'What is the business and finance employment rate of Seattle Metro Area (WA)?',
-            href: '/region/310M200US42660/Seattle_Metro_Area_WA/occupations/business_and_finance'
+            name: 'What is the population count of Seattle, WA?',
+            href: '/entity/1600000US5363000/Seattle_WA/demographics.population.count?'
         }
     ]);
 }

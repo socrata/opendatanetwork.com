@@ -137,20 +137,16 @@ class ODNClient {
     /**
      * Search for questions relating to the given query.
      */
-    searchQuestions(query, limit, offset) {
+    searchQuestions(query, limit) {
         if (_.isEmpty(query)) return Promise.resolve([]);
 
         return getJSON(this.searchQuestionsURL.apply(this, arguments)).then(response => {
-            return Promise.resolve(response.questions);
+            return Promise.resolve(response.options);
         });
     }
 
-    searchQuestionsURL(query, limit, offset) {
-        return this.url('search/v1/question', {
-            query,
-            limit,
-            offset
-        });
+    searchQuestionsURL(query, limit) {
+        return this.url('suggest/v1/question', {query, limit});
     }
 
     /**

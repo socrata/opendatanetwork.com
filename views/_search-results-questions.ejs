@@ -9,9 +9,11 @@
 
     <div class="search-results" id="search-questions">
         <% questions.forEach((question, index) => { %>
+            <% const entity = question.entities[0]; %>
+            <% const variable = question.variable; %>
             <li class="question <%= index > 1 ? 'collapsible collapsed' : '' %>">
-                <a href="<%= navigate.to(question.entity).regionURL(question.vector, question.metric) %>">
-                    <%= question.text %>
+                <a href="<%= navigate.to(entity).variable(variable.id).url(); %>">
+                    What is the <%= variable.name %> of <%= entity.name %>?
                 </a>
             </li>
         <% }); %>

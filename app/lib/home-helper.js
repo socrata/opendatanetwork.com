@@ -1,13 +1,12 @@
 'use strict';
 
+const _ = require('lodash');
+
 class HomeHelper {
     static getRandomQuestions(questionsSet) {
-        const selected = [];
-        questionsSet.forEach(questions => {
-            var index = Math.floor(Math.random() * questions.length);
-            selected.push(questions[index]);
-        });
-        return selected;
+        return questionsSet
+            .filter(_.negate(_.isEmpty))
+            .map(_.sample);
     }
 
     static getRandomMostPopulousRegionsFromEachState(locations, count) {
