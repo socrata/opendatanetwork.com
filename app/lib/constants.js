@@ -7,15 +7,6 @@ const GlobalConstants = require("../../src/constants");
  */
 const ControllerConstants = {
     CATALOG_URL: 'http://api.us.socrata.com/api/catalog/v1',
-    ROSTER_URL: 'https://odn.data.socrata.com/resource/czuf-rtrf.json',
-    SEARCH_RESULTS_REGIONS_URL: 'https://odn.data.socrata.com/resource/czuf-rtrf.json',
-
-    RELATED_CHILD_URL: GlobalConstants.ODN_API_BASE_URL + '/entity/v1/child',
-    RELATED_PARENT_URL: GlobalConstants.ODN_API_BASE_URL + '/entity/v1/parent',
-    RELATED_PEER_URL: GlobalConstants.ODN_API_BASE_URL + '/entity/v1/peer',
-    RELATED_SIBLING_URL: GlobalConstants.ODN_API_BASE_URL + '/entity/v1/sibling',
-    SEARCH_DATASET_URL: GlobalConstants.ODN_API_BASE_URL + '/search/v1/dataset',
-    SEARCH_QUESTION_URL: GlobalConstants.ODN_API_BASE_URL + '/search/v1/question',
 
     N_RELATIVES: 5,
 
