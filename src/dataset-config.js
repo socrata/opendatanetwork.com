@@ -437,10 +437,10 @@ const DATASET_CONFIG = {
         ]
     },
 
-    'health.insurance': {
+    'health.health_insurance': {
         charts: [
             {
-                id: 'health.insurance.pctui.chart',
+                id: 'health.health_insurance.pctui.chart',
                 type: 'line',
                 constraint: {
                     age: '18 to 64',
@@ -451,11 +451,11 @@ const DATASET_CONFIG = {
                 name: 'Percent Uninsured',
                 forecast: 5,
                 variables: [
-                    'health.insurance.pctui'
+                    'health.health_insurance.pctui'
                 ]
             },
             {
-                id: 'health.insurance.income.chart',
+                id: 'health.health_insurance.income.chart',
                 type: 'column',
                 constraint: {
                     year: '2014',
@@ -465,11 +465,11 @@ const DATASET_CONFIG = {
                 },
                 name: 'Percent Uninsured by Income Level',
                 variables: [
-                    'health.insurance.pctui'
+                    'health.health_insurance.pctui'
                 ]
             },
             {
-                id: 'health.insurance.race.chart',
+                id: 'health.health_insurance.race.chart',
                 type: 'bar',
                 constraint: {
                     year: '2014',
@@ -479,7 +479,7 @@ const DATASET_CONFIG = {
                 },
                 name: 'Percent Uninsured by Race',
                 variables: [
-                    'health.insurance.pctui'
+                    'health.health_insurance.pctui'
                 ]
             }
 
