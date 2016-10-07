@@ -50,7 +50,7 @@ var _params = <%- JSON.stringify(params) %>;
                 <% if ((column.cachedContents != null) && (column.cachedContents.top != null)) {
                     var rg = _.slice(column.cachedContents.top, 0, 5);
                     rg.forEach(function(o) { %>
-                            <div class="dotdotdot"><%= (((column.dataTypeName == 'location') || (column.dataTypeName == 'point')) ?  JSON.stringify(o.item) : o.item) %></div>
+                            <div class="dotdotdot"><%= (((column.dataTypeName == 'location') || (column.dataTypeName == 'point' || (column.dataTypeName == 'url'))) ?  JSON.stringify(o.item) : o.item) %></div>
                 <%
                     });
                 }
