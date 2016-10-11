@@ -14,6 +14,7 @@ $(() => {
     attachMobileMenuHandlers();
     expandMobileQuestions();
     citationTooltip();
+    attachChartResizeHandler();
 });
 
 // Main search bar autosuggest.
@@ -231,3 +232,18 @@ function citationTooltip() {
     });
 }
 
+var resizeTimeout;
+
+function attachChartResizeHandler() {
+    $(window).resize(() => {
+
+        if (resizeTimeout) 
+            clearTimeout(resizeTimeout);
+
+        resizeTimeout = setTimeout(() => {
+            d3.selectAll('.chart h1 a').remove();
+            d3.selectAll('.chart-container').selectAll('*').remove();
+            drawCharts();
+        }, 300);
+    });
+}

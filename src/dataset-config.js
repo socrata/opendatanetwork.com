@@ -437,6 +437,55 @@ const DATASET_CONFIG = {
         ]
     },
 
+    'health.health_insurance': {
+        charts: [
+            {
+                id: 'health.health_insurance.pctui.chart',
+                type: 'line',
+                constraint: {
+                    age: '18 to 64',
+                    race: 'All races',
+                    sex: 'Both sexes',
+                    income: 'All income levels'
+                },
+                name: 'Percent Uninsured',
+                forecast: 5,
+                variables: [
+                    'health.health_insurance.pctui'
+                ]
+            },
+            {
+                id: 'health.health_insurance.income.chart',
+                type: 'column',
+                constraint: {
+                    year: '2014',
+                    age: '18 to 64',
+                    race: 'All races',
+                    sex: 'Both sexes',
+                },
+                name: 'Percent Uninsured by Income Level',
+                variables: [
+                    'health.health_insurance.pctui'
+                ]
+            },
+            {
+                id: 'health.health_insurance.race.chart',
+                type: 'bar',
+                constraint: {
+                    year: '2014',
+                    age: '18 to 64',
+                    sex: 'Both sexes',
+                    income: 'All income levels'
+                },
+                name: 'Percent Uninsured by Race',
+                variables: [
+                    'health.health_insurance.pctui'
+                ]
+            }
+
+        ]
+    },
+
     'health.environmental_health': {
         charts: [
             {
