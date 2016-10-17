@@ -4,32 +4,6 @@ const DATASET_CONFIG = {
     'finance.michigan_debt': {
         charts: [
             {
-                id: 'finance.michigan_debt.debt_service.chart',
-                type: 'line',
-                name: 'Debt Service',
-                variables: [
-                    'finance.michigan_debt.debt_service'
-                ],
-                options: {
-                    vAxis: {
-                        format: "#,###.##%"
-                    }
-                }
-            },
-            {
-                id: 'finance.michigan_debt.long_term_debt_revenue.chart',
-                type: 'line',
-                name: 'Long Term Debt Revenue',
-                variables: [
-                    'finance.michigan_debt.long_term_debt_revenue'
-                ],
-                options: {
-                    vAxis: {
-                        format: "#,###.##%"
-                    }
-                }
-            },
-            {
                 id: 'finance.michigan_debt.debt_long_term.chart',
                 type: 'line',
                 name: 'Long Term Debt',
@@ -51,14 +25,6 @@ const DATASET_CONFIG = {
     'finance.michigan_expenditures': {
         charts: [
             {
-                id: 'finance.michigan_expenditures.public_safety_expenditures.chart',
-                type: 'line',
-                name: 'Total Public Safety Fund Expenditures',
-                variables: [
-                    'finance.michigan_expenditures.public_safety_expenditures'
-                ]
-            },
-            {
                 id: 'finance.michigan_expenditures.total_general_fund_expenditures.chart',
                 type: 'line',
                 name: 'Total General Fund Expenditures',
@@ -72,27 +38,11 @@ const DATASET_CONFIG = {
     'finance.michigan_general_fund': {
         charts: [
             {
-                id: 'finance.michigan_general_fund.general_fund_balance.chart',
-                type: 'line',
-                name: 'General Fund Balance Operating Budget Surplus(Deficit)',
-                variables: [
-                    'finance.michigan_general_fund.general_fund_balance'
-                ]
-            },
-            {
                 id: 'finance.michigan_general_fund.general_fund_unrestricted_balance.chart',
                 type: 'line',
                 name: 'General Fund Unrestricted Balance',
                 variables: [
                     'finance.michigan_general_fund.general_fund_unrestricted_balance'
-                ]
-            },
-            {
-                id: 'finance.michigan_general_fund.liquidity_ratio.chart',
-                type: 'line',
-                name: 'Liquidity Ratio',
-                variables: [
-                    'finance.michigan_general_fund.liquidity_ratio'
                 ]
             },
             {
@@ -169,14 +119,6 @@ const DATASET_CONFIG = {
                 name: 'Total General Fund Revenue',
                 variables: [
                     'finance.michigan_revenues.total_general_fund_revenue'
-                ]
-            },
-            {
-                id: 'finance.michigan_revenues.unrestricted_revenue.chart',
-                type: 'line',
-                name: 'Unrestricted Revenue',
-                variables: [
-                    'finance.michigan_revenues.unrestricted_revenue'
                 ]
             }
         ]
