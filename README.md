@@ -95,6 +95,12 @@ There should be no need to manually deploy to Heroku,
 but if you do, make sure that `master` stays in sync with what is
 on Heroku.
 
+Note that `master` is a protected branch on Github.
+To update the `master` branch, open a pull request, ensure that all tests
+pass, and then have someone else review your changes.
+Then, Github will allow merging the pull request into `master`
+and Heroku will automatically deploy the application.
+
 Check LastPass for Heroku access.
 
 #### MemJS

@@ -30,7 +30,12 @@ class DatasetController {
         //
         const originalDatasetPromise = Dataset.datasetSummary(domain, id);
         const datasetMigrationsPromise = Dataset.datasetMigrations(domain, id);
-        const promises = Promise.all([originalDatasetPromise, datasetMigrationsPromise]);
+
+        const promises = Promise.all([
+            originalDatasetPromise,
+            // We swallow the 404 error that comes from the migrations service
+            datasetMigrationsPromise.catch(function(){})
+        ]);
 
         promises.then(data => {
             const originalDataset = data[0];
@@ -39,7 +44,7 @@ class DatasetController {
             var nbeId = null;
             var obeId = null;
 
-            if (migrations.error) {
+            if (migrations == null || migrations.error) {
                 if (originalDataset.newBackend)
                     nbeId = originalDataset.id;
                 else
@@ -151,7 +156,7 @@ class DatasetController {
                             nbeId,
                             obeId,
                             newBackend: originalDataset.newBackend,
-                            migrationsError: migrations.error,
+                            migrationsError: migrations == null || migrations.error,
                         },
                         quickLinks: {
                             categories: data[2],

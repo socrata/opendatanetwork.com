@@ -1,0 +1,7 @@
+[
+    "demographics.population.count",
+    "demographics.population.change",
+    "education.graduation_rates.percent_high_school_graduate_or_higher",
+    "education.graduation_rates.percent_bachelors_degree_or_higher",
+    "jobs.earnings.median_earnings"
+]

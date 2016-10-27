@@ -1,0 +1,10 @@
+[
+    "region.nation",
+    "region.region",
+    "region.division",
+    "region.state",
+    "region.county",
+    "region.msa",
+    "region.place",
+    "region.zip_code"
+]
