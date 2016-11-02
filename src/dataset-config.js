@@ -30,6 +30,14 @@ const DATASET_CONFIG = {
                 }
             },
             {
+                id: 'finance.michigan_debt.debt_long_term.chart',
+                type: 'line',
+                name: 'Long Term Debt',
+                variables: [
+                    'finance.michigan_debt.debt_long_term'
+                ]
+            },
+            {
                 id: 'finance.michigan_debt.debt_health.chart',
                 type: 'line',
                 name: 'Debt Per Capita',
@@ -66,9 +74,17 @@ const DATASET_CONFIG = {
             {
                 id: 'finance.michigan_general_fund.general_fund_balance.chart',
                 type: 'line',
-                name: 'General Fund Balance',
+                name: 'General Fund Balance Operating Budget Surplus(Deficit)',
                 variables: [
                     'finance.michigan_general_fund.general_fund_balance'
+                ]
+            },
+            {
+                id: 'finance.michigan_general_fund.general_fund_unrestricted_balance.chart',
+                type: 'line',
+                name: 'General Fund Unrestricted Balance',
+                variables: [
+                    'finance.michigan_general_fund.general_fund_unrestricted_balance'
                 ]
             },
             {
