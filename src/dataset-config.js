@@ -262,7 +262,19 @@ const DATASET_CONFIG = {
             }
         ]
     },
-
+    'economy.personal_income': {
+        charts: [
+            {
+                id: 'economy.personal_income.annual_personal_income.chart',
+                type: 'line',
+                forecast: 5,
+                name: 'Annual Personal Income in US$',
+                variables: [
+                    'economy.personal_income.annual_personal_income'
+                ]
+            }
+        ]
+    },
     'economy.cost_of_living': {
         charts: [
             {
