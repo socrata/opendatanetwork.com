@@ -1,7 +1,21 @@
 'use strict';
 
-const _ODN_API_HOST_AND_PORT = 'api.opendatanetwork.com';
-const _ODN_API_BASE_URL = 'https://'+_ODN_API_HOST_AND_PORT;
+var _ODN_API_HOST_AND_PORT = 'localhost:3001';
+var _ODN_API_BASE_URL = 'http://'+_ODN_API_HOST_AND_PORT;
+
+switch(process.env.ENVIRONMENT) {
+  case 'production':
+    _ODN_API_HOST_AND_PORT = 'api.opendatanetwork.com';
+    _ODN_API_BASE_URL = 'https://'+_ODN_API_HOST_AND_PORT;
+    break;
+
+  case 'staging':
+    _ODN_API_HOST_AND_PORT = 'opendatanetwork-staging.herokuapp.com';
+    _ODN_API_BASE_URL = 'https://'+_ODN_API_HOST_AND_PORT;
+    break;
+}
+
+console.log("Connecting to backend at", _ODN_API_BASE_URL);
 
 const GlobalConstants = {
     ODN_API_HOST_AND_PORT: _ODN_API_HOST_AND_PORT,
