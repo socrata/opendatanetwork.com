@@ -10,7 +10,7 @@ switch(process.env.ENVIRONMENT) {
     break;
 
   case 'staging':
-    _ODN_API_HOST_AND_PORT = 'opendatanetwork-staging.herokuapp.com';
+    _ODN_API_HOST_AND_PORT = 'odn-backend-staging.herokuapp.com';
     _ODN_API_BASE_URL = 'https://'+_ODN_API_HOST_AND_PORT;
     break;
 }
