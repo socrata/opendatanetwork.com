@@ -8,7 +8,7 @@ const ExpandCollapseControl = L.Control.extend({
 
         const containerDiv = L.DomUtil.create('div', 'leaflet-bar map-expand-collapse');
 
-        this.expanded = (d3.select("body").node().getBoundingClientRect().width > GlobalConstants.MOBILE_WIDTH);
+        this.expanded = (d3.select("body").node().getBoundingClientRect().width > GlobalConfig.mobile_width);
 
         if (this.expanded)
             this.enableControls(map);
@@ -56,7 +56,7 @@ const ExpandCollapseControl = L.Control.extend({
         $('#leaflet-map').animate({ height: 500 }, null, null, () => {
             map.invalidateSize();
         });
-        
+
         this.buttonIcon.classed('fa-expand', false).classed('fa-compress', true);
         this.enableControls(map);
         this.expanded = true;
@@ -65,7 +65,7 @@ const ExpandCollapseControl = L.Control.extend({
     collapseMap: function(map) {
 
         $('#leaflet-map').animate({ height: 300 }, null, null, () => {
-            map.invalidateSize();    
+            map.invalidateSize();
         });
 
         this.buttonIcon.classed('fa-compress', false).classed('fa-expand', true);

@@ -86,7 +86,7 @@ function renderEntities(entities) {
 
             cell.append('div')
                 .attr('class', 'regionType')
-                .text(GlobalConstants.REGION_NAMES[entity.type] || '');
+                .text(GlobalConfig.regions.names[entity.type] || '');
         });
     });
 }

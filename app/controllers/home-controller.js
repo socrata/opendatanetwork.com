@@ -14,7 +14,7 @@ const ErrorHandler = require('../lib/error-handler');
 const ODNClient = require('../../src/odn-client/odn-client');
 const Navigate = require('../../src/navigate/entity');
 
-const GlobalConstants = require('../../src/constants');
+const GlobalConfig = require('../../src/config');
 
 //TODO: Same var in dataset controller as well. Extract it out.
 const quickLinksCount = 15;
@@ -43,7 +43,7 @@ class HomeController {
                     const randomQuestions = HomeHelper.getRandomQuestions(questionsData);
 
                     const templateParams = {
-                        GlobalConstants,
+                        GlobalConfig,
                         Navigate,
                         categories,
                         locations,
