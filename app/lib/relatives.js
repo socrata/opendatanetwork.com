@@ -2,18 +2,18 @@
 
 const _ = require('lodash');
 
-const ControllerConstants = require('./constants');
-const GlobalConstants = require('../../src/constants');
+const GlobalConfig = require('../../src/config');
 const Request = require('./request');
 
 class Relatives {
 
     static peers(region) {
         return new Promise((resolve, reject) => {
-            const url = Request.buildURL(ControllerConstants.RELATED_PEER_URL, {
-                app_token: GlobalConstants.APP_TOKEN,
+            const url = Request.buildURL(GlobalConfig.odn_api.base
+              + GlobalConfig.odn_api.related_peer_endpoint, {
+                app_token: GlobalConfig.app_token,
                 entity_id: region.id,
-                limit: ControllerConstants.N_RELATIVES * 4
+                limit: GlobalConfig.n_relatives * 4
             });
 
             Request.getJSON(url).then(json => resolve(json), reject);
@@ -23,10 +23,11 @@ class Relatives {
     static parents(region) {
 
         return new Promise((resolve, reject) => {
-            const url = Request.buildURL(ControllerConstants.RELATED_PARENT_URL, {
-                app_token: GlobalConstants.APP_TOKEN,
+            const url = Request.buildURL(GlobalConfig.odn_api.base
+              + GlobalConfig.odn_api.related_parent_endpoint, {
+                app_token: GlobalConfig.app_token,
                 entity_id: region.id,
-                limit: ControllerConstants.N_RELATIVES * 4
+                limit: GlobalConfig.n_relatives * 4
             });
 
             Request.getJSON(url).then(json => resolve(json), reject);
@@ -36,10 +37,11 @@ class Relatives {
     static children(region) {
 
         return new Promise((resolve, reject) => {
-            const url = Request.buildURL(ControllerConstants.RELATED_CHILD_URL, {
-                app_token: GlobalConstants.APP_TOKEN,
+            const url = Request.buildURL(GlobalConfig.odn_api.base
+              + GlobalConfig.odn_api.related_child_endpoint, {
+                app_token: GlobalConfig.app_token,
                 entity_id: region.id,
-                limit: ControllerConstants.N_RELATIVES * 4
+                limit: GlobalConfig.n_relatives * 4
             });
 
             Request.getJSON(url).then(json => resolve(json), reject);
@@ -48,10 +50,10 @@ class Relatives {
 
     static siblings(region) {
         return new Promise((resolve, reject) => {
-            const url = Request.buildURL(ControllerConstants.RELATED_SIBLING_URL, {
-                app_token: GlobalConstants.APP_TOKEN,
+            const url = Request.buildURL(GlobalConfig.odn_api.base + GlobalConfig.odn_api.related_sibling_endpoint, {
+                app_token: GlobalConfig.app_token,
                 entity_id: region.id,
-                limit: ControllerConstants.N_RELATIVES * 4
+                limit: GlobalConfig.n_relatives * 4
             });
 
             Request.getJSON(url).then(json => resolve(json), reject);

@@ -10,7 +10,7 @@ if (typeof require !== 'undefined') {
     var _ = require('lodash');
     var buildURL = require('./build-url');
     var getJSON = require('./get-json');
-    var GlobalConstants = require('../constants');
+    var GlobalConfig = require('../config');
     var EntityNavigate = require('../navigate/entity');
 }
 
@@ -217,7 +217,7 @@ function forEntities(entityIDs) {
     return {entity_id: entityIDs.join(',')};
 }
 
-var odn = new ODNClient(GlobalConstants.ODN_API_BASE_URL, GlobalConstants.APP_TOKEN);
+var odn = new ODNClient(GlobalConfig.odn_api.base, GlobalConfig.app_token);
 
 if (typeof module !== 'undefined') module.exports = odn;
 

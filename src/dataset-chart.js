@@ -53,12 +53,12 @@ class DatasetChart {
 
     getOptions() {
 
-        if (d3.select("body").node().getBoundingClientRect().width > GlobalConstants.MOBILE_WIDTH) {
+        if (d3.select("body").node().getBoundingClientRect().width > GlobalConfig.mobile_width) {
 
             return _.extend({
                     title: this.config.name || 'Chart'
                 },
-                DATASET_CONSTANTS.CHART_OPTIONS,
+                GlobalConfig.charts.options,
                 this.config.options || {});
         }
         else {
@@ -66,7 +66,7 @@ class DatasetChart {
             return _.extend({
                     title: this.config.name || 'Chart'
                 },
-                DATASET_CONSTANTS.CHART_OPTIONS,
+                GlobalConfig.charts.options,
                 this.config.options || {},
                 this.config.mobileOptions || {});
         }

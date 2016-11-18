@@ -59,7 +59,7 @@ const TooltipControl = L.Control.extend({
                 const [x, y] = bounds.normalize(point);
                 const [left, top] = bounds.quadrant(point);
 
-                const p = MapConstants.TOOLTIP_PADDING;
+                const p = GlobalConfig.maps.tooltip_padding;
                 const dispX = left ? x + this.width + p : x - p;
                 const dispY = top ? y + this.height + p : y - p;
 

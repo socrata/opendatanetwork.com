@@ -36,17 +36,17 @@ class MapView {
      * Shows the map on the given div.
      */
     show(selector) {
-        const isMobile = d3.select('body').node().getBoundingClientRect().width <= GlobalConstants.MOBILE_WIDTH;
+        const isMobile = d3.select('body').node().getBoundingClientRect().width <= GlobalConfig.mobile_width;
 
         const container = d3.select(selector)
             .append('div')
             .attr('class', isMobile ? 'map-container map-container-collapsed' : 'map-container map-container-expanded')
-            .attr('id', MapConstants.CSS_ID);
+            .attr('id', GlobalConfig.maps.css_id);
 
-        const map = L.map(MapConstants.CSS_ID, MapConstants.MAP_OPTIONS);
+        const map = L.map(GlobalConfig.maps.css_id, GlobalConfig.maps.map_options);
         this.map = map;
 
-        map.fitBounds(this.initialBounds, MapConstants.INITIAL_ZOOM_OPTIONS);
+        map.fitBounds(this.initialBounds, GlobalConfig.maps.initial_zoom_options);
 
         map.whenReady(() => {
             this.showZoom();
@@ -55,11 +55,11 @@ class MapView {
             this.showTileLayers();
         });
 
-        openSocket(MapConstants.MAP_VALUES_URL).then(socket => {
+        openSocket(GlobalConfig.odn_api.base).then(socket => {
             socket.on('message', message => this.handleUpdate(JSON.parse(message)));
 
             let updater = () => this.requestUpdate(socket);
-            updater = _.debounce(updater, MapConstants.UPDATE_WAIT);
+            updater = _.debounce(updater, GlobalConfig.maps.update_wait);
 
             updater();
             map.on('moveend', updater);
@@ -69,16 +69,16 @@ class MapView {
     }
 
     showTileLayers() {
-        const url = layerID => `https://api.mapbox.com/v4/${layerID}/{z}/{x}/{y}.png?access_token=${MapConstants.MAPBOX_TOKEN}`;
+        const url = layerID => `https://api.mapbox.com/v4/${layerID}/{z}/{x}/{y}.png?access_token=${GlobalConfig.maps.mapbox.token}`;
 
-        const base = L.tileLayer(url(MapConstants.BASE_LAYER_ID)).addTo(this.map);
+        const base = L.tileLayer(url(GlobalConfig.maps.mapbox.base_layer_id)).addTo(this.map);
         const pane = this.map.createPane('labels');
-        const labels = L.tileLayer(url(MapConstants.LABEL_LAYER_ID), {pane}).addTo(this.map);
+        const labels = L.tileLayer(url(GlobalConfig.maps.mapbox.label_layer_id), {pane}).addTo(this.map);
     }
 
     showZoom() {
-        if (MapConstants.ZOOM_CONTROL) {
-            this.zoomControl = new L.Control.Zoom(MapConstants.ZOOM_CONTROL_OPTIONS);
+        if (GlobalConfig.maps.zoom_control) {
+            this.zoomControl = new L.Control.Zoom(GlobalConfig.maps.zoom_control_options);
             this.map.addControl(this.zoomControl);
         }
     }
@@ -90,7 +90,7 @@ class MapView {
     }
 
     showExpand() {
-        if (d3.select('body').node().getBoundingClientRect().width <= GlobalConstants.MOBILE_WIDTH) {
+        if (d3.select('body').node().getBoundingClientRect().width <= GlobalConfig.mobile_width) {
             this.expandCollapseControl = new ExpandCollapseControl();
             this.map.addControl(this.expandCollapseControl);
         }
@@ -107,7 +107,7 @@ class MapView {
     }
 
     getPopup(feature) {
-        return L.popup(MapConstants.POPUP_OPTIONS)
+        return L.popup(GlobalConfig.maps.popup_options)
             .setLatLng(getCenter(feature))
             .setContent(this.getPopupContent(feature));
     }
@@ -172,8 +172,8 @@ class MapView {
 
     styleFeature(feature) {
         const fill = {fillColor: this.scale(feature.properties.value)};
-        const base = MapConstants.BASE_STYLE;
-        const selected = this.isSelected(feature) ? MapConstants.SELECTED_STYLE : {};
+        const base = GlobalConfig.maps.base_style;
+        const selected = this.isSelected(feature) ? GlobalConfig.maps.selected_style : {};
 
         return _.assign(fill, base, selected);
     }
@@ -267,8 +267,8 @@ function supportsWebsockets() {
 
 function getColorScale(variable) {
     const scale = variable.stoplight ?
-        MapConstants.STOPLIGHT_COLOR_SCALE :
-        MapConstants.COLOR_SCALE;
+        colorbrewer.RdYlGn[8] :
+        colorbrewer.Blues[9].slice(1);
     return variable.reverse ? reverse(scale) : scale;
 }
 

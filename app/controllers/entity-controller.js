@@ -7,7 +7,7 @@ const _ = require('lodash');
 
 const EntityFormatter = require('../lib/entity-formatter');
 const ODNClient = require('../../src/odn-client/odn-client');
-const GlobalConstants = require('../../src/constants');
+const GlobalConfig = require('../../src/config');
 const DatasetConfig = require('../../src/dataset-config');
 const Navigate = require('../../src/navigate/entity');
 
@@ -70,7 +70,7 @@ module.exports = (request, response) => {
                         css,
                         asyncCSS,
                         scripts,
-                        GlobalConstants,
+                        GlobalConfig,
                         title,
                         datasets,
                         related,
@@ -195,7 +195,7 @@ function clean(string) {
 
 
 function getRelated(entityID, variableID) {
-    const limit = GlobalConstants.RELATED_ENTITY_COUNT;
+    const limit = GlobalConfig.related_entity_count;
     const promises = ['parent', 'child', 'sibling', 'peer'].map(relation => {
         // Only constrain related entities to those with data for
         // the current variable with entities of the same type.
@@ -252,7 +252,7 @@ function generateQuestions(topics, dataset, variable) {
         .value();
 
     return datasetVariables.concat(otherVariables)
-        .slice(0, GlobalConstants.QUESTION_COUNT);
+        .slice(0, GlobalConfig.question_count);
 }
 
 /**

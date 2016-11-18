@@ -10,6 +10,7 @@ const favicon = require('serve-favicon');
 const helmet = require('helmet');
 const numeral = require('numeral');
 const querystring = require('querystring');
+const expose = require('express-expose');
 
 const HomeController = require('./app/controllers/home-controller');
 const CategoriesController = require('./app/controllers/categories-controller');
@@ -18,8 +19,9 @@ const PagesController = require('./app/controllers/pages-controller');
 
 const ErrorHandler = require('./app/lib/error-handler');
 const UrlUtil = require('./app/lib/url-util');
+const GlobalConfig = require('./src/config');
 
-const app = express();
+const app = expose(express());
 
 // Compression
 app.use(compression());
@@ -81,6 +83,9 @@ app.use('/robots.txt', express.static(__dirname + '/views/static/robots.txt'));
 
 app.use('/sitemap.xml', express.static(__dirname + '/views/static/sitemap.xml'));
 app.use('/sitemap', express.static(__dirname + '/views/static/sitemap'));
+
+// Expose our config to the client
+app.expose(GlobalConfig, 'GlobalConfig');
 
 // Ensure HTTP
 //

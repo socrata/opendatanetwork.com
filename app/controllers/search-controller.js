@@ -11,7 +11,7 @@ const Exception = require('../lib/exception');
 const ODNClient = require('../../src/odn-client/odn-client');
 const EntityNavigate = require('../../src/navigate/entity');
 const SearchNavigate = require('../../src/navigate/search');
-const Constants = require('../../src/constants');
+const GlobalConfig = require('../../src/config');
 
 const Category = require('../models/category');
 const Place = require('../models/place');
@@ -38,7 +38,7 @@ module.exports = (request, response) => {
         ODNClient.searchQuestions(query)
     ]).then(([entities, ceteraResponse, allCategories, allDomains, allTags, questions]) => {
         const templateData = {
-            Constants,
+            GlobalConfig,
             page: 'search',
             query,
             categories,
