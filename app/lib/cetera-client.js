@@ -3,7 +3,7 @@
  * Simple client for the Cetera catalog API.
  */
 
-const Constants = require('./constants');
+const GlobalConfig = require('../../src/config');
 const Request = require('./request');
 
 const _ = require('lodash');
@@ -17,7 +17,7 @@ class CeteraClient {
     }
 
     datasetsURL(limit, offset) {
-        return Request.buildURL(Constants.CATALOG_URL, {
+        return Request.buildURL(GlobalConfig.catalog.api, {
             q: this.query,
             categories: this.categories,
             domains: this.domains,

@@ -5,7 +5,6 @@ const GlobalConfig = require('../../src/config');
 const Querystring = require('querystring');
 const Request = require('./request');
 const Navigate = require('./navigate');
-const Constants = require('./constants');
 
 class Data {
     static getDataAvailability(regions) {

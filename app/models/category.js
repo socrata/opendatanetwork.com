@@ -5,14 +5,14 @@ const moment = require('moment');
 const numeral = require('numeral');
 const Request = require('../lib/request');
 const FileCache = require('../lib/fileCache');
-const Constants = require('../lib/constants');
+const GlobalConfig = require('../../src/config');
 
 class Category {
     static catalog(path, n, defaultResponse) {
         defaultResponse = defaultResponse || {results: []};
 
         return new Promise((resolve, reject) => {
-            Request.getJSON(`${Constants.CATALOG_URL}/${path}`).then(response => {
+            Request.getJSON(`${GlobalConfig.catalog.api}/${path}`).then(response => {
                 if (response) {
                     if (n) response.results = response.results.slice(0, n);
                     resolve(response);
@@ -28,7 +28,7 @@ class Category {
             Category.catalog('categories', n).then(response => {
                 Category.categoryMetadata().then(metadata => {
                     const categories = response.results.map(result => {
-                        result.metadata = metadata[result.category] || Constants.DEFAULT_METADATA;
+                        result.metadata = metadata[result.category] || GlobalConfig.catalog.default_metadata;
                         return result;
                     });
 
@@ -41,7 +41,7 @@ class Category {
     static domains(n) {
         const defaultResponse = { results: [] };
         return new Promise((resolve, reject) => {
-            Request.getJSON(`${Constants.CATALOG_URL}/domains`).then(response => {
+            Request.getJSON(`${GlobalConfig.catalog.api}/domains`).then(response => {
                 if (response) {
 
                     // Filter out domains without datasets
