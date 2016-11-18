@@ -17,7 +17,6 @@ var net = require('net');
 
 var baseScripts = [
     'src/app.js',
-    'src/constants.js',
     'src/odn-client/build-url.js',
     'src/odn-client/get-json.js',
     'src/odn-client/odn-client.js',
@@ -28,7 +27,6 @@ var baseScripts = [
 ];
 
 var mapScripts = [
-    'src/maps/constants.js',
     'src/maps/expand-collapse-control.js',
     'src/maps/legend-control.js',
     'src/maps/tooltip-control.js',
@@ -77,7 +75,6 @@ var entityScripts = baseScripts
     .concat(autosuggestScripts)
     .concat(mapScripts)
     .concat([
-        'src/dataset-constants.js',
         'src/dataset-chart.js',
         'src/infinite-scroll.js',
         'src/show-more-questions.js',
