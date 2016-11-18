@@ -28,12 +28,12 @@ function testSearchEntities(test) {
 function testSearchQuestions(test) {
     testQuestions(test, '#search-questions li a', [
         {
-            name: 'What is the population count of Seattle Metro Area (WA)?',
-            href: '/region/310M200US42660/Seattle_Metro_Area_WA/population/population'
+            name: 'What is the annual change in GDP of Seattle Metro Area (WA)?',
+            href: '/region/310M200US42660/Seattle_Metro_Area_WA/gdp/annual_change_in_gdp'
         },
         {
-            name: 'What is the business and finance employment rate of Seattle Metro Area (WA)?',
-            href: '/region/310M200US42660/Seattle_Metro_Area_WA/occupations/business_and_finance'
+            name: 'What is the healthcare employment rate of Seattle Metro Area (WA)?',
+            href: '/region/310M200US42660/Seattle_Metro_Area_WA/occupations/healthcare'
         }
     ]);
 }
@@ -49,8 +49,8 @@ function testSearchDatasets(test) {
 
 function testInfiniteScroll(test) {
     casper.scrollToBottom();
-    casper.waitForText('Seattle Federal Jobs', function() {
-        test.assertSelectorHasText('.search-results.datasets li a', 'Seattle Federal Jobs');
+    casper.waitForText('Seattle, WA-SPD Incidents', function() {
+        test.assertSelectorHasText('.search-results.datasets li a', 'Seattle, WA-SPD Incidents');
     });
 }
 
