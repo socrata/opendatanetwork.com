@@ -257,6 +257,47 @@ const DATASET_CONFIG = {
         ]
     },
 
+     'geographic.population': {
+        charts: [
+            {
+                id: 'geographic.population.density.chart',
+                type: 'line',
+                name: 'Population density',
+                variables: [
+                    'geographic.population.density'
+                ]
+            }
+            
+        ]
+    },
+
+    'geographic.area': {
+        charts: [
+            {
+                id: 'geographic.area.water_area.chart',
+                type: 'table',
+                 constraint: {
+                    year: '2014'
+                },
+                name: 'Water Area',
+                variables: [
+                    'geographic.area.water_area'
+                ]
+            },
+            {
+                id: 'geographic.area.land_area.chart',
+                type: 'table',
+                 constraint: {
+                    year: '2014'
+                },
+                name: 'Land Area',
+                variables: [
+                    'geographic.area.land_area'
+                ]
+            }
+        ]
+    },
+
     'economy.consumption': {
         charts: [
             {

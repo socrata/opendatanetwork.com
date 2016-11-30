@@ -93,7 +93,7 @@ function testPopulationCountChart(test) {
     casper.waitForSelector('#chart-demographics-population-count-chart svg', function() {
         test.assertExists('#chart-demographics-population-count-chart svg');
         test.assertSelectorHasText('#dataset-description-demographics-population-count-chart .forecast-descriptions p',
-            'The last measured population count for Seattle, WA was 624,681 in 2013. Seattle, WA experienced an average growth rate of 1.29% from our first statistic recorded in 2009. If past trends continue, we forecast the population count to be 663,026 by 2018.');
+            'The last measured population count for Seattle, WA was 637,850 in 2014. Seattle, WA experienced an average growth rate of 1.48% from our first statistic recorded in 2009. If past trends continue, we forecast the population count to be 681,695 by 2019.');
     });
 }
 
