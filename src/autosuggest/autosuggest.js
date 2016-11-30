@@ -29,7 +29,7 @@ class Autosuggest {
     }
 
     throttledSuggest(term) {
-        this.delay(GlobalConstants.AUTOCOMPLETE_WAIT_MS).then(() => {
+        this.delay(GlobalConfig.autocomplete.wait_ms).then(() => {
             if (term === this.currentTerm) {
                 this.suggest(term);
             }

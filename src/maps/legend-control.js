@@ -108,7 +108,7 @@ const LegendControl = L.Control.extend({
             .attr('width', dimension)
             .attr('height', dimension)
             .style('fill', color => color)
-            .style('fill-opacity', MapConstants.LEGEND_OPACITY);
+            .style('fill-opacity', GlobalConfig.maps.legend_opacity);
 
         legend
             .append('rect')

@@ -56,7 +56,7 @@
                 <% if (relative.entities.length > 0) { %>
                     <div class="children" id="<%= relative.type %>">
                         <h2 class="places-in-region-header">
-                            <%= GlobalConstants.PLURAL_REGION_NAMES[relative.type] || 'Regions' %> in <%= entities[0].name %>
+                            <%= GlobalConfig.regions.plural_names[relative.type] || 'Regions' %> in <%= entities[0].name %>
                         </h2>
 
                         <ul class="places-in-region-list">

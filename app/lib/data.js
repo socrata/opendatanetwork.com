@@ -1,16 +1,15 @@
 'use strict';
 
 const _ = require('lodash');
-const GlobalConstants = require('../../src/constants');
+const GlobalConfig = require('../../src/config');
 const Querystring = require('querystring');
 const Request = require('./request');
 const Navigate = require('./navigate');
-const Constants = require('./constants');
 
 class Data {
     static getDataAvailability(regions) {
-        const url = Request.buildURL(GlobalConstants.DATA_AVAILABILITY_URL, {
-            app_token: GlobalConstants.APP_TOKEN,
+        const url = Request.buildURL(GlobalConfig.odn_api.base + GlobalConfig.odn_api.data_availability_endpoint, {
+            app_token: GlobalConfig.app_token,
             entity_id: regions.map(region => region.id).join(','),
         });
 
@@ -61,10 +60,11 @@ class Data {
     }
 
     static constraints(entities, variable, constraint, fixed) {
-        const path = GlobalConstants.DATA_CONSTRAINT_URL.format(variable.id);
+        const path = GlobalConfig.odn_api.base
+          + GlobalConfig.odn_api.data_constraint_endpoint.format(variable.id);
         const params = _.extend({
             constraint,
-            app_token: GlobalConstants.APP_TOKEN,
+            app_token: GlobalConfig.app_token,
             entity_id: entities.map(_.property('id')).join(',')
         }, _.omit(fixed, constraint) || {});
         const url = Request.buildURL(path, params);
@@ -76,8 +76,9 @@ class Data {
 
         return new Promise((resolve, reject) => {
 
-            const url = Request.buildURL(GlobalConstants.DATA_CONSTRAINT_URL.format(variable.id), {
-                app_token: GlobalConstants.APP_TOKEN,
+            const url = Request.buildURL(GlobalConfig.odn_api.base
+                + GlobalConfig.odn_api.data_constraint_endpoint.format(variable.id), {
+                app_token: GlobalConfig.app_token,
                 entity_id: regions.map(region => region.id).join(','),
                 constraint: constraint
             });
@@ -91,7 +92,7 @@ class Data {
        return new Promise((resolve, reject) => {
 
             const params = {
-                app_token: GlobalConstants.APP_TOKEN,
+                app_token: GlobalConfig.app_token,
                 entity_id: regions.map(region => region.id).join(','),
                 variable: variable
             };
@@ -102,7 +103,8 @@ class Data {
             if (forecast)
                 params.forecast = forecast;
 
-            const url = Data.buildUrl(GlobalConstants.DATA_VALUES_URL, params);
+            const url = Data.buildUrl(GlobalConfig.odn_api.base
+              + GlobalConfig.odn_api.data_values_endpoint, params);
             Request.getJSON(url).then(json => resolve(json), reject);
         });
     }

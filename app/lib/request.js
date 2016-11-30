@@ -7,9 +7,9 @@ const memjs = require('memjs');
 const crypto = require('crypto');
 
 const Exception = require('./exception');
-const Constants = require('./constants');
+const GlobalConfig = require('../../src/config');
 const Cache = require('./cache');
-const cache = new Cache(null, Constants.CACHE_OPTIONS);
+const cache = new Cache(null, { expires: GlobalConfig.cache_options.expires });
 const buildURL = require('../../src/odn-client/build-url');
 
 class Request {
@@ -51,7 +51,7 @@ class Request {
     }
 
     static _timeout(milliseconds) {
-        milliseconds = milliseconds || Constants.TIMEOUT_MS;
+        milliseconds = milliseconds || GlobalConfig.timeout_ms;
 
         return new Promise((resolve, reject) => {
             setTimeout(() => {

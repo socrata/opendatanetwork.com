@@ -5,12 +5,12 @@ const moment = require('moment');
 const numeral = require('numeral');
 const Request = require('../lib/request');
 const FileCache = require('../lib/fileCache');
-const Constants = require('../lib/constants');
+const GlobalConfig = require('../../src/config');
 
 class Place {
     static regions(ids) {
         const params = {'$where': `id in(${ids.map(id => `'${id}'`).join(',')})`};
-        const url = Request.buildURL(Constants.ROSTER_URL, params);
+        const url = Request.buildURL(GlobalConfig.datasets.roster_url, params);
         return Request.getJSON(url);
     }
 

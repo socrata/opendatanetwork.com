@@ -4,7 +4,7 @@ const _ = require('lodash');
 const moment = require('moment');
 const numeral = require('numeral');
 const Category = require('./category');
-const Constants = require('../lib/constants');
+const GlobalConfig = require('../../src/config');
 const FileCache = require('../lib/fileCache');
 
 class Tag {
@@ -13,7 +13,7 @@ class Tag {
             Category.catalog('tags', n).then(response => {
                 Tag.tagMetadata().then(metadata => {
                     const tags = response.results.map(result => {
-                        result.metadata = metadata[result.tag] || Constants.DEFAULT_METADATA;
+                        result.metadata = metadata[result.tag] || GlobalConfig.catalog.default_metadata;
                         return result;
                     });
 

@@ -20,7 +20,7 @@ function infiniteScroll(paginator, onScroll) {
 
 function shouldScroll() {
     return ($(window).scrollTop() >=
-            $(document).height() - $(window).height() - GlobalConstants.SCROLL_THRESHOLD);
+            $(document).height() - $(window).height() - GlobalConfig.scroll_threshold);
 }
 
 class Paginator {

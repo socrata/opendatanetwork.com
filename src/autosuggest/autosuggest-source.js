@@ -12,14 +12,14 @@ class AutosuggestSource {
         if (this.config.options)
             return Promise.resolve(this.config.options);
 
-        const limit = GlobalConstants.AUTOCOMPLETE_SHOWN_OPTIONS;
+        const limit = GlobalConfig.autocomplete.shown_options;
         return odn.suggest(this.config.suggestType, term, limit, this.config.params);
     }
 
     display(container, options) {
         if (options.length === 0) return [];
 
-        if (this.config.sort) options = _.sortBy(options, this.config.sort).slice(0, GlobalConstants.AUTOCOMPLETE_SHOWN_OPTIONS);
+        if (this.config.sort) options = _.sortBy(options, this.config.sort).slice(0, GlobalConfig.autocomplete.shown_options);
         if (this.config.filter) options = options.filter(this.config.filter);
 
         const category = container
