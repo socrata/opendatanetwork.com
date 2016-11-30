@@ -307,12 +307,15 @@ variables:
     charts:
       - id: geographic.area.land_area.chart
         type: table
+        constraint:
+        year: '2014'
         forecast: 5
         name: Land Area
         variables:
           - geographic.area.land_area
       - id: geographic.area.water_area.chart
         type: table
+        year: '2014'
         name: Water Area
         variables:
           - geographic.area.water_area
