@@ -42,9 +42,6 @@ app.use(minifyHTML({
 // Cookie parser
 app.use(cookieParser());
 
-// Set X-Frame-Options header
-app.use(helmet.xframe('deny'));
-
 // Set up apache common log format output
 //app.use(morgan('combined'));
 
