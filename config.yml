@@ -295,6 +295,30 @@ variables:
         name: Population Change
         variables:
           - demographics.population.change
+  geographic.population:
+    charts:
+      - id: geographic.population.density.chart
+        type: line
+        forecast: 5
+        name: Population Density
+        variables:
+          - geographic.population.density
+  geographic.area:
+    charts:
+      - id: geographic.area.land_area.chart
+        type: table
+        constraint:
+        year: '2014'
+        forecast: 5
+        name: Land Area
+        variables:
+          - geographic.area.land_area
+      - id: geographic.area.water_area.chart
+        type: table
+        year: '2014'
+        name: Water Area
+        variables:
+          - geographic.area.water_area
   economy.consumption:
     charts:
       - id: economy.consumption.personal_consumption_expenditures.chart

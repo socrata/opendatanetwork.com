@@ -49,8 +49,8 @@ function testSearchDatasets(test) {
 
 function testInfiniteScroll(test) {
     casper.scrollToBottom();
-    casper.waitForText('Seattle, WA-SPD Incidents', function() {
-        test.assertSelectorHasText('.search-results.datasets li a', 'Seattle, WA-SPD Incidents');
+    casper.waitForText('Seattle Federal Jobs', function() {
+        test.assertSelectorHasText('.search-results.datasets li a', 'Seattle Federal Jobs');
     });
 }
 
