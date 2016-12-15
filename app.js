@@ -24,8 +24,8 @@ const GlobalConfig = require('./src/config');
 const app = expose(express());
 
 // HACK HACK HACK DOS BLOCKER
-const BLOCKLIST = process.env.BLOCKLIST.split(",");
-const BLOCKAGENTS = process.env.BLOCKAGENTS.split(",");
+const BLOCKLIST = (process.env.BLOCKLIST || "").split(",");
+const BLOCKAGENTS = (process.env.BLOCKAGENTS || "").split(",");
 app.use((req, res, next) => {
   var ip = req.headers["x-forwarded-for"];
   var agent = req.headers["user-agent"];
