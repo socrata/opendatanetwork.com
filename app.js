@@ -23,6 +23,18 @@ const GlobalConfig = require('./src/config');
 
 const app = expose(express());
 
+
+// HACK HACK HACK DOS BLOCKER
+const BLOCKLIST = process.env.BLOCKLIST.split(",");
+app.use((req, res, next) => {
+  var ip = req.headers["x-forwarded-for"];
+  if(BLOCKLIST.includes(ip)) {
+    res.end("Banned!");
+  } else {
+    next();
+  }
+});
+
 // Compression
 app.use(compression());
 
