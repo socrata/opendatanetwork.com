@@ -23,6 +23,20 @@ const GlobalConfig = require('./src/config');
 
 const app = expose(express());
 
+// HACK HACK HACK DOS BLOCKER
+const BLOCKLIST = (process.env.BLOCKLIST || "").split(",");
+const BLOCKAGENTS = (process.env.BLOCKAGENTS || "").split(",");
+app.use((req, res, next) => {
+  var ip = req.headers["x-forwarded-for"];
+  var agent = req.headers["user-agent"];
+  if(BLOCKLIST.includes(ip) || BLOCKAGENTS.includes(agent)) {
+    console.log("Blocked", ip, req.headers["user-agent"]);
+    res.end("Oh no you din't!");
+  } else {
+    next();
+  }
+});
+
 // Compression
 app.use(compression());
 
@@ -49,6 +63,9 @@ app.use((req, res, next) => {
   const query_inbound_url = req.query['x-return-url'];
   const query_inbound_url_description = req.query['x-return-description'];
   if (!_.isUndefined(query_inbound_url)) {
+    delete req.query['x-return-url'];
+    delete req.query['x-return-description'];
+
     res.cookie('inbound_url', query_inbound_url, {});
     res.cookie('inbound_url_description', query_inbound_url_description || 'Back', {});
   }

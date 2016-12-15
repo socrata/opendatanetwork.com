@@ -53,7 +53,8 @@ module.exports = (request, response) => {
 
             getConstraintMenus(entityIDs, variable.id, dataset.constraints, fixed).then(constraintMenus => {
                 const constraints = getConstraints(constraintMenus);
-                const query = _.extend({}, request.query, constraints);
+                // x-return-url and x-return-description will already be set in the cookies from middleware
+                const query = _.extend({}, _.omit(request.query, 'x-return-url', 'x-return-description'), constraints);
                 const url = new Navigate(entities, variable.id, query).url();
 
                 if (url !== request.url) return response.redirect(307, url);
