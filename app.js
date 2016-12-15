@@ -26,12 +26,14 @@ const app = expose(express());
 
 // HACK HACK HACK DOS BLOCKER
 const BLOCKLIST = process.env.BLOCKLIST.split(",");
+const BLOCKAGENTS = process.env.BLOCKAGENTS.split(",");
 app.use((req, res, next) => {
   console.log("Evaluating:", req.headers["x-forwarded-for"], req.headers["user-agent"]);
   var ip = req.headers["x-forwarded-for"];
-  if(BLOCKLIST.includes(ip)) {
-    console.log("Blocked", ip, req.headers["user-agent"], "by blocklist");
-    res.end("Banned!");
+  var agent = req.headers["user-agent"];
+  if(BLOCKLIST.includes(ip) || BLOCKAGENTS.includes(agent)) {
+    console.log("Blocked", ip, req.headers["user-agent"]);
+    res.end("Oh no you din't!");
   } else {
     next();
   }
