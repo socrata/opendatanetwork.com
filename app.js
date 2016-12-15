@@ -27,9 +27,10 @@ const app = expose(express());
 // HACK HACK HACK DOS BLOCKER
 const BLOCKLIST = process.env.BLOCKLIST.split(",");
 app.use((req, res, next) => {
+  console.log("Evaluating:", req.headers["x-forwarded-for"], req.headers["user-agent"]);
   var ip = req.headers["x-forwarded-for"];
   if(BLOCKLIST.includes(ip)) {
-    console.log("Blocked", ip, "by blocklist");
+    console.log("Blocked", ip, req.headers["user-agent"], "by blocklist");
     res.end("Banned!");
   } else {
     next();
