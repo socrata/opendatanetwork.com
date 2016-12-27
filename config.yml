@@ -162,6 +162,11 @@ variables:
         options:
           vAxis:
             format: '#,###.##%'
+      - id: finance.michigan_debt.debt_long_term.chart
+        type: line
+        name: Long Term Debt
+        variables:
+          - finance.michigan_debt.debt_long_term
       - id: finance.michigan_debt.long_term_debt_revenue.chart
         type: line
         name: Long Term Debt Revenue
@@ -170,11 +175,6 @@ variables:
         options:
           vAxis:
             format: '#,###.##%'
-      - id: finance.michigan_debt.debt_long_term.chart
-        type: line
-        name: Long Term Debt
-        variables:
-          - finance.michigan_debt.debt_long_term
       - id: finance.michigan_debt.debt_health.chart
         type: line
         name: Debt Per Capita
