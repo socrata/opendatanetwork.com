@@ -406,6 +406,24 @@ variables:
         name: Change in GDP
         variables:
           - economy.gdp.per_capita_gdp_percent_change
+  economy.state_exports:
+    charts:
+      - id: economy.state_exports.all_goods_timeline.chart
+        type: line
+        name: Value of All Goods
+        constraint:
+          month: 'Total'
+        variables:
+          - economy.state_exports.all_goods
+      - id: economy.state_exports.classification.chart
+        type: bar
+        name: Types of Goods
+        constraint:
+          month: 'Total'
+          year: '2016'
+        variables:
+          - economy.state_exports.manufactured
+          - economy.state_exports.non_manufactured
   education.classroom_statistics:
     charts:
       - id: education.classroom_statistics.chart
