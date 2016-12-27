@@ -415,6 +415,15 @@ variables:
           month: 'Total'
         variables:
           - economy.state_exports.all_goods
+      - id: economy.state_exports.all_goods_seasonality.chart
+        type: column
+        name: Manufacturing Seasonality
+        constraint:
+          year: 2015
+        exclude:
+          - Total
+        variables:
+          - economy.state_exports.all_goods
       - id: economy.state_exports.classification.chart
         type: bar
         name: Types of Goods
