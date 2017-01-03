@@ -7,6 +7,7 @@ cache_options:
 
 odn_api:
   base: "https://api.opendatanetwork.com"
+  # base: "http://localhost:3001"
   entity_lookup_endpoint: "/entity/v1"
   data_availability_endpoint: "/data/v1/availability"
   data_constraint_endpoint: "/data/v1/constraint/{0}"
@@ -297,14 +298,18 @@ variables:
       - id: demographics.population.count.chart
         type: line
         forecast: 5
+        constraint:
+          age: All ages
+          race: All races
+          sex: Both sexes
         name: Population
         variables:
           - demographics.population.count
-      - id: demographics.population.change.chart
-        type: line
-        name: Population Change
-        variables:
-          - demographics.population.change
+     # - id: demographics.population.change.chart
+     #   type: line
+     #   name: Population Change
+     #   variables:
+     #     - demographics.population.change
   geographic.population:
     charts:
       - id: geographic.population.density.chart
