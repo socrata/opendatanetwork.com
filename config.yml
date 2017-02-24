@@ -7,7 +7,7 @@ cache_options:
 
 odn_api:
   base: "https://api.opendatanetwork.com"
-  # base: "http://localhost:3001"
+  #base: "http://localhost:3001"
   entity_lookup_endpoint: "/entity/v1"
   data_availability_endpoint: "/data/v1/availability"
   data_constraint_endpoint: "/data/v1/constraint/{0}"
@@ -49,6 +49,8 @@ regions:
     region.place: "Place"
     region.zip_code: "ZIP Code"
     region.township: "Township"
+    region.isd_district: "Intermediate School District"
+    region.lea_district: "Local Education Academy"
 
   plural_names:
     region.nation: "Nations"
@@ -60,6 +62,8 @@ regions:
     region.place: "Places"
     region.zip_code: "ZIP Codes"
     region.township: "Townships"
+    region.isd_district: "Intermediate School Districts"
+    region.lea_district: "Local Education Academies"
 
 catalog:
   api: "http://api.us.socrata.com/api/catalog/v1"
