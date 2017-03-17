@@ -64,7 +64,6 @@ catalog:
   api: "http://api.us.socrata.com/api/catalog/v1"
   dataset_summary_url: "https://{0}/api/views/{1}.json"
   dataset_migrations_url: "https://{0}/api/migrations/{1}.json"
-  athena_url: "https://socrata-athena.herokuapp.com/schema/v1/applied/{0}"
 
   default_metadata:
     description: ""
