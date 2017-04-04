@@ -57,13 +57,12 @@ class DatasetController {
 
             // Remaining promises
             //
-            const schemasPromise = Dataset.standardSchemas(id);
             const paramsPromise = ParamsHelper.parameters(req, res);
             const categoriesPromise = Category.categories(quickLinksCount);
             const domainsPromise = Category.domains(quickLinksCount);
             const locationsPromise = Place.locations();
 
-            var rg = [schemasPromise, paramsPromise, categoriesPromise, domainsPromise, locationsPromise];
+            var rg = [paramsPromise, categoriesPromise, domainsPromise, locationsPromise];
 
             // If we have a new backend dataset, fetch the old backend dataset to get cachedContents "sample values".
             //
@@ -82,29 +81,14 @@ class DatasetController {
 
                     // If we add promises above, we need to keep these indices correct.
                     //
-                    if (data.length == 6)
-                        oldDataset = data[5];
+                    if (data.length == 5)
+                        oldDataset = data[4];
                     else if (!originalDataset.newBackend)
                         oldDataset = originalDataset;
                     else
                         oldDataset = null;
 
-                    const schemas = data[0].map(schema => {
-
-                        const uid = schema.url.match(/(\w{4}-\w{4})$/)[1];
-                        const query = Request.buildURL(`https://${domain}/resource/${id}.json?`, schema.query);
-
-                        return _.extend(schema, {
-                            uid,
-                            query,
-                            standard: schema.standardIds[0],
-                            required_columns: schema.columns,
-                            opt_columns: schema.optColumns,
-                            direct_map: schema.query.length === 0
-                        });
-                    });
-
-                    const params = data[1];
+                    const params = data[0];
                     const originalColumns = _.filter(originalDataset.columns, DatasetHelper.isNotComputedField);
 
                     if (oldDataset) {
@@ -137,7 +121,6 @@ class DatasetController {
                     const templateParams = {
                         GlobalConfig,
                         params,
-                        schemas,
                         title: originalDataset.name,
                         dataset: {
                             domain,
@@ -159,10 +142,10 @@ class DatasetController {
                             migrationsError: migrations == null || migrations.error,
                         },
                         quickLinks: {
-                            categories: data[2],
-                            domains: data[3].results,
+                            categories: data[1],
+                            domains: data[1].results,
                             ref: 'dp',
-                            regions: data[4].slice(0, quickLinksCount),
+                            regions: data[3].slice(0, quickLinksCount),
                         },
                         css: [
                             '/styles/dataset.css'
