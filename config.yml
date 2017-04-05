@@ -7,6 +7,7 @@ cache_options:
 
 odn_api:
   base: "https://api.opendatanetwork.com"
+  #base: "http://localhost:3001"
   entity_lookup_endpoint: "/entity/v1"
   data_availability_endpoint: "/data/v1/availability"
   data_constraint_endpoint: "/data/v1/constraint/{0}"
@@ -48,6 +49,8 @@ regions:
     region.place: "Place"
     region.zip_code: "ZIP Code"
     region.township: "Township"
+    region.isd_district: "Intermediate School District"
+    region.lea_district: "Local Education Academy"
 
   plural_names:
     region.nation: "Nations"
@@ -59,6 +62,8 @@ regions:
     region.place: "Places"
     region.zip_code: "ZIP Codes"
     region.township: "Townships"
+    region.isd_district: "Intermediate School Districts"
+    region.lea_district: "Local Education Academies"
 
 catalog:
   api: "http://api.us.socrata.com/api/catalog/v1"
@@ -151,6 +156,71 @@ maps:
     closeOnClick: false
 
 variables:
+  schools.finance:
+    charts:
+      - id: schools.finance.gf_assets.chart
+        type: line
+        name: Total Assets
+        variables:
+          - schools.finance.gf_assets
+      - id: schools.finance.gf_liabilities.chart
+        type: line
+        name: Total Liabilities
+        variables:
+          - schools.finance.gf_liabilities
+      - id: schools.finance.gf_bal.chart
+        type: line
+        name: General Fund Balance
+        variables:
+          - schools.finance.gf_bal
+      - id: schools.finance.gf_rev.chart
+        type: line
+        name: Total General Fund Revenue
+        variables:
+          - schools.finance.gf_rev
+      - id: schools.finance.gf_exp.chart
+        type: line
+        name: Total General Fund Expenditures
+        variables:
+          - schools.finance.gf_exp
+      - id: schools.finance.gf_revexp.chart
+        type: line
+        name: General Fund Revenue Over Expenditure
+        variables:
+          - schools.finance.gf_revexp
+      - id: schools.finance.alRatio.chart
+        type: line
+        name: General Fund Assets over Liabilities
+        variables:
+          - schools.finance.alRatio 
+      - id: schools.finance.gf_revpupil.chart
+        type: line
+        name: General Fund Revenue Per Pupil FTE
+        variables:
+          - schools.finance.gf_revpupil
+      - id: schools.finance.gf_exppupil.chart
+        type: line
+        name: General Fund Expenditure Per Pupil FTE
+        variables:
+          - schools.finance.gf_exppupil    
+      - id: schools.finance.gf_brev.chart
+        type: line
+        name: General Fund Balance as a Percent of Revenue
+        variables:
+          - schools.finance.gf_brev
+      - id: schools.finance.gf_bpupil.chart
+        type: line
+        name: General Fund Balance Per Pupil FTE
+        variables:
+          - schools.finance.gf_bpupil
+  schools.enrollment:
+    charts:
+      - id: schools.enrollment.fte_enrollment.chart
+        type: line
+        name: Full Time Equivalent (FTE) Enrollment
+        variables:
+          - schools.enrollment.fte_enrollment
+
   finance.michigan_debt:
     charts:
       - id: finance.michigan_debt.debt_service.chart
