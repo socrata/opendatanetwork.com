@@ -160,12 +160,12 @@ variables:
     charts:
       - id: schools.finance.gf_assets.chart
         type: line
-        name: Total Assets
+        name: General Fund Assets
         variables:
           - schools.finance.gf_assets
       - id: schools.finance.gf_liabilities.chart
         type: line
-        name: Total Liabilities
+        name: General Fund Liabilities
         variables:
           - schools.finance.gf_liabilities
       - id: schools.finance.gf_bal.chart
@@ -175,12 +175,12 @@ variables:
           - schools.finance.gf_bal
       - id: schools.finance.gf_rev.chart
         type: line
-        name: Total General Fund Revenue
+        name: General Fund Revenue
         variables:
           - schools.finance.gf_rev
       - id: schools.finance.gf_exp.chart
         type: line
-        name: Total General Fund Expenditures
+        name: General Fund Expenditure
         variables:
           - schools.finance.gf_exp
       - id: schools.finance.gf_revexp.chart
@@ -192,7 +192,22 @@ variables:
         type: line
         name: General Fund Assets over Liabilities
         variables:
-          - schools.finance.alRatio 
+          - schools.finance.Rev_Staff
+      - id: schools.finance.Rev_Staff.chart
+        type: line
+        name: General Fund Revenue per Staff FTE
+        variables:
+          - schools.finance.Exp_Staff
+      - id: schools.finance.Exp_Staff.chart
+        type: line
+        name: General Fund Expenditure per Staff FTE
+        variables:
+          - schools.finance.Exp_Staff
+      - id: schools.finance.gf_brev.chart
+        type: line
+        name: General Fund Balance as a Percent of Revenue
+        variables:
+          - schools.finance.gf_brev
       - id: schools.finance.gf_revpupil.chart
         type: line
         name: General Fund Revenue Per Pupil FTE
@@ -203,11 +218,6 @@ variables:
         name: General Fund Expenditure Per Pupil FTE
         variables:
           - schools.finance.gf_exppupil    
-      - id: schools.finance.gf_brev.chart
-        type: line
-        name: General Fund Balance as a Percent of Revenue
-        variables:
-          - schools.finance.gf_brev
       - id: schools.finance.gf_bpupil.chart
         type: line
         name: General Fund Balance Per Pupil FTE
