@@ -7,6 +7,7 @@ cache_options:
 
 odn_api:
   base: "https://api.opendatanetwork.com"
+  #base: "http://localhost:3001"
   entity_lookup_endpoint: "/entity/v1"
   data_availability_endpoint: "/data/v1/availability"
   data_constraint_endpoint: "/data/v1/constraint/{0}"
@@ -195,7 +196,7 @@ variables:
     charts:
       - id: finance.michigan_general_fund.general_fund_balance.chart
         type: line
-        name: General Fund Balance
+        name: Revenue Surplus (Deficit)
         variables:
           - finance.michigan_general_fund.general_fund_balance
       - id: finance.michigan_general_fund.liquidity_ratio.chart
