@@ -275,7 +275,7 @@ variables:
     charts:
       - id: finance.michigan_general_fund.general_fund_balance.chart
         type: line
-        name: General Fund Balance
+        name: Revenue Surplus (Deficit)
         variables:
           - finance.michigan_general_fund.general_fund_balance
       - id: finance.michigan_general_fund.liquidity_ratio.chart
