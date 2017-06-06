@@ -6,8 +6,9 @@ cache_options:
   expires: 43200
 
 odn_api:
-  base: "https://api.opendatanetwork.com"
+  # While running locally, point to localhost
   #base: "http://localhost:3001"
+  base: "https://api.opendatanetwork.com"
   entity_lookup_endpoint: "/entity/v1"
   data_availability_endpoint: "/data/v1/availability"
   data_constraint_endpoint: "/data/v1/constraint/{0}"
@@ -582,3 +583,21 @@ variables:
         name: Occupations
         variables:
           - jobs.occupations.percent_employed
+  technology.broadband:
+    charts:
+      - id: technology.broadband.population.chart
+        type: line
+        constraint:
+          adsl: yes
+          cable: yes
+          fiber: yes
+          other: yes
+          satellite: yes
+          fixed: yes
+          speed: 25
+          urban_rural: Urban
+          tribal_non: Nontribal
+        name: Residents with Broadband
+        variables:
+          - technology.broadband.population
+      
