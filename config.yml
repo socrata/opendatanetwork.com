@@ -156,81 +156,146 @@ maps:
     closeOnClick: false
 
 variables:
-  schools.finance:
-    charts:
-      - id: schools.finance.gf_brev.chart
-        type: line
-        name: General Fund Balance as a Percent of Revenue
-        variables:
-          - schools.finance.gf_brev
-      - id: schools.finance.gf_assets.chart
-        type: line
-        name: General Fund Assets
-        variables:
-          - schools.finance.gf_assets
-      - id: schools.finance.gf_liabilities.chart
-        type: line
-        name: General Fund Liabilities
-        variables:
-          - schools.finance.gf_liabilities
-      - id: schools.finance.gf_bal.chart
-        type: line
-        name: General Fund Balance
-        variables:
-          - schools.finance.gf_bal
-      - id: schools.finance.gf_rev.chart
-        type: line
-        name: General Fund Revenue
-        variables:
-          - schools.finance.gf_rev
-      - id: schools.finance.gf_exp.chart
-        type: line
-        name: General Fund Expenditure
-        variables:
-          - schools.finance.gf_exp
-      - id: schools.finance.gf_revexp.chart
-        type: line
-        name: General Fund Revenue Over Expenditure
-        variables:
-          - schools.finance.gf_revexp
-      - id: schools.finance.alRatio.chart
-        type: line
-        name: General Fund Assets over Liabilities
-        variables:
-          - schools.finance.Rev_Staff
-      - id: schools.finance.Rev_Staff.chart
-        type: line
-        name: General Fund Revenue per Staff FTE
-        variables:
-          - schools.finance.Exp_Staff
-      - id: schools.finance.Exp_Staff.chart
-        type: line
-        name: General Fund Expenditure per Staff FTE
-        variables:
-          - schools.finance.Exp_Staff
-      - id: schools.finance.gf_bpupil.chart
-        type: line
-        name: General Fund Balance Per Pupil FTE
-        variables:
-          - schools.finance.gf_bpupil
-      - id: schools.finance.gf_revpupil.chart
-        type: line
-        name: General Fund Revenue Per Pupil FTE
-        variables:
-          - schools.finance.gf_revpupil
-      - id: schools.finance.gf_exppupil.chart
-        type: line
-        name: General Fund Expenditure Per Pupil FTE
-        variables:
-          - schools.finance.gf_exppupil    
   schools.enrollment:
     charts:
       - id: schools.enrollment.fte_enrollment.chart
         type: line
-        name: Full Time Equivalent (FTE) Enrollment
+        name: Fall Student Count (FTE)
         variables:
           - schools.enrollment.fte_enrollment
-
+      - id: schools.enrollment.EnrollmentChange.chart
+        type: line
+        name: Change in Fall Student Count
+        variables:
+          - schools.enrollment.EnrollmentChange
+      - id: schools.enrollment.EnrollmentPercent.chart
+        type: line
+        name: Percent Change Fall Student Count
+        variables:
+          - schools.enrollment.EnrollmentPercent
+  schools.finance:
+    charts:
+      - id: schools.finance.gf_brev.chart
+        type: line
+        name: General Fund Balance/Revenue
+        variables:
+          - schools.finance.gf_brev
+      - id: schools.finance.gf_bal.chart
+        type: line
+        name: Total General Fund Balance
+        variables:
+          - schools.finance.gf_bal
+      - id: schools.finance.gf_rev.chart
+        type: line
+        name: Total General Fund Revenue
+        variables:
+          - schools.finance.gf_rev
+      - id: schools.finance.gf_exp.chart
+        type: line
+        name: Total General Fund Expenditure
+        variables:
+          - schools.finance.gf_exp
+      - id: schools.finance.11-1-51x-xxxx.chart
+        type: line
+        name: General Fund Long Term Debt Service
+        variables:
+          - schools.finance.11-1-51x-xxxx
+      - id: schools.finance.Unrestricted.chart
+        type: line
+        name: Unrestricted General Fund Revenue
+        variables:
+          - schools.finance.Unrestricted
+  schools.fiscal_metrics:
+    charts:
+      - id: schools.fiscal_metrics.gf_revexp.chart
+        type: line
+        name: General Fund Revenue/Expenditure
+        variables:
+          - schools.fiscal_metrics.gf_revexp
+      - id: schools.fiscal_metrics.Rev_Staff.chart
+        type: line
+        name: General Fund Revenue Per Staff FTE
+        variables:
+          - schools.fiscal_metrics.Rev_Staff
+      - id: schools.fiscal_metrics.Exp_Staff.chart
+        type: line
+        name: General Fund Expenditure per Staff FTE
+        variables:
+          - schools.fiscal_metrics.Exp_Staff
+      - id: schools.fiscal_metrics.271_SQM.chart
+        type: line
+        name: Transportation Cost Per Square Mile
+        variables:
+          - schools.fiscal_metrics.271_SQM
+      - id: schools.fiscal_metrics.OM_Revenue.chart
+        type: line
+        name: Operations and Maintenance/Revenue
+        variables:
+          - schools.fiscal_metrics.OM_Revenue
+      - id: schools.fiscal_metrics.URRatio.chart
+        type: line
+        name: Percent Unrestricted General Fund Revenue
+        variables:
+          - schools.fiscal_metrics.URRatio
+      - id: schools.fiscal_metrics.gf_revpupil.chart
+        type: line
+        name: Total General Fund Revenue Per Student
+        variables:
+          - schools.fiscal_metrics.gf_revpupil
+      - id: schools.fiscal_metrics.gf_exppupil.chart
+        type: line
+        name: Total General Fund Expenditure Per Student
+        variables:
+          - schools.fiscal_metrics.gf_exppupil 
+      - id: schools.fiscal_metrics.gf_bpupil.chart
+        type: line
+        name: Total General Fund Balance Per Student
+        variables:
+          - schools.fiscal_metrics.gf_bpupil
+  schools.staffing:
+    charts:
+      - id: schools.staffing.TotalStaff.chart
+        type: line
+        name: Total Staff FTE
+        variables:
+          - schools.staffing.TotalStaff
+      - id: schools.staffing.Teachers.chart
+        type: line
+        name: Teachers
+        variables:
+          - schools.staffing.Teachers
+      - id: schools.staffing.Administrators.chart
+        type: line
+        name: Administrators
+        variables:
+          - schools.staffing.Administrators
+      - id: schools.staffing.Paras.chart
+        type: line
+        name: Paraprofessionals/Aides
+        variables:
+          - schools.staffing.Paras
+      - id: schools.staffing.NonInstructional.chart
+        type: line
+        name: Non-Instructional
+        variables:
+          - schools.staffing.NonInstructional
+  schools.statement_of_position:
+    charts:
+      - id: schools.statement_of_position.gf_assets.chart
+        type: line
+        name: Total General Fund Assets
+        variables:
+          - schools.statement_of_position.gf_assets
+      - id: schools.statement_of_position.gf_liabilities.chart
+        type: line
+        name: Total General Fund Liabilities
+        variables:
+          - schools.statement_of_position.gf_liabilities
+      - id: schools.statement_of_position.alRatio.chart
+        type: line
+        name: General Fund Liquidity Ratio
+        variables:
+          - schools.statement_of_position.alRatio
   finance.michigan_debt:
     charts:
       - id: finance.michigan_debt.debt_service.chart
