@@ -345,7 +345,7 @@ variables:
           - finance.michigan_general_fund.general_fund_balance
       - id: finance.michigan_general_fund.liquidity_ratio.chart
         type: line
-        name: Liquidity Ratio
+        name: Liquidity (Quick) Ratio
         variables:
           - finance.michigan_general_fund.liquidity_ratio
       - id: finance.michigan_general_fund.general_fund_unrestricted_balance.chart
@@ -399,7 +399,7 @@ variables:
           - finance.michigan_revenues.total_general_fund_revenue
       - id: finance.michigan_revenues.unrestricted_revenue.chart
         type: line
-        name: Unrestricted Revenue
+        name: Unrestricted Fund Balance
         variables:
           - finance.michigan_revenues.unrestricted_revenue
   crime.fbi_ucr:
