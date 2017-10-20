@@ -336,7 +336,7 @@ variables:
         type: line
         name: Total General Fund Expenditures
         variables:
-          - finance.michigan_debt.total_general_fund_expenditures    
+          - finance.michigan_debt.total_general_fund_expenditures
   finance.michigan_general_fund:
     charts:
       - id: finance.michigan_general_fund.general_fund_health.chart
