@@ -317,6 +317,8 @@ variables:
         variables:
           - finance.michigan_debt.long_term_debt_revenue
         options:
+          tooltip:
+            format: '#,###.##%'
           vAxis:
             format: '#,###.##%'
       - id: finance.michigan_debt.debt_health.chart
@@ -348,11 +350,17 @@ variables:
         name: Liquidity Ratio
         variables:
           - finance.michigan_general_fund.liquidity_ratio
+        options:
+          vAxis:
+            format: '#,###.##%'
       - id: finance.michigan_general_fund.general_fund_unrestricted_balance.chart
         type: line
         name: General Fund Unrestricted Balance
         variables: 
           - finance.michigan_general_fund.general_fund_unrestricted_balance
+        options:
+          vAxis:
+            format: '#,###.##%'
       - id: finance.michigan_general_fund.general_fund_health.chart
         type: line
         name: General Fund Balance Per Capita
