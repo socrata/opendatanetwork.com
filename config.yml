@@ -349,11 +349,17 @@ variables:
         name: General Fund Unrestricted Balance
         variables: 
           - finance.michigan_general_fund.general_fund_unrestricted_balance
+        options:
+          vAxis:
+            format: '#,###.##%'
       - id: finance.michigan_general_fund.liquidity_ratio.chart
         type: line
         name: Liquidity Ratio
         variables:
           - finance.michigan_general_fund.liquidity_ratio
+        options:
+          vAxis:
+            format: '#,###.##%'
       - id: finance.michigan_general_fund.revenue_surplus.chart
         type: line
         name: Revenue Surplus (Deficit)
