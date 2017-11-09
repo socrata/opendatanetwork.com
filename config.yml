@@ -317,8 +317,6 @@ variables:
         variables:
           - finance.michigan_debt.long_term_debt_revenue
         options:
-          tooltip:
-            format: '#,###.##%'
           vAxis:
             format: '#,###.##%'
       - id: finance.michigan_debt.debt_health.chart
