@@ -332,11 +332,6 @@ variables:
         options:
           vAxis:
             format: '#,###.##%'
-      - id: finance.michigan_debt.total_general_fund_expenditures.chart
-        type: line
-        name: Total General Fund Expenditures
-        variables:
-          - finance.michigan_debt.total_general_fund_expenditures    
   finance.michigan_general_fund:
     charts:
       - id: finance.michigan_general_fund.general_fund_health.chart
@@ -365,6 +360,16 @@ variables:
         name: Revenue Surplus (Deficit)
         variables:
           - finance.michigan_general_fund.revenue_surplus
+      - id: finance.michigan_general_fund.total_general_fund_expenditures.chart
+        type: line
+        name: Total General Fund Expenditures
+        variables:
+          - finance.michigan_general_fund.total_general_fund_expenditures
+      - id: finance.michigan_general_fund.total_general_fund_revenues.chart
+        type: line
+        name: Total General Fund Revenue
+        variables:
+          - finance.michigan_general_fund.total_general_fund_revenues
   finance.michigan_pensions:
     charts:
       - id: finance.michigan_pensions.unfunded_pension_liability.chart
@@ -389,11 +394,6 @@ variables:
         name: Total Taxable Value
         variables:
           - finance.michigan_property_tax.total_taxable_value
-      - id: finance.michigan_revenues.total_general_fund_revenue.chart
-        type: line
-        name: Total General Fund Revenue
-        variables:
-          - finance.michigan_property_tax.total_general_fund_revenue
   crime.fbi_ucr:
     charts:
       - id: crime.fbi_ucr.count.chart
