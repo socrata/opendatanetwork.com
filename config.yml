@@ -348,9 +348,7 @@ variables:
           vAxis:
             format: '#,###.##%'
       - id: finance.michigan_general_fund.liquidity_ratio.chart
-        type: line
-        name: Liquidity Ratio
-        variables:
+      variables:
           - finance.michigan_general_fund.liquidity_ratio
         options:
           vAxis:
