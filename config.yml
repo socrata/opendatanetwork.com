@@ -399,7 +399,7 @@ variables:
       - id: crime.fbi_ucr.count.chart
         type: bar
         constraint:
-          year: '2014'
+          year: '2016'
         name: Crime Incident Count
         options:
           chartArea:
@@ -415,7 +415,7 @@ variables:
       - id: crime.fbi_ucr.rate.chart
         type: bar
         constraint:
-          year: '2014'
+          year: '2016'
         name: 'Crime Incident Rate per 100,000 People'
         options:
           chartArea:
@@ -454,14 +454,14 @@ variables:
       - id: geographic.area.land_area.chart
         type: table
         constraint:
-        year: '2014'
+        year: '2016'
         forecast: 5
         name: Land Area
         variables:
           - geographic.area.land_area
       - id: geographic.area.water_area.chart
         type: table
-        year: '2014'
+        year: '2016'
         name: Water Area
         variables:
           - geographic.area.water_area
@@ -681,7 +681,7 @@ variables:
       - id: jobs.earnings.gender.chart
         type: table
         constraint:
-          year: '2013'
+          year: '2016'
         name: Earnings and Gender
         variables:
           - jobs.earnings.median_earnings
@@ -690,7 +690,7 @@ variables:
       - id: jobs.earnings.education.chart
         type: stepped-area
         constraint:
-          year: '2013'
+          year: '2016'
         name: Earnings and Education
         options:
           areaOpacity: 0
@@ -714,7 +714,7 @@ variables:
       - id: jobs.occupations.chart
         type: table
         constraint:
-          year: '2013'
+          year: '2016'
         name: Occupations
         variables:
           - jobs.occupations.percent_employed
