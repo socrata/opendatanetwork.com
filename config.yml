@@ -491,7 +491,7 @@ variables:
       - id: economy.cost_of_living.index.chart
         type: table
         constraint:
-          year: '2013'
+          year: '2015'
         name: Cost of Living
         variables:
           - economy.cost_of_living.index
