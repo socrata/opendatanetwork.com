@@ -111,7 +111,7 @@ maps:
   update_wait: 200
   css_id: "leaflet-map"
   mapbox:
-    token: "pk.eyJ1IjoibGFuZWFhc2VuIiwiYSI6ImYxZjExYmYzOTMxYzgyZTc2NDY0NDBmNDNmZmEwYWM3In0.uy5ta6EsSEZggkVQHo2ygw"
+    token: "pk.eyJ1Ijoic29jcmF0YSIsImEiOiJjam4zc3Q4MHAwM2JnM3duMHBuaWFwM2ZlIn0.3wkWYqv1MF1XY32aUwk8XQ"
     label_layer_id: "socrata-apps.cb421623"
     base_layer_id: "socrata-apps.af2cc4ed"
 
