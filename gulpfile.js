@@ -6,14 +6,9 @@ var babel = require('gulp-babel');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var cached = require('gulp-cached');
-var util = require('gulp-util');
-var exit = require('gulp-exit');
 var remember = require('gulp-remember');
 var sass = require('gulp-sass');
-var rename = require('gulp-rename');
 var nodemon = require('gulp-nodemon');
-var spawn = require('child_process').spawn;
-var net = require('net');
 
 var baseScripts = [
     'src/app.js',
