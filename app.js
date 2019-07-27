@@ -153,16 +153,16 @@ app.get('/dataset/:domain/:id', DatasetController.show);
 
 // new URL format
 const entityController = require('./app/controllers/entity-controller');
-app.get('/entity/:entityIDs', entityController);
-app.get('/entity/:entityIDs/:entityNames', entityController);
-app.get('/entity/:entityIDs/:entityNames/:variableID', entityController);
-
-const redirectRegion = require('./app/controllers/redirect/region');
-app.get('/region/:regionIDs', redirectRegion);
-app.get('/region/:regionIDs/:regionNames', redirectRegion);
-app.get('/region/:regionIDs/:regionNames/:vector', redirectRegion);
-app.get('/region/:regionIDs/:regionNames/:vector/:metric', redirectRegion);
-app.get('/region/:regionIDs/:regionNames/:vector/:metric/:year', redirectRegion);
+//app.get('/entity/:entityIDs', entityController);
+//app.get('/entity/:entityIDs/:entityNames', entityController);
+//app.get('/entity/:entityIDs/:entityNames/:variableID', entityController);
+//
+//const redirectRegion = require('./app/controllers/redirect/region');
+//app.get('/region/:regionIDs', redirectRegion);
+//app.get('/region/:regionIDs/:regionNames', redirectRegion);
+//app.get('/region/:regionIDs/:regionNames/:vector', redirectRegion);
+//app.get('/region/:regionIDs/:regionNames/:vector/:metric', redirectRegion);
+//app.get('/region/:regionIDs/:regionNames/:vector/:metric/:year', redirectRegion);
 
 app.get('/search-results', require('./app/controllers/search-results-controller'));
 app.get('/search-results/entity', require('./app/controllers/entity-search-results-controller'));
