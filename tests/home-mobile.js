@@ -12,6 +12,7 @@ casper.test.begin('homepage mobile', function(test) {
         test.assertTitle(title);
         test.assertSelectorHasText('.logo', title);
 
+        testQuestionsList(test);
         testCategoryList(test);
 
         testMainSuggest(test);
@@ -19,6 +20,10 @@ casper.test.begin('homepage mobile', function(test) {
         test.done();
     });
 });
+
+function testQuestionsList(test) {
+    assertToggles(test, '.questions-dropdown', '.questions-list-container');
+}
 
 function testCategoryList(test) {
     assertToggles(test, '.categories-dropdown-mobile', '.categories-list-mobile');
@@ -32,3 +37,4 @@ function testCategoryList(test) {
 function categoryURL(category) {
     return '/search?categories=' + category;
 }
+
