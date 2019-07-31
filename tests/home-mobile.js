@@ -21,8 +21,8 @@ casper.test.begin('homepage mobile', function(test) {
     });
 });
 
-function testQuestionsList(test) {	
-    assertToggles(test, '.questions-dropdown', '.questions-list-container');	
+function testQuestionsList(test) {
+    assertToggles(test, '.questions-dropdown', '.questions-list-container');
 }
 
 function testCategoryList(test) {
@@ -37,3 +37,4 @@ function testCategoryList(test) {
 function categoryURL(category) {
     return '/search?categories=' + category;
 }
+
