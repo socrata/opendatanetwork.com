@@ -43,7 +43,7 @@ module.exports = (request, response) => {
         const entityIDs = (request.params.regionIDs || '').split('-');
         const entityNames = (request.params.regionNames || '').split('-');
         const entities = _.zip(entityIDs, entityNames)
-            .map(pair => _.fromPairs(['id', 'name'], pair))
+            .map(pair => _.zipObject(['id', 'name'], pair))
             .filter(entity => !_.isEmpty(entity.id));
 
         const url = new EntityNavigate(entities, variableID, constraints).url();
