@@ -6,7 +6,7 @@ if (typeof require !== 'undefined') {
 }
 
 function buildURL(path, params) {
-    const validParams = _.omitBy(params, invalid);
+    const validParams = _.omit(params, invalid);
     const paramString = stringify(validParams);
     return `${path}${path[path.length - 1] === '?' ? '' : '?'}${paramString}`;
 }

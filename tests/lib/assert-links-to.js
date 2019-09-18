@@ -16,8 +16,8 @@ function assertLinksTo(test, linkSelector) {
 }
 
 function contains(objects, object) {
-    return _.some(objects, function(other) {
-        return _.every(_.keys(object), function(key) {
+    return _.any(objects, function(other) {
+        return _.all(_.keys(object), function(key) {
             return key in other && roughlyEqual(object[key], other[key]);
         });
     });

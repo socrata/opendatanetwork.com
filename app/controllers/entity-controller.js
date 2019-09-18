@@ -179,7 +179,7 @@ function getConstraintMenus(entityIDs, variableID, constraints, fixed, results) 
 function getConstraints(constraintMenus) {
     return _(constraintMenus)
         .map(constraint => [constraint.name, constraint.selected])
-        .fromPairs()
+        .object()
         .value();
 }
 

@@ -43,7 +43,7 @@ module.exports = (request, response) => {
         const entityIDs = (request.params.regionIDs || '').split('-');
         const entityNames = (request.params.regionNames || '').split('-');
         const entities = _.zip(entityIDs, entityNames)
-            .map(pair => _.zipObject(['id', 'name'], pair))
+            .map(pair => _.object(['id', 'name'], pair))
             .filter(entity => !_.isEmpty(entity.id));
 
         const url = new EntityNavigate(entities, variableID, constraints).url();
@@ -60,10 +60,10 @@ function getVectorToTopicPromise(topicToVector) {
 
 function getVectorToTopic(topicToVector) {
     return _(topicToVector)
-        .toPairs()
+        .pairs()
         .map(([topic, vectors]) => vectors.map(vector => [vector, topic]))
         .flatten()
-        .fromPairs()
+        .object()
         .value();
 }
 
