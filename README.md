@@ -1,5 +1,5 @@
 
-[![Build Status](https://travis-ci.org/socrata/opendatanetwork.com.svg?branch=master)](https://travis-ci.org/socrata/opendatanetwork.com)
+[![Build Status](https://travis-ci.org/socrata/opendatanetwork.com.svg?branch=staging)](https://travis-ci.org/socrata/opendatanetwork.com)
 
 # OpenDataNetwork.com
 
