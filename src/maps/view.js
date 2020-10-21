@@ -69,11 +69,20 @@ class MapView {
     }
 
     showTileLayers() {
-        const url = layerID => `https://api.mapbox.com/v4/${layerID}/{z}/{x}/{y}.png?access_token=${GlobalConfig.maps.mapbox.token}`;
+        const url = layerID => `https://api.mapbox.com/styles/v1/${layerID}/tiles/{z}/{x}/{y}?access_token=${GlobalConfig.maps.mapbox.token}`;
 
-        const base = L.tileLayer(url(GlobalConfig.maps.mapbox.base_layer_id)).addTo(this.map);
+        const base = L.tileLayer(url(GlobalConfig.maps.mapbox.base_layer_id), {
+          tileSize: 512,
+          maxZoom: 18,
+          zoomOffset: -1,
+        }).addTo(this.map);
         const pane = this.map.createPane('labels');
-        const labels = L.tileLayer(url(GlobalConfig.maps.mapbox.label_layer_id), {pane}).addTo(this.map);
+        const labels = L.tileLayer(url(GlobalConfig.maps.mapbox.label_layer_id), {
+          pane,
+          tileSize: 512,
+          maxZoom: 18,
+          zoomOffset: -1,
+        }).addTo(this.map);
     }
 
     showZoom() {
