@@ -59,7 +59,7 @@ class Cache {
      */
     set(key, value, expiration) {
         return new Promise((resolve, reject) => {
-            this.client.set(key, value, (error, value) => {
+            this.client.set(key, value, {}, (error, value) => {
                 if (value) return resolve();
                 reject(error);
             }, expiration);

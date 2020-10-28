@@ -179,7 +179,7 @@ function getConstraintMenus(entityIDs, variableID, constraints, fixed, results) 
 function getConstraints(constraintMenus) {
     return _(constraintMenus)
         .map(constraint => [constraint.name, constraint.selected])
-        .object()
+        .fromPairs()
         .value();
 }
 
@@ -192,8 +192,6 @@ function clean(string) {
         .replace(/\W/g, '')
         .toLowerCase();
 }
-
-
 
 function getRelated(entityID, variableID) {
     const limit = GlobalConfig.related_entity_count;

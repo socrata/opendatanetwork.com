@@ -49,8 +49,8 @@ function testSearchDatasets(test) {
 
 function testInfiniteScroll(test) {
     casper.scrollToBottom();
-    casper.waitForText('Seattle Registered Voters', function() {
-        test.assertSelectorHasText('.search-results.datasets li a', 'Seattle Registered Voters');
+    casper.waitForText('Seattle Cultural Space Inventory Map', function() {
+        test.assertSelectorHasText('.search-results.datasets li a', 'Seattle Cultural Space Inventory Map');
     });
 }
 

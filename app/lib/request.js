@@ -2,8 +2,6 @@
 
 const _ = require('lodash');
 const request = require('request-promise');
-const querystring = require('querystring');
-const memjs = require('memjs');
 const crypto = require('crypto');
 
 const Exception = require('./exception');
