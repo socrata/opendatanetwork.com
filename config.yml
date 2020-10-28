@@ -112,8 +112,8 @@ maps:
   css_id: "leaflet-map"
   mapbox:
     token: "pk.eyJ1Ijoic29jcmF0YSIsImEiOiJjam4zc3Q4MHAwM2JnM3duMHBuaWFwM2ZlIn0.3wkWYqv1MF1XY32aUwk8XQ"
-    label_layer_id: "socrata-apps.cb421623"
-    base_layer_id: "socrata-apps.af2cc4ed"
+    label_layer_id: "socrata/ckgjf6zb919q919mpribwkuc8"
+    base_layer_id: "socrata/ckgjf7e1v0zu419thjgtzg1qx"
 
   map_options:
     minZoom: 3.0
@@ -246,7 +246,7 @@ variables:
         type: line
         name: Total General Fund Expenditure Per Student
         variables:
-          - schools.fiscal_metrics.gf_exppupil 
+          - schools.fiscal_metrics.gf_exppupil
       - id: schools.fiscal_metrics.gf_bpupil.chart
         type: line
         name: Total General Fund Balance Per Student
@@ -342,7 +342,7 @@ variables:
       - id: finance.michigan_general_fund.general_fund_unrestricted_balance.chart
         type: line
         name: General Fund Unrestricted Balance
-        variables: 
+        variables:
           - finance.michigan_general_fund.general_fund_unrestricted_balance
         options:
           vAxis:
