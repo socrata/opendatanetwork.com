@@ -46,7 +46,7 @@ Run `./flush-memcache.sh` to flush the development cache.
 The build process is automated using `gulp` and configured with `gulpfile.js`.
 
 Verify gulp is installed with `gulp --version`. If it's not installed, run
-`npm install --global gulp-cli` and `npm install --save-dev gulp`.
+`npm install --global gulp-cli`.
 
 To build the application, simply run `gulp`. This will automatically
 build all javascript and css assets and package them for deployment.
