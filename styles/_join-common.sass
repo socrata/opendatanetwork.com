@@ -39,45 +39,26 @@ header li a:hover
 /* Footer
 
 footer
-    background: url("/images/footer-background.png") repeat-y center center
-    height: 50px
-    overflow: hidden
-    text-align: center
-
-#footer-about-socrata
-    color: #fafafa
-    font-size: 14px
-    display: inline-block
-    height: 50px
-    line-height: 50px
-    position: relative
-    left: 30px
-    top: 2px
-
-#footer-content
-    background: url("/images/footer-content-background.png") no-repeat top left
-    height: 50px
-    margin: 0 auto
-    position: relative
+    background-color: $footer-background-color
+    border-top: 1px solid $bottom-gray-border-color
+    padding: 30px
     text-align: left
-    width: 1280px
 
-#footer-powered-by-socrata img
-    display: block
-    margin-top: -12px
-    position: absolute
-    right: 0
-    top: 50%
+    .text-link
+        color: $footer-text-color
+        font-size: 13px
+        margin-left: 15px
+        position: relative
+        top: -3px
+
+        &:hover
+            text-decoration: underline
 
 /* Media queries
 
 @media (max-width: 1280px)
     header div
         width: 100%
-    #footer-content
-        width: 100%
-    #footer-powered-by-socrata img
-        right: 10px
 
 @media (max-width: 768px)
     header .explore
