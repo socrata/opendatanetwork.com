@@ -87,26 +87,13 @@ every commit. To install it, run:
 ln -s -f ../../scripts/pre-commit.sh .git/hooks/pre-commit
 ```
 
-### Deployment
+### Official deployment
 
-The ODN is hosted on Heroku.
-There are two environments:
-[production](https://opendatanetwork.herokuapp.com/) and
-[staging](https://opendatanetwork-staging.herokuapp.com/).
+For community users, pushing the app to Heroku with a Memcachier add-on should be sufficient.
 
-To deploy to an environment, push to the corresponding branch on github.
-For production, push to `master` and for staging, push to `staging`.
-There should be no need to manually deploy to Heroku,
-but if you do, make sure that `master` stays in sync with what is
-on Heroku.
+For Tyler Technologies employees, refer to [troubleshooting](https://socrata.atlassian.net/wiki/spaces/ONCALL/pages/2158625000/OpsDoc+-+opendatanetwork.com)
+for further help in administering the official instance.
 
-Note that `master` is a protected branch on Github.
-To update the `master` branch, open a pull request, ensure that all tests
-pass, and then have someone else review your changes.
-Then, Github will allow merging the pull request into `master`
-and Heroku will automatically deploy the application.
-
-Check LastPass for Heroku access.
 
 #### MemJS
 
