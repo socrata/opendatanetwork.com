@@ -62,8 +62,7 @@ var searchScripts = baseScripts
         'src/infinite-scroll.js',
         'src/show-more-questions.js',
         'src/mobile-menus.js',
-        'src/search.js',
-        'src/api/odn-api.js']);
+        'src/search.js' ]);
 gulp.task('search', js(searchScripts, 'search.min.js'));
 
 var entityScripts = baseScripts
@@ -83,7 +82,7 @@ var datasetScripts = baseScripts
         'src/dataset.js']);
 gulp.task('dataset', js(datasetScripts, 'dataset.min.js'));
 
-gulp.task('js', ['home', 'search', 'dataset', 'entity']);
+gulp.task('js', gulp.series('home', 'search', 'dataset', 'entity'));
 
 gulp.task('css', function() {
     return gulp.src(['styles/**/*.scss', 'styles/**/*.sass'])
@@ -93,9 +92,9 @@ gulp.task('css', function() {
         .pipe(gulp.dest('styles/compressed'));
 });
 
-gulp.task('build', ['js', 'css']);
+gulp.task('build', gulp.series('js', 'css'));
 
-gulp.task('watch', ['build'], function() {
+gulp.task('watch', gulp.series('build'), function() {
     gulp.watch('src/**/*.js', ['js']);
     gulp.watch(['styles/*.sass', 'styles/*.scss'], ['css']);
 });
@@ -103,10 +102,10 @@ gulp.task('watch', ['build'], function() {
 gulp.task('start', function() {
     return nodemon({
         script: 'app.js',
-        watch: ['lib/', 'styles/compressed/', 'controllers/', 'data/', 'app/'],
+        watch: ['lib/', 'styles/compressed/', 'controllers/', 'data/', 'app/', 'config.yml'],
         harmony_destructuring: true
     });
 });
 
-gulp.task('default', ['watch']);
+gulp.task('default', gulp.series('watch'));
 

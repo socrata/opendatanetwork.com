@@ -1,5 +1,5 @@
 
-[![Build Status](https://travis-ci.org/socrata/opendatanetwork.com.svg?branch=master)](https://travis-ci.org/socrata/opendatanetwork.com)
+[![Build Status](https://travis-ci.org/socrata/opendatanetwork.com.svg?branch=staging)](https://travis-ci.org/socrata/opendatanetwork.com)
 
 # OpenDataNetwork.com
 
@@ -19,9 +19,7 @@ After cloning the repository and downloading node,
 simply run `npm install` from within the project directory
 to install all dependencies.
 
-The ODN backend uses syntactic features of ES6 that are only available in
-recent versions of Node, so it may fail to run with older versions.
-Make sure that you use the Node version specified in `package.json` (currently `6.2.2`).
+Make sure that you use the Node version specified in `package.json` (currently `10.18.0`).
 You can check your node version using `node --version`.
 
 ### Memcached
@@ -46,6 +44,9 @@ Run `./flush-memcache.sh` to flush the development cache.
 ### Build
 
 The build process is automated using `gulp` and configured with `gulpfile.js`.
+
+Verify gulp is installed with `gulp --version`. If it's not installed, run
+`npm install --global gulp-cli`.
 
 To build the application, simply run `gulp`. This will automatically
 build all javascript and css assets and package them for deployment.
@@ -112,3 +113,7 @@ Check LastPass for Heroku access.
 The ODN uses the Heroku [MemJS](https://github.com/alevy/memjs) add-on
 for memcached.
 
+#### Troubleshooting
+
+For Tyler Technologies employees, refer to [troubleshooting](https://socrata.atlassian.net/wiki/spaces/ONCALL/pages/2158625000/OpsDoc+-+opendatanetwork.com)
+for further help.
