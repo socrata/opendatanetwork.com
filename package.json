@@ -11,7 +11,7 @@
     "d3": "^5.8.0",
     "deepmerge": "^2.2.1",
     "ejs": "^2.6.1",
-    "express": "^4.16.4",
+    "express": "^4.18.2",
     "express-expose": "^0.3.4",
     "express-minify-html": "^0.12.0",
     "fs-promise": "^2.0.3",
