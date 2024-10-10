@@ -8,7 +8,7 @@
                 <div class="search-refine-similar-regions-mobile">
                     <a id="search-refine-close-mobile" class="fa fa-caret-up"></a>
                     <label>Refine by</label>
-                    <% include ../../_search-tokens %>
+                    <%- include ("../../_search-tokens") %>
                 </div>
                 <ul class="search-refine-menu-list-mobile">
                     <li class="search-refine-menu-list-item-categories-mobile">
@@ -16,14 +16,14 @@
                             Categories
                             <em class="fa fa-caret-down odn-caret"></em>
                         </a>
-                        <% include _category-list %>
+                        <%- include ("_category-list") %>
                     </li>
                     <li class="search-refine-menu-list-item-domains-mobile">
                         <a class="refine-menu-header-mobile">
                             Domains
                             <em class="fa fa-caret-down odn-caret"></em>
                         </a>
-                        <% include _publisher-list %>
+                        <%- include ("_publisher-list") %>
                     </li>
                 </ul>
             </div>

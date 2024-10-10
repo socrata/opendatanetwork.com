@@ -1,5 +1,5 @@
-<% include _header %>
-<% include _search-bar %>
+<%- include ("_header") %>
+<%- include ("_search-bar") %>
 
 <script>
 
@@ -9,21 +9,21 @@
 </script>
 
 <section class="main-section" role="main">
-    <% include _region-navigation %>
+    <%- include ("_region-navigation") %>
 
     <div class="charts-column">
-        <% include menus/_menus %>
-        <% include menus/mobile/_menus %>
-        <% include _map %>
+        <%- include ("menus/_menus") %>
+        <%- include ("menus/mobile/_menus") %>
+        <%- include ("_map") %>
         <div class="charts-container">
-            <% include _charts %>
-            <% include _citation %>
+            <%- include ("_charts") %>
+            <%- include ("_citation") %>
 
             <div id="map-container-mobile"></div>
         </div>
 
-        <% include _search-datasets %>
+        <%- include ("_search-datasets") %>
     </div>
 </section>
 
-<% include _footer %>
+<%- include ("_footer") %>

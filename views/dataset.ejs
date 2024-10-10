@@ -1,5 +1,5 @@
-<% include _header %>
-<% include _search-bar %>
+<%- include ("_header") %>
+<%- include ("_search-bar") %>
 
 <script>
 var _params = <%- JSON.stringify(params) %>;
@@ -70,5 +70,5 @@ var _params = <%- JSON.stringify(params) %>;
     </div>
 </section>
 
-<% include _usersnap %>
-<% include _footer %>
+<%- include ("_usersnap") %>
+<%- include ("_footer") %>
