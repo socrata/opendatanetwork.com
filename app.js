@@ -43,15 +43,15 @@ app.use(compression());
 
 // HTML Minification
 app.use(minifyHTML({
-    override: true,
-    htmlMinifier: {
-        removeComments: true,
-        collapseWhitespace: true,
-        collapseBooleanAttributes: true,
-        removeAttributeQuotes: true,
-        removeEmptyAttributes: true,
-        minifyJS: false
-    }
+  override: true,
+  htmlMinifier: {
+    removeComments: true,
+    collapseWhitespace: true,
+    collapseBooleanAttributes: true,
+    removeAttributeQuotes: true,
+    removeEmptyAttributes: true,
+    minifyJS: false
+  }
 }));
 
 // Cookie parser
@@ -101,11 +101,11 @@ app.use('/sitemap', express.static(__dirname + '/views/static/sitemap'));
 
 // Configure rate limiter
 var rateLimiter = rateLimit({
-    windowMs: 1 * 60 * 1000, // 1 minute
-    limit: 300, // Limit each IP to 300 requests per window
-    standardHeaders: 'draft-7',
-    legacyHeaders: false, // Disable X-RateLimit-* header
-    // store: Memcached
+  windowMs: 1 * 60 * 1000, // 1 minute
+  limit: 300, // Limit each IP to 300 requests per window
+  standardHeaders: 'draft-7',
+  legacyHeaders: false, // Disable X-RateLimit-* header
+  // store: Memcached
 });
 
 app.use(rateLimiter);
@@ -116,11 +116,10 @@ app.expose(GlobalConfig, 'GlobalConfig');
 // Ensure HTTP
 //
 app.get('*', function(req, res, next) {
-
-    if (req.headers['x-forwarded-proto'] === 'http')
-        res.redirect(301, 'https://' + req.hostname + req.url);
-    else
-        next();
+  if (req.headers['x-forwarded-proto'] === 'http')
+    res.redirect(301, 'https://' + req.hostname + req.url);
+  else
+    next();
 });
 
 // Strip all get parameters to avoid XSS attempts
@@ -188,8 +187,8 @@ app.use((error, req, res, next) => {
 var port = Number(process.env.PORT || 3000);
 
 process.on('unhandledRejection', function(reason, p){
-    console.log("Possibly Unhandled Rejection at: Promise ", p, " reason: ", reason);
-    // application specific logging here
+  console.log("Possibly Unhandled Rejection at: Promise ", p, " reason: ", reason);
+  // application specific logging here
 });
 
 String.prototype.format = function() {
@@ -201,9 +200,8 @@ String.prototype.format = function() {
 };
 
 app.listen(port);
-console.log('app is listening on ' + port);
+console.log(`Application running on port ${port}...`);
 
 app.locals._ = _;
 app.locals.numeral = numeral;
 app.locals.querystring = querystring;
-
