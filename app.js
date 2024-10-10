@@ -5,6 +5,7 @@ const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const express = require('express');
 const minifyHTML = require('express-minify-html');
+const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 const favicon = require('serve-favicon');
 const helmet = require('helmet');
@@ -97,6 +98,17 @@ app.use('/robots.txt', express.static(__dirname + '/views/static/robots.txt'));
 
 app.use('/sitemap.xml', express.static(__dirname + '/views/static/sitemap.xml'));
 app.use('/sitemap', express.static(__dirname + '/views/static/sitemap'));
+
+// Configure rate limiter
+var rateLimiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    limit: 300, // Limit each IP to 300 requests per window
+    standardHeaders: 'draft-7',
+    legacyHeaders: false, // Disable X-RateLimit-* header
+    // store: Memcached
+});
+
+app.use(rateLimiter);
 
 // Expose our config to the client
 app.expose(GlobalConfig, 'GlobalConfig');
