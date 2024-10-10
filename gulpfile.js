@@ -7,7 +7,7 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var cached = require('gulp-cached');
 var remember = require('gulp-remember');
-var sass = require('gulp-sass');
+var sass = require('gulp-sass')(require('sass'));
 var nodemon = require('gulp-nodemon');
 
 var baseScripts = [

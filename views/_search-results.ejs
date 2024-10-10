@@ -1,16 +1,16 @@
 
 <div class="search-results-regular-column">
 
-<% include search/refine/_search-refine-controls-mobile %>
+<%- include ("search/refine/_search-refine-controls-mobile") %>
 
 <% if (entities.length > 0) { %>
-    <% include _search-results-regions-bar %>
-    <% include _search-results-regions %>
+    <%- include ("_search-results-regions-bar") %>
+    <%- include ("_search-results-regions") %>
 <% } %>
 
-<% include _search-results-questions %>
+<%- include ("_search-results-questions") %>
 
-<% include search/refine/_search-refine-controls %>
+<%- include ("search/refine/_search-refine-controls") %>
 
 <% if (datasets.length > 0) { %>
     <% if (typeof currentCategory != 'undefined' && currentCategory && currentCategory.metadata && currentCategory.metadata.description) { %>
@@ -26,7 +26,7 @@
     <% } %>
 
     <ul class="search-results datasets">
-        <% include _search-results-items %>
+        <%- include ("_search-results-items") %>
     </ul>
 <% } %>
 </div>

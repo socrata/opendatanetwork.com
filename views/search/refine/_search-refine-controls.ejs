@@ -2,12 +2,12 @@
 <section class="refine-bar search-header-bar">
     <div class="refine-link" role="navigation">
         <span>Categories<em class="fa fa-caret-down"></em></span>
-        <% include _category-list %>
+        <%- include ("_category-list") %>
     </div>
 
     <div class="refine-link">
         <span>Publishers<em class="fa fa-caret-down"></em></span>
-        <% include _publisher-list %>
+        <%- include ("_publisher-list") %>
     </div>
 
     <label class="refine-by-label">Refine by:</label>
@@ -29,7 +29,7 @@
         <% } %>
     </label>
 
-    <% include ../../_search-tokens %>
+    <%- include ("../../_search-tokens") %>
 </section>
 
 <div id="catalog-info-box"></div>

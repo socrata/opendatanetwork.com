@@ -7,7 +7,7 @@ const deepmerge = require('deepmerge');
 
 // Yes, I know this is all synchronous, but it also only happens at startup time
 var loadConfig = function() {
-  var config = yaml.safeLoad(fs.readFileSync(__dirname + '/../config.yml', 'utf8'));
+  var config = yaml.load(fs.readFileSync(__dirname + '/../config.yml', 'utf8'));
 
   // Fetch our override config if we've got it
   if(process.env.CONFIG_URL) {
