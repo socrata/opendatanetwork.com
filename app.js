@@ -101,9 +101,11 @@ app.use('/sitemap.xml', express.static(__dirname + '/views/static/sitemap.xml'))
 app.use('/sitemap', express.static(__dirname + '/views/static/sitemap'));
 
 // Configure rate limiter
+const RATE_WINDOW = (process.env.RATE_LIMIT || 60000); // Defaults to 1000ms (or 1s) * 60 (or 1min)
+const RATE_LIMIT = (process.env.RATE_INTERVAL || 60); // Defaults to 60 requests per window
 var rateLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 1 minute
-  limit: 60, // Limit each IP to 60 requests per window
+  windowMs: RATE_WINDOW,
+  limit: RATE_LIMIT,
   standardHeaders: 'draft-7',
   legacyHeaders: false, // Disable X-RateLimit-* header
   // store: Memcached
