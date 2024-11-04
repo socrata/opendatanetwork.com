@@ -31,7 +31,7 @@ app.use((req, res, next) => {
   var ip = req.headers["x-forwarded-for"];
   var agent = req.headers["user-agent"];
   console.log("IP:", ip, "AGENT:", agent);
-  if(BLOCKLIST.includes(ip) || BLOCKAGENTS.includes(agent)) {
+  if(BLOCKLIST.includes(ip) || BLOCKAGENTS.includes(agent) || agent.includes("Presto")) {
     console.log("Blocked", ip, req.headers["user-agent"]);
     res.end("Oh no you din't!");
   } else {
