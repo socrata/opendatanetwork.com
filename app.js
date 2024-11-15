@@ -24,6 +24,23 @@ const GlobalConfig = require('./src/config');
 
 const app = expose(express());
 
+// Reverse proxy (Heroku) fix for X-Forwarded-For
+app.set('trust proxy', 2);
+
+// Configure rate limiter
+const RATE_WINDOW = (process.env.RATE_LIMIT || 60000); // Defaults to 1000ms (or 1s) * 60 (or 1min)
+const RATE_LIMIT = (process.env.RATE_INTERVAL || 60); // Defaults to 60 requests per window
+var rateLimiter = rateLimit({
+  windowMs: RATE_WINDOW,
+  limit: RATE_LIMIT,
+  standardHeaders: 'draft-7',
+  legacyHeaders: false, // Disable X-RateLimit-* header
+  // store: Memcached
+});
+
+// Implement rate limiter
+app.use(rateLimiter);
+
 // HACK HACK HACK DOS BLOCKER
 const BLOCKLIST = (process.env.BLOCKLIST || "").split(",");
 console.log("USING BLOCKLIST", BLOCKLIST);
@@ -100,23 +117,6 @@ app.use('/robots.txt', express.static(__dirname + '/views/static/robots.txt'));
 
 app.use('/sitemap.xml', express.static(__dirname + '/views/static/sitemap.xml'));
 app.use('/sitemap', express.static(__dirname + '/views/static/sitemap'));
-
-// Configure rate limiter
-const RATE_WINDOW = (process.env.RATE_LIMIT || 60000); // Defaults to 1000ms (or 1s) * 60 (or 1min)
-const RATE_LIMIT = (process.env.RATE_INTERVAL || 60); // Defaults to 60 requests per window
-var rateLimiter = rateLimit({
-  windowMs: RATE_WINDOW,
-  limit: RATE_LIMIT,
-  standardHeaders: 'draft-7',
-  legacyHeaders: false, // Disable X-RateLimit-* header
-  // store: Memcached
-});
-
-// Implement rate limiter
-app.use(rateLimiter);
-
-// Reverse proxy (Heroku) fix for X-Forwarded-For
-app.set('trust proxy', 2);
 
 // Expose our config to the client
 app.expose(GlobalConfig, 'GlobalConfig');
