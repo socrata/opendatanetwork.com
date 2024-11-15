@@ -115,7 +115,7 @@ var rateLimiter = rateLimit({
 app.use(rateLimiter);
 
 // Reverse proxy (Heroku) fix for X-Forwarded-For
-app.set('trust proxy', 1);
+app.set('trust proxy', 2);
 
 // Expose our config to the client
 app.expose(GlobalConfig, 'GlobalConfig');
