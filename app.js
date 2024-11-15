@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const express = require('express');
 const minifyHTML = require('express-minify-html');
 const rateLimit = require('express-rate-limit');
+const ipFilter = require('express-ipfilter').IpFilter;
 const morgan = require('morgan');
 const favicon = require('serve-favicon');
 const helmet = require('helmet');
@@ -27,6 +28,29 @@ const app = expose(express());
 // Reverse proxy (Heroku) fix for X-Forwarded-For
 app.set('trust proxy', 2);
 
+// Implement IP address blocks based on BLOCKLIST environment variable
+let allowlist_ips = [process.env.BLOCKLIST];
+let clientIp = function (req, res) {
+  return req.headers['x-forwarded-for'] ? (req.headers['x-forwarded-for']).split(',')[0] : ""
+};
+app.use(ipFilter({
+    detectIp: clientIp,
+    forbidden: "You are not authorized to access this page.",
+    filter: allowlist_ips,
+  })
+)
+
+// Implement user agent blocks based on BLOCKAGENTS environment variable
+app.use((req, res, next) => {
+  let agent = req.get("User-Agent");
+  if (BLOCKAGENTS.includes(agent) || agent.includes("Presto")) {
+    console.log(`Blocked user agent: ${agent}`);
+    res.send(401, "You are not authorized to access this page.");
+  } else {
+    next();
+  }
+});
+
 // Configure rate limiter
 const RATE_WINDOW = (process.env.RATE_LIMIT || 60000); // Defaults to 1000ms (or 1s) * 60 (or 1min)
 const RATE_LIMIT = (process.env.RATE_INTERVAL || 60); // Defaults to 60 requests per window
@@ -41,6 +65,7 @@ var rateLimiter = rateLimit({
 // Implement rate limiter
 app.use(rateLimiter);
 
+/*
 // HACK HACK HACK DOS BLOCKER
 const BLOCKLIST = (process.env.BLOCKLIST || "").split(",");
 const BLOCKAGENTS = (process.env.BLOCKAGENTS || "").split(",");
@@ -55,6 +80,7 @@ app.use((req, res, next) => {
     next();
   }
 });
+*/
 
 // Compression
 app.use(compression());
@@ -176,6 +202,7 @@ app.get('/entity/:entityIDs/:entityNames', entityController);
 app.get('/entity/:entityIDs/:entityNames/:variableID', entityController);
 
 const redirectRegion = require('./app/controllers/redirect/region');
+const { IpFilter } = require('express-ipfilter');
 app.get('/region/:regionIDs', redirectRegion);
 app.get('/region/:regionIDs/:regionNames', redirectRegion);
 app.get('/region/:regionIDs/:regionNames/:vector', redirectRegion);
