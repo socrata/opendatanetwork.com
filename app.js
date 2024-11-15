@@ -28,7 +28,7 @@ const app = expose(express());
 const BLOCKLIST = (process.env.BLOCKLIST || "").split(",");
 const BLOCKAGENTS = (process.env.BLOCKAGENTS || "").split(",");
 app.use((req, res, next) => {
-  var ip = req.headers["x-forwarded-for"];
+  var ip = req.ip;
   var agent = req.headers["user-agent"];
   console.log("IP:", ip, "AGENT:", agent);
   if(BLOCKLIST.includes(ip) || BLOCKAGENTS.includes(agent) || agent.includes("Presto")) {
