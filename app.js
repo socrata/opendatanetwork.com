@@ -111,7 +111,11 @@ var rateLimiter = rateLimit({
   // store: Memcached
 });
 
+// Implement rate limiter
 app.use(rateLimiter);
+
+// Reverse proxy (Heroku) fix for X-Forwarded-For
+app.set('trust proxy', 1);
 
 // Expose our config to the client
 app.expose(GlobalConfig, 'GlobalConfig');
