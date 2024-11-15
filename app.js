@@ -203,7 +203,6 @@ app.get('/entity/:entityIDs/:entityNames', entityController);
 app.get('/entity/:entityIDs/:entityNames/:variableID', entityController);
 
 const redirectRegion = require('./app/controllers/redirect/region');
-const { IpFilter } = require('express-ipfilter');
 app.get('/region/:regionIDs', redirectRegion);
 app.get('/region/:regionIDs/:regionNames', redirectRegion);
 app.get('/region/:regionIDs/:regionNames/:vector', redirectRegion);
