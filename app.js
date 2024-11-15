@@ -26,6 +26,7 @@ const app = expose(express());
 
 // HACK HACK HACK DOS BLOCKER
 const BLOCKLIST = (process.env.BLOCKLIST || "").split(",");
+console.log("USING BLOCKLIST", BLOCKLIST);
 const BLOCKAGENTS = (process.env.BLOCKAGENTS || "").split(",");
 app.use((req, res, next) => {
   var ip = req.ip;
