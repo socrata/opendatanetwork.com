@@ -43,6 +43,7 @@ app.use(ipFilter({
 // Implement user agent blocks based on BLOCKAGENTS environment variable
 app.use((req, res, next) => {
   let agent = req.get("User-Agent");
+  const BLOCKAGENTS = (process.env.BLOCKAGENTS || "").split(",");
   if (BLOCKAGENTS.includes(agent) || agent.includes("Presto")) {
     console.log(`Blocked user agent: ${agent}`);
     res.send(401, "You are not authorized to access this page.");
