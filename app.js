@@ -29,14 +29,14 @@ const app = expose(express());
 app.set('trust proxy', 2);
 
 // Implement IP address blocks based on BLOCKLIST environment variable
-let allowlist_ips = [process.env.BLOCKLIST];
+const BLOCKLIST = (process.env.BLOCKAGENTS || "").split(",");
 let clientIp = function (req, res) {
   return req.headers['x-forwarded-for'] ? (req.headers['x-forwarded-for']).split(',')[0] : ""
 };
 app.use(ipFilter({
     detectIp: clientIp,
     forbidden: "You are not authorized to access this page.",
-    filter: allowlist_ips,
+    filter: BLOCKLIST,
   })
 )
 
@@ -55,7 +55,7 @@ app.use((req, res, next) => {
 // Configure rate limiter
 const RATE_WINDOW = (process.env.RATE_LIMIT || 60000); // Defaults to 1000ms (or 1s) * 60 (or 1min)
 const RATE_LIMIT = (process.env.RATE_INTERVAL || 60); // Defaults to 60 requests per window
-var rateLimiter = rateLimit({
+let rateLimiter = rateLimit({
   windowMs: RATE_WINDOW,
   limit: RATE_LIMIT,
   standardHeaders: 'draft-7',
