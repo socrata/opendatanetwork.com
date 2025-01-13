@@ -26,7 +26,7 @@ const GlobalConfig = require('./src/config');
 const app = expose(express());
 
 // Reverse proxy (Heroku) fix for X-Forwarded-For
-app.set('trust proxy', true);
+app.set('trust proxy', 2);
 
 // Implement IP address blocks based on BLOCKLIST environment variable
 const BLOCKLIST = (process.env.BLOCKLIST || "").split(",");
@@ -178,6 +178,7 @@ app.get('*', function(req, res, next) {
 
 // Set up 301 redirects for old routes
 //
+app.get('/ip', (request, response) => response.send(request.ip));
 app.get('/articles/*', function(req, res) { res.redirect(301, '/'); });
 app.get('/census', function(req, res) { res.redirect(301, '/'); });
 app.get('/explore', function(req, res) { res.redirect(301, '/'); });
