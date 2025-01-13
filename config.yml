@@ -6,7 +6,7 @@ cache_options:
   expires: 43200
 
 odn_api:
-  base: "https://api.opendatanetwork.com"
+  base: "https://odn-backend.herokuapp.com"
   # base: "http://localhost:3001"
   entity_lookup_endpoint: "/entity/v1"
   data_availability_endpoint: "/data/v1/availability"
