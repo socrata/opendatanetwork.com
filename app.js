@@ -29,7 +29,7 @@ const app = expose(express());
 app.set('trust proxy', 2);
 
 // Implement IP address blocks based on BLOCKLIST environment variable
-const BLOCKLIST = (process.env.BLOCKAGENTS || "").split(",");
+const BLOCKLIST = (process.env.BLOCKLIST || "").split(",");
 let clientIp = function (req, res) {
   return req.headers['x-forwarded-for'] ? (req.headers['x-forwarded-for']).split(',')[0] : ""
 };
