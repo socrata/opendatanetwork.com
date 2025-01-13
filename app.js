@@ -34,7 +34,7 @@ let clientIp = function (req, res) {
   return req.headers['x-forwarded-for'] ? (req.headers['x-forwarded-for']).split(',')[0] : "";
 };
 
-app.use(ipFilter(BLOCKLIST))
+app.use(ipFilter({filter: BLOCKLIST, detectIp: clientIp}))
 
 // Implement user agent blocks based on BLOCKAGENTS environment variable
 app.use((req, res, next) => {
