@@ -31,8 +31,9 @@ app.set('trust proxy', true);
 // Implement IP address blocks based on BLOCKLIST environment variable
 const BLOCKLIST = (process.env.BLOCKLIST || "").split(",");
 let clientIp = function (req, res) { 
-  console.log(req.ip)
-  return req.ip
+  let assumed_ip = req.headers['x-forwarded-for'] ? (req.headers['x-forwarded-for']).split(',')[0] : "";
+  console.log("IP: ", assumed_ip);
+  return assumed_ip
 };
 
 app.use(ipFilter({
