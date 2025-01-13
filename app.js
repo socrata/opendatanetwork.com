@@ -30,18 +30,11 @@ app.set('trust proxy', 2);
 
 // Implement IP address blocks based on BLOCKLIST environment variable
 const BLOCKLIST = ['47.79.*.*', '73.172.36.102'] // (process.env.BLOCKLIST || "").split(",");
-let clientIp = function (req, res) { 
-  let assumed_ip = req.headers['x-forwarded-for'] ? (req.headers['x-forwarded-for']).split(',')[0] : "";
-  console.log("IP: ", assumed_ip);
-  return assumed_ip
+let clientIp = function (req, res) {
+  return req.headers['x-forwarded-for'] ? (req.headers['x-forwarded-for']).split(',')[0] : "";
 };
 
-app.use(ipFilter({
-    detectIp: clientIp,
-    forbidden: "You are not authorized to access this page.",
-    filter: BLOCKLIST,
-  })
-)
+app.use(ipFilter(BLOCKLIST))
 
 // Implement user agent blocks based on BLOCKAGENTS environment variable
 app.use((req, res, next) => {
