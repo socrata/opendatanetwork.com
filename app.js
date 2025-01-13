@@ -26,7 +26,7 @@ const GlobalConfig = require('./src/config');
 const app = expose(express());
 
 // Reverse proxy (Heroku) fix for X-Forwarded-For
-app.set('trust proxy', 2);
+app.set('trust proxy', true);
 
 // Implement IP address blocks based on BLOCKLIST environment variable
 const BLOCKLIST = (process.env.BLOCKLIST || "").split(",");
