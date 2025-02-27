@@ -2,13 +2,14 @@
 <%- include ("_search-bar") %>
 
 <script>
-
     // This data will be passed along to the client side scripts.
     var _data = <%- JSON.stringify({entities, query, categories, domains, tags, ceteraURL}) %>;
-
 </script>
 
 <section class="main-section" role="main">
+    <% if (locals.showCaptcha) { %>
+        <%- include ("_captcha") %>
+    <% } %>
     <%- include ("_search-results") %>
 </section>
 

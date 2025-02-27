@@ -21,6 +21,8 @@ const quickLinksCount = 15;
 
 class DatasetController {
     static show(req, res) {
+        // Note: CAPTCHA logic is now centralized in app.js
+        
         const domain = req.params.domain;
         const id = req.params.id;
 

@@ -37,6 +37,7 @@ const scripts = [
 ];
 
 module.exports = (request, response) => {
+    // Note: CAPTCHA logic is now centralized in app.js
     const errorHandler = Exception.getHandler(request, response);
 
     const entityIDs = getEntityIDs(request);

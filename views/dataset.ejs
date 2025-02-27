@@ -7,6 +7,9 @@ var _params = <%- JSON.stringify(params) %>;
 </script>
 
 <section class="main-section" role="main">
+<% if (locals.showCaptcha) { %>
+    <%- include ("_captcha") %>
+<% } %>
     <div class="dataset-wrapper">
         <div class="dataset-container">
             <div class="title-container">

@@ -5,8 +5,19 @@
 
 ## Summary
 
-This document describes the data-driven aspects of the OpenDataNetwork.com website,
-details how and where the site is hosted and the lists location of the source tree.
+OpenDataNetwork.com is a web platform that aggregates, catalogs, and visualizes open data from various sources. It provides a centralized interface for discovering, exploring, and analyzing open datasets across different regions, topics, and categories.
+
+### Key Features
+- Dataset discovery through search functionality
+- Geographic data exploration for various entity types (regions, states, counties, cities)
+- Data visualization with interactive charts and maps
+- Comparative analysis of entities (comparing metrics across different regions)
+- Question-based interface for exploring data
+- Category and tag-based browsing of datasets
+
+The platform connects to an ODN Backend API to fetch data about regions, entities, and datasets. It serves as a comprehensive portal for open data discovery and analysis, making public datasets more accessible, searchable, and usable for various stakeholders including government agencies, businesses, researchers, and the general public.
+
+This document details the development environment, how and where the site is hosted, and lists location of the source tree.
 
 ## Datasets
 
@@ -99,6 +110,14 @@ for further help in administering the official instance.
 
 The ODN uses the Heroku [MemJS](https://github.com/alevy/memjs) add-on
 for memcached.
+
+### CAPTCHA Protection
+
+The site uses hCaptcha to protect against abusive scraping by bots. When suspicious traffic is detected (based on user agent, IP patterns, or query patterns), a CAPTCHA challenge is displayed to the user. 
+
+To configure hCaptcha:
+1. Set the `HCAPTCHA_SECRET` and `HCAPTCHA_SITEKEY` environment variables
+2. The CAPTCHA will automatically appear for suspicious traffic on search, dataset, and entity pages
 
 #### Troubleshooting
 

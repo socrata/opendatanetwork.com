@@ -13,6 +13,7 @@ const helmet = require('helmet');
 const numeral = require('numeral');
 const querystring = require('querystring');
 const expose = require('express-expose');
+const hcaptcha = require('hcaptcha');
 
 const HomeController = require('./app/controllers/home-controller');
 const CategoriesController = require('./app/controllers/categories-controller');
@@ -58,6 +59,76 @@ let rateLimiter = rateLimit({
   legacyHeaders: false, // Disable X-RateLimit-* header
   // store: Memcached
 });
+
+// Configure hCaptcha middleware
+// Replace these with actual values from your hCaptcha account
+const HCAPTCHA_SECRET = process.env.HCAPTCHA_SECRET || 'your-hcaptcha-secret';
+const HCAPTCHA_SITEKEY = process.env.HCAPTCHA_SITEKEY || 'your-hcaptcha-sitekey';
+
+// Create a middleware function to verify hCaptcha tokens
+const captchaMiddleware = (req, res, next) => {
+  const token = req.body && req.body['h-captcha-response'];
+  
+  if (!token) {
+    return res.status(400).send('CAPTCHA verification failed - please complete the CAPTCHA challenge');
+  }
+  
+  hcaptcha.verify(HCAPTCHA_SECRET, token)
+    .then(data => {
+      if (data.success) {
+        return next();
+      } else {
+        return res.status(400).send('CAPTCHA verification failed - ' + (data['error-codes'] || 'unknown error'));
+      }
+    })
+    .catch(err => {
+      console.error('CAPTCHA verification error:', err);
+      return res.status(500).send('Error verifying CAPTCHA');
+    });
+};
+
+// Define paths that need CAPTCHA protection
+const captchaProtectedPaths = [
+  '/search',
+  '/dataset',
+  '/entity',
+  '/region'
+];
+
+// For POST requests to protected paths, we can add the CAPTCHA verification middleware
+// This would typically be used for form submissions
+app.use(express.urlencoded({ extended: true })); // Add body parser for form data
+
+app.use((req, res, next) => {
+  // Check if the request path starts with any of the protected paths
+  const isProtectedPath = captchaProtectedPaths.some(path => 
+    req.path.startsWith(path)
+  );
+  
+  // Only apply CAPTCHA to protected paths and for POST requests
+  if (isProtectedPath && req.method === 'POST' && 
+      // If it's a form submission with a captcha 
+      req.body && req.body['h-captcha-response']) {
+    return captchaMiddleware(req, res, next);
+  }
+  
+  // Set a flag for suspicious requests to show the CAPTCHA in the view
+  const userAgent = req.headers['user-agent'] || '';
+  const isSuspicious = userAgent.includes('bot') || 
+                      req.query.suspicious ||
+                      (req.headers['x-forwarded-for'] && 
+                       req.headers['x-forwarded-for'].split(',').length > 2);
+  
+  if (isProtectedPath && isSuspicious) {
+    res.locals.showCaptcha = true;
+    res.locals.requestPath = req.path; // Pass current path for the form action
+  }
+  
+  next();
+});
+
+// Expose CAPTCHA sitekey to templates
+app.locals.HCAPTCHA_SITEKEY = HCAPTCHA_SITEKEY;
 
 // Implement rate limiter
 app.use(rateLimiter);

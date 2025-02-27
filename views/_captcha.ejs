@@ -1,0 +1,11 @@
+<!-- hCaptcha widget for bot protection -->
+<form method="POST" action="<%= locals.requestPath || request.path %>">
+  <div class="h-captcha-container">
+    <p>Please complete the CAPTCHA challenge below to continue:</p>
+    <div class="h-captcha" data-sitekey="<%= locals.HCAPTCHA_SITEKEY %>"></div>
+    <small class="captcha-notice">This helps us prevent automated scraping and protect our service.</small>
+    <div style="margin-top: 15px;">
+      <button type="submit" class="blue-button">Submit</button>
+    </div>
+  </div>
+</form>

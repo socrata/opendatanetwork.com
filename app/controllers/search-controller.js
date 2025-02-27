@@ -25,6 +25,8 @@ module.exports = (request, response) => {
     const categories = requestParser.getCategories();
     const domains = requestParser.getDomains();
     const tags = requestParser.getTags();
+    
+    // Note: CAPTCHA logic is now centralized in app.js
 
     const cetera = new CeteraClient(query, categories, domains, tags);
 
