@@ -12,6 +12,7 @@ var nodemon = require('gulp-nodemon');
 
 var baseScripts = [
     'src/app.js',
+    'src/captcha.js',
     'src/odn-client/build-url.js',
     'src/odn-client/get-json.js',
     'src/odn-client/odn-client.js',

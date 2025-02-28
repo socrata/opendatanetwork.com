@@ -6,15 +6,19 @@ $(() => {
     menuMouseHandlers();
     autosuggest();
     compareAutosuggest(navigate);
-    drawMap();
-    drawCharts();
-    apiBadges();
-    showMoreQuestions();
-    infiniteDatasetScroll();
-    attachMobileMenuHandlers();
-    expandMobileQuestions();
-    citationTooltip();
-    attachChartResizeHandler();
+    
+    // Show captcha before displaying data
+    showCaptchaForEntityData(function() {
+        drawMap();
+        drawCharts();
+        apiBadges();
+        showMoreQuestions();
+        infiniteDatasetScroll();
+        attachMobileMenuHandlers();
+        expandMobileQuestions();
+        citationTooltip();
+        attachChartResizeHandler();
+    });
 });
 
 // Main search bar autosuggest.
@@ -245,5 +249,21 @@ function attachChartResizeHandler() {
             d3.selectAll('.chart-container').selectAll('*').remove();
             drawCharts();
         }, 300);
+    });
+}
+
+/**
+ * Show captcha before displaying entity data
+ * @param {Function} callback - Function to call after captcha is completed
+ */
+function showCaptchaForEntityData(callback) {
+    // Hide chart and map containers initially
+    $('.chart-container, .map-container, .questions-container').hide();
+    
+    // Show the captcha and set callback
+    window.ODNCaptcha.show(function() {
+        // After captcha is completed, show the data containers
+        $('.chart-container, .map-container, .questions-container').fadeIn();
+        if (typeof callback === 'function') callback();
     });
 }

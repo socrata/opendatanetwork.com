@@ -8,7 +8,13 @@ $(document).ready(function() {
     showMore('.refine-link #refine-menu-domains-view-more');
     showMore('.refine-link #refine-menu-categories-view-more');
     apiBadges();
-    infiniteDatasetScroll();
+    
+    // Show captcha before loading search results
+    if ($('.datasets').length > 0 && $('.search-results-header-label').text().includes('datasets for')) {
+        showCaptchaForResults();
+    } else {
+        infiniteDatasetScroll();
+    }
 
     // Selected category (yellow box)
     $('.current-category-info-box .fa-close').click(() => {
@@ -146,13 +152,34 @@ function infiniteDatasetScroll() {
 
 function getDatasetPaginator() {
     return new Paginator((limit, offset) => {
-        return buildURL('/search-results', {
+        // Create the URL for dataset results
+        const url = buildURL('/search-results', {
             limit,
             offset,
             q: _data.query,
             categories: _data.categories,
             domains: _data.domains,
             tags: _data.tags
+        });
+        
+        // Return a promise that will resolve when captcha is completed
+        return new Promise((resolve, reject) => {
+            // Show captcha before fetching next page of results
+            if (offset > 0) {
+                window.ODNCaptcha.show(function() {
+                    // After captcha is completed, fetch the results
+                    fetch(url)
+                        .then(response => response.text())
+                        .then(resolve)
+                        .catch(reject);
+                });
+            } else {
+                // First page is already verified by the initial captcha
+                fetch(url)
+                    .then(response => response.text())
+                    .then(resolve)
+                    .catch(reject);
+            }
         });
     });
 }
@@ -167,5 +194,19 @@ function showMore(selector) {
     });
 
     selection.attr('display', 'none');
+}
+
+/**
+ * Show captcha before loading search results
+ */
+function showCaptchaForResults() {
+    // Hide the search results initially
+    $('.search-results').hide();
+    
+    // Show the captcha and set callback to show results when completed
+    window.ODNCaptcha.show(function() {
+        $('.search-results').fadeIn();
+        infiniteDatasetScroll();
+    });
 }
 

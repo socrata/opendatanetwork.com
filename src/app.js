@@ -13,7 +13,36 @@ $(document).ready(function() {
         else
             $('header .search-bar-form').submit();
     });
+    
+    // Intercept clicks on data access links to enforce captcha verification
+    interceptDataAccessLinks();
 });
+
+/**
+ * Intercept clicks on data access links to enforce captcha verification
+ */
+function interceptDataAccessLinks() {
+    $(document).on('click', 'a', function(e) {
+        const $link = $(this);
+        const href = $link.attr('href');
+        
+        if (!href) return;
+        
+        // Check if this is an API link or data download link
+        const isDataLink = href.match(/\/(api|data|download|dataset)\//i) || 
+                          $link.hasClass('api-link') || 
+                          $link.data('api-link') ||
+                          $link.closest('.dataset-column-list').length > 0;
+                          
+        if (isDataLink) {
+            // Prevent default link behavior
+            e.preventDefault();
+            
+            // Show captcha before navigating
+            window.ODNCaptcha.show(href);
+        }
+    });
+}
 
 // Array extensions
 //

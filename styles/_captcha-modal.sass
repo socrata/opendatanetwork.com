@@ -1,0 +1,133 @@
+//
+// Captcha modal styles
+//
+
+#captcha-modal
+  position: fixed
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+  background-color: rgba(0, 0, 0, 0.7)
+  z-index: 3000
+  display: flex
+  justify-content: center
+  align-items: center
+
+.captcha-container
+  position: relative
+  background-color: #fff
+  border-radius: 4px
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3)
+  width: 400px
+  max-width: 90%
+  padding: 30px
+  text-align: center
+
+  .captcha-close
+    position: absolute
+    top: 10px
+    right: 10px
+    width: 44px
+    height: 44px
+    background: none
+    border: none
+    font-size: 24px
+    line-height: 24px
+    cursor: pointer
+    color: $dark-gray-text-color
+    display: flex
+    align-items: center
+    justify-content: center
+    padding: 0
+    
+    &:hover, &:focus
+      color: $black-text-color
+      outline: none
+
+  .captcha-title
+    color: $blue-text-color
+    font-size: 1.5em
+    margin-bottom: 20px
+
+  .captcha-challenge
+    margin: 20px 0
+    padding: 15px
+    background-color: $light-gray-background-color
+    border: 1px solid $gray-border-color
+    border-radius: 4px
+    font-weight: bold
+    font-size: 1.2em
+
+  .captcha-input-group
+    position: relative
+    margin: 10px 0
+    
+    .captcha-input
+      width: 100%
+      padding: 10px
+      border: 1px solid $gray-border-color
+      border-radius: 4px
+      box-sizing: border-box
+      font-family: $fonts
+      
+      &.error
+        border-color: #e74c3c
+    
+    .captcha-error
+      color: #e74c3c
+      margin-top: 5px
+      font-size: 0.9em
+      text-align: left
+      height: 20px
+
+  .captcha-submit
+    background-color: $blue-background-color
+    color: white
+    border: none
+    border-radius: 4px
+    padding: 10px 20px
+    font-size: 1em
+    cursor: pointer
+    transition: background-color 0.2s
+    margin-top: 10px
+
+    &:hover, &:focus
+      background-color: #2980b9
+      outline: none
+
+  .captcha-note
+    margin-top: 15px
+    font-size: 0.85em
+    color: $dark-gray-text-color
+    
+  .captcha-audio-btn
+    background: none
+    border: none
+    color: $blue-text-color
+    font-size: 0.9em
+    text-decoration: underline
+    cursor: pointer
+    margin-top: 8px
+    
+    &:hover, &:focus
+      color: #2980b9
+      outline: none
+  
+  .captcha-loading
+    margin-top: 20px
+    
+    .captcha-spinner
+      width: 30px
+      height: 30px
+      border: 3px solid rgba(0, 0, 0, 0.1)
+      border-radius: 50%
+      border-top-color: $blue-background-color
+      animation: spin 1s linear infinite
+      margin: 0 auto 10px
+      
+@keyframes spin
+  0%
+    transform: rotate(0deg)
+  100%
+    transform: rotate(360deg)

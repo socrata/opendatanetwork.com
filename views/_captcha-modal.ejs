@@ -1,0 +1,31 @@
+<div id="captcha-modal" style="display: none;" role="dialog" aria-labelledby="captcha-title" aria-describedby="captcha-description">
+  <div class="captcha-container">
+    <button type="button" class="captcha-close" id="captcha-close" aria-label="Close">&times;</button>
+    
+    <div class="captcha-title" id="captcha-title">Verify Human Access</div>
+    <p id="captcha-description">To continue to the requested data, please complete this verification:</p>
+    
+    <div class="captcha-challenge" id="captcha-challenge">
+      <!-- Challenge will be inserted here via JavaScript -->
+    </div>
+    
+    <form id="captcha-form">
+      <div class="captcha-input-group">
+        <input type="text" class="captcha-input" id="captcha-input" placeholder="Type your answer here" aria-required="true">
+        <div class="captcha-error" id="captcha-error" aria-live="assertive"></div>
+      </div>
+      <button type="submit" class="captcha-submit">Submit</button>
+    </form>
+    
+    <div class="captcha-note">
+      This verification helps prevent automated data scraping.
+      <br>
+      <button type="button" class="captcha-audio-btn" id="captcha-audio-btn">Listen to challenge</button>
+    </div>
+
+    <div class="captcha-loading" id="captcha-loading" style="display: none;">
+      <div class="captcha-spinner"></div>
+      <div>Loading data...</div>
+    </div>
+  </div>
+</div>
