@@ -99,11 +99,19 @@ const captchaProtectedPaths = [
 // This would typically be used for form submissions
 app.use(express.urlencoded({ extended: true })); // Add body parser for form data
 
+// Check if DISABLE_CAPTCHA environment variable is set (useful for tests)
+const DISABLE_CAPTCHA = process.env.DISABLE_CAPTCHA === 'true';
+
 app.use((req, res, next) => {
   // Check if the request path starts with any of the protected paths
   const isProtectedPath = captchaProtectedPaths.some(path => 
     req.path.startsWith(path)
   );
+  
+  // Skip CAPTCHA if disabled via environment variable
+  if (DISABLE_CAPTCHA) {
+    return next();
+  }
   
   // Only apply CAPTCHA to protected paths and for POST requests
   if (isProtectedPath && req.method === 'POST' && 

@@ -38,7 +38,7 @@
     "postinstall": "gulp build",
     "start": "node app.js",
     "develop": "gulp build && node app.js",
-    "test": "casperjs test tests/*.js"
+    "test": "DISABLE_CAPTCHA=true casperjs test tests/*.js"
   },
   "version": "1.0.0",
   "main": "app.js",

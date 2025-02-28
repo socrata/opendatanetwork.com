@@ -113,11 +113,24 @@ for memcached.
 
 ### CAPTCHA Protection
 
-The site uses hCaptcha to protect against abusive scraping by bots. When suspicious traffic is detected (based on user agent, IP patterns, or query patterns), a CAPTCHA challenge is displayed to the user. 
+The site uses hCaptcha to protect against abusive scraping by bots. The CAPTCHA challenge is displayed for all users visiting search, dataset, entity, and region pages.
 
 To configure hCaptcha:
 1. Set the `HCAPTCHA_SECRET` and `HCAPTCHA_SITEKEY` environment variables
-2. The CAPTCHA will automatically appear for suspicious traffic on search, dataset, and entity pages
+
+#### Disabling CAPTCHA for Development or Testing
+
+For development or testing purposes, you can disable the CAPTCHA by setting the `DISABLE_CAPTCHA` environment variable to `true`:
+
+```sh
+# Run the application with CAPTCHA disabled
+DISABLE_CAPTCHA=true node app.js
+
+# Run tests with CAPTCHA disabled (already configured in package.json)
+npm test
+```
+
+The test script in package.json automatically sets `DISABLE_CAPTCHA=true` when running tests.
 
 #### Troubleshooting
 
