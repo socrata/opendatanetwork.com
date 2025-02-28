@@ -5,22 +5,41 @@
     <div class="captcha-title" id="captcha-title">Verify Human Access</div>
     <p id="captcha-description">To continue to the requested data, please complete this verification:</p>
     
-    <div class="captcha-challenge" id="captcha-challenge">
-      <!-- Challenge will be inserted here via JavaScript -->
+    <div class="captcha-challenge-wrapper">
+      <div class="captcha-text-challenge" id="captcha-text-challenge">
+        <!-- Text challenge will be inserted here via JavaScript -->
+      </div>
+      
+      <div class="captcha-visual-challenge" id="captcha-visual-challenge">
+        <div class="captcha-instruction" id="captcha-instruction"></div>
+        <div class="captcha-image-grid" id="captcha-image-grid">
+          <!-- Images will be inserted here via JavaScript -->
+        </div>
+        <div class="captcha-refresh">
+          <button type="button" id="captcha-refresh-btn" class="captcha-refresh-btn">
+            <span aria-hidden="true">↻</span> New challenge
+          </button>
+        </div>
+      </div>
     </div>
     
     <form id="captcha-form">
-      <div class="captcha-input-group">
+      <div class="captcha-input-group" id="captcha-text-input-group">
         <input type="text" class="captcha-input" id="captcha-input" placeholder="Type your answer here" aria-required="true">
         <div class="captcha-error" id="captcha-error" aria-live="assertive"></div>
       </div>
-      <button type="submit" class="captcha-submit">Submit</button>
+      
+      <!-- Hidden fields for visual selection captcha -->
+      <div id="captcha-selection-input" style="display: none;"></div>
+      
+      <button type="submit" class="captcha-submit" id="captcha-submit">Verify</button>
     </form>
     
     <div class="captcha-note">
       This verification helps prevent automated data scraping.
       <br>
       <button type="button" class="captcha-audio-btn" id="captcha-audio-btn">Listen to challenge</button>
+      <button type="button" class="captcha-alt-btn" id="captcha-alt-btn">Try different challenge type</button>
     </div>
 
     <div class="captcha-loading" id="captcha-loading" style="display: none;">
