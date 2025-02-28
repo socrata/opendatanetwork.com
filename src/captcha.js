@@ -421,14 +421,21 @@
             gridItem.className = 'captcha-image-item';
             gridItem.dataset.index = index;
             
-            // Use placeholder images (in production, you would use real images)
-            const img = document.createElement('img');
-            img.src = `${CAPTCHA_IMAGES_BASE_URL}${item}.jpg`;
-            img.alt = isTarget ? `${item} (select this)` : item;
-            img.onerror = function() {
-                // Fallback for missing images
-                this.src = 'https://via.placeholder.com/150?text=' + item;
-            };
+            // Instead of external images, use SVG directly to guarantee they load
+            const img = document.createElement('div');
+            img.className = 'captcha-svg-wrapper';
+            img.setAttribute('role', 'img');
+            img.setAttribute('aria-label', isTarget ? `${item} (select this)` : item);
+            
+            // Get SVG icon based on item name
+            const svgContent = getSVGForItem(item);
+            img.innerHTML = svgContent;
+            
+            // Add item name as visible text beneath the icon
+            const itemLabel = document.createElement('div');
+            itemLabel.className = 'captcha-item-label';
+            itemLabel.textContent = item;
+            img.appendChild(itemLabel);
             
             // Create checkmark indicator
             const checkmark = document.createElement('div');
@@ -528,6 +535,75 @@
             [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
         }
         return newArray;
+    }
+    
+    /**
+     * Get SVG icon for a given item
+     * @param {string} item - Item name
+     * @returns {string} SVG markup
+     */
+    function getSVGForItem(item) {
+        // Simple SVG icons with consistent style but different shapes for each item
+        const icons = {
+            // Vehicles
+            car: '<svg viewBox="0 0 100 100"><rect x="10" y="50" width="80" height="30" rx="5" fill="#3498db"/><circle cx="25" cy="80" r="10" fill="#2c3e50"/><circle cx="75" cy="80" r="10" fill="#2c3e50"/><rect x="20" y="30" width="60" height="25" rx="5" fill="#3498db"/></svg>',
+            truck: '<svg viewBox="0 0 100 100"><rect x="5" y="50" width="50" height="30" fill="#e74c3c"/><rect x="55" y="40" width="40" height="40" fill="#e74c3c"/><circle cx="20" cy="80" r="10" fill="#2c3e50"/><circle cx="80" cy="80" r="10" fill="#2c3e50"/></svg>',
+            motorcycle: '<svg viewBox="0 0 100 100"><circle cx="30" cy="70" r="20" fill="#9b59b6"/><circle cx="70" cy="70" r="20" fill="#9b59b6"/><path d="M30,70 L70,70 L50,30 Z" fill="#9b59b6"/></svg>',
+            bus: '<svg viewBox="0 0 100 100"><rect x="10" y="30" width="80" height="50" rx="5" fill="#2ecc71"/><rect x="20" y="40" width="15" height="10" fill="#ecf0f1"/><rect x="45" y="40" width="15" height="10" fill="#ecf0f1"/><rect x="70" y="40" width="15" height="10" fill="#ecf0f1"/><circle cx="25" cy="80" r="8" fill="#2c3e50"/><circle cx="75" cy="80" r="8" fill="#2c3e50"/></svg>',
+            bicycle: '<svg viewBox="0 0 100 100"><circle cx="30" cy="70" r="20" fill="#f1c40f"/><circle cx="70" cy="70" r="20" fill="#f1c40f"/><path d="M30,70 L70,70 L50,30 Z" stroke="#f1c40f" stroke-width="3" fill="none"/></svg>',
+            boat: '<svg viewBox="0 0 100 100"><path d="M10,60 C30,70 70,70 90,60 L80,80 C60,90 40,90 20,80 Z" fill="#3498db"/><path d="M50,20 L50,60" stroke="#95a5a6" stroke-width="5"/><path d="M50,30 C60,40 60,50 50,60" fill="#ecf0f1"/></svg>',
+            train: '<svg viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="60" fill="#9b59b6"/><rect x="30" y="30" width="40" height="15" fill="#ecf0f1"/><circle cx="35" cy="80" r="8" fill="#2c3e50"/><circle cx="65" cy="80" r="8" fill="#2c3e50"/></svg>',
+            airplane: '<svg viewBox="0 0 100 100"><path d="M20,50 L80,50 L90,40 L80,30 L20,30 L10,40 Z" fill="#3498db"/><rect x="30" y="35" width="40" height="10" fill="#3498db"/><path d="M50,30 L50,10 L60,10 L60,30" fill="#3498db"/><path d="M30,50 L20,80 L40,80 L45,50" fill="#3498db"/><path d="M70,50 L80,80 L60,80 L55,50" fill="#3498db"/></svg>',
+            
+            // Animals
+            dog: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="30" fill="#f39c12"/><circle cx="35" cy="40" r="5" fill="#2c3e50"/><circle cx="65" cy="40" r="5" fill="#2c3e50"/><path d="M40,60 C45,65 55,65 60,60" stroke="#2c3e50" stroke-width="2" fill="none"/><circle cx="20" cy="30" r="10" fill="#f39c12"/><circle cx="80" cy="30" r="10" fill="#f39c12"/></svg>',
+            cat: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="30" fill="#95a5a6"/><path d="M35,40 L30,30 M65,40 L70,30" stroke="#2c3e50" stroke-width="2"/><circle cx="35" cy="40" r="5" fill="#2c3e50"/><circle cx="65" cy="40" r="5" fill="#2c3e50"/><path d="M40,60 C45,65 55,65 60,60" stroke="#2c3e50" stroke-width="2" fill="none"/><path d="M20,40 L30,20 M80,40 L70,20" fill="none" stroke="#95a5a6" stroke-width="5"/></svg>',
+            horse: '<svg viewBox="0 0 100 100"><path d="M20,40 C20,60 30,80 50,80 C70,80 80,60 80,40 C80,20 70,20 50,20 C30,20 20,20 20,40 Z" fill="#d35400"/><path d="M50,20 L50,5" stroke="#d35400" stroke-width="10"/></svg>',
+            elephant: '<svg viewBox="0 0 100 100"><circle cx="60" cy="60" r="30" fill="#95a5a6"/><path d="M60,60 C40,50 30,30 30,10" stroke="#95a5a6" stroke-width="10" fill="none"/><circle cx="70" cy="50" r="5" fill="#2c3e50"/><path d="M80,80 L90,90 M40,80 L30,90" stroke="#95a5a6" stroke-width="8" fill="none"/></svg>',
+            lion: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="30" fill="#f39c12"/><path d="M20,50 L10,40 M20,50 L10,50 M20,50 L10,60" stroke="#f39c12" stroke-width="3" fill="none"/><path d="M80,50 L90,40 M80,50 L90,50 M80,50 L90,60" stroke="#f39c12" stroke-width="3" fill="none"/><circle cx="35" cy="40" r="5" fill="#2c3e50"/><circle cx="65" cy="40" r="5" fill="#2c3e50"/><path d="M40,60 C45,65 55,65 60,60" stroke="#2c3e50" stroke-width="2" fill="none"/></svg>',
+            bird: '<svg viewBox="0 0 100 100"><circle cx="50" cy="40" r="20" fill="#3498db"/><path d="M30,50 L10,60" stroke="#3498db" stroke-width="5"/><path d="M70,50 L90,60" stroke="#3498db" stroke-width="5"/><path d="M50,60 L50,80 L40,90 M50,80 L60,90" stroke="#e74c3c" stroke-width="3" fill="none"/><circle cx="45" cy="35" r="3" fill="#2c3e50"/><circle cx="55" cy="35" r="3" fill="#2c3e50"/></svg>',
+            fish: '<svg viewBox="0 0 100 100"><path d="M20,50 C40,20 60,20 80,50 C60,80 40,80 20,50 Z" fill="#e74c3c"/><circle cx="70" cy="50" r="5" fill="#2c3e50"/><path d="M20,50 L5,40 M20,50 L5,60" stroke="#e74c3c" stroke-width="3"/></svg>',
+            rabbit: '<svg viewBox="0 0 100 100"><circle cx="50" cy="60" r="20" fill="#ecf0f1"/><path d="M40,30 C40,10 30,10 30,30" stroke="#ecf0f1" stroke-width="8" fill="none"/><path d="M60,30 C60,10 70,10 70,30" stroke="#ecf0f1" stroke-width="8" fill="none"/><circle cx="45" cy="55" r="2" fill="#2c3e50"/><circle cx="55" cy="55" r="2" fill="#2c3e50"/><path d="M47,65 L53,65" stroke="#2c3e50" stroke-width="1" fill="none"/></svg>',
+            
+            // Food
+            apple: '<svg viewBox="0 0 100 100"><circle cx="50" cy="60" r="30" fill="#e74c3c"/><path d="M50,30 C40,10 50,10 50,30" stroke="#27ae60" stroke-width="5" fill="none"/></svg>',
+            pizza: '<svg viewBox="0 0 100 100"><path d="M10,80 L50,10 L90,80 Z" fill="#f39c12"/><circle cx="30" cy="40" r="5" fill="#e74c3c"/><circle cx="50" cy="60" r="5" fill="#e74c3c"/><circle cx="70" cy="40" r="5" fill="#e74c3c"/></svg>',
+            burger: '<svg viewBox="0 0 100 100"><path d="M30,40 L70,40 C75,40 80,45 80,50 C80,55 75,60 70,60 L30,60 C25,60 20,55 20,50 C20,45 25,40 30,40 Z" fill="#d35400"/><path d="M30,60 L70,60 C75,60 80,65 80,70 C80,75 75,80 70,80 L30,80 C25,80 20,75 20,70 C20,65 25,60 30,60 Z" fill="#f39c12"/><path d="M30,20 L70,20 C75,20 80,25 80,30 C80,35 75,40 70,40 L30,40 C25,40 20,35 20,30 C20,25 25,20 30,20 Z" fill="#f1c40f"/><circle cx="40" cy="50" r="3" fill="#2ecc71"/><circle cx="60" cy="50" r="3" fill="#2ecc71"/><circle cx="50" cy="50" r="3" fill="#e74c3c"/></svg>',
+            cake: '<svg viewBox="0 0 100 100"><path d="M20,50 L80,50 L80,80 L20,80 Z" fill="#e74c3c"/><path d="M30,40 L70,40 L70,50 L30,50 Z" fill="#f39c12"/><path d="M40,30 L60,30 L60,40 L40,40 Z" fill="#f1c40f"/><path d="M50,10 L50,30" stroke="#2c3e50" stroke-width="2"/><circle cx="50" cy="10" r="5" fill="#e74c3c"/></svg>',
+            bread: '<svg viewBox="0 0 100 100"><path d="M10,40 C10,20 20,20 50,20 C80,20 90,20 90,40 L90,70 C90,90 80,90 50,90 C20,90 10,90 10,70 Z" fill="#d35400"/></svg>',
+            banana: '<svg viewBox="0 0 100 100"><path d="M50,50 C70,30 80,20 90,10 C80,20 70,30 60,50 C50,70 40,80 20,90" stroke="#f1c40f" stroke-width="15" fill="none"/></svg>',
+            sandwich: '<svg viewBox="0 0 100 100"><path d="M20,30 L80,30 L80,40 L20,40 Z" fill="#f1c40f"/><path d="M20,40 L80,40 L80,60 L20,60 Z" fill="#2ecc71"/><path d="M20,60 L80,60 L80,70 L20,70 Z" fill="#f1c40f"/></svg>',
+            salad: '<svg viewBox="0 0 100 100"><path d="M20,60 C20,40 80,40 80,60 L75,80 L25,80 Z" fill="#2ecc71"/><circle cx="40" cy="55" r="5" fill="#e74c3c"/><circle cx="60" cy="55" r="5" fill="#e74c3c"/><circle cx="50" cy="65" r="5" fill="#f1c40f"/></svg>',
+            
+            // Tools
+            hammer: '<svg viewBox="0 0 100 100"><rect x="45" y="20" width="10" height="50" fill="#95a5a6"/><path d="M20,30 L55,30 L55,20 L20,20 Z" fill="#2c3e50"/></svg>',
+            screwdriver: '<svg viewBox="0 0 100 100"><path d="M40,10 L60,30 L30,60 L10,40 Z" fill="#2c3e50"/><rect x="45" y="35" transform="rotate(-45 50 50)" width="10" height="50" fill="#95a5a6"/></svg>',
+            wrench: '<svg viewBox="0 0 100 100"><path d="M20,20 C10,10 20,0 30,10 L70,50 C80,40 90,50 80,60 L40,80 C30,90 20,80 30,70 Z" fill="#7f8c8d"/><path d="M30,30 C20,40 30,50 40,40 Z" fill="#ecf0f1"/></svg>',
+            saw: '<svg viewBox="0 0 100 100"><rect x="10" y="40" width="80" height="20" fill="#95a5a6"/><path d="M90,40 L80,20 L70,40 L60,20 L50,40 L40,20 L30,40 L20,20 L10,40" fill="none" stroke="#2c3e50" stroke-width="3"/></svg>',
+            drill: '<svg viewBox="0 0 100 100"><path d="M30,30 L80,30 L80,70 L30,70 L20,50 Z" fill="#2c3e50"/><path d="M80,40 L95,40 L95,60 L80,60" fill="#95a5a6"/><rect x="20" y="45" width="20" height="10" fill="#95a5a6"/></svg>',
+            pliers: '<svg viewBox="0 0 100 100"><path d="M30,10 C20,10 20,20 30,20 L40,20 L40,40 L60,40 L60,20 L70,20 C80,20 80,10 70,10 Z" fill="#2c3e50"/><path d="M40,40 L30,90 M60,40 L70,90" stroke="#95a5a6" stroke-width="10" fill="none"/></svg>',
+            shovel: '<svg viewBox="0 0 100 100"><path d="M50,10 L50,70" stroke="#95a5a6" stroke-width="5" fill="none"/><path d="M30,70 L70,70 L50,90 Z" fill="#2c3e50"/></svg>',
+            axe: '<svg viewBox="0 0 100 100"><path d="M60,10 L40,80" stroke="#95a5a6" stroke-width="5" fill="none"/><path d="M20,30 C0,20 20,0 40,10 Z" fill="#2c3e50"/></svg>',
+            
+            // Distractors
+            tree: '<svg viewBox="0 0 100 100"><rect x="45" y="60" width="10" height="30" fill="#795548"/><path d="M20,60 L50,20 L80,60 Z" fill="#2ecc71"/></svg>',
+            house: '<svg viewBox="0 0 100 100"><path d="M20,50 L50,20 L80,50" fill="none" stroke="#e74c3c" stroke-width="5"/><rect x="30" y="50" width="40" height="30" fill="#3498db"/><rect x="45" y="60" width="10" height="20" fill="#2c3e50"/></svg>',
+            person: '<svg viewBox="0 0 100 100"><circle cx="50" cy="30" r="15" fill="#3498db"/><line x1="50" y1="45" x2="50" y2="75" stroke="#3498db" stroke-width="10"/><line x1="30" y1="55" x2="70" y2="55" stroke="#3498db" stroke-width="10"/><line x1="50" y1="75" x2="30" y2="95" stroke="#3498db" stroke-width="10"/><line x1="50" y1="75" x2="70" y2="95" stroke="#3498db" stroke-width="10"/></svg>',
+            building: '<svg viewBox="0 0 100 100"><rect x="20" y="30" width="60" height="60" fill="#95a5a6"/><rect x="30" y="10" width="40" height="20" fill="#95a5a6"/><rect x="30" y="40" width="10" height="10" fill="#2c3e50"/><rect x="60" y="40" width="10" height="10" fill="#2c3e50"/><rect x="30" y="60" width="10" height="10" fill="#2c3e50"/><rect x="60" y="60" width="10" height="10" fill="#2c3e50"/></svg>',
+            flower: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="15" fill="#f1c40f"/><circle cx="30" cy="30" r="10" fill="#e74c3c"/><circle cx="70" cy="30" r="10" fill="#e74c3c"/><circle cx="30" cy="70" r="10" fill="#e74c3c"/><circle cx="70" cy="70" r="10" fill="#e74c3c"/><path d="M50,65 L50,95" stroke="#2ecc71" stroke-width="5" fill="none"/></svg>',
+            mountain: '<svg viewBox="0 0 100 100"><path d="M10,80 L40,20 L70,60 L90,40 L90,80 Z" fill="#95a5a6"/><path d="M40,20 L42,18 L45,22 Z" fill="#ecf0f1"/></svg>',
+            computer: '<svg viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="40" fill="#2c3e50"/><rect x="30" y="30" width="40" height="20" fill="#3498db"/><rect x="35" y="60" width="30" height="20" fill="#95a5a6"/></svg>',
+            book: '<svg viewBox="0 0 100 100"><path d="M30,20 L70,20 L70,80 L30,80 Z" fill="#e74c3c"/><path d="M30,20 L30,80" stroke="#2c3e50" stroke-width="2" fill="none"/><path d="M40,40 L60,40 M40,50 L60,50 M40,60 L60,60" stroke="#ecf0f1" stroke-width="2" fill="none"/></svg>',
+            shoe: '<svg viewBox="0 0 100 100"><path d="M20,60 C20,40 30,40 40,40 L80,40 C90,40 90,60 80,60 Z" fill="#2c3e50"/></svg>',
+            chair: '<svg viewBox="0 0 100 100"><path d="M30,30 L70,30 L70,60 L30,60 Z" fill="#d35400"/><path d="M30,60 L20,90 M70,60 L80,90" stroke="#d35400" stroke-width="5" fill="none"/><path d="M30,40 L70,40" stroke="#95a5a6" stroke-width="5"/></svg>',
+            clock: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="30" fill="#ecf0f1" stroke="#2c3e50" stroke-width="3"/><path d="M50,50 L50,30" stroke="#2c3e50" stroke-width="3" fill="none"/><path d="M50,50 L60,60" stroke="#2c3e50" stroke-width="3" fill="none"/><circle cx="50" cy="50" r="3" fill="#2c3e50"/></svg>',
+            laptop: '<svg viewBox="0 0 100 100"><path d="M20,40 L80,40 L80,70 L20,70 Z" fill="#95a5a6"/><path d="M10,70 L90,70 L90,80 L10,80 Z" fill="#7f8c8d"/><rect x="30" y="50" width="40" height="10" fill="#3498db"/></svg>',
+            phone: '<svg viewBox="0 0 100 100"><rect x="35" y="20" width="30" height="60" rx="5" fill="#2c3e50"/><rect x="40" y="30" width="20" height="30" fill="#3498db"/><circle cx="50" cy="70" r="5" fill="#95a5a6"/></svg>',
+            pen: '<svg viewBox="0 0 100 100"><path d="M30,70 L70,30" stroke="#2c3e50" stroke-width="5" fill="none"/><path d="M70,30 L80,20 L70,10 L60,20 Z" fill="#f1c40f"/><path d="M30,70 L20,90 L40,80 Z" fill="#2c3e50"/></svg>'
+        };
+        
+        // Return the SVG for the item, or a fallback if not found
+        return icons[item] || `<svg viewBox="0 0 100 100"><text x="10" y="55" font-family="Arial" font-size="20">${item}</text></svg>`;
     }
     
     /**

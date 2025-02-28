@@ -84,20 +84,38 @@
         overflow: hidden
         cursor: pointer
         transition: border-color 0.2s, transform 0.1s
+        background-color: #f8f8f8
         
         &:hover
           transform: scale(1.05)
         
         &.selected
           border-color: $blue-background-color
+          background-color: rgba(52, 152, 219, 0.1)
           
-        img
+        .captcha-svg-wrapper
           position: absolute
           top: 0
           left: 0
           width: 100%
           height: 100%
-          object-fit: cover
+          display: flex
+          flex-direction: column
+          align-items: center
+          justify-content: center
+          padding: 10%
+          box-sizing: border-box
+          
+          svg
+            width: 100%
+            height: 80%
+            
+          .captcha-item-label
+            margin-top: 5px
+            font-size: 12px
+            font-weight: bold
+            color: $dark-gray-text-color
+            text-transform: capitalize
           
         .captcha-image-checkmark
           position: absolute
