@@ -8,6 +8,10 @@
 This document describes the data-driven aspects of the OpenDataNetwork.com website,
 details how and where the site is hosted and the lists location of the source tree.
 
+## Anti-Scraping Protection
+
+The site includes a captcha system to prevent automated scraping of data while maintaining accessibility for legitimate users.
+
 ## Datasets
 
 [Submit a dataset recommendation! &raquo;](https://github.com/socrata/opendatanetwork.com/issues/new?labels=data&body=Source%20Agency%3A%20Department%20of%20Redundancy%20Department%0ASource%20URL%3A%20https%3A%2F%2Fagency.gov%2Fawesome%2Fdataset%0A%0AWhy%20do%20you%20think%20this%20dataset%20would%20be%20valuable%20in%20the%20ODN%3F%3A%0A%0ALorem%20ipsum%20dolor%20sit%20amet%2C%20consectetur%20adipiscing%20elit.%20Pellentesque%20dictum%20augue%20ac%20lorem%20malesuada%20at%20rhoncus%20turpis%20condimentum.%20Maecenas%20commodo%20sem%20ac%20magna%20posuere%20ultrices.%20Proin%20ut%20felis%20ac%20odio%20consectetur%20rutrum%20vel%20quis%20sem.%0A)
@@ -104,3 +108,66 @@ for memcached.
 
 For Tyler Technologies employees, refer to [troubleshooting](https://socrata.atlassian.net/wiki/spaces/ONCALL/pages/2158625000/OpsDoc+-+opendatanetwork.com)
 for further help.
+
+## Captcha System
+
+The OpenDataNetwork.com site includes a captcha system to prevent automated scraping while ensuring accessibility for legitimate users.
+
+### How It Works
+
+- The captcha system presents a mathematical challenge (addition, subtraction, multiplication, or pattern recognition) that users must solve before accessing data
+- Once solved, a cookie is set that exempts the user from seeing additional captchas for a configurable period (default: 30 minutes)
+- The captcha protects search results, dataset pages, entity pages, and API/data download links
+- Accessibility features include keyboard navigation, screen reader support, and audio alternatives
+
+### Files and Structure
+
+- `views/_captcha-modal.ejs`: HTML template for the captcha modal dialog
+- `styles/_captcha-modal.sass`: Styling for the captcha modal
+- `src/captcha.js`: Core functionality including challenge generation, verification, and session management
+- `tests/captcha.js` and `tests/lib/test-captcha.js`: Test files for the captcha system
+
+### Configuration Options
+
+The captcha behavior can be configured by modifying `src/captcha.js`:
+
+1. **Session Duration**: To change how long a successful captcha completion remains valid, modify the cookie duration in the `handleSuccess()` function:
+   ```javascript
+   // Change 30 to your desired number of minutes
+   setCookie('odn_captcha_verified', 'true', 30);
+   ```
+
+2. **Challenge Difficulty**: To adjust challenge difficulty, modify the challenge generators in the `challenges` array:
+   ```javascript
+   // For example, to increase difficulty of addition problems:
+   const a = Math.floor(Math.random() * 50) + 1; // Changed from 20 to 50
+   const b = Math.floor(Math.random() * 50) + 1; // Changed from 20 to 50
+   ```
+
+3. **Maximum Attempts**: Change the maximum number of failed attempts before temporary lockout:
+   ```javascript
+   // In the CaptchaState constructor:
+   this.maxAttempts = 5; // Change to desired number
+   ```
+
+### Testing the Captcha
+
+1. Run the application using `gulp start`
+2. Navigate to a protected page (search page, dataset page)
+3. Verify the captcha modal appears and functions correctly
+4. After successful completion, verify that you can access the data
+5. Try navigating to another protected page within 30 minutes and verify you don't see the captcha again
+
+To run the automated tests for the captcha system:
+
+```sh
+casperjs test tests/captcha.js
+```
+
+### Security Considerations
+
+For enhanced security in production environments, consider:
+
+1. Implementing server-side validation of captcha responses
+2. Adding rate limiting by IP address to prevent brute force attempts
+3. Rotating challenge types and increasing complexity for users showing suspicious behavior

@@ -6,15 +6,62 @@
  * Includes accessibility features and improved security
  */
 (function() {
-    // Cache DOM elements
-    const captchaModal = document.getElementById('captcha-modal');
-    const captchaChallenge = document.getElementById('captcha-challenge');
-    const captchaForm = document.getElementById('captcha-form');
-    const captchaInput = document.getElementById('captcha-input');
-    const captchaError = document.getElementById('captcha-error');
-    const captchaClose = document.getElementById('captcha-close');
-    const captchaAudioBtn = document.getElementById('captcha-audio-btn');
-    const captchaLoading = document.getElementById('captcha-loading');
+    // DOM elements - will be initialized when document is ready
+    let captchaModal;
+    let captchaChallenge;
+    let captchaForm;
+    let captchaInput;
+    let captchaError;
+    let captchaClose;
+    let captchaAudioBtn;
+    let captchaLoading;
+    
+    // Flag to track initialization status
+    let isInitialized = false;
+    
+    /**
+     * Initialize captcha elements once DOM is ready
+     * @returns {boolean} Whether initialization was successful
+     */
+    function initCaptchaElements() {
+        if (isInitialized) return true;
+        
+        try {
+            captchaModal = document.getElementById('captcha-modal');
+            if (!captchaModal) {
+                console.error('Captcha modal element not found. Verify _captcha-modal.ejs is included in the page.');
+                return false;
+            }
+            
+            captchaChallenge = document.getElementById('captcha-challenge');
+            captchaForm = document.getElementById('captcha-form');
+            captchaInput = document.getElementById('captcha-input');
+            captchaError = document.getElementById('captcha-error');
+            captchaClose = document.getElementById('captcha-close');
+            captchaAudioBtn = document.getElementById('captcha-audio-btn');
+            captchaLoading = document.getElementById('captcha-loading');
+            
+            // Set up event listeners
+            if (captchaForm) {
+                captchaForm.addEventListener('submit', handleSubmit);
+            }
+            
+            if (captchaClose) {
+                captchaClose.addEventListener('click', closeCaptcha);
+            }
+            
+            if (captchaAudioBtn) {
+                captchaAudioBtn.addEventListener('click', readChallengeAloud);
+            }
+            
+            isInitialized = true;
+            console.log('Captcha system initialized successfully');
+            return true;
+        } catch (e) {
+            console.error('Failed to initialize captcha system:', e);
+            return false;
+        }
+    }
     
     // Track state for each captcha instance
     const CaptchaState = function() {
@@ -146,32 +193,58 @@
      * @param {string|Function} destination - URL to navigate to or callback to execute after success
      */
     function showCaptcha(destination) {
-        // Check if user has recently passed a captcha
-        if (getCookie('odn_captcha_verified')) {
-            // Skip captcha if verified within the last 30 minutes
+        try {
+            // Initialize elements if not already done
+            if (!isInitialized && !initCaptchaElements()) {
+                console.warn('Captcha system not initialized. Proceeding without verification.');
+                // Fall back to direct execution/navigation if captcha can't be shown
+                if (typeof destination === 'function') {
+                    destination();
+                } else if (typeof destination === 'string') {
+                    window.location.href = destination;
+                }
+                return;
+            }
+            
+            // Check if user has recently passed a captcha
+            if (getCookie('odn_captcha_verified')) {
+                // Skip captcha if verified within the last 30 minutes
+                if (typeof destination === 'function') {
+                    try {
+                        destination();
+                    } catch (e) {
+                        console.error('Error executing captcha callback:', e);
+                    }
+                } else if (typeof destination === 'string') {
+                    window.location.href = destination;
+                }
+                return;
+            }
+            
+            const captchaRequest = {
+                destination: destination,
+                triggerElement: document.activeElement
+            };
+            
+            // Add to queue
+            captchaQueue.push(captchaRequest);
+            
+            // Process if not already processing
+            if (!isProcessingCaptcha) {
+                processNextCaptcha();
+            }
+        } catch (e) {
+            console.error('Error showing captcha:', e);
+            // Fall back to direct execution/navigation on error
             if (typeof destination === 'function') {
                 try {
                     destination();
-                } catch (e) {
-                    console.error('Error executing captcha callback:', e);
+                } catch (err) {
+                    console.error('Error executing captcha fallback callback:', err);
                 }
             } else if (typeof destination === 'string') {
                 window.location.href = destination;
             }
-            return;
-        }
-        
-        const captchaRequest = {
-            destination: destination,
-            triggerElement: document.activeElement
-        };
-        
-        // Add to queue
-        captchaQueue.push(captchaRequest);
-        
-        // Process if not already processing
-        if (!isProcessingCaptcha) {
-            processNextCaptcha();
         }
     }
     
@@ -372,22 +445,45 @@
         }
     }
     
-    // Set up event listeners
-    if (captchaForm) {
-        captchaForm.addEventListener('submit', handleSubmit);
+    // Initialize on document ready
+    function initOnDOMReady() {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initCaptchaElements);
+        } else {
+            // DOMContentLoaded already fired
+            initCaptchaElements();
+        }
     }
     
-    if (captchaClose) {
-        captchaClose.addEventListener('click', closeCaptcha);
-    }
+    // Initialize immediately if possible, otherwise wait for document ready
+    initOnDOMReady();
     
-    if (captchaAudioBtn) {
-        captchaAudioBtn.addEventListener('click', readChallengeAloud);
-    }
+    // Try again after a delay in case the modal is added to the DOM later
+    setTimeout(initCaptchaElements, 1000);
     
-    // Expose functions to global scope
+    // Expose functions to global scope - with error handling
     window.ODNCaptcha = {
-        show: showCaptcha,
-        close: closeCaptcha
+        show: function(destination) {
+            // Double-check initialization before showing
+            if (!isInitialized) {
+                initCaptchaElements();
+            }
+            showCaptcha(destination);
+        },
+        close: function() {
+            if (isInitialized) {
+                closeCaptcha();
+            }
+        },
+        // Add debug method for troubleshooting
+        debug: function() {
+            console.log('Captcha initialized:', isInitialized);
+            console.log('Captcha modal found:', !!document.getElementById('captcha-modal'));
+            return {
+                isInitialized: isInitialized,
+                modalExists: !!document.getElementById('captcha-modal'),
+                cookieExists: !!getCookie('odn_captcha_verified')
+            };
+        }
     };
 })();

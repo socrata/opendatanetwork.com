@@ -1,4 +1,16 @@
 <%- include ("_google-analytics") %>
 <%- include ("_captcha-modal") %>
+<script>
+// Captcha initialization check - will log to console if there are issues
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        if (window.ODNCaptcha && typeof window.ODNCaptcha.debug === 'function') {
+            console.log('Captcha status check:', window.ODNCaptcha.debug());
+        } else {
+            console.error('Captcha system not properly initialized. Check that captcha.js is loaded.');
+        }
+    }, 2000); // Give time for everything to initialize
+});
+</script>
 </body>
 </html>
