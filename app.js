@@ -112,14 +112,8 @@ app.use((req, res, next) => {
     return captchaMiddleware(req, res, next);
   }
   
-  // Set a flag for suspicious requests to show the CAPTCHA in the view
-  const userAgent = req.headers['user-agent'] || '';
-  const isSuspicious = userAgent.includes('bot') || 
-                      req.query.suspicious ||
-                      (req.headers['x-forwarded-for'] && 
-                       req.headers['x-forwarded-for'].split(',').length > 2);
-  
-  if (isProtectedPath && isSuspicious) {
+  // Show captcha for all protected paths regardless of traffic type
+  if (isProtectedPath) {
     res.locals.showCaptcha = true;
     res.locals.requestPath = req.path; // Pass current path for the form action
   }
