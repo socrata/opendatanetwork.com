@@ -109,56 +109,68 @@ for memcached.
 For Tyler Technologies employees, refer to [troubleshooting](https://socrata.atlassian.net/wiki/spaces/ONCALL/pages/2158625000/OpsDoc+-+opendatanetwork.com)
 for further help.
 
-## Captcha System
+## Google reCAPTCHA Integration
 
-The OpenDataNetwork.com site includes a captcha system to prevent automated scraping while ensuring accessibility for legitimate users.
+The OpenDataNetwork.com site integrates Google's reCAPTCHA v2 system to prevent automated scraping while providing a user-friendly experience for legitimate users.
 
 ### How It Works
 
-- The captcha system presents a mathematical challenge (addition, subtraction, multiplication, or pattern recognition) that users must solve before accessing data
-- Once solved, a cookie is set that exempts the user from seeing additional captchas for a configurable period (default: 30 minutes)
+- The site uses Google reCAPTCHA v2 to verify that users are human before accessing protected content
+- Once verified, a cookie is set that exempts the user from seeing additional captchas for a configurable period (default: 30 minutes)
 - The captcha protects search results, dataset pages, entity pages, and API/data download links
-- Accessibility features include keyboard navigation, screen reader support, and audio alternatives
+- Accessibility features include keyboard navigation, screen reader support, and focus management
 
 ### Files and Structure
 
-- `views/_captcha-modal.ejs`: HTML template for the captcha modal dialog
+- `views/_captcha-modal.ejs`: HTML template for the captcha modal dialog with reCAPTCHA container
 - `styles/_captcha-modal.sass`: Styling for the captcha modal
-- `src/captcha.js`: Core functionality including challenge generation, verification, and session management
-- `tests/captcha.js` and `tests/lib/test-captcha.js`: Test files for the captcha system
+- `src/captcha.js`: Core functionality including Google reCAPTCHA integration, verification, and session management
+- `tests/captcha.js` and `tests/lib/test-captcha.js`: Test files for the captcha system (need to be updated for reCAPTCHA)
 
 ### Configuration Options
 
-The captcha behavior can be configured by modifying `src/captcha.js`:
+The reCAPTCHA behavior can be configured by modifying `src/captcha.js`:
 
-1. **Session Duration**: To change how long a successful captcha completion remains valid, modify the cookie duration in the `handleSuccess()` function:
+1. **reCAPTCHA Site Key**: Replace the demo key with your actual reCAPTCHA site key:
+   ```javascript
+   const RECAPTCHA_SITE_KEY = 'your-site-key-here'; // Replace with your actual key
+   ```
+
+2. **Session Duration**: To change how long a successful captcha completion remains valid, modify the cookie duration:
    ```javascript
    // Change 30 to your desired number of minutes
-   setCookie('odn_captcha_verified', 'true', 30);
+   setCookie('odn_captcha_verified', token, 30);
    ```
 
-2. **Challenge Difficulty**: To adjust challenge difficulty, modify the challenge generators in the `challenges` array:
+3. **reCAPTCHA Theme and Size**: Customize the appearance of the reCAPTCHA widget:
    ```javascript
-   // For example, to increase difficulty of addition problems:
-   const a = Math.floor(Math.random() * 50) + 1; // Changed from 20 to 50
-   const b = Math.floor(Math.random() * 50) + 1; // Changed from 20 to 50
+   recaptchaWidget = window.grecaptcha.render(recaptchaElement, {
+       'sitekey': RECAPTCHA_SITE_KEY,
+       'callback': 'onRecaptchaSuccess',
+       'expired-callback': 'onRecaptchaExpired',
+       'error-callback': 'onRecaptchaError',
+       'theme': 'light', // Options: 'light' or 'dark'
+       'size': 'normal' // Options: 'normal', 'compact', or 'invisible'
+   });
    ```
 
-3. **Maximum Attempts**: Change the maximum number of failed attempts before temporary lockout:
-   ```javascript
-   // In the CaptchaState constructor:
-   this.maxAttempts = 5; // Change to desired number
-   ```
+### Setting Up reCAPTCHA
 
-### Testing the Captcha
+1. Register your site with Google reCAPTCHA at https://www.google.com/recaptcha/admin
+2. Choose reCAPTCHA v2 with "I'm not a robot" checkbox
+3. Add your domains to the list of allowed domains
+4. Copy your site key and replace the demo key in `src/captcha.js`
+5. For production, also update the secret key in your server-side validation (if implemented)
+
+### Testing the reCAPTCHA
 
 1. Run the application using `gulp start`
 2. Navigate to a protected page (search page, dataset page)
-3. Verify the captcha modal appears and functions correctly
+3. Verify the reCAPTCHA appears and functions correctly
 4. After successful completion, verify that you can access the data
 5. Try navigating to another protected page within 30 minutes and verify you don't see the captcha again
 
-To run the automated tests for the captcha system:
+To run automated tests for the reCAPTCHA system (note: tests may need to be updated):
 
 ```sh
 casperjs test tests/captcha.js
@@ -168,6 +180,7 @@ casperjs test tests/captcha.js
 
 For enhanced security in production environments, consider:
 
-1. Implementing server-side validation of captcha responses
+1. Implementing server-side validation of reCAPTCHA responses with Google's verification API
 2. Adding rate limiting by IP address to prevent brute force attempts
-3. Rotating challenge types and increasing complexity for users showing suspicious behavior
+3. Using reCAPTCHA's advanced security features and risk analysis
+4. Consider using reCAPTCHA v3 for enterprise-level protection with invisible challenges
