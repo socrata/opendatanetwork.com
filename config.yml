@@ -5,6 +5,10 @@ timeout_ms: 5000
 cache_options:
   expires: 43200
 
+# Google reCAPTCHA config
+recaptcha:
+  site_key: "${RECAPTCHA_SITE_KEY}"  # Will be replaced with environment variable
+
 odn_api:
   base: "https://odn-backend.herokuapp.com"
   # base: "http://localhost:3001"

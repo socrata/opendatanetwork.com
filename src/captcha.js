@@ -13,7 +13,14 @@
     
     // reCAPTCHA related variables
     let recaptchaWidget;
-    const RECAPTCHA_SITE_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'; // Demo key - replace with your actual key
+    
+    // Get reCAPTCHA site key from environment variable or use demo key as fallback
+    const RECAPTCHA_SITE_KEY = (typeof window !== 'undefined' && 
+                               window.GlobalConfig && 
+                               window.GlobalConfig.recaptcha && 
+                               window.GlobalConfig.recaptcha.site_key) 
+                               ? window.GlobalConfig.recaptcha.site_key 
+                               : '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'; // Demo key
     
     // Flag to track initialization status
     let isInitialized = false;
