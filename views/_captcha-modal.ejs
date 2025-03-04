@@ -7,11 +7,7 @@
     
     <div id="recaptcha-container" class="g-recaptcha-container">
       <!-- Google reCAPTCHA will be rendered here -->
-      <div id="g-recaptcha" class="g-recaptcha" 
-           data-sitekey="<%= GlobalConfig.recaptcha && GlobalConfig.recaptcha.site_key ? GlobalConfig.recaptcha.site_key : '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI' %>"
-           data-callback="onRecaptchaSuccess"
-           data-expired-callback="onRecaptchaExpired" 
-           data-error-callback="onRecaptchaError"></div>
+      <div id="g-recaptcha"></div>
     </div>
     
     <div class="captcha-note">
@@ -25,5 +21,4 @@
   </div>
 </div>
 
-<!-- reCAPTCHA API script -->
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<!-- Script will be injected by captcha.js to load the reCAPTCHA API -->

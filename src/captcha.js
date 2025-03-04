@@ -13,17 +13,38 @@
     
     // reCAPTCHA related variables
     let recaptchaWidget;
+    let recaptchaApiLoaded = false;
     
-    // Get reCAPTCHA site key from environment variable or use demo key as fallback
-    const RECAPTCHA_SITE_KEY = (typeof window !== 'undefined' && 
-                               window.GlobalConfig && 
-                               window.GlobalConfig.recaptcha && 
-                               window.GlobalConfig.recaptcha.site_key) 
-                               ? window.GlobalConfig.recaptcha.site_key 
-                               : '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'; // Demo key
+    // Use demo key as fallback, will be replaced with actual key if available
+    const RECAPTCHA_SITE_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'; // Demo key
     
     // Flag to track initialization status
     let isInitialized = false;
+    
+    // Load the reCAPTCHA API script
+    function loadRecaptchaApi() {
+        // If API is already loaded, don't load again
+        if (document.querySelector('script[src*="recaptcha/api.js"]')) {
+            return;
+        }
+
+        const script = document.createElement('script');
+        script.src = 'https://www.google.com/recaptcha/api.js?onload=onRecaptchaApiLoaded&render=explicit';
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+        
+        // Create a global callback for when the API is loaded
+        window.onRecaptchaApiLoaded = function() {
+            recaptchaApiLoaded = true;
+            console.log('reCAPTCHA API loaded via explicit script injection');
+            
+            // If we have a current request, render the widget now
+            if (currentRequest) {
+                renderRecaptcha();
+            }
+        };
+    }
     
     /**
      * Initialize captcha elements once DOM is ready
@@ -49,8 +70,13 @@
                 captchaClose.addEventListener('click', closeCaptcha);
             }
             
-            // Wait for reCAPTCHA API to load
-            waitForRecaptchaAPI();
+            // Load the reCAPTCHA API script
+            loadRecaptchaApi();
+            
+            // Set up global callbacks for reCAPTCHA
+            window.onRecaptchaSuccess = handleRecaptchaSuccess;
+            window.onRecaptchaExpired = handleRecaptchaExpired;
+            window.onRecaptchaError = handleRecaptchaError;
             
             isInitialized = true;
             console.log('reCAPTCHA integration initialized successfully');
@@ -58,21 +84,6 @@
         } catch (e) {
             console.error('Failed to initialize reCAPTCHA system:', e);
             return false;
-        }
-    }
-    
-    /**
-     * Wait for Google reCAPTCHA API to load
-     */
-    function waitForRecaptchaAPI() {
-        if (typeof window.grecaptcha === 'undefined') {
-            setTimeout(waitForRecaptchaAPI, 100);
-        } else {
-            console.log('reCAPTCHA API loaded');
-            // Add global callback for reCAPTCHA
-            window.onRecaptchaSuccess = handleRecaptchaSuccess;
-            window.onRecaptchaExpired = handleRecaptchaExpired;
-            window.onRecaptchaError = handleRecaptchaError;
         }
     }
     
@@ -163,25 +174,44 @@
      * Show the reCAPTCHA challenge
      */
     function renderRecaptcha() {
-        // The reCAPTCHA widget is now rendered automatically using data-sitekey attribute
-        // We need to set up the callbacks
         try {
-            if (typeof window.grecaptcha === 'undefined') {
-                console.log('reCAPTCHA API not loaded yet - will be handled automatically when loaded');
+            // Check if reCAPTCHA API is loaded
+            if (typeof window.grecaptcha === 'undefined' || typeof window.grecaptcha.render !== 'function') {
+                console.log('reCAPTCHA API not loaded yet - waiting for it to load');
                 return;
             }
             
-            // Set up callbacks for the reCAPTCHA
-            window.onRecaptchaSuccess = handleRecaptchaSuccess;
-            window.onRecaptchaExpired = handleRecaptchaExpired;
-            window.onRecaptchaError = handleRecaptchaError;
-            
-            // Reset if needed
-            if (recaptchaWidget !== undefined && typeof window.grecaptcha.reset === 'function') {
-                window.grecaptcha.reset();
+            // Get the container element
+            const recaptchaElement = document.getElementById('g-recaptcha');
+            if (!recaptchaElement) {
+                console.error('reCAPTCHA container element not found');
+                return;
             }
+            
+            // Try to get site key from global config (if available) or use default
+            let siteKey = RECAPTCHA_SITE_KEY;
+            if (typeof window.GlobalConfig !== 'undefined' && 
+                window.GlobalConfig.recaptcha && 
+                window.GlobalConfig.recaptcha.site_key) {
+                siteKey = window.GlobalConfig.recaptcha.site_key;
+            }
+            
+            console.log('Rendering reCAPTCHA with site key: ' + siteKey);
+            
+            // Clear any existing content
+            recaptchaElement.innerHTML = '';
+            
+            // Render a new widget explicitly
+            recaptchaWidget = window.grecaptcha.render(recaptchaElement, {
+                'sitekey': siteKey,
+                'callback': 'onRecaptchaSuccess',
+                'expired-callback': 'onRecaptchaExpired',
+                'error-callback': 'onRecaptchaError',
+                'theme': 'light',
+                'size': 'normal'
+            });
         } catch (e) {
-            console.error('Error with reCAPTCHA:', e);
+            console.error('Error rendering reCAPTCHA:', e);
         }
     }
     
@@ -316,8 +346,14 @@
         announcement.textContent = 'Verification required. Please complete the captcha to continue.';
         document.body.appendChild(announcement);
         
-        // Render the reCAPTCHA
-        renderRecaptcha();
+        // Make sure API is loaded and render the reCAPTCHA
+        if (typeof window.grecaptcha === 'undefined' || typeof window.grecaptcha.render !== 'function') {
+            console.log('reCAPTCHA API not loaded yet, loading now...');
+            loadRecaptchaApi(); // This will call renderRecaptcha when API loads
+        } else {
+            console.log('reCAPTCHA API already loaded, rendering widget...');
+            renderRecaptcha();
+        }
         
         // Set focus after a small delay (for screen readers)
         setTimeout(() => {
