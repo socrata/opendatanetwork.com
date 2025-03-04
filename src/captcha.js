@@ -65,7 +65,7 @@
      * Wait for Google reCAPTCHA API to load
      */
     function waitForRecaptchaAPI() {
-        if (typeof window.grecaptcha === 'undefined' || typeof window.grecaptcha.render !== 'function') {
+        if (typeof window.grecaptcha === 'undefined') {
             setTimeout(waitForRecaptchaAPI, 100);
         } else {
             console.log('reCAPTCHA API loaded');
@@ -163,30 +163,25 @@
      * Show the reCAPTCHA challenge
      */
     function renderRecaptcha() {
-        if (typeof window.grecaptcha === 'undefined' || 
-            typeof window.grecaptcha.render !== 'function') {
-            console.error('reCAPTCHA API not loaded yet');
-            return;
-        }
-        
+        // The reCAPTCHA widget is now rendered automatically using data-sitekey attribute
+        // We need to set up the callbacks
         try {
-            // Clear previous widget if it exists
-            if (recaptchaWidget !== undefined && recaptchaContainer.children.length > 0) {
-                window.grecaptcha.reset(recaptchaWidget);
-            } else {
-                // Render a new widget
-                const recaptchaElement = document.getElementById('g-recaptcha');
-                recaptchaWidget = window.grecaptcha.render(recaptchaElement, {
-                    'sitekey': RECAPTCHA_SITE_KEY,
-                    'callback': 'onRecaptchaSuccess',
-                    'expired-callback': 'onRecaptchaExpired',
-                    'error-callback': 'onRecaptchaError',
-                    'theme': 'light',
-                    'size': 'normal'
-                });
+            if (typeof window.grecaptcha === 'undefined') {
+                console.log('reCAPTCHA API not loaded yet - will be handled automatically when loaded');
+                return;
+            }
+            
+            // Set up callbacks for the reCAPTCHA
+            window.onRecaptchaSuccess = handleRecaptchaSuccess;
+            window.onRecaptchaExpired = handleRecaptchaExpired;
+            window.onRecaptchaError = handleRecaptchaError;
+            
+            // Reset if needed
+            if (recaptchaWidget !== undefined && typeof window.grecaptcha.reset === 'function') {
+                window.grecaptcha.reset();
             }
         } catch (e) {
-            console.error('Error rendering reCAPTCHA:', e);
+            console.error('Error with reCAPTCHA:', e);
         }
     }
     
