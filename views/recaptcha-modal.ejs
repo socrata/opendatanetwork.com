@@ -1,0 +1,155 @@
+<%- include ("_document-header", {css: "main.css", title: title || 'Security Verification Required'}) %>
+<%- include ("_header") %>
+
+<div class="recaptcha-container">
+  <div class="recaptcha-modal" role="dialog" aria-labelledby="recaptcha-title" aria-describedby="recaptcha-description">
+    <h2 id="recaptcha-title"><%= error ? 'Verification Failed' : 'Please Verify You Are Human' %></h2>
+    
+    <% if (error) { %>
+      <p id="recaptcha-description"><%= errorMessage || 'Sorry, we couldn\'t verify that you\'re human. Please try again.' %></p>
+    <% } else { %>
+      <p id="recaptcha-description">To protect our data from abuse, we need to verify that you're not a robot.</p>
+    <% } %>
+    
+    <form id="recaptchaForm" action="<%= redirectUrl %>" method="GET">
+      <input type="hidden" id="g-recaptcha-token" name="g-recaptcha-token" value="">
+      <button type="submit" id="submitBtn" disabled aria-live="polite">Please wait...</button>
+    </form>
+  </div>
+</div>
+
+<script src="https://www.google.com/recaptcha/api.js?render=<%= siteKey %>"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var submitBtn = document.getElementById('submitBtn');
+    var form = document.getElementById('recaptchaForm');
+    
+    // Add keyboard navigation support
+    submitBtn.addEventListener('keydown', function(e) {
+      // If Enter or Space is pressed, submit the form
+      if (e.key === 'Enter' || e.key === ' ') {
+        if (!submitBtn.disabled) {
+          form.submit();
+        }
+      }
+    });
+    
+    // Execute reCAPTCHA verification
+    grecaptcha.ready(function() {
+      submitBtn.innerText = 'Verifying...';
+      
+      // Set a timeout to handle slow reCAPTCHA responses
+      var recaptchaTimeout = setTimeout(function() {
+        submitBtn.innerText = 'Taking longer than expected...';
+      }, 3000);
+      
+      grecaptcha.execute('<%= siteKey %>', {action: 'verify'})
+        .then(function(token) {
+          clearTimeout(recaptchaTimeout);
+          document.getElementById('g-recaptcha-token').value = token;
+          submitBtn.disabled = false;
+          submitBtn.innerText = 'Continue to Website';
+          
+          // CSRF protection - add a timestamp to prevent replay attacks
+          var csrfToken = document.createElement('input');
+          csrfToken.type = 'hidden';
+          csrfToken.name = 'recaptcha_timestamp';
+          csrfToken.value = Date.now();
+          form.appendChild(csrfToken);
+          
+          // Auto-submit after getting token, with a longer delay for slower connections
+          setTimeout(function() {
+            form.submit();
+          }, 2000);
+        })
+        .catch(function(error) {
+          clearTimeout(recaptchaTimeout);
+          console.error('reCAPTCHA error:', error);
+          submitBtn.innerText = 'Verification Failed - Click to Retry';
+          submitBtn.disabled = false;
+          submitBtn.addEventListener('click', function() {
+            window.location.reload();
+          });
+        });
+    });
+  });
+</script>
+
+<style>
+  .recaptcha-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  
+  .recaptcha-modal {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+  }
+  
+  .recaptcha-modal h2 {
+    margin-top: 0;
+    color: #2980b9;
+  }
+  
+  .recaptcha-modal p {
+    margin-bottom: 20px;
+  }
+  
+  #submitBtn {
+    background-color: #2980b9;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    /* Improving color contrast for better accessibility - meets WCAG AA standards */
+    font-weight: bold;
+  }
+  
+  #submitBtn:focus-visible {
+    outline: 3px solid #2680d9;
+    outline-offset: 2px;
+  }
+  
+  #submitBtn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  #submitBtn:not(:disabled):hover {
+    background-color: #216a9c;
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    .recaptcha-modal {
+      background-color: #333;
+      color: #fff;
+    }
+    
+    .recaptcha-modal h2 {
+      color: #64b5f6;
+    }
+  }
+  
+  .grecaptcha-badge {
+    visibility: visible !important;
+  }
+</style>
+
+<%- include ("_document-footer") %>

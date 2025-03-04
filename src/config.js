@@ -17,6 +17,29 @@ var loadConfig = function() {
       config = deepmerge.all([config, override]);
     }
   }
+  
+  // Enable reCAPTCHA in staging and production environments
+  const nodeEnv = process.env.NODE_ENV || 'development';
+  if (nodeEnv === 'production' || nodeEnv === 'staging') {
+    config.recaptcha.enabled = true;
+  }
+  
+  // Override with environment variables if provided
+  if (process.env.RECAPTCHA_SITE_KEY) {
+    config.recaptcha.site_key = process.env.RECAPTCHA_SITE_KEY;
+  }
+  
+  if (process.env.RECAPTCHA_SECRET_KEY) {
+    config.recaptcha.secret_key = process.env.RECAPTCHA_SECRET_KEY;
+  }
+  
+  if (process.env.RECAPTCHA_SCORE_THRESHOLD) {
+    config.recaptcha.score_threshold = parseFloat(process.env.RECAPTCHA_SCORE_THRESHOLD);
+  }
+  
+  if (process.env.RECAPTCHA_ENABLED) {
+    config.recaptcha.enabled = process.env.RECAPTCHA_ENABLED === 'true';
+  }
 
   return config;
 };

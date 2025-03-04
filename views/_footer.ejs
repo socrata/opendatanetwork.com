@@ -3,6 +3,12 @@
                 <img src="/images/tyler-empowered-logo-white.svg" alt="Empowered by Tyler Technologies" role="presentation" />
             </a>
             <a class="text-link" target="_blank" href="https://www.tylertech.com/privacy">Privacy Policy</a>
+            <% if (typeof GlobalConfig !== 'undefined' && GlobalConfig.recaptcha && GlobalConfig.recaptcha.enabled) { %>
+              <p class="recaptcha-disclosure">This site is protected by reCAPTCHA and the Google 
+                <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and
+                <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.
+              </p>
+            <% } %>
         </footer>
 
         <%- include ("_google-analytics") %>

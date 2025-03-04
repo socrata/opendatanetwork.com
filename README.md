@@ -104,3 +104,64 @@ for memcached.
 
 For Tyler Technologies employees, refer to [troubleshooting](https://socrata.atlassian.net/wiki/spaces/ONCALL/pages/2158625000/OpsDoc+-+opendatanetwork.com)
 for further help.
+
+## reCAPTCHA Configuration
+
+This application uses Google reCAPTCHA v3 to protect data access routes from abusive robots.
+
+### Setup Instructions
+
+1. **Get reCAPTCHA Keys**:
+   - Go to the [Google reCAPTCHA Admin Console](https://www.google.com/recaptcha/admin)
+   - Register a new site
+   - Choose reCAPTCHA v3
+   - Add your domains (and localhost for development)
+   - Get your Site Key and Secret Key
+
+2. **Configuration**:
+   - Add your keys to the environment:
+     ```shell
+     export RECAPTCHA_SITE_KEY="your_site_key"
+     export RECAPTCHA_SECRET_KEY="your_secret_key"
+     ```
+   - Or update `config.yml` directly (not recommended for production)
+
+3. **Enable reCAPTCHA**:
+   - reCAPTCHA is automatically enabled in staging and production environments
+   - For manual control, use the environment variable:
+     ```shell
+     export RECAPTCHA_ENABLED=true
+     ```
+   - For development, it's disabled by default
+
+4. **Adjust Score Threshold**:
+   - The default score threshold is 0.5 (range 0.0 to 1.0)
+   - Lower values are more permissive, higher values more restrictive
+   - Adjust using:
+     ```shell
+     export RECAPTCHA_SCORE_THRESHOLD=0.7
+     ```
+
+### How It Works
+
+- reCAPTCHA v3 is applied to all data access routes
+- When a user accesses protected data without verification, a modal appears
+- The modal contains an invisible reCAPTCHA challenge
+- After verification, the user is redirected to the requested data
+- Verification persists in the user's session for 24 hours
+
+### Protected Routes
+
+- `/dataset/*` - Dataset pages
+- `/entity/*` - Entity data pages
+- `/region/*` - Region data pages
+- `/search*` - Search results
+- `/categories.json` - Categories data
+
+### Testing
+
+The reCAPTCHA tests are included in the standard test suite:
+
+```shell
+npm test
+```

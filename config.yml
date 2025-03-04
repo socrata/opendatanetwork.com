@@ -2,6 +2,12 @@ app_token: "cQovpGcdUT1CSzgYk0KPYdAI0"
 user_agent: "OpenDataNetwork.com"
 timeout_ms: 5000
 
+recaptcha:
+  site_key: "REPLACE_WITH_YOUR_SITE_KEY"
+  secret_key: "REPLACE_WITH_YOUR_SECRET_KEY"
+  score_threshold: 0.5
+  enabled: false # Will be set to true in staging and production via CONFIG_URL
+
 cache_options:
   expires: 43200
 

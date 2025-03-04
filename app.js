@@ -13,6 +13,7 @@ const helmet = require('helmet');
 const numeral = require('numeral');
 const querystring = require('querystring');
 const expose = require('express-expose');
+const session = require('express-session');
 
 const HomeController = require('./app/controllers/home-controller');
 const CategoriesController = require('./app/controllers/categories-controller');
@@ -22,6 +23,7 @@ const PagesController = require('./app/controllers/pages-controller');
 const ErrorHandler = require('./app/lib/error-handler');
 const UrlUtil = require('./app/lib/url-util');
 const GlobalConfig = require('./src/config');
+const RecaptchaMiddleware = require('./app/lib/recaptcha');
 
 const app = expose(express());
 
@@ -102,6 +104,21 @@ app.use(minifyHTML({
 // Cookie parser
 app.use(cookieParser());
 
+// Session middleware
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'opendatanetwork-secret',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging',
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
+}));
+
+// Body parsers for request data
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 // Set up apache common log format output
 //app.use(morgan('combined'));
 
@@ -156,6 +173,18 @@ app.get('*', function(req, res, next) {
     next();
 });
 
+// Test route for the reCAPTCHA modal (only accessible in test environment)
+if (process.env.NODE_ENV === 'test') {
+  app.get('/recaptcha-modal', function(req, res) {
+    res.render('recaptcha-modal', {
+      title: 'Test Modal',
+      siteKey: 'test-site-key',
+      redirectUrl: '/',
+      error: req.query.error === 'true'
+    });
+  });
+}
+
 // Strip all get parameters to avoid XSS attempts
 var strip = function(string) { return string.replace(/[^A-z0-9-_.+&]+/g, ' '); };
 app.get('*', function(req, res, next) {
@@ -186,32 +215,36 @@ app.get('/join', function(req, res) { res.redirect(301, '/join-open-data-network
 app.get('/join/complete', function(req, res) { res.redirect(301, '/join-open-data-network/complete'); });
 app.get('/v4', function(req, res) { res.redirect(301, '/'); });
 
+// Public routes that don't need reCAPTCHA protection
 app.get('/', HomeController.index);
-app.get('/categories.json', CategoriesController.categories);
 app.get('/join-open-data-network', PagesController.join);
 app.get('/join-open-data-network/complete', PagesController.joinComplete);
-app.get('/search', require('./app/controllers/search-controller'));
+
+// Apply reCAPTCHA middleware to data access routes
+// This middleware will show a modal if verification is needed
+app.get('/categories.json', RecaptchaMiddleware, CategoriesController.categories);
+app.get('/search', RecaptchaMiddleware, require('./app/controllers/search-controller'));
 /*
-app.get('/search/search-results', SearchController.searchResults);
-app.get('/search/:vector', SearchController.search);
+app.get('/search/search-results', RecaptchaMiddleware, SearchController.searchResults);
+app.get('/search/:vector', RecaptchaMiddleware, SearchController.search);
 */
-app.get('/dataset/:domain/:id', DatasetController.show);
+app.get('/dataset/:domain/:id', RecaptchaMiddleware, DatasetController.show);
 
 // new URL format
 const entityController = require('./app/controllers/entity-controller');
-app.get('/entity/:entityIDs', entityController);
-app.get('/entity/:entityIDs/:entityNames', entityController);
-app.get('/entity/:entityIDs/:entityNames/:variableID', entityController);
+app.get('/entity/:entityIDs', RecaptchaMiddleware, entityController);
+app.get('/entity/:entityIDs/:entityNames', RecaptchaMiddleware, entityController);
+app.get('/entity/:entityIDs/:entityNames/:variableID', RecaptchaMiddleware, entityController);
 
 const redirectRegion = require('./app/controllers/redirect/region');
-app.get('/region/:regionIDs', redirectRegion);
-app.get('/region/:regionIDs/:regionNames', redirectRegion);
-app.get('/region/:regionIDs/:regionNames/:vector', redirectRegion);
-app.get('/region/:regionIDs/:regionNames/:vector/:metric', redirectRegion);
-app.get('/region/:regionIDs/:regionNames/:vector/:metric/:year', redirectRegion);
+app.get('/region/:regionIDs', RecaptchaMiddleware, redirectRegion);
+app.get('/region/:regionIDs/:regionNames', RecaptchaMiddleware, redirectRegion);
+app.get('/region/:regionIDs/:regionNames/:vector', RecaptchaMiddleware, redirectRegion);
+app.get('/region/:regionIDs/:regionNames/:vector/:metric', RecaptchaMiddleware, redirectRegion);
+app.get('/region/:regionIDs/:regionNames/:vector/:metric/:year', RecaptchaMiddleware, redirectRegion);
 
-app.get('/search-results', require('./app/controllers/search-results-controller'));
-app.get('/search-results/entity', require('./app/controllers/entity-search-results-controller'));
+app.get('/search-results', RecaptchaMiddleware, require('./app/controllers/search-results-controller'));
+app.get('/search-results/entity', RecaptchaMiddleware, require('./app/controllers/entity-search-results-controller'));
 
 app.use((error, req, res, next) => {
   ErrorHandler.error(req, res)(error);
