@@ -149,14 +149,46 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://www.google.com", "https://www.gstatic.com"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", "data:", "https://www.google.com"],
-      connectSrc: ["'self'"],
-      fontSrc: ["'self'"],
+      scriptSrc: [
+        "'self'", 
+        "'unsafe-inline'", 
+        "'unsafe-eval'", 
+        "https://www.google.com", 
+        "https://www.gstatic.com", 
+        "https://ajax.googleapis.com",
+        "https://cdn.jsdelivr.net",
+        "https://fast.wistia.net",
+        "https://api.usersnap.com",
+        "https://maxcdn.bootstrapcdn.com"
+      ],
+      styleSrc: [
+        "'self'", 
+        "'unsafe-inline'", 
+        "https://cdn.jsdelivr.net", 
+        "https://fonts.googleapis.com",
+        "https://maxcdn.bootstrapcdn.com"
+      ],
+      imgSrc: [
+        "'self'", 
+        "data:", 
+        "https://www.google.com",
+        "https://maxcdn.bootstrapcdn.com",
+        "https://*.wistia.com",
+        "https://*.wistia.net"
+      ],
+      connectSrc: [
+        "'self'", 
+        "https://api.usersnap.com",
+        "https://*.wistia.com"
+      ],
+      fontSrc: [
+        "'self'", 
+        "https://fonts.gstatic.com",
+        "https://maxcdn.bootstrapcdn.com"
+      ],
       objectSrc: ["'none'"],
-      mediaSrc: ["'self'"],
-      frameSrc: ["'self'", "https://www.google.com"],
+      mediaSrc: ["'self'", "https://*.wistia.com", "https://*.wistia.net"],
+      frameSrc: ["'self'", "https://www.google.com", "https://*.wistia.com"],
       frameAncestors: ["'self'"]
     }
   }
