@@ -131,9 +131,16 @@ The OpenDataNetwork.com site integrates Google's reCAPTCHA v2 system to prevent 
 
 The reCAPTCHA behavior can be configured by modifying `src/captcha.js`:
 
-1. **reCAPTCHA Site Key**: Replace the demo key with your actual reCAPTCHA site key:
-   ```javascript
-   const RECAPTCHA_SITE_KEY = 'your-site-key-here'; // Replace with your actual key
+1. **reCAPTCHA Site Key**: Set your reCAPTCHA site key using the `RECAPTCHA_SITE_KEY` environment variable:
+   ```bash
+   # Linux/Mac
+   export RECAPTCHA_SITE_KEY=your-site-key-here
+   
+   # Windows
+   set RECAPTCHA_SITE_KEY=your-site-key-here
+   
+   # Heroku
+   heroku config:set RECAPTCHA_SITE_KEY=your-site-key-here
    ```
 
 2. **Session Duration**: To change how long a successful captcha completion remains valid, modify the cookie duration:
