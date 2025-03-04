@@ -5,10 +5,18 @@
     <div class="captcha-title" id="captcha-title">Verify Human Access</div>
     <p id="captcha-description">To continue to the requested data, please complete this verification:</p>
     
-    <div id="recaptcha-container" class="g-recaptcha-container">
-      <!-- Google reCAPTCHA will be rendered here -->
-      <div id="g-recaptcha"></div>
-    </div>
+    <form id="captcha-form">
+      <div class="captcha-challenge-wrapper">
+        <div id="captcha-challenge" class="captcha-text-challenge"></div>
+      </div>
+      
+      <div class="captcha-input-group">
+        <input type="text" id="captcha-input" class="captcha-input" placeholder="Enter your answer here" autocomplete="off">
+        <div id="captcha-error" class="captcha-error"></div>
+      </div>
+      
+      <button type="submit" id="captcha-submit" class="captcha-submit">Verify</button>
+    </form>
     
     <div class="captcha-note">
       This verification helps prevent automated data scraping.
@@ -20,5 +28,3 @@
     </div>
   </div>
 </div>
-
-<!-- Script will be injected by captcha.js to load the reCAPTCHA API -->

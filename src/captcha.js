@@ -1,50 +1,21 @@
 'use strict';
 
 /**
- * reCAPTCHA integration for preventing bots from scraping data
- * Uses Google's reCAPTCHA v2 for more reliable bot detection
+ * Simple math-based captcha implementation for preventing bots from scraping data
+ * Uses basic arithmetic challenges that are easy for humans but harder for bots
  */
 (function() {
     // DOM elements - will be initialized when document is ready
     let captchaModal;
     let captchaClose;
-    let recaptchaContainer;
+    let captchaChallenge;
+    let captchaForm;
+    let captchaInput;
+    let captchaError;
     let captchaLoading;
-    
-    // reCAPTCHA related variables
-    let recaptchaWidget;
-    let recaptchaApiLoaded = false;
-    
-    // Use demo key as fallback, will be replaced with actual key if available
-    const RECAPTCHA_SITE_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'; // Demo key
     
     // Flag to track initialization status
     let isInitialized = false;
-    
-    // Load the reCAPTCHA API script
-    function loadRecaptchaApi() {
-        // If API is already loaded, don't load again
-        if (document.querySelector('script[src*="recaptcha/api.js"]')) {
-            return;
-        }
-
-        const script = document.createElement('script');
-        script.src = 'https://www.google.com/recaptcha/api.js?onload=onRecaptchaApiLoaded&render=explicit';
-        script.async = true;
-        script.defer = true;
-        document.head.appendChild(script);
-        
-        // Create a global callback for when the API is loaded
-        window.onRecaptchaApiLoaded = function() {
-            recaptchaApiLoaded = true;
-            console.log('reCAPTCHA API loaded via explicit script injection');
-            
-            // If we have a current request, render the widget now
-            if (currentRequest) {
-                renderRecaptcha();
-            }
-        };
-    }
     
     /**
      * Initialize captcha elements once DOM is ready
@@ -61,7 +32,10 @@
             }
             
             // Get modal elements
-            recaptchaContainer = document.getElementById('recaptcha-container');
+            captchaChallenge = document.getElementById('captcha-challenge');
+            captchaForm = document.getElementById('captcha-form');
+            captchaInput = document.getElementById('captcha-input');
+            captchaError = document.getElementById('captcha-error');
             captchaClose = document.getElementById('captcha-close');
             captchaLoading = document.getElementById('captcha-loading');
             
@@ -70,149 +44,86 @@
                 captchaClose.addEventListener('click', closeCaptcha);
             }
             
-            // Load the reCAPTCHA API script
-            loadRecaptchaApi();
-            
-            // Set up global callbacks for reCAPTCHA
-            window.onRecaptchaSuccess = handleRecaptchaSuccess;
-            window.onRecaptchaExpired = handleRecaptchaExpired;
-            window.onRecaptchaError = handleRecaptchaError;
+            if (captchaForm) {
+                captchaForm.addEventListener('submit', handleSubmit);
+            }
             
             isInitialized = true;
-            console.log('reCAPTCHA integration initialized successfully');
+            console.log('Captcha system initialized successfully');
             return true;
         } catch (e) {
-            console.error('Failed to initialize reCAPTCHA system:', e);
+            console.error('Failed to initialize captcha system:', e);
             return false;
         }
     }
     
-    // Track captcha request state
-    const CaptchaRequest = function() {
+    // Track captcha state
+    const CaptchaState = function() {
+        this.challenge = null;
+        this.answer = null;
+        this.attemptCount = 0;
+        this.maxAttempts = 5;
         this.destination = null;
         this.callback = null;
         this.triggerElement = null;
-        this.token = '';
     };
     
-    // Current captcha request
-    let currentRequest = null;
+    // Current captcha state
+    let currentCaptcha = null;
     
     // Queue for multiple captcha requests
     const captchaQueue = [];
     let isProcessingCaptcha = false;
     
     /**
-     * reCAPTCHA callbacks
+     * Generate a math challenge
+     * @returns {Object} Challenge details with question and answer
      */
-    
-    /**
-     * Handle successful reCAPTCHA verification
-     * @param {string} token - The reCAPTCHA response token
-     */
-    function handleRecaptchaSuccess(token) {
-        if (!currentRequest) {
-            console.warn('reCAPTCHA succeeded but no current request found');
-            return;
-        }
+    function generateMathChallenge() {
+        // Create a simple arithmetic problem
+        const operations = [
+            {
+                name: 'addition',
+                symbol: '+',
+                operation: (a, b) => a + b,
+                format: (a, b) => `What is ${a} + ${b}?`
+            },
+            {
+                name: 'subtraction',
+                symbol: '-',
+                operation: (a, b) => a - b,
+                format: (a, b) => `What is ${a} - ${b}?`
+            },
+            {
+                name: 'multiplication',
+                symbol: '×',
+                operation: (a, b) => a * b,
+                format: (a, b) => `What is ${a} × ${b}?`
+            }
+        ];
         
-        // Store the token
-        currentRequest.token = token;
+        // Select a random operation
+        const op = operations[Math.floor(Math.random() * operations.length)];
         
-        // Show loading indicator
-        if (captchaLoading) {
-            captchaLoading.style.display = 'block';
-        }
+        // Generate two random numbers 1-20 for addition/subtraction, 1-10 for multiplication
+        const maxVal = op.name === 'multiplication' ? 10 : 20;
+        const a = Math.floor(Math.random() * maxVal) + 1;
+        const b = Math.floor(Math.random() * maxVal) + 1;
         
-        // Set the verification cookie - valid for 30 minutes
-        setCookie('odn_captcha_verified', token, 30);
+        // For subtraction, ensure a >= b to avoid negative results
+        const x = op.name === 'subtraction' ? Math.max(a, b) : a;
+        const y = op.name === 'subtraction' ? Math.min(a, b) : b;
         
-        // Small delay to show loading indicator
-        setTimeout(() => {
-            // Hide the modal
-            closeCaptcha();
-            
-            // Navigate to destination or execute callback
-            if (currentRequest.destination) {
-                window.location.href = currentRequest.destination;
-            } else if (currentRequest.callback && typeof currentRequest.callback === 'function') {
-                try {
-                    currentRequest.callback(token);
-                } catch (e) {
-                    console.error('Error executing captcha callback:', e);
-                }
-            }
-            
-            // Reset loading state
-            if (captchaLoading) {
-                captchaLoading.style.display = 'none';
-            }
-        }, 500);
-    }
-    
-    /**
-     * Handle expired reCAPTCHA
-     */
-    function handleRecaptchaExpired() {
-        if (recaptchaWidget !== null && typeof grecaptcha !== 'undefined') {
-            grecaptcha.reset(recaptchaWidget);
-        }
-    }
-    
-    /**
-     * Handle reCAPTCHA error
-     */
-    function handleRecaptchaError() {
-        console.error('reCAPTCHA error occurred');
-        // Reset the captcha
-        if (recaptchaWidget !== null && typeof grecaptcha !== 'undefined') {
-            grecaptcha.reset(recaptchaWidget);
-        }
-    }
-    
-    /**
-     * Show the reCAPTCHA challenge
-     */
-    function renderRecaptcha() {
-        try {
-            // Check if reCAPTCHA API is loaded
-            if (typeof window.grecaptcha === 'undefined' || typeof window.grecaptcha.render !== 'function') {
-                console.log('reCAPTCHA API not loaded yet - waiting for it to load');
-                return;
-            }
-            
-            // Get the container element
-            const recaptchaElement = document.getElementById('g-recaptcha');
-            if (!recaptchaElement) {
-                console.error('reCAPTCHA container element not found');
-                return;
-            }
-            
-            // Try to get site key from global config (if available) or use default
-            let siteKey = RECAPTCHA_SITE_KEY;
-            if (typeof window.GlobalConfig !== 'undefined' && 
-                window.GlobalConfig.recaptcha && 
-                window.GlobalConfig.recaptcha.site_key) {
-                siteKey = window.GlobalConfig.recaptcha.site_key;
-            }
-            
-            console.log('Rendering reCAPTCHA with site key: ' + siteKey);
-            
-            // Clear any existing content
-            recaptchaElement.innerHTML = '';
-            
-            // Render a new widget explicitly
-            recaptchaWidget = window.grecaptcha.render(recaptchaElement, {
-                'sitekey': siteKey,
-                'callback': 'onRecaptchaSuccess',
-                'expired-callback': 'onRecaptchaExpired',
-                'error-callback': 'onRecaptchaError',
-                'theme': 'light',
-                'size': 'normal'
-            });
-        } catch (e) {
-            console.error('Error rendering reCAPTCHA:', e);
-        }
+        // Calculate the answer
+        const answer = op.operation(x, y).toString();
+        
+        // Create the challenge text
+        const question = op.format(x, y);
+        
+        return {
+            question: question,
+            answer: answer
+        };
     }
     
     /**
@@ -319,21 +230,40 @@
         isProcessingCaptcha = true;
         const request = captchaQueue.shift();
         
-        // Create a new request object
-        currentRequest = new CaptchaRequest();
+        // Create a new captcha state
+        currentCaptcha = new CaptchaState();
         
         // Store the destination and trigger element
         if (typeof request.destination === 'function') {
-            currentRequest.callback = request.destination;
+            currentCaptcha.callback = request.destination;
         } else {
-            currentRequest.destination = request.destination;
+            currentCaptcha.destination = request.destination;
         }
         
-        currentRequest.triggerElement = request.triggerElement;
+        currentCaptcha.triggerElement = request.triggerElement;
         
         // Hide loading indicator
         if (captchaLoading) {
             captchaLoading.style.display = 'none';
+        }
+        
+        // Generate a math challenge
+        const challenge = generateMathChallenge();
+        currentCaptcha.challenge = challenge.question;
+        currentCaptcha.answer = challenge.answer;
+        
+        // Set the challenge text
+        if (captchaChallenge) {
+            captchaChallenge.textContent = challenge.question;
+        }
+        
+        // Reset input field and error message
+        if (captchaInput) {
+            captchaInput.value = '';
+        }
+        
+        if (captchaError) {
+            captchaError.textContent = '';
         }
         
         // Show the modal
@@ -343,24 +273,14 @@
         const announcement = document.createElement('div');
         announcement.setAttribute('aria-live', 'assertive');
         announcement.setAttribute('class', 'sr-only');
-        announcement.textContent = 'Verification required. Please complete the captcha to continue.';
+        announcement.textContent = 'Verification required. Please solve a simple math problem to continue.';
         document.body.appendChild(announcement);
-        
-        // Make sure API is loaded and render the reCAPTCHA
-        if (typeof window.grecaptcha === 'undefined' || typeof window.grecaptcha.render !== 'function') {
-            console.log('reCAPTCHA API not loaded yet, loading now...');
-            loadRecaptchaApi(); // This will call renderRecaptcha when API loads
-        } else {
-            console.log('reCAPTCHA API already loaded, rendering widget...');
-            renderRecaptcha();
-        }
         
         // Set focus after a small delay (for screen readers)
         setTimeout(() => {
-            // Try to focus on the first focusable element in the modal
-            const firstFocusable = captchaModal.querySelector('button, [href], input, iframe, [tabindex]:not([tabindex="-1"])');
-            if (firstFocusable) {
-                firstFocusable.focus();
+            // Try to focus on the input field
+            if (captchaInput) {
+                captchaInput.focus();
             }
             
             // Remove the announcement after it's been read
@@ -409,8 +329,8 @@
         captchaModal.style.display = 'none';
         
         // Return focus to the trigger element
-        if (currentRequest && currentRequest.triggerElement) {
-            currentRequest.triggerElement.focus();
+        if (currentCaptcha && currentCaptcha.triggerElement) {
+            currentCaptcha.triggerElement.focus();
         }
         
         // Process next captcha if any
@@ -419,6 +339,101 @@
         } else {
             isProcessingCaptcha = false;
         }
+    }
+    
+    /**
+     * Handle form submission
+     * @param {Event} e - Form submit event
+     */
+    function handleSubmit(e) {
+        e.preventDefault();
+        
+        if (!currentCaptcha) {
+            console.error('No active captcha challenge');
+            return;
+        }
+        
+        // Get user's answer
+        const userAnswer = captchaInput.value.trim();
+        
+        // Reset error style
+        captchaInput.classList.remove('error');
+        captchaError.textContent = '';
+        
+        // Check if answer is empty
+        if (!userAnswer) {
+            captchaInput.classList.add('error');
+            captchaError.textContent = 'Please enter an answer';
+            captchaInput.focus();
+            return;
+        }
+        
+        // Check if answer is correct
+        if (userAnswer === currentCaptcha.answer) {
+            // Success!
+            handleSuccess();
+        } else {
+            // Wrong answer
+            currentCaptcha.attemptCount++;
+            
+            captchaInput.classList.add('error');
+            
+            if (currentCaptcha.attemptCount >= currentCaptcha.maxAttempts) {
+                // Too many attempts
+                captchaError.textContent = 'Too many failed attempts. Please try again later.';
+                
+                setTimeout(() => {
+                    closeCaptcha();
+                }, 2000);
+            } else {
+                // Generate new challenge
+                captchaError.textContent = 'Incorrect answer. Please try again.';
+                
+                const challenge = generateMathChallenge();
+                currentCaptcha.challenge = challenge.question;
+                currentCaptcha.answer = challenge.answer;
+                
+                // Update challenge text
+                captchaChallenge.textContent = challenge.question;
+                
+                // Clear input
+                captchaInput.value = '';
+                captchaInput.focus();
+            }
+        }
+    }
+    
+    /**
+     * Handle successful captcha completion
+     */
+    function handleSuccess() {
+        // Show loading indicator
+        captchaLoading.style.display = 'block';
+        captchaForm.style.display = 'none';
+        
+        // Set verification cookie (valid for 30 minutes)
+        setCookie('odn_captcha_verified', 'true', 30);
+        
+        // Small delay to show loading indicator
+        setTimeout(() => {
+            // Hide the modal
+            closeCaptcha();
+            
+            // Navigate to destination or execute callback
+            if (currentCaptcha.destination) {
+                window.location.href = currentCaptcha.destination;
+            } else if (currentCaptcha.callback && typeof currentCaptcha.callback === 'function') {
+                try {
+                    currentCaptcha.callback();
+                } catch (e) {
+                    console.error('Error executing captcha callback:', e);
+                }
+            }
+            
+            // Reset form display for next captcha
+            captchaForm.style.display = 'block';
+            captchaLoading.style.display = 'none';
+        }, 500);
     }
     
     // Initialize on document ready
