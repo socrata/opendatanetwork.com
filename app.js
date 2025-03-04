@@ -144,6 +144,24 @@ app.use('/robots.txt', express.static(__dirname + '/views/static/robots.txt'));
 app.use('/sitemap.xml', express.static(__dirname + '/views/static/sitemap.xml'));
 app.use('/sitemap', express.static(__dirname + '/views/static/sitemap'));
 
+// Configure security with Helmet
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://www.google.com", "https://www.gstatic.com"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", "data:", "https://www.google.com"],
+      connectSrc: ["'self'"],
+      fontSrc: ["'self'"],
+      objectSrc: ["'none'"],
+      mediaSrc: ["'self'"],
+      frameSrc: ["'self'", "https://www.google.com"],
+      frameAncestors: ["'self'"]
+    }
+  }
+}));
+
 // Expose our config to the client
 app.expose(GlobalConfig, 'GlobalConfig');
 
