@@ -38,9 +38,13 @@ class RecaptchaMiddleware {
             if (req.session && req.session.recaptchaVerified) {
                 const elapsed = Date.now() - (req.session.recaptchaTimestamp || 0);
                 const oneHour = 60 * 60 * 1000;
+                console.log('Session check - Verified:', req.session.recaptchaVerified, 'Elapsed:', elapsed, 'ms');
                 if (elapsed < oneHour) {
+                    console.log('Session valid - skipping reCAPTCHA');
                     return next();
                 }
+            } else {
+                console.log('No valid session found');
             }
 
             const recaptchaResponse = req.body['g-recaptcha-response'] || 

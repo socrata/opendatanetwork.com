@@ -108,11 +108,13 @@ app.use(cookieParser());
 app.use(session({
     secret: process.env.SESSION_SECRET || 'odn-recaptcha-secret-change-me',
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true, // Changed to true to ensure session is created
+    proxy: true, // Trust the reverse proxy (Heroku)
     cookie: {
-        secure: process.env.NODE_ENV === 'production',
+        secure: true, // Always use secure on Heroku (HTTPS)
         httpOnly: true,
-        maxAge: 3600000 // 1 hour
+        maxAge: 3600000, // 1 hour
+        sameSite: 'lax' // Helps with CSRF protection
     }
 }));
 
@@ -250,9 +252,17 @@ app.post('/recaptcha-verify', (req, res) => {
             if (req.session) {
                 req.session.recaptchaVerified = true;
                 req.session.recaptchaTimestamp = Date.now();
+                
+                // Ensure session is saved before redirecting
+                req.session.save((err) => {
+                    if (err) {
+                        console.error('Session save error:', err);
+                    }
+                    res.redirect(originalUrl);
+                });
+            } else {
+                res.redirect(originalUrl);
             }
-            
-            res.redirect(originalUrl);
         });
     } else {
         res.redirect(originalUrl);
