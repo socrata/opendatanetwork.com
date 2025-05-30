@@ -1,0 +1,31 @@
+<% if (typeof recaptcha !== 'undefined' && recaptcha.enabled) { %>
+    <div class="recaptcha-container">
+        <div class="g-recaptcha" 
+             data-sitekey="<%= recaptcha.siteKey %>">
+        </div>
+        <div class="recaptcha-error" style="display: none; color: red; margin-top: 10px;">
+            Please complete the reCAPTCHA challenge to continue.
+        </div>
+    </div>
+    <script>
+        // Store the reCAPTCHA response for later use
+        window.recaptchaToken = null;
+        
+        // This function is called automatically when reCAPTCHA is solved
+        function grecaptchaCallback(token) {
+            window.recaptchaToken = token;
+            const errorDiv = document.querySelector('.recaptcha-error');
+            if (errorDiv) errorDiv.style.display = 'none';
+        }
+        
+        // Check if reCAPTCHA was completed before allowing certain actions
+        function checkRecaptcha() {
+            if (!window.recaptchaToken) {
+                const errorDiv = document.querySelector('.recaptcha-error');
+                if (errorDiv) errorDiv.style.display = 'block';
+                return false;
+            }
+            return true;
+        }
+    </script>
+<% } %>

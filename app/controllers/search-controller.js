@@ -20,6 +20,17 @@ const Tag = require('../models/tag');
 module.exports = (request, response) => {
     const errorHandler = Exception.getHandler(request, response);
 
+    // Handle POST requests by redirecting to GET with query params
+    if (request.method === 'POST') {
+        const params = new URLSearchParams();
+        if (request.body.q) params.set('q', request.body.q);
+        if (request.body.categories) params.set('categories', request.body.categories);
+        if (request.body.domains) params.set('domains', request.body.domains);
+        if (request.body.tags) params.set('tags', request.body.tags);
+        
+        return response.redirect(`/search?${params.toString()}`);
+    }
+
     const requestParser = new SearchRequestParser(request);
     const query = requestParser.getQuery();
     const categories = requestParser.getCategories();
