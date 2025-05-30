@@ -42,13 +42,7 @@ The following endpoints are now protected by reCAPTCHA:
 
 ## Testing
 
-For development/testing, you can use Google's test keys:
-```bash
-export RECAPTCHA_SITE_KEY="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
-export RECAPTCHA_SECRET_KEY="6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
-```
-
-These keys will always show a visible reCAPTCHA and always pass validation.
+For development/testing, you can use Google's test keys (available from Google's reCAPTCHA documentation). These test keys will always show a visible reCAPTCHA and always pass validation.
 
 ## Troubleshooting
 
