@@ -212,6 +212,52 @@ app.get('/categories.json', CategoriesController.categories);
 app.get('/join-open-data-network', PagesController.join);
 app.get('/join-open-data-network/complete', PagesController.joinComplete);
 app.get('/search', require('./app/controllers/search-controller'));
+
+// reCAPTCHA verification endpoint
+app.post('/recaptcha-verify', (req, res) => {
+    const recaptchaResponse = req.body['g-recaptcha-response'];
+    const originalUrl = req.body.originalUrl || '/';
+    
+    if (!recaptchaResponse) {
+        return res.render('recaptcha-verify.ejs', {
+            originalUrl,
+            title: 'Security Verification - Open Data Network',
+            error: 'Please complete the reCAPTCHA challenge.'
+        });
+    }
+    
+    // Verify the reCAPTCHA
+    if (recaptchaMiddleware.isEnabled()) {
+        const reCAPTCHA = require('google-recaptcha');
+        const recaptcha = new reCAPTCHA({
+            secret: process.env.RECAPTCHA_SECRET_KEY
+        });
+        
+        recaptcha.verify({
+            response: recaptchaResponse,
+            remoteip: req.ip
+        }, (error) => {
+            if (error) {
+                console.error('reCAPTCHA verification failed:', error);
+                return res.render('recaptcha-verify.ejs', {
+                    originalUrl,
+                    title: 'Security Verification - Open Data Network',
+                    error: 'Verification failed. Please try again.'
+                });
+            }
+            
+            // Success - set session and redirect
+            if (req.session) {
+                req.session.recaptchaVerified = true;
+                req.session.recaptchaTimestamp = Date.now();
+            }
+            
+            res.redirect(originalUrl);
+        });
+    } else {
+        res.redirect(originalUrl);
+    }
+});
 /*
 app.get('/search/search-results', SearchController.searchResults);
 app.get('/search/:vector', SearchController.search);

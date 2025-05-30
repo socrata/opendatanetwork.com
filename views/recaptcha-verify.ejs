@@ -7,7 +7,9 @@
         <p>Please complete the security check to continue.</p>
         
         <% if (typeof recaptcha !== 'undefined' && recaptcha.enabled) { %>
-            <form method="GET" action="<%= originalUrl %>" style="margin-top: 30px;">
+            <form method="POST" action="/recaptcha-verify" style="margin-top: 30px;">
+                <input type="hidden" name="originalUrl" value="<%= originalUrl %>">
+                
                 <div class="g-recaptcha" 
                      data-sitekey="<%= recaptcha.siteKey %>"
                      data-callback="onRecaptchaComplete"
@@ -18,8 +20,6 @@
                     <div style="color: red; margin-top: 10px;"><%= error %></div>
                 <% } %>
                 
-                <input type="hidden" name="g-recaptcha-response" id="recaptcha-response">
-                
                 <div style="margin-top: 20px;">
                     <button type="submit" class="btn btn-primary" id="continue-btn" disabled style="padding: 10px 30px; font-size: 16px;">
                         Continue
@@ -29,7 +29,6 @@
             
             <script>
                 function onRecaptchaComplete(token) {
-                    document.getElementById('recaptcha-response').value = token;
                     document.getElementById('continue-btn').disabled = false;
                 }
             </script>

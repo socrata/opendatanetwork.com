@@ -48,7 +48,7 @@ class RecaptchaMiddleware {
                                      req.headers['x-recaptcha-response'];
 
             console.log('reCAPTCHA check - Method:', req.method, 'URL:', req.originalUrl);
-            console.log('reCAPTCHA response token:', recaptchaResponse ? 'Present' : 'Missing');
+            console.log('reCAPTCHA response token:', recaptchaResponse ? `Present (${recaptchaResponse.substring(0, 20)}...)` : 'Missing');
 
             if (!recaptchaResponse) {
                 // For GET requests, show the verification page
