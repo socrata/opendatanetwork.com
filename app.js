@@ -5,7 +5,6 @@ const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const express = require('express');
 const session = require('express-session');
-const MemcachedStore = require('connect-memcached')(session);
 const minifyHTML = require('express-minify-html');
 const rateLimit = require('express-rate-limit');
 const ipFilter = require('express-ipfilter').IpFilter;
@@ -119,18 +118,9 @@ const sessionConfig = {
     }
 };
 
-// Use Memcached store if available (for Heroku multi-dyno support)
-if (process.env.MEMCACHIER_SERVERS) {
-    sessionConfig.store = new MemcachedStore({
-        servers: process.env.MEMCACHIER_SERVERS.split(','),
-        username: process.env.MEMCACHIER_USERNAME,
-        password: process.env.MEMCACHIER_PASSWORD,
-        prefix: 'sess:'
-    });
-    console.log('Using Memcached session store');
-} else {
-    console.log('Using default memory session store (single dyno only)');
-}
+// TODO: Add Memcached session store for multi-dyno support
+// For now, using default memory store
+console.log('Using default memory session store - reCAPTCHA sessions may not persist across dynos');
 
 app.use(session(sessionConfig));
 
