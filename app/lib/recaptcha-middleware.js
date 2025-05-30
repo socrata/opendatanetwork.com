@@ -8,6 +8,11 @@ class RecaptchaMiddleware {
         this.secretKey = process.env.RECAPTCHA_SECRET_KEY || '';
         this.enabled = !!(this.siteKey && this.secretKey);
         
+        console.log('reCAPTCHA initialization:');
+        console.log('- Site Key:', this.siteKey ? 'Set' : 'Not set');
+        console.log('- Secret Key:', this.secretKey ? 'Set' : 'Not set');
+        console.log('- Enabled:', this.enabled);
+        
         if (this.enabled) {
             this.recaptcha = new reCAPTCHA({
                 secret: this.secretKey
@@ -42,6 +47,9 @@ class RecaptchaMiddleware {
                                      req.query['g-recaptcha-response'] || 
                                      req.headers['x-recaptcha-response'];
 
+            console.log('reCAPTCHA check - Method:', req.method, 'URL:', req.originalUrl);
+            console.log('reCAPTCHA response token:', recaptchaResponse ? 'Present' : 'Missing');
+
             if (!recaptchaResponse) {
                 // For GET requests, show the verification page
                 if (req.method === 'GET') {
@@ -63,6 +71,8 @@ class RecaptchaMiddleware {
                 remoteip: req.ip
             }, (error) => {
                 if (error) {
+                    console.error('reCAPTCHA verification error:', error);
+                    
                     // For GET requests, show the verification page with error
                     if (req.method === 'GET') {
                         return res.render('recaptcha-verify.ejs', {
@@ -108,6 +118,9 @@ class RecaptchaMiddleware {
                 response: recaptchaResponse,
                 remoteip: req.ip
             }, (error) => {
+                if (error) {
+                    console.error('reCAPTCHA optional verification error:', error);
+                }
                 req.recaptchaVerified = !error;
                 next();
             });
