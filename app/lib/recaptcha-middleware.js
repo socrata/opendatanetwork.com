@@ -34,8 +34,11 @@ class RecaptchaMiddleware {
                 return next();
             }
 
-            // Check if user has already verified recently
-            if (req.session && req.session.recaptchaVerified) {
+            // Check if user has already verified recently (session or cookie)
+            const cookieVerified = req.cookies && req.cookies.recaptcha_verified;
+            const sessionVerified = req.session && req.session.recaptchaVerified;
+            
+            if (sessionVerified) {
                 const elapsed = Date.now() - (req.session.recaptchaTimestamp || 0);
                 const oneHour = 60 * 60 * 1000;
                 console.log('Session check - Verified:', req.session.recaptchaVerified, 'Elapsed:', elapsed, 'ms');
@@ -43,8 +46,28 @@ class RecaptchaMiddleware {
                     console.log('Session valid - skipping reCAPTCHA');
                     return next();
                 }
+            } else if (cookieVerified) {
+                // Verify cookie signature
+                const parts = cookieVerified.split('.');
+                if (parts.length === 2) {
+                    const [timestamp, signature] = parts;
+                    const expectedSig = require('crypto')
+                        .createHmac('sha256', this.secretKey)
+                        .update(timestamp)
+                        .digest('hex')
+                        .substring(0, 16);
+                    
+                    if (signature === expectedSig) {
+                        const elapsed = Date.now() - parseInt(timestamp);
+                        const oneHour = 60 * 60 * 1000;
+                        if (elapsed < oneHour) {
+                            console.log('Cookie valid - skipping reCAPTCHA');
+                            return next();
+                        }
+                    }
+                }
             } else {
-                console.log('No valid session found');
+                console.log('No valid session or cookie found');
             }
 
             const recaptchaResponse = req.body['g-recaptcha-response'] || 

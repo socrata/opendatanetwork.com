@@ -254,10 +254,27 @@ app.post('/recaptcha-verify', (req, res) => {
                 });
             }
             
-            // Success - set session and redirect
+            // Success - set session and cookie, then redirect
+            const timestamp = Date.now();
+            
+            // Set signed cookie as backup
+            const crypto = require('crypto');
+            const signature = crypto
+                .createHmac('sha256', process.env.RECAPTCHA_SECRET_KEY)
+                .update(timestamp.toString())
+                .digest('hex')
+                .substring(0, 16);
+            
+            res.cookie('recaptcha_verified', `${timestamp}.${signature}`, {
+                httpOnly: true,
+                secure: true,
+                maxAge: 3600000, // 1 hour
+                sameSite: 'lax'
+            });
+            
             if (req.session) {
                 req.session.recaptchaVerified = true;
-                req.session.recaptchaTimestamp = Date.now();
+                req.session.recaptchaTimestamp = timestamp;
                 
                 // Ensure session is saved before redirecting
                 req.session.save((err) => {
