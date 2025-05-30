@@ -194,8 +194,13 @@ class ODNClient {
     }
 
     url(relativePath, clientParams) {
-        const path = `${this.baseURL}/${relativePath}`;
-        const params = _.extend({app_token: this.appToken}, clientParams);
+        // If running in browser, use our protected proxy endpoint
+        const isClient = typeof window !== 'undefined';
+        const basePath = isClient ? '/api' : this.baseURL;
+        const path = `${basePath}/${relativePath}`;
+        
+        // Don't include app_token on client side as proxy will add it
+        const params = isClient ? clientParams : _.extend({app_token: this.appToken}, clientParams);
         return buildURL(path, params);
     }
 

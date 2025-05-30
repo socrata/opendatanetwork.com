@@ -18,7 +18,8 @@ var baseScripts = [
     'src/navigate/entity.js',
     'src/navigate/search.js',
     'src/api-badge/api-badge.js',
-    'src/api-badge/api-popup.js'
+    'src/api-badge/api-popup.js',
+    'src/recaptcha-handler.js'
 ];
 
 var mapScripts = [

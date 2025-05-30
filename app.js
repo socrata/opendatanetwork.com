@@ -4,6 +4,7 @@ const _ = require('lodash');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const express = require('express');
+const session = require('express-session');
 const minifyHTML = require('express-minify-html');
 const rateLimit = require('express-rate-limit');
 const ipFilter = require('express-ipfilter').IpFilter;
@@ -22,6 +23,7 @@ const PagesController = require('./app/controllers/pages-controller');
 const ErrorHandler = require('./app/lib/error-handler');
 const UrlUtil = require('./app/lib/url-util');
 const GlobalConfig = require('./src/config');
+const recaptchaMiddleware = require('./app/lib/recaptcha-middleware');
 
 const app = expose(express());
 
@@ -102,6 +104,30 @@ app.use(minifyHTML({
 // Cookie parser
 app.use(cookieParser());
 
+// Session middleware with Memcached store for multi-dyno support
+const sessionConfig = {
+    secret: process.env.SESSION_SECRET || 'odn-recaptcha-secret-change-me',
+    resave: false,
+    saveUninitialized: true, // Changed to true to ensure session is created
+    proxy: true, // Trust the reverse proxy (Heroku)
+    cookie: {
+        secure: true, // Always use secure on Heroku (HTTPS)
+        httpOnly: true,
+        maxAge: 3600000, // 1 hour
+        sameSite: 'lax' // Helps with CSRF protection
+    }
+};
+
+// TODO: Add Memcached session store for multi-dyno support
+// For now, using default memory store
+console.log('Using default memory session store - reCAPTCHA sessions may not persist across dynos');
+
+app.use(session(sessionConfig));
+
+// Body parser for POST requests
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 // Set up apache common log format output
 //app.use(morgan('combined'));
 
@@ -147,6 +173,9 @@ app.use('/sitemap', express.static(__dirname + '/views/static/sitemap'));
 // Expose our config to the client
 app.expose(GlobalConfig, 'GlobalConfig');
 
+// Add reCAPTCHA middleware to all requests
+app.use(recaptchaMiddleware.addToLocals());
+
 // Ensure HTTP
 //
 app.get('*', function(req, res, next) {
@@ -191,17 +220,88 @@ app.get('/categories.json', CategoriesController.categories);
 app.get('/join-open-data-network', PagesController.join);
 app.get('/join-open-data-network/complete', PagesController.joinComplete);
 app.get('/search', require('./app/controllers/search-controller'));
+
+// reCAPTCHA verification endpoint
+app.post('/recaptcha-verify', (req, res) => {
+    const recaptchaResponse = req.body['g-recaptcha-response'];
+    const originalUrl = req.body.originalUrl || '/';
+    
+    if (!recaptchaResponse) {
+        return res.render('recaptcha-verify.ejs', {
+            originalUrl,
+            title: 'Security Verification - Open Data Network',
+            error: 'Please complete the reCAPTCHA challenge.'
+        });
+    }
+    
+    // Verify the reCAPTCHA
+    if (recaptchaMiddleware.isEnabled()) {
+        const reCAPTCHA = require('google-recaptcha');
+        const recaptcha = new reCAPTCHA({
+            secret: process.env.RECAPTCHA_SECRET_KEY
+        });
+        
+        recaptcha.verify({
+            response: recaptchaResponse,
+            remoteip: req.ip
+        }, (error) => {
+            if (error) {
+                console.error('reCAPTCHA verification failed:', error);
+                return res.render('recaptcha-verify.ejs', {
+                    originalUrl,
+                    title: 'Security Verification - Open Data Network',
+                    error: 'Verification failed. Please try again.'
+                });
+            }
+            
+            // Success - set session and cookie, then redirect
+            const timestamp = Date.now();
+            
+            // Set signed cookie as backup
+            const crypto = require('crypto');
+            const signature = crypto
+                .createHmac('sha256', process.env.RECAPTCHA_SECRET_KEY)
+                .update(timestamp.toString())
+                .digest('hex')
+                .substring(0, 16);
+            
+            res.cookie('recaptcha_verified', `${timestamp}.${signature}`, {
+                httpOnly: true,
+                secure: true,
+                maxAge: 3600000, // 1 hour
+                sameSite: 'lax'
+            });
+            
+            if (req.session) {
+                req.session.recaptchaVerified = true;
+                req.session.recaptchaTimestamp = timestamp;
+                
+                // Ensure session is saved before redirecting
+                req.session.save((err) => {
+                    if (err) {
+                        console.error('Session save error:', err);
+                    }
+                    res.redirect(originalUrl);
+                });
+            } else {
+                res.redirect(originalUrl);
+            }
+        });
+    } else {
+        res.redirect(originalUrl);
+    }
+});
 /*
 app.get('/search/search-results', SearchController.searchResults);
 app.get('/search/:vector', SearchController.search);
 */
-app.get('/dataset/:domain/:id', DatasetController.show);
+app.get('/dataset/:domain/:id', recaptchaMiddleware.verify(), DatasetController.show);
 
 // new URL format
 const entityController = require('./app/controllers/entity-controller');
-app.get('/entity/:entityIDs', entityController);
-app.get('/entity/:entityIDs/:entityNames', entityController);
-app.get('/entity/:entityIDs/:entityNames/:variableID', entityController);
+app.get('/entity/:entityIDs', recaptchaMiddleware.verify(), entityController);
+app.get('/entity/:entityIDs/:entityNames', recaptchaMiddleware.verify(), entityController);
+app.get('/entity/:entityIDs/:entityNames/:variableID', recaptchaMiddleware.verify(), entityController);
 
 const redirectRegion = require('./app/controllers/redirect/region');
 app.get('/region/:regionIDs', redirectRegion);
@@ -212,6 +312,9 @@ app.get('/region/:regionIDs/:regionNames/:vector/:metric/:year', redirectRegion)
 
 app.get('/search-results', require('./app/controllers/search-results-controller'));
 app.get('/search-results/entity', require('./app/controllers/entity-search-results-controller'));
+
+// Protected API proxy endpoints
+app.get('/api/*', recaptchaMiddleware.verify(), require('./app/controllers/api-proxy-controller'));
 
 app.use((error, req, res, next) => {
   ErrorHandler.error(req, res)(error);

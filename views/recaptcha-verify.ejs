@@ -1,0 +1,42 @@
+<%- include ("_document-header", {css: "home.css"}) %>
+<%- include ("_bar-header") %>
+
+<section class="main-section" role="main">
+    <div class="recaptcha-verify-container" style="max-width: 600px; margin: 50px auto; padding: 20px; text-align: center;">
+        <h2>Security Verification</h2>
+        <p>Please complete the security check to continue.</p>
+        
+        <% if (typeof recaptcha !== 'undefined' && recaptcha.enabled) { %>
+            <form method="POST" action="/recaptcha-verify" style="margin-top: 30px;">
+                <input type="hidden" name="originalUrl" value="<%= originalUrl %>">
+                
+                <div class="g-recaptcha" 
+                     data-sitekey="<%= recaptcha.siteKey %>"
+                     data-callback="onRecaptchaComplete"
+                     style="display: inline-block;">
+                </div>
+                
+                <% if (typeof error !== 'undefined') { %>
+                    <div style="color: red; margin-top: 10px;"><%= error %></div>
+                <% } %>
+                
+                <div style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary" id="continue-btn" disabled style="padding: 10px 30px; font-size: 16px;">
+                        Continue
+                    </button>
+                </div>
+            </form>
+            
+            <script>
+                function onRecaptchaComplete(token) {
+                    document.getElementById('continue-btn').disabled = false;
+                }
+            </script>
+        <% } else { %>
+            <p>reCAPTCHA is not configured. Please contact the administrator.</p>
+        <% } %>
+    </div>
+</section>
+
+<%- include ("_bar-footer") %>
+<%- include ("_document-footer") %>
