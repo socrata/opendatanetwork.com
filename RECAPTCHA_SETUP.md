@@ -9,12 +9,13 @@ To enable reCAPTCHA, you need to set the following environment variables:
 ```bash
 export RECAPTCHA_SITE_KEY="your_site_key_here"
 export RECAPTCHA_SECRET_KEY="your_secret_key_here"
+export SESSION_SECRET="your-session-secret-here"  # For session management
 ```
 
 ## Getting reCAPTCHA Keys
 
 1. Go to https://www.google.com/recaptcha/admin/
-2. Register a new site with reCAPTCHA v2 (Invisible reCAPTCHA badge)
+2. Register a new site with reCAPTCHA v2 ("I'm not a robot" Checkbox)
 3. Add your domain(s) to the allowed domains list
 4. Copy the Site Key and Secret Key
 
@@ -22,26 +23,36 @@ export RECAPTCHA_SECRET_KEY="your_secret_key_here"
 
 The following endpoints are now protected by reCAPTCHA:
 
-- `/search` (POST requests)
-- `/categories.json`
-- `/dataset/:domain/:id`
-- `/entity/*` (all entity endpoints)
-- `/search-results`
-- `/search-results/entity`
-- `/api/*` (all API proxy endpoints)
+- `/dataset/:domain/:id` - Dataset pages
+- `/entity/*` - All entity/region data pages
+- `/api/*` - All API proxy endpoints
 
 ## How it Works
 
-1. **Search Form**: Uses invisible reCAPTCHA that triggers on form submission
-2. **API Requests**: Client-side JavaScript automatically adds reCAPTCHA tokens to API requests
-3. **Direct Access**: All data endpoints require valid reCAPTCHA verification
+1. **Verification Page**: When users access protected content, they see a verification page with visible reCAPTCHA
+2. **Session Management**: Once verified, users can browse for 1 hour without re-verification
+3. **API Protection**: The `/api/*` endpoints require reCAPTCHA tokens in headers
+
+## User Experience
+
+1. User visits a protected page (e.g., dataset or entity page)
+2. They see a "Security Verification" page with reCAPTCHA checkbox
+3. After completing reCAPTCHA, they click "Continue"
+4. They can browse freely for 1 hour without seeing reCAPTCHA again
 
 ## Testing
 
-When reCAPTCHA is not configured (environment variables not set), the site will work normally without protection.
+For development/testing, you can use Google's test keys:
+```bash
+export RECAPTCHA_SITE_KEY="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+export RECAPTCHA_SECRET_KEY="6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
+```
+
+These keys will always show a visible reCAPTCHA and always pass validation.
 
 ## Troubleshooting
 
-- If you see "reCAPTCHA verification required" errors, make sure the environment variables are set correctly
-- Check browser console for any JavaScript errors related to reCAPTCHA
-- Ensure your domain is added to the allowed domains in reCAPTCHA admin panel
+- If reCAPTCHA doesn't appear, check that environment variables are set
+- Ensure your domain is in the allowed domains list in reCAPTCHA admin
+- Check browser console for JavaScript errors
+- The "Continue" button remains disabled until reCAPTCHA is completed

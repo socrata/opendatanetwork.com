@@ -1,4 +1,4 @@
-<form method="POST" action="/search" class="search-bar-form" autocomplete="off">
+<form method="GET" action="/search" class="search-bar-form" autocomplete="off">
     <a class="logo-small" href="/" title="Open Data Network"><div></div></a>
 
     <span class='search-wrapper clearfix'>
@@ -18,11 +18,6 @@
             <% } %>
         <% } %>
 
-        <% if (typeof recaptcha !== 'undefined' && recaptcha.enabled) { %>
-            <div class="g-recaptcha" 
-                 data-sitekey="<%= recaptcha.siteKey %>" 
-                 data-callback="onRecaptchaSubmit"></div>
-        <% } %>
 
         <div class="search-buttons">
             <button type="submit" class="search-link" tabindex="0">

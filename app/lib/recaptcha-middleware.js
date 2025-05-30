@@ -29,11 +29,29 @@ class RecaptchaMiddleware {
                 return next();
             }
 
+            // Check if user has already verified recently
+            if (req.session && req.session.recaptchaVerified) {
+                const elapsed = Date.now() - (req.session.recaptchaTimestamp || 0);
+                const oneHour = 60 * 60 * 1000;
+                if (elapsed < oneHour) {
+                    return next();
+                }
+            }
+
             const recaptchaResponse = req.body['g-recaptcha-response'] || 
                                      req.query['g-recaptcha-response'] || 
                                      req.headers['x-recaptcha-response'];
 
             if (!recaptchaResponse) {
+                // For GET requests, show the verification page
+                if (req.method === 'GET') {
+                    return res.render('recaptcha-verify.ejs', {
+                        originalUrl: req.originalUrl,
+                        title: 'Security Verification - Open Data Network'
+                    });
+                }
+                
+                // For other requests, return JSON error
                 return res.status(400).json({
                     error: 'reCAPTCHA verification required',
                     message: 'Please complete the reCAPTCHA challenge'
@@ -45,11 +63,27 @@ class RecaptchaMiddleware {
                 remoteip: req.ip
             }, (error) => {
                 if (error) {
+                    // For GET requests, show the verification page with error
+                    if (req.method === 'GET') {
+                        return res.render('recaptcha-verify.ejs', {
+                            originalUrl: req.originalUrl,
+                            title: 'Security Verification - Open Data Network',
+                            error: 'Verification failed. Please try again.'
+                        });
+                    }
+                    
                     return res.status(400).json({
                         error: 'reCAPTCHA verification failed',
                         message: 'Invalid reCAPTCHA response. Please try again.'
                     });
                 }
+                
+                // Set a session flag to avoid repeated checks
+                if (req.session) {
+                    req.session.recaptchaVerified = true;
+                    req.session.recaptchaTimestamp = Date.now();
+                }
+                
                 next();
             });
         };

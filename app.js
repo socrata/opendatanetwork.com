@@ -4,6 +4,7 @@ const _ = require('lodash');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const express = require('express');
+const session = require('express-session');
 const minifyHTML = require('express-minify-html');
 const rateLimit = require('express-rate-limit');
 const ipFilter = require('express-ipfilter').IpFilter;
@@ -103,6 +104,18 @@ app.use(minifyHTML({
 // Cookie parser
 app.use(cookieParser());
 
+// Session middleware
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'odn-recaptcha-secret-change-me',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        maxAge: 3600000 // 1 hour
+    }
+}));
+
 // Body parser for POST requests
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -195,11 +208,10 @@ app.get('/join/complete', function(req, res) { res.redirect(301, '/join-open-dat
 app.get('/v4', function(req, res) { res.redirect(301, '/'); });
 
 app.get('/', HomeController.index);
-app.get('/categories.json', recaptchaMiddleware.verify(), CategoriesController.categories);
+app.get('/categories.json', CategoriesController.categories);
 app.get('/join-open-data-network', PagesController.join);
 app.get('/join-open-data-network/complete', PagesController.joinComplete);
-app.get('/search', recaptchaMiddleware.verifyOptional(), require('./app/controllers/search-controller'));
-app.post('/search', recaptchaMiddleware.verify(), require('./app/controllers/search-controller'));
+app.get('/search', require('./app/controllers/search-controller'));
 /*
 app.get('/search/search-results', SearchController.searchResults);
 app.get('/search/:vector', SearchController.search);
@@ -219,8 +231,8 @@ app.get('/region/:regionIDs/:regionNames/:vector', redirectRegion);
 app.get('/region/:regionIDs/:regionNames/:vector/:metric', redirectRegion);
 app.get('/region/:regionIDs/:regionNames/:vector/:metric/:year', redirectRegion);
 
-app.get('/search-results', recaptchaMiddleware.verify(), require('./app/controllers/search-results-controller'));
-app.get('/search-results/entity', recaptchaMiddleware.verify(), require('./app/controllers/entity-search-results-controller'));
+app.get('/search-results', require('./app/controllers/search-results-controller'));
+app.get('/search-results/entity', require('./app/controllers/entity-search-results-controller'));
 
 // Protected API proxy endpoints
 app.get('/api/*', recaptchaMiddleware.verify(), require('./app/controllers/api-proxy-controller'));
