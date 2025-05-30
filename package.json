@@ -6,6 +6,7 @@
     "@babel/preset-env": "^7.25.7",
     "casperjs": "^1.1.4",
     "compression": "^1.7.4",
+    "connect-memcached": "^2.0.0",
     "cookie-parser": "^1.4.7",
     "d3": "^7.9.0",
     "deepmerge": "^4.3.1",

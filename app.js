@@ -5,6 +5,7 @@ const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const express = require('express');
 const session = require('express-session');
+const MemcachedStore = require('connect-memcached')(session);
 const minifyHTML = require('express-minify-html');
 const rateLimit = require('express-rate-limit');
 const ipFilter = require('express-ipfilter').IpFilter;
@@ -104,8 +105,8 @@ app.use(minifyHTML({
 // Cookie parser
 app.use(cookieParser());
 
-// Session middleware
-app.use(session({
+// Session middleware with Memcached store for multi-dyno support
+const sessionConfig = {
     secret: process.env.SESSION_SECRET || 'odn-recaptcha-secret-change-me',
     resave: false,
     saveUninitialized: true, // Changed to true to ensure session is created
@@ -116,7 +117,22 @@ app.use(session({
         maxAge: 3600000, // 1 hour
         sameSite: 'lax' // Helps with CSRF protection
     }
-}));
+};
+
+// Use Memcached store if available (for Heroku multi-dyno support)
+if (process.env.MEMCACHIER_SERVERS) {
+    sessionConfig.store = new MemcachedStore({
+        servers: process.env.MEMCACHIER_SERVERS.split(','),
+        username: process.env.MEMCACHIER_USERNAME,
+        password: process.env.MEMCACHIER_PASSWORD,
+        prefix: 'sess:'
+    });
+    console.log('Using Memcached session store');
+} else {
+    console.log('Using default memory session store (single dyno only)');
+}
+
+app.use(session(sessionConfig));
 
 // Body parser for POST requests
 app.use(express.urlencoded({ extended: true }));
