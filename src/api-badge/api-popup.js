@@ -28,12 +28,18 @@ class APIPopup {
             .attr('class', 'fa fa-close')
             .on('click', () => this.close());
 
-        this.container
-            .append('strong')
-            .append('a')
-            .attr('href', this.apiaryURL)
-            .attr('target', '_blank')
-            .text(this.endpoint);
+        if (this.apiaryURL) {
+            this.container
+                .append('strong')
+                .append('a')
+                .attr('href', this.apiaryURL)
+                .attr('target', '_blank')
+                .text(this.endpoint);
+        } else {
+            this.container
+                .append('strong')
+                .text(this.endpoint);
+        }
 
         this.container
             .append('p')
@@ -43,18 +49,20 @@ class APIPopup {
                 `${this.description} for ${this.entityNames.join(', ')}` :
                 this.description);
 
-        this.docsContainer = this.container
-            .append('dl');
+        if (this.apiaryURL) {
+            this.docsContainer = this.container
+                .append('dl');
 
-        this.docsContainer
-            .append('dt')
-            .text('API Docs:');
+            this.docsContainer
+                .append('dt')
+                .text('API Docs:');
 
-        this.docsContainer
-            .append('dd')
-            .append('a')
-            .attr('href', this.apiaryURL)
-            .text(this.description);
+            this.docsContainer
+                .append('dd')
+                .append('a')
+                .attr('href', this.apiaryURL)
+                .text(this.description);
+        }
 
         this.close();
     }

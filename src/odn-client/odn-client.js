@@ -2,8 +2,6 @@
 
 /**
  * Client for the ODN Backend API.
- *
- * API documentation available here: http://docs.odn.apiary.io/
  */
 
 if (typeof require !== 'undefined') {

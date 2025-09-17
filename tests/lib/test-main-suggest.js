@@ -31,10 +31,6 @@ function testSeattle(mainSuggest) {
         {
             name: 'What is the business and finance employment rate of Seattle Metro Area (WA)?',
             href: '/region/310M200US42660/Seattle_Metro_Area_WA/occupations/business_and_finance'
-        },
-        {
-            name: 'Suggestions API Documentation',
-            href: 'http://docs.odn.apiary.io/#reference/0/suggestions/get-suggestions'
         }
     ]);
 }

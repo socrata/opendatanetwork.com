@@ -108,8 +108,7 @@ function apiBadges() {
 
 function availableDataBadge(entityIDs) {
     const url = odn.availableDataURL(entityIDs);
-    const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/data-availability/find-all-available-data-for-some-entities';
-    const popup = new APIPopup('Available data', '/data/availability', url, apiaryURL);
+    const popup = new APIPopup('Available data', '/data/availability', url, null);
     const badge = new APIBadge(popup);
 
     const selection = d3.select('div.chart-tabs-container');
@@ -119,8 +118,7 @@ function availableDataBadge(entityIDs) {
 
 function constraintBadge(entityIDs, variableID, constraint) {
     const url = odn.constraintsURL(entityIDs, variableID, constraint);
-    const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/data-constraints/get-constraint-permutations-for-entities';
-    const popup = new APIPopup('Constraint permutations', '/data/constraint', url, apiaryURL);
+    const popup = new APIPopup('Constraint permutations', '/data/constraint', url, null);
     const badge = new APIBadge(popup);
 
     const selection = d3.select('div.chart-sub-nav-container');
@@ -130,8 +128,7 @@ function constraintBadge(entityIDs, variableID, constraint) {
 
 function newMapBadge(entityIDs, variableID, constraints) {
     const url = odn.newMapURL(entityIDs, variableID, constraints);
-    const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/map-creation';
-    const popup = new APIPopup('Create a new map', '/data/map/new', url, apiaryURL);
+    const popup = new APIPopup('Create a new map', '/data/map/new', url, null);
     const badge = new APIBadge(popup);
 
     const selection = d3.select('div.map-container');
@@ -141,8 +138,7 @@ function newMapBadge(entityIDs, variableID, constraints) {
 
 function chartBadge(chart) {
     const url = chart.getDataURL();
-    const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/data-values/get-values-for-variables';
-    const popup = new APIPopup('Get chart data', '/data/values', url, apiaryURL);
+    const popup = new APIPopup('Get chart data', '/data/values', url, null);
     const badge = new APIBadge(popup);
 
     const selection = d3.select(`div#${chart.config.id}`);
@@ -152,8 +148,7 @@ function chartBadge(chart) {
 
 function peerBadge(entityID) {
     const url = odn.relatedURL(entityID, 'peer');
-    const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/entity-relationships';
-    const popup = new APIPopup('Get peers', '/entity/peer', url, apiaryURL);
+    const popup = new APIPopup('Get peers', '/entity/peer', url, null);
     const badge = new APIBadge(popup);
 
     const selection = d3.select('div#peers');
@@ -163,8 +158,7 @@ function peerBadge(entityID) {
 
 function siblingBadge(entityID) {
     const url = odn.relatedURL(entityID, 'sibling');
-    const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/entity-relationships';
-    const popup = new APIPopup('Get siblings', '/entity/sibling', url, apiaryURL);
+    const popup = new APIPopup('Get siblings', '/entity/sibling', url, null);
     const badge = new APIBadge(popup);
 
     const selection = d3.select('div#siblings');
@@ -174,10 +168,9 @@ function siblingBadge(entityID) {
 
 function childBadge(entityID) {
     const url = odn.relatedURL(entityID, 'child');
-    const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/entity-relationships';
 
     d3.selectAll('div.children').each(function() {
-        const popup = new APIPopup('Get children', '/entity/child', url, apiaryURL);
+        const popup = new APIPopup('Get children', '/entity/child', url, null);
         const badge = new APIBadge(popup);
 
         const selection = d3.select(this);
@@ -188,8 +181,7 @@ function childBadge(entityID) {
 
 function datasetSearchBadge(entityIDs, datasetID) {
     const url = odn.searchDatasetsURL(entityIDs, datasetID);
-    const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/search-datasets/get-datasets';
-    const popup = new APIPopup('Search for datasets', '/search/dataset', url, apiaryURL);
+    const popup = new APIPopup('Search for datasets', '/search/dataset', url, null);
     const badge = new APIBadge(popup);
 
     const selection = d3.select('div.search-results-header');
