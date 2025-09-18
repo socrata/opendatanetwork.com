@@ -33,24 +33,6 @@ const AUTOSUGGEST_SOURCES = [
             return new EntityNavigate([option.entity])
                 .regionURL(option.vector, option.metric);
         }
-    },
-    {
-        options: [
-            {
-                text: 'Suggestions API Documentation',
-                url: 'http://docs.odn.apiary.io/#reference/0/suggestions/get-suggestions',
-                type: 'api'
-            }
-        ],
-        suggestType: 'api',
-        name: 'API',
-        select: option => 'http://docs.odn.apiary.io/#reference/0/suggestions/get-suggestions',
-        onCategorySelection: category => {
-            category.classed('autocomplete-category-api', true);
-            category.append('a')
-                .attr('class', 'small-api-link')
-                .text('API');
-        }
     }
 ];
 

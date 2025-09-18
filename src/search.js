@@ -116,9 +116,8 @@ function apiBadges() {
 
 function questionBadge(query) {
     const url = odn.searchQuestionsURL(query);
-    const apiaryURL = 'http://docs.odn.apiary.io/#reference/0/search-questions/get-questions';
     const description = `Questions for ${query}`;
-    const popup = new APIPopup(description, '/search/question', url, apiaryURL, true);
+    const popup = new APIPopup(description, '/search/question', url, null, true);
     const badge = new APIBadge(popup);
 
     popup.appendTo(d3.select('#question-api-popup'));
@@ -127,9 +126,8 @@ function questionBadge(query) {
 
 function datasetBadge() {
     const url = _data.ceteraURL;
-    const apiaryURL = 'http://docs.socratadiscovery.apiary.io/#';
     const description = 'Search for datasets';
-    const popup = new APIPopup(description, '/catalog', url, apiaryURL, true);
+    const popup = new APIPopup(description, '/catalog', url, null, true);
     const badge = new APIBadge(popup);
 
     popup.appendTo(d3.select('#catalog-info-box'));
